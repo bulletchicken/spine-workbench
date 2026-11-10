@@ -1,0 +1,95 @@
+{
+  "what": "A vertebra centred at (0, 0, 100) twisted 30 degrees, whose corners sit off the ends of its endplate axes: on a side film, on a front film stored with one quarter turn, and on a front film with a deeper lower endplate.",
+  "tolerancePx": 1e-9,
+  "cases": [
+    {
+      "what": "twist: rotation vector (0, 0, pi/6), side film facing anterior",
+      "vertebra": {
+        "centre": [0, 0, 100],
+        "rotation": [0, 0, 0.5235987755982988],
+        "height": 20,
+        "wedgeFront": 0,
+        "wedgeSide": 0,
+        "topHalfWidth": 15,
+        "topHalfDepth": 10,
+        "bottomHalfWidth": 15,
+        "bottomHalfDepth": 10
+      },
+      "film": {
+        "kind": "side",
+        "imageRight": "anterior",
+        "quarterTurns": 0,
+        "size": [2000, 4000],
+        "mmPerPx": 0.5,
+        "origin": [1000, 3000]
+      },
+      "expect": {
+        "supA": [1022.9128784747792, 2780],
+        "supP": [977.0871215252208, 2780],
+        "infA": [1022.9128784747792, 2820],
+        "infP": [977.0871215252208, 2820]
+      }
+    },
+    {
+      "what": "twist: rotation vector (0, 0, pi/6), one clockwise quarter turn, front film facing patient left",
+      "vertebra": {
+        "centre": [0, 0, 100],
+        "rotation": [0, 0, 0.5235987755982988],
+        "height": 20,
+        "wedgeFront": 0,
+        "wedgeSide": 0,
+        "topHalfWidth": 15,
+        "topHalfDepth": 10,
+        "bottomHalfWidth": 15,
+        "bottomHalfDepth": 10
+      },
+      "film": {
+        "kind": "front",
+        "imageRight": "patient-left",
+        "quarterTurns": 1,
+        "size": [4000, 2000],
+        "mmPerPx": 0.4,
+        "mmPerPxVertical": 0.5,
+        "origin": [1000, 3000]
+      },
+      "expect": {
+        "supL": [2725, 971.1611781858498],
+        "supR": [2725, 1026.8388218141502],
+        "infL": [2775, 971.1611781858498],
+        "infR": [2775, 1026.8388218141502],
+        "pedL": [2741, 991.2350055514441],
+        "pedR": [2741, 1031.7649944485559]
+      }
+    },
+    {
+      "what": "twist: rotation vector (0, 0, pi/6), lower endplate 12 mm deep, front film facing patient left",
+      "vertebra": {
+        "centre": [0, 0, 100],
+        "rotation": [0, 0, 0.5235987755982988],
+        "height": 20,
+        "wedgeFront": 0,
+        "wedgeSide": 0,
+        "topHalfWidth": 15,
+        "topHalfDepth": 10,
+        "bottomHalfWidth": 15,
+        "bottomHalfDepth": 12
+      },
+      "film": {
+        "kind": "front",
+        "imageRight": "patient-left",
+        "quarterTurns": 0,
+        "size": [2000, 4000],
+        "mmPerPx": 0.5,
+        "origin": [1000, 3000]
+      },
+      "expect": {
+        "supL": [1027.8388218141502, 2780],
+        "supR": [972.1611781858498, 2780],
+        "infL": [1028.6181760425084, 2820],
+        "infR": [971.3818239574916, 2820],
+        "pedL": [1006.5149944485559, 2792.8],
+        "pedR": [965.9850055514441, 2792.8]
+      }
+    }
+  ]
+}

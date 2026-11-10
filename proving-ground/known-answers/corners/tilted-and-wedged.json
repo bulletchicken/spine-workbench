@@ -1,0 +1,178 @@
+{
+  "what": "A vertebra centred at (0, 0, 100) turned 30 degrees about one patient axis, or wedged 60 degrees, one at a time.",
+  "tolerancePx": 1e-9,
+  "cases": [
+    {
+      "what": "tilt: rotation vector (pi/6, 0, 0), front film facing patient left",
+      "vertebra": {
+        "centre": [0, 0, 100],
+        "rotation": [0.5235987755982988, 0, 0],
+        "height": 20,
+        "wedgeFront": 0,
+        "wedgeSide": 0,
+        "topHalfWidth": 15,
+        "topHalfDepth": 10,
+        "bottomHalfWidth": 15,
+        "bottomHalfDepth": 10
+      },
+      "film": {
+        "kind": "front",
+        "imageRight": "patient-left",
+        "quarterTurns": 0,
+        "size": [2000, 4000],
+        "mmPerPx": 0.5,
+        "origin": [1000, 3000]
+      },
+      "expect": {
+        "supL": [1015.9807621135332, 2767.679491924311],
+        "supR": [964.0192378864668, 2797.679491924311],
+        "infL": [1035.980762113533, 2802.320508075689],
+        "infR": [984.0192378864668, 2832.320508075689],
+        "pedL": [1016.6649944485558, 2782.064617092752],
+        "pedR": [976.1350055514441, 2805.4646170927517]
+      }
+    },
+    {
+      "what": "lean: rotation vector (0, pi/6, 0), side film facing anterior",
+      "vertebra": {
+        "centre": [0, 0, 100],
+        "rotation": [0, 0.5235987755982988, 0],
+        "height": 20,
+        "wedgeFront": 0,
+        "wedgeSide": 0,
+        "topHalfWidth": 15,
+        "topHalfDepth": 10,
+        "bottomHalfWidth": 15,
+        "bottomHalfDepth": 10
+      },
+      "film": {
+        "kind": "side",
+        "imageRight": "anterior",
+        "quarterTurns": 0,
+        "size": [2000, 4000],
+        "mmPerPx": 0.5,
+        "origin": [1000, 3000]
+      },
+      "expect": {
+        "supA": [1027.3205080756888, 2792.679491924311],
+        "supP": [992.6794919243113, 2772.679491924311],
+        "infA": [1007.3205080756887, 2827.320508075689],
+        "infP": [972.6794919243113, 2807.320508075689]
+      }
+    },
+    {
+      "what": "twist: rotation vector (0, 0, pi/6), front film facing patient left",
+      "vertebra": {
+        "centre": [0, 0, 100],
+        "rotation": [0, 0, 0.5235987755982988],
+        "height": 20,
+        "wedgeFront": 0,
+        "wedgeSide": 0,
+        "topHalfWidth": 15,
+        "topHalfDepth": 10,
+        "bottomHalfWidth": 15,
+        "bottomHalfDepth": 10
+      },
+      "film": {
+        "kind": "front",
+        "imageRight": "patient-left",
+        "quarterTurns": 0,
+        "size": [2000, 4000],
+        "mmPerPx": 0.5,
+        "origin": [1000, 3000]
+      },
+      "expect": {
+        "supL": [1027.8388218141502, 2780],
+        "supR": [972.1611781858498, 2780],
+        "infL": [1027.8388218141502, 2820],
+        "infR": [972.1611781858498, 2820],
+        "pedL": [1007.7649944485559, 2792.8],
+        "pedR": [967.2350055514441, 2792.8]
+      }
+    },
+    {
+      "what": "front wedge pi/3, front film facing patient left",
+      "vertebra": {
+        "centre": [0, 0, 100],
+        "rotation": [0, 0, 0],
+        "height": 20,
+        "wedgeFront": 1.0471975511965976,
+        "wedgeSide": 0,
+        "topHalfWidth": 15,
+        "topHalfDepth": 10,
+        "bottomHalfWidth": 15,
+        "bottomHalfDepth": 10
+      },
+      "film": {
+        "kind": "front",
+        "imageRight": "patient-left",
+        "quarterTurns": 0,
+        "size": [2000, 4000],
+        "mmPerPx": 0.5,
+        "origin": [1000, 3000]
+      },
+      "expect": {
+        "supL": [1025.980762113533, 2765],
+        "supR": [974.0192378864668, 2795],
+        "infL": [1025.980762113533, 2835],
+        "infR": [974.0192378864668, 2805],
+        "pedL": [1023.4, 2792.8],
+        "pedR": [976.6, 2792.8]
+      }
+    },
+    {
+      "what": "front wedge pi/3, bending film facing patient right",
+      "vertebra": {
+        "centre": [0, 0, 100],
+        "rotation": [0, 0, 0],
+        "height": 20,
+        "wedgeFront": 1.0471975511965976,
+        "wedgeSide": 0,
+        "topHalfWidth": 15,
+        "topHalfDepth": 10,
+        "bottomHalfWidth": 15,
+        "bottomHalfDepth": 10
+      },
+      "film": {
+        "kind": "bend-right",
+        "imageRight": "patient-right",
+        "quarterTurns": 0,
+        "size": [2000, 4000],
+        "mmPerPx": 0.5,
+        "origin": [1000, 3000]
+      },
+      "expect": {
+        "sup": [[974.0192378864668, 2765], [1025.980762113533, 2795]],
+        "inf": [[974.0192378864668, 2835], [1025.980762113533, 2805]]
+      }
+    },
+    {
+      "what": "side wedge pi/3, side film facing anterior",
+      "vertebra": {
+        "centre": [0, 0, 100],
+        "rotation": [0, 0, 0],
+        "height": 20,
+        "wedgeFront": 0,
+        "wedgeSide": 1.0471975511965976,
+        "topHalfWidth": 15,
+        "topHalfDepth": 10,
+        "bottomHalfWidth": 15,
+        "bottomHalfDepth": 10
+      },
+      "film": {
+        "kind": "side",
+        "imageRight": "anterior",
+        "quarterTurns": 0,
+        "size": [2000, 4000],
+        "mmPerPx": 0.5,
+        "origin": [1000, 3000]
+      },
+      "expect": {
+        "supA": [1017.3205080756887, 2790],
+        "supP": [982.6794919243113, 2770],
+        "infA": [1017.3205080756887, 2810],
+        "infP": [982.6794919243113, 2830]
+      }
+    }
+  ]
+}

@@ -1,0 +1,206 @@
+{
+  "what": "An upright vertebra with no turn and no wedge, on every kind of film and every facing.",
+  "tolerancePx": 1e-9,
+  "cases": [
+    {
+      "what": "front film facing patient left",
+      "vertebra": {
+        "centre": [0, 10, 100],
+        "rotation": [0, 0, 0],
+        "height": 20,
+        "wedgeFront": 0,
+        "wedgeSide": 0,
+        "topHalfWidth": 15,
+        "topHalfDepth": 10,
+        "bottomHalfWidth": 15,
+        "bottomHalfDepth": 10
+      },
+      "film": {
+        "kind": "front",
+        "imageRight": "patient-left",
+        "quarterTurns": 0,
+        "size": [2000, 4000],
+        "mmPerPx": 0.5,
+        "origin": [1000, 3000]
+      },
+      "expect": {
+        "supL": [1050, 2780],
+        "supR": [990, 2780],
+        "infL": [1050, 2820],
+        "infR": [990, 2820],
+        "pedL": [1043.4, 2792.8],
+        "pedR": [996.6, 2792.8]
+      }
+    },
+    {
+      "what": "front film facing patient right",
+      "vertebra": {
+        "centre": [0, 10, 100],
+        "rotation": [0, 0, 0],
+        "height": 20,
+        "wedgeFront": 0,
+        "wedgeSide": 0,
+        "topHalfWidth": 15,
+        "topHalfDepth": 10,
+        "bottomHalfWidth": 15,
+        "bottomHalfDepth": 10
+      },
+      "film": {
+        "kind": "front",
+        "imageRight": "patient-right",
+        "quarterTurns": 0,
+        "size": [2000, 4000],
+        "mmPerPx": 0.5,
+        "origin": [1000, 3000]
+      },
+      "expect": {
+        "supL": [950, 2780],
+        "supR": [1010, 2780],
+        "infL": [950, 2820],
+        "infR": [1010, 2820],
+        "pedL": [956.6, 2792.8],
+        "pedR": [1003.4, 2792.8]
+      }
+    },
+    {
+      "what": "side film facing anterior",
+      "vertebra": {
+        "centre": [0, 10, 100],
+        "rotation": [0, 0, 0],
+        "height": 20,
+        "wedgeFront": 0,
+        "wedgeSide": 0,
+        "topHalfWidth": 15,
+        "topHalfDepth": 10,
+        "bottomHalfWidth": 15,
+        "bottomHalfDepth": 10
+      },
+      "film": {
+        "kind": "side",
+        "imageRight": "anterior",
+        "quarterTurns": 0,
+        "size": [2000, 4000],
+        "mmPerPx": 0.5,
+        "origin": [1000, 3000]
+      },
+      "expect": {
+        "supA": [1020, 2780],
+        "supP": [980, 2780],
+        "infA": [1020, 2820],
+        "infP": [980, 2820]
+      }
+    },
+    {
+      "what": "side film facing posterior",
+      "vertebra": {
+        "centre": [0, 10, 100],
+        "rotation": [0, 0, 0],
+        "height": 20,
+        "wedgeFront": 0,
+        "wedgeSide": 0,
+        "topHalfWidth": 15,
+        "topHalfDepth": 10,
+        "bottomHalfWidth": 15,
+        "bottomHalfDepth": 10
+      },
+      "film": {
+        "kind": "side",
+        "imageRight": "posterior",
+        "quarterTurns": 0,
+        "size": [2000, 4000],
+        "mmPerPx": 0.5,
+        "origin": [1000, 3000]
+      },
+      "expect": {
+        "supA": [980, 2780],
+        "supP": [1020, 2780],
+        "infA": [980, 2820],
+        "infP": [1020, 2820]
+      }
+    },
+    {
+      "what": "bending film facing patient right",
+      "vertebra": {
+        "centre": [0, 10, 100],
+        "rotation": [0, 0, 0],
+        "height": 20,
+        "wedgeFront": 0,
+        "wedgeSide": 0,
+        "topHalfWidth": 15,
+        "topHalfDepth": 10,
+        "bottomHalfWidth": 15,
+        "bottomHalfDepth": 10
+      },
+      "film": {
+        "kind": "bend-left",
+        "imageRight": "patient-right",
+        "quarterTurns": 0,
+        "size": [2000, 4000],
+        "mmPerPx": 0.5,
+        "origin": [1000, 3000]
+      },
+      "expect": {
+        "sup": [[950, 2780], [1010, 2780]],
+        "inf": [[950, 2820], [1010, 2820]]
+      }
+    },
+    {
+      "what": "front film, a lower endplate larger than the upper",
+      "vertebra": {
+        "centre": [0, 10, 100],
+        "rotation": [0, 0, 0],
+        "height": 20,
+        "wedgeFront": 0,
+        "wedgeSide": 0,
+        "topHalfWidth": 15,
+        "topHalfDepth": 10,
+        "bottomHalfWidth": 16,
+        "bottomHalfDepth": 11
+      },
+      "film": {
+        "kind": "front",
+        "imageRight": "patient-left",
+        "quarterTurns": 0,
+        "size": [2000, 4000],
+        "mmPerPx": 0.5,
+        "origin": [1000, 3000]
+      },
+      "expect": {
+        "supL": [1050, 2780],
+        "supR": [990, 2780],
+        "infL": [1052, 2820],
+        "infR": [988, 2820],
+        "pedL": [1044.18, 2792.8],
+        "pedR": [995.82, 2792.8]
+      }
+    },
+    {
+      "what": "side film, a lower endplate larger than the upper",
+      "vertebra": {
+        "centre": [0, 10, 100],
+        "rotation": [0, 0, 0],
+        "height": 20,
+        "wedgeFront": 0,
+        "wedgeSide": 0,
+        "topHalfWidth": 15,
+        "topHalfDepth": 10,
+        "bottomHalfWidth": 16,
+        "bottomHalfDepth": 11
+      },
+      "film": {
+        "kind": "side",
+        "imageRight": "anterior",
+        "quarterTurns": 0,
+        "size": [2000, 4000],
+        "mmPerPx": 0.5,
+        "origin": [1000, 3000]
+      },
+      "expect": {
+        "supA": [1020, 2780],
+        "supP": [980, 2780],
+        "infA": [1022, 2820],
+        "infP": [978, 2820]
+      }
+    }
+  ]
+}

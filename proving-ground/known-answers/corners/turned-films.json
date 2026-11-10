@@ -1,0 +1,128 @@
+{
+  "what": "The straight vertebra on films stored turned, with pixels 0.4 mm along a stored row and 0.5 mm down a stored column.",
+  "tolerancePx": 1e-9,
+  "cases": [
+    {
+      "what": "one clockwise quarter turn, front film facing patient left",
+      "vertebra": {
+        "centre": [0, 10, 100],
+        "rotation": [0, 0, 0],
+        "height": 20,
+        "wedgeFront": 0,
+        "wedgeSide": 0,
+        "topHalfWidth": 15,
+        "topHalfDepth": 10,
+        "bottomHalfWidth": 15,
+        "bottomHalfDepth": 10
+      },
+      "film": {
+        "kind": "front",
+        "imageRight": "patient-left",
+        "quarterTurns": 1,
+        "size": [4000, 2000],
+        "mmPerPx": 0.4,
+        "mmPerPxVertical": 0.5,
+        "origin": [1000, 3000]
+      },
+      "expect": {
+        "supL": [2725, 949],
+        "supR": [2725, 1009],
+        "infL": [2775, 949],
+        "infR": [2775, 1009],
+        "pedL": [2741, 955.6],
+        "pedR": [2741, 1002.4]
+      }
+    },
+    {
+      "what": "two quarter turns, front film facing patient left",
+      "vertebra": {
+        "centre": [0, 10, 100],
+        "rotation": [0, 0, 0],
+        "height": 20,
+        "wedgeFront": 0,
+        "wedgeSide": 0,
+        "topHalfWidth": 15,
+        "topHalfDepth": 10,
+        "bottomHalfWidth": 15,
+        "bottomHalfDepth": 10
+      },
+      "film": {
+        "kind": "front",
+        "imageRight": "patient-left",
+        "quarterTurns": 2,
+        "size": [2000, 4000],
+        "mmPerPx": 0.4,
+        "mmPerPxVertical": 0.5,
+        "origin": [1000, 3000]
+      },
+      "expect": {
+        "supL": [936.5, 1219],
+        "supR": [1011.5, 1219],
+        "infL": [936.5, 1179],
+        "infR": [1011.5, 1179],
+        "pedL": [944.75, 1206.2],
+        "pedR": [1003.25, 1206.2]
+      }
+    },
+    {
+      "what": "three quarter turns, front film facing patient left",
+      "vertebra": {
+        "centre": [0, 10, 100],
+        "rotation": [0, 0, 0],
+        "height": 20,
+        "wedgeFront": 0,
+        "wedgeSide": 0,
+        "topHalfWidth": 15,
+        "topHalfDepth": 10,
+        "bottomHalfWidth": 15,
+        "bottomHalfDepth": 10
+      },
+      "film": {
+        "kind": "front",
+        "imageRight": "patient-left",
+        "quarterTurns": 3,
+        "size": [4000, 2000],
+        "mmPerPx": 0.4,
+        "mmPerPxVertical": 0.5,
+        "origin": [1000, 3000]
+      },
+      "expect": {
+        "supL": [1274, 1050],
+        "supR": [1274, 990],
+        "infL": [1224, 1050],
+        "infR": [1224, 990],
+        "pedL": [1258, 1043.4],
+        "pedR": [1258, 996.6]
+      }
+    },
+    {
+      "what": "one clockwise quarter turn, side film facing posterior",
+      "vertebra": {
+        "centre": [0, 10, 100],
+        "rotation": [0, 0, 0],
+        "height": 20,
+        "wedgeFront": 0,
+        "wedgeSide": 0,
+        "topHalfWidth": 15,
+        "topHalfDepth": 10,
+        "bottomHalfWidth": 15,
+        "bottomHalfDepth": 10
+      },
+      "film": {
+        "kind": "side",
+        "imageRight": "posterior",
+        "quarterTurns": 1,
+        "size": [4000, 2000],
+        "mmPerPx": 0.4,
+        "mmPerPxVertical": 0.5,
+        "origin": [1000, 3000]
+      },
+      "expect": {
+        "supA": [2725, 1019],
+        "supP": [2725, 979],
+        "infA": [2775, 1019],
+        "infP": [2775, 979]
+      }
+    }
+  ]
+}
