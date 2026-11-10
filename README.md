@@ -19,3 +19,7 @@ The first part is being built now.
 - **Rust** does the computing, compiled to WebAssembly and run in background workers.
 - **TypeScript and React** do everything you see and click.
 - The same Rust also runs from the command line, so every calculation is tested on made-up spines with known answers before it touches a real film.
+
+## Licence
+
+Spine Workbench is released under the [Apache License 2.0](LICENSE).
