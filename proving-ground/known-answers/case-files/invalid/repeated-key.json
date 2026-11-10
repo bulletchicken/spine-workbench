@@ -1,0 +1,50 @@
+{
+  "format": "spine-case",
+  "version": 1,
+  "savedWith": {
+    "app": "0.1.0"
+  },
+  "films": [
+    {
+      "kind": "front",
+      "image": {
+        "path": "films/front.png",
+        "width": 1200,
+        "height": 3000,
+        "bitsStored": 8
+      },
+      "source": "png",
+      "keptTags": null,
+      "values": {
+        "offset": 0,
+        "inverted": false,
+        "invertedByUser": false,
+        "modality": {
+          "kind": "linear",
+          "slope": 1.0,
+          "intercept": 0.0
+        }
+      },
+      "flags": [],
+      "blanked": [],
+      "geometry": {
+        "mmPerPx": null,
+        "mmPerPxVertical": null,
+        "scale": null,
+        "quarterTurns": 0,
+        "imageRight": null,
+        "confirmed": {
+          "upright": false,
+          "leftRight": false,
+          "facing": false,
+          "scale": false,
+          "polarity": false,
+          "privacy": false
+        }
+      }
+    }
+  ],
+  "marks": [],
+  "nextVertebraId": 1,
+  "nextVertebraId": 999
+}

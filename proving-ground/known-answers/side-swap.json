@@ -1,0 +1,1474 @@
+{
+  "cases": [
+    {
+      "what": "front film: corners, pedicles with their seen state, sacrum ends and hip sides swap; c7 stays",
+      "facing": "patient-right",
+      "before": {
+        "film": "front",
+        "vertebrae": [
+          {
+            "id": 1,
+            "level": "C7",
+            "marks": {
+              "kind": "front",
+              "points": {
+                "supL": {
+                  "at": [
+                    100.0,
+                    200.0
+                  ],
+                  "source": "auto",
+                  "pinned": false,
+                  "inferred": false
+                },
+                "supR": {
+                  "at": [
+                    140.0,
+                    202.0
+                  ],
+                  "source": "pin",
+                  "pinned": true,
+                  "inferred": false
+                },
+                "infL": {
+                  "at": [
+                    101.0,
+                    230.0
+                  ],
+                  "source": "auto",
+                  "pinned": false,
+                  "inferred": true
+                },
+                "infR": {
+                  "at": [
+                    139.0,
+                    231.0
+                  ],
+                  "source": "hand",
+                  "pinned": false,
+                  "inferred": false
+                },
+                "pedL": {
+                  "seen": "visible",
+                  "at": [
+                    110.0,
+                    215.0
+                  ],
+                  "source": "auto",
+                  "pinned": false,
+                  "inferred": false,
+                  "ringScore": 0.75
+                },
+                "pedR": {
+                  "seen": "not-visible",
+                  "source": "hand"
+                }
+              }
+            },
+            "confidence": {
+              "score": 0.96875,
+              "band": "high",
+              "reasons": [],
+              "calibrated": false,
+              "endplateSpreadPx": null,
+              "margin": null
+            },
+            "outline": null
+          },
+          {
+            "id": 2,
+            "level": "T1",
+            "marks": {
+              "kind": "front",
+              "points": {
+                "supL": {
+                  "at": [
+                    102.0,
+                    250.0
+                  ],
+                  "source": "hand",
+                  "pinned": false,
+                  "inferred": false
+                },
+                "supR": {
+                  "at": [
+                    143.0,
+                    252.0
+                  ],
+                  "source": "auto",
+                  "pinned": false,
+                  "inferred": true
+                },
+                "infL": {
+                  "at": [
+                    103.0,
+                    281.0
+                  ],
+                  "source": "pin",
+                  "pinned": true,
+                  "inferred": false
+                },
+                "infR": {
+                  "at": [
+                    142.0,
+                    283.0
+                  ],
+                  "source": "auto",
+                  "pinned": false,
+                  "inferred": false
+                },
+                "pedL": {
+                  "seen": "not-visible",
+                  "source": "auto"
+                },
+                "pedR": {
+                  "seen": "visible",
+                  "at": [
+                    133.0,
+                    266.0
+                  ],
+                  "source": "pin",
+                  "pinned": true,
+                  "inferred": false,
+                  "ringScore": 0.5
+                }
+              }
+            },
+            "confidence": {
+              "score": 0.875,
+              "band": "high",
+              "reasons": [],
+              "calibrated": false,
+              "endplateSpreadPx": null,
+              "margin": null
+            },
+            "outline": null
+          }
+        ],
+        "landmarks": {
+          "c7": {
+            "at": [
+              120.0,
+              215.75
+            ],
+            "source": "auto",
+            "pinned": false,
+            "inferred": true
+          },
+          "sacrumTop": {
+            "view": "front",
+            "sacL": {
+              "at": [
+                90.0,
+                900.0
+              ],
+              "source": "auto",
+              "pinned": false,
+              "inferred": false
+            },
+            "sacR": {
+              "at": [
+                150.0,
+                905.0
+              ],
+              "source": "pin",
+              "pinned": true,
+              "inferred": false
+            }
+          },
+          "hips": [
+            {
+              "side": "left",
+              "centre": {
+                "at": [
+                  60.0,
+                  1000.0
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "radiusPx": 30.0
+            },
+            {
+              "side": "right",
+              "centre": {
+                "at": [
+                  180.0,
+                  1002.0
+                ],
+                "source": "hand",
+                "pinned": false,
+                "inferred": false
+              },
+              "radiusPx": null
+            }
+          ]
+        },
+        "naming": {
+          "template": "standard",
+          "chosenBy": "engine",
+          "alternatives": [],
+          "fromTop": null,
+          "fromBottom": null,
+          "flags": [
+            "names-unknown"
+          ],
+          "l5ConfirmedOn": null
+        },
+        "namedFor": "patient-left"
+      },
+      "after": {
+        "film": "front",
+        "vertebrae": [
+          {
+            "id": 1,
+            "level": "C7",
+            "marks": {
+              "kind": "front",
+              "points": {
+                "supL": {
+                  "at": [
+                    140.0,
+                    202.0
+                  ],
+                  "source": "pin",
+                  "pinned": true,
+                  "inferred": false
+                },
+                "supR": {
+                  "at": [
+                    100.0,
+                    200.0
+                  ],
+                  "source": "auto",
+                  "pinned": false,
+                  "inferred": false
+                },
+                "infL": {
+                  "at": [
+                    139.0,
+                    231.0
+                  ],
+                  "source": "hand",
+                  "pinned": false,
+                  "inferred": false
+                },
+                "infR": {
+                  "at": [
+                    101.0,
+                    230.0
+                  ],
+                  "source": "auto",
+                  "pinned": false,
+                  "inferred": true
+                },
+                "pedL": {
+                  "seen": "not-visible",
+                  "source": "hand"
+                },
+                "pedR": {
+                  "seen": "visible",
+                  "at": [
+                    110.0,
+                    215.0
+                  ],
+                  "source": "auto",
+                  "pinned": false,
+                  "inferred": false,
+                  "ringScore": 0.75
+                }
+              }
+            },
+            "confidence": {
+              "score": 0.96875,
+              "band": "high",
+              "reasons": [],
+              "calibrated": false,
+              "endplateSpreadPx": null,
+              "margin": null
+            },
+            "outline": null
+          },
+          {
+            "id": 2,
+            "level": "T1",
+            "marks": {
+              "kind": "front",
+              "points": {
+                "supL": {
+                  "at": [
+                    143.0,
+                    252.0
+                  ],
+                  "source": "auto",
+                  "pinned": false,
+                  "inferred": true
+                },
+                "supR": {
+                  "at": [
+                    102.0,
+                    250.0
+                  ],
+                  "source": "hand",
+                  "pinned": false,
+                  "inferred": false
+                },
+                "infL": {
+                  "at": [
+                    142.0,
+                    283.0
+                  ],
+                  "source": "auto",
+                  "pinned": false,
+                  "inferred": false
+                },
+                "infR": {
+                  "at": [
+                    103.0,
+                    281.0
+                  ],
+                  "source": "pin",
+                  "pinned": true,
+                  "inferred": false
+                },
+                "pedL": {
+                  "seen": "visible",
+                  "at": [
+                    133.0,
+                    266.0
+                  ],
+                  "source": "pin",
+                  "pinned": true,
+                  "inferred": false,
+                  "ringScore": 0.5
+                },
+                "pedR": {
+                  "seen": "not-visible",
+                  "source": "auto"
+                }
+              }
+            },
+            "confidence": {
+              "score": 0.875,
+              "band": "high",
+              "reasons": [],
+              "calibrated": false,
+              "endplateSpreadPx": null,
+              "margin": null
+            },
+            "outline": null
+          }
+        ],
+        "landmarks": {
+          "c7": {
+            "at": [
+              120.0,
+              215.75
+            ],
+            "source": "auto",
+            "pinned": false,
+            "inferred": true
+          },
+          "sacrumTop": {
+            "view": "front",
+            "sacL": {
+              "at": [
+                150.0,
+                905.0
+              ],
+              "source": "pin",
+              "pinned": true,
+              "inferred": false
+            },
+            "sacR": {
+              "at": [
+                90.0,
+                900.0
+              ],
+              "source": "auto",
+              "pinned": false,
+              "inferred": false
+            }
+          },
+          "hips": [
+            {
+              "side": "right",
+              "centre": {
+                "at": [
+                  60.0,
+                  1000.0
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "radiusPx": 30.0
+            },
+            {
+              "side": "left",
+              "centre": {
+                "at": [
+                  180.0,
+                  1002.0
+                ],
+                "source": "hand",
+                "pinned": false,
+                "inferred": false
+              },
+              "radiusPx": null
+            }
+          ]
+        },
+        "naming": {
+          "template": "standard",
+          "chosenBy": "engine",
+          "alternatives": [],
+          "fromTop": null,
+          "fromBottom": null,
+          "flags": [
+            "names-unknown"
+          ],
+          "l5ConfirmedOn": null
+        },
+        "namedFor": "patient-right"
+      }
+    },
+    {
+      "what": "side film: anterior and posterior corners and sacrum ends swap; unpaired hips stay",
+      "facing": "posterior",
+      "before": {
+        "film": "side",
+        "vertebrae": [
+          {
+            "id": 2,
+            "level": "T1",
+            "marks": {
+              "kind": "side",
+              "points": {
+                "supA": {
+                  "at": [
+                    300.0,
+                    400.0
+                  ],
+                  "source": "auto",
+                  "pinned": false,
+                  "inferred": false
+                },
+                "supP": {
+                  "at": [
+                    260.0,
+                    402.0
+                  ],
+                  "source": "pin",
+                  "pinned": true,
+                  "inferred": false
+                },
+                "infA": {
+                  "at": [
+                    301.0,
+                    430.0
+                  ],
+                  "source": "region-wand",
+                  "pinned": false,
+                  "inferred": false
+                },
+                "infP": {
+                  "at": [
+                    259.0,
+                    431.0
+                  ],
+                  "source": "auto",
+                  "pinned": false,
+                  "inferred": true
+                }
+              }
+            },
+            "confidence": {
+              "score": 0.96875,
+              "band": "high",
+              "reasons": [],
+              "calibrated": false,
+              "endplateSpreadPx": null,
+              "margin": null
+            },
+            "outline": null
+          },
+          {
+            "id": 3,
+            "level": "T2",
+            "marks": {
+              "kind": "side",
+              "points": {
+                "supA": {
+                  "at": [
+                    303.0,
+                    450.0
+                  ],
+                  "source": "hand",
+                  "pinned": false,
+                  "inferred": false
+                },
+                "supP": {
+                  "at": [
+                    262.0,
+                    452.0
+                  ],
+                  "source": "auto",
+                  "pinned": false,
+                  "inferred": true
+                },
+                "infA": {
+                  "at": [
+                    304.0,
+                    481.0
+                  ],
+                  "source": "auto",
+                  "pinned": false,
+                  "inferred": false
+                },
+                "infP": {
+                  "at": [
+                    261.0,
+                    482.0
+                  ],
+                  "source": "pin",
+                  "pinned": true,
+                  "inferred": false
+                }
+              }
+            },
+            "confidence": {
+              "score": 0.875,
+              "band": "high",
+              "reasons": [],
+              "calibrated": false,
+              "endplateSpreadPx": null,
+              "margin": null
+            },
+            "outline": null
+          }
+        ],
+        "landmarks": {
+          "c7": null,
+          "sacrumTop": {
+            "view": "side",
+            "sacA": {
+              "at": [
+                310.0,
+                900.0
+              ],
+              "source": "auto",
+              "pinned": false,
+              "inferred": false
+            },
+            "sacP": {
+              "at": [
+                270.0,
+                905.0
+              ],
+              "source": "hand",
+              "pinned": false,
+              "inferred": false
+            }
+          },
+          "hips": [
+            {
+              "side": "unpaired",
+              "centre": {
+                "at": [
+                  320.0,
+                  1000.0
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "radiusPx": 25.0
+            },
+            {
+              "side": "unpaired",
+              "centre": {
+                "at": [
+                  330.0,
+                  1005.0
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "radiusPx": 26.0
+            }
+          ]
+        },
+        "naming": {
+          "template": "standard",
+          "chosenBy": "engine",
+          "alternatives": [],
+          "fromTop": null,
+          "fromBottom": null,
+          "flags": [
+            "names-unknown"
+          ],
+          "l5ConfirmedOn": null
+        },
+        "namedFor": "anterior"
+      },
+      "after": {
+        "film": "side",
+        "vertebrae": [
+          {
+            "id": 2,
+            "level": "T1",
+            "marks": {
+              "kind": "side",
+              "points": {
+                "supA": {
+                  "at": [
+                    260.0,
+                    402.0
+                  ],
+                  "source": "pin",
+                  "pinned": true,
+                  "inferred": false
+                },
+                "supP": {
+                  "at": [
+                    300.0,
+                    400.0
+                  ],
+                  "source": "auto",
+                  "pinned": false,
+                  "inferred": false
+                },
+                "infA": {
+                  "at": [
+                    259.0,
+                    431.0
+                  ],
+                  "source": "auto",
+                  "pinned": false,
+                  "inferred": true
+                },
+                "infP": {
+                  "at": [
+                    301.0,
+                    430.0
+                  ],
+                  "source": "region-wand",
+                  "pinned": false,
+                  "inferred": false
+                }
+              }
+            },
+            "confidence": {
+              "score": 0.96875,
+              "band": "high",
+              "reasons": [],
+              "calibrated": false,
+              "endplateSpreadPx": null,
+              "margin": null
+            },
+            "outline": null
+          },
+          {
+            "id": 3,
+            "level": "T2",
+            "marks": {
+              "kind": "side",
+              "points": {
+                "supA": {
+                  "at": [
+                    262.0,
+                    452.0
+                  ],
+                  "source": "auto",
+                  "pinned": false,
+                  "inferred": true
+                },
+                "supP": {
+                  "at": [
+                    303.0,
+                    450.0
+                  ],
+                  "source": "hand",
+                  "pinned": false,
+                  "inferred": false
+                },
+                "infA": {
+                  "at": [
+                    261.0,
+                    482.0
+                  ],
+                  "source": "pin",
+                  "pinned": true,
+                  "inferred": false
+                },
+                "infP": {
+                  "at": [
+                    304.0,
+                    481.0
+                  ],
+                  "source": "auto",
+                  "pinned": false,
+                  "inferred": false
+                }
+              }
+            },
+            "confidence": {
+              "score": 0.875,
+              "band": "high",
+              "reasons": [],
+              "calibrated": false,
+              "endplateSpreadPx": null,
+              "margin": null
+            },
+            "outline": null
+          }
+        ],
+        "landmarks": {
+          "c7": null,
+          "sacrumTop": {
+            "view": "side",
+            "sacA": {
+              "at": [
+                270.0,
+                905.0
+              ],
+              "source": "hand",
+              "pinned": false,
+              "inferred": false
+            },
+            "sacP": {
+              "at": [
+                310.0,
+                900.0
+              ],
+              "source": "auto",
+              "pinned": false,
+              "inferred": false
+            }
+          },
+          "hips": [
+            {
+              "side": "unpaired",
+              "centre": {
+                "at": [
+                  320.0,
+                  1000.0
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "radiusPx": 25.0
+            },
+            {
+              "side": "unpaired",
+              "centre": {
+                "at": [
+                  330.0,
+                  1005.0
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "radiusPx": 26.0
+            }
+          ]
+        },
+        "naming": {
+          "template": "standard",
+          "chosenBy": "engine",
+          "alternatives": [],
+          "fromTop": null,
+          "fromBottom": null,
+          "flags": [
+            "names-unknown"
+          ],
+          "l5ConfirmedOn": null
+        },
+        "namedFor": "posterior"
+      }
+    },
+    {
+      "what": "bending film: the two ends of each endplate line swap",
+      "facing": "patient-left",
+      "before": {
+        "film": "bend-left",
+        "vertebrae": [
+          {
+            "id": 3,
+            "level": "L1",
+            "marks": {
+              "kind": "bending",
+              "lines": {
+                "sup": [
+                  {
+                    "at": [
+                      500.0,
+                      600.0
+                    ],
+                    "source": "pin",
+                    "pinned": true,
+                    "inferred": false
+                  },
+                  {
+                    "at": [
+                      540.0,
+                      604.0
+                    ],
+                    "source": "auto",
+                    "pinned": false,
+                    "inferred": false
+                  }
+                ],
+                "inf": [
+                  {
+                    "at": [
+                      501.0,
+                      630.0
+                    ],
+                    "source": "boundary-wand",
+                    "pinned": false,
+                    "inferred": false
+                  },
+                  {
+                    "at": [
+                      541.0,
+                      633.0
+                    ],
+                    "source": "auto",
+                    "pinned": false,
+                    "inferred": true
+                  }
+                ]
+              }
+            },
+            "confidence": {
+              "score": 0.96875,
+              "band": "high",
+              "reasons": [],
+              "calibrated": false,
+              "endplateSpreadPx": null,
+              "margin": null
+            },
+            "outline": null
+          },
+          {
+            "id": 4,
+            "level": "L2",
+            "marks": {
+              "kind": "bending",
+              "lines": {
+                "sup": [
+                  {
+                    "at": [
+                      503.0,
+                      650.0
+                    ],
+                    "source": "auto",
+                    "pinned": false,
+                    "inferred": true
+                  },
+                  {
+                    "at": [
+                      544.0,
+                      655.0
+                    ],
+                    "source": "hand",
+                    "pinned": false,
+                    "inferred": false
+                  }
+                ],
+                "inf": [
+                  {
+                    "at": [
+                      504.0,
+                      681.0
+                    ],
+                    "source": "auto",
+                    "pinned": false,
+                    "inferred": false
+                  },
+                  {
+                    "at": [
+                      545.0,
+                      686.0
+                    ],
+                    "source": "pin",
+                    "pinned": true,
+                    "inferred": false
+                  }
+                ]
+              }
+            },
+            "confidence": {
+              "score": 0.875,
+              "band": "high",
+              "reasons": [],
+              "calibrated": false,
+              "endplateSpreadPx": null,
+              "margin": null
+            },
+            "outline": null
+          }
+        ],
+        "landmarks": {
+          "c7": null,
+          "sacrumTop": {
+            "view": "front",
+            "sacL": {
+              "at": [
+                480.0,
+                900.0
+              ],
+              "source": "auto",
+              "pinned": false,
+              "inferred": false
+            },
+            "sacR": {
+              "at": [
+                560.0,
+                905.0
+              ],
+              "source": "hand",
+              "pinned": false,
+              "inferred": false
+            }
+          },
+          "hips": []
+        },
+        "naming": {
+          "template": "standard",
+          "chosenBy": "engine",
+          "alternatives": [],
+          "fromTop": null,
+          "fromBottom": null,
+          "flags": [
+            "names-unknown"
+          ],
+          "l5ConfirmedOn": null
+        },
+        "namedFor": "patient-right"
+      },
+      "after": {
+        "film": "bend-left",
+        "vertebrae": [
+          {
+            "id": 3,
+            "level": "L1",
+            "marks": {
+              "kind": "bending",
+              "lines": {
+                "sup": [
+                  {
+                    "at": [
+                      540.0,
+                      604.0
+                    ],
+                    "source": "auto",
+                    "pinned": false,
+                    "inferred": false
+                  },
+                  {
+                    "at": [
+                      500.0,
+                      600.0
+                    ],
+                    "source": "pin",
+                    "pinned": true,
+                    "inferred": false
+                  }
+                ],
+                "inf": [
+                  {
+                    "at": [
+                      541.0,
+                      633.0
+                    ],
+                    "source": "auto",
+                    "pinned": false,
+                    "inferred": true
+                  },
+                  {
+                    "at": [
+                      501.0,
+                      630.0
+                    ],
+                    "source": "boundary-wand",
+                    "pinned": false,
+                    "inferred": false
+                  }
+                ]
+              }
+            },
+            "confidence": {
+              "score": 0.96875,
+              "band": "high",
+              "reasons": [],
+              "calibrated": false,
+              "endplateSpreadPx": null,
+              "margin": null
+            },
+            "outline": null
+          },
+          {
+            "id": 4,
+            "level": "L2",
+            "marks": {
+              "kind": "bending",
+              "lines": {
+                "sup": [
+                  {
+                    "at": [
+                      544.0,
+                      655.0
+                    ],
+                    "source": "hand",
+                    "pinned": false,
+                    "inferred": false
+                  },
+                  {
+                    "at": [
+                      503.0,
+                      650.0
+                    ],
+                    "source": "auto",
+                    "pinned": false,
+                    "inferred": true
+                  }
+                ],
+                "inf": [
+                  {
+                    "at": [
+                      545.0,
+                      686.0
+                    ],
+                    "source": "pin",
+                    "pinned": true,
+                    "inferred": false
+                  },
+                  {
+                    "at": [
+                      504.0,
+                      681.0
+                    ],
+                    "source": "auto",
+                    "pinned": false,
+                    "inferred": false
+                  }
+                ]
+              }
+            },
+            "confidence": {
+              "score": 0.875,
+              "band": "high",
+              "reasons": [],
+              "calibrated": false,
+              "endplateSpreadPx": null,
+              "margin": null
+            },
+            "outline": null
+          }
+        ],
+        "landmarks": {
+          "c7": null,
+          "sacrumTop": {
+            "view": "front",
+            "sacL": {
+              "at": [
+                560.0,
+                905.0
+              ],
+              "source": "hand",
+              "pinned": false,
+              "inferred": false
+            },
+            "sacR": {
+              "at": [
+                480.0,
+                900.0
+              ],
+              "source": "auto",
+              "pinned": false,
+              "inferred": false
+            }
+          },
+          "hips": []
+        },
+        "naming": {
+          "template": "standard",
+          "chosenBy": "engine",
+          "alternatives": [],
+          "fromTop": null,
+          "fromBottom": null,
+          "flags": [
+            "names-unknown"
+          ],
+          "l5ConfirmedOn": null
+        },
+        "namedFor": "patient-left"
+      }
+    },
+    {
+      "what": "already named for this facing: nothing changes",
+      "facing": "anterior",
+      "before": {
+        "film": "side",
+        "vertebrae": [
+          {
+            "id": 2,
+            "level": "T1",
+            "marks": {
+              "kind": "side",
+              "points": {
+                "supA": {
+                  "at": [
+                    300.0,
+                    400.0
+                  ],
+                  "source": "auto",
+                  "pinned": false,
+                  "inferred": false
+                },
+                "supP": {
+                  "at": [
+                    260.0,
+                    402.0
+                  ],
+                  "source": "pin",
+                  "pinned": true,
+                  "inferred": false
+                },
+                "infA": {
+                  "at": [
+                    301.0,
+                    430.0
+                  ],
+                  "source": "region-wand",
+                  "pinned": false,
+                  "inferred": false
+                },
+                "infP": {
+                  "at": [
+                    259.0,
+                    431.0
+                  ],
+                  "source": "auto",
+                  "pinned": false,
+                  "inferred": true
+                }
+              }
+            },
+            "confidence": {
+              "score": 0.96875,
+              "band": "high",
+              "reasons": [],
+              "calibrated": false,
+              "endplateSpreadPx": null,
+              "margin": null
+            },
+            "outline": null
+          },
+          {
+            "id": 3,
+            "level": "T2",
+            "marks": {
+              "kind": "side",
+              "points": {
+                "supA": {
+                  "at": [
+                    303.0,
+                    450.0
+                  ],
+                  "source": "hand",
+                  "pinned": false,
+                  "inferred": false
+                },
+                "supP": {
+                  "at": [
+                    262.0,
+                    452.0
+                  ],
+                  "source": "auto",
+                  "pinned": false,
+                  "inferred": true
+                },
+                "infA": {
+                  "at": [
+                    304.0,
+                    481.0
+                  ],
+                  "source": "auto",
+                  "pinned": false,
+                  "inferred": false
+                },
+                "infP": {
+                  "at": [
+                    261.0,
+                    482.0
+                  ],
+                  "source": "pin",
+                  "pinned": true,
+                  "inferred": false
+                }
+              }
+            },
+            "confidence": {
+              "score": 0.875,
+              "band": "high",
+              "reasons": [],
+              "calibrated": false,
+              "endplateSpreadPx": null,
+              "margin": null
+            },
+            "outline": null
+          }
+        ],
+        "landmarks": {
+          "c7": null,
+          "sacrumTop": {
+            "view": "side",
+            "sacA": {
+              "at": [
+                310.0,
+                900.0
+              ],
+              "source": "auto",
+              "pinned": false,
+              "inferred": false
+            },
+            "sacP": {
+              "at": [
+                270.0,
+                905.0
+              ],
+              "source": "hand",
+              "pinned": false,
+              "inferred": false
+            }
+          },
+          "hips": [
+            {
+              "side": "unpaired",
+              "centre": {
+                "at": [
+                  320.0,
+                  1000.0
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "radiusPx": 25.0
+            },
+            {
+              "side": "unpaired",
+              "centre": {
+                "at": [
+                  330.0,
+                  1005.0
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "radiusPx": 26.0
+            }
+          ]
+        },
+        "naming": {
+          "template": "standard",
+          "chosenBy": "engine",
+          "alternatives": [],
+          "fromTop": null,
+          "fromBottom": null,
+          "flags": [
+            "names-unknown"
+          ],
+          "l5ConfirmedOn": null
+        },
+        "namedFor": "anterior"
+      },
+      "after": {
+        "film": "side",
+        "vertebrae": [
+          {
+            "id": 2,
+            "level": "T1",
+            "marks": {
+              "kind": "side",
+              "points": {
+                "supA": {
+                  "at": [
+                    300.0,
+                    400.0
+                  ],
+                  "source": "auto",
+                  "pinned": false,
+                  "inferred": false
+                },
+                "supP": {
+                  "at": [
+                    260.0,
+                    402.0
+                  ],
+                  "source": "pin",
+                  "pinned": true,
+                  "inferred": false
+                },
+                "infA": {
+                  "at": [
+                    301.0,
+                    430.0
+                  ],
+                  "source": "region-wand",
+                  "pinned": false,
+                  "inferred": false
+                },
+                "infP": {
+                  "at": [
+                    259.0,
+                    431.0
+                  ],
+                  "source": "auto",
+                  "pinned": false,
+                  "inferred": true
+                }
+              }
+            },
+            "confidence": {
+              "score": 0.96875,
+              "band": "high",
+              "reasons": [],
+              "calibrated": false,
+              "endplateSpreadPx": null,
+              "margin": null
+            },
+            "outline": null
+          },
+          {
+            "id": 3,
+            "level": "T2",
+            "marks": {
+              "kind": "side",
+              "points": {
+                "supA": {
+                  "at": [
+                    303.0,
+                    450.0
+                  ],
+                  "source": "hand",
+                  "pinned": false,
+                  "inferred": false
+                },
+                "supP": {
+                  "at": [
+                    262.0,
+                    452.0
+                  ],
+                  "source": "auto",
+                  "pinned": false,
+                  "inferred": true
+                },
+                "infA": {
+                  "at": [
+                    304.0,
+                    481.0
+                  ],
+                  "source": "auto",
+                  "pinned": false,
+                  "inferred": false
+                },
+                "infP": {
+                  "at": [
+                    261.0,
+                    482.0
+                  ],
+                  "source": "pin",
+                  "pinned": true,
+                  "inferred": false
+                }
+              }
+            },
+            "confidence": {
+              "score": 0.875,
+              "band": "high",
+              "reasons": [],
+              "calibrated": false,
+              "endplateSpreadPx": null,
+              "margin": null
+            },
+            "outline": null
+          }
+        ],
+        "landmarks": {
+          "c7": null,
+          "sacrumTop": {
+            "view": "side",
+            "sacA": {
+              "at": [
+                310.0,
+                900.0
+              ],
+              "source": "auto",
+              "pinned": false,
+              "inferred": false
+            },
+            "sacP": {
+              "at": [
+                270.0,
+                905.0
+              ],
+              "source": "hand",
+              "pinned": false,
+              "inferred": false
+            }
+          },
+          "hips": [
+            {
+              "side": "unpaired",
+              "centre": {
+                "at": [
+                  320.0,
+                  1000.0
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "radiusPx": 25.0
+            },
+            {
+              "side": "unpaired",
+              "centre": {
+                "at": [
+                  330.0,
+                  1005.0
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "radiusPx": 26.0
+            }
+          ]
+        },
+        "naming": {
+          "template": "standard",
+          "chosenBy": "engine",
+          "alternatives": [],
+          "fromTop": null,
+          "fromBottom": null,
+          "flags": [
+            "names-unknown"
+          ],
+          "l5ConfirmedOn": null
+        },
+        "namedFor": "anterior"
+      }
+    }
+  ]
+}

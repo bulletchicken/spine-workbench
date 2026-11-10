@@ -1,0 +1,74 @@
+[
+  {
+    "file": "valid/minimal.json",
+    "verdict": "accept",
+    "code": null,
+    "detail": null
+  },
+  {
+    "file": "valid/four-films.json",
+    "verdict": "accept",
+    "code": null,
+    "detail": null
+  },
+  {
+    "file": "invalid/unknown-field.json",
+    "verdict": "refuse",
+    "code": "case-unknown-field",
+    "detail": "films[0].fileName"
+  },
+  {
+    "file": "invalid/version-2.json",
+    "verdict": "refuse",
+    "code": "case-newer-version",
+    "detail": "version"
+  },
+  {
+    "file": "invalid/missing-format.json",
+    "verdict": "refuse",
+    "code": "case-wrong-format",
+    "detail": "format"
+  },
+  {
+    "file": "invalid/bad-level.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "marks[0].vertebrae[0].level"
+  },
+  {
+    "file": "invalid/point-off-film.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "marks[0].vertebrae[0].marks.points.supL.at"
+  },
+  {
+    "file": "invalid/levels-out-of-order.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "marks[0].vertebrae[1].level"
+  },
+  {
+    "file": "invalid/repeated-key.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "nextVertebraId"
+  },
+  {
+    "file": "invalid/c7-without-vertebra.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "marks[1].landmarks.c7"
+  },
+  {
+    "file": "invalid/c7-off-its-vertebra.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "marks[2].landmarks.c7.at"
+  },
+  {
+    "file": "invalid/c7-pinned.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "marks[2].landmarks.c7.pinned"
+  }
+]
