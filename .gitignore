@@ -1,0 +1,11 @@
+# Anything in here stays on this machine: downloaded films, datasets, scratch work.
+local-only/
+
+# Installed packages and build output
+node_modules/
+target/
+dist/
+
+# Editor and system clutter
+.DS_Store
+*.log
