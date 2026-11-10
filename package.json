@@ -1,0 +1,25 @@
+{
+  "name": "spine-workbench",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@9.12.3",
+  "engines": {
+    "node": ">=22.13.0",
+    "pnpm": ">=9.12.3"
+  },
+  "scripts": {
+    "dev": "cargo chores wasm --dev && pnpm --filter ./app dev",
+    "engine": "cargo chores wasm --release",
+    "build": "pnpm engine && pnpm --filter ./app build",
+    "check": "cargo fmt --check && cargo clippy --workspace --all-targets -- -D warnings && cargo chores seams && cargo chores shapes --check && cargo check -p wasm-bridge --target wasm32-unknown-unknown && pnpm engine && tsc -b app && eslint .",
+    "test": "pnpm engine && cargo test --workspace && pnpm -r --if-present run test",
+    "score": "cargo spine score"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "eslint": "10.14.0",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.2"
+  }
+}
