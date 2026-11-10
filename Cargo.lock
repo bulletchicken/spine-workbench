@@ -724,6 +724,8 @@ dependencies = [
  "libm",
  "nalgebra",
  "proptest",
+ "serde",
+ "serde_json",
  "shapes",
 ]
 
