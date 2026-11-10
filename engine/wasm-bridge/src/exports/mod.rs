@@ -8,4 +8,5 @@ pub mod film_reader;
 pub mod info;
 pub mod made_up_spines;
 pub mod scorekeeper;
+pub mod shapes;
 pub mod toolbox;
