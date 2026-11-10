@@ -238,7 +238,7 @@ The folders and import rules in one picture: `app/README.md`.
 | the one stylesheet, which imports the shared ones in order | `app/src/look-and-feel/base.css` |
 | the values of the data attributes that carry state to CSS | `app/src/look-and-feel/data-attributes.ts` |
 | what a gallery page holds | `app/src/gallery/gallery-page.ts` |
-| the preview notice, error wording, evidence entries | `app/src/words/preview-notice.ts`, `app/src/words/faults.ts`, `app/src/words/evidence-ledger.ts` |
+| the preview notice, error wording, evidence entries, the one word for each idea | `app/src/words/preview-notice.ts`, `app/src/words/faults.ts`, `app/src/words/evidence-ledger.ts`, `app/src/words/glossary.ts` |
 | the rule against outcome claims in the wording | `app/src/words/never-claim.test.ts` |
 
 ## The proof (`proving-ground/`)

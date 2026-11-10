@@ -92,9 +92,9 @@ C1 < … < C7 < T1 < … < T12 < T13 < L1 < … < L5 < L6 < L7
   vertebra; one fewer is just as possible. Counts that differ from 12 and
   5, and transitional vertebrae at either end of the lumbar spine, are
   common enough that every film's naming is checked from both ends and
-  L5 is confirmed by the user. In one MR study of 147 adults, 8.2% had an
-  unusual count and 15.0% a lumbosacral transitional vertebra (Carrino et
-  al., Radiology 2011, PMID 21436097).
+  L5 is confirmed by the user. In one MR study of 147 subjects, 8.2% had
+  an unusual count and 15.0% a lumbosacral transitional vertebra
+  (Carrino et al., Radiology 2011, PMID 21436097).
 - Each count (`Template`) has its levels, the chain the auto pass solves
   (`TEMPLATE_LEVELS`), and its names (`TEMPLATE_NAMES`): its levels run on
   upward through C6 to C1 and downward through the lumbar names after its

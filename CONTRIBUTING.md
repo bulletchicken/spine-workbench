@@ -66,7 +66,7 @@ type(scope): imperative summary
 - **scope** is optional. When given it is `deps` or a real folder: a
   top-level folder (`app`, `engine`, `chores`, `docs`, `proving-ground`),
   an engine crate (`film-reader`), an area of `app/src` (`engine-room`),
-  or a step named without its number (`bring-films`);
+  or a step named without its number (`find`);
 - the whole subject is at most 72 characters, with no full stop.
 
 Leave a blank line, then a body wrapped at 72 columns saying **why**. For
