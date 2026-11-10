@@ -1,6 +1,7 @@
 {
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
+    "allowImportingTsExtensions": true,
     "tsBuildInfoFile": "../target/tsc/app.tsbuildinfo",
     "types": ["vite/client", "node"],
     "paths": { "@/*": ["./src/*"] }

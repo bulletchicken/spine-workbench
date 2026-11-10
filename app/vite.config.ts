@@ -1,11 +1,13 @@
 import react from '@vitejs/plugin-react';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
+import { contentPolicy } from './build-plugins/content-policy.ts';
+import { engineBuild } from './build-plugins/engine-build.ts';
 
 // The app is a static site: one page, ES-module workers and the engine's
 // own .wasm, all served from the same origin.
 export default defineConfig({
-  plugins: [react()],
+  plugins: [engineBuild(), react(), contentPolicy()],
   resolve: {
     alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
   },
