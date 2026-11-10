@@ -1,0 +1,56 @@
+# Every commit in a pull request, and the pull request's own text, through
+# chores/check-commit-message.sh: subject shape, a real folder as scope,
+# one author, no trailers and no tool footers.
+#
+# The checker comes from the base branch, so a pull request that relaxes
+# it is still judged by the rules it would replace. Only a base that has
+# no checker yet falls back to the pull request's own copy.
+
+name: commit-hygiene
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+
+permissions:
+  contents: read
+
+jobs:
+  messages:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - name: The checker from the base branch
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+        run: |
+          if ! git show "$BASE:chores/check-commit-message.sh" > "$RUNNER_TEMP/check-commit-message.sh"; then
+            echo "the base branch has no checker yet; using this pull request's"
+            cp chores/check-commit-message.sh "$RUNNER_TEMP/check-commit-message.sh"
+          fi
+          chmod +x "$RUNNER_TEMP/check-commit-message.sh"
+      - name: Every commit
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+          HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          status=0
+          for commit in $(git rev-list --reverse --no-merges "$BASE..$HEAD"); do
+            git log -1 --format=%B "$commit" > "$RUNNER_TEMP/message"
+            if "$RUNNER_TEMP/check-commit-message.sh" --tree "$commit" "$RUNNER_TEMP/message"; then
+              echo "ok  $(git log -1 --format=%s "$commit")"
+            else
+              echo "::error::commit $commit breaks the commit rules"
+              status=1
+            fi
+          done
+          exit "$status"
+      - name: The pull request body
+        env:
+          BODY: ${{ github.event.pull_request.body }}
+        run: |
+          printf '%s\n' "$BODY" > "$RUNNER_TEMP/body"
+          "$RUNNER_TEMP/check-commit-message.sh" --body "$RUNNER_TEMP/body"
