@@ -228,10 +228,16 @@ The folders and import rules in one picture: `app/README.md`.
 | the worker messages | `app/src/engine-room/messages.ts` |
 | the one fetch: loading the engine | `app/src/engine-room/load-engine.ts` |
 | how a worker boots | `app/src/engine-room/workers/boot.ts`, `app/src/engine-room/workers/film-worker/film.worker.ts`, `app/src/engine-room/workers/spine-worker/spine.worker.ts` |
+| what the stand-in's story must hold | `app/src/sample-case/story-shape.ts` |
 | the step contract | `app/src/steps/step-contract.ts` |
 | the tool contract | `app/src/toolbox/tool-contract.ts` |
 | the film-to-screen transform | `app/src/film-viewer/film-space.ts` |
 | the case edits | `app/src/case-state/case-edits.ts` |
+| the design's tokens, unchanged | `app/src/look-and-feel/tokens.css` |
+| a duration the design names that is not a token | `app/src/look-and-feel/named-timings.css` |
+| the one stylesheet, which imports the shared ones in order | `app/src/look-and-feel/base.css` |
+| the values of the data attributes that carry state to CSS | `app/src/look-and-feel/data-attributes.ts` |
+| what a gallery page holds | `app/src/gallery/gallery-page.ts` |
 | the preview notice, error wording, evidence entries | `app/src/words/preview-notice.ts`, `app/src/words/faults.ts`, `app/src/words/evidence-ledger.ts` |
 | the rule against outcome claims in the wording | `app/src/words/never-claim.test.ts` |
 

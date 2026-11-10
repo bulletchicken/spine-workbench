@@ -1,0 +1,135 @@
+/* ==========================================================================
+   Spine Workbench · design tokens  ("Reading Room", final)
+   One rule to remember: light means go, colour means data.
+   Chrome is neutral. Exactly one thing on screen wears lumen: the next action.
+   The only hues are the four confidence colours, and each is also a line
+   pattern, a glyph and a word, so nothing rests on hue alone.
+   ========================================================================== */
+:root {
+  color-scheme: dark;
+
+  /* ---- The room: deep neutrals with a breath of blue ---------------------- */
+  --room-0: #05070a;                 /* page behind everything */
+  --room-1: #0a0d12;                 /* guide, bars */
+  --room-2: #10141b;                 /* cards */
+  --room-3: #171c25;                 /* hover, raised */
+  --room-4: #222935;                 /* pressed, selected */
+  --well:   #020304;                 /* the recessed bay a film hangs in */
+  --line-1: rgba(190, 215, 255, .08);
+  --line-2: rgba(190, 215, 255, .14);
+  --line-3: rgba(190, 215, 255, .26);
+
+  /* ---- Ink (WCAG contrast worked out on --room-1; on a --room-2 card it is about 5% lower) ---- */
+  --ink-1: #eef3f9;                  /* 17.4:1  text */
+  --ink-2: #b0bac8;                  /*  9.9:1  secondary text */
+  --ink-3: #8793a4;                  /*  6.2:1  captions, labels */
+  --ink-4: #566070;                  /*  3.1:1  decoration and 24 px or larger only, never small text */
+
+  /* ---- Lumen: the one light. Only the next action wears it. --------------- */
+  --lumen-hi:   #f2f9ff;
+  --lumen:      #cfeaff;
+  --lumen-mid:  #86ccff;
+  --lumen-deep: #3f9cf0;
+  --lumen-glow: rgba(110, 190, 255, .42);
+  --lumen-wash: rgba(110, 190, 255, .10);
+  --on-lumen:   #04121e;             /* text on a lit button, 15.2:1 */
+
+  /* ---- Confidence: the only hues in the app -------------------------------
+     The three machine states are the set measured in the Light Table study with
+     a colour-vision simulation (Machado 2009): its closest pair on film stayed
+     near 49 CIE76 for typical, green-blind, red-blind and blue-blind vision.
+     Measure again in the app. Each state also has its own line, glyph and word.
+     Against --room-1: sure 10.3:1, look 13.5:1, needs 6.2:1.
+       sure      solid line      filled dot     "Sure"
+       look      dashed line     half dot       "Worth a look"
+       needs     dotted, heavier hollow ring    "Needs you"
+       by-you    solid bright    tick           "Set by you"
+       inferred  long dash       hollow, short dash, always with the word    */
+  --sure:     #5cc8ff;
+  --look:     #ffd23f;
+  --needs:    #f0626e;
+  --by-you:   #f4f9ff;
+  --inferred: #aab4c3;
+  --sure-wash:   rgba(92, 200, 255, .13);
+  --look-wash:   rgba(255, 210, 63, .14);
+  --needs-wash:  rgba(240, 98, 110, .16);
+  --by-you-wash: rgba(244, 249, 255, .10);
+  --dash-sure: none;
+  --dash-look: 7 5;
+  --dash-needs: 1.5 5;
+  --dash-inferred: 12 6;
+  --casing: rgba(2, 4, 8, .78);      /* dark line under every mark so it reads on bright bone */
+
+  /* ---- Type ---------------------------------------------------------------- */
+  --font-voice: "Instrument Serif", "Iowan Old Style", "Charter", "Hoefler Text", Georgia, serif;
+  --font-ui:    "Geist", "Inter", ui-sans-serif, system-ui, -apple-system, "SF Pro Text", "Segoe UI", sans-serif;
+  --font-data:  "Geist Mono", "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --text-micro: 11px;   --lh-micro: 16px;     /* caps labels, key hints */
+  --text-small: 12px;   --lh-small: 18px;     /* captions, chips */
+  --text-body:  14px;   --lh-body:  21px;     /* everything read as a sentence */
+  --text-lead:  16px;   --lh-lead:  24px;     /* the lit button */
+  --text-title: 20px;   --lh-title: 26px;     /* card numbers */
+  --text-voice: 32px;   --lh-voice: 36px;     /* the guide's one sentence */
+  --text-hero:  48px;   --lh-hero:  50px;     /* the L and R side letters */
+  --track-caps: .09em;
+
+  /* ---- Space (4-point) ------------------------------------------------------ */
+  --s-1: 4px;  --s-2: 8px;  --s-3: 12px; --s-4: 16px; --s-5: 20px;
+  --s-6: 24px; --s-8: 32px; --s-10: 40px; --s-12: 48px; --s-16: 64px;
+
+  /* ---- Radius ---------------------------------------------------------------- */
+  --r-film: 3px;  --r-1: 5px;  --r-2: 9px;  --r-3: 13px;  --r-4: 18px;  --r-pill: 999px;
+
+  /* ---- Elevation: light from above, never a hard drop ----------------------- */
+  --lift-1: inset 0 1px 0 rgba(255, 255, 255, .04), 0 1px 2px rgba(0, 0, 0, .4);
+  --lift-2: inset 0 1px 0 rgba(255, 255, 255, .07), 0 10px 30px -8px rgba(0, 0, 0, .65), 0 2px 6px rgba(0, 0, 0, .35);
+  --lift-3: inset 0 1px 0 rgba(255, 255, 255, .09), 0 40px 80px -20px rgba(0, 0, 0, .8), 0 8px 24px rgba(0, 0, 0, .5);
+  --glass: rgba(16, 20, 27, .72);
+  --glass-blur: blur(22px) saturate(1.25);
+  --glow-lumen: 0 0 0 1px rgba(255, 255, 255, .55) inset, 0 0 26px var(--lumen-glow), 0 0 2px rgba(134, 204, 255, .9);
+  --glow-film: 0 0 0 1px rgba(200, 225, 255, .08), 0 0 90px rgba(120, 180, 255, .08), 0 30px 60px -30px rgba(0, 0, 0, .9);
+  --focus-ring: 0 0 0 2px var(--room-0), 0 0 0 4px var(--lumen-mid);
+
+  /* ---- Motion: light arrives, cameras move, nothing bounces for fun --------- */
+  --t-instant: 90ms;    /* hover, press */
+  --t-quick:   160ms;   /* buttons, chips, pin drop */
+  --t-base:    240ms;   /* popovers, ticks, toasts, label roll */
+  --t-calm:    420ms;   /* guide lines, cards, lamp-on */
+  --t-slow:    700ms;   /* bays re-hanging, focus pull, case fold */
+  --t-cinema:  1400ms;  /* reserved for the pass */
+  --ease-out:    cubic-bezier(.2, .8, .2, 1);     /* arrivals */
+  --ease-in-out: cubic-bezier(.65, 0, .35, 1);    /* cameras and bays */
+  --ease-lens:   cubic-bezier(.7, 0, .2, 1);      /* the unroll */
+  --ease-snap:   cubic-bezier(.2, 1.4, .4, 1);    /* lock-in, pin drop: one small overshoot */
+  --breathe: 2.6s;                                /* the only loop: the one lit thing */
+  --stagger: 22ms;                                /* per level, for rolls and cascades */
+
+  /* ---- Layout ----------------------------------------------------------------- */
+  --bar-h: 56px;        /* top bar */
+  --foot-h: 28px;       /* status line */
+  --guide-w: 368px;     /* the guide, on the left */
+  --bench-pad: 16px;
+  --bay-gap: 12px;
+  --bay-head: 30px;
+  --dock-w: 68px;       /* tool dock gutter (Adjust only) */
+  --ladder-w: 100px;    /* the ladder between Front and Side */
+  --lane-w: 204px;      /* the same lane while the pass plays */
+  --bends-w: 150px;     /* the two bending films, stacked */
+}
+
+/* One breakpoint. Below it the guide narrows, the dock drops its words and the rail keeps only numbers. */
+@media (max-width: 1199px) {
+  :root {
+    --guide-w: 312px;
+    --text-voice: 27px; --lh-voice: 31px;
+    --text-hero: 36px;  --lh-hero: 38px;
+    --dock-w: 46px; --ladder-w: 78px; --lane-w: 176px; --bends-w: 104px;
+    --bench-pad: 12px; --bay-gap: 8px;
+  }
+}
+
+/* Reduced motion: light still arrives, nothing travels, nothing loops. */
+@media (prefers-reduced-motion: reduce) {
+  :root { --t-quick: 1ms; --t-base: 1ms; --t-calm: 120ms; --t-slow: 160ms; --t-cinema: 160ms; --stagger: 0ms; }
+}
+[data-motion="reduced"] { --t-quick: 1ms; --t-base: 1ms; --t-calm: 120ms; --t-slow: 160ms; --t-cinema: 160ms; --stagger: 0ms; }

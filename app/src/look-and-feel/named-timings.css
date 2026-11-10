@@ -1,0 +1,26 @@
+/* The durations and gaps the design names that are not among its tokens.
+   tokens.css stays the design's file, unchanged, so they live here. Component
+   CSS takes every duration from these or the tokens, never a literal, and all
+   of them but how long a toast stays shrink under reduced motion. */
+:root {
+  --t-reading: 1100ms;       /* the sheen up a slot */
+  --t-lock-in: 260ms;
+  --t-cut: 620ms;
+  --t-flood: 360ms;
+  --t-refit: 280ms;          /* an outline easing to its new corners; script reads it through choreography/timing.ts */
+  --t-moved: 300ms;          /* the pass: a wrong guess sliding to its place */
+  --t-wipe: 640ms;           /* an evidence map wiping down a film */
+  --stagger-line: 40ms;      /* guide lines */
+  --stagger-card: 60ms;      /* guide cards */
+  --t-tick-first: 200ms;     /* case-fold: the first manifest line */
+  --t-tick-gap: 170ms;
+  --t-fold-at: 1100ms;       /* when the four cards start to fold */
+  --t-tile-after: 520ms;     /* the case tile, after the fold starts */
+  --t-toast-stay: 4600ms;    /* not motion; never shortened */
+}
+@media (prefers-reduced-motion: reduce) {
+  :root { --t-reading: 1ms; --t-lock-in: 1ms; --t-cut: 1ms; --t-flood: 1ms; --t-refit: 1ms; --t-moved: 1ms; --t-wipe: 1ms;
+          --stagger-line: 0ms; --stagger-card: 0ms; --t-tick-first: 1ms; --t-tick-gap: 0ms; --t-fold-at: 1ms; --t-tile-after: 1ms; }
+}
+[data-motion="reduced"] { --t-reading: 1ms; --t-lock-in: 1ms; --t-cut: 1ms; --t-flood: 1ms; --t-refit: 1ms; --t-moved: 1ms; --t-wipe: 1ms;
+                          --stagger-line: 0ms; --stagger-card: 0ms; --t-tick-first: 1ms; --t-tick-gap: 0ms; --t-fold-at: 1ms; --t-tile-after: 1ms; }
