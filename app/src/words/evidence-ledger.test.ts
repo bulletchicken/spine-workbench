@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { EVIDENCE_LEDGER, type EvidenceEntry, evidenceEntry } from './evidence-ledger';
+import { GLOSSARY } from './glossary';
 
 const OUTCOME_WORDS: readonly RegExp[] = [
   /\bpredict/i,
@@ -95,3 +96,45 @@ describe('the evidence ledger', () => {
   });
 });
 
+const BANNED_IN_GLOSSARY: readonly RegExp[] = [
+  /\bsegmentation\b/i,
+  /\binference\b/i,
+  /\bpipeline\b/i,
+  /\bpredict/i,
+  /\boptimal/i,
+  /\bsafe\b/i,
+  /\bvalidated\b/i,
+  /\bdynamic programming\b/i,
+];
+
+describe('the glossary', () => {
+  it('uses none of the banned words, in a term or its meaning', () => {
+    for (const [term, meaning] of Object.entries(GLOSSARY)) {
+      for (const pattern of BANNED_IN_GLOSSARY) {
+        expect(`${term} ${meaning}`, term).not.toMatch(pattern);
+      }
+    }
+  });
+
+  it('has the fifteen terms the design asks for', () => {
+    expect(Object.keys(GLOSSARY).sort()).toEqual(
+      [
+        'Needs you',
+        'Set by you',
+        'Sure',
+        'Worth a look',
+        'bending film',
+        'front film',
+        'guess',
+        'inferred',
+        'level',
+        'not visible',
+        'outline',
+        'pass',
+        'pin',
+        'search',
+        'side film',
+      ].sort(),
+    );
+  });
+});
