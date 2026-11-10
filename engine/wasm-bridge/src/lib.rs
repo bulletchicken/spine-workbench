@@ -8,8 +8,19 @@
 //! | [`crossing`] | how values cross into JavaScript |
 //! | [`faults`] | errors and panics as JavaScript values |
 //! | [`exports`] | one file per engine crate |
+//!
+//! This crate does not forbid `unsafe`: the code wasm-bindgen generates
+//! uses it. Nothing written by hand here does.
 
 pub mod crossing;
 pub mod exports;
 pub mod faults;
 pub mod film_desk;
+
+use wasm_bindgen::prelude::wasm_bindgen;
+
+/// Runs once when a worker instantiates the module, before any export.
+#[wasm_bindgen(start)]
+fn start() {
+    faults::capture_panics();
+}
