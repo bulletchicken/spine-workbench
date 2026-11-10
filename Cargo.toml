@@ -1,0 +1,81 @@
+# The Rust workspace. Every engine crate is a folder in engine/, so a new
+# crate never edits a shared list. Every Wave 1 dependency is
+# pinned once below; crates refer to it with `name.workspace = true`.
+# Changing a pin is its own `chore(deps)` pull request.
+
+[workspace]
+resolver = "3"
+members = ["engine/*"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.99"
+license = "Apache-2.0"
+publish = false
+
+[workspace.dependencies]
+# Shapes and their crossings
+serde = { version = "=1.0.229", features = ["derive"] }
+serde_json = { version = "=1.0.154", features = ["float_roundtrip"] }
+serde_bytes = "=0.11.19"
+serde_path_to_error = "=0.1.20"
+schemars = "=1.2.3"
+ts-rs = { version = "=12.0.1", features = ["no-serde-warnings"] }
+thiserror = "=2.0.21"
+
+# Maths: libm gives the same transcendental bits natively and in wasm
+libm = "=0.2.16"
+nalgebra = "=0.35.0"
+rustfft = { version = "=6.4.1", default-features = false, features = ["wasm_simd"] }
+transpose = "=0.2.3"
+half = { version = "=2.7.1", default-features = false }
+
+# Films in and out: pure Rust codecs only, no C, no threads
+png = "=0.18.1"
+jpeg-decoder = { version = "=0.3.2", default-features = false }
+hayro-jpeg2000 = { version = "=0.4.1", default-features = false, features = ["std"] }
+dicom-object = { version = "=0.10.1", default-features = false, features = ["deflate"] }
+flate2 = { version = "=1.1.10", default-features = false, features = ["rust_backend"] }
+miniz_oxide = "=0.9.1"
+sha2 = "=0.11.1"
+
+# The case file
+zip = { version = "=9.0.5", default-features = false, features = ["deflate-flate2"] }
+
+# Scoring and the command line (native only; never in the wasm-bridge tree)
+csv = "=1.4.0"
+clap = { version = "=4.6.7", features = ["derive"] }
+rayon = "=1.12.0"
+
+# The browser doorway (wasm-bridge only). The wasm-bindgen pin must equal
+# the installed wasm-bindgen command-line tool exactly.
+wasm-bindgen = "=0.2.130"
+js-sys = "=0.3.107"
+serde-wasm-bindgen = "=0.6.5"
+
+# Tests
+proptest = "=1.12.0"
+wasm-bindgen-test = "=0.3.80"
+jpeg-encoder = "=0.7.1"
+dicom-toolkit-jpeg2000 = "=0.5.0"
+pure_jpegls = "=2.0.0"
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+
+# Debug wasm is too slow for image work, so the dev wasm build is optimised
+# but keeps debug assertions and overflow checks.
+[profile.wasm-dev]
+inherits = "release"
+opt-level = 2
+lto = false
+codegen-units = 16
+debug-assertions = true
+overflow-checks = true
+
+# Native tests run on full-size films; optimise dependencies even in dev.
+[profile.dev.package."*"]
+opt-level = 2

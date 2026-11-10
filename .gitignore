@@ -5,6 +5,8 @@ local-only/
 node_modules/
 target/
 dist/
+app/src/engine-room/wasm-build/
+proving-ground/test-results/
 
 # Editor and system clutter
 .DS_Store

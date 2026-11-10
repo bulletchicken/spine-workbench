@@ -1,0 +1,9 @@
+# The Rust toolchain for this repository, pinned to one stable release so
+# a new release's lints or formatting never turn every branch red at once,
+# with the browser target and the formatting and lint tools. CI installs
+# exactly this file. Moving to a newer release is its own pull request.
+[toolchain]
+channel = "1.99.1"
+components = ["rustfmt", "clippy"]
+targets = ["wasm32-unknown-unknown"]
+profile = "minimal"

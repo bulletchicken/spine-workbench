@@ -1,0 +1,9 @@
+# WebAssembly builds use 128-bit SIMD (Chrome, and Safari 16.4 and later).
+[target.wasm32-unknown-unknown]
+rustflags = ["-C", "target-feature=+simd128"]
+
+[alias]
+# Repository upkeep tasks: `cargo chores <task>`.
+chores = "run -q -p chores --"
+# The engine on the command line: `cargo spine <command>`.
+spine = "run -q --release -p command-line --bin spine --"
