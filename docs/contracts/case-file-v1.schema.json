@@ -1,0 +1,1920 @@
+{
+  "$defs": {
+    "ChosenBy": {
+      "oneOf": [
+        {
+          "const": "engine",
+          "description": "The engine, from image evidence.",
+          "type": "string"
+        },
+        {
+          "const": "user",
+          "description": "The user, in the naming panel.",
+          "type": "string"
+        }
+      ]
+    },
+    "Confidence": {
+      "additionalProperties": false,
+      "description": "Confidence for one vertebra.",
+      "properties": {
+        "band": {
+          "$ref": "#/$defs/ConfidenceBand",
+          "description": "Never higher than [`ConfidenceBand::for_score`] gives; caps can\nlower it."
+        },
+        "calibrated": {
+          "description": "False until the score has been checked against real films; the app\nthen labels the colours as uncalibrated.",
+          "type": "boolean"
+        },
+        "endplateSpreadPx": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EndplateSpread"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "How far each endplate could plausibly move, one standard deviation\nin film pixels; `null` when not computed by the chain search."
+        },
+        "margin": {
+          "description": "Energy gap to the best placement outside the right-bone box; `null`\nwhen not computed by the chain search.",
+          "format": "double",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "reasons": {
+          "items": {
+            "$ref": "#/$defs/ConfidenceReason"
+          },
+          "type": "array"
+        },
+        "score": {
+          "description": "0 to 1: how likely the outline is on the right bone.",
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "required": [
+        "band",
+        "calibrated",
+        "endplateSpreadPx",
+        "margin",
+        "reasons",
+        "score"
+      ],
+      "type": "object"
+    },
+    "ConfidenceBand": {
+      "description": "The colour a vertebra is drawn in. Ordered low to high.",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "type": "string"
+    },
+    "ConfidenceReason": {
+      "description": "Why a vertebra's confidence is what it is. Several reasons cap the band\nat medium whatever the score.",
+      "oneOf": [
+        {
+          "const": "weak-gap",
+          "description": "The gap above or below is faint.",
+          "type": "string"
+        },
+        {
+          "const": "odd-height",
+          "description": "The height is unusual next to its neighbours.",
+          "type": "string"
+        },
+        {
+          "const": "films-disagree",
+          "description": "The front and side films place it differently.",
+          "type": "string"
+        },
+        {
+          "const": "rib-overlap",
+          "description": "Ribs cross it.",
+          "type": "string"
+        },
+        {
+          "const": "pedicle-hidden",
+          "description": "A pedicle could not be seen.",
+          "type": "string"
+        },
+        {
+          "const": "near-film-edge",
+          "description": "It is close to the edge of the film.",
+          "type": "string"
+        },
+        {
+          "const": "level-uncertain",
+          "description": "Its level name is in doubt.",
+          "type": "string"
+        },
+        {
+          "const": "edited-by-user",
+          "description": "The user changed it.",
+          "type": "string"
+        },
+        {
+          "const": "no-evidence",
+          "description": "It sits where the film shows nothing (cropped off): placed from the\nchain alone.",
+          "type": "string"
+        },
+        {
+          "const": "tilt-inconsistent",
+          "description": "Its endplate tilts disagree with its neighbours'.",
+          "type": "string"
+        },
+        {
+          "const": "metal-nearby",
+          "description": "Metal lies over it.",
+          "type": "string"
+        },
+        {
+          "const": "polarity-uncertain",
+          "description": "The film's brightness may be the wrong way round.",
+          "type": "string"
+        },
+        {
+          "const": "lossy-film",
+          "description": "The film was stored with lossy compression.",
+          "type": "string"
+        }
+      ]
+    },
+    "Confirmations": {
+      "additionalProperties": false,
+      "description": "What the user has settled about a film. Each is set only by an explicit\npress, never by a guess.",
+      "properties": {
+        "facing": {
+          "description": "Side films: which way the patient faces.",
+          "type": "boolean"
+        },
+        "leftRight": {
+          "description": "Front and bending films: which side is the patient's left.",
+          "type": "boolean"
+        },
+        "polarity": {
+          "description": "The brightness is the right way round (bone bright).",
+          "type": "boolean"
+        },
+        "privacy": {
+          "description": "The border was checked for names or IDs, and any were blanked out.",
+          "type": "boolean"
+        },
+        "scale": {
+          "type": "boolean"
+        },
+        "upright": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "facing",
+        "leftRight",
+        "polarity",
+        "privacy",
+        "scale",
+        "upright"
+      ],
+      "type": "object"
+    },
+    "EndplateLines": {
+      "additionalProperties": false,
+      "description": "The two endplate lines of a vertebra on a bending film. Each line's\nends are ordered patient left, then patient right.",
+      "properties": {
+        "inf": {
+          "items": {
+            "$ref": "#/$defs/Mark"
+          },
+          "maxItems": 2,
+          "minItems": 2,
+          "type": "array"
+        },
+        "sup": {
+          "items": {
+            "$ref": "#/$defs/Mark"
+          },
+          "maxItems": 2,
+          "minItems": 2,
+          "type": "array"
+        }
+      },
+      "required": [
+        "inf",
+        "sup"
+      ],
+      "type": "object"
+    },
+    "EndplateSpread": {
+      "additionalProperties": false,
+      "description": "One standard deviation of each endplate's position, in film pixels.",
+      "properties": {
+        "inf": {
+          "format": "double",
+          "type": "number"
+        },
+        "sup": {
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "required": [
+        "inf",
+        "sup"
+      ],
+      "type": "object"
+    },
+    "FileScaleRule": {
+      "description": "Which spacing tags gave the scale, and therefore at which depth it is\ntrue. In order of preference.",
+      "oneOf": [
+        {
+          "const": "fiducial",
+          "description": "Pixel spacing calibrated on a visible fiducial.",
+          "type": "string"
+        },
+        {
+          "const": "geometry",
+          "description": "Pixel spacing from an assumed or known geometry.",
+          "type": "string"
+        },
+        {
+          "const": "corrected-unknown-method",
+          "description": "Pixel spacing differing from the detector spacing: corrected, by an\nunstated method.",
+          "type": "string"
+        },
+        {
+          "const": "detector-over-magnification",
+          "description": "Detector spacing divided by the estimated magnification.",
+          "type": "string"
+        },
+        {
+          "const": "detector-from-distances",
+          "description": "Detector spacing times source-to-patient over source-to-detector.",
+          "type": "string"
+        },
+        {
+          "const": "detector-uncorrected",
+          "description": "Detector spacing, uncorrected: sizes read larger than in the patient.",
+          "type": "string"
+        },
+        {
+          "const": "unknown-calibration",
+          "description": "Pixel spacing with no way to tell whether it was corrected.",
+          "type": "string"
+        }
+      ]
+    },
+    "Film": {
+      "additionalProperties": false,
+      "description": "One film as saved in the case file.\n\nThere is no field for the original file name, so one cannot be stored.",
+      "properties": {
+        "blanked": {
+          "description": "Boxes the user blanked out (names or IDs burnt into the image),\neach on the film. Every pixel a box covers (see\n[`PxRect::covers_pixel`]) is zero in the stored PNG and left out of\nevery analysis.",
+          "items": {
+            "$ref": "#/$defs/PxRect"
+          },
+          "type": "array"
+        },
+        "flags": {
+          "items": {
+            "$ref": "#/$defs/IntakeFlag"
+          },
+          "type": "array"
+        },
+        "geometry": {
+          "$ref": "#/$defs/FilmGeometry"
+        },
+        "image": {
+          "$ref": "#/$defs/FilmImage"
+        },
+        "keptTags": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/KeptTags"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "`null` unless the source was DICOM."
+        },
+        "kind": {
+          "$ref": "#/$defs/FilmKind"
+        },
+        "source": {
+          "$ref": "#/$defs/SourceFormat"
+        },
+        "values": {
+          "$ref": "#/$defs/PixelValues"
+        }
+      },
+      "required": [
+        "blanked",
+        "flags",
+        "geometry",
+        "image",
+        "keptTags",
+        "kind",
+        "source",
+        "values"
+      ],
+      "type": "object"
+    },
+    "FilmGeometry": {
+      "additionalProperties": false,
+      "description": "A film's geometry as saved.",
+      "properties": {
+        "confirmed": {
+          "$ref": "#/$defs/Confirmations"
+        },
+        "imageRight": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ImageRight"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "mmPerPx": {
+          "description": "Horizontal (column) spacing in mm per pixel; `null` until a scale is\nknown. Angles work without it; lengths do not.",
+          "format": "double",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "mmPerPxVertical": {
+          "description": "Vertical (row) spacing, only when pixels are not square.",
+          "format": "double",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "quarterTurns": {
+          "$ref": "#/$defs/QuarterTurns"
+        },
+        "scale": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ScaleSource"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "confirmed",
+        "imageRight",
+        "mmPerPx",
+        "mmPerPxVertical",
+        "quarterTurns",
+        "scale"
+      ],
+      "type": "object"
+    },
+    "FilmImage": {
+      "additionalProperties": false,
+      "description": "The stored image of one film inside the case file: a lossless grayscale\nPNG at the film's own bit depth, re-encoded from the decoded pixels, so\nno tag or EXIF from the original can travel with it.",
+      "properties": {
+        "bitsStored": {
+          "description": "Significant bits per pixel, 1 to 16. Values are stored left-aligned\nin an 8- or 16-bit PNG with an sBIT chunk, so `value >> (16 − bits)`\n(or `8 − bits`) gives back the exact stored value.",
+          "format": "uint8",
+          "maximum": 255,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "height": {
+          "format": "uint32",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "path": {
+          "description": "Always [`FilmKind::png_path`] of the film it belongs to.",
+          "type": "string"
+        },
+        "width": {
+          "format": "uint32",
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "bitsStored",
+        "height",
+        "path",
+        "width"
+      ],
+      "type": "object"
+    },
+    "FilmKind": {
+      "description": "The four films of a case. Bending films are front views.",
+      "enum": [
+        "front",
+        "side",
+        "bend-left",
+        "bend-right"
+      ],
+      "type": "string"
+    },
+    "FilmMarks": {
+      "additionalProperties": false,
+      "description": "Everything marked on one film.",
+      "properties": {
+        "film": {
+          "$ref": "#/$defs/FilmKind"
+        },
+        "landmarks": {
+          "$ref": "#/$defs/Landmarks"
+        },
+        "namedFor": {
+          "$ref": "#/$defs/ImageRight",
+          "description": "The facing the left/right (or anterior/posterior) names were given\nfor: the film's `imageRight` at its `quarterTurns` at the moment\nthe names were given, whether or not it was confirmed (the\nengine's own guess while `imageRight` is still unknown).\n\nA `set-geometry` edit is judged against the film's geometry before\nit. One that changes the turns drops the marks, because the upright\ndirection decides which endplate is upper and the order of the\nlevels. One that keeps the turns and changes `imageRight` to a\nfacing (not to unknown) renames the marks for it\n([`FilmMarks::renamed_for`], which swaps the names only if this\ndiffers). Any other change (the scale, the confirmations, or\n`imageRight` back to unknown) leaves the marks as they are, even\nwhen this differs from `imageRight`."
+        },
+        "naming": {
+          "$ref": "#/$defs/LevelNaming"
+        },
+        "vertebrae": {
+          "description": "Top to bottom, levels strictly in order.",
+          "items": {
+            "$ref": "#/$defs/VertebraOnFilm"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "film",
+        "landmarks",
+        "namedFor",
+        "naming",
+        "vertebrae"
+      ],
+      "type": "object"
+    },
+    "FrontMarks": {
+      "additionalProperties": false,
+      "description": "The six marks of a vertebra on a front film.",
+      "properties": {
+        "infL": {
+          "$ref": "#/$defs/Mark"
+        },
+        "infR": {
+          "$ref": "#/$defs/Mark"
+        },
+        "pedL": {
+          "$ref": "#/$defs/PedicleMark"
+        },
+        "pedR": {
+          "$ref": "#/$defs/PedicleMark"
+        },
+        "supL": {
+          "$ref": "#/$defs/Mark"
+        },
+        "supR": {
+          "$ref": "#/$defs/Mark"
+        }
+      },
+      "required": [
+        "infL",
+        "infR",
+        "pedL",
+        "pedR",
+        "supL",
+        "supR"
+      ],
+      "type": "object"
+    },
+    "HipCentre": {
+      "additionalProperties": false,
+      "description": "A femoral head: its centre and, when a circle was fitted, its radius.",
+      "properties": {
+        "centre": {
+          "$ref": "#/$defs/Mark"
+        },
+        "radiusPx": {
+          "description": "The fitted circle's radius in pixels; `null` when placed by hand.",
+          "format": "double",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "side": {
+          "$ref": "#/$defs/HipSide"
+        }
+      },
+      "required": [
+        "centre",
+        "radiusPx",
+        "side"
+      ],
+      "type": "object"
+    },
+    "HipSide": {
+      "description": "Which hip a hip centre is.",
+      "oneOf": [
+        {
+          "const": "left",
+          "description": "The patient's left hip (front films).",
+          "type": "string"
+        },
+        {
+          "const": "right",
+          "description": "The patient's right hip (front films).",
+          "type": "string"
+        },
+        {
+          "const": "unpaired",
+          "description": "One of the two femoral heads on a side film; which one is unknown.",
+          "type": "string"
+        },
+        {
+          "const": "merged",
+          "description": "The midpoint of the two femoral heads where a side film shows them\nwithin 5 mm of each other.",
+          "type": "string"
+        }
+      ]
+    },
+    "ImageRight": {
+      "description": "The patient direction that points to screen right once the film is\nshown upright (after its quarter turns, before any mirroring).\n\nFront and bending films use `patient-left` or `patient-right`; side\nfilms use `anterior` or `posterior`.",
+      "enum": [
+        "patient-left",
+        "patient-right",
+        "anterior",
+        "posterior"
+      ],
+      "type": "string"
+    },
+    "IntakeFlag": {
+      "description": "Something noticed while reading a film that the stored pixels alone no\nlonger show.",
+      "enum": [
+        "multi-frame",
+        "for-processing",
+        "unusual-sop-class",
+        "no-file-meta",
+        "nonstandard-deflate",
+        "bits-stored-mismatch",
+        "j2k-not-exact",
+        "jp2-wrapper",
+        "colour-converted",
+        "alpha-ignored",
+        "exif-mirrored",
+        "polarity-conflict",
+        "non-monotone-modality-lut",
+        "dx-rescale-not-identity",
+        "anisotropic-pixels",
+        "sod-is-table-distance",
+        "slot-geometry",
+        "lossy",
+        "burned-in-annotation",
+        "invalid-spacing",
+        "oblique-orientation"
+      ],
+      "type": "string"
+    },
+    "KeptTags": {
+      "additionalProperties": false,
+      "description": "The keep-list: the only DICOM values ever copied out of a file. Every\nother tag (names, identifiers, dates, times, institutions, operators,\nstations, instance identifiers, private tags) is dropped while the file\nis parsed and has no field here. All are `null` when the file did not\ncarry them.",
+      "properties": {
+        "bitsStored": {
+          "description": "(0028,0101) as declared in the file.",
+          "format": "uint8",
+          "maximum": 255,
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "burnedInAnnotation": {
+          "description": "(0028,0301).",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "distanceSourceToDetector": {
+          "description": "(0018,1110) in mm. Kept for the cone and slot cameras of Wave 2.",
+          "format": "double",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "distanceSourceToPatient": {
+          "description": "(0018,1111) in mm.",
+          "format": "double",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "estimatedMagnification": {
+          "description": "(0018,1114).",
+          "format": "double",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "imageLaterality": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Laterality"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "(0020,0062)."
+        },
+        "imagerPixelSpacing": {
+          "description": "(0018,1164) in mm, row then column.",
+          "items": {
+            "format": "double",
+            "type": "number"
+          },
+          "maxItems": 2,
+          "minItems": 2,
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "lossyCompression": {
+          "description": "(0028,2110).",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "lossyRatio": {
+          "description": "(0028,2112), the first value.",
+          "format": "double",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "manufacturer": {
+          "description": "(0008,0070), cut to 64 characters. Tells slot scanners apart.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "modality": {
+          "description": "(0008,0060), for example `DX` or `CR`.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "modelName": {
+          "description": "(0008,1090), cut to 64 characters.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "nominalScannedPixelSpacing": {
+          "description": "(0018,2010) in mm, row then column.",
+          "items": {
+            "format": "double",
+            "type": "number"
+          },
+          "maxItems": 2,
+          "minItems": 2,
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "numberOfFrames": {
+          "description": "(0028,0008). Only the first frame is read.",
+          "format": "uint32",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "patientOrientation": {
+          "description": "(0020,0020): the patient directions of +x and +y, letters A, P, L,\nR, H and F only.",
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 2,
+          "minItems": 2,
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "photometric": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Photometric"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "(0028,0004)."
+        },
+        "pixelAspectRatio": {
+          "description": "(0028,0034) vertical then horizontal.",
+          "items": {
+            "format": "uint32",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "maxItems": 2,
+          "minItems": 2,
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "pixelSpacing": {
+          "description": "(0028,0030) in mm, row spacing (vertical) then column spacing.",
+          "items": {
+            "format": "double",
+            "type": "number"
+          },
+          "maxItems": 2,
+          "minItems": 2,
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "pixelSpacingCalibration": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SpacingCalibration"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "(0028,0A02)."
+        },
+        "presentationIntent": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PresentationIntent"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "(0008,0068)."
+        },
+        "rescaleIntercept": {
+          "description": "(0028,1052).",
+          "format": "double",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "rescaleSlope": {
+          "description": "(0028,1053).",
+          "format": "double",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "shutters": {
+          "description": "(0018,1600 to 1620), geometry only. Several shapes together leave\nthe smallest visible area.",
+          "items": {
+            "$ref": "#/$defs/Shutter"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "sopClass": {
+          "description": "(0008,0016) the class of image, a fixed standard identifier (never\nthe instance identifier). It decides what the spacing tags mean.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "transferSyntax": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TransferSyntax"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "The transfer syntax, named from our own table."
+        },
+        "viewPosition": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ViewPosition"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "(0018,5101)."
+        },
+        "windowCentre": {
+          "description": "(0028,1050), the first value, in modality units.",
+          "format": "double",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "windowFunction": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WindowFunction"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "(0028,1056)."
+        },
+        "windowWidth": {
+          "description": "(0028,1051), the first value.",
+          "format": "double",
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "bitsStored",
+        "burnedInAnnotation",
+        "distanceSourceToDetector",
+        "distanceSourceToPatient",
+        "estimatedMagnification",
+        "imageLaterality",
+        "imagerPixelSpacing",
+        "lossyCompression",
+        "lossyRatio",
+        "manufacturer",
+        "modality",
+        "modelName",
+        "nominalScannedPixelSpacing",
+        "numberOfFrames",
+        "patientOrientation",
+        "photometric",
+        "pixelAspectRatio",
+        "pixelSpacing",
+        "pixelSpacingCalibration",
+        "presentationIntent",
+        "rescaleIntercept",
+        "rescaleSlope",
+        "shutters",
+        "sopClass",
+        "transferSyntax",
+        "viewPosition",
+        "windowCentre",
+        "windowFunction",
+        "windowWidth"
+      ],
+      "type": "object"
+    },
+    "Landmarks": {
+      "additionalProperties": false,
+      "description": "Every landmark on one film. Each is `null` or empty until found.",
+      "properties": {
+        "c7": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Mark"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "The mean of the four corners (line ends, on a bending film) of the\nfilm's C7 vertebra; `null` exactly when the film has none. Never\npinned, its source always `auto`, inferred when any corner is."
+        },
+        "hips": {
+          "description": "Front films: at most one left and one right. Side films: one or two\nunpaired, or one merged. Bending films: none.",
+          "items": {
+            "$ref": "#/$defs/HipCentre"
+          },
+          "type": "array"
+        },
+        "sacrumTop": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SacrumTop"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "c7",
+        "hips",
+        "sacrumTop"
+      ],
+      "type": "object"
+    },
+    "Laterality": {
+      "enum": [
+        "left",
+        "right",
+        "both",
+        "unpaired"
+      ],
+      "type": "string"
+    },
+    "Level": {
+      "description": "One vertebral level. Declared top to bottom, so `<` means \"above\".",
+      "oneOf": [
+        {
+          "enum": [
+            "C2",
+            "C3",
+            "C4",
+            "C5",
+            "C6",
+            "C7",
+            "T1",
+            "T2",
+            "T3",
+            "T4",
+            "T5",
+            "T6",
+            "T7",
+            "T8",
+            "T9",
+            "T10",
+            "T11",
+            "T12",
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5"
+          ],
+          "type": "string"
+        },
+        {
+          "const": "C1",
+          "description": "C1 to C6: only above C7 on a chain that edits pushed upward.",
+          "type": "string"
+        },
+        {
+          "const": "T13",
+          "description": "Only on a spine flagged with an extra thoracic vertebra.",
+          "type": "string"
+        },
+        {
+          "const": "L6",
+          "description": "Only on a spine flagged with an extra lumbar vertebra, or a chain\nthat edits pushed downward.",
+          "type": "string"
+        },
+        {
+          "const": "L7",
+          "description": "Only on a chain that edits pushed downward.",
+          "type": "string"
+        }
+      ]
+    },
+    "LevelNaming": {
+      "additionalProperties": false,
+      "description": "One film's level naming, as saved.",
+      "properties": {
+        "alternatives": {
+          "description": "Every count's chance, best first.",
+          "items": {
+            "$ref": "#/$defs/TemplateChance"
+          },
+          "type": "array"
+        },
+        "chosenBy": {
+          "$ref": "#/$defs/ChosenBy"
+        },
+        "flags": {
+          "items": {
+            "$ref": "#/$defs/NamingFlag"
+          },
+          "type": "array"
+        },
+        "fromBottom": {
+          "description": "The same, counting up from the sacrum.",
+          "items": {
+            "$ref": "#/$defs/Level"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "fromTop": {
+          "description": "The name each vertebra gets counting down from the first rib: one\nper vertebra, in the order of `FilmMarks.vertebrae` (of the chain's\nbodies, in a `FilmChain`), each from [`Template::names`]. `null`\nwhen that end could not be counted. An edit that changes the chain\ncounts again and rewrites both lists.",
+          "items": {
+            "$ref": "#/$defs/Level"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "l5ConfirmedOn": {
+          "description": "The id of the vertebra the user said is L5, while it still carries\nthat name; `null` until then, and always `null` in a `FilmChain`.\nAnchored to the id, not a position: a split or merge that renames\nor retires that vertebra clears it and raises `naming-conflict`.\nUntil it is set, anything that depends on the level names is\nunconfirmed.",
+          "format": "uint32",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "template": {
+          "$ref": "#/$defs/Template",
+          "description": "The count the film's chain is solved with."
+        }
+      },
+      "required": [
+        "alternatives",
+        "chosenBy",
+        "flags",
+        "fromBottom",
+        "fromTop",
+        "l5ConfirmedOn",
+        "template"
+      ],
+      "type": "object"
+    },
+    "Mark": {
+      "additionalProperties": false,
+      "description": "One placed point.",
+      "properties": {
+        "at": {
+          "$ref": "#/$defs/Px"
+        },
+        "inferred": {
+          "description": "Placed without image evidence at that spot: from the chain's\npadding beyond a cropped film, or a default pedicle position.",
+          "type": "boolean"
+        },
+        "pinned": {
+          "description": "Pinned marks stay exactly where the user put them; every tool and\nre-solve respects them.",
+          "type": "boolean"
+        },
+        "source": {
+          "$ref": "#/$defs/MarkSource"
+        }
+      },
+      "required": [
+        "at",
+        "inferred",
+        "pinned",
+        "source"
+      ],
+      "type": "object"
+    },
+    "MarkSource": {
+      "description": "Who or what last placed a mark.",
+      "oneOf": [
+        {
+          "const": "auto",
+          "description": "The auto pass.",
+          "type": "string"
+        },
+        {
+          "const": "region-wand",
+          "description": "A region wand edit refitted it.",
+          "type": "string"
+        },
+        {
+          "const": "boundary-wand",
+          "description": "A boundary wand split or merge placed it.",
+          "type": "string"
+        },
+        {
+          "const": "pin",
+          "description": "The user dragged it with the pin tool.",
+          "type": "string"
+        },
+        {
+          "const": "hand",
+          "description": "The user placed it by hand.",
+          "type": "string"
+        }
+      ]
+    },
+    "ModalityMap": {
+      "description": "From file values `s` to modality values `m`.",
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "description": "`m = slope · s + intercept`.",
+          "properties": {
+            "intercept": {
+              "format": "double",
+              "type": "number"
+            },
+            "kind": {
+              "const": "linear",
+              "type": "string"
+            },
+            "slope": {
+              "format": "double",
+              "type": "number"
+            }
+          },
+          "required": [
+            "intercept",
+            "kind",
+            "slope"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "`m = table[clamp(s − firstMapped, 0, table.length − 1)]`.",
+          "properties": {
+            "bits": {
+              "format": "uint8",
+              "maximum": 255,
+              "minimum": 0,
+              "type": "integer"
+            },
+            "firstMapped": {
+              "format": "int32",
+              "type": "integer"
+            },
+            "kind": {
+              "const": "lookup",
+              "type": "string"
+            },
+            "table": {
+              "items": {
+                "format": "uint16",
+                "maximum": 65535,
+                "minimum": 0,
+                "type": "integer"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "bits",
+            "firstMapped",
+            "kind",
+            "table"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "NamingFlag": {
+      "description": "Something about a film's naming the user should look at.",
+      "oneOf": [
+        {
+          "const": "non-standard-count",
+          "description": "The film's count is not the standard one: the chosen template is\nnot `standard`, or a split or merge left levels outside the\ntemplate (see [`Template::names`]).",
+          "type": "string"
+        },
+        {
+          "const": "close-alternative",
+          "description": "Another count scored close to the standard one.",
+          "type": "string"
+        },
+        {
+          "const": "ends-disagree",
+          "description": "Counting from the top and from the bottom gave one vertebra two\nnames.",
+          "type": "string"
+        },
+        {
+          "const": "top-anchor-weak",
+          "description": "The first rib is unclear: named from the sacrum only.",
+          "type": "string"
+        },
+        {
+          "const": "bottom-anchor-weak",
+          "description": "The sacrum is unclear: named from the first rib only.",
+          "type": "string"
+        },
+        {
+          "const": "names-unknown",
+          "description": "Neither end is clear: the vertebrae are shown as ?1, ?2 and so on.",
+          "type": "string"
+        },
+        {
+          "const": "films-disagree-on-count",
+          "description": "The front and side films chose different counts.",
+          "type": "string"
+        }
+      ]
+    },
+    "PedicleMark": {
+      "description": "A pedicle: placed, or not visible. Only pedicles can be \"not visible\";\nthe types allow it nowhere else.",
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "at": {
+              "$ref": "#/$defs/Px"
+            },
+            "inferred": {
+              "type": "boolean"
+            },
+            "pinned": {
+              "type": "boolean"
+            },
+            "ringScore": {
+              "description": "Strength of the ring evidence where the auto pass found it;\n`null` when a person placed it.",
+              "format": "double",
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "seen": {
+              "const": "visible",
+              "type": "string"
+            },
+            "source": {
+              "$ref": "#/$defs/MarkSource"
+            }
+          },
+          "required": [
+            "at",
+            "inferred",
+            "pinned",
+            "ringScore",
+            "seen",
+            "source"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "seen": {
+              "const": "not-visible",
+              "type": "string"
+            },
+            "source": {
+              "$ref": "#/$defs/MarkSource",
+              "description": "Who decided it cannot be seen."
+            }
+          },
+          "required": [
+            "seen",
+            "source"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "Photometric": {
+      "enum": [
+        "monochrome1",
+        "monochrome2",
+        "rgb",
+        "ybr-full",
+        "ybr-full422",
+        "ybr-rct",
+        "ybr-ict",
+        "palette-colour"
+      ],
+      "type": "string"
+    },
+    "PixelValues": {
+      "additionalProperties": false,
+      "description": "How a stored pixel value `p` (bone bright, `0 ..= 2^bits − 1`) relates\nto the value `s` in the original file, and from there to modality\nvalues: `s = offset + (inverted ? 2^bits − 1 − p : p)`, then `m` is\n`modality` applied to `s`. Both steps are exact, so windows from the\nfile can be applied to the stored pixels.",
+      "properties": {
+        "inverted": {
+          "description": "True when the stored values run opposite to the file's values, so\nthat bone is bright. Includes the user's own flip.",
+          "type": "boolean"
+        },
+        "invertedByUser": {
+          "description": "True when the user flipped the brightness by hand.",
+          "type": "boolean"
+        },
+        "modality": {
+          "$ref": "#/$defs/ModalityMap"
+        },
+        "offset": {
+          "description": "The smallest value the file could hold (0, or −2^(bits−1) for\nsigned data).",
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "inverted",
+        "invertedByUser",
+        "modality",
+        "offset"
+      ],
+      "type": "object"
+    },
+    "PresentationIntent": {
+      "enum": [
+        "for-presentation",
+        "for-processing"
+      ],
+      "type": "string"
+    },
+    "Px": {
+      "description": "A point in original film pixels: `[x, y]`, x right, y down, the centre\nof the top-left pixel at (0, 0).",
+      "items": {
+        "format": "double",
+        "type": "number"
+      },
+      "maxItems": 2,
+      "minItems": 2,
+      "type": "array"
+    },
+    "PxRect": {
+      "additionalProperties": false,
+      "description": "An axis-aligned box in original film pixels, edges included.\n\nWhere a box stands for pixels (a blanked box, a mask), it covers every\npixel it reaches into: pixel (i, j) when the box enters the pixel's\nsquare, not when it only meets its edge. See [`PxRect::covers_pixel`].",
+      "properties": {
+        "bottom": {
+          "format": "double",
+          "type": "number"
+        },
+        "left": {
+          "format": "double",
+          "type": "number"
+        },
+        "right": {
+          "format": "double",
+          "type": "number"
+        },
+        "top": {
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "required": [
+        "bottom",
+        "left",
+        "right",
+        "top"
+      ],
+      "type": "object"
+    },
+    "QuarterTurns": {
+      "enum": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "type": "integer"
+    },
+    "Ruler": {
+      "additionalProperties": false,
+      "description": "One two-click ruler: two points on the film and the length between them.",
+      "properties": {
+        "a": {
+          "$ref": "#/$defs/Px"
+        },
+        "b": {
+          "$ref": "#/$defs/Px"
+        },
+        "mm": {
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "required": [
+        "a",
+        "b",
+        "mm"
+      ],
+      "type": "object"
+    },
+    "SacrumTop": {
+      "description": "The two ends of the sacral plateau.",
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "description": "Front and bending films.",
+          "properties": {
+            "sacL": {
+              "$ref": "#/$defs/Mark"
+            },
+            "sacR": {
+              "$ref": "#/$defs/Mark"
+            },
+            "view": {
+              "const": "front",
+              "type": "string"
+            }
+          },
+          "required": [
+            "sacL",
+            "sacR",
+            "view"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "Side films.",
+          "properties": {
+            "sacA": {
+              "$ref": "#/$defs/Mark"
+            },
+            "sacP": {
+              "$ref": "#/$defs/Mark"
+            },
+            "view": {
+              "const": "side",
+              "type": "string"
+            }
+          },
+          "required": [
+            "sacA",
+            "sacP",
+            "view"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "SavedWith": {
+      "additionalProperties": false,
+      "description": "Which app wrote the file: its version, and nothing else.",
+      "properties": {
+        "app": {
+          "description": "A version such as `0.1.0`: letters, digits, `.`, `+` and `-` only,\nat most 32 characters, so it cannot carry anything else.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "app"
+      ],
+      "type": "object"
+    },
+    "ScaleSource": {
+      "description": "Where a film's scale came from. Saved with the film, so the scale can\nalways be traced and worked out again.",
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "description": "From the file's spacing tags (kept in [`crate::film::KeptTags`]),\nby the named rule.",
+          "properties": {
+            "rule": {
+              "$ref": "#/$defs/FileScaleRule"
+            },
+            "source": {
+              "const": "file",
+              "type": "string"
+            }
+          },
+          "required": [
+            "rule",
+            "source"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "From one or more two-click rulers, combined by inverse variance.",
+          "properties": {
+            "rulers": {
+              "items": {
+                "$ref": "#/$defs/Ruler"
+              },
+              "type": "array"
+            },
+            "source": {
+              "const": "ruler",
+              "type": "string"
+            }
+          },
+          "required": [
+            "rulers",
+            "source"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "From a round calibration object of known size: the fitted circle\nand the object's true diameter, so the scale is\n`diameterMm / (2 · radiusPx)`.",
+          "properties": {
+            "centre": {
+              "$ref": "#/$defs/Px"
+            },
+            "diameterMm": {
+              "format": "double",
+              "type": "number"
+            },
+            "radiusPx": {
+              "format": "double",
+              "type": "number"
+            },
+            "source": {
+              "const": "known-object",
+              "type": "string"
+            }
+          },
+          "required": [
+            "centre",
+            "diameterMm",
+            "radiusPx",
+            "source"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "Shutter": {
+      "description": "A display shutter as the file describes it, in the file's own 1-based\nrow and column numbers.",
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "left": {
+              "format": "uint32",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "lower": {
+              "format": "uint32",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "right": {
+              "format": "uint32",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "shape": {
+              "const": "rectangle",
+              "type": "string"
+            },
+            "upper": {
+              "format": "uint32",
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "left",
+            "lower",
+            "right",
+            "shape",
+            "upper"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "centreColumn": {
+              "format": "double",
+              "type": "number"
+            },
+            "centreRow": {
+              "format": "double",
+              "type": "number"
+            },
+            "radius": {
+              "format": "double",
+              "type": "number"
+            },
+            "shape": {
+              "const": "circle",
+              "type": "string"
+            }
+          },
+          "required": [
+            "centreColumn",
+            "centreRow",
+            "radius",
+            "shape"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "shape": {
+              "const": "polygon",
+              "type": "string"
+            },
+            "vertices": {
+              "description": "Row, column pairs; the polygon closes itself.",
+              "items": {
+                "items": {
+                  "format": "double",
+                  "type": "number"
+                },
+                "maxItems": 2,
+                "minItems": 2,
+                "type": "array"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "shape",
+            "vertices"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "SideMarks": {
+      "additionalProperties": false,
+      "description": "The four corners of a vertebra on a side film.",
+      "properties": {
+        "infA": {
+          "$ref": "#/$defs/Mark"
+        },
+        "infP": {
+          "$ref": "#/$defs/Mark"
+        },
+        "supA": {
+          "$ref": "#/$defs/Mark"
+        },
+        "supP": {
+          "$ref": "#/$defs/Mark"
+        }
+      },
+      "required": [
+        "infA",
+        "infP",
+        "supA",
+        "supP"
+      ],
+      "type": "object"
+    },
+    "SourceFormat": {
+      "description": "What the original file was. Not identifying, and it matters: a JPEG\nsource is lossy, and only a DICOM source has kept tags.",
+      "enum": [
+        "png",
+        "jpeg",
+        "dicom"
+      ],
+      "type": "string"
+    },
+    "SpacingCalibration": {
+      "enum": [
+        "geometry",
+        "fiducial"
+      ],
+      "type": "string"
+    },
+    "Template": {
+      "description": "A vertebra count the chain search can solve with.",
+      "oneOf": [
+        {
+          "const": "standard",
+          "description": "C7, T1 to T12, L1 to L5.",
+          "type": "string"
+        },
+        {
+          "const": "extra-thoracic",
+          "description": "Adds T13.",
+          "type": "string"
+        },
+        {
+          "const": "extra-lumbar",
+          "description": "Adds L6.",
+          "type": "string"
+        },
+        {
+          "const": "missing-thoracic",
+          "description": "No T12.",
+          "type": "string"
+        },
+        {
+          "const": "missing-lumbar",
+          "description": "No L5.",
+          "type": "string"
+        }
+      ]
+    },
+    "TemplateChance": {
+      "additionalProperties": false,
+      "description": "How likely a count is, from the template scores. Not calibrated, and\nshown as such.",
+      "properties": {
+        "chance": {
+          "description": "0 to 1.",
+          "format": "double",
+          "type": "number"
+        },
+        "template": {
+          "$ref": "#/$defs/Template"
+        }
+      },
+      "required": [
+        "chance",
+        "template"
+      ],
+      "type": "object"
+    },
+    "TransferSyntax": {
+      "enum": [
+        "implicit-little-endian",
+        "explicit-little-endian",
+        "explicit-big-endian",
+        "deflated-little-endian",
+        "encapsulated-uncompressed",
+        "rle-lossless",
+        "jpeg-baseline",
+        "jpeg-extended",
+        "jpeg-lossless",
+        "jpeg-lossless-first-order",
+        "jpeg-ls-lossless",
+        "jpeg-ls-near-lossless",
+        "jpeg2000-lossless",
+        "jpeg2000"
+      ],
+      "type": "string"
+    },
+    "VertebraMarks": {
+      "description": "The marks of one vertebra; which kind depends on the film.",
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "description": "Front films.",
+          "properties": {
+            "kind": {
+              "const": "front",
+              "type": "string"
+            },
+            "points": {
+              "$ref": "#/$defs/FrontMarks"
+            }
+          },
+          "required": [
+            "kind",
+            "points"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "Side films.",
+          "properties": {
+            "kind": {
+              "const": "side",
+              "type": "string"
+            },
+            "points": {
+              "$ref": "#/$defs/SideMarks"
+            }
+          },
+          "required": [
+            "kind",
+            "points"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "Bending films.",
+          "properties": {
+            "kind": {
+              "const": "bending",
+              "type": "string"
+            },
+            "lines": {
+              "$ref": "#/$defs/EndplateLines"
+            }
+          },
+          "required": [
+            "kind",
+            "lines"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "VertebraOnFilm": {
+      "additionalProperties": false,
+      "description": "One vertebra on one film.",
+      "properties": {
+        "confidence": {
+          "$ref": "#/$defs/Confidence"
+        },
+        "id": {
+          "description": "Stable within a case and never reused, even after the vertebra is\nremoved (see `CaseFileV1::next_vertebra_id`). Undo, selection and\nthe renumbering animation follow it.",
+          "format": "uint32",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "level": {
+          "$ref": "#/$defs/Level"
+        },
+        "marks": {
+          "$ref": "#/$defs/VertebraMarks"
+        },
+        "outline": {
+          "description": "The region wand's outline, when it made one.",
+          "items": {
+            "$ref": "#/$defs/Px"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "confidence",
+        "id",
+        "level",
+        "marks",
+        "outline"
+      ],
+      "type": "object"
+    },
+    "ViewPosition": {
+      "enum": [
+        "ap",
+        "pa",
+        "ll",
+        "rl",
+        "rld",
+        "lld",
+        "rlo",
+        "llo",
+        "lateral"
+      ],
+      "type": "string"
+    },
+    "WindowFunction": {
+      "enum": [
+        "linear",
+        "linear-exact",
+        "sigmoid"
+      ],
+      "type": "string"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "The whole case.",
+  "properties": {
+    "films": {
+      "description": "Only the films present, each kind at most once.",
+      "items": {
+        "$ref": "#/$defs/Film"
+      },
+      "type": "array"
+    },
+    "format": {
+      "const": "spine-case",
+      "description": "Always `\"spine-case\"`.",
+      "type": "string"
+    },
+    "marks": {
+      "description": "One entry per film that has marks.",
+      "items": {
+        "$ref": "#/$defs/FilmMarks"
+      },
+      "type": "array"
+    },
+    "nextVertebraId": {
+      "description": "The id the next new vertebra gets. Only ever goes up, so ids are\nnever reused.",
+      "format": "uint32",
+      "minimum": 0,
+      "type": "integer"
+    },
+    "savedWith": {
+      "$ref": "#/$defs/SavedWith"
+    },
+    "version": {
+      "const": 1,
+      "description": "Always `1`.",
+      "format": "uint32",
+      "minimum": 0,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "films",
+    "format",
+    "marks",
+    "nextVertebraId",
+    "savedWith",
+    "version"
+  ],
+  "title": "CaseFileV1",
+  "type": "object"
+}
