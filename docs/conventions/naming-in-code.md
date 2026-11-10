@@ -17,6 +17,8 @@ first; a playful name only when its meaning is still obvious
 | Unit tests | beside the code: Rust `#[cfg(test)]`, TypeScript `*.test.ts` | `apply-edit.test.ts` |
 | Rust integration tests | a sentence saying what holds | `pins_hold.rs` |
 | Browser tests | `*.spec.ts` | `nothing-leaves.spec.ts` |
+| Gallery pages | `*.gallery.tsx` beside the part it shows; found by its name, never listed | `VertebraMark.gallery.tsx` |
+| Dev scenes | `*.scenes.ts` beside the step or flow it opens; found by its name, never listed | `find.scenes.ts` |
 | Generated code | inside `generated/` or `wasm-build/`, never edited by hand | `app/src/shapes/generated/` |
 | Enum values in JSON | kebab-case | `'not-visible'`, `'film-unsupported-compression'` |
 | JSON fields | camelCase | `mmPerPx` |
@@ -44,17 +46,18 @@ file).
 
 ## Two vocabularies, one mapping
 
-The engine names things by **what they compute** (nouns); the app's step
-folders by **what the surgeon does** (verbs). Within each side a name
+The engine names things by **what they compute**; the app's step
+folders are **named as the rail names the step** (`1-films`,
+`2-size-and-facing`, `3-find`, `4-adjust`). Within each side a name
 never changes spelling:
 
 - engine crate `film-reader` = its export file
   `engine/wasm-bridge/src/exports/film_reader.rs` = its row in `MAP.md`;
-- step folder `3-find-vertebrae/` = its words file `words/find-vertebrae.ts`
-  = its stand-in script `stand-in/scripts/find-vertebrae.ts`.
+- step folder `3-find/` = its words file `words/find.ts` = its stand-in
+  script `stand-in/scripts/find.ts`.
 
-`toolbox` and `made-up-spines` are the same word on both sides: the engine
-computes them, the app lets you use them.
+`auto-pass`, `toolbox` and `made-up-spines` are the same word on both
+sides: the engine computes them, the app lets you watch or use them.
 
 ## Guessing a path
 
@@ -63,6 +66,6 @@ door to the browser is `engine/wasm-bridge/src/exports/C.rs` (with
 underscores), its jobs are in
 `app/src/engine-room/workers/<film|spine>-worker/jobs/`, and screens call
 it through `app/src/engine-room/engine-client.ts`. A screen lives in
-`app/src/steps/<n>-<verb>/` with its words in `app/src/words/<verb>.ts`.
+`app/src/steps/<n>-<slug>/` with its words in `app/src/words/<slug>.ts`.
 Proof is always under `proving-ground/`. `MAP.md` at the root lists the
 rest.

@@ -49,39 +49,124 @@ const NETWORK_EXEMPT = ['app/src/engine-room/load-engine.ts'];
 
 const restrictedGlobals = (names) => ['error', ...names.map((name) => ({ name, message: NETWORK }))];
 
-// Import boundaries between the areas of app/src. Each area lists what it
-// may not import; a file gets the rules of the most specific area it is in.
+// Import boundaries between the areas of app/src, drawn in app/README.md
+// (which also says how a new area gets its row). Each area lists what it
+// may not import. A later row replaces an earlier one for the files it
+// matches, so a file gets the rules of the most specific area it is in,
+// and each row carries its whole list.
 const SHAPES_ONLY = { group: ['**/shapes', '**/shapes/**', '!@/shapes'], message: 'Shared types come only from @/shapes.' };
 const ENGINE_INSIDES = {
   group: ['**/wasm-build', '**/wasm-build/**', '**/workers', '**/workers/**'],
   message: 'Only the engine room reaches the wasm build and the workers.',
 };
 const STAND_IN = { group: ['**/stand-in', '**/stand-in/**'], message: 'Only pick-engine.ts and tests use the stand-in engine.' };
-const OTHER_STEPS = { group: ['**/[0-9]-*', '**/[0-9]-*/**'], message: 'A step never imports another step.' };
-const STEP_ENGINE = {
-  group: ['**/engine-room/**', '!@/engine-room/engine-client', '!@/engine-room/use-engine'],
-  message: 'Steps reach the engine only through @/engine-room/engine-client and @/engine-room/use-engine.',
+const SAMPLE_CASE = {
+  group: ['**/sample-case', '**/sample-case/**'],
+  message: 'The sample case is for gallery pages, scenes, tests and the stand-in.',
 };
-const NO_STEPS = { group: ['**/steps', '**/steps/**'], message: 'This area never imports steps.' };
-const NO_CASE_STATE = { group: ['**/case-state', '**/case-state/**'], message: 'This area never imports the case state.' };
-const NO_ENGINE_ROOM = { group: ['**/engine-room', '**/engine-room/**'], message: 'This area never imports the engine room.' };
+const OTHER_STEPS = { group: ['**/[0-9]-*', '**/[0-9]-*/**'], message: 'A step never imports another step.' };
+// The stand-in is left to STAND_IN, so that tests in these areas may use it.
+const ENGINE_DOOR_ONLY = {
+  group: [
+    '**/engine-room/**',
+    '!@/engine-room/engine-client',
+    '!@/engine-room/use-engine',
+    '!@/engine-room/stand-in',
+    '!@/engine-room/stand-in/**',
+  ],
+  message: 'This area reaches the engine only through @/engine-room/engine-client and @/engine-room/use-engine.',
+};
+
+/**
+ * An area's folder: its @/ path, or anything inside it by any path. The
+ * bare name is matched only as @/<area>, because words files share their
+ * area's name (@/words/auto-pass is not the auto-pass area).
+ */
+const no = (area) => ({ group: [`@/${area}`, `**/${area}/**`], message: `This area never imports ${area}.` });
+const NO_STEPS = no('steps');
+const NO_CASE_STATE = no('case-state');
+const NO_VIEW_STATE = no('view-state');
+const NO_ENGINE_ROOM = no('engine-room');
+const NO_BENCH = no('bench');
+const NO_AUTO_PASS = no('auto-pass');
+const NO_TOOLBOX = no('toolbox');
+
+/** Every area that look-and-feel, choreography and building-blocks never import. */
+const ABOVE_THE_BLOCKS = [
+  'steps',
+  'case-state',
+  'view-state',
+  'engine-room',
+  'film-viewer',
+  'bench',
+  'marks',
+  'ladder',
+  'guide',
+  'auto-pass',
+  'toolbox',
+  'review',
+  'on-this-device',
+  'case-sheet',
+  'reopen-case',
+  'made-up-spines',
+  'open-and-save',
+  'app-shell',
+  'gallery',
+];
+// Their own gallery pages need the page type. The bare @/gallery is left
+// out, because a folder that matches can never be let back in.
+const GALLERY_PAGE_TYPE_ONLY = {
+  group: ['**/gallery/**', '!@/gallery/gallery-page'],
+  message: 'This area takes only the GalleryPage type from @/gallery/gallery-page.',
+};
+const DRAWS_ONLY = ABOVE_THE_BLOCKS.map((area) => (area === 'gallery' ? GALLERY_PAGE_TYPE_ONLY : no(area)));
+const REVIEW_ONLY = [
+  ...ABOVE_THE_BLOCKS.filter((area) => area !== 'review').map(no),
+  no('choreography'),
+  no('building-blocks'),
+  { group: ['**/look-and-feel/**', '!@/look-and-feel/data-attributes'], message: 'review/ takes only the data-attribute types from look-and-feel.' },
+];
 
 const AREAS = [
   { files: 'app/src/**/*.{ts,tsx}', banned: [SHAPES_ONLY, ENGINE_INSIDES] },
   { files: 'app/src/shapes/**/*.{ts,tsx}', banned: [ENGINE_INSIDES] },
   { files: 'app/src/engine-room/**/*.{ts,tsx}', banned: [SHAPES_ONLY] },
-  { files: 'app/src/steps/[0-9]-*/**/*.{ts,tsx}', banned: [SHAPES_ONLY, ENGINE_INSIDES, OTHER_STEPS, STEP_ENGINE] },
+  { files: 'app/src/steps/[0-9]-*/**/*.{ts,tsx}', banned: [SHAPES_ONLY, ENGINE_INSIDES, OTHER_STEPS, ENGINE_DOOR_ONLY] },
+  { files: 'app/src/{look-and-feel,choreography,building-blocks}/**/*.{ts,tsx}', banned: [SHAPES_ONLY, ENGINE_INSIDES, ...DRAWS_ONLY] },
   {
-    files: 'app/src/{film-viewer,look-and-feel,choreography,building-blocks}/**/*.{ts,tsx}',
-    banned: [SHAPES_ONLY, ENGINE_INSIDES, NO_STEPS, NO_CASE_STATE, NO_ENGINE_ROOM],
+    files: 'app/src/film-viewer/**/*.{ts,tsx}',
+    banned: [SHAPES_ONLY, ENGINE_INSIDES, NO_STEPS, NO_CASE_STATE, NO_VIEW_STATE, NO_ENGINE_ROOM],
+  },
+  {
+    files: 'app/src/{marks,ladder,guide}/**/*.{ts,tsx}',
+    banned: [SHAPES_ONLY, ENGINE_INSIDES, NO_STEPS, NO_CASE_STATE, NO_VIEW_STATE, NO_ENGINE_ROOM, NO_BENCH, NO_AUTO_PASS, NO_TOOLBOX],
+  },
+  { files: 'app/src/review/**/*.{ts,tsx}', banned: [SHAPES_ONLY, ENGINE_INSIDES, ...REVIEW_ONLY] },
+  {
+    files: 'app/src/auto-pass/**/*.{ts,tsx}',
+    banned: [SHAPES_ONLY, ENGINE_INSIDES, NO_STEPS, NO_CASE_STATE, NO_BENCH, NO_TOOLBOX, ENGINE_DOOR_ONLY],
+  },
+  {
+    files: 'app/src/{bench,toolbox,on-this-device,case-sheet,reopen-case,made-up-spines,open-and-save}/**/*.{ts,tsx}',
+    banned: [SHAPES_ONLY, ENGINE_INSIDES, NO_STEPS, ENGINE_DOOR_ONLY],
   },
 ];
 
 /** Where the stand-in engine may be imported. */
 const STAND_IN_ALLOWED = ['app/src/engine-room/pick-engine.ts', 'app/src/engine-room/stand-in/**', '**/*.test.{ts,tsx}'];
 
+/** Where the sample case may be imported: those, and the files that show the app in a state. */
+const SAMPLE_CASE_ALLOWED = [...STAND_IN_ALLOWED, 'app/src/sample-case/**', '**/*.gallery.tsx', '**/*.scenes.ts'];
+
+// Three entries per row, in this order: every file of the area gets its
+// list and both bans; files where the sample case is allowed lose that
+// ban; files where the stand-in is allowed lose both.
 const importBoundaries = AREAS.flatMap(({ files, banned }) => [
-  { files: [files], rules: { 'no-restricted-imports': ['error', { patterns: [...banned, STAND_IN] }] } },
+  { files: [files], rules: { 'no-restricted-imports': ['error', { patterns: [...banned, STAND_IN, SAMPLE_CASE] }] } },
+  {
+    files: SAMPLE_CASE_ALLOWED.map((allowed) => [files, allowed]),
+    rules: { 'no-restricted-imports': ['error', { patterns: [...banned, STAND_IN] }] },
+  },
   {
     files: STAND_IN_ALLOWED.map((allowed) => [files, allowed]),
     rules: { 'no-restricted-imports': ['error', { patterns: banned }] },
