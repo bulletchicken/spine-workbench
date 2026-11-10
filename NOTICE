@@ -6,3 +6,17 @@ LICENSE).
 
 Third-party material bundled with the app (typefaces, bone models) is
 credited below, each with its licence, when it is added.
+
+Typefaces
+
+Geist and Geist Mono
+  Copyright 2024 The Geist Project Authors
+  (https://github.com/vercel/geist-font)
+  SIL Open Font License 1.1, in third-party-licences/geist-OFL.txt and
+  third-party-licences/geist-mono-OFL.txt
+
+Instrument Serif
+  Copyright 2022 The Instrument Serif Project Authors
+  (https://github.com/Instrument/instrument-serif)
+  SIL Open Font License 1.1, in
+  third-party-licences/instrument-serif-OFL.txt

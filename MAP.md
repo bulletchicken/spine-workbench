@@ -14,6 +14,7 @@ built.
 | what the project is and how to run it | `README.md` |
 | how we branch, commit and review | `CONTRIBUTING.md` |
 | the licence and third-party credits | `LICENSE`, `NOTICE` |
+| the licence text of each bundled typeface | `third-party-licences/` |
 | the Rust workspace, its pinned dependencies, the build profiles | `Cargo.toml`, `Cargo.lock` |
 | the Rust toolchain | `rust-toolchain.toml` |
 | the Rust formatting and lint rules (no clocks, threads, files, std float maths) | `rustfmt.toml`, `clippy.toml` |
