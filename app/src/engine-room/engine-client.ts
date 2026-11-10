@@ -101,7 +101,12 @@ export interface EngineClient {
 export interface RunOptions {
   /** At most ten a second. */
   onProgress?(progress: { stage: Stage; fraction: number }): void;
-  /** At most thirty a second, newest first; keyframes are never dropped. */
+  /**
+   * Every frame is kept except two kinds, which may be thinned to thirty a
+   * second, newest kept: `joint-progress` frames, and `evidence` frames
+   * with `final: false` whose `map` is not `wavefront`. Each film's
+   * frames, and the chain pass's, arrive in the order they were emitted.
+   */
   onFrame?(frame: WatchFrame): void;
   /** Aborting rejects the call with `pass-cancelled`. */
   signal?: AbortSignal;

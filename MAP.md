@@ -72,6 +72,7 @@ The crate map, the dependency rules and the patient frame in one picture:
 | the saved case record | `engine/shapes/src/case_file_v1.rs` |
 | strict reading and canonical writing of case.json | `engine/shapes/src/reading.rs` |
 | the strict-reading, mark-name, golden-file and side-swap tests | `engine/shapes/tests/strict_reading.rs`, `engine/shapes/tests/mark_names_are_exact.rs`, `engine/shapes/tests/golden_case_files.rs`, `engine/shapes/tests/side_swap.rs` |
+| which watch frames may be thinned | `engine/shapes/tests/which_frames_may_be_thinned.rs` |
 
 ### Image filters (`engine/darkroom/`)
 

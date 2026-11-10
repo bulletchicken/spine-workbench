@@ -17,8 +17,9 @@
 //! `confidence`, and `outlines` ending with `final: true`. `warning` frames
 //! may come between any two others.
 //!
-//! Keyframes the app must never drop: `stage-started`, `chain-locked`,
-//! `levels-named`, `confidence` and the final `outlines`.
+//! Every frame is kept except two kinds, which may be thinned to thirty a
+//! second, newest kept: `joint-progress` frames, and `evidence` frames
+//! with `final: false` whose `map` is not `wavefront`.
 
 use crate::auto_pass::{PassWarning, Stage};
 use crate::confidence::ConfidenceBand;
@@ -311,6 +312,8 @@ pub enum WatchFrame {
         film: FilmKind,
         stage: Stage,
         naming: LevelNaming,
+        /// The level of each body, top to bottom, as `FilmMarks.vertebrae`
+        /// and the two naming lists run.
         levels: Vec<Level>,
     },
     Confidence {
@@ -334,15 +337,29 @@ pub enum WatchFrame {
 }
 
 impl WatchFrame {
-    /// Frames the app may coalesce but never drop.
+    /// Whether the frame must be kept. Every frame is kept except two
+    /// kinds, which may be thinned to thirty a second, newest kept:
+    /// `joint-progress` frames, and `evidence` frames with `final: false`
+    /// whose `map` is not `wavefront`. Every kind is named here, so a new
+    /// one does not compile until it is decided.
     pub fn is_keyframe(&self) -> bool {
         match self {
+            WatchFrame::JointProgress { .. } => false,
+            WatchFrame::Evidence { map, is_final, .. } => *is_final || *map == MapKind::Wavefront,
             WatchFrame::StageStarted { .. }
+            | WatchFrame::EndZones { .. }
+            | WatchFrame::CentreLine { .. }
+            | WatchFrame::Width { .. }
+            | WatchFrame::StripShape { .. }
+            | WatchFrame::StripRows { .. }
+            | WatchFrame::Barcode { .. }
+            | WatchFrame::Sweep { .. }
+            | WatchFrame::TemplateScored { .. }
             | WatchFrame::ChainLocked { .. }
             | WatchFrame::LevelsNamed { .. }
-            | WatchFrame::Confidence { .. } => true,
-            WatchFrame::Outlines { is_final, .. } => *is_final,
-            _ => false,
+            | WatchFrame::Confidence { .. }
+            | WatchFrame::Outlines { .. }
+            | WatchFrame::Warning { .. } => true,
         }
     }
 }

@@ -70,4 +70,9 @@ heat: Uint8Array,
 /**
  * The best chain so far ending at this level.
  */
-tentative: Array<ChainBody>, } | { "kind": "template-scored", film: FilmKind, stage: Stage, template: Template, score: number, chance: number, } | { "kind": "joint-progress", film: FilmKind, stage: Stage, start: number, round: number, upper: number, lower: number, } | { "kind": "chain-locked", film: FilmKind, stage: Stage, bodies: Array<ChainBody>, } | { "kind": "levels-named", film: FilmKind, stage: Stage, naming: LevelNaming, levels: Array<Level>, } | { "kind": "confidence", film: FilmKind, stage: Stage, levels: Array<LevelConfidence>, } | { "kind": "outlines", film: FilmKind, stage: Stage, quads: Array<OutlineQuad>, final: boolean, } | { "kind": "warning", film: FilmKind, stage: Stage, warning: PassWarning, };
+tentative: Array<ChainBody>, } | { "kind": "template-scored", film: FilmKind, stage: Stage, template: Template, score: number, chance: number, } | { "kind": "joint-progress", film: FilmKind, stage: Stage, start: number, round: number, upper: number, lower: number, } | { "kind": "chain-locked", film: FilmKind, stage: Stage, bodies: Array<ChainBody>, } | { "kind": "levels-named", film: FilmKind, stage: Stage, naming: LevelNaming, 
+/**
+ * The level of each body, top to bottom, as `FilmMarks.vertebrae`
+ * and the two naming lists run.
+ */
+levels: Array<Level>, } | { "kind": "confidence", film: FilmKind, stage: Stage, levels: Array<LevelConfidence>, } | { "kind": "outlines", film: FilmKind, stage: Stage, quads: Array<OutlineQuad>, final: boolean, } | { "kind": "warning", film: FilmKind, stage: Stage, warning: PassWarning, };

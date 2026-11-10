@@ -65,9 +65,12 @@ cancel { id }            ───────▶   (stepped jobs stop between s
    nothing is copied twice.
 7. **Stepped jobs** (`film-pass`, `chain-pass`) run in slices of about
    8 ms, timed in the worker with `performance.now()`; the engine itself
-   has no clock. Progress is sent at most ten times a second; sweep frames
-   at most thirty times a second, newest first, and keyframes are never
-   dropped (see [watch frames](watch-frames.md)).
+   has no clock. Progress is sent at most ten times a second. Every frame
+   is kept except two kinds, which may be thinned to thirty a second,
+   newest kept: `joint-progress` frames, and `evidence` frames with
+   `final: false` whose `map` is not `wavefront`. A frame held back is
+   sent or dropped before any later frame is sent, so frames arrive in
+   the order they were emitted (see [watch frames](watch-frames.md)).
 8. **Cancel** is a flag checked between slices. The pass is freed and the
    job ends `failed` with `pass-cancelled`. A slice that runs past two
    seconds gets the worker terminated and replaced.

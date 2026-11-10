@@ -19,8 +19,10 @@ fraction, frames }`. The worker's step loop calls it repeatedly.
 
 ## Consequences
 
-- Progress is throttled to ten a second and sweep frames to thirty a
-  second, newest first; keyframes are never dropped.
+- Progress is throttled to ten a second. Every frame is kept except two
+  kinds, which may be thinned to thirty a second, newest kept:
+  `joint-progress` frames, and `evidence` frames with `final: false`
+  whose `map` is not `wavefront`.
 - Pacing belongs to the app: the step 3 frame player gives each stage a
   minimum dwell, offers skip and replay, and calms down under reduced
   motion.

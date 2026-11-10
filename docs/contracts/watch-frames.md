@@ -19,14 +19,20 @@ TypeScript is the generated `WatchFrame` union.
   `Step { done, stage, fraction, frames }`.
 - **Every frame names its `film` and `stage`.** Every position is in
   original film pixels.
-- **Pacing is the app's job.** The worker throttles (progress at most ten
-  a second, sweep frames at most thirty a second, newest first). The step
-  3 frame player buffers frames, gives each stage a minimum dwell, offers
-  skip, replay and scrubbing, and falls back to cross-fades under reduced
-  motion.
-- **Keyframes are never dropped:** `stage-started`, `chain-locked`,
-  `levels-named`, `confidence`, and the `outlines` frame with `final:
-  true`.
+- **Pacing is the app's job.** The worker sends progress at most ten
+  times a second. The step 3 frame player buffers frames, gives each
+  stage a minimum dwell, offers skip, replay and scrubbing, and falls
+  back to cross-fades under reduced motion.
+- **Every frame is kept except two kinds,** which may be thinned to
+  thirty a second, newest kept: `joint-progress` frames, and `evidence`
+  frames with `final: false` whose `map` is not `wavefront`. A frame held
+  back is sent or dropped before any later frame of its pass is sent, so
+  each film's frames, and the chain pass's, arrive in the order they were
+  emitted. The film passes run in parallel, so their frames may
+  interleave. The player replays what it was sent, so a dropped strip
+  block would leave a hole in the strip and a dropped sweep frame a gap
+  in the search.
+  `WatchFrame::is_keyframe` is false for exactly those two.
 - **Outlines may move at the end.** The best chain is known only once the
   sweep finishes, so an outline already shown may shift when the final
   outlines arrive; the app glides it into place.
@@ -54,7 +60,7 @@ evidence → centre-line → strip → chain → naming → confidence
 | `template-scored` | chain | one vertebra count's score and chance |
 | `joint-progress` | chain | progress when a front and a side film are solved together |
 | `chain-locked` | chain | every body found, as endplate lines |
-| `levels-named` | naming | the film's `LevelNaming` and the level of each body |
+| `levels-named` | naming | the film's `LevelNaming` and the level of each body, top to bottom |
 | `confidence` | confidence | each level's confidence |
 | `outlines` | confidence | one quad per vertebra, corners in quad order round the outline; the last has `final: true` |
 | `warning` | any | something the user should know about the pass, between any two frames |
