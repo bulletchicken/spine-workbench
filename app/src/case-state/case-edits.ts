@@ -27,15 +27,28 @@
 //   edit per film in `AutoPassResult.marks`, in that order, each with
 //   cause `auto-pass` and `basedOn` set to `AutoPassResult.caseVersion`
 //   (the version the pass started from). Each is kept or dropped on its
-//   own and is its own undo step on its own film. The order matters: each
-//   film's new ids lie above the previous film's, so one film's edit
-//   landing never makes the ids of a later film's edit look given out.
+//   own; the kept ones are one action. The order matters: each film's new
+//   ids lie above the previous film's, so one film's edit landing never
+//   makes the ids of a later film's edit look given out.
 // - `nextVertebraId` never goes down: after each applied edit other than
 //   `open-case` (which takes the opened case's), it is the larger of its
 //   value before the edit and one above the highest vertebra id in the
 //   case, so ids are never reused.
-// - Each edit except `open-case` touches exactly one film; undo and redo
-//   are kept per film (see `editedFilm`).
+// - Each edit except `open-case` touches exactly one film.
+// - A list of edits may be applied as one action. Each is kept or dropped
+//   by the rules above, in order, and the version goes up once per
+//   applied edit. The kept edits are one undo step; a single edit is an
+//   action of one (consecutive `move-mark` edits with the same `gesture`
+//   join one action). Applying an action that keeps at least one edit
+//   clears redo; one that keeps none changes nothing and adds no undo
+//   step. Undo and redo keep one list for the case and act on the newest
+//   action: one undo or redo restores every film that action touched and
+//   raises the version once, and each of those films counts as changed
+//   at that version. The store can also start the history afresh without
+//   changing the case, as `open-case` does.
+// - Applying an action reports which of its edits were kept and which
+//   were dropped, so the screens show `twoFilms` and each warning only
+//   for what landed, without guessing.
 // - After every edit, each film's `landmarks.c7` is what `c7_of` (in
 //   `engine/shapes/src/landmarks.rs`) works out from that film's
 //   vertebrae: the mean of the C7 vertebra's four corners, source `auto`,
@@ -100,8 +113,8 @@ export type CaseEdit =
    *   something other than this app keep their names until the facing
    *   changes (the case check `marks-named-for-other-facing` reports
    *   them meanwhile).
-   * Like every edit it is one undo step, so undoing it brings back the
-   * marks as they were together with the old geometry.
+   * Undoing it brings back the marks as they were together with the old
+   * geometry.
    */
   | { kind: 'set-geometry'; film: FilmKind; geometry: FilmGeometry }
   /**

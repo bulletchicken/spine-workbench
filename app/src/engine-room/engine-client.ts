@@ -73,8 +73,8 @@ export interface EngineClient {
    *
    * The answer's `caseVersion` is `input.caseVersion`, stamped by the
    * client itself: the jobs between workers never reach the case store,
-   * so they carry no version. The screens apply the answer as one
-   * `replace-marks` edit per entry of `marks`, each with cause
+   * so they carry no version. The screens apply the answer as one action:
+   * one `replace-marks` edit per entry of `marks`, each with cause
    * `{ by: 'auto-pass' }` and `basedOn: caseVersion`, in order; each is
    * kept or dropped on its own. When only some are kept, they show
    * `twoFilms` only if all were, and only the kept films' warnings.

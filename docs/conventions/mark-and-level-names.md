@@ -64,10 +64,10 @@ the film's geometry before it:
   differs from `imageRight`. Confirming the facing as it stands never
   renames anything.
 
-Either way it is one undo step, so undo brings the marks back with the
-old turns or facing. The case check `marks-named-for-other-facing`
-therefore fires only while `imageRight` is unknown, or on a file written
-by something other than this app.
+Either way, undo brings the marks back together with the old turns or
+facing. The case check `marks-named-for-other-facing` therefore fires
+only while `imageRight` is unknown, or on a file written by something
+other than this app.
 
 ## Landmarks
 

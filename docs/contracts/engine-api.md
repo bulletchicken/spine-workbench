@@ -54,13 +54,11 @@ can drop an answer that is stale (the rules in
 The client stamps it on `AutoPassResult.caseVersion` itself: the jobs
 between workers (`film-pass`, `chain-pass`, `place-points`) never reach
 the case store, so they carry no version and no answer reaches it
-without one. The screens then apply the result as one `replace-marks`
-edit per entry of `AutoPassResult.marks`:
+without one. The screens then apply the result as one action: one
+`replace-marks` edit per entry of `AutoPassResult.marks`, in order:
 
 ```ts
-for (const marks of result.marks) {
-  apply({ kind: 'replace-marks', marks, cause: { by: 'auto-pass' }, basedOn: result.caseVersion });
-}
+apply(result.marks.map((marks) => ({ kind: 'replace-marks', marks, cause: { by: 'auto-pass' }, basedOn: result.caseVersion })));
 ```
 
 The case store judges staleness per film: each edit is dropped if its
@@ -70,12 +68,14 @@ make the others stale. It is also dropped if it uses a vertebra id the
 case has given out since `basedOn` (an id its film does not hold and
 that is below the case's `nextVertebraId`), so one id never ends up on
 two vertebrae. The edits go in the order of `marks` because each film's
-new ids lie above the previous film's. Each kept edit is its own undo
-step on its own film.
+new ids lie above the previous film's. The kept edits are one action,
+one undo step; when none is kept, nothing changes and no undo step is
+added.
 
-When only some edits are kept, the screens show `twoFilms` only if
-every film's edit was kept, and each warning only if its film's edit
-was kept, so nothing on screen describes marks the case does not hold.
+Applying the action reports which edits were kept. When only some are
+kept, the screens show `twoFilms` only if every film's edit was kept,
+and each warning only if its film's edit was kept, so nothing on screen
+describes marks the case does not hold.
 
 ## Jobs
 
