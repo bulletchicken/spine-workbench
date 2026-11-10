@@ -3,6 +3,8 @@ import { createRoot } from 'react-dom/client';
 import { EngineFailure } from './engine-room/engine-client';
 import { loadEngine } from './engine-room/load-engine';
 import type { FromWorker, ToWorker } from './engine-room/messages';
+import { faultWords } from './words/faults';
+import { PREVIEW_NOTICE } from './words/preview-notice';
 import type { EngineError, EngineInfo } from '@/shapes';
 
 // The bare app: it starts one film worker and the spine worker, hands each
@@ -81,8 +83,13 @@ function App() {
             Engine <span data-testid="engine-version">{engine.info.engineVersion}</span> ready
           </>
         )}
-        {engine.status === 'failed' && `The engine did not start (${engine.error.code}).`}
+        {engine.status === 'failed' && (
+          <>
+            {faultWords(engine.error.code).title}. {faultWords(engine.error.code).whatToDo}
+          </>
+        )}
       </p>
+      <p>{PREVIEW_NOTICE.short}</p>
     </main>
   );
 }
