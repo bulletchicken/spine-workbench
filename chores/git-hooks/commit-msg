@@ -3,4 +3,12 @@
 # applies the house commit rules; a refused message stops the commit and
 # says why. `pnpm install` points git here (core.hooksPath).
 
+# A fixup, squash or amend commit is folded into its target by
+# `git rebase --autosquash` before it is pushed, so its message is not
+# checked here. CI checks every commit in a pull request and refuses one
+# that was pushed unfolded.
+case "$(sed -n 1p "$1")" in
+  'fixup! '* | 'squash! '* | 'amend! '*) exit 0 ;;
+esac
+
 exec "$(git rev-parse --show-toplevel)/chores/check-commit-message.sh" "$1"

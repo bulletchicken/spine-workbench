@@ -98,9 +98,22 @@ the stand-in engine, `pnpm build` and `pnpm --filter ./app preview` for
 work against the real engine.
 
 **Review.** Someone other than the author reviews the diff and posts a
-review comment. The author answers with new commits, not force-pushed
-rewrites, so the review can follow. When the reviewer posts "Reviewed:
-ready to merge" and every workflow is green, merge with
+review comment. The author folds each fix into the commit it belongs to,
+so that every commit reaching `main` still stands on its own:
+
+```sh
+git add <the files you fixed>
+git commit --fixup=<sha>
+git fetch origin
+git rebase -i --autosquash origin/main
+git push --force-with-lease
+```
+
+Then post a comment saying what changed for each point, so the review
+can follow. The commit-msg hook lets `fixup!`, `squash!` and `amend!`
+commits through, because the rebase folds them away; CI refuses any
+that reach a pull request. When the reviewer posts "Reviewed: ready to
+merge" and every workflow is green, merge with
 
 ```sh
 gh pr merge --rebase --delete-branch
