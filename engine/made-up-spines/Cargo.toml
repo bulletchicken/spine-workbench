@@ -1,0 +1,17 @@
+[package]
+name = "made-up-spines"
+description = "Spines and films with known answers, for tests, scoring and trying the app."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+shapes = { path = "../shapes" }
+darkroom = { path = "../darkroom" }
+forward-model = { path = "../forward-model" }
+libm.workspace = true
+nalgebra.workspace = true
+png.workspace = true
+thiserror.workspace = true

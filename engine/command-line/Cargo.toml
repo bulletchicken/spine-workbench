@@ -1,0 +1,26 @@
+[package]
+name = "command-line"
+description = "The spine binary: the same engine, natively."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[[bin]]
+name = "spine"
+path = "src/main.rs"
+
+[dependencies]
+shapes = { path = "../shapes" }
+auto-pass = { path = "../auto-pass" }
+case-checks = { path = "../case-checks" }
+case-file = { path = "../case-file" }
+film-geometry = { path = "../film-geometry" }
+film-reader = { path = "../film-reader", features = ["test-support"] }
+made-up-spines = { path = "../made-up-spines" }
+scorekeeper = { path = "../scorekeeper" }
+toolbox = { path = "../toolbox" }
+clap.workspace = true
+rayon.workspace = true
+serde_json.workspace = true

@@ -1,0 +1,31 @@
+[package]
+name = "film-reader"
+description = "Bytes in, one greyscale film out; every tag not on the keep-list dropped."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[features]
+# Writes test DICOM files. Tests and `spine make-up --format dicom` use it;
+# the browser build never does.
+test-support = []
+
+[dependencies]
+shapes = { path = "../shapes" }
+darkroom = { path = "../darkroom" }
+dicom-object.workspace = true
+flate2.workspace = true
+half.workspace = true
+hayro-jpeg2000.workspace = true
+jpeg-decoder.workspace = true
+miniz_oxide.workspace = true
+png.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+dicom-toolkit-jpeg2000.workspace = true
+jpeg-encoder.workspace = true
+proptest.workspace = true
+pure_jpegls.workspace = true

@@ -1,0 +1,21 @@
+[package]
+name = "toolbox"
+description = "The maths behind the adjusting tools: region wand, boundary wand and pins."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+shapes = { path = "../shapes" }
+darkroom = { path = "../darkroom" }
+film-reader = { path = "../film-reader" }
+auto-pass = { path = "../auto-pass" }
+libm.workspace = true
+nalgebra.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+made-up-spines = { path = "../made-up-spines" }
+proptest.workspace = true
