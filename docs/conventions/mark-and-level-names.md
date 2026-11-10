@@ -73,7 +73,7 @@ other than this app.
 
 | Name | What |
 |---|---|
-| `c7` | the centre of the C7 body: the mean of the chain's C7 corners, worked out again whenever they move or the names change which vertebra is C7, so never moved or pinned on its own, and `null` when the film has no C7 |
+| `c7` | the mean of the chain's C7 corners, the centre of the C7 body: worked out again whenever they move or the names change which vertebra is C7, so never moved or pinned on its own, and `null` when the film has no C7 |
 | `sacL`, `sacR` (front) or `sacA`, `sacP` (side) | the two ends of the top of the sacrum |
 | hip centres | femoral head centres: `left` and `right` on a front film; on a side film one or two `unpaired` heads, or one `merged` midpoint |
 

@@ -12,8 +12,8 @@
 // - Nothing happens on a click that the hover did not show.
 // - Every engine request carries the session's case version, and every
 //   answer is applied as an edit `basedOn` that version, so the case
-//   store drops an answer that arrives after its film changed, or after
-//   the case gave out the vertebra id it uses.
+//   store drops an answer that arrives after its film changed, or that
+//   uses a vertebra id the case may have given out since.
 // - The right button belongs to the viewer (brightness and contrast); a
 //   tool sees the primary button only.
 

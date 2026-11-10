@@ -12,11 +12,10 @@
 //   needs the browser to hand the worker's script request to the route
 //   as a script, as Chromium does; WebKit does not, so there a worker's
 //   listener starts when Playwright reaches the worker, just after its
-//   first lines. Every
-//   script from the app's origin gets it, since a request does not say
-//   whether a worker will run it; in the page it does nothing more. A
-//   worker whose script starts with a static import is reported instead,
-//   since its imports would run before the listener.
+//   first lines. Every script from the app's origin gets it, since a
+//   request does not say whether a worker will run it; in the page it
+//   does nothing more. A worker whose script starts with a static import
+//   is reported instead, since its imports would run before the listener.
 // - Every worker Playwright sees also gets the listener by evaluation, a
 //   no-op when it is already there (and the only way in WebKit). A worker
 //   it cannot reach is reported as a violation, so a missed worker fails

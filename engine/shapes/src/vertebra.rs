@@ -115,8 +115,10 @@ impl FilmMarks {
     /// Every point keeps its position and its flags (source, pinned,
     /// inferred); only which name holds it changes. Levels, ids,
     /// confidence, outlines and naming are untouched, and `c7` is worked
-    /// out again ([`Landmarks::c7_of`]), which gives the same point: the
-    /// mean of the same four corners.
+    /// out again ([`Landmarks::c7_of`]): the mean of the same four
+    /// corners, so the same point up to rounding, well inside
+    /// [`C7_TOLERANCE_PX`](crate::landmarks::C7_TOLERANCE_PX), because the
+    /// corners are added in another order.
     ///
     /// `facing` suits the film's view, as the reader ensures for
     /// `imageRight`. This is the one definition: the app's case reducer

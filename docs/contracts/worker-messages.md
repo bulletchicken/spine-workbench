@@ -60,7 +60,11 @@ cancel { id }            ───────▶   (stepped jobs stop between s
    so a wrong payload is a compile error rather than a refusal.
 5. **One job at a time** per worker. Jobs the table marks `replaceable`
    (hover previews, live checks) keep at most one waiting; a newer one
-   replaces it.
+   replaces it. A replaced call rejects with `pass-cancelled`. So do the
+   waiting and running calls on a film that is replaced or retired (the
+   [engine API](engine-api.md) says which): the main thread rejects them
+   itself, cancels their stepped jobs, and drops any later message for
+   them.
 6. **Transfers.** `output` and frame payloads go in the transfer list;
    nothing is copied twice.
 7. **Stepped jobs** (`film-pass`, `chain-pass`) run in slices of about

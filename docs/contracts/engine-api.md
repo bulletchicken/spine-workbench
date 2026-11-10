@@ -35,9 +35,33 @@ and tests only, never shipped) both implement it.
 | `resolvePins(kind, input)` | `PinOutput` | `resolve-pins` |
 | `checkCase(case)` | `CheckFinding[]` | `check-case` |
 | `saveCase(case)` | `.spinecase` bytes | `encode-png` on every film, then `pack-case` |
-| `openCase(bytes)` | `OpenedCase` | `unpack-case`, then `open-film` for each PNG with its saved record |
+| `openCase(bytes)` | `OpenedCase` | `unpack-case`; it opens no film |
 | `makeUpSpine(recipe)` | `MadeUpSpine` | `make-up-spine` |
 | `compareWithAnswerKey(marks, key)` | `AnswerKeyComparison` | `compare-with-answer-key` |
+
+`openCase` reads and checks the file and opens no film. The screen then
+opens each film through `openFilm` with its saved record. `openFilm` for
+a kind that is already open replaces that film.
+
+When a film is replaced or retired, every call on it that is still
+waiting or running rejects with `pass-cancelled`, the code a replaced
+call rejects with: an `openFilm` still opening it, `displayPixels`,
+`senseGeometry`, the two scale calls, `previewTool`, `regionWand`,
+`boundaryWand` and `resolvePins`. A `runAutoPass` or `saveCase` that
+includes the film and has not settled rejects as a whole with
+`pass-cancelled`, because its answer would describe a film that is no
+longer the one open: the pass's other films are cancelled with it and
+nothing is applied. Frames already delivered stay delivered, and none
+arrives after the rejection. Calls on other films are untouched, and a
+call made after the replacing `openFilm` goes to the new film. If the
+replacing `openFilm` fails, the film that was open stays open and
+unchanged, so a file that cannot be read costs nothing but the calls it
+cut off, which the screen may make again.
+
+Only a `runAutoPass` rejected this way is a stopped search. Any other
+call rejected this way is not, and the screen does not word it as one:
+it lets a call on the old film go by, and the save sheet starts the
+save again from the case as it now stands.
 
 `run` (on `runAutoPass` only) takes `onProgress`, `onFrame` and an
 `AbortSignal`; aborting rejects with `pass-cancelled`. Every promise
@@ -65,9 +89,9 @@ The case store judges staleness per film: each edit is dropped if its
 own film changed after `basedOn` (any applied edit on it, undo and redo
 included, or an `open-case`), so the first film's edit landing does not
 make the others stale. It is also dropped if it uses a vertebra id the
-case has given out since `basedOn` (an id its film does not hold and
-that is below the case's `nextVertebraId`), so one id never ends up on
-two vertebrae. The edits go in the order of `marks` because each film's
+case may have given out since `basedOn` (an id its film does not hold
+and that is below the case's `nextVertebraId`), so one id never ends up
+on two vertebrae. The edits go in the order of `marks` because each film's
 new ids lie above the previous film's. The kept edits are one action,
 one undo step; when none is kept, nothing changes and no undo step is
 added.
@@ -130,8 +154,9 @@ Notes on inputs:
   each film of `AutoPassInput.films`.
 - `place-points` takes the first free vertebra id, since ids are unique
   across the case and never reused. `runAutoPass` places points film by
-  film, starting at `AutoPassInput.firstVertebraId` and continuing above
-  the highest id the previous film received.
+  film. Each film starts one above the highest id given to any earlier
+  film in the pass, and at `AutoPassInput.firstVertebraId` while none has
+  been.
 - `scale-from-known-object` takes where the user pressed (the object's
   centre), where they let go (on its rim, the circle fit's starting
   radius), and the object's true diameter.

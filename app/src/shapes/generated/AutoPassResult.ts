@@ -9,8 +9,8 @@ import type { TwoFilmCheck } from "./TwoFilmCheck";
  * The app applies it as one `replace-marks` edit per entry of `marks`,
  * in order, each with cause `auto-pass` and `basedOn` set to
  * `caseVersion`. Each edit is kept or dropped on its own: dropped if its
- * own film changed since that version, or if the case has since given
- * out a vertebra id it uses.
+ * own film changed since that version, or if it uses a vertebra id the
+ * case may have given out since.
  *
  * When only some of the edits are kept, the screens show `twoFilms` only
  * if every film's edit was kept, and each warning only if its film's

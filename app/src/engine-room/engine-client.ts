@@ -11,8 +11,8 @@
 // - The engine keeps nothing but each film's pixels and caches. Every edit
 //   request and the auto pass carry the case version they were computed
 //   from, and every answer echoes that version, so the case store can
-//   drop an answer that arrives after its film changed, or after the
-//   case gave out a vertebra id it uses (the rules in
+//   drop an answer that arrives after its film changed, or that uses a
+//   vertebra id the case may have given out since (the rules in
 //   case-state/case-edits.ts).
 // - Every point is in original film pixels.
 
@@ -54,11 +54,21 @@ export interface EngineClient {
   /**
    * Read a film's bytes: a dropped file (PNG, JPEG or DICOM, judged by the
    * bytes alone) with `saved` null, or a case PNG with its saved record.
+   * For a kind that is already open it replaces that film, and the calls
+   * still waiting or running on the old one reject with `pass-cancelled`
+   * (docs/contracts/engine-api.md says which, and what the screen does
+   * with them). If it fails, the film that was open stays open and
+   * unchanged.
    */
   openFilm(kind: FilmKind, bytes: ArrayBuffer, saved: Film | null): Promise<OpenedFilm>;
   /** The film for the GPU: half-float bits, width × height from its facts. */
   displayPixels(kind: FilmKind): Promise<Uint16Array>;
-  /** Forget a film: its worker is closed and its bytes dropped. */
+  /**
+   * Forget a film: its worker is closed and its bytes dropped. The calls
+   * still waiting or running on it reject with `pass-cancelled`
+   * (docs/contracts/engine-api.md says which, and what the screen does
+   * with them).
+   */
   retireFilm(kind: FilmKind): void;
 
   senseGeometry(kind: FilmKind): Promise<GeometryGuess>;
@@ -78,22 +88,44 @@ export interface EngineClient {
    * `{ by: 'auto-pass' }` and `basedOn: caseVersion`, in order; each is
    * kept or dropped on its own. When only some are kept, they show
    * `twoFilms` only if all were, and only the kept films' warnings.
+   * Replacing or retiring one of its films rejects it as a whole with
+   * `pass-cancelled`.
    */
   runAutoPass(input: AutoPassInput, run?: RunOptions): Promise<AutoPassResult>;
 
-  /** What a click would do here, before any click. A newer call replaces a waiting one. */
+  /**
+   * What a click would do here, before any click. A newer call replaces a
+   * waiting one; a replaced call rejects with `pass-cancelled`, which the
+   * screen lets go by.
+   */
   previewTool(kind: FilmKind, input: ToolPreviewInput): Promise<ToolPreview>;
   regionWand(kind: FilmKind, input: RegionWandInput): Promise<RegionWandOutput>;
   boundaryWand(kind: FilmKind, input: BoundaryWandInput): Promise<BoundaryWandOutput>;
   resolvePins(kind: FilmKind, input: PinInput): Promise<PinOutput>;
 
+  /**
+   * The case checks. A newer call replaces a waiting one; a replaced call
+   * rejects with `pass-cancelled`, which the screen lets go by.
+   */
   checkCase(c: CaseFileV1): Promise<CheckFinding[]>;
-  /** The `.spinecase` bytes: each film's PNG, then the zip. */
+  /**
+   * The `.spinecase` bytes: each film's PNG, then the zip. Replacing or
+   * retiring one of its films rejects it as a whole with `pass-cancelled`,
+   * which is not a stopped search: the save sheet starts the save again.
+   */
   saveCase(c: CaseFileV1): Promise<Uint8Array>;
-  /** Read a `.spinecase`; each film then opens through `openFilm` with its saved record. */
+  /**
+   * Read and check a `.spinecase`; it opens no film. The screen then opens
+   * each film through `openFilm` with its saved record.
+   */
   openCase(bytes: ArrayBuffer): Promise<OpenedCase>;
 
   makeUpSpine(recipe: MadeUpRecipe): Promise<MadeUpSpine>;
+  /**
+   * The marks against a made-up spine's answer key. A newer call replaces a
+   * waiting one; a replaced call rejects with `pass-cancelled`, which the
+   * screen lets go by.
+   */
   compareWithAnswerKey(marks: FilmMarks[], key: AnswerKey): Promise<AnswerKeyComparison>;
 }
 

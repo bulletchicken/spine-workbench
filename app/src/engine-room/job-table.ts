@@ -134,7 +134,10 @@ export interface JobRules {
   worker: WorkerRole;
   /** A stepped pass: it reports progress and watch frames, and can be cancelled. */
   stepped: boolean;
-  /** At most one waits in the queue; a newer one replaces it (hover previews). */
+  /**
+   * At most one waits in the queue; a newer one replaces it (hover
+   * previews). A replaced call rejects with `pass-cancelled`.
+   */
   replaceable: boolean;
 }
 

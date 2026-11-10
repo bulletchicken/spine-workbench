@@ -25,11 +25,11 @@
 //! "toward image right of the upright film" name a direction seen on the
 //! upright film but are written as film-pixel steps.
 //!
-//! Lengths along the spine
-//! (arc length, strip rows and columns, widths) are in the film's **length
-//! unit**: millimetres when the film has a scale, and assumed millimetres,
-//! taken from the spine's own width, when `scaleAssumed` is set. Nothing
-//! measured in assumed millimetres may be reported as a length.
+//! Lengths along the spine (arc length, strip rows and columns, widths)
+//! are in the film's **length unit**: millimetres when the film has a
+//! scale, and assumed millimetres, taken from the spine's own width, when
+//! `scaleAssumed` is set. Nothing measured in assumed millimetres may be
+//! reported as a length.
 
 use darkroom::grey_image::GreyImage;
 use serde::{Deserialize, Serialize};

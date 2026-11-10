@@ -4,9 +4,9 @@
 //! The engine keeps no edit state. Every request carries the film's current
 //! [`FilmMarks`] and the case version it was computed from; every answer
 //! echoes that version, so the app drops an answer that arrives after its
-//! film changed, or after the case gave out the new vertebra id it uses
-//! (the rules in `app/src/case-state/case-edits.ts`). Nothing happens on
-//! a click that the hover did not show.
+//! film changed, or that uses a new vertebra id the case may have given
+//! out since (the rules in `app/src/case-state/case-edits.ts`). Nothing
+//! happens on a click that the hover did not show.
 
 use crate::landmarks::LandmarkName;
 use crate::levels::Level;

@@ -17,12 +17,14 @@
 //     stale.
 //   - It holds a vertebra id that its film does not hold now and that is
 //     below the case's `nextVertebraId`. The answer took its new ids from
-//     `nextVertebraId` as it was at `basedOn`, so such an id has been
+//     `nextVertebraId` as it was at `basedOn`, so such an id may have been
 //     given out since, to another film or to marks that undo or redo can
-//     bring back, and keeping it could put one id on two vertebrae.
+//     bring back, and keeping it could put one id on two vertebrae. (Ids
+//     are also skipped when an edit that held them is dropped; the rule
+//     does not tell the two apart.)
 //   So a late answer never overwrites newer work on its film, and an
 //   answer that is not late is lost to work on another film only when
-//   that work gave out a vertebra id the answer also uses.
+//   that work raised `nextVertebraId` past a vertebra id the answer uses.
 // - An auto pass over several films is applied as one `replace-marks`
 //   edit per film in `AutoPassResult.marks`, in that order, each with
 //   cause `auto-pass` and `basedOn` set to `AutoPassResult.caseVersion`
@@ -102,7 +104,9 @@ export type CaseEdit =
    *   `right` hip centres. Each point keeps its position and its flags
    *   (source, pinned, inferred); only which name holds it changes.
    *   `namedFor` becomes the new `imageRight`, and `c7`, the mean of the
-   *   same four corners, is worked out again and lands on the same point.
+   *   same four corners, is worked out again and lands on the same point
+   *   up to rounding, well inside `C7_TOLERANCE_PX`, because the four
+   *   corners are added in another order.
    *   The mirror must reproduce `proving-ground/known-answers/side-swap.json`.
    *   It is mirrored rather than called because this reducer is pure and
    *   synchronous on the main thread, where no engine is loaded.
@@ -128,8 +132,8 @@ export type CaseEdit =
   | { kind: 'set-blanked'; film: FilmKind; boxes: PxRect[] }
   /**
    * An engine answer: one film's marks, whole. Dropped if its film
-   * changed since `basedOn`, or if it uses a vertebra id the case has
-   * given out since (see the rules above).
+   * changed since `basedOn`, or if it uses a vertebra id the case may
+   * have given out since (see the rules above).
    */
   | { kind: 'replace-marks'; marks: FilmMarks; basedOn: number; cause: MarksCause }
   /**

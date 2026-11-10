@@ -5,9 +5,9 @@
 //! `sacL` and `sacR` (patient left and right) on front and bending films,
 //! `sacA` and `sacP` (anterior and posterior) on side films.
 //!
-//! C7 is the centre of the C7 body. The chain's C7 vertebra is the
-//! authority: `c7` is derived from its four corners, and it is worked out
-//! again whenever those corners move (the auto pass, a wand, a pin, a
+//! `c7` is the mean of the four corners of the chain's C7 vertebra, the
+//! centre of the C7 body. That vertebra is the authority: `c7` is worked
+//! out again whenever those corners move (the auto pass, a wand, a pin, a
 //! hand move) or the names change which vertebra is C7 (the user saying
 //! which vertebra is L5, or a wand's split or merge shifting the names on
 //! one side). So it is never pinned or placed on its own, and
