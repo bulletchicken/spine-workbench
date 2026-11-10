@@ -20,6 +20,46 @@ The first part is being built now.
 - **TypeScript and React** do everything you see and click.
 - The same Rust also runs from the command line, so every calculation is tested on made-up spines with known answers before it touches a real film.
 
+## Run it
+
+You need [rustup](https://rustup.rs), Node 22.13 or later and pnpm 9.12 or
+later. Then, from the repository root:
+
+```sh
+cargo install wasm-bindgen-cli --version 0.2.130 --locked
+pnpm install
+pnpm dev
+```
+
+The first command installs the tool that turns the Rust engine into a
+module the browser can load (its version must match the `wasm-bindgen`
+crate; a bare version installs exactly that one). The pinned Rust
+toolchain installs itself on the first cargo run. `pnpm dev` builds the
+engine and serves the app at http://localhost:5173; open that address in
+a browser.
+
+The browser tests need Playwright's Chromium, installed once:
+
+```sh
+pnpm --filter ./proving-ground exec playwright install chromium
+```
+
+Other commands:
+
+| Command | Does |
+|---|---|
+| `pnpm build` | the production app in `app/dist/` |
+| `pnpm verify` | the checks CI runs: types and lints, unit tests, then browser tests on the production build, in Chromium only (CI adds WebKit) |
+| `cargo spine <command>` | the same engine on the command line |
+
+The production build is a static site. Serve it with the
+`Content-Security-Policy` header from `app/build-plugins/content-policy.ts`
+on every file, as `pnpm --filter ./app preview` does: the app's workers
+take their policy from that header.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for how to work on it and
+[MAP.md](MAP.md) for where everything is.
+
 ## Licence
 
 Spine Workbench is released under the [Apache License 2.0](LICENSE).

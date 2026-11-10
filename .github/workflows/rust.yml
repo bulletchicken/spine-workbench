@@ -40,3 +40,5 @@ jobs:
         run: cargo chores seams
       - name: Generated shapes match the Rust shapes
         run: cargo chores shapes --check
+      - name: Every path in MAP.md exists
+        run: cargo chores map --check

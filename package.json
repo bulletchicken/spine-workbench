@@ -11,11 +11,12 @@
     "dev": "pnpm --filter ./app dev",
     "engine": "cargo chores wasm --release",
     "build": "pnpm --filter ./app build",
-    "check": "cargo fmt --check && cargo clippy --workspace --all-targets -- -D warnings && cargo chores seams && cargo chores shapes --check && cargo check -p wasm-bridge --target wasm32-unknown-unknown && pnpm engine && tsc -b app proving-ground && eslint . --max-warnings 0",
+    "check": "cargo fmt --check && cargo clippy --workspace --all-targets -- -D warnings && cargo chores seams && cargo chores shapes --check && cargo chores map --check && cargo check -p wasm-bridge --target wasm32-unknown-unknown && pnpm engine && tsc -b app proving-ground && eslint . --max-warnings 0",
     "test": "pnpm engine && cargo test --workspace && pnpm -r --if-present run test",
     "browser": "pnpm build && pnpm --filter ./proving-ground browser",
     "verify": "pnpm check && pnpm test && pnpm browser",
-    "score": "cargo spine score"
+    "score": "cargo spine score",
+    "prepare": "git config core.hooksPath chores/git-hooks"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

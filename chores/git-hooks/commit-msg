@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# git runs this with the file holding the message being committed. It
+# applies the house commit rules; a refused message stops the commit and
+# says why. `pnpm install` points git here (core.hooksPath).
+
+exec "$(git rev-parse --show-toplevel)/chores/check-commit-message.sh" "$1"
