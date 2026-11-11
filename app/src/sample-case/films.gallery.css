@@ -1,0 +1,27 @@
+/* The sample films' gallery page: four bays of the mock's 04-up, each a
+   film 560 pixels tall in its well. */
+
+.sample-films {
+  display: flex;
+  gap: 27px;
+  align-items: flex-start;
+}
+
+.sample-film {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sample-film figcaption {
+  font: 600 15px/1 var(--font-ui);
+  color: var(--ink-1);
+}
+
+.sample-film canvas {
+  display: block;
+  height: 560px;
+  width: auto;
+  background: var(--well);
+}
