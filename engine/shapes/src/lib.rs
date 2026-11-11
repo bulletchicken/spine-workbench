@@ -60,6 +60,7 @@ pub mod marks;
 pub mod naming;
 pub mod pixels;
 pub mod reading;
+pub mod spine_fit;
 pub mod toolbox;
 pub mod vertebra;
 pub mod watch_frames;

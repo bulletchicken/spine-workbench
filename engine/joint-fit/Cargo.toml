@@ -1,0 +1,19 @@
+[package]
+name = "joint-fit"
+description = "Fit one three-dimensional spine to marks on two films."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+shapes = { path = "../shapes" }
+forward-model = { path = "../forward-model" }
+nalgebra.workspace = true
+libm.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+made-up-spines = { path = "../made-up-spines" }
+proptest.workspace = true

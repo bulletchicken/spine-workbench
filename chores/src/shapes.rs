@@ -30,6 +30,7 @@ use shapes::levels::Level;
 use shapes::made_up::{AnswerKey, AnswerKeyComparison, MadeUpRecipe, MadeUpSpine};
 use shapes::marks::MarkName;
 use shapes::naming::Template;
+use shapes::spine_fit::{FitInput, SpineFit};
 use shapes::toolbox::{
     BoundaryWandInput, BoundaryWandOutput, PinInput, PinOutput, RegionWandInput, RegionWandOutput,
     ToolPreview, ToolPreviewInput,
@@ -99,7 +100,7 @@ fn clear(folder: &Path) -> Outcome {
 /// worker message, or a list the app checks its own constants against.
 fn write_types(folder: &Path) -> Outcome {
     let config = Config::new().with_out_dir(folder);
-    let exports: [Export; 31] = [
+    let exports: [Export; 33] = [
         CaseFileV1::export_all,
         OpenedCase::export_all,
         EngineInfo::export_all,
@@ -127,6 +128,8 @@ fn write_types(folder: &Path) -> Outcome {
         AnswerKey::export_all,
         AnswerKeyComparison::export_all,
         MadeUpSpine::export_all,
+        FitInput::export_all,
+        SpineFit::export_all,
         MarkName::export_all,
         LandmarkName::export_all,
         Level::export_all,

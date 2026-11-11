@@ -18,6 +18,7 @@ case-checks = { path = "../case-checks" }
 case-file = { path = "../case-file" }
 film-geometry = { path = "../film-geometry" }
 film-reader = { path = "../film-reader" }
+joint-fit = { path = "../joint-fit" }
 made-up-spines = { path = "../made-up-spines" }
 scorekeeper = { path = "../scorekeeper" }
 toolbox = { path = "../toolbox" }

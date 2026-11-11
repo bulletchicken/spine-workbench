@@ -67,6 +67,7 @@ The crate map, the dependency rules and the patient frame in one picture:
 | tool previews and the wand and pin inputs and outputs | `engine/shapes/src/toolbox.rs` |
 | case check findings | `engine/shapes/src/checks.rs` |
 | made-up recipes, answer keys and comparisons | `engine/shapes/src/made_up.rs` |
+| the joint fit's inputs, poses, uncertainty and stopping reason | `engine/shapes/src/spine_fit.rs` |
 | engine info | `engine/shapes/src/engine_info.rs` |
 | error codes | `engine/shapes/src/errors.rs` |
 | the saved case record | `engine/shapes/src/case_file_v1.rs` |
@@ -121,6 +122,13 @@ The crate map, the dependency rules and the patient frame in one picture:
 | blur, noise and quantisation | `engine/made-up-spines/src/film_painter/detector.rs` |
 | click noise on true marks | `engine/made-up-spines/src/click_noise.rs` |
 | the answer key | `engine/made-up-spines/src/answer_key.rs` |
+
+### Joint fit (`engine/joint-fit/`)
+
+| I want to change… | Open |
+|---|---|
+| fitting front and side marks as one spine | `engine/joint-fit/src/lib.rs` |
+| the joint fit's browser export | `engine/wasm-bridge/src/exports/joint_fit.rs` |
 
 ### Reading films (`engine/film-reader/`)
 
