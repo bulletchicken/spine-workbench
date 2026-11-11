@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { EngineFailure } from './engine-room/engine-client';
 import { loadEngine } from './engine-room/load-engine';
 import type { FromWorker, ToWorker } from './engine-room/messages';
+import './look-and-feel/base.css';
 import { faultWords } from './words/faults';
 import { PREVIEW_NOTICE } from './words/preview-notice';
 import type { EngineError, EngineInfo } from '@/shapes';
@@ -96,9 +97,23 @@ function App() {
 
 const root = document.getElementById('root');
 if (root === null) throw new Error('index.html has no #root element');
+const page = createRoot(root);
 
-createRoot(root).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-);
+// In development, ?gallery shows every part in every state in place of the
+// app. A production build has no gallery in it: this branch, and with it
+// the only import of gallery/, is dropped when the build is made.
+if (import.meta.env.DEV && new URLSearchParams(window.location.search).has('gallery')) {
+  void import('./gallery/Gallery').then(({ Gallery }) => {
+    page.render(
+      <StrictMode>
+        <Gallery />
+      </StrictMode>,
+    );
+  });
+} else {
+  page.render(
+    <StrictMode>
+      <App />
+    </StrictMode>,
+  );
+}

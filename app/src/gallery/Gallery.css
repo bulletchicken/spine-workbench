@@ -1,0 +1,211 @@
+/* The gallery's own frame: a bar, an index and the framed page. Dev only. */
+.gallery {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  grid-template: var(--bar-h) minmax(0, 1fr) / 232px minmax(0, 1fr);
+  min-width: 960px;
+  background: var(--room-0);
+  color: var(--ink-1);
+  font: 400 var(--text-body) / var(--lh-body) var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.gallery-empty {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--s-6);
+  background: var(--room-0);
+  color: var(--ink-2);
+  font: 400 var(--text-body) / var(--lh-body) var(--font-ui);
+}
+
+/* ---- the bar ---- */
+.gallery-bar {
+  display: flex;
+  grid-column: 1 / -1;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+  padding: 0 var(--s-5);
+  border-bottom: 1px solid var(--line-1);
+  background: var(--room-1);
+}
+
+.gallery-name {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+}
+
+.gallery-name b {
+  font-weight: 600;
+}
+
+.gallery-tag {
+  padding: var(--s-1) 6px;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-pill);
+  color: var(--ink-3);
+  font: 500 10px / 1 var(--font-data);
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+}
+
+.gallery-switches {
+  display: flex;
+  align-items: center;
+  gap: var(--s-5);
+}
+
+.gallery-switch {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.gallery-switch-name {
+  margin-right: var(--s-2);
+  color: var(--ink-3);
+  font: 500 var(--text-micro) / var(--lh-micro) var(--font-ui);
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+}
+
+.gallery-switch .button {
+  font-family: var(--font-data);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums slashed-zero;
+}
+
+.gallery-alone {
+  display: inline-flex;
+  align-items: center;
+  height: 30px;
+  padding: 0 10px;
+  border-radius: var(--r-2);
+  color: var(--ink-2);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    background var(--t-base),
+    color var(--t-base);
+}
+
+.gallery-alone:hover {
+  background: var(--room-3);
+  color: var(--ink-1);
+}
+
+.gallery-alone:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+/* ---- the index ---- */
+.gallery-index {
+  padding: var(--s-5) var(--s-3);
+  overflow: hidden auto;
+  border-right: 1px solid var(--line-1);
+  background: var(--room-1);
+  scrollbar-width: thin;
+  scrollbar-color: var(--room-4) transparent;
+}
+
+.gallery-index section + section {
+  margin-top: var(--s-5);
+}
+
+.gallery-area {
+  margin: 0 0 var(--s-1);
+  padding: 0 var(--s-2);
+  color: var(--ink-3);
+  font: 500 var(--text-micro) / var(--lh-micro) var(--font-ui);
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+}
+
+.gallery-index ul {
+  display: grid;
+  gap: 1px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gallery-index a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 30px;
+  padding: 0 var(--s-2);
+  border-radius: var(--r-2);
+  color: var(--ink-2);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  transition:
+    background var(--t-base),
+    color var(--t-base);
+}
+
+.gallery-index a:hover {
+  background: var(--room-3);
+  color: var(--ink-1);
+}
+
+.gallery-index a[aria-current='page'] {
+  background: var(--room-3);
+  box-shadow: var(--lift-1);
+  color: var(--ink-1);
+}
+
+/* After the rule above, so the link of the page on show wears the ring too. */
+.gallery-index a:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.gallery-count {
+  color: var(--ink-3);
+  font: 500 var(--text-micro) / 1 var(--font-data);
+  font-variant-numeric: tabular-nums slashed-zero;
+}
+
+/* ---- the framed page ---- */
+.gallery-frame-room {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  min-width: 0;
+  min-height: 0;
+  padding: var(--s-3) var(--s-4) var(--s-4);
+}
+
+.gallery-frame-note {
+  margin: 0;
+  color: var(--ink-3);
+  font: 500 var(--text-micro) / var(--lh-micro) var(--font-data);
+  font-variant-numeric: tabular-nums slashed-zero;
+}
+
+/* The frame keeps its full width and is drawn smaller, so what does not fit is clipped here. */
+.gallery-frame-fit {
+  flex: 1;
+  min-height: 0;
+  padding: 1px;
+  overflow: hidden;
+}
+
+.gallery-frame {
+  display: block;
+  border: 0;
+  border-radius: var(--r-3);
+  background: var(--room-0);
+  box-shadow: 0 0 0 1px var(--line-2);
+  transform-origin: 0 0;
+}

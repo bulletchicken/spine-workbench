@@ -1,0 +1,137 @@
+/* The foot of the region the toasts are mounted in. */
+.toasts {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  z-index: 14;
+  display: flex;
+  justify-content: center;
+  width: max-content;
+  max-width: calc(100% - 2 * var(--s-4));
+  pointer-events: none;
+  translate: -50% 0;
+}
+
+/* The status message itself: always on the page, never seen. */
+.toasts-spoken {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  box-sizing: border-box;
+  /* 40 tall with an action in it or without: 5 above and below the 28 px action, inside the edge. */
+  min-height: 40px;
+  padding: 5px var(--s-4) 5px var(--s-3);
+  border: 1px solid var(--line-2);
+  /* A pill while the line fits on one row; a soft box if it ever wraps. */
+  border-radius: 20px;
+  background: var(--glass);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--lift-2);
+  color: var(--ink-1);
+  font: 400 13px / var(--lh-small) var(--font-ui);
+  /* Hidden when off, so its action cannot be reached. Visibility changes in
+     one step: at once on the way in, and after the fade on the way out. */
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity var(--t-base),
+    transform var(--t-base) var(--ease-out),
+    visibility var(--t-base);
+}
+
+.toast[data-shown] {
+  visibility: visible;
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+.toast[data-action] {
+  padding-right: 6px;
+}
+
+.toast-mark {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  color: var(--sure);
+}
+
+.toast-mark svg {
+  width: 16px;
+  height: 16px;
+}
+
+.toast-mark[data-tone='note'] {
+  color: var(--ink-3);
+}
+
+.toast-action {
+  /* The hint sits on --room-4, where --ink-3 is too faint for 11 px type. */
+  --kbd-ink: var(--ink-2);
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  margin: 0 0 0 var(--s-2);
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--r-pill);
+  background: var(--room-4);
+  color: var(--ink-1);
+  font: 600 13px / 1 var(--font-ui);
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background var(--t-base),
+    transform var(--t-instant);
+}
+
+.toast-action:hover {
+  background: color-mix(in srgb, var(--room-4), var(--ink-1) 10%);
+}
+
+.toast-action:active {
+  transform: translateY(1px);
+}
+
+.toast-action:focus-visible {
+  /* The ring is a shadow; the clear outline is what forced colours draw in its place.
+     The radius is said again so the ring keeps this control's own shape. */
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  border-radius: var(--r-pill);
+  box-shadow: var(--focus-ring);
+}
+
+/* How long a toast stays. The time is never shortened; the clock stops while the toast is in use. */
+.toast-clock {
+  position: absolute;
+  animation: toast-stay var(--t-toast-stay) linear;
+}
+
+.toast:hover .toast-clock,
+.toast:focus-within .toast-clock {
+  animation-play-state: paused;
+}
+
+@keyframes toast-stay {
+  to {
+    visibility: hidden;
+  }
+}

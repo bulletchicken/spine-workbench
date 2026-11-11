@@ -1,0 +1,11 @@
+/* For the Button page: quiet actions as the guide lays them out.
+   Gallery only: nothing here is part of a block, and none of it is in a production build. */
+
+.blocks-gallery-quiet {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  gap: var(--s-2);
+  max-width: 320px;
+  margin: 0 -10px;
+}

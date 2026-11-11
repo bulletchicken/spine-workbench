@@ -1,0 +1,87 @@
+/* The stage scrolls by itself and fills the window, whatever the page around it is set to do. */
+.gallery-stage {
+  position: fixed;
+  inset: 0;
+  box-sizing: border-box;
+  padding: var(--s-6);
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--room-4) transparent;
+  background: var(--room-0);
+  color: var(--ink-1);
+  font: 400 var(--text-body) / var(--lh-body) var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.gallery-stage-head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-3);
+  margin-bottom: var(--s-5);
+}
+
+.gallery-stage-area {
+  color: var(--ink-3);
+  font: 500 var(--text-micro) / var(--lh-micro) var(--font-ui);
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+}
+
+.gallery-stage-part {
+  margin: 0;
+  font: 600 var(--text-lead) / var(--lh-lead) var(--font-ui);
+}
+
+/* Small states share a row; a state too wide for that takes a row to itself.
+   A state that cannot shrink to the window (four films side by side) keeps its
+   plate around it, and the stage scrolls sideways to show the rest. */
+.gallery-plates {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: var(--s-4);
+}
+
+.gallery-plate {
+  display: flex;
+  flex: 1 1 300px;
+  flex-direction: column;
+  border: 1px solid var(--line-1);
+  border-radius: var(--r-3);
+  background: var(--room-1);
+}
+
+.gallery-plate-name {
+  margin: 0;
+  padding: var(--s-2) var(--s-4);
+  border-bottom: 1px solid var(--line-1);
+  color: var(--ink-3);
+  font: 500 var(--text-micro) / var(--lh-micro) var(--font-ui);
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+}
+
+.gallery-plate-body {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-5) var(--s-4);
+}
+
+/* A quiet line a page may put beside a part: what a press did, a value as it changes. */
+.gallery-note {
+  color: var(--ink-3);
+  font-size: var(--text-small);
+  line-height: var(--lh-small);
+}
+
+.gallery-plate-failure {
+  margin: 0;
+  color: var(--ink-2);
+  font: 400 var(--text-small) / var(--lh-small) var(--font-data);
+}

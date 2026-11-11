@@ -1,0 +1,26 @@
+/* For the Toast page: a toast held at its full width, and the foot of a bench.
+   Gallery only: nothing here is part of a block, and none of it is in a production build. */
+
+.blocks-gallery-held-toast {
+  flex: none;
+  min-width: max-content;
+}
+
+.blocks-gallery-toast-bench {
+  box-sizing: border-box;
+  position: relative;
+  flex: 1;
+  width: min(100%, 760px);
+  height: 220px;
+  border: 1px solid var(--line-1);
+  border-radius: var(--r-2);
+  background: var(--room-0);
+}
+
+.blocks-gallery-toast-asks {
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  padding: var(--s-4);
+}

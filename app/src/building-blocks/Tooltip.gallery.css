@@ -1,0 +1,25 @@
+/* For the Tooltip page: room on every side of a control.
+   Gallery only: nothing here is part of a block, and none of it is in a production build. */
+
+.blocks-gallery-tip-key {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+.blocks-gallery-resting {
+  flex: 1;
+}
+
+.blocks-gallery-spread {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  gap: 112px;
+  padding: var(--s-10) 112px;
+}
+
+.blocks-gallery-help {
+  box-sizing: border-box;
+  padding: var(--s-8) 260px var(--s-8) 0;
+}

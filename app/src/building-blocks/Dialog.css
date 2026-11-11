@@ -1,0 +1,91 @@
+/* The veil covers the dialog's nearest positioned ancestor, not the window. */
+.dialog-veil {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  background: color-mix(in srgb, var(--room-0) 62%, transparent);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  animation: dialog-veil-in var(--t-calm) both;
+}
+
+.dialog {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 21;
+  box-sizing: border-box;
+  width: min(600px, calc(100% - 2 * var(--s-5)));
+  max-height: calc(100% - 2 * var(--s-5));
+  padding: var(--s-6);
+  overflow: auto;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-4);
+  background: var(--glass);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--lift-3);
+  color: var(--ink-1);
+  font: 400 var(--text-body) / var(--lh-body) var(--font-ui);
+  translate: -50% -50%;
+  animation: dialog-in var(--t-calm) var(--ease-out) both;
+}
+
+/* Focus rests on the sheet only when nothing in it can take focus; the sheet itself wears no ring. */
+.dialog:focus,
+.dialog:focus-visible {
+  outline: none;
+  border-radius: var(--r-4);
+  box-shadow: var(--lift-3);
+}
+
+/* sheet-in: the veil dims the region and the sheet rises into place. */
+@keyframes dialog-veil-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(4%) scale(0.985);
+  }
+}
+
+/* On the way out both fade, quicker than they came. */
+.dialog-veil[data-leaving] {
+  pointer-events: none;
+  animation: dialog-veil-out var(--t-base) both;
+}
+
+.dialog[data-leaving] {
+  pointer-events: none;
+  animation: dialog-out var(--t-base) var(--ease-out) both;
+}
+
+@keyframes dialog-veil-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes dialog-out {
+  to {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+}
+
+/* Reduced motion: it is there at once. --t-base is 1 ms then, where --t-calm is still a fade. */
+[data-motion='reduced'] .dialog-veil,
+[data-motion='reduced'] .dialog {
+  animation-duration: var(--t-base);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dialog-veil,
+  .dialog {
+    animation-duration: var(--t-base);
+  }
+}

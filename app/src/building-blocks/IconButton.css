@@ -1,0 +1,84 @@
+.icon-button {
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  width: 34px;
+  height: 34px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-2);
+  background: transparent;
+  color: var(--ink-2);
+  /* A child that is a figure, not an icon (a speed such as 1×), is set as data. */
+  font: 500 var(--text-micro) / 1 var(--font-data);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  transition:
+    background var(--t-base),
+    color var(--t-base),
+    transform var(--t-instant);
+}
+
+.icon-button[data-shape='round'] {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.icon-button svg {
+  width: 18px;
+  height: 18px;
+}
+
+.icon-button[data-shape='round'] svg {
+  width: 16px;
+  height: 16px;
+}
+
+.icon-button:hover:not([aria-disabled='true']),
+.icon-button[aria-expanded='true'] {
+  background: var(--room-3);
+  color: var(--ink-1);
+}
+
+.icon-button:active:not([aria-disabled='true']),
+.icon-button[aria-pressed='true'] {
+  background: var(--room-4);
+  color: var(--ink-1);
+}
+
+/* A round button sits on glass, where --room-3 hardly shows: it lights a step further,
+   and its pressed face is a step past that, so held down never looks merely hovered. */
+.icon-button[data-shape='round']:hover:not([aria-disabled='true']),
+.icon-button[data-shape='round'][aria-expanded='true'] {
+  background: var(--room-4);
+}
+
+.icon-button[data-shape='round']:active:not([aria-disabled='true']),
+.icon-button[data-shape='round'][aria-pressed='true'] {
+  background: color-mix(in srgb, var(--room-4), var(--ink-1) 10%);
+}
+
+.icon-button:active:not([aria-disabled='true']) {
+  transform: translateY(1px);
+}
+
+.icon-button:focus-visible {
+  /* The ring is a shadow; the clear outline is what forced colours draw in its place.
+     The radius is said again so the ring keeps this control's own shape. */
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  border-radius: var(--r-2);
+  box-shadow: var(--focus-ring);
+}
+
+.icon-button[data-shape='round']:focus-visible {
+  border-radius: 50%;
+}
+
+.icon-button[aria-disabled='true'] {
+  color: var(--ink-4);
+  cursor: default;
+}

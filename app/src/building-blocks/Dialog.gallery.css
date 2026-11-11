@@ -1,0 +1,111 @@
+/* For the Dialog page: a strip of guide, a bench of four films, and what the sheet holds.
+   Gallery only: nothing here is part of a block, and none of it is in a production build. */
+
+.blocks-gallery-room {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  width: 100%;
+  min-width: 720px;
+  max-width: 1072px;
+  height: 500px;
+  overflow: hidden;
+  border: 1px solid var(--line-1);
+  border-radius: var(--r-2);
+  background: var(--room-0);
+}
+
+.blocks-gallery-guide {
+  box-sizing: border-box;
+  display: grid;
+  gap: var(--s-4);
+  align-content: start;
+  justify-items: start;
+  padding: var(--s-5) var(--s-4);
+  border-right: 1px solid var(--line-1);
+  background: var(--room-1);
+  color: var(--ink-2);
+  font-size: var(--text-small);
+  line-height: var(--lh-small);
+}
+
+.blocks-gallery-guide p {
+  margin: 0;
+}
+
+.blocks-gallery-bench {
+  box-sizing: border-box;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--bay-gap);
+  padding: var(--bench-pad);
+}
+
+/* Four films: a bright spine on black, enough for the veil to have something to blur. */
+.blocks-gallery-bench > i {
+  border-radius: var(--r-film);
+  background:
+    repeating-linear-gradient(180deg, rgba(238, 248, 255, 0.55) 0 14px, transparent 14px 19px) 50% 50% / 26px 78% no-repeat,
+    radial-gradient(60% 50% at 50% 45%, rgba(170, 190, 215, 0.28), transparent 70%),
+    var(--well);
+  box-shadow: var(--glow-film);
+}
+
+.blocks-gallery-sheet-title {
+  margin: 0;
+  font: 400 28px / 32px var(--font-voice);
+  letter-spacing: -0.01em;
+}
+
+.blocks-gallery-sheet-sub {
+  margin: var(--s-1) 0 0;
+  color: var(--ink-2);
+  font-family: var(--font-data);
+  font-size: var(--text-small);
+}
+
+.blocks-gallery-manifest {
+  box-sizing: border-box;
+  display: grid;
+  gap: 5px;
+  margin: var(--s-3) 0 0;
+  padding: 10px var(--s-3);
+  border: 1px solid var(--line-1);
+  border-radius: var(--r-2);
+  background: var(--well);
+  list-style: none;
+}
+
+.blocks-gallery-manifest li {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr);
+  gap: var(--s-2);
+  align-items: center;
+  color: var(--ink-2);
+  font-size: var(--text-small);
+  line-height: 17px;
+}
+
+.blocks-gallery-manifest svg {
+  width: 14px;
+  height: 14px;
+  color: var(--sure);
+}
+
+.blocks-gallery-sheet-fine {
+  margin: var(--s-3) 0 0;
+  color: var(--ink-2);
+  font-size: var(--text-small);
+  line-height: 17px;
+}
+
+.blocks-gallery-sheet-actions {
+  display: flex;
+  gap: var(--s-2);
+  margin-top: var(--s-4);
+}
+
+.blocks-gallery-sheet-actions .button:first-child {
+  flex: 1.4;
+}

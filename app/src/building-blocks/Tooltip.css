@@ -1,0 +1,101 @@
+.tooltip-anchor {
+  position: relative;
+  display: inline-flex;
+}
+
+.tooltip {
+  --gap: var(--s-2);
+  /* Where it arrives from: 4px nearer the control than where it rests. */
+  --from-x: 0px;
+  --from-y: 0px;
+  /* A key hint in a tooltip sits on --room-4, where --ink-3 is too faint for 11 px type. */
+  --kbd-ink: var(--ink-2);
+  position: absolute;
+  z-index: 5;
+  box-sizing: border-box;
+  width: max-content;
+  padding: 6px 10px;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-2);
+  background: var(--room-4);
+  color: var(--ink-1);
+  font: 400 var(--text-small) / var(--lh-micro) var(--font-ui);
+  text-align: left;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(var(--from-x), var(--from-y));
+  transition:
+    opacity var(--t-base),
+    transform var(--t-base) var(--ease-out);
+}
+
+.tooltip[data-shown] {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---- help: a sentence or two ---- */
+.tooltip[data-look='help'] {
+  --gap: var(--s-3);
+  width: 236px;
+  padding: 10px var(--s-3);
+  box-shadow: var(--lift-2);
+  color: var(--ink-2);
+  line-height: 17px;
+  white-space: normal;
+}
+
+.tooltip[data-look='help'] b {
+  display: block;
+  color: var(--ink-1);
+  font-weight: 600;
+}
+
+/* ---- the side it opens on ---- */
+.tooltip[data-side='below'] {
+  --from-y: -4px;
+  top: calc(100% + var(--gap));
+}
+
+.tooltip[data-side='above'] {
+  --from-y: 4px;
+  bottom: calc(100% + var(--gap));
+}
+
+.tooltip[data-side='right'] {
+  --from-x: -4px;
+  left: calc(100% + var(--gap));
+}
+
+.tooltip[data-side='left'] {
+  --from-x: 4px;
+  right: calc(100% + var(--gap));
+}
+
+/* ---- where it sits along that side ---- */
+.tooltip:is([data-side='above'], [data-side='below'])[data-align='start'] {
+  left: 0;
+}
+
+.tooltip:is([data-side='above'], [data-side='below'])[data-align='centre'] {
+  left: 50%;
+  translate: -50% 0;
+}
+
+.tooltip:is([data-side='above'], [data-side='below'])[data-align='end'] {
+  right: 0;
+}
+
+.tooltip:is([data-side='left'], [data-side='right'])[data-align='start'] {
+  top: 0;
+}
+
+.tooltip:is([data-side='left'], [data-side='right'])[data-align='centre'] {
+  top: 50%;
+  translate: 0 -50%;
+}
+
+.tooltip:is([data-side='left'], [data-side='right'])[data-align='end'] {
+  bottom: 0;
+}

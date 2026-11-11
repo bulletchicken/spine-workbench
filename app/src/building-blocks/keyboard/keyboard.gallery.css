@@ -1,0 +1,71 @@
+/* For the key ranks page: the ten ranks as rows.
+   Gallery only: nothing here is part of a block, and none of it is in a production build. */
+
+.blocks-gallery-ranks {
+  display: grid;
+  flex: 1;
+  gap: var(--s-3);
+  max-width: 640px;
+}
+
+.blocks-gallery-ranks p {
+  margin: 0;
+  color: var(--ink-1);
+}
+
+.blocks-gallery-ranks ol {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.blocks-gallery-ranks li {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr) auto;
+  gap: var(--s-3);
+  align-items: center;
+  min-height: 40px;
+  padding: 0 var(--s-2);
+  border-top: 1px solid var(--line-1);
+  color: var(--ink-3);
+  font-size: var(--text-small);
+  transition: background var(--t-slow) var(--ease-out);
+}
+
+.blocks-gallery-ranks li[data-on] {
+  color: var(--ink-1);
+}
+
+.blocks-gallery-ranks li[data-took] {
+  background: var(--room-3);
+}
+
+.blocks-gallery-ranks li .button {
+  justify-self: start;
+  font-family: var(--font-data);
+}
+
+.blocks-gallery-rank-keys {
+  display: flex;
+  gap: var(--s-1);
+}
+
+.blocks-gallery-ranks input {
+  box-sizing: border-box;
+  width: 160px;
+  height: 28px;
+  margin-left: var(--s-2);
+  padding: 0 var(--s-2);
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-1);
+  background: var(--well);
+  color: var(--ink-1);
+  font: inherit;
+}
+
+.blocks-gallery-ranks input:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
