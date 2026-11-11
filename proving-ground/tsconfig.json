@@ -2,7 +2,8 @@
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
     "tsBuildInfoFile": "../target/tsc/proving-ground.tsbuildinfo",
-    "types": ["node"]
+    "types": ["node"],
+    "paths": { "@/*": ["../app/src/*"] }
   },
   "include": ["parity", "in-the-browser", "playwright.config.ts", "vitest.config.ts"]
 }
