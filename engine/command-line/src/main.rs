@@ -114,7 +114,6 @@ struct MakeUpArgs {
     out: PathBuf,
 }
 
-#[expect(dead_code, reason = "a command reads its arguments once it is built")]
 #[derive(Args)]
 struct OpenArgs {
     film: PathBuf,
