@@ -1,7 +1,7 @@
 import { Pause, RotateCcw, SkipForward } from 'lucide-react';
 import { useState } from 'react';
 import type { GalleryPage } from '@/gallery/gallery-page';
-import './glass-strip.gallery.css';
+import './playback-strip.gallery.css';
 import { IconButton } from './IconButton';
 import { Slider } from './Slider';
 import type { SliderSegment } from './slider-geometry';
@@ -23,11 +23,11 @@ function beatAt(time: number): string {
   return BEATS.find((beat) => time < beat.to)?.label ?? 'Finished';
 }
 
-/** The slider as playback holds it: on glass, between round buttons. */
+/** The slider as playback holds it: in its ruled strip, between round buttons. */
 function Playback({ startAt, disabled = false }: { startAt: number; disabled?: boolean }) {
   const [time, setTime] = useState(startAt);
   return (
-    <div className="blocks-gallery-glass blocks-gallery-playback">
+    <div className="blocks-gallery-strip blocks-gallery-playback">
       <IconButton
         shape="round"
         label="Watch again from the start"

@@ -1,4 +1,4 @@
-/* For the Kbd page: a word with its hint, and the lit button's face, which sets the hint's colours.
+/* For the Kbd page: a word with its hint.
    Gallery only: nothing here is part of a block, and none of it is in a production build. */
 
 .blocks-gallery-word {
@@ -7,20 +7,4 @@
   gap: 6px;
   font-size: 13px;
   font-weight: 600;
-}
-
-.blocks-gallery-lit {
-  box-sizing: border-box;
-  --kbd-ink: color-mix(in srgb, var(--on-lumen) 62%, transparent);
-  --kbd-fill: color-mix(in srgb, var(--on-lumen) 12%, transparent);
-  --kbd-edge: transparent;
-  display: inline-flex;
-  align-items: center;
-  gap: var(--s-3);
-  min-height: 48px;
-  padding: 0 var(--s-6);
-  border-radius: var(--r-3);
-  background: linear-gradient(180deg, var(--lumen-hi), var(--lumen) 58%, #a9d9ff);
-  color: var(--on-lumen);
-  font: 600 var(--text-lead) / 20px var(--font-ui);
 }

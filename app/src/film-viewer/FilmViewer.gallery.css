@@ -1,5 +1,6 @@
-/* The film viewer's gallery page: bays like the bench's, and a test layer
-   drawn the way marks are, a dark casing under every line. */
+/* The film viewer's gallery page: wells like the bench's, black and square
+   with a hairline round them, and a test layer drawn the way marks are, a
+   dark casing under every line. */
 .film-viewer-stage {
   display: inline-flex;
   flex-direction: column;
@@ -9,9 +10,8 @@
 
 .film-viewer-stage__bay {
   position: relative;
-  border-radius: var(--r-3);
   background: var(--well);
-  border: 1px solid var(--line-1);
+  border: 1px solid var(--rule);
   overflow: hidden;
 }
 
@@ -32,7 +32,7 @@
 
 .film-viewer-row {
   display: flex;
-  gap: var(--bay-gap);
+  gap: var(--s-3);
 }
 
 .test-marks__edge {

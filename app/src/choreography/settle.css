@@ -1,12 +1,12 @@
-/* settle: a guide line or a card arrives, rising a little as it brightens.
+/* settle: a guide line or a section arrives, rising a little as it fades in.
    It ends on the part's own opacity and place, so the keyframes say only
    where it starts.
 
      animation: settle var(--t-calm) var(--ease-out) both;
      animation-delay: calc(var(--i, 0) * var(--stagger-line));
 
-   Under reduced motion light still arrives and nothing travels: the rise is
-   zero, and the line only brightens. */
+   Under reduced motion things still arrive and nothing travels: the rise is
+   zero, and the line only fades in. */
 :root {
   --settle-rise: 8px;
 }

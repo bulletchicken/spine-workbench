@@ -1,6 +1,7 @@
 import type { GalleryPage } from '@/gallery/gallery-page';
 import { Kbd } from './Kbd';
 import './Kbd.gallery.css';
+import './lit-face.gallery.css';
 
 const page: GalleryPage = {
   area: 'building-blocks',
@@ -47,7 +48,7 @@ const page: GalleryPage = {
       ),
     },
     {
-      name: 'On a lit surface, which sets its two colours',
+      name: 'On the lit button, which is solid ink and sets the hint’s colours',
       show: () => (
         <span className="blocks-gallery-lit">
           Choose films <Kbd keys={['Enter']} />

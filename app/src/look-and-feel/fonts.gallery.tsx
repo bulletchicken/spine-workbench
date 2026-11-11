@@ -152,7 +152,7 @@ const page: GalleryPage = {
       ),
     },
     {
-      name: 'The four inks, on the room and on a card',
+      name: 'The four inks: on paper, on a row under the pointer, and on a film',
       show: () => (
         <>
           <div className="look-gallery-inks">
@@ -162,6 +162,12 @@ const page: GalleryPage = {
             <span className="look-gallery-ink-4">Ink 4: 24 px and larger only</span>
           </div>
           <div className="look-gallery-inks look-gallery-card">
+            <span className="look-gallery-ink-1">Ink 1: text</span>
+            <span className="look-gallery-ink-2">Ink 2: secondary text</span>
+            <span className="look-gallery-ink-3">Ink 3: captions, labels</span>
+            <span className="look-gallery-ink-4">Ink 4: 24 px and larger only</span>
+          </div>
+          <div className="look-gallery-inks look-gallery-on-film" data-ground="film">
             <span className="look-gallery-ink-1">Ink 1: text</span>
             <span className="look-gallery-ink-2">Ink 2: secondary text</span>
             <span className="look-gallery-ink-3">Ink 3: captions, labels</span>

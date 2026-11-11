@@ -1,64 +1,120 @@
 /* ==========================================================================
-   Spine Workbench · design tokens  ("Reading Room")
-   One rule to remember: light means go, colour means data.
-   Chrome is neutral. Exactly one thing on screen wears lumen: the next action.
-   The only hues are the four confidence colours, and each is also a line
-   pattern, a glyph and a word, so nothing rests on hue alone.
+   Spine Workbench · design tokens  ("Clinical White")
+   One rule to remember: ink means go, colour means data.
+   The page is white and ruled. Exactly one thing on screen is solid ink: the
+   next action. The only hues are the four confidence colours, and each is
+   also a line pattern, a glyph and a word, so nothing rests on hue alone.
+
+   What changed from the dark "Reading Room" tokens, and why
+   - One theme, light. The room is white paper with one neutral grey scale.
+     A film is still read on black, so --well is black and never themed.
+   - Two grounds. Everything is seen either on paper or on a film, and the
+     two need opposite inks. Each ink, line, lumen and confidence token has a
+     value for each ground (--ink-1-paper, --ink-1-film). The plain name
+     (--ink-1) is the one for the ground you stand on: paper by default, film
+     inside data-ground="film". Component CSS uses the plain names only.
+   - Rules, not boxes. --rule is the one hairline the frame is drawn with.
+     Radii are small. Nothing floats on a shadow, nothing is glass, nothing
+     glows: --lift-*, --glass-blur and --glow-lumen are kept so no name has
+     to change, and now say "none". What floats is paper with a --keyline.
+   - Lumen keeps its name and its meaning, the next action. On paper it is
+     ink; on film it is white. It no longer has a hue.
+   - Confidence has an on-paper set, dark enough for white (4.5:1 or more
+     for the four states), beside the on-film set, which is unchanged.
+   - Every name the dark tokens had is still here.
    ========================================================================== */
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 
-  /* ---- The room: deep neutrals with a breath of blue ---------------------- */
-  --room-0: #05070a;                 /* page behind everything */
-  --room-1: #0a0d12;                 /* guide, bars */
-  --room-2: #10141b;                 /* cards */
-  --room-3: #171c25;                 /* hover, raised */
-  --room-4: #222935;                 /* pressed, selected */
-  --well:   #020304;                 /* the recessed bay a film hangs in */
-  --line-1: rgba(190, 215, 255, .08);
-  --line-2: rgba(190, 215, 255, .14);
-  --line-3: rgba(190, 215, 255, .26);
+  /* ---- Paper: white, and one neutral grey scale ---------------------------- */
+  --room-0: #ffffff;                 /* the page */
+  --room-1: #ffffff;                 /* guide, bars */
+  --room-2: #ffffff;                 /* ruled sections, where the dark design had cards */
+  --room-3: #f3f4f5;                 /* under the pointer */
+  --room-4: #e8eaec;                 /* pressed, selected */
+  --well:   #000000;                 /* behind a film, always; never themed */
+  --rule:   #cfd3d8;                 /* the hairline: every line that runs across the window */
+  --keyline: #111417;                /* the line round anything that floats: a popover, a sheet, a toast */
 
-  /* ---- Ink (WCAG contrast worked out on --room-1; on a --room-2 card it is about 5% lower) ---- */
-  --ink-1: #eef3f9;                  /* 17.4:1  text */
-  --ink-2: #b0bac8;                  /*  9.9:1  secondary text */
-  --ink-3: #8793a4;                  /*  6.2:1  captions, labels */
-  --ink-4: #566070;                  /*  3.1:1  decoration and 24 px or larger only, never small text */
+  /* ---- Ink, lines and lumen, for each ground --------------------------------
+     On paper, contrast is worked out on white (#ffffff); on --room-3 it is
+     about 9% lower. On film it is worked out on the well (#000000). */
+  --ink-1-paper: #111417;            /* 18.5:1  text */
+  --ink-2-paper: #41474e;            /*  9.4:1  secondary text */
+  --ink-3-paper: #636a72;            /*  5.5:1  captions, labels */
+  --ink-4-paper: #8a9198;            /*  3.2:1  decoration and 24 px or larger only, never small text */
+  --ink-1-film:  #f4f6f8;            /* 19.4:1 */
+  --ink-2-film:  #c2c8cf;            /* 12.5:1 */
+  --ink-3-film:  #98a0a9;            /*  7.9:1 */
+  --ink-4-film:  #6b737c;            /*  4.4:1  decoration only */
 
-  /* ---- Lumen: the one light. Only the next action wears it. --------------- */
-  --lumen-hi:   #f2f9ff;
-  --lumen:      #cfeaff;
-  --lumen-mid:  #86ccff;
-  --lumen-deep: #3f9cf0;
-  --lumen-glow: rgba(110, 190, 255, .42);
-  --lumen-wash: rgba(110, 190, 255, .10);
-  --on-lumen:   #04121e;             /* text on a lit button, 15.2:1 */
+  --line-1-paper: #e4e7ea;           /* a lighter rule, between rows inside a section */
+  --line-2-paper: #cfd3d8;           /* the same grey as --rule */
+  --line-3-paper: #868c93;           /* 3.4:1  the outline of a control */
+  --line-1-film:  rgba(255, 255, 255, .12);
+  --line-2-film:  rgba(255, 255, 255, .22);
+  --line-3-film:  rgba(255, 255, 255, .45);
+
+  /* Lumen: the next action. Ink on paper, white on film. Never a hue. */
+  --lumen-hi-paper:   #2c3238;       /* the ink button under the pointer */
+  --lumen-paper:      #111417;       /* the one solid ink button */
+  --lumen-mid-paper:  #111417;       /* the focus ring, and a sign that points at the action */
+  --lumen-deep-paper: #111417;       /* the line round a pair of choices */
+  --lumen-glow-paper: rgba(17, 20, 23, 0);
+  --lumen-wash-paper: rgba(17, 20, 23, .05);
+  --on-lumen-paper:   #ffffff;       /* text on the ink button, 18.5:1 */
+  --lumen-hi-film:    #ffffff;       /* the ring, the ghost line, a letter that is set */
+  --lumen-film:       #ffffff;
+  --lumen-mid-film:   #c9d0d7;
+  --lumen-deep-film:  #98a0a9;
+  --lumen-glow-film:  rgba(255, 255, 255, 0);
+  --lumen-wash-film:  rgba(255, 255, 255, .14);
+  --on-lumen-film:    #0b0d0f;       /* text on a white badge on a film */
 
   /* ---- Confidence: the only hues in the app -------------------------------
-     The three machine states were chosen with a colour-vision simulation
-     (Machado 2009): the closest pair on film stayed near 49 CIE76 for typical,
-     green-blind, red-blind and blue-blind vision.
-     Measure again in the app. Each state also has its own line, glyph and word.
-     Against --room-1: sure 10.3:1, look 13.5:1, needs 6.2:1.
+     Each state has its own line, glyph and word, and one colour per ground.
        sure      solid line      filled dot     "Sure"
        look      dashed line     half dot       "Worth a look"
        needs     dotted, heavier hollow ring    "Needs you"
-       by-you    solid bright    tick           "Set by you"
-       inferred  long dash       hollow, short dash, always with the word    */
-  --sure:     #5cc8ff;
-  --look:     #ffd23f;
-  --needs:    #f0626e;
-  --by-you:   #f4f9ff;
-  --inferred: #aab4c3;
-  --sure-wash:   rgba(92, 200, 255, .13);
-  --look-wash:   rgba(255, 210, 63, .14);
-  --needs-wash:  rgba(240, 98, 110, .16);
-  --by-you-wash: rgba(244, 249, 255, .10);
+       by-you    solid, strongest tick          "Set by you"
+       inferred  long dash       hollow, short dash, always with the word
+
+     On film (unchanged; drawn over a dark casing, contrast against the well):
+       sure 11.2:1, look 14.5:1, needs 6.7:1, by-you 19.8:1, inferred 10.0:1.
+     On paper (contrast against white):
+       sure 6.4:1, look 4.7:1, needs 8.4:1, by-you 18.5:1, inferred 3.9:1.
+     "Set by you" is the strongest neutral of its ground: white on film, ink on
+     paper. "Inferred" is a mark and never small text, so 3:1 is its floor.
+
+     Told apart without hue. CIE76 distance of the closest pair among all five,
+     with a colour-vision simulation (Machado 2009), for typical / red-blind /
+     green-blind / blue-blind vision: on paper 45 / 27 / 25 / 25, on film
+     25 / 23 / 26 / 25. As greys (CIE L*) the paper set is five steps:
+     by-you 6, needs 33, sure 40, look 49, inferred 54; on film, in the same
+     order, 98, 60, 77, 86, 73. Line, glyph and word carry the rest. */
+  --sure-paper:     #0b57d0;
+  --look-paper:     #a86400;
+  --needs-paper:    #9c1022;
+  --by-you-paper:   #111417;
+  --inferred-paper: #7b828a;
+  --sure-film:      #5cc8ff;
+  --look-film:      #ffd23f;
+  --needs-film:     #f0626e;
+  --by-you-film:    #f4f9ff;
+  --inferred-film:  #aab4c3;
+  --sure-wash-paper:   rgba(11, 87, 208, .07);
+  --look-wash-paper:   rgba(168, 100, 0, .09);
+  --needs-wash-paper:  rgba(156, 16, 34, .06);
+  --by-you-wash-paper: rgba(17, 20, 23, .05);
+  --sure-wash-film:    rgba(92, 200, 255, .13);
+  --look-wash-film:    rgba(255, 210, 63, .14);
+  --needs-wash-film:   rgba(240, 98, 110, .16);
+  --by-you-wash-film:  rgba(244, 249, 255, .10);
   --dash-sure: none;
   --dash-look: 7 5;
   --dash-needs: 1.5 5;
   --dash-inferred: 12 6;
-  --casing: rgba(2, 4, 8, .78);      /* dark line under every mark so it reads on bright bone */
+  --casing: rgba(2, 4, 8, .78);      /* dark line under every mark on a film, so it reads on bright bone */
 
   /* ---- Type ---------------------------------------------------------------- */
   --font-voice: "Instrument Serif", "Iowan Old Style", "Charter", "Hoefler Text", Georgia, serif;
@@ -67,8 +123,8 @@
   --text-micro: 11px;   --lh-micro: 16px;     /* caps labels, key hints */
   --text-small: 12px;   --lh-small: 18px;     /* captions, chips */
   --text-body:  14px;   --lh-body:  21px;     /* everything read as a sentence */
-  --text-lead:  16px;   --lh-lead:  24px;     /* the lit button */
-  --text-title: 20px;   --lh-title: 26px;     /* card numbers */
+  --text-lead:  16px;   --lh-lead:  24px;     /* the ink button */
+  --text-title: 20px;   --lh-title: 26px;     /* section numbers */
   --text-voice: 32px;   --lh-voice: 36px;     /* the guide's one sentence */
   --text-hero:  48px;   --lh-hero:  50px;     /* the L and R side letters */
   --track-caps: .09em;
@@ -77,58 +133,113 @@
   --s-1: 4px;  --s-2: 8px;  --s-3: 12px; --s-4: 16px; --s-5: 20px;
   --s-6: 24px; --s-8: 32px; --s-10: 40px; --s-12: 48px; --s-16: 64px;
 
-  /* ---- Radius ---------------------------------------------------------------- */
-  --r-film: 3px;  --r-1: 5px;  --r-2: 9px;  --r-3: 13px;  --r-4: 18px;  --r-pill: 999px;
+  /* ---- Radius: small and few. A well is square. ------------------------------ */
+  --r-film: 0px;  --r-1: 2px;  --r-2: 3px;  --r-3: 4px;  --r-4: 6px;  --r-pill: 999px;
 
-  /* ---- Elevation: light from above, never a hard drop ----------------------- */
-  --lift-1: inset 0 1px 0 rgba(255, 255, 255, .04), 0 1px 2px rgba(0, 0, 0, .4);
-  --lift-2: inset 0 1px 0 rgba(255, 255, 255, .07), 0 10px 30px -8px rgba(0, 0, 0, .65), 0 2px 6px rgba(0, 0, 0, .35);
-  --lift-3: inset 0 1px 0 rgba(255, 255, 255, .09), 0 40px 80px -20px rgba(0, 0, 0, .8), 0 8px 24px rgba(0, 0, 0, .5);
-  --glass: rgba(16, 20, 27, .72);
-  --glass-blur: blur(22px) saturate(1.25);
-  --glow-lumen: 0 0 0 1px rgba(255, 255, 255, .55) inset, 0 0 26px var(--lumen-glow), 0 0 2px rgba(134, 204, 255, .9);
-  --glow-film: 0 0 0 1px rgba(200, 225, 255, .08), 0 0 90px rgba(120, 180, 255, .08), 0 30px 60px -30px rgba(0, 0, 0, .9);
-  --focus-ring: 0 0 0 2px var(--room-0), 0 0 0 4px var(--lumen-mid);
+  /* ---- Elevation: there is none. Kept by name; what floats wears --keyline. -- */
+  --lift-1: none;
+  --lift-2: none;
+  --lift-3: none;
+  --glass: #ffffff;
+  --glass-blur: none;
+  --glow-lumen: none;
+  --glow-film: 0 0 0 1px rgba(255, 255, 255, .14);   /* a hairline round a film on its well */
 
-  /* ---- Motion: light arrives, cameras move, nothing bounces for fun --------- */
+  /* ---- Motion: things arrive, cameras move, nothing bounces for fun ---------- */
   --t-instant: 90ms;    /* hover, press */
   --t-quick:   160ms;   /* buttons, chips, pin drop */
   --t-base:    240ms;   /* popovers, ticks, toasts, label roll */
-  --t-calm:    420ms;   /* guide lines, cards, lamp-on */
+  --t-calm:    420ms;   /* guide lines, sections, lamp-on */
   --t-slow:    700ms;   /* bays re-hanging, focus pull, case fold */
   --t-cinema:  1400ms;  /* reserved for the pass */
   --ease-out:    cubic-bezier(.2, .8, .2, 1);     /* arrivals */
   --ease-in-out: cubic-bezier(.65, 0, .35, 1);    /* cameras and bays */
   --ease-lens:   cubic-bezier(.7, 0, .2, 1);      /* the unroll */
   --ease-snap:   cubic-bezier(.2, 1.4, .4, 1);    /* lock-in, pin drop: one small overshoot */
-  --breathe: 2.6s;                                /* the only loop: the one lit thing */
+  --breathe: 2.6s;                                /* the only loop: the ring on a film */
   --stagger: 22ms;                                /* per level, for rolls and cascades */
 
-  /* ---- Layout ----------------------------------------------------------------- */
+  /* ---- Layout: the bench is ruled edge to edge; bays touch --------------------- */
   --bar-h: 56px;        /* top bar */
   --foot-h: 28px;       /* status line */
   --guide-w: 368px;     /* the guide, on the left */
-  --bench-pad: 16px;
-  --bay-gap: 12px;
-  --bay-head: 30px;
-  --dock-w: 68px;       /* tool dock gutter (Adjust only) */
-  --ladder-w: 100px;    /* the ladder between Front and Side */
+  --bench-pad: 0px;
+  --bay-gap: 0px;
+  --bay-head: 32px;
+  --dock-w: 68px;       /* the tool column (Adjust only) */
+  --ladder-w: 108px;    /* the ladder between Front and Side */
   --lane-w: 204px;      /* the same lane while the pass plays */
   --bends-w: 150px;     /* the two bending films, stacked */
 }
 
-/* One breakpoint. Below it the guide narrows, the dock drops its words and the rail keeps only numbers. */
+/* ---- The ground you stand on ---------------------------------------------------
+   Paper unless an ancestor says data-ground="film". A paper label laid on a
+   film says data-ground="paper" to turn back. Both blocks set the same names. */
+:root,
+[data-ground="paper"] {
+  --ink-1: var(--ink-1-paper);
+  --ink-2: var(--ink-2-paper);
+  --ink-3: var(--ink-3-paper);
+  --ink-4: var(--ink-4-paper);
+  --line-1: var(--line-1-paper);
+  --line-2: var(--line-2-paper);
+  --line-3: var(--line-3-paper);
+  --lumen-hi: var(--lumen-hi-paper);
+  --lumen: var(--lumen-paper);
+  --lumen-mid: var(--lumen-mid-paper);
+  --lumen-deep: var(--lumen-deep-paper);
+  --lumen-glow: var(--lumen-glow-paper);
+  --lumen-wash: var(--lumen-wash-paper);
+  --on-lumen: var(--on-lumen-paper);
+  --sure: var(--sure-paper);
+  --look: var(--look-paper);
+  --needs: var(--needs-paper);
+  --by-you: var(--by-you-paper);
+  --inferred: var(--inferred-paper);
+  --sure-wash: var(--sure-wash-paper);
+  --look-wash: var(--look-wash-paper);
+  --needs-wash: var(--needs-wash-paper);
+  --by-you-wash: var(--by-you-wash-paper);
+  --focus-ring: 0 0 0 2px #ffffff, 0 0 0 4px var(--ink-1-paper);
+}
+[data-ground="film"] {
+  --ink-1: var(--ink-1-film);
+  --ink-2: var(--ink-2-film);
+  --ink-3: var(--ink-3-film);
+  --ink-4: var(--ink-4-film);
+  --line-1: var(--line-1-film);
+  --line-2: var(--line-2-film);
+  --line-3: var(--line-3-film);
+  --lumen-hi: var(--lumen-hi-film);
+  --lumen: var(--lumen-film);
+  --lumen-mid: var(--lumen-mid-film);
+  --lumen-deep: var(--lumen-deep-film);
+  --lumen-glow: var(--lumen-glow-film);
+  --lumen-wash: var(--lumen-wash-film);
+  --on-lumen: var(--on-lumen-film);
+  --sure: var(--sure-film);
+  --look: var(--look-film);
+  --needs: var(--needs-film);
+  --by-you: var(--by-you-film);
+  --inferred: var(--inferred-film);
+  --sure-wash: var(--sure-wash-film);
+  --look-wash: var(--look-wash-film);
+  --needs-wash: var(--needs-wash-film);
+  --by-you-wash: var(--by-you-wash-film);
+  --focus-ring: 0 0 0 2px #000000, 0 0 0 4px var(--ink-1-film);
+}
+
+/* One breakpoint. Below it the guide narrows, the tool column drops its words and the rail keeps only numbers. */
 @media (max-width: 1199px) {
   :root {
     --guide-w: 312px;
     --text-voice: 27px; --lh-voice: 31px;
     --text-hero: 36px;  --lh-hero: 38px;
-    --dock-w: 46px; --ladder-w: 78px; --lane-w: 176px; --bends-w: 104px;
-    --bench-pad: 12px; --bay-gap: 8px;
+    --dock-w: 46px; --ladder-w: 84px; --lane-w: 176px; --bends-w: 104px;
   }
 }
 
-/* Reduced motion: light still arrives, nothing travels, nothing loops. */
+/* Reduced motion: things still arrive, nothing travels, nothing loops. */
 @media (prefers-reduced-motion: reduce) {
   :root { --t-quick: 1ms; --t-base: 1ms; --t-calm: 120ms; --t-slow: 160ms; --t-cinema: 160ms; --stagger: 0ms; }
 }

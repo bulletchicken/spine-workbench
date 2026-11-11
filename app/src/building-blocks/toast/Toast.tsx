@@ -32,7 +32,7 @@ function ActionButton({ action, shown, onPress }: { action: ToastAction; shown: 
     if (before?.isConnected === true) before.focus({ preventScroll: true });
   };
 
-  // Put away while it is still drawn: the pill fades with the button in it.
+  // Put away while it is still drawn: the slip fades with the button in it.
   useLayoutEffect(() => {
     if (!shown) giveFocusBack(button.current);
   }, [shown]);
@@ -61,12 +61,12 @@ function ActionButton({ action, shown, onPress }: { action: ToastAction; shown: 
 }
 
 /**
- * One line on a glass pill, with at most one action. How long it stays is
+ * One line on a slip of paper, with at most one action. How long it stays is
  * `--t-toast-stay`, kept by a CSS animation on a hidden clock, so the
  * time lives in one place and the clock stops while the pointer is on the
  * toast or focus is inside it.
  *
- * The line is drawn here and spoken by Toasts, so the pill can fade away
+ * The line is drawn here and spoken by Toasts, so the slip can fade away
  * without the status message going with it.
  */
 export function Toast({ said, shown, mark, onAction, onStayed }: ToastProps) {

@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import type { GalleryPage } from '@/gallery/gallery-page';
 import { Button } from './Button';
 import './Button.gallery.css';
+import { Kbd } from './Kbd';
+import './lit-face.gallery.css';
 
 /** A button that is busy for a moment after each press, as a save is. */
 function PressToSave() {
@@ -38,6 +40,18 @@ const page: GalleryPage = {
   area: 'building-blocks',
   part: 'Button',
   states: [
+    {
+      name: 'Beside the lit button: one solid ink, one outlined, one in words',
+      show: () => (
+        <div className="blocks-gallery-beside-lit">
+          <span className="blocks-gallery-lit">
+            Save case file <Kbd keys={['Enter']} />
+          </span>
+          <Button size="large">Not yet</Button>
+          <Button look="text">Skip for now</Button>
+        </div>
+      ),
+    },
     {
       name: 'Standard',
       show: () => (

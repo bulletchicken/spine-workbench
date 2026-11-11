@@ -9,7 +9,7 @@
   stroke-width: var(--icon-stroke, 1.6px);
   stroke-linecap: round;
   stroke-linejoin: round;
-  /* Waiting. Not --ink-4, which falls under 3:1 on a card. */
+  /* Waiting. Not --ink-4, which falls under 3:1 on a row under the pointer. */
   color: var(--ink-3);
 }
 

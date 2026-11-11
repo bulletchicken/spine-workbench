@@ -1,0 +1,15 @@
+/* For the IconButton and Slider pages: the strip playback sits in, ruled
+   above and below as it is across the foot of the bench.
+   Gallery only: nothing here is part of a block, and none of it is in a production build. */
+
+.blocks-gallery-strip {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: var(--s-1);
+  height: 56px;
+  padding: 0 var(--s-3);
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  background: var(--room-0);
+}

@@ -31,7 +31,7 @@
   justify-content: space-between;
   gap: var(--s-4);
   padding: 0 var(--s-5);
-  border-bottom: 1px solid var(--line-1);
+  border-bottom: 1px solid var(--rule);
   background: var(--room-1);
 }
 
@@ -47,8 +47,8 @@
 
 .gallery-tag {
   padding: var(--s-1) 6px;
-  border: 1px solid var(--line-2);
-  border-radius: var(--r-pill);
+  border: 1px solid var(--line-3);
+  border-radius: var(--r-1);
   color: var(--ink-3);
   font: 500 10px / 1 var(--font-data);
   letter-spacing: var(--track-caps);
@@ -110,10 +110,10 @@
 .gallery-index {
   padding: var(--s-5) var(--s-3);
   overflow: hidden auto;
-  border-right: 1px solid var(--line-1);
+  border-right: 1px solid var(--rule);
   background: var(--room-1);
   scrollbar-width: thin;
-  scrollbar-color: var(--room-4) transparent;
+  scrollbar-color: var(--line-2) transparent;
 }
 
 .gallery-index section + section {
@@ -158,10 +158,11 @@
   color: var(--ink-1);
 }
 
+/* The page on show: ink, and a two-pixel ink line down its edge. */
 .gallery-index a[aria-current='page'] {
-  background: var(--room-3);
-  box-shadow: var(--lift-1);
+  box-shadow: inset 2px 0 0 var(--ink-1);
   color: var(--ink-1);
+  font-weight: 600;
 }
 
 /* After the rule above, so the link of the page on show wears the ring too. */
@@ -204,8 +205,7 @@
 .gallery-frame {
   display: block;
   border: 0;
-  border-radius: var(--r-3);
   background: var(--room-0);
-  box-shadow: 0 0 0 1px var(--line-2);
+  box-shadow: 0 0 0 1px var(--rule);
   transform-origin: 0 0;
 }

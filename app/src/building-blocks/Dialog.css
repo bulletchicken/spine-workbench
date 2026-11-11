@@ -1,11 +1,11 @@
-/* The veil covers the dialog's nearest positioned ancestor, not the window. */
+/* The veil covers the dialog's nearest positioned ancestor, not the window.
+   It is paper, nearly opaque: what is under it, films included, falls back
+   to a faint print, and nothing is blurred. */
 .dialog-veil {
   position: absolute;
   inset: 0;
   z-index: 20;
-  background: color-mix(in srgb, var(--room-0) 62%, transparent);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  background: color-mix(in srgb, var(--room-0) 84%, transparent);
   animation: dialog-veil-in var(--t-calm) both;
 }
 
@@ -19,12 +19,10 @@
   max-height: calc(100% - 2 * var(--s-5));
   padding: var(--s-6);
   overflow: auto;
-  border: 1px solid var(--line-2);
+  /* A sheet of paper with a keyline, and no shadow under it. */
+  border: 1px solid var(--keyline);
   border-radius: var(--r-4);
-  background: var(--glass);
-  -webkit-backdrop-filter: var(--glass-blur);
-  backdrop-filter: var(--glass-blur);
-  box-shadow: var(--lift-3);
+  background: var(--room-0);
   color: var(--ink-1);
   font: 400 var(--text-body) / var(--lh-body) var(--font-ui);
   translate: -50% -50%;
@@ -36,10 +34,10 @@
 .dialog:focus-visible {
   outline: none;
   border-radius: var(--r-4);
-  box-shadow: var(--lift-3);
+  box-shadow: none;
 }
 
-/* sheet-in: the veil dims the region and the sheet rises into place. */
+/* sheet-in: the veil covers the region and the sheet rises into place. */
 @keyframes dialog-veil-in {
   from {
     opacity: 0;

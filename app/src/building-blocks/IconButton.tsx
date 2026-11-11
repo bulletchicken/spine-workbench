@@ -12,7 +12,7 @@ interface IconButtonProps extends Omit<ComponentProps<'button'>, 'type' | 'disab
   /** Where the tooltip opens. */
   tipSide?: TooltipPlace['side'];
   tipAlign?: TooltipPlace['align'];
-  /** `round` is for a row of small controls on glass, such as playback. */
+  /** `round` is for a row of small controls in a strip, such as playback. */
   shape?: 'square' | 'round';
   /** Cannot be pressed. It stays in the tab order, so its tooltip can still say why. */
   disabled?: boolean;

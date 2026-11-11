@@ -1,14 +1,15 @@
 # design
 
 What the app looks like, says and does, and how it moves. The design is
-called Reading Room: a dim room, four films on a bench, the spine
-unrolled between them as a ladder, one sentence and one light.
+called Clinical White: a white, ruled page, four films on a bench, each
+on black, the spine unrolled between them as a ladder, one sentence and
+one ink button.
 
 | File | What it is |
 |---|---|
 | [`design-language.md`](design-language.md) | The rules: the concept, the shell, every state of the flow, tokens, type, motion, components, wording, accessibility and build notes. |
 | [`mock.html`](mock.html) | The design, working. One self-contained file: it makes no request and holds no patient image. Open it in a browser. |
-| [`tokens.css`](tokens.css) | The design tokens alone. The app's copy is `app/src/look-and-feel/tokens.css`; a test holds the two to the same values. |
+| [`tokens.css`](tokens.css) | The design tokens alone, each ink and colour with a value for paper and a value for a film. The app's copy is `app/src/look-and-feel/tokens.css`; a test holds the two to the same values. |
 | [`where-the-app-differs.md`](where-the-app-differs.md) | The short list of where the app departs from the mock on purpose. |
 
 Where the page and the mock disagree, the mock wins for how something

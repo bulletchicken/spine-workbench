@@ -10,8 +10,7 @@
   max-width: 1072px;
   height: 500px;
   overflow: hidden;
-  border: 1px solid var(--line-1);
-  border-radius: var(--r-2);
+  border: 1px solid var(--rule);
   background: var(--room-0);
 }
 
@@ -22,7 +21,7 @@
   align-content: start;
   justify-items: start;
   padding: var(--s-5) var(--s-4);
-  border-right: 1px solid var(--line-1);
+  border-right: 1px solid var(--rule);
   background: var(--room-1);
   color: var(--ink-2);
   font-size: var(--text-small);
@@ -42,14 +41,17 @@
   padding: var(--bench-pad);
 }
 
-/* Four films: a bright spine on black, enough for the veil to have something to blur. */
+/* Four films, each in its black well with a hairline between: a bright spine
+   on black, enough for the veil to have something to cover. */
 .blocks-gallery-bench > i {
-  border-radius: var(--r-film);
   background:
-    repeating-linear-gradient(180deg, rgba(238, 248, 255, 0.55) 0 14px, transparent 14px 19px) 50% 50% / 26px 78% no-repeat,
-    radial-gradient(60% 50% at 50% 45%, rgba(170, 190, 215, 0.28), transparent 70%),
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.55) 0 14px, transparent 14px 19px) 50% 50% / 26px 78% no-repeat,
+    radial-gradient(60% 50% at 50% 45%, rgba(200, 205, 212, 0.28), transparent 70%),
     var(--well);
-  box-shadow: var(--glow-film);
+}
+
+.blocks-gallery-bench > i + i {
+  border-left: 1px solid var(--rule);
 }
 
 .blocks-gallery-sheet-title {
@@ -68,12 +70,9 @@
 .blocks-gallery-manifest {
   box-sizing: border-box;
   display: grid;
-  gap: 5px;
   margin: var(--s-3) 0 0;
-  padding: 10px var(--s-3);
-  border: 1px solid var(--line-1);
-  border-radius: var(--r-2);
-  background: var(--well);
+  padding: 0;
+  border-bottom: 1px solid var(--line-1);
   list-style: none;
 }
 
@@ -82,6 +81,8 @@
   grid-template-columns: 16px minmax(0, 1fr);
   gap: var(--s-2);
   align-items: center;
+  padding: 6px 0;
+  border-top: 1px solid var(--line-1);
   color: var(--ink-2);
   font-size: var(--text-small);
   line-height: 17px;

@@ -58,9 +58,9 @@
   height: 28px;
   margin-left: var(--s-2);
   padding: 0 var(--s-2);
-  border: 1px solid var(--line-2);
+  border: 1px solid var(--line-3);
   border-radius: var(--r-1);
-  background: var(--well);
+  background: var(--room-0);
   color: var(--ink-1);
   font: inherit;
 }

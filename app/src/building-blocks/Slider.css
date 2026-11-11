@@ -55,7 +55,6 @@
 .slider-rail {
   height: 100%;
   overflow: hidden;
-  border-radius: 2px;
   background: var(--line-2);
 }
 
@@ -75,7 +74,8 @@
   height: 9px;
   border-radius: 50%;
   background: var(--ink-1);
-  box-shadow: 0 0 0 2px var(--casing);
+  /* A ring of paper round the knob, so it stands clear of the bar it sits on. */
+  box-shadow: 0 0 0 2px var(--room-0);
   opacity: 0;
   translate: -50% -50%;
   scale: 0.6;

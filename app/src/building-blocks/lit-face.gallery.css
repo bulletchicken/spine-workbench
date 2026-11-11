@@ -1,0 +1,20 @@
+/* For the Button and Kbd pages: the lit button's face. It is the guide's
+   part, not a block; it is drawn here so a block can be seen beside it.
+   Solid ink, the only solid thing on a page, and it sets a key hint's colours.
+   Gallery only: nothing here is part of a block, and none of it is in a production build. */
+
+.blocks-gallery-lit {
+  box-sizing: border-box;
+  --kbd-ink: color-mix(in srgb, var(--on-lumen) 78%, transparent);
+  --kbd-fill: transparent;
+  --kbd-edge: color-mix(in srgb, var(--on-lumen) 34%, transparent);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-3);
+  min-height: 48px;
+  padding: 0 var(--s-6);
+  border-radius: var(--r-3);
+  background: var(--lumen);
+  color: var(--on-lumen);
+  font: 600 var(--text-lead) / 20px var(--font-ui);
+}

@@ -16,8 +16,9 @@ interface ButtonProps extends Omit<ComponentProps<'button'>, 'type' | 'disabled'
 }
 
 /**
- * A button that is not the next action. The one lit button is the
- * guide's, and nothing here wears its light.
+ * A button that is not the next action: outlined, or the words alone.
+ * The one lit button, the only solid ink on a page, is the guide's, and
+ * nothing here is ever solid.
  */
 export function Button({ look = 'standard', size = 'regular', disabled = false, busy = false, onPress, className, children, ...rest }: ButtonProps) {
   return (

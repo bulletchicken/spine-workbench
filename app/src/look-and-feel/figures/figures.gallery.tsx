@@ -30,7 +30,7 @@ const page: GalleryPage = {
   area: 'look-and-feel',
   part: 'View figures',
   states: [
-    { name: 'The four views, in empty slots', show: () => <Slots size="full" lit /> },
+    { name: 'The four views, in empty slots, the first under the pointer', show: () => <Slots size="full" lit /> },
     { name: 'In narrow slots, as under 1200', show: () => <Slots size="small" /> },
   ],
 };

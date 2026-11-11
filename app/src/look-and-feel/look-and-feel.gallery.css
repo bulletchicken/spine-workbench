@@ -40,7 +40,9 @@
   --icon-size: 60px;
 }
 
-/* ---- a patch of film: grey bone on a dark ground, as a mark sees it ---- */
+/* ---- a patch of film: grey bone on black, as a mark sees it. The patch
+   says data-ground="film", so everything drawn on it takes its on-film
+   colours ---- */
 .look-gallery-film {
   display: block;
   border-radius: var(--r-film);
@@ -87,69 +89,88 @@
   font: 500 11.5px var(--font-data);
 }
 
-/* ---- a rung of the ladder ---- */
+/* ---- a rung of the ladder: a ruled row on paper, as tall as its vertebra.
+   Its bar, glyph and name say how sure; its rule is the frame's hairline
+   whatever the state ---- */
 .look-gallery-rungs {
   display: grid;
-  gap: 3px;
-  width: 100px;
+  width: var(--ladder-w);
+  border-bottom: 1px solid var(--rule);
 }
 
 .look-gallery-rung {
   position: relative;
   display: flex;
   align-items: center;
-  height: 30px;
-  opacity: var(--conf-rung-fade);
+  height: 32px;
+  border-top: 1px solid var(--rule);
+}
+
+.look-gallery-rung[data-chosen='yes'] {
+  background: linear-gradient(90deg, var(--room-4) 0 18px, transparent 18px 56px, var(--room-4) 56px);
 }
 
 .look-gallery-rung-bar {
   position: absolute;
-  top: 1px;
-  bottom: 1px;
-  left: 1px;
+  top: 2px;
+  bottom: 2px;
+  left: 9px;
   width: var(--conf-bar-w);
-  border-radius: 2px;
   background: var(--conf-bar);
+  opacity: var(--conf-rung-fade);
 }
 
-.look-gallery-rung-frame {
+/* The rung's slice of the unrolled strip: film, so it is dark and wears no state. */
+.look-gallery-rung-slice {
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 8px;
+  left: 18px;
   width: 38px;
-  border: var(--conf-frame-w) var(--conf-edge) var(--c);
-  border-radius: 3px;
-  background: var(--conf-wash);
-  box-shadow: 0 0 0 1px var(--casing);
+  background: linear-gradient(#8d949c, #8d949c) 50% 50% / 26px 22px no-repeat var(--well);
+}
+
+.look-gallery-rung[data-chosen='yes'] .look-gallery-rung-slice {
+  box-shadow: inset 0 0 0 2px #fff;
 }
 
 .look-gallery-rung-name {
   display: flex;
   align-items: center;
-  gap: 4px;
-  margin-left: 52px;
+  gap: 5px;
+  margin-left: 62px;
   color: var(--ink-1);
   font: 500 10.5px / 1 var(--font-data);
+  opacity: var(--conf-rung-fade);
 }
 
-/* ---- a legend chip ---- */
+.look-gallery-rung[data-chosen='yes'] .look-gallery-rung-name {
+  font-weight: 600;
+}
+
+/* ---- the legend: four ruled cells ---- */
 .look-gallery-legend {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 6px;
-  width: 302px;
+  width: 320px;
+  border-top: 1px solid var(--line-1);
 }
 
 .look-gallery-chip {
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
-  gap: 5px 8px;
-  padding: 7px 10px 9px;
-  border: 1px solid var(--line-1);
-  border-radius: var(--r-2);
-  background: var(--room-1);
+  gap: 6px 8px;
+  padding: 9px 12px 11px 0;
+}
+
+.look-gallery-chip:nth-child(even) {
+  padding: 9px 0 11px 12px;
+  border-left: 1px solid var(--line-1);
+}
+
+.look-gallery-chip:nth-child(n + 3) {
+  border-top: 1px solid var(--line-1);
 }
 
 .look-gallery-chip-count {
@@ -159,17 +180,13 @@
 .look-gallery-chip-line {
   grid-column: 1 / -1;
   height: 0;
-  margin-top: 2px;
   border-top: var(--conf-edge-w) var(--conf-edge) var(--c);
 }
 
 /* ---- state icons where they are used ---- */
 .look-gallery-rows {
-  width: 300px;
-  padding: 6px var(--s-4);
-  border: 1px solid var(--line-1);
-  border-radius: var(--r-3);
-  background: var(--room-2);
+  width: 320px;
+  border-bottom: 1px solid var(--rule);
 }
 
 .look-gallery-row {
@@ -182,7 +199,7 @@
 }
 
 .look-gallery-row:first-child {
-  border-top: 0;
+  border-top-color: var(--rule);
 }
 
 .look-gallery-row .state-icon {
@@ -202,54 +219,53 @@
   line-height: 17px;
 }
 
+/* A fact about a film: a sign and a few words, set as data. No box unless it needs an answer. */
 .look-gallery-fact {
   --icon-size: 12px;
   display: inline-flex;
   align-items: center;
   gap: 4px;
   height: 20px;
-  padding: 0 7px 0 5px;
-  border: 1px solid var(--line-1);
-  border-radius: var(--r-pill);
-  background: var(--room-2);
   color: var(--ink-2);
   font: 500 10.5px / 1 var(--font-data);
 }
 
 .look-gallery-fact[data-state='needs'] {
-  border-color: rgb(255 210 63 / 0.4);
+  padding: 0 6px 0 4px;
+  border: 1px solid var(--look);
+  border-radius: var(--r-1);
   background: var(--look-wash);
-  color: var(--look);
+  color: var(--ink-1);
 }
 
 /* ---- icons where they are used ---- */
+/* The tools: a ruled column, as down the bench's left edge. */
 .look-gallery-dock {
   display: grid;
-  gap: 3px;
-  width: calc(var(--dock-w) - 10px);
-  padding: 5px;
-  border: 1px solid var(--line-2);
-  border-radius: var(--r-3);
-  background: var(--glass);
-  box-shadow: var(--lift-2);
+  width: var(--dock-w);
+  border: 1px solid var(--rule);
+  border-bottom: 0;
 }
 
 .look-gallery-tool {
   position: relative;
   display: grid;
+  align-content: center;
   justify-items: center;
-  gap: 3px;
-  padding: 8px 0 6px;
-  border-radius: var(--r-2);
+  gap: 4px;
+  height: 64px;
+  border-bottom: 1px solid var(--rule);
   color: var(--ink-2);
 }
 
+/* The tool in hand: ink, and a two-pixel ink line down its edge. */
 .look-gallery-tool[data-held='yes'] {
-  background: var(--room-4);
-  box-shadow:
-    inset 0 0 0 1px var(--line-3),
-    inset 2px 0 0 var(--ink-1);
+  box-shadow: inset 2px 0 0 var(--ink-1);
   color: var(--ink-1);
+}
+
+.look-gallery-tool[data-held='yes'] .look-gallery-tool-word {
+  font-weight: 700;
 }
 
 .look-gallery-tool-word {
@@ -260,22 +276,20 @@
 
 .look-gallery-tool kbd {
   position: absolute;
-  top: 4px;
-  right: 5px;
+  top: 5px;
+  right: 6px;
   color: var(--ink-3);
   font-size: 9px;
 }
 
 .look-gallery-dock-rule {
-  height: 1px;
-  margin: 2px 6px;
-  background: var(--line-2);
+  display: none;
 }
 
-/* Under 1200 the dock is icons alone: the words and the key letters go. */
+/* Under 1200 the column is icons alone: the words and the key letters go. */
 @media (max-width: 1199px) {
   .look-gallery-tool {
-    padding: 9px 0;
+    height: 48px;
   }
 
   .look-gallery-tool-word,
@@ -284,20 +298,20 @@
   }
 }
 
+/* Playback: a strip ruled above and below, as across the foot of the bench. */
 .look-gallery-transport {
   --icon-size: 16px;
   display: flex;
   align-items: center;
   gap: var(--s-4);
-  height: 46px;
+  height: 56px;
   padding: 0 var(--s-4);
-  border: 1px solid var(--line-2);
-  border-radius: var(--r-pill);
-  background: var(--glass);
-  box-shadow: var(--lift-2);
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
   color: var(--ink-2);
 }
 
+/* The lit button: the one solid ink thing on a page. */
 .look-gallery-lit {
   --icon-size: 18px;
   display: inline-flex;
@@ -306,12 +320,12 @@
   min-height: 48px;
   padding: 8px 20px;
   border-radius: var(--r-3);
-  background: linear-gradient(180deg, var(--lumen-hi), var(--lumen) 58%, color-mix(in srgb, var(--lumen) 48%, var(--lumen-mid)));
-  box-shadow: var(--glow-lumen);
+  background: var(--lumen);
   color: var(--on-lumen);
   font: 600 var(--text-lead) / 20px var(--font-ui);
 }
 
+/* The saved case: ink-lined and never solid, because once a case is saved nothing asks to be pressed. */
 .look-gallery-case-tile {
   --icon-size: 40px;
   --icon-stroke: 1.3px;
@@ -319,10 +333,10 @@
   place-items: center;
   width: 80px;
   height: 80px;
+  border: 1.5px solid var(--ink-1);
   border-radius: var(--r-4);
-  background: linear-gradient(180deg, var(--lumen-hi), var(--lumen));
-  box-shadow: var(--glow-lumen);
-  color: var(--on-lumen);
+  background: var(--room-0);
+  color: var(--ink-1);
 }
 
 .look-gallery-unreadable {
@@ -334,7 +348,6 @@
   width: 190px;
   padding: var(--s-5) var(--s-3);
   border: 1.5px dotted var(--needs);
-  border-radius: var(--r-2);
   background: var(--needs-wash);
   text-align: center;
 }
@@ -385,10 +398,11 @@
    bays share the bench: as wide as at 1440 where there is room, and
    narrower together where there is not ---- */
 .look-gallery-slots {
-  --slot-w: 235px;
+  --slot-w: 219px;
+  --slot-gap: 48px;
   display: flex;
-  gap: var(--bay-gap);
-  width: calc(4 * var(--slot-w) + 3 * var(--bay-gap));
+  gap: var(--slot-gap);
+  width: calc(4 * var(--slot-w) + 3 * var(--slot-gap));
   max-width: 100%;
 }
 
@@ -402,29 +416,31 @@
   min-width: 0;
   height: 420px;
   border: 1px dashed var(--line-3);
-  border-radius: var(--r-2);
-  background:
-    radial-gradient(120% 55% at 50% 0%, rgb(150 200 255 / 0.075), rgb(150 200 255 / 0.012) 70%),
-    linear-gradient(180deg, rgb(190 215 255 / 0.03), rgb(190 215 255 / 0.008));
+  background: var(--room-0);
   color: var(--ink-3);
   font-size: var(--text-small);
   line-height: 16px;
 }
 
+.look-gallery-slot > span {
+  color: var(--ink-2);
+}
+
 .look-gallery-slot .view-figure {
   width: 46%;
   max-width: 92px;
-  opacity: 0.8;
 }
 
+/* Under the pointer, or with files held over the bench. */
 .look-gallery-slot[data-lit='yes'] {
-  border-color: var(--lumen-mid);
-  background: var(--lumen-wash);
+  border-color: var(--ink-1);
+  background: var(--room-3);
   color: var(--ink-1);
 }
 
 .look-gallery-slots[data-size='small'] {
   --slot-w: 150px;
+  --slot-gap: 28px;
 }
 
 .look-gallery-slots[data-size='small'] .look-gallery-slot {
@@ -567,12 +583,16 @@
   width: 300px;
 }
 
+/* A row under the pointer: the faintest off-white, where every ink is about a tenth weaker. */
 .look-gallery-card {
   padding: 14px var(--s-4);
-  border: 1px solid var(--line-1);
-  border-radius: var(--r-3);
-  background: var(--room-2);
-  box-shadow: var(--lift-1);
+  background: var(--room-3);
+}
+
+/* A film's well, where the same names are the on-film inks. */
+.look-gallery-on-film {
+  padding: 14px var(--s-4);
+  background: var(--well);
 }
 
 .look-gallery-figures-column {

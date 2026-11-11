@@ -1,25 +1,42 @@
-/* flash: something new arrives lit, then fades to its own colours. An
-   outline on a film starts as a broad white line with a white wash; the
-   frame of a rung on the ladder starts with a white ground. One set of
-   keyframes serves both: a shape reads the stroke and fill, a box reads the
-   background.
+/* flash: something new arrives marked, then fades to its own colours. On a
+   film an outline starts as a broad white line with a white wash, and the
+   slice of the strip a new rung stands on starts white. On paper a new row
+   starts under a wash of ink. One set of keyframes serves all three: a shape
+   reads the stroke and fill, a box reads the background.
 
      animation: flash var(--t-slow) var(--ease-out);
 
+   What it starts from follows the ground the part stands on: white inside
+   data-ground="film", ink on paper.
+
    Give it to the one thing that is new and draws itself: the outline's own
-   path, the rung's own frame. Never to a group, or to a box with drawings
+   path, the rung's own slice. Never to a group, or to a box with drawings
    inside it. Fill, stroke and stroke-width inherit, so while the flash runs
-   everything inside that leaves one of them unsaid is drawn white and 6 px
-   wide as well. Every sign in look-and-feel states its own fill and stroke
-   for that reason, so a glyph beside a flashing frame keeps its shape.
+   everything inside that leaves one of them unsaid is drawn in the flash's
+   colour and 6 px wide as well. Every sign in look-and-feel states its own
+   fill and stroke for that reason, so a glyph beside a flashing row keeps
+   its shape.
 
    It ends on the part's own colours, so the keyframes say only where it
    starts. */
+:root,
+[data-ground='paper'] {
+  --flash-line: var(--ink-1-paper);
+  --flash-fill: rgb(17 20 23 / 0.12);
+  --flash-ground: rgb(17 20 23 / 0.14);
+}
+
+[data-ground='film'] {
+  --flash-line: #fff;
+  --flash-fill: rgb(255 255 255 / 0.34);
+  --flash-ground: rgb(255 255 255 / 0.5);
+}
+
 @keyframes flash {
   from {
-    background-color: rgb(255 255 255 / 0.5);
-    fill: rgb(255 255 255 / 0.34);
-    stroke: #fff;
+    background-color: var(--flash-ground);
+    fill: var(--flash-fill);
+    stroke: var(--flash-line);
     stroke-width: 6px;
   }
 }

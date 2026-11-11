@@ -31,13 +31,10 @@
   /* 40 tall with an action in it or without: 5 above and below the 28 px action, inside the edge. */
   min-height: 40px;
   padding: 5px var(--s-4) 5px var(--s-3);
-  border: 1px solid var(--line-2);
-  /* A pill while the line fits on one row; a soft box if it ever wraps. */
-  border-radius: 20px;
-  background: var(--glass);
-  -webkit-backdrop-filter: var(--glass-blur);
-  backdrop-filter: var(--glass-blur);
-  box-shadow: var(--lift-2);
+  /* A slip of paper with a keyline. It is often laid over a film, where white on black needs no shadow. */
+  border: 1px solid var(--keyline);
+  border-radius: var(--r-2);
+  background: var(--room-0);
   color: var(--ink-1);
   font: 400 13px / var(--lh-small) var(--font-ui);
   /* Hidden when off, so its action cannot be reached. Visibility changes in
@@ -81,7 +78,7 @@
 }
 
 .toast-action {
-  /* The hint sits on --room-4, where --ink-3 is too faint for 11 px type. */
+  /* The hint is set a step darker than a caption, to be read at a glance. */
   --kbd-ink: var(--ink-2);
   display: inline-flex;
   flex: none;
@@ -90,20 +87,22 @@
   height: 28px;
   margin: 0 0 0 var(--s-2);
   padding: 0 10px;
-  border: 0;
-  border-radius: var(--r-pill);
-  background: var(--room-4);
+  border: 1px solid var(--line-3);
+  border-radius: var(--r-1);
+  background: var(--room-0);
   color: var(--ink-1);
   font: 600 13px / 1 var(--font-ui);
   white-space: nowrap;
   cursor: pointer;
   transition:
     background var(--t-base),
+    border-color var(--t-base),
     transform var(--t-instant);
 }
 
 .toast-action:hover {
-  background: color-mix(in srgb, var(--room-4), var(--ink-1) 10%);
+  border-color: var(--ink-1);
+  background: var(--room-3);
 }
 
 .toast-action:active {
@@ -115,7 +114,7 @@
      The radius is said again so the ring keeps this control's own shape. */
   outline: 2px solid transparent;
   outline-offset: 2px;
-  border-radius: var(--r-pill);
+  border-radius: var(--r-1);
   box-shadow: var(--focus-ring);
 }
 

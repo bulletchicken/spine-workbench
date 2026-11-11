@@ -1,22 +1,26 @@
-/* breathe: the only loop in the app. The one lit thing breathes: the lit
-   button's glow, a pair of choice cards more softly, the ring on a film.
+/* breathe: the only loop in the app, and it runs only on a film. The ring
+   that marks where the next action will land eases between rest and full
+   strength, so it is found on a busy picture. Nothing on paper loops: the
+   lit button is solid ink and stands still, and so does a pair of choices.
 
    The keyframes move one number, --breath, from 0 (breathed out) to 1
-   (breathed in) and back, and each part turns that number into its own
-   light: the reach of a glow, the strength of a ring. A part that is not
-   breathing rests at 0.5, half a breath.
+   (breathed in) and back, and the ring turns that number into its own
+   strength. A part that is not breathing rests at 0.5, half a breath.
 
    A part breathes by taking the whole animation, never the keyframes'
    name alone:
 
      animation: var(--breathing);
 
-   Each thing that glows takes it itself. --breath does not inherit, so a
-   box that breathes does not make what is inside it breathe: each card of
-   a pair takes the animation, not the pair.
+   --breath does not inherit, so a box that breathes does not make what is
+   inside it breathe.
 
-   Under reduced motion --breathing is `none`, so nothing loops and every
-   lit thing holds its resting light. */
+   No colour is set here. The ring is drawn in --lumen-hi, which is white on
+   a film, and nothing glows: the breath changes how strongly a line shows,
+   never a shadow.
+
+   Under reduced motion --breathing is `none`, so nothing loops and the ring
+   holds its resting strength. */
 @property --breath {
   syntax: '<number>';
   inherits: false;
@@ -25,11 +29,6 @@
 
 :root {
   --breathing: breathe var(--breathe) ease-in-out infinite;
-
-  /* The colour of the breathing light: the blue of --lumen-glow, as bare
-     channels, so a lit part can give it a strength that follows the breath:
-     rgb(var(--breath-light) / calc(0.3 + 0.25 * var(--breath))). */
-  --breath-light: 110 190 255;
 }
 
 @media (prefers-reduced-motion: reduce) {

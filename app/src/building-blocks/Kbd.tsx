@@ -17,7 +17,8 @@ interface KbdProps {
  * the way this machine's keyboard prints it.
  *
  * It takes its colours from `--kbd-ink` and `--kbd-fill`, so a part on a
- * surface of its own (the lit button) sets those two and the hint fits.
+ * surface of its own (the lit button, which is solid ink) sets those two
+ * and the hint fits.
  */
 export function Kbd({ keys, look = 'chip', className }: KbdProps) {
   return (

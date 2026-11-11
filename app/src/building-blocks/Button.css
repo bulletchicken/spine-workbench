@@ -1,3 +1,6 @@
+/* A button that is not the next action: outlined, or the words alone.
+   Neither is ever solid. The one solid ink button on a page is the next
+   action, and that is a part of its own. */
 .button {
   position: relative;
   display: inline-flex;
@@ -7,9 +10,9 @@
   height: 34px;
   margin: 0;
   padding: 0 14px;
-  border: 1px solid var(--line-2);
+  border: 1px solid var(--line-3);
   border-radius: var(--r-2);
-  background: var(--room-2);
+  background: var(--room-0);
   color: var(--ink-1);
   font: 600 13px / 1 var(--font-ui);
   white-space: nowrap;
@@ -43,13 +46,13 @@
 
 .button:hover:not(:disabled, [aria-disabled='true']),
 .button[aria-expanded='true'] {
-  border-color: var(--line-3);
+  border-color: var(--ink-1);
   background: var(--room-3);
 }
 
 .button:active:not(:disabled, [aria-disabled='true']),
 .button[aria-pressed='true'] {
-  border-color: var(--line-3);
+  border-color: var(--ink-1);
   background: var(--room-4);
 }
 

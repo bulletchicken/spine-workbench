@@ -53,7 +53,7 @@ const page: GalleryPage = {
       ),
     },
     {
-      name: 'In the tool dock',
+      name: 'In the tool column',
       show: () => (
         <div className="look-gallery-dock">
           {DOCK.map(({ name, word, letter }, index) => (
@@ -73,7 +73,7 @@ const page: GalleryPage = {
       ),
     },
     {
-      name: 'On the transport, 16 px',
+      name: 'In the playback strip, 16 px',
       show: () => (
         <div className="look-gallery-transport">
           <Icon name="replay" />
@@ -84,7 +84,7 @@ const page: GalleryPage = {
       ),
     },
     {
-      name: 'On the lit button, 18 px',
+      name: 'On the lit button, which is solid ink, 18 px',
       show: () => (
         <>
           <span className="look-gallery-lit">

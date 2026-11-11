@@ -1,7 +1,7 @@
 import { Pause, Redo2, RotateCcw, SkipForward, Undo2 } from 'lucide-react';
 import { useState } from 'react';
 import type { GalleryPage } from '@/gallery/gallery-page';
-import './glass-strip.gallery.css';
+import './playback-strip.gallery.css';
 import { IconButton } from './IconButton';
 
 /** Undo and redo over a short history, so each tooltip names the action a press would do. */
@@ -88,9 +88,9 @@ const page: GalleryPage = {
       ),
     },
     {
-      name: 'Round, on glass',
+      name: 'Round, in the playback strip',
       show: () => (
-        <div className="blocks-gallery-glass">
+        <div className="blocks-gallery-strip">
           <IconButton shape="round" label="Watch again from the start" tipSide="above" tipAlign="start">
             <RotateCcw />
           </IconButton>
@@ -109,7 +109,7 @@ const page: GalleryPage = {
     {
       name: 'Round, held down or open',
       show: () => (
-        <div className="blocks-gallery-glass">
+        <div className="blocks-gallery-strip">
           <IconButton shape="round" label="Held down" tipSide="above" tipAlign="start" aria-pressed>
             <Pause />
           </IconButton>

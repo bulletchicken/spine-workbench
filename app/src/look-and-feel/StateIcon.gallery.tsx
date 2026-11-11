@@ -45,7 +45,7 @@ const page: GalleryPage = {
       ),
     },
     {
-      name: 'In the rows of a card',
+      name: 'In the rows of a section',
       show: () => (
         <ul className="look-gallery-rows">
           {ROWS.map(({ state, title, line }) => (

@@ -1,6 +1,11 @@
 /* One film on screen. The viewer fills the box it is given (a bay's
    viewport); the canvas, the layers and the HUDs all cover it exactly, so
-   the film and everything drawn on it share one set of screen pixels. */
+   the film and everything drawn on it share one set of screen pixels.
+
+   The viewer says data-ground="film", so every layer and HUD inside it
+   takes the on-film value of each token: light inks, and the confidence
+   colours as they are drawn over a dark casing. The black well behind the
+   film is the bay's. */
 .film-viewer {
   position: relative;
   width: 100%;
@@ -11,7 +16,9 @@
   -webkit-user-select: none;
 }
 
-/* The light around a hung film, on a box that follows the film's outline. */
+/* A hairline round a hung film, on a box that follows the film's outline, so
+   the film's edge is plain on its black well. Nothing glows; the box and the
+   token it reads keep the names they had. */
 .film-viewer__glow {
   position: absolute;
   border-radius: var(--r-film);

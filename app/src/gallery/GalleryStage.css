@@ -6,7 +6,7 @@
   padding: var(--s-6);
   overflow: auto;
   scrollbar-width: thin;
-  scrollbar-color: var(--room-4) transparent;
+  scrollbar-color: var(--line-2) transparent;
   background: var(--room-0);
   color: var(--ink-1);
   font: 400 var(--text-body) / var(--lh-body) var(--font-ui);
@@ -40,21 +40,20 @@
   display: flex;
   flex-wrap: wrap;
   align-items: stretch;
-  gap: var(--s-4);
+  gap: var(--s-2) var(--s-8);
 }
 
+/* A plate is a ruled section, not a box: a rule, the state's name, a lighter rule, the state. */
 .gallery-plate {
   display: flex;
   flex: 1 1 300px;
   flex-direction: column;
-  border: 1px solid var(--line-1);
-  border-radius: var(--r-3);
-  background: var(--room-1);
+  border-top: 1px solid var(--rule);
 }
 
 .gallery-plate-name {
   margin: 0;
-  padding: var(--s-2) var(--s-4);
+  padding: var(--s-2) 0;
   border-bottom: 1px solid var(--line-1);
   color: var(--ink-3);
   font: 500 var(--text-micro) / var(--lh-micro) var(--font-ui);
@@ -70,7 +69,7 @@
   align-content: flex-start;
   align-items: center;
   gap: var(--s-3);
-  padding: var(--s-5) var(--s-4);
+  padding: var(--s-5) 0 var(--s-6);
 }
 
 /* A quiet line a page may put beside a part: what a press did, a value as it changes. */

@@ -36,7 +36,6 @@
 
 .blocks-gallery-guards {
   display: grid;
-  gap: var(--s-3);
   margin: var(--s-4) 0 0;
   padding: 0;
   list-style: none;
@@ -46,6 +45,8 @@
   display: grid;
   grid-template-columns: 20px 1fr;
   gap: 10px;
+  padding: 10px 0;
+  border-top: 1px solid var(--line-1);
 }
 
 .blocks-gallery-guards svg {
@@ -73,18 +74,15 @@
   display: flex;
   align-items: baseline;
   gap: var(--s-3);
-  margin-top: var(--s-5);
-  padding: var(--s-4);
-  border: 1px solid var(--line-1);
-  border-radius: var(--r-3);
-  background: var(--well);
+  padding: var(--s-3) 0;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
 }
 
 .blocks-gallery-pop-count b {
-  color: var(--lumen);
+  color: var(--ink-1);
   font: 500 40px / 40px var(--font-data);
   font-variant-numeric: slashed-zero;
-  text-shadow: 0 0 18px var(--lumen-glow);
 }
 
 .blocks-gallery-pop-count span {

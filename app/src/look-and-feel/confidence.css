@@ -5,8 +5,13 @@
    Each state also has a glyph (ConfidenceGlyph) and a word, so nothing rests
    on hue alone.
 
+   Each colour has two values, one for paper and one for a film, and the
+   tokens hand over the one for the ground a part stands on: a rung and a
+   chip are on paper, an outline is inside data-ground="film". Nothing here
+   names a ground.
+
      --c                 the state's colour
-     --conf-wash         the tint inside an outline, and inside a rung's frame
+     --conf-wash         the tint inside an outline
 
    An outline on a film:
      --conf-line         its width, in screen pixels
@@ -15,13 +20,15 @@
      --conf-fade         how strongly the outline shows
      --conf-casing-fade  how strongly the dark casing under it shows
 
-   A rung of the ladder and a chip of the legend:
+   A rung of the ladder and a chip of the legend, both on paper:
      --conf-edge         the same line as a CSS border style
      --conf-edge-w       its width as the line under a legend chip
-     --conf-frame-w      its width as a rung's frame
      --conf-bar          the bar at a rung's edge, as a background
      --conf-bar-w        the bar's width
-     --conf-rung-fade    how strongly the whole rung shows */
+     --conf-rung-fade    how strongly a rung's bar and name show
+
+   A rung is a ruled row, and its rule is the frame's hairline whatever the
+   state: only its bar, its glyph and its name say how sure. */
 [data-conf] {
   --c: var(--sure);
   --conf-wash: transparent;
@@ -32,7 +39,6 @@
   --conf-casing-fade: 1;
   --conf-edge: solid;
   --conf-edge-w: 2px;
-  --conf-frame-w: 1.5px;
   --conf-bar: var(--c);
   --conf-bar-w: 4px;
   --conf-rung-fade: 1;
@@ -56,7 +62,6 @@
   --conf-cap: round;
   --conf-edge: dotted;
   --conf-edge-w: 3px;
-  --conf-frame-w: 2px;
   --conf-bar: repeating-linear-gradient(180deg, var(--c) 0 2px, transparent 2px 5px);
   --conf-bar-w: 5px;
 }
@@ -67,7 +72,8 @@
 }
 
 /* Not counted: C7 above T1 and any outline below L5. Drawn as inferred, and
-   faint: a thin line on a thin casing, and a rung that stands back. */
+   faint: a thin line on a thin casing, and a rung whose thin, long-dashed bar
+   and name stand back. */
 [data-conf='sacrum'] {
   --c: var(--inferred);
   --conf-line: 1.4px;
@@ -76,6 +82,7 @@
   --conf-casing-fade: 0.4;
   --conf-edge: dashed;
   --conf-edge-w: 1px;
-  --conf-frame-w: 1px;
-  --conf-rung-fade: 0.6;
+  --conf-bar: repeating-linear-gradient(180deg, var(--c) 0 6px, transparent 6px 9px);
+  --conf-bar-w: 2px;
+  --conf-rung-fade: 0.7;
 }

@@ -18,7 +18,7 @@ interface PopoverProps {
 }
 
 /**
- * A glass panel that opens beside the control that asked for it and gets
+ * A paper panel that opens beside the control that asked for it and gets
  * out of the way easily. It is placed against its nearest positioned
  * ancestor, so wrap the control and the popover in one positioned
  * element, or give it a place of its own through `className`.

@@ -7,7 +7,7 @@ the type, and every sign the app draws. How things move is next door, in
 | File | Holds |
 |---|---|
 | `base.css` | the app's one stylesheet: it imports the files below and the four shared keyframes, in order, then sets the reset, the body and the focus ring |
-| `tokens.css` | the design's tokens, unchanged; never edited here |
+| `tokens.css` | the design's tokens, unchanged; never edited here. Each token that depends on its ground has a value for paper and one for a film |
 | `named-timings.css` | the durations and gaps the design names that are not tokens |
 | `fonts.css` | Instrument Serif, Geist and Geist Mono, from the installed font packages |
 | `confidence.css` | the one place `data-conf` becomes colour and line |
@@ -18,11 +18,40 @@ the type, and every sign the app draws. How things move is next door, in
 | `figures/` | the four view figures, and `figure-for-view.ts`, which finds one by film kind |
 | `BrandMark.tsx` | the app's mark |
 
+## Paper and film
+
+The page is white and ruled: regions are divided by one-pixel hairlines
+(`--rule`) and by space, never by a box with a fill and a shadow. A film
+is still read on black, so its well is `--well` and is never themed.
+
+That makes two grounds, and they need opposite inks. A token that
+depends on its ground has a value for each (`--ink-1-paper`,
+`--ink-1-film`), and component CSS uses the plain name (`--ink-1`),
+which is the one for the ground the part stands on:
+
+- paper, unless an ancestor says `data-ground="film"`;
+- film inside `data-ground="film"`: the film viewer says it, so every
+  layer and HUD in it is drawn in on-film values with no rule of its own;
+- paper again inside `data-ground="paper"`, for a paper label laid on a
+  film.
+
+The inks, the lines, lumen, the focus ring and the confidence colours
+follow the ground. `tokens.test.ts` holds the two grounds to the same
+names, and `contrast.test.ts` holds every ink and every confidence
+colour to its contrast on its own ground.
+
+What floats (a popover, a sheet, a toast, a tooltip, a label on a film)
+is paper with a `--keyline` round it. Nothing has a shadow, nothing is
+glass and nothing glows: `--lift-*`, `--glass-blur` and `--glow-lumen`
+are kept by name and say `none`.
+
 ## Colour and type
 
-Light means go, colour means data. Lumen (`--lumen-*`) is only for the
-next action. The only hues are the confidence colours, and each comes
-with a line pattern, a glyph and a word.
+Ink means go, colour means data. Lumen (`--lumen-*`) is only for the
+next action: on paper it is ink, and the lit button is the one solid ink
+thing on a page; on a film it is white. It has no hue. The only hues are
+the confidence colours, and each comes with a line pattern, a glyph and
+a word.
 
 | Family | Token | For |
 |---|---|---|
@@ -61,7 +90,13 @@ weighs what theirs does: set `--icon-size` to the hint's font size and
 Put `data-conf` on a vertebra, a rung or a chip, and read the
 properties `confidence.css` sets. Everything that differs from one state
 to the next is one of them, so no part writes a `[data-conf]` rule of
-its own:
+its own.
+
+Each state's colour has an on-paper value and an on-film value, and
+`--c` is worked out where `data-conf` stands. So put `data-conf` inside
+the ground the mark is drawn on: on the vertebra's group inside the
+film, on the rung on paper. One `data-conf` on a box that holds both a
+film and a paper part would colour both for paper.
 
 ```css
 .outline-casing {
@@ -77,16 +112,14 @@ its own:
   opacity: var(--conf-fade);
 }
 
-.rung {
-  opacity: var(--conf-rung-fade);
-}
+/* A rung is a ruled row on paper. Its rule is --rule whatever the state. */
 .rung-bar {
   width: var(--conf-bar-w);
   background: var(--conf-bar);
+  opacity: var(--conf-rung-fade);
 }
-.rung-frame {
-  border: var(--conf-frame-w) var(--conf-edge) var(--c);
-  background: var(--conf-wash);
+.rung-name {
+  opacity: var(--conf-rung-fade);
 }
 
 .legend-chip-line {
@@ -95,7 +128,8 @@ its own:
 ```
 
 What a part adds for itself is what does not depend on the state: the
-5 px casing under an outline, a rung's size, how a selected rung shows.
+5 px casing under an outline, a rung's size and its rule, how a selected
+rung shows.
 
 `<ConfidenceGlyph conf="look" />` is the glyph as a 12 px picture.
 Inside another SVG, draw `<ConfidenceGlyphShapes conf="look" cased />` in
@@ -130,9 +164,10 @@ glyph, a whole disc under one with a hollow, so no bone shows through.
 
 ## Focus
 
-Every focusable thing gets a 2 px lumen ring with a 2 px dark gap from
-`base.css`, with no rule of its own. The ring is an outline and a shadow
-in the same place.
+Every focusable thing gets a 2 px ring with a 2 px gap from `base.css`,
+with no rule of its own: ink with a paper gap on paper, white with a
+black gap on a film. The ring is an outline and a shadow in the same
+place.
 
 A part may replace the ring with a focus of its own that shows as
 plainly, and then turns both off itself (`outline: none; box-shadow:

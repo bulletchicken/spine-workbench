@@ -25,7 +25,7 @@ const page: GalleryPage = {
     {
       name: 'An outline on a film, in each state',
       show: () => (
-        <svg className="look-gallery-film" width="250" height="236" viewBox="0 0 250 236">
+        <svg className="look-gallery-film" data-ground="film" width="250" height="236" viewBox="0 0 250 236">
           <rect className="look-gallery-film-soft" width="250" height="236" />
           <rect className="look-gallery-film-bone" x="92" y="8" width="64" height="220" rx="6" />
           <rect className="look-gallery-film-bright" x="92" y="96" width="64" height="44" />
@@ -45,13 +45,13 @@ const page: GalleryPage = {
       ),
     },
     {
-      name: 'A rung of the ladder, in each state',
+      name: 'A rung of the ladder, in each state, with one chosen',
       show: () => (
         <div className="look-gallery-rungs">
           {STATES.map(({ conf, level }) => (
-            <div key={conf} className="look-gallery-rung" data-conf={conf}>
+            <div key={conf} className="look-gallery-rung" data-conf={conf} data-chosen={conf === 'needs' ? 'yes' : 'no'}>
               <i className="look-gallery-rung-bar" />
-              <i className="look-gallery-rung-frame" />
+              <i className="look-gallery-rung-slice" data-ground="film" />
               <span className="look-gallery-rung-name">
                 <ConfidenceGlyph conf={conf} />
                 {level}
@@ -62,7 +62,7 @@ const page: GalleryPage = {
       ),
     },
     {
-      name: 'A legend chip, in each counted state',
+      name: 'The legend, a cell for each counted state',
       show: () => (
         <div className="look-gallery-legend">
           {STATES.filter(({ conf }) => conf !== 'sacrum').map(({ conf, word, count }) => (

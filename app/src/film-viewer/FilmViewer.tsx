@@ -284,6 +284,7 @@ export function FilmViewer({
     <div
       ref={root}
       className="film-viewer"
+      data-ground="film"
       style={style}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}

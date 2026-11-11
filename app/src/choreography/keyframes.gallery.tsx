@@ -33,23 +33,24 @@ const page: GalleryPage = {
   part: 'The four shared keyframes',
   states: [
     {
-      name: 'breathe: one breath, three lights',
+      name: 'breathe: the ring on a film, beside what stands still on paper',
       show: () => (
         <div className="motion-gallery-row">
+          <svg className="motion-gallery-film" data-ground="film" width="96" height="72" viewBox="0 0 96 72">
+            <rect className="motion-gallery-bone" x="18" y="8" width="60" height="56" rx="5" />
+            <circle className="motion-gallery-ring-casing" cx="48" cy="36" r="13" />
+            <circle className="motion-gallery-ring" cx="48" cy="36" r="13" />
+          </svg>
           <span className="motion-gallery-lit">Choose films</span>
           <div className="motion-gallery-choices">
             <span className="motion-gallery-choice">The upper one</span>
             <span className="motion-gallery-choice">The lower one</span>
           </div>
-          <svg className="motion-gallery-film" width="96" height="72" viewBox="0 0 96 72">
-            <rect className="motion-gallery-bone" x="18" y="8" width="60" height="56" rx="5" />
-            <circle className="motion-gallery-ring" cx="48" cy="36" r="13" />
-          </svg>
         </div>
       ),
     },
     {
-      name: 'settle: guide lines, then cards',
+      name: 'settle: guide lines, then sections',
       show: () => (
         <Replayed>
           <div className="motion-gallery-guide">
@@ -91,18 +92,20 @@ const page: GalleryPage = {
       name: 'flash: a new outline, a new rung',
       show: () => (
         <Replayed>
-          <div className="motion-gallery-row" data-conf="byyou">
-            <svg className="motion-gallery-film" width="120" height="72" viewBox="0 0 120 72">
+          <div className="motion-gallery-row">
+            {/* The state stands inside the ground it is drawn on, so each takes that ground's colour. */}
+            <svg className="motion-gallery-film" data-ground="film" data-conf="byyou" width="120" height="72" viewBox="0 0 120 72">
               <rect className="motion-gallery-bone" x="22" y="6" width="76" height="60" rx="5" />
               <path className="motion-gallery-outline-casing" d="M30 16L88 13L90 31L32 34Z" />
               <path className="motion-gallery-outline" d="M30 16L88 13L90 31L32 34Z" />
               <path className="motion-gallery-outline-casing" d="M32 40L90 37L92 55L34 58Z" />
               <path className="motion-gallery-outline" d="M32 40L90 37L92 55L34 58Z" />
             </svg>
-            <div className="motion-gallery-rungs">
+            <div className="motion-gallery-rungs" data-conf="byyou">
               {NEW_LEVELS.map((level) => (
                 <div key={level} className="motion-gallery-rung">
-                  <i className="motion-gallery-rung-frame" />
+                  <i className="motion-gallery-rung-bar" />
+                  <i className="motion-gallery-rung-slice" data-ground="film" />
                   <span className="motion-gallery-rung-name">
                     <ConfidenceGlyph conf="byyou" />
                     {level}

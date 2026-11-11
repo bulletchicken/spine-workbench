@@ -1,4 +1,5 @@
-/* For the Toast page: a toast held at its full width, and the foot of a bench.
+/* For the Toast page: a toast held at its full width, and the foot of a bench,
+   where a toast is most often laid over a film.
    Gallery only: nothing here is part of a block, and none of it is in a production build. */
 
 .blocks-gallery-held-toast {
@@ -12,9 +13,11 @@
   flex: 1;
   width: min(100%, 760px);
   height: 220px;
-  border: 1px solid var(--line-1);
-  border-radius: var(--r-2);
-  background: var(--room-0);
+  border: 1px solid var(--rule);
+  background:
+    linear-gradient(var(--room-0), var(--room-0)) 0 0 / 100% 68px no-repeat,
+    linear-gradient(var(--rule), var(--rule)) 0 68px / 100% 1px no-repeat,
+    var(--well);
 }
 
 .blocks-gallery-toast-asks {

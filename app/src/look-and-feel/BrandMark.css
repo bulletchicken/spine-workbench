@@ -1,5 +1,5 @@
-/* Three vertebrae on a small dark plate. Drawn in ink: lumen is kept for
-   the next action, so the mark never competes with the one lit thing. */
+/* Three vertebrae on a small paper plate with an ink line round it. Drawn in
+   ink and never solid: the one solid thing on a page is the next action. */
 :where(.brand-mark) {
   flex: none;
   width: 26px;
@@ -7,9 +7,9 @@
 }
 
 .brand-mark-plate {
-  fill: var(--room-2);
-  stroke: var(--line-3);
-  stroke-width: 1px;
+  fill: var(--room-0);
+  stroke: var(--ink-1);
+  stroke-width: 1.2px;
 }
 
 .brand-mark-body {

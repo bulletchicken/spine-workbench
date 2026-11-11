@@ -10,8 +10,8 @@ draws. Each has a page in the gallery (`?gallery` in development).
 | `IconButton` | `IconButton.tsx` | an icon with a spoken name and a tooltip that can name the action a press would do |
 | `Kbd` | `Kbd.tsx` | a key hint, written as this machine's keyboard prints it (⌘Z or Ctrl+Z) |
 | `Tooltip` | `Tooltip.tsx` | a few words beside a control, on hover and on keyboard focus |
-| `Popover` | `Popover.tsx` | a glass panel beside the control that opened it; Escape, a press outside or focus moving on closes it |
-| `Dialog` | `Dialog.tsx` | a glass sheet over a veil, with focus kept inside it and every key kept from what is behind it |
+| `Popover` | `Popover.tsx` | a paper panel with a keyline beside the control that opened it; Escape, a press outside or focus moving on closes it |
+| `Dialog` | `Dialog.tsx` | a sheet of paper over a veil, with focus kept inside it and every key kept from what is behind it |
 | `Slider` | `Slider.tsx` | a slider cut into named parts, for the pointer and the keyboard |
 | `Toasts`, `say()` | `toast/` | one line at the foot of the bench saying what just happened, with at most one action |
 | `useKey` | `keyboard/` | how a part answers keys |

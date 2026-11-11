@@ -1,4 +1,5 @@
-/* For the Button page: quiet actions as the guide lays them out.
+/* For the Button page: quiet actions as the guide lays them out, and a row
+   that stands a button of each kind beside the lit one.
    Gallery only: nothing here is part of a block, and none of it is in a production build. */
 
 .blocks-gallery-quiet {
@@ -8,4 +9,11 @@
   gap: var(--s-2);
   max-width: 320px;
   margin: 0 -10px;
+}
+
+.blocks-gallery-beside-lit {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-3);
 }

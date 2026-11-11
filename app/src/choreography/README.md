@@ -1,8 +1,9 @@
 # choreography
 
-How things move. Light arrives, cameras move, nothing bounces for fun:
-things appear by brightening, and exactly one thing loops, the lit next
-action. Every duration and curve is a custom property, from
+How things move. Things arrive, cameras move, nothing bounces for fun:
+things appear by fading in, and exactly one thing loops, the ring on a
+film that marks where the next action will land. Nothing on paper loops
+and nothing glows. Every duration and curve is a custom property, from
 `look-and-feel/tokens.css` or `look-and-feel/named-timings.css`; no
 component's CSS holds a literal time.
 
@@ -35,9 +36,9 @@ Keyframe names are global, so a component uses these by name.
   animation-delay: calc(var(--i, 0) * var(--stagger));
 }
 
-/* flash: a new outline or a new rung, lit and then fading to its own colours. */
+/* flash: a new outline or a new rung, marked and then fading to its own colours. */
 .outline.is-new,
-.rung-frame.is-new {
+.rung-slice.is-new {
   animation: flash var(--t-slow) var(--ease-out);
 }
 ```
@@ -48,31 +49,37 @@ sets `--roll`; a name drawn on a film sets it in film pixels.
 
 `flash` goes on the one thing that is new and draws itself: the
 outline's own path, which reads the stroke and fill, or the rung's own
-frame, which reads the background. It never goes on a group, or on a box
-with drawings inside it. Fill, stroke and stroke-width inherit, so
-anything inside that leaves one unsaid would be drawn white and 6 px
-wide while the flash runs. Every sign in `look-and-feel/` states its own
-fill and stroke, so a glyph beside a flashing frame keeps its shape; a
-shape a part draws for itself should do the same.
+slice of the strip, which reads the background. It never goes on a
+group, or on a box with drawings inside it. Fill, stroke and
+stroke-width inherit, so anything inside that leaves one unsaid would be
+drawn in the flash's colour and 6 px wide while it runs. Every sign in
+`look-and-feel/` states its own fill and stroke, so a glyph beside a
+flashing row keeps its shape; a shape a part draws for itself should do
+the same.
+
+What `flash` starts from follows the ground the part stands on: white
+inside `data-ground="film"`, a wash of ink on paper. A part never names
+either.
 
 `breathe` is different. It moves one number, `--breath`, from 0 to 1 and
-back, and each lit part turns that number into its own light. A part
-takes the whole animation, never the keyframes' name:
+back, and the ring on a film turns that number into how strongly it
+shows. It takes the whole animation, never the keyframes' name:
 
 ```css
-.lit-button {
-  box-shadow: 0 0 calc(18px + 16px * var(--breath)) rgb(var(--breath-light) / calc(0.3 + 0.25 * var(--breath)));
+.hint-ring {
+  stroke: var(--lumen-hi);
+  stroke-opacity: calc(0.55 + 0.45 * var(--breath));
   animation: var(--breathing);
 }
 ```
 
-- `--breath-light` is the colour of the breathing light, set once in
-  `breathe.css`: the blue of `--lumen-glow` as bare channels, so a part
-  gives it a strength that follows the breath. No part writes that blue
-  as a literal.
+- Only the ring breathes, and only on a film, where a still mark can be
+  lost among bone. On paper the next action is the one solid ink button
+  and a pair of choices is ink-lined; both stand still.
+- The breath changes a line's strength. It never changes a shadow:
+  nothing in the app glows, and `breathe.css` names no colour.
 - `--breath` does not inherit. A box that takes the animation breathes
-  alone; what is inside it stays at rest. So each thing that glows takes
-  the animation itself: each card of a pair of choices, not the pair.
+  alone; what is inside it stays at rest.
 - `--breathing` is `none` under reduced motion, and a part that is not
   breathing rests at `--breath: 0.5`. So no part needs a rule of its own
   to stop the loop.
@@ -123,9 +130,9 @@ the system asks for it or the app does. Under it:
 |---|---|
 | the tokens | `--t-quick` and `--t-base` 1 ms, `--t-calm` 120 ms, `--t-slow` and `--t-cinema` 160 ms, `--stagger` 0 |
 | every named timing | 1 ms, or 0 for a gap; how long a toast stays is not motion and keeps its 4.6 s |
-| `breathe` | does not run; lit parts hold half a breath |
-| `settle` | brightens without rising |
-| bays and cameras | land at once, with no glide; the shrunken tokens are for what brightens or fades |
+| `breathe` | does not run; the ring holds half a breath |
+| `settle` | fades in without rising |
+| bays and cameras | land at once, with no glide; the shrunken tokens are for what fades in or out |
 
 The system's own setting has the same effect through a media query, with
 no attribute at all. A component that loops something of its own (a busy

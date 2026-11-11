@@ -8,16 +8,17 @@
   /* Where it arrives from: 4px nearer the control than where it rests. */
   --from-x: 0px;
   --from-y: 0px;
-  /* A key hint in a tooltip sits on --room-4, where --ink-3 is too faint for 11 px type. */
+  /* A key hint in a tooltip is set a step darker than a caption, to be read at a glance. */
   --kbd-ink: var(--ink-2);
   position: absolute;
   z-index: 5;
   box-sizing: border-box;
   width: max-content;
   padding: 6px 10px;
-  border: 1px solid var(--line-2);
+  /* Paper with a keyline, like everything that floats. */
+  border: 1px solid var(--keyline);
   border-radius: var(--r-2);
-  background: var(--room-4);
+  background: var(--room-0);
   color: var(--ink-1);
   font: 400 var(--text-small) / var(--lh-micro) var(--font-ui);
   text-align: left;
@@ -40,7 +41,6 @@
   --gap: var(--s-3);
   width: 236px;
   padding: 10px var(--s-3);
-  box-shadow: var(--lift-2);
   color: var(--ink-2);
   line-height: 17px;
   white-space: normal;

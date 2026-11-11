@@ -13,12 +13,12 @@ the pull request that makes it.
 | The view figures are closed shapes whose spine runs down through the legs. | The figures stand on open legs, the spine ends at the pelvis, the side view has a nose, and the two bends are the front figure bent as one arc. | Four views that read as one person in four poses, and a side view that cannot be taken for a front. |
 | A row that warns and a row that is wrong share the warning triangle, told apart by colour. | A wrong row wears a cross in a ring; the triangle is kept for warnings. | Nothing rests on hue alone. |
 | A busy row spins the dotted ring of a waiting row. | Busy is an arc on a faint ring; waiting is a ring of dots. | The two are told apart when nothing moves, as under reduced motion. |
-| The waiting sign is drawn in `--ink-4`. | It is drawn in `--ink-3`. | `--ink-4` is 2.9:1 on a card, under the 3:1 a sign needs. |
-| The brand mark is tinted pale blue. | It is drawn in ink. | Lumen is kept for the next action; the chrome is neutral. |
+| The waiting sign is drawn in `--ink-4`. | It is drawn in `--ink-3`. | `--ink-4` is 2.9:1 on a row under the pointer, under the 3:1 a sign needs. |
 | A confidence glyph on a film has no casing. | It has the same dark casing as the outline and the name beside it: a line round a solid glyph, a whole disc under the two with a hollow. | It must read on bright bone, and no bone may show through a ring. |
 | Draws the dots of a needs-you outline `1.5 5.5`, though its token `--dash-needs` says `1.5 5`. | `confidence.css` writes `1.5 5.5`, as the mock draws it and the design's table says. The token is kept as the design has it, and nothing reads it. | The tokens are not edited, and at 3.2 px wide the round dots need the half pixel to stay apart. |
 | Writes `←`, `→` and `⌘` in key hints as characters, in whatever face the system has. | A key hint draws an arrow key, and Command, Shift and Option, as icons. | The app's typefaces have no left or right arrow and none of those signs, so as characters they would change size and weight from one system to the next. |
 | The focus ring is a shadow. | The ring is the token's shadow and an outline in the same place. | A control with a shadow of its own keeps its ring, and forced colours still draw one. |
+| The ring, the ghost line and the centre line take their dark casing from a tight `drop-shadow`. | Each has a casing line drawn under it, as an outline has. | One way of casing a mark, and no filter on a film's layer. |
 | The boundary wand's gap line touches the two bodies; the wand's sparks are uneven. | The drawn icons are redrawn on one 20 px grid with one 1.6 px line. | One family at one weight. |
 | Draws its everyday icons (tick, close, undo, play and the rest) by hand in its sprite. | Takes them from Lucide, as the design language asks. The three solid playback signs are drawn at four fifths. | The mock may load nothing; the app installs the icon package. A solid shape weighs more than a line drawing of the same size. |
 
@@ -26,8 +26,9 @@ the pull request that makes it.
 
 | The mock | The app | Why |
 |---|---|---|
-| Three keyframes breathe: the lit button's, the choice pair's and the ring's. | One, `breathe`, moves a number from 0 to 1 and each lit part turns it into its own light. | One loop, stopped in one place under reduced motion. |
-| Under reduced motion the ring rests at full strength and a settling line still rises. | Every lit part rests at half a breath, and a settling line only brightens. | Light still arrives; nothing loops and nothing travels. |
+| The ring's loop is a keyframe of its own, `ring`. | `breathe` moves a number from 0 to 1 and the ring turns it into how strongly its line shows. | One loop, stopped in one place under reduced motion, and a breath that names no colour. |
+| Under reduced motion the ring rests at full strength and a settling line still rises. | The ring rests at half a breath, and a settling line only fades in. | Things still arrive; nothing loops and nothing travels. |
+| A new rung's slice of the strip flashes white through a keyframe of its own. | One `flash` serves an outline, a slice and a row, and starts from white on a film and from a wash of ink on paper. | The ground decides, not the part. |
 | A cascade's delay is set on each element by script. | Script writes each item's place, `--i`, and CSS works out the delay from a token. | Timing is never set from script, so reduced motion closes every gap. |
 | The film is moved by a CSS transform with a transition. | The camera is moved by script on the one loop, with the same token duration and curve. | A real film is about 3000 by 7000 pixels; the app draws it on a canvas the size of its viewport. |
 

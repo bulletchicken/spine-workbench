@@ -1,27 +1,39 @@
-/* The sample films' gallery page: four bays of the mock's 04-up, each a
-   film 560 pixels tall in its well. */
+/* The sample films' gallery page: four bays of the mock's 04-up. The bays
+   touch, with a hairline between them and one under their names; each
+   film is 560 pixels tall in its black well. */
 
 .sample-films {
-  display: flex;
-  gap: 27px;
+  display: inline-flex;
   align-items: flex-start;
+  border: 1px solid var(--rule);
 }
 
 .sample-film {
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+}
+
+.sample-film + .sample-film {
+  border-left: 1px solid var(--rule);
 }
 
 .sample-film figcaption {
-  font: 600 15px/1 var(--font-ui);
+  display: flex;
+  align-items: center;
+  height: var(--bay-head);
+  padding: 0 var(--s-3);
+  border-bottom: 1px solid var(--rule);
+  font: 600 14px/1 var(--font-ui);
   color: var(--ink-1);
 }
 
+/* The well is the film's own box and the room round it: black to the bay's edges. */
 .sample-film canvas {
   display: block;
+  box-sizing: content-box;
   height: 560px;
   width: auto;
+  padding: var(--s-5) var(--s-4);
   background: var(--well);
 }

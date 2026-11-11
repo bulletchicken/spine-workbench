@@ -65,7 +65,7 @@ describe('reduced motion, in the stylesheets', () => {
     expect(BREATHE.byApp['--breathing']).toBe('none');
   });
 
-  it('lets nothing travel: a settling line only brightens', () => {
+  it('lets nothing travel: a settling line only fades in', () => {
     expect(SETTLE.normally['--settle-rise']).toBe('8px');
     expect(SETTLE.byApp['--settle-rise']).toBe('0px');
   });

@@ -12,7 +12,7 @@ const STATES: readonly { conf: Conf; word: GlossaryTerm | 'Not counted' }[] = [
   { conf: 'sacrum', word: 'Not counted' },
 ];
 
-/** What a glyph may lie on: bright bone, bone, and the dark of the film around it. */
+/** What a glyph on a film may lie on: bright bone, bone, and the dark of the film around it. */
 const GROUNDS: readonly { ground: string; levels: readonly string[] }[] = [
   { ground: 'look-gallery-film-bright', levels: ['T3', 'T4', 'T5', 'T6', 'T7'] },
   { ground: 'look-gallery-film-bone', levels: ['T8', 'T9', 'T10', 'T11', 'T12'] },
@@ -24,7 +24,7 @@ const page: GalleryPage = {
   part: 'ConfidenceGlyph',
   states: [
     {
-      name: 'The five glyphs, each with its word',
+      name: 'The five glyphs on paper, each with its word',
       show: () => (
         <div className="look-gallery-set">
           {STATES.map(({ conf, word }) => (
@@ -52,7 +52,7 @@ const page: GalleryPage = {
     {
       name: 'On a film, cased, beside a level name',
       show: () => (
-        <svg className="look-gallery-film" width="330" height="114" viewBox="0 0 330 114">
+        <svg className="look-gallery-film" data-ground="film" width="330" height="114" viewBox="0 0 330 114">
           {GROUNDS.map(({ ground, levels }, row) => (
             <g key={ground} transform={`translate(0 ${String(row * 38)})`}>
               <rect className={ground} width="330" height="38" />

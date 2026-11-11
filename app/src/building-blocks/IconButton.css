@@ -49,18 +49,6 @@
   color: var(--ink-1);
 }
 
-/* A round button sits on glass, where --room-3 hardly shows: it lights a step further,
-   and its pressed face is a step past that, so held down never looks merely hovered. */
-.icon-button[data-shape='round']:hover:not([aria-disabled='true']),
-.icon-button[data-shape='round'][aria-expanded='true'] {
-  background: var(--room-4);
-}
-
-.icon-button[data-shape='round']:active:not([aria-disabled='true']),
-.icon-button[data-shape='round'][aria-pressed='true'] {
-  background: color-mix(in srgb, var(--room-4), var(--ink-1) 10%);
-}
-
 .icon-button:active:not([aria-disabled='true']) {
   transform: translateY(1px);
 }

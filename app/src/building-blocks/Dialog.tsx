@@ -24,7 +24,7 @@ function stopsIn(panel: HTMLElement): HTMLElement[] {
 }
 
 /**
- * A glass sheet over a veil, for the one thing that must be answered
+ * A sheet of paper over a veil, for the one thing that must be answered
  * before going on.
  *
  * The veil covers the dialog's nearest positioned ancestor and nothing
