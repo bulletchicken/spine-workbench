@@ -42,12 +42,27 @@ impl Fft2 {
     /// The unnormalised forward transform: `F(k, l) = Σ f(x, y) e^(−2πi(kx/W + ly/H))`.
     /// `None` unless there is one value per grid point.
     pub fn forward(&self, values: &[Complex<f32>]) -> Option<Vec<Complex<f32>>> {
-        self.transform(values, &self.row_forward, &self.column_forward, 1.0)
+        if values.len() != self.width.checked_mul(self.height)? {
+            return None;
+        }
+        self.forward_owned(values.to_vec())
     }
 
     /// The inverse transform, divided by `W · H` so that `inverse(forward(f)) = f`.
     /// `None` unless there is one value per grid point.
     pub fn inverse(&self, values: &[Complex<f32>]) -> Option<Vec<Complex<f32>>> {
+        if values.len() != self.width.checked_mul(self.height)? {
+            return None;
+        }
+        self.inverse_owned(values.to_vec())
+    }
+
+    /// Transform a temporary spectrum without copying its full grid first.
+    pub(crate) fn forward_owned(&self, values: Vec<Complex<f32>>) -> Option<Vec<Complex<f32>>> {
+        self.transform(values, &self.row_forward, &self.column_forward, 1.0)
+    }
+
+    pub(crate) fn inverse_owned(&self, values: Vec<Complex<f32>>) -> Option<Vec<Complex<f32>>> {
         let scale = 1.0 / (self.width * self.height) as f32;
         self.transform(values, &self.row_inverse, &self.column_inverse, scale)
     }
@@ -56,17 +71,17 @@ impl Fft2 {
     /// back, then multiplies by `scale`.
     fn transform(
         &self,
-        values: &[Complex<f32>],
+        mut data: Vec<Complex<f32>>,
         row_plan: &Arc<dyn Fft<f32>>,
         column_plan: &Arc<dyn Fft<f32>>,
         scale: f32,
     ) -> Option<Vec<Complex<f32>>> {
         let (width, height) = (self.width, self.height);
-        if values.len() != width.checked_mul(height)? {
+        if data.len() != width.checked_mul(height)? {
             return None;
         }
-        if values.is_empty() {
-            return Some(Vec::new());
+        if data.is_empty() {
+            return Some(data);
         }
         let mut scratch = vec![
             Complex::new(0.0, 0.0);
@@ -74,11 +89,10 @@ impl Fft2 {
                 .get_inplace_scratch_len()
                 .max(column_plan.get_inplace_scratch_len())
         ];
-        let mut data = values.to_vec();
         for row in data.chunks_mut(width) {
             row_plan.process_with_scratch(row, &mut scratch);
         }
-        let mut turned = vec![Complex::new(0.0, 0.0); values.len()];
+        let mut turned = vec![Complex::new(0.0, 0.0); data.len()];
         transpose(&data, &mut turned, width, height);
         for column in turned.chunks_mut(height) {
             column_plan.process_with_scratch(column, &mut scratch);

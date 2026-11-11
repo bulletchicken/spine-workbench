@@ -10,6 +10,7 @@ use shapes::film::{
     DisplayWindow, FilmFacts, FilmKind, PixelValues, SourceFormat, WindowFunction, WindowSource,
 };
 use shapes::film_geometry::QuarterTurns;
+use shapes::levels::Level;
 use shapes::made_up::{FilmAnswer, MadeUpRecipe, RecipeName, Tier, TrueMarks};
 use shapes::pixels::Px;
 use shapes::watch_frames::{MapKind, WatchFrame};
@@ -134,12 +135,51 @@ fn check_maps(evidence: &FilmEvidence) {
     }
 }
 
-// Not met yet, and kept at the specified tolerances so the gap stays in
-// view. Measured on six made-up films: front centre lines hold on mild
-// curves (0.3 mm mean on a straight spine, 1.3 mm on a 40 degree curve) and
-// miss on severe ones; the side film's path leaves the spine through the
-// chest; about half the disc gaps sit within tolerance. Run it with
-// `cargo test -p auto-pass -- --ignored` when the stages change.
+#[test]
+fn side_paths_stay_on_the_column_across_recipes_seeds_and_turns() {
+    for seed in [11, 71] {
+        for (turns, name) in [
+            RecipeName::Straight,
+            RecipeName::RightThoracic40,
+            RecipeName::DoubleMajor55To45,
+            RecipeName::LumbarLeft30,
+        ]
+        .into_iter()
+        .enumerate()
+        {
+            let (film, key) = film(name, seed, Tier::T1, FilmKind::Side, turns as u8);
+            let evidence = evidence::build(&film, &key.geometry, None).expect("side evidence");
+            let line = centre_line::trace(&evidence, &key.geometry).expect("side centre line");
+            let distances: Vec<_> = key
+                .vertebrae
+                .iter()
+                .filter(|v| Level::MEASURED.contains(&v.level))
+                .map(|v| {
+                    let (sup, inf) = endplates(&v.marks);
+                    distance_to_line(midpoint(sup, inf), &line, 0.5)
+                })
+                .collect();
+            assert_eq!(distances.len(), 17);
+            let mean = distances.iter().sum::<f64>() / distances.len() as f64;
+            // The product's side-path target is a mean below 3 mm over
+            // the 17 measured bodies, independently positioned by the key.
+            assert!(
+                mean < 3.0,
+                "{name:?}, seed {seed}, turn {turns}: mean distance {mean:.3} mm"
+            );
+        }
+    }
+}
+
+// Still below the original tolerances. In the six-film order below,
+// measured centre mean / maximum distances in mm are:
+// 0.338 / 2.148, 1.257 / 3.149, 1.836 / 3.435, 1.443 / 7.512,
+// 1.369 / 3.637 and 4.641 / 13.238. Disc matches at the unchanged
+// tolerances are respectively 10, 12, 14, 12, 11 and 10 out of 17.
+// The side path now follows the thorax, but its original straight-film
+// bounds and the 95% disc-position gate still fail. The separate side
+// regression above uses the product's 3 mm mean target over T1-L5.
+// Run with `cargo test -p auto-pass -- --ignored` when the stages change.
 #[test]
 #[ignore = "the made-up-film accuracy targets are not met yet"]
 fn centre_lines_and_disc_gaps_follow_the_made_up_answer_keys() {

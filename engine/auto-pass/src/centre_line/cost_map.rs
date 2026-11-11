@@ -8,7 +8,7 @@ use darkroom::sampling::bilinear;
 use shapes::auto_pass::{PassWarning, PassWarningCode};
 use shapes::errors::{EngineError, ErrorCode};
 use shapes::film::FilmKind;
-use shapes::film_geometry::QuarterTurns;
+use shapes::film_geometry::{FilmGeometry, ImageRight, QuarterTurns};
 use shapes::pixels::{Px, PxRect};
 
 use super::smooth::Point;
@@ -114,10 +114,85 @@ fn profile_blur(values: &[f32], sigma: f64) -> Vec<f32> {
         .to_vec()
 }
 
+// A visible broad head or a body reaching the lower field edges does not
+// imply that the neck is cropped. Side films require a real neck valley
+// followed by a shoulder rise; a uniform cropped silhouette has neither.
+fn neck_hint(
+    widths: &[f32],
+    field_top: usize,
+    field_bottom: usize,
+    spacing: f64,
+    body_fills: bool,
+    side: bool,
+) -> (Option<f64>, bool) {
+    let upper_end = (field_top + (field_bottom - field_top) * 2 / 5).min(widths.len() - 1);
+    let max_upper = widths[field_top..=upper_end]
+        .iter()
+        .copied()
+        .fold(0.0f32, f32::max);
+    let mut top_cropped = body_fills || widths[field_top] >= 0.6 * max_upper;
+    let neck_y = if top_cropped && !side {
+        None
+    } else {
+        let neck_end = field_top + (field_bottom - field_top) * 3 / 10;
+        let neck = (field_top..=neck_end)
+            .min_by(|&a, &b| widths[a].total_cmp(&widths[b]))
+            .unwrap_or(field_top);
+        let shoulder = (neck..=upper_end)
+            .find(|&y| widths[y] >= 0.85 * max_upper)
+            .unwrap_or(upper_end);
+        if side
+            && (widths[neck] > 0.9 * max_upper
+                || shoulder.saturating_sub(neck) as f64 * spacing < 5.0)
+        {
+            None
+        } else {
+            (neck + 1..=shoulder)
+                .max_by(|&a, &b| {
+                    (widths[a] - widths[a - 1]).total_cmp(&(widths[b] - widths[b - 1]))
+                })
+                .map(|y| y as f64 * spacing)
+        }
+    };
+    if side {
+        top_cropped = neck_y.is_none();
+    }
+    (neck_y, top_cropped)
+}
+
+// A front crop needs the visible head-to-neck fall as well as the
+// shoulder rise. This supplements, and never overrides, neck_hint's
+// existing refusal of cropped or body-filled front fields.
+fn visible_front_neck(widths: &[f32], top: usize, bottom: usize, spacing: f64) -> Option<f64> {
+    let upper_end = (top + (bottom - top) * 2 / 5).min(widths.len() - 1);
+    let max_upper = widths[top..=upper_end]
+        .iter()
+        .copied()
+        .fold(0.0f32, f32::max);
+    let neck_end = top + (bottom - top) * 3 / 10;
+    let neck = (top..=neck_end)
+        .min_by(|&a, &b| widths[a].total_cmp(&widths[b]))
+        .unwrap_or(top);
+    let head = widths[top..=neck].iter().copied().fold(0.0f32, f32::max);
+    let shoulder = (neck..=upper_end)
+        .find(|&y| widths[y] >= 0.85 * max_upper)
+        .unwrap_or(upper_end);
+    if neck == top
+        || head * 0.9 < widths[neck]
+        || widths[neck] > 0.9 * max_upper
+        || shoulder.saturating_sub(neck) as f64 * spacing < 5.0
+    {
+        return None;
+    }
+    (neck + 1..=shoulder)
+        .max_by(|&a, &b| (widths[a] - widths[a - 1]).total_cmp(&(widths[b] - widths[b - 1])))
+        .map(|y| y as f64 * spacing)
+}
+
 impl CostMap {
     /// A bounded image grid (at least 2 units/cell), with the fine image
     /// retained at at least 1 unit/cell for normal-profile refinement.
-    pub fn build(evidence: &FilmEvidence, turns: QuarterTurns) -> Result<Self, EngineError> {
+    pub fn build(evidence: &FilmEvidence, geometry: &FilmGeometry) -> Result<Self, EngineError> {
         let placement = evidence.image.placement();
         let placement_finite = [placement.origin, placement.step_across, placement.step_down]
             .iter()
@@ -143,7 +218,7 @@ impl CostMap {
                 "the evidence grid cannot be traced",
             ));
         }
-        let q = upright_turn(evidence, turns);
+        let q = upright_turn(evidence, geometry.quarter_turns);
         let fine_factor = (1.0 / mm).max(1.0);
         let coarse_factor = (2.0 / mm).max(1.0);
         let fine = turn(
@@ -199,28 +274,14 @@ impl CostMap {
             .unwrap_or(h - 1);
         let body_fills = left.iter().filter(|&&x| x < 2).count() > h / 2
             && right.iter().filter(|&&x| x + 2 >= w).count() > h / 2;
-        let upper_end = (field_top + (field_bottom - field_top) * 2 / 5).min(h - 1);
-        let max_upper = widths[field_top..=upper_end]
-            .iter()
-            .copied()
-            .fold(0.0f32, f32::max);
-        let top_cropped = body_fills || widths[field_top] >= 0.6 * max_upper;
-        let neck_y = if top_cropped {
-            None
-        } else {
-            let neck_end = field_top + (field_bottom - field_top) * 3 / 10;
-            let neck = (field_top..=neck_end)
-                .min_by(|&a, &b| widths[a].total_cmp(&widths[b]))
-                .unwrap_or(field_top);
-            let shoulder = (neck..=upper_end)
-                .find(|&y| widths[y] >= 0.85 * max_upper)
-                .unwrap_or(upper_end);
-            (neck + 1..=shoulder)
-                .max_by(|&a, &b| {
-                    (widths[a] - widths[a - 1]).total_cmp(&(widths[b] - widths[b - 1]))
-                })
-                .map(|y| y as f64 * spacing)
-        };
+        let (neck_y, top_cropped) = neck_hint(
+            &widths,
+            field_top,
+            field_bottom,
+            spacing,
+            body_fills,
+            evidence.film == FilmKind::Side,
+        );
         let q70 = percentile(image.pixels(), 0.70);
         let front = evidence.film != FilmKind::Side;
         let mut mass = vec![0.0f32; h];
@@ -254,11 +315,20 @@ impl CostMap {
             (Some(neck), Some(crest)) => ((crest - neck) / 470.0).clamp(0.45, 1.2),
             _ => 1.0,
         };
-        // End hints are deliberately not a hard crop: a shoulder edge or
-        // an early bone-mass rise can imitate the neck or iliac crest.
-        // Retain the complete usable field so that such a false hint does
-        // not remove vertebrae from the later chain search.
-        let start_row = field_top;
+        // A visible neck bounds the useful upper chain. A front crop
+        // additionally needs an uncropped field and a visible width fall
+        // above the neck. Keep the full lower field because an early
+        // bone-mass rise can imitate an iliac crest.
+        let start_neck = neck_y.filter(|_| {
+            !front || visible_front_neck(&widths, field_top, field_bottom, spacing).is_some()
+        });
+        let start_row = start_neck
+            .map(|neck| {
+                ((neck - 40.0 * size_factor) / spacing)
+                    .floor()
+                    .max(field_top as f64) as usize
+            })
+            .unwrap_or(field_top);
         let end_row = field_bottom;
         let requested_end =
             crest_y.map(|crest| crest + 0.25 * (crest - neck_y.unwrap_or(crest - 470.0)));
@@ -296,68 +366,106 @@ impl CostMap {
         let mut ridge = vec![0.0f32; n];
         let mut sigma = vec![12.0f32; n];
         let mut along = vec![Point { x: 0.0, y: 1.0 }; n];
-        let scales = if front {
-            [7.0, 8.75, 10.9, 13.7, 17.1, 21.4, 26.7]
-        } else {
-            [6.0, 7.5, 9.4, 11.7, 14.6, 18.3, 22.9]
-        };
-        let scale_factor = size_factor.clamp(0.6, 1.1);
-        let broad = shrink(&image, 2.0, 2.0).expect("positive shrink");
-        for scale in scales {
-            let scale = scale * scale_factor;
-            let (source, grid_spacing) = if scale < 10.0 {
-                (&image, spacing)
-            } else {
-                (&broad, 2.0 * spacing)
-            };
-            let hessian = Hessian::at_scale(source, scale / grid_spacing).expect("bounded scale");
-            let gradient =
-                normalised_gradient(source, scale / grid_spacing).expect("bounded scale");
-            for y in 0..h {
-                for x in 0..w {
-                    let i = y * w + x;
-                    let film = image.film_point(x as f64, y as f64);
-                    let (sx, sy) = source.image_point(film).expect("invertible placement");
-                    let sx = sx.clamp(0.0, f64::from(source.width() - 1));
-                    let sy = sy.clamp(0.0, f64::from(source.height() - 1));
-                    let sample =
-                        |map: &GreyImage<f32>| f64::from(bilinear(map, sx, sy).unwrap_or(0.0));
-                    let (a, b, c) = (
-                        sample(&hessian.xx),
-                        sample(&hessian.xy),
-                        sample(&hessian.yy),
-                    );
-                    let gap = libm::hypot(a - c, 2.0 * b);
-                    let lambda1 = 0.5 * (a + c - gap);
-                    let lambda2 = 0.5 * (a + c + gap);
-                    if lambda1 >= -1e-9 {
-                        continue;
-                    }
-                    let edge_ratio =
-                        libm::hypot(sample(&gradient.x), sample(&gradient.y)) / -lambda1;
-                    let response = -lambda1
-                        * libm::exp(-2.0 * lambda2 * lambda2 / (lambda1 * lambda1))
-                        * (1.0 - edge_ratio / 0.75).clamp(0.0, 1.0);
-                    if response > f64::from(ridge[i]) {
-                        ridge[i] = response as f32;
-                        sigma[i] = scale as f32;
-                        let theta = 0.5 * libm::atan2(2.0 * b, a - c);
-                        along[i] = Point {
-                            x: libm::cos(theta),
-                            y: libm::sin(theta),
-                        };
+        if front {
+            let scales = [7.0, 8.75, 10.9, 13.7, 17.1, 21.4, 26.7];
+            let scale_factor = size_factor.clamp(0.6, 1.1);
+            let broad = shrink(&image, 2.0, 2.0).expect("positive shrink");
+            for scale in scales {
+                let scale = scale * scale_factor;
+                let (source, grid_spacing) = if scale < 10.0 {
+                    (&image, spacing)
+                } else {
+                    (&broad, 2.0 * spacing)
+                };
+                let hessian =
+                    Hessian::at_scale(source, scale / grid_spacing).expect("bounded scale");
+                let gradient =
+                    normalised_gradient(source, scale / grid_spacing).expect("bounded scale");
+                for y in 0..h {
+                    for x in 0..w {
+                        let i = y * w + x;
+                        let film = image.film_point(x as f64, y as f64);
+                        let (sx, sy) = source.image_point(film).expect("invertible placement");
+                        let sx = sx.clamp(0.0, f64::from(source.width() - 1));
+                        let sy = sy.clamp(0.0, f64::from(source.height() - 1));
+                        let sample =
+                            |map: &GreyImage<f32>| f64::from(bilinear(map, sx, sy).unwrap_or(0.0));
+                        let (a, b, c) = (
+                            sample(&hessian.xx),
+                            sample(&hessian.xy),
+                            sample(&hessian.yy),
+                        );
+                        let gap = libm::hypot(a - c, 2.0 * b);
+                        let lambda1 = 0.5 * (a + c - gap);
+                        let lambda2 = 0.5 * (a + c + gap);
+                        if lambda1 >= -1e-9 {
+                            continue;
+                        }
+                        let edge_ratio =
+                            libm::hypot(sample(&gradient.x), sample(&gradient.y)) / -lambda1;
+                        let response = -lambda1
+                            * libm::exp(-2.0 * lambda2 * lambda2 / (lambda1 * lambda1))
+                            * (1.0 - edge_ratio / 0.75).clamp(0.0, 1.0);
+                        if response > f64::from(ridge[i]) {
+                            ridge[i] = response as f32;
+                            sigma[i] = scale as f32;
+                            let theta = 0.5 * libm::atan2(2.0 * b, a - c);
+                            along[i] = Point {
+                                x: libm::cos(theta),
+                                y: libm::sin(theta),
+                            };
+                        }
                     }
                 }
             }
         }
-        let normaliser = percentile(&ridge, 0.99).max(1e-6);
+        if !front {
+            let facing = match geometry.image_right {
+                Some(ImageRight::Anterior) => Some(true),
+                Some(ImageRight::Posterior) => Some(false),
+                _ => None,
+            };
+            if facing.is_none() {
+                warnings.push(warning(PassWarningCode::FacingUnknown, evidence.film));
+            }
+            let walls = super::body_walls::detect(&fine, mm * fine_factor, size_factor, facing);
+            let grid = |values| {
+                GreyImage::new(fine.width(), fine.height(), values, fine.placement())
+                    .expect("same grid")
+            };
+            ridge = shrink(
+                &grid(walls.strength),
+                coarse_factor / fine_factor,
+                coarse_factor / fine_factor,
+            )
+            .expect("positive shrink")
+            .pixels()
+            .to_vec();
+            sigma = shrink(
+                &grid(walls.half_width),
+                coarse_factor / fine_factor,
+                coarse_factor / fine_factor,
+            )
+            .expect("positive shrink")
+            .pixels()
+            .to_vec();
+            along.fill(Point { x: 0.0, y: 1.0 });
+        }
+        let normaliser = if front {
+            percentile(&ridge, 0.99).max(1e-6)
+        } else {
+            1.0
+        };
         let mut cost = vec![5.0f32; n];
         for y in 0..h {
             for x in 0..w {
                 let i = y * w + x;
                 ridge[i] = (ridge[i] / normaliser).min(1.0);
                 let side_border = (x.min(w - 1 - x) as f64) * spacing < 8.0;
-                if mask.pixels()[i] < 0.5 || side_border {
+                if mask.pixels()[i] < 0.5
+                    || side_border
+                    || (!front && (x < left[y] || x > right[y]))
+                {
                     continue;
                 }
                 cost[i] = 0.03 + ((1.0 - ridge[i]) * (1.0 - ridge[i]));
@@ -430,6 +538,58 @@ impl CostMap {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn a_visible_side_neck_survives_a_broad_head_and_lower_field_fill() {
+        let mut widths = vec![100.0f32; 100];
+        widths[..20].fill(70.0);
+        widths[20..31].fill(40.0);
+        widths[31..35].copy_from_slice(&[45.0, 55.0, 75.0, 90.0]);
+        // The largest expansion is at row 33, from 55 to 75 mm. A 70 mm
+        // head exceeds 60% of the 100 mm shoulders but is not a crop.
+        assert_eq!(
+            neck_hint(&widths, 0, 99, 1.0, true, true),
+            (Some(33.0), false)
+        );
+        // Front and bending views retain their existing cropped-field rule.
+        assert_eq!(neck_hint(&widths, 0, 99, 1.0, true, false), (None, true));
+    }
+
+    #[test]
+    fn a_uniform_side_crop_does_not_invent_a_neck() {
+        assert_eq!(
+            neck_hint(&[100.0; 100], 0, 99, 1.0, true, true),
+            (None, true)
+        );
+    }
+
+    #[test]
+    fn a_front_crop_needs_both_an_uncropped_field_and_a_visible_neck() {
+        let mut widths = vec![100.0f32; 300];
+        widths[..40].fill(50.0);
+        widths[40..61].fill(30.0);
+        widths[61..65].copy_from_slice(&[35.0, 45.0, 65.0, 90.0]);
+        // The shoulder's largest rise is at row 64 (65 to 90). With a
+        // visible 50-unit head above the 30-unit neck, the two cues agree.
+        let visible = visible_front_neck(&widths, 0, 299, 1.0);
+        assert_eq!(visible, Some(64.0));
+        let uncropped = neck_hint(&widths, 0, 299, 1.0, false, false).0;
+        assert_eq!(uncropped.filter(|_| visible.is_some()), Some(64.0));
+        // The same valley must not override a field already diagnosed as
+        // cropped/body-filled. Upper torso shape can imitate a neck.
+        let cropped = neck_hint(&widths, 0, 299, 1.0, true, false).0;
+        assert_eq!(cropped.filter(|_| visible.is_some()), None);
+    }
+
+    #[test]
+    fn a_front_crop_needs_a_neck_valley_inside_the_field() {
+        let mut widths = vec![100.0f32; 300];
+        widths[..61].fill(30.0);
+        widths[61..65].copy_from_slice(&[35.0, 45.0, 65.0, 90.0]);
+        // A narrow first row followed by widening is compatible with a
+        // cropped chest. There is no visible width fall above a neck.
+        assert_eq!(visible_front_neck(&widths, 0, 299, 1.0), None);
+    }
 
     #[test]
     fn turning_a_grid_keeps_each_original_film_pixel() {

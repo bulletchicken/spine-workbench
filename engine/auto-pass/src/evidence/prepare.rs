@@ -1,5 +1,8 @@
 //! A bounded working copy, its usable field, and noise-floored contrast.
 
+#[path = "assumed_scale.rs"]
+mod assumed_scale;
+
 #[path = "conditioning.rs"]
 mod conditioning;
 #[path = "masking.rs"]
@@ -73,9 +76,14 @@ pub(super) fn prepare_with_exclusions(
         ));
     }
     let scale_assumed = geometry.mm_per_px.is_none();
-    let sx = geometry
-        .mm_per_px
-        .unwrap_or_else(|| assumed_spacing(film, geometry, blanked));
+    let sx = geometry.mm_per_px.unwrap_or_else(|| {
+        assumed_scale::estimate(
+            film,
+            geometry,
+            blanked,
+            polarity_override.unwrap_or(Polarity::BoneBright),
+        )
+    });
     let sy = geometry.mm_per_px_vertical.unwrap_or(sx);
     if !sx.is_finite() || !sy.is_finite() || sx <= 0.0 || sy <= 0.0 || sx > 2.0 || sy > 2.0 {
         return Err(EngineError::new(
@@ -274,63 +282,6 @@ fn polarity_check(
     }
 }
 
-/// The median half-height width of the central bright ridge is assigned
-/// 24 anatomical units. It is a scale guess, never a physical measurement.
-fn assumed_spacing(film: &DecodedFilm, geometry: &FilmGeometry, blanked: &[PxRect]) -> f64 {
-    let (stored_w, stored_h) = (film.image.width() as usize, film.image.height() as usize);
-    let (w, h) = upright_size(stored_w, stored_h, geometry.quarter_turns);
-    let (w, h) = (w as u32, h as u32);
-    let stride = (w / 256).max(1);
-    let n = (w / stride) as usize;
-    let mut widths = Vec::new();
-    for row in 0..24u32 {
-        let y = h / 3 + row * (h / 3) / 24;
-        let profile: Vec<f32> = (0..n)
-            .map(|x| {
-                let x = (x as u32 * stride).min(w - 1);
-                let index = upright_index(
-                    stored_w,
-                    stored_h,
-                    geometry.quarter_turns,
-                    x as usize,
-                    y as usize,
-                );
-                if blanked.iter().any(|area| {
-                    area.covers_pixel((index % stored_w) as u32, (index / stored_w) as u32)
-                }) {
-                    0.0
-                } else {
-                    f32::from(film.image.pixels()[index])
-                }
-            })
-            .collect();
-        let (lo, hi) = conditioning::window(&profile, None, 0.1, 0.95);
-        if hi <= lo {
-            continue;
-        }
-        let peak = (n / 4..3 * n / 4).max_by(|&a, &b| profile[a].total_cmp(&profile[b]));
-        let Some(peak) = peak else { continue };
-        let threshold = lo + 0.5 * (profile[peak] - lo);
-        let mut left = peak;
-        let mut right = peak;
-        while left > 0 && profile[left - 1] > threshold {
-            left -= 1
-        }
-        while right + 1 < n && profile[right + 1] > threshold {
-            right += 1
-        }
-        let width = (right - left + 1) as f32 * stride as f32;
-        if width >= w as f32 / 150.0 && width <= w as f32 / 3.0 {
-            widths.push(width)
-        }
-    }
-    if widths.len() >= 6 {
-        (24.0 / f64::from(conditioning::median(&mut widths))).clamp(0.01, 2.0)
-    } else {
-        450.0 / f64::from(w.min(h))
-    }
-}
-
 fn upright_size(width: usize, height: usize, turns: QuarterTurns) -> (usize, usize) {
     if turns.get().is_multiple_of(2) {
         (width, height)
@@ -491,5 +442,118 @@ mod tests {
         assert_eq!(prepared.valid.get(13, 100), Some(&1));
         assert_eq!(prepared.valid.get(32, 100), Some(&0));
         assert!(prepared.image.pixels().iter().all(|v| v.is_finite()));
+    }
+
+    fn uncalibrated_bar(body_width: usize, turns: u8, distractors: bool) -> DecodedFilm {
+        let (uw, uh) = (450usize, 900usize);
+        let (w, h) = if turns.is_multiple_of(2) {
+            (uw, uh)
+        } else {
+            (uh, uw)
+        };
+        let q = QuarterTurns::new(turns).unwrap();
+        let mut pixels = vec![0u16; w * h];
+        for y in 0..uh {
+            for x in 0..uw {
+                let in_bar = x >= uw / 2 - body_width / 2 && x < uw / 2 + body_width / 2;
+                let cortex = distractors
+                    && in_bar
+                    && (x < uw / 2 - body_width / 2 + 2 || x >= uw / 2 + body_width / 2 - 2);
+                let step = distractors && x < 150;
+                pixels[upright_index(w, h, q, x, y)] = 500
+                    + if in_bar { 1800 } else { 0 }
+                    + if cortex { 1600 } else { 0 }
+                    + if step { 1800 } else { 0 };
+            }
+        }
+        let mut decoded = film(12, 1, false);
+        decoded.image = GreyImage::new(w as u32, h as u32, pixels, Placement::FILM).unwrap();
+        decoded.facts.width = w as u32;
+        decoded.facts.height = h as u32;
+        decoded
+    }
+
+    #[test]
+    fn assumed_scale_assigns_twenty_four_units_to_a_bar_width() {
+        // For a top-hat bar and gamma=1, sigma* = width/2. Assigning sigma*
+        // twelve units therefore gives spacing=24/width. The eight-scale
+        // logarithmic grid and four-pixel sampling allow 25%, as PATH-9.
+        for width in [20, 40, 60] {
+            let decoded = uncalibrated_bar(width, 0, false);
+            let spacing = assumed_scale::estimate(
+                &decoded,
+                &FilmGeometry::UNKNOWN,
+                &[],
+                Polarity::BoneBright,
+            );
+            let expected = 24.0 / width as f64;
+            assert!(
+                (spacing / expected - 1.0).abs() < 0.25,
+                "width {width}: spacing {spacing}"
+            );
+        }
+    }
+
+    #[test]
+    fn assumed_scale_ignores_thin_cortex_and_a_single_step_in_every_stored_turn() {
+        // The two-pixel cortical rims and the isolated step have the same
+        // extra contrast as the body. The known body is forty pixels wide;
+        // neither distractor should replace its centre or width estimate.
+        for turns in 0..4 {
+            let decoded = uncalibrated_bar(40, turns, true);
+            let geometry = FilmGeometry {
+                quarter_turns: QuarterTurns::new(turns).unwrap(),
+                ..FilmGeometry::UNKNOWN
+            };
+            let spacing = assumed_scale::estimate(&decoded, &geometry, &[], Polarity::BoneBright);
+            assert!(
+                (spacing / 0.6 - 1.0).abs() < 0.25,
+                "turns {turns}: spacing {spacing}"
+            );
+        }
+    }
+
+    #[test]
+    fn excluded_values_cannot_set_the_assumed_scale() {
+        let original = uncalibrated_bar(40, 0, true);
+        let blanked = [PxRect {
+            left: 110.25,
+            top: 100.25,
+            right: 180.25,
+            bottom: 800.25,
+        }];
+        let mut altered = original.clone();
+        let mut pixels = altered.image.pixels().to_vec();
+        for y in 0..altered.image.height() {
+            for x in 0..altered.image.width() {
+                if blanked[0].covers_pixel(x, y) {
+                    pixels[(y * altered.image.width() + x) as usize] = 65535;
+                }
+            }
+        }
+        altered.image = GreyImage::new(
+            altered.image.width(),
+            altered.image.height(),
+            pixels,
+            Placement::FILM,
+        )
+        .unwrap();
+        let scale = |film| {
+            assumed_scale::estimate(film, &FilmGeometry::UNKNOWN, &blanked, Polarity::BoneBright)
+        };
+        // Every touched resampling footprint is excluded before statistics
+        // and derivatives, so even saturation in that box has no influence.
+        assert_eq!(scale(&original), scale(&altered));
+        let inverted = DecodedFilm {
+            image: original.image.map(|&v| 4095 - v),
+            facts: original.facts.clone(),
+        };
+        let dark = assumed_scale::estimate(
+            &inverted,
+            &FilmGeometry::UNKNOWN,
+            &blanked,
+            Polarity::BoneDark,
+        );
+        assert!((dark / scale(&original) - 1.0).abs() < 1e-5);
     }
 }

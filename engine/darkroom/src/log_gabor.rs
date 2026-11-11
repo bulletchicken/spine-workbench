@@ -160,8 +160,8 @@ impl Spectrum {
         let as_complex = |values: &[f32]| -> Vec<Complex<f32>> {
             values.iter().map(|&v| Complex::new(v, 0.0)).collect()
         };
-        let mut values = fft.forward(&as_complex(pixels))?;
-        let smooth = fft.forward(&as_complex(&boundary_image(pixels, width, height)))?;
+        let mut values = fft.forward_owned(as_complex(pixels))?;
+        let smooth = fft.forward_owned(as_complex(&boundary_image(pixels, width, height)))?;
         let cosines = |n: usize| -> Vec<f64> {
             (0..n)
                 .map(|k| libm::cos(2.0 * PI * k as f64 / n as f64))
@@ -221,7 +221,7 @@ impl Spectrum {
         }
         let back = self
             .fft
-            .inverse(&product)
+            .inverse_owned(product)
             .expect("the product has one value per grid point");
         let (width, height) = (self.width as usize, self.height as usize);
         let mut real = Vec::with_capacity(width * height);

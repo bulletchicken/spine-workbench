@@ -38,15 +38,12 @@ pub fn build(
     let mut widths: Vec<_> = line.samples.iter().map(|sample| sample.width).collect();
     let rank = ((widths.len() - 1) as f64 * 0.95).round() as usize;
     let (_, width95, _) = widths.select_nth_unstable_by(rank, f64::total_cmp);
-    let mut half_width = (0.9 * *width95).clamp(25.0, 50.0);
-    let curvature = line
-        .samples
-        .iter()
-        .map(|s| s.curvature.abs())
-        .fold(0.0, f64::max);
-    if curvature * half_width > 0.8 {
-        half_width = (0.8 / curvature).max(22.0);
-    }
+    // Keep the measured field of view at every row. A tight bend affects
+    // only its concave columns; using its curvature to narrow the entire
+    // strip would discard well-separated walls elsewhere on the film.
+    // The local Jacobian guard below excludes the folded samples, and the
+    // exact maps apply the same guard to fractional positions.
+    let half_width = (0.9 * *width95).clamp(25.0, 50.0);
     let cols = 2 * (half_width / STEP).round() as u32 + 1;
     let rows = layout.len() as u32;
     let cells = (rows as usize).checked_mul(cols as usize).ok_or_else(|| {
@@ -572,7 +569,7 @@ mod tests {
     }
 
     #[test]
-    fn fold_guard_narrows_then_masks_only_the_concave_columns() {
+    fn fold_guard_masks_only_the_local_concave_columns() {
         let image = ramp();
         let evidence = evidence(&image);
         let geometry = FilmGeometry {
@@ -582,28 +579,56 @@ mod tests {
         for radius in [50.0, 25.0] {
             let line = line(0, (0.5, 0.5), Some(radius));
             let strip = build(&image, &evidence, &line, &geometry).unwrap();
-            if radius == 50.0 {
-                assert_eq!(strip.cols, 161); // H_eff = 0.8*50 = 40 mm.
-                assert!(strip.valid.iter().all(|v| *v == 1));
-                assert!(warnings(&strip).is_empty());
-            } else {
-                assert_eq!(strip.cols, 89); // 22 mm floor at half-mm steps.
-                for row in 0..strip.rows as usize {
-                    let first = row * strip.cols as usize;
-                    assert!(strip.valid[first..first + 85].iter().all(|v| *v == 1));
-                    assert_eq!(&strip.valid[first + 85..first + 89], &[0, 0, 0, 0]);
-                    assert!(
-                        strip.values[first + 85..first + 89]
-                            .iter()
-                            .all(|v| v.is_nan())
-                    );
-                }
-                assert_eq!(warnings(&strip)[0].code, PassWarningCode::StripFolded);
-                assert_eq!(maps::strip_to_film(&strip, 20.0, 88.0), None);
+            assert_eq!(strip.cols, 201); // Measured 50 mm field of view.
+            let last_valid = 100 + (0.8 * radius / STEP).round() as usize;
+            for row in 0..strip.rows as usize {
+                let first = row * strip.cols as usize;
+                assert!(
+                    strip.valid[first..=first + last_valid]
+                        .iter()
+                        .all(|v| *v == 1)
+                );
+                assert!(
+                    strip.valid[first + last_valid + 1..first + 201]
+                        .iter()
+                        .all(|v| *v == 0)
+                );
+                assert!(
+                    strip.values[first + last_valid + 1..first + 201]
+                        .iter()
+                        .all(|v| v.is_nan())
+                );
             }
-            // Physical height is not arc length on a curved spine.
+            assert_eq!(warnings(&strip)[0].code, PassWarningCode::StripFolded);
+            assert_eq!(maps::strip_to_film(&strip, 20.0, 200.0), None);
+            // The full convex field stays usable at either curvature.
+            assert!(maps::strip_to_film(&strip, 20.0, 0.0).is_some());
             assert!((strip.layout[60].z + radius * libm::sin(30.0 / radius)).abs() < 1e-12);
         }
+    }
+
+    #[test]
+    fn a_short_bend_does_not_crop_the_straight_rows() {
+        let image = ramp();
+        let evidence = evidence(&image);
+        let geometry = FilmGeometry {
+            mm_per_px: Some(0.5),
+            ..FilmGeometry::UNKNOWN
+        };
+        let mut line = line(0, (0.5, 0.5), Some(25.0));
+        let join = line.samples[40]; // A 10 mm circular arc, then its tangent.
+        for sample in &mut line.samples[41..] {
+            sample.at = add(join.at, scale(join.along, sample.arc - join.arc));
+            sample.along = join.along;
+            sample.curvature = 0.0;
+        }
+        let strip = build(&image, &evidence, &line, &geometry).unwrap();
+        assert_eq!(strip.cols, 201);
+        // The analytic straight segment has Jacobian one across all 100 mm.
+        let row = 40;
+        let first = row * strip.cols as usize;
+        assert!(strip.valid[first..first + 201].iter().all(|v| *v == 1));
+        assert!(maps::strip_to_film(&strip, row as f64, 200.0).is_some());
     }
 
     #[test]

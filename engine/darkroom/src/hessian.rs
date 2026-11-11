@@ -121,6 +121,29 @@ pub struct LineMeasure {
     pub normal: f64,
 }
 
+/// A line's strength and signed curvature, keeping its normal unevaluated.
+/// A scale search only needs the normal when this curvature wins.
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct LineCurvature {
+    pub strength: f64,
+    pub lambda2: f64,
+    twice_cross: f64,
+    diagonal_difference: f64,
+    plus_is_stronger: bool,
+}
+
+impl LineCurvature {
+    /// The stronger eigenvalue's normal in [−π/2, π/2).
+    pub fn normal(&self) -> f64 {
+        let theta_plus = 0.5 * libm::atan2(self.twice_cross, self.diagonal_difference);
+        fold_to_half_turn(if self.plus_is_stronger {
+            theta_plus
+        } else {
+            theta_plus + PI / 2.0
+        })
+    }
+}
+
 /// The line measures of an image at one scale, on its placement.
 #[derive(Clone, Debug, PartialEq)]
 pub struct LineMeasures {
@@ -213,17 +236,28 @@ fn scale_by(grid: GreyImage<f32>, factor: f64) -> GreyImage<f32> {
 
 /// The line measure of the symmetric matrix `[[a, b], [b, c]]`.
 pub fn line_measure(a: f64, b: f64, c: f64) -> LineMeasure {
+    let curvature = line_curvature(a, b, c);
+    LineMeasure {
+        strength: curvature.strength,
+        lambda2: curvature.lambda2,
+        normal: curvature.normal(),
+    }
+}
+
+/// The line strength and signed curvature of `[[a, b], [b, c]]`.
+/// The normal is calculated only when [`LineCurvature::normal`] is called.
+pub fn line_curvature(a: f64, b: f64, c: f64) -> LineCurvature {
     let mean = (a + c) / 2.0;
     let half_gap = (a - c) / 2.0;
     let root = (half_gap * half_gap + b * b).sqrt();
     let plus = mean + root;
     let minus = mean - root;
-    let theta_plus = 0.5 * libm::atan2(2.0 * b, a - c);
     // The stronger eigenvalue is λ2; its direction is the normal across the line.
-    let (lambda1, lambda2, theta2) = if plus.abs() >= minus.abs() {
-        (minus, plus, theta_plus)
+    let plus_is_stronger = plus.abs() >= minus.abs();
+    let (lambda1, lambda2) = if plus_is_stronger {
+        (minus, plus)
     } else {
-        (plus, minus, theta_plus + PI / 2.0)
+        (plus, minus)
     };
     let ratio = if lambda2 == 0.0 {
         0.0
@@ -233,10 +267,12 @@ pub fn line_measure(a: f64, b: f64, c: f64) -> LineMeasure {
     let energy = lambda1 * lambda1 + lambda2 * lambda2;
     let strength = libm::exp(-ratio * ratio / (2.0 * BETA * BETA))
         * (1.0 - libm::exp(-energy / (2.0 * C * C)));
-    LineMeasure {
+    LineCurvature {
         strength,
         lambda2,
-        normal: fold_to_half_turn(theta2),
+        twice_cross: 2.0 * b,
+        diagonal_difference: a - c,
+        plus_is_stronger,
     }
 }
 

@@ -2,7 +2,7 @@
 
 use super::edges::Gaussian;
 use darkroom::grey_image::GreyImage;
-use darkroom::hessian::line_measure;
+use darkroom::hessian::{LineCurvature, line_curvature};
 use darkroom::log_gabor::Spectrum;
 use std::f64::consts::PI;
 
@@ -33,11 +33,11 @@ impl Best {
         }
     }
 
-    fn include(&mut self, i: usize, strength: f64, eigenvalue: f64, normal: f64, scale: usize) {
-        self.strength[i] = self.strength[i].max(strength as f32);
-        if eigenvalue.abs() > f64::from(self.eigenvalue[i]) {
-            self.eigenvalue[i] = eigenvalue.abs() as f32;
-            self.normal[i] = normal as f32;
+    fn include(&mut self, i: usize, measure: &LineCurvature, scale: usize) {
+        self.strength[i] = self.strength[i].max(measure.strength as f32);
+        if measure.lambda2.abs() > f64::from(self.eigenvalue[i]) {
+            self.eigenvalue[i] = measure.lambda2.abs() as f32;
+            self.normal[i] = measure.normal() as f32;
             if let Some(value) = self.scale.get_mut(i) {
                 *value = scale as u8;
             }
@@ -111,7 +111,7 @@ pub(super) fn compute(
                     continue;
                 }
                 let c = f64::from(contrast.pixels()[i]).max(1e-6);
-                let measure = line_measure(
+                let measure = line_curvature(
                     f64::from(diagonal.real.pixels()[i]) / c,
                     f64::from(xy.pixels()[i]) / c,
                     f64::from(diagonal.imaginary.pixels()[i]) / c,
@@ -119,11 +119,11 @@ pub(super) fn compute(
                 if measure.lambda2 < 0.0 {
                     bright[i] = measure.strength as f32;
                     if scale_mm <= 2.0 {
-                        ridge.include(i, measure.strength, measure.lambda2, measure.normal, index);
+                        ridge.include(i, &measure, index);
                     }
                 } else {
                     dark[i] = measure.strength as f32;
-                    valley.include(i, measure.strength, measure.lambda2, measure.normal, index);
+                    valley.include(i, &measure, index);
                 }
             }
             checkpoint(

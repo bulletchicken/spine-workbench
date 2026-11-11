@@ -4,9 +4,11 @@
 use crate::handoffs::{Barcode, Strip};
 use shapes::errors::{EngineError, ErrorCode};
 
-/// Mean across the central half of each body's width, followed by a
-/// 12-size-unit Gaussian high pass and a running 60-size-unit MAD. Invalid
-/// rows are excluded from both statistics and remain invalid afterwards.
+/// Preserve the central mean in `values`. For `high_pass`, use the lower
+/// quartile across the central three quarters of the body, followed by a
+/// 12-size-unit Gaussian high pass and a running 60-size-unit MAD. This
+/// broader, robust projection limits bright posterior overlap without
+/// taking the minimum of a noisy row. Invalid rows stay invalid.
 pub fn build(strip: &Strip, size_factor: f64) -> Result<Barcode, EngineError> {
     let rows = strip.rows as usize;
     let cols = strip.cols as usize;
@@ -30,6 +32,8 @@ pub fn build(strip: &Strip, size_factor: f64) -> Result<Barcode, EngineError> {
     let middle = (cols - 1) as f64 / 2.0;
     let mut values = vec![f32::NAN; rows];
     let mut valid = vec![0; rows];
+    let mut profile = vec![f32::NAN; rows];
+    let mut samples = Vec::with_capacity(cols);
     for (row, layout) in strip.layout.iter().enumerate() {
         if !layout.half_width.is_finite() || layout.half_width < 0.0 {
             return Err(EngineError::new(
@@ -56,6 +60,25 @@ pub fn build(strip: &Strip, size_factor: f64) -> Result<Barcode, EngineError> {
             values[row] = (sum / f64::from(count)) as f32;
             valid[row] = 1;
         }
+        // The cortical side walls lie outside this interior band. At its
+        // lower quartile, bright pedicles and central posterior overlap
+        // cannot dominate unless they cover three quarters of the band.
+        let radius = 0.75 * layout.half_width;
+        let first = (middle - radius / strip.col_step).ceil().max(0.0) as usize;
+        let last = (middle + radius / strip.col_step)
+            .floor()
+            .min((cols - 1) as f64) as usize;
+        samples.clear();
+        for col in first..=last {
+            let index = row * cols + col;
+            if strip.valid[index] != 0 && strip.values[index].is_finite() {
+                samples.push(strip.values[index]);
+            }
+        }
+        if !samples.is_empty() {
+            let rank = (samples.len() - 1) / 4;
+            profile[row] = *samples.select_nth_unstable_by(rank, f32::total_cmp).1;
+        }
     }
 
     let sigma = 12.0 * size_factor / strip.row_step;
@@ -73,11 +96,11 @@ pub fn build(strip: &Strip, size_factor: f64) -> Result<Barcode, EngineError> {
         for other in row.saturating_sub(radius)..=(row + radius).min(rows - 1) {
             if valid[other] != 0 {
                 let w = weights[row.abs_diff(other)];
-                sum += w * f64::from(values[other]);
+                sum += w * f64::from(profile[other]);
                 weight += w;
             }
         }
-        residuals[row] = (f64::from(values[row]) - sum / weight) as f32;
+        residuals[row] = (f64::from(profile[row]) - sum / weight) as f32;
     }
     let half_window = (30.0 * size_factor / strip.row_step)
         .floor()
@@ -190,6 +213,33 @@ mod tests {
             assert!(barcode.high_pass[best] < 0.0);
         }
         assert!((barcode.values[200] - 0.2).abs() < 1e-6);
+    }
+
+    #[test]
+    fn bright_central_overlap_does_not_move_the_disc_profile() {
+        let mut strip = striped();
+        for row in 0..strip.rows as usize {
+            let arc = row as f64 * strip.row_step;
+            // A second projected structure has its bright peaks at the
+            // real gaps. It occupies the central 10 mm of a 40 mm body;
+            // the broad interior still shows the true discs at 60/100/140.
+            let overlap = 0.8 * (1.0 - libm::cos(std::f64::consts::TAU * arc / 40.0));
+            for col in 30..=50 {
+                strip.values[row * strip.cols as usize + col] += overlap as f32;
+            }
+        }
+        let barcode = build(&strip, 1.0).unwrap();
+        for gap in [60usize, 100, 140] {
+            let row = gap * 2;
+            let best = (row - 4..=row + 4)
+                .min_by(|&a, &b| barcode.high_pass[a].total_cmp(&barcode.high_pass[b]))
+                .unwrap();
+            // The clean columns have an analytic minimum at the disc.
+            assert!(best.abs_diff(row) <= 1);
+            assert!(barcode.high_pass[best] < 0.0);
+            // The frozen mean still reports the observed bright overlap.
+            assert!(barcode.values[row] > 0.9);
+        }
     }
 
     #[test]

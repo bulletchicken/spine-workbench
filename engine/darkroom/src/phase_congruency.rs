@@ -224,7 +224,7 @@ pub struct MonogenicRun<'a> {
     done: usize,
     /// The gains and even response of the second scale of a pair, worked
     /// out with the first.
-    held: Option<(Vec<f32>, Vec<f32>)>,
+    held: Option<(Vec<f32>, GreyImage<f32>)>,
     sums: Sums,
     noise_level: Option<Vec<f32>>,
 }
@@ -291,7 +291,12 @@ impl<'a> MonogenicRun<'a> {
         let odd = self
             .spectrum
             .filtered(|index, point| riesz(point) * gains[index]);
-        self.add_scale(scale, &even, odd.real.pixels(), odd.imaginary.pixels());
+        self.add_scale(
+            scale,
+            even.pixels(),
+            odd.real.pixels(),
+            odd.imaginary.pixels(),
+        );
         self.done += 1;
         true
     }
@@ -299,7 +304,7 @@ impl<'a> MonogenicRun<'a> {
     /// The even responses of `scale` and, when there is one, the scale
     /// after it, from one inverse transform. Returns this scale's gains
     /// and response and holds the next one's.
-    fn even_pair(&mut self, scale: usize) -> (Vec<f32>, Vec<f32>) {
+    fn even_pair(&mut self, scale: usize) -> (Vec<f32>, GreyImage<f32>) {
         let gains = self.bank.gains(scale).expect("the scale is in the bank");
         let real = |gain: f32| Complex::new(gain, 0.0);
         if scale + 1 < self.scales() {
@@ -310,11 +315,11 @@ impl<'a> MonogenicRun<'a> {
             let pair = self
                 .spectrum
                 .filtered_pair(|i, _| real(gains[i]), |i, _| real(next[i]));
-            self.held = Some((next, pair.imaginary.pixels().to_vec()));
-            (gains, pair.real.pixels().to_vec())
+            self.held = Some((next, pair.imaginary));
+            (gains, pair.real)
         } else {
             let alone = self.spectrum.filtered(|i, _| real(gains[i]));
-            (gains, alone.real.pixels().to_vec())
+            (gains, alone.real)
         }
     }
 

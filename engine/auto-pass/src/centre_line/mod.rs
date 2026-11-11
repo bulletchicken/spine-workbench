@@ -5,6 +5,7 @@
 //! The working image is upright, while every returned position and vector
 //! remains in original film pixels.
 
+mod body_walls;
 pub mod cheapest_path;
 pub mod cost_map;
 mod refine;
@@ -43,7 +44,7 @@ fn run(
     geometry: &FilmGeometry,
     checkpoints: bool,
 ) -> Result<(CentreLine, Vec<WatchFrame>), EngineError> {
-    let mut map = CostMap::build(evidence, geometry.quarter_turns)?;
+    let mut map = CostMap::build(evidence, geometry)?;
     let mut path = cheapest_path::search(&map, true, checkpoints).ok_or_else(|| {
         EngineError::new(
             ErrorCode::PassNoSpineFound,
