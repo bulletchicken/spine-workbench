@@ -4,3 +4,5 @@
 pub mod from_known_object;
 pub mod from_ruler;
 pub mod from_tags;
+
+mod circle_fit;
