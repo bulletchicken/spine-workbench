@@ -15,3 +15,27 @@
 pub mod boundary_wand;
 pub mod pins;
 pub mod region_wand;
+
+use auto_pass::handoffs::FilmPassCache;
+use film_reader::decoded_film::DecodedFilm;
+use shapes::{
+    errors::EngineError,
+    film_geometry::FilmGeometry,
+    toolbox::{ToolPreview, ToolPreviewInput, WandKind},
+};
+
+/// Preview the same decision the corresponding commit validates. Both calls
+/// read the supplied marks and echo their case version without storing edits.
+pub fn preview(
+    film: &DecodedFilm,
+    geometry: Option<&FilmGeometry>,
+    cache: Option<&FilmPassCache>,
+    input: &ToolPreviewInput,
+) -> Result<ToolPreview, EngineError> {
+    match input.tool {
+        WandKind::RegionWand => {
+            region_wand::hover::preview(film, &input.marks, input.at, input.case_version)
+        }
+        WandKind::BoundaryWand => boundary_wand::preview(film, geometry, cache, input),
+    }
+}
