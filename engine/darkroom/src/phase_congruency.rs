@@ -383,20 +383,20 @@ impl<'a> MonogenicRun<'a> {
     /// spread of scales is not yet defined.
     pub fn provisional_edge(&self) -> Option<GreyImage<f32>> {
         let scales = self.done.min(self.settings.congruency_scales);
-        (scales >= 2).then(|| self.congruency(scales).0)
+        (scales >= 2).then(|| self.image(self.congruency(scales, false).0))
     }
 
     /// Runs every remaining scale and returns the maps.
     pub fn finish(mut self) -> PhaseMaps {
         while self.step() {}
-        let (edge, direction, kind) = self.congruency(self.settings.congruency_scales);
+        let (edge, direction, kind) = self.congruency(self.settings.congruency_scales, true);
         let (ridge_symmetry, valley_symmetry) = self.symmetry();
         let levels = self.noise_level.take().unwrap_or_default();
         let noise_level = self.image(levels);
         PhaseMaps {
-            edge,
-            direction,
-            kind,
+            edge: self.image(edge),
+            direction: self.image(direction),
+            kind: self.image(kind),
             ridge_symmetry,
             valley_symmetry,
             noise_level,
@@ -409,7 +409,9 @@ impl<'a> MonogenicRun<'a> {
         GreyImage::new(width, height, pixels, placement).expect("one value per pixel")
     }
 
-    fn congruency(&self, scales: usize) -> (GreyImage<f32>, GreyImage<f32>, GreyImage<f32>) {
+    // Intermediate previews need only strengths. Avoid allocating and
+    // computing two full angle maps that the preview would discard.
+    fn congruency(&self, scales: usize, angles: bool) -> (Vec<f32>, Vec<f32>, Vec<f32>) {
         let s = &self.settings;
         let epsilon = s.epsilon;
         let factor = self.threshold_factor(scales, s.congruency_k);
@@ -418,8 +420,8 @@ impl<'a> MonogenicRun<'a> {
         let len = sums.even.len();
         let (mut edge, mut direction, mut kind) = (
             Vec::with_capacity(len),
-            Vec::with_capacity(len),
-            Vec::with_capacity(len),
+            Vec::with_capacity(if angles { len } else { 0 }),
+            Vec::with_capacity(if angles { len } else { 0 }),
         );
         for i in 0..len {
             let f = f64::from(sums.even[i]);
@@ -440,10 +442,12 @@ impl<'a> MonogenicRun<'a> {
                 0.0
             };
             edge.push(strength as f32);
-            direction.push(half_open_angle(libm::atan2f(h2 as f32, h1 as f32)));
-            kind.push(libm::atan2f(f as f32, odd as f32));
+            if angles {
+                direction.push(half_open_angle(libm::atan2f(h2 as f32, h1 as f32)));
+                kind.push(libm::atan2f(f as f32, odd as f32));
+            }
         }
-        (self.image(edge), self.image(direction), self.image(kind))
+        (edge, direction, kind)
     }
 
     fn symmetry(&self) -> (GreyImage<f32>, GreyImage<f32>) {
