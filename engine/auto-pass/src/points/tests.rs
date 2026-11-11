@@ -299,5 +299,6 @@ fn extreme_finite_scales_keep_searches_bounded() {
     for row in &mut strip.layout {
         row.half_width = 1e300;
     }
-    assert!(front::place(&strip, &body, Polarity::BoneBright).is_err());
+    let marks = front::place(&strip, &body, Polarity::BoneBright).unwrap();
+    assert!(marks.corners().iter().all(|mark| mark.at.is_finite()));
 }

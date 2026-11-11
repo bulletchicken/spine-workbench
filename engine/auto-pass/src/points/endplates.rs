@@ -18,6 +18,16 @@ pub(super) fn refine(
     if layout.half_width <= 0.0 {
         return (plate, false);
     }
+    refine_width(strip, plate, superior, polarity, layout.half_width)
+}
+
+pub(super) fn refine_width(
+    strip: &Strip,
+    plate: EndplateOnStrip,
+    superior: bool,
+    polarity: Polarity,
+    half_width: f64,
+) -> (EndplateOnStrip, bool) {
     let step = strip.row_step.min(0.5) / strip.row_step;
     let extent = (1.5 / strip.row_step / step)
         .ceil()
@@ -31,7 +41,7 @@ pub(super) fn refine(
                 row: plate.row + f64::from(i) * step,
                 tilt: plate.tilt + f64::from(j) * angle_step,
             };
-            let value = line_score(strip, candidate, layout.half_width, superior, polarity);
+            let value = line_score(strip, candidate, half_width, superior, polarity);
             if value > score {
                 best = candidate;
                 score = value;
@@ -42,7 +52,7 @@ pub(super) fn refine(
     if score < 0.005 {
         return (plate, false);
     }
-    let score_at = |line| line_score(strip, line, layout.half_width, superior, polarity);
+    let score_at = |line| line_score(strip, line, half_width, superior, polarity);
     let before = score_at(EndplateOnStrip {
         row: best.row - step,
         ..best

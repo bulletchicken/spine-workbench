@@ -3,9 +3,10 @@
 use crate::handoffs::{EndplateOnStrip, FoundBody, Polarity, Strip};
 use shapes::errors::EngineError;
 use shapes::marks::Mark;
+use shapes::pixels::Px;
 
 use super::back_to_film::{layout_at, mapped, refused, sample, validate};
-use super::endplates::{peak_offset, polarity_sign, refine};
+use super::endplates::{peak_offset, polarity_sign, refine, refine_width};
 
 /// Ends ordered toward negative then positive upright image right.
 pub(super) struct BodyCorners {
@@ -17,15 +18,15 @@ pub(super) struct BodyCorners {
 }
 
 #[derive(Clone, Copy)]
-struct Wall {
-    offset: f64,
-    slope: f64,
-    middle: f64,
-    observed: bool,
+pub(super) struct Wall {
+    pub offset: f64,
+    pub slope: f64,
+    pub middle: f64,
+    pub observed: bool,
 }
 
 impl Wall {
-    fn intersection(self, strip: &Strip, plate: EndplateOnStrip) -> Option<(f64, f64)> {
+    pub(super) fn intersection(self, strip: &Strip, plate: EndplateOnStrip) -> Option<(f64, f64)> {
         let tilt = libm::tan(plate.tilt);
         let denominator = 1.0 - self.slope * tilt;
         if denominator.abs() < 0.2 {
@@ -38,58 +39,118 @@ impl Wall {
     }
 }
 
+/// A local fit may have holes where the strip ends or folds.
+#[derive(Clone)]
+pub(super) struct FittedBody {
+    pub partial: [Option<Mark>; 4],
+    pub top: EndplateOnStrip,
+    pub bottom: EndplateOnStrip,
+    pub half_width: f64,
+}
+
 pub(super) fn body_corners(
     strip: &Strip,
     body: &FoundBody,
     polarity: Polarity,
 ) -> Result<BodyCorners, EngineError> {
     validate(strip)?;
-    if !valid_plate(body.sup) || !valid_plate(body.inf) || body.inf.row <= body.sup.row {
-        return Err(refused("the body's endplates are invalid or reversed"));
+    let width =
+        super::widths::estimate(strip, body).ok_or_else(|| refused("invalid body height"))?;
+    let fitted = fit_body(strip, body, polarity, width)?;
+    complete(strip, body, &fitted, &[]).ok_or_else(|| refused("no finite body frame is available"))
+}
+
+pub(super) fn fit_body(
+    strip: &Strip,
+    body: &FoundBody,
+    polarity: Polarity,
+    half_width: f64,
+) -> Result<FittedBody, EngineError> {
+    if !valid_plate(body.sup)
+        || !valid_plate(body.inf)
+        || body.inf.row <= body.sup.row
+        || !half_width.is_finite()
+        || half_width <= 0.0
+    {
+        return Err(refused("the body's endplates or width are invalid"));
     }
-    let half_width = layout_at(strip, (body.sup.row + body.inf.row) * 0.5)
-        .map(|r| r.half_width)
-        .filter(|w| *w > 0.0)
-        .ok_or_else(|| refused("the strip has no body width"))?;
-    let (top, top_seen) = if body.inferred {
+    // A bounded wall guide must not hide a supported lateral part of an
+    // endplate. Retry an unseen line over the column band, still capped by
+    // the body's height envelope so trunk-wide bands cannot steer its tilt.
+    let refine_plate = |plate: EndplateOnStrip, superior| {
+        let fitted = refine_width(strip, plate, superior, polarity, half_width);
+        if fitted.1 {
+            return fitted;
+        }
+        let wider = layout_at(strip, plate.row)
+            .map(|layout| layout.half_width)
+            .filter(|width| width.is_finite() && *width > half_width)
+            .map(|width| {
+                width.min(
+                    super::widths::maximum_ratio(strip.film)
+                        * (body.inf.row - body.sup.row)
+                        * strip.row_step
+                        * 0.5,
+                )
+            });
+        wider.map_or(fitted, |width| {
+            refine_width(strip, plate, superior, polarity, width)
+        })
+    };
+    let (mut top, mut top_seen) = if body.inferred {
         (body.sup, false)
     } else {
-        refine(strip, body.sup, true, polarity)
+        refine_plate(body.sup, true)
     };
-    let (bottom, bottom_seen) = if body.inferred {
+    let (mut bottom, mut bottom_seen) = if body.inferred {
         (body.inf, false)
     } else {
-        refine(strip, body.inf, false, polarity)
+        refine_plate(body.inf, false)
     };
     if bottom.row <= top.row {
-        return Err(refused("refinement crossed the endplates"));
+        (top, bottom, top_seen, bottom_seen) = (body.sup, body.inf, false, false);
     }
-    let walls = [-1.0, 1.0].map(|side| {
-        fit(
-            strip,
-            [top, bottom],
-            side * half_width,
-            polarity,
-            1.6,
-            !body.inferred,
-        )
-    });
-    let mark = |wall: Wall, plate, seen| {
-        mark_at(strip, wall, plate, seen && !body.inferred)
-            .ok_or_else(|| refused("a corner lies outside the strip or in a fold"))
-    };
-    Ok(BodyCorners {
-        sup: [
-            mark(walls[0], top, top_seen)?,
-            mark(walls[1], top, top_seen)?,
-        ],
-        inf: [
-            mark(walls[0], bottom, bottom_seen)?,
-            mark(walls[1], bottom, bottom_seen)?,
+    let height = (bottom.row - top.row) * strip.row_step;
+    let half_width = half_width.min(super::widths::maximum_ratio(strip.film) * height * 0.5);
+    let walls =
+        super::wall_pairs::choose(strip, [top, bottom], half_width, polarity, !body.inferred);
+    Ok(FittedBody {
+        partial: [
+            mark_at(strip, walls[0], top, top_seen),
+            mark_at(strip, walls[1], top, top_seen),
+            mark_at(strip, walls[1], bottom, bottom_seen),
+            mark_at(strip, walls[0], bottom, bottom_seen),
         ],
         top,
         bottom,
         half_width: (walls[1].offset - walls[0].offset) * 0.5,
+    })
+}
+
+pub(super) fn complete(
+    strip: &Strip,
+    body: &FoundBody,
+    fitted: &FittedBody,
+    neighbours: &[[Px; 4]],
+) -> Option<BodyCorners> {
+    let refined = FoundBody {
+        sup: fitted.top,
+        inf: fitted.bottom,
+        ..*body
+    };
+    let marks = super::recovery::recover(
+        strip,
+        &refined,
+        fitted.half_width,
+        fitted.partial,
+        neighbours,
+    )?;
+    Some(BodyCorners {
+        sup: [marks[0], marks[1]],
+        inf: [marks[3], marks[2]],
+        top: fitted.top,
+        bottom: fitted.bottom,
+        half_width: fitted.half_width,
     })
 }
 
@@ -191,7 +252,7 @@ fn fit(
     best
 }
 
-fn wall_score(
+pub(super) fn wall_score(
     strip: &Strip,
     plates: [EndplateOnStrip; 2],
     wall: Wall,

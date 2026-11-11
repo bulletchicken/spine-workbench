@@ -30,7 +30,16 @@ pub(super) fn place_with_rings(
         ));
     }
     let corners = super::walls::body_corners(strip, body, polarity)?;
-    let [negative, positive] = super::pedicles::find(strip, body, &corners, evidence);
+    from_corners(strip, body, &corners, evidence)
+}
+
+pub(super) fn from_corners(
+    strip: &Strip,
+    body: &FoundBody,
+    corners: &super::walls::BodyCorners,
+    evidence: Option<&super::pedicles::RingEvidence<'_>>,
+) -> Result<FrontMarks, EngineError> {
+    let [negative, positive] = super::pedicles::find(strip, body, corners, evidence);
     let [left, right] = if super::back_to_film::facing(strip)? == ImageRight::PatientLeft {
         [1, 0]
     } else {

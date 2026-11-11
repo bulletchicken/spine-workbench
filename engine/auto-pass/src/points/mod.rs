@@ -8,12 +8,16 @@ pub mod side;
 
 mod endplates;
 mod pedicles;
+mod recovery;
+mod wall_pairs;
 mod walls;
+mod widths;
 
 #[cfg(test)]
 mod tests;
 
 use crate::handoffs::{FilmPassCache, SettledChain};
+use shapes::confidence::{ConfidenceBand, ConfidenceReason};
 use shapes::errors::EngineError;
 use shapes::film::FilmKind;
 use shapes::naming::LevelNaming;
@@ -24,7 +28,7 @@ use shapes::vertebra::{FilmMarks, VertebraMarks, VertebraOnFilm};
 pub fn place_points(
     cache: &FilmPassCache,
     chain: &SettledChain,
-    naming: LevelNaming,
+    mut naming: LevelNaming,
     first_id: u32,
 ) -> Result<FilmMarks, EngineError> {
     let strip = &cache.strip;
@@ -55,26 +59,118 @@ pub fn place_points(
     } else {
         None
     };
+    let guides: Vec<_> = boundaries
+        .bodies
+        .iter()
+        .map(|body| widths::estimate(strip, body))
+        .collect();
+    let fit = |index: usize, width: f64| {
+        walls::fit_body(strip, &boundaries.bodies[index], boundaries.polarity, width).ok()
+    };
+    let first: Vec<_> = guides
+        .iter()
+        .enumerate()
+        .map(|(i, width)| width.and_then(|width| fit(i, width)))
+        .collect();
+    // Neighbours vote only against a width outlier. Keep a consistent
+    // local fit intact rather than moving supported corners with every
+    // small change in a nearby body's estimate.
+    let fitted: Vec<_> = first
+        .iter()
+        .enumerate()
+        .map(|(i, own)| {
+            let own = own.as_ref()?;
+            let mut votes: Vec<_> = first
+                .iter()
+                .enumerate()
+                .filter(|(j, _)| *j != i && j.abs_diff(i) <= 2)
+                .filter_map(|(_, fit)| fit.as_ref())
+                .filter(|fit| {
+                    fit.partial
+                        .iter()
+                        .flatten()
+                        .filter(|mark| !mark.inferred)
+                        .count()
+                        >= 2
+                })
+                .map(|fit| fit.half_width)
+                .collect();
+            if votes.len() >= 2 {
+                let near = widths::median(&mut votes)?;
+                if own.half_width < 0.75 * near || own.half_width > 1.25 * near {
+                    let target = guides[i]?.clamp(0.85 * near, 1.15 * near);
+                    return fit(i, target);
+                }
+            }
+            Some(own.clone())
+        })
+        .collect();
+    let provisional: Vec<_> = fitted
+        .iter()
+        .enumerate()
+        .map(|(i, fitted)| walls::complete(strip, &boundaries.bodies[i], fitted.as_ref()?, &[]))
+        .collect();
+    let mut kept = Vec::new();
     for (index, (body, confidence)) in boundaries.bodies.iter().zip(&chain.confidence).enumerate() {
-        let polarity = boundaries.polarity;
+        let Some(fitted) = fitted[index].as_ref() else {
+            continue;
+        };
+        let neighbours: Vec<_> = provisional
+            .iter()
+            .enumerate()
+            .filter(|(i, _)| *i != index && i.abs_diff(index) <= 2)
+            .filter_map(|(_, corners)| {
+                let c = corners.as_ref()?;
+                Some([c.sup[0].at, c.sup[1].at, c.inf[1].at, c.inf[0].at])
+            })
+            .collect();
+        let Some(corners) = walls::complete(strip, body, fitted, &neighbours) else {
+            continue;
+        };
         let marks = match strip.film {
             FilmKind::Front => VertebraMarks::Front {
-                points: front::place_with_rings(strip, body, polarity, ring_evidence.as_ref())?,
+                points: front::from_corners(strip, body, &corners, ring_evidence.as_ref())?,
             },
             FilmKind::Side => VertebraMarks::Side {
-                points: side::place(strip, body, polarity)?,
+                points: side::from_corners(strip, &corners)?,
             },
             FilmKind::BendLeft | FilmKind::BendRight => VertebraMarks::Bending {
-                lines: bending::place(strip, body, polarity)?,
+                lines: bending::from_corners(strip, &corners)?,
             },
         };
+        let mut confidence = confidence.clone();
+        if marks.corners().iter().any(|mark| mark.inferred) {
+            confidence.score *= 0.5;
+            confidence.band = ConfidenceBand::Low;
+            confidence.calibrated = false;
+            if !confidence.reasons.contains(&ConfidenceReason::NoEvidence) {
+                confidence.reasons.push(ConfidenceReason::NoEvidence);
+            }
+        }
+        kept.push(index);
         vertebrae.push(VertebraOnFilm {
-            id: first_id + index as u32,
+            id: first_id + vertebrae.len() as u32,
             level: body.level,
             marks,
-            confidence: confidence.clone(),
+            confidence,
             outline: None,
         });
+    }
+    if vertebrae.is_empty() {
+        return Err(back_to_film::refused("no vertebra could be placed"));
+    }
+    if kept.len() != boundaries.bodies.len() {
+        let retain = |names: Option<Vec<_>>| {
+            names.and_then(|names| {
+                (names.len() == boundaries.bodies.len())
+                    .then(|| kept.iter().map(|&i| names[i]).collect())
+            })
+        };
+        naming.from_top = retain(naming.from_top);
+        naming.from_bottom = retain(naming.from_bottom);
+        // A supplied confirmation refers to the old allocation; omission
+        // must not silently make that id refer to a different vertebra.
+        naming.l5_confirmed_on = None;
     }
     let landmarks = crate::landmarks::place(cache, chain, &vertebrae);
     Ok(FilmMarks {

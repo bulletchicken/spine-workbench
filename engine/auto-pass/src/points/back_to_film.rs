@@ -49,7 +49,6 @@ pub(super) fn refused(detail: &str) -> EngineError {
 
 pub(super) fn validate(strip: &Strip) -> Result<(), EngineError> {
     let count = u64::from(strip.rows) * u64::from(strip.cols);
-    let finite = |p: Px| p.x().is_finite() && p.y().is_finite();
     if strip.rows < 2
         || strip.cols < 3
         || strip.cols.is_multiple_of(2)
@@ -58,15 +57,6 @@ pub(super) fn validate(strip: &Strip) -> Result<(), EngineError> {
         || strip.layout.len() != strip.rows as usize
         || !(strip.row_step.is_finite() && strip.row_step > 0.0)
         || !(strip.col_step.is_finite() && strip.col_step > 0.0)
-        || strip.layout.iter().any(|r| {
-            !finite(r.centre)
-                || !finite(r.across)
-                || !finite(r.along)
-                || !r.curvature.is_finite()
-                || !r.half_width.is_finite()
-                || r.half_width < 0.0
-                || r.across.x() * r.along.y() - r.across.y() * r.along.x() == 0.0
-        })
         || strip
             .evidence
             .ring
@@ -117,8 +107,11 @@ pub(super) fn mapped(strip: &Strip, row: f64, col: f64) -> Option<Px> {
         return None;
     }
     let layout = layout_at(strip, row)?;
+    let determinant = layout.across.x() * layout.along.y() - layout.across.y() * layout.along.x();
     let k = col - f64::from(strip.cols - 1) / 2.0;
-    if !layout.curvature.is_finite()
+    if !determinant.is_finite()
+        || determinant.abs() < 1e-12
+        || !layout.curvature.is_finite()
         || !strip.col_step.is_finite()
         || strip.col_step <= 0.0
         || 1.0 - layout.curvature * k * strip.col_step <= 0.2

@@ -18,6 +18,13 @@ pub fn place(
         ));
     }
     let corners = super::walls::body_corners(strip, body, polarity)?;
+    from_corners(strip, &corners)
+}
+
+pub(super) fn from_corners(
+    strip: &Strip,
+    corners: &super::walls::BodyCorners,
+) -> Result<SideMarks, EngineError> {
     let [anterior, posterior] = if super::back_to_film::facing(strip)? == ImageRight::Anterior {
         [1, 0]
     } else {

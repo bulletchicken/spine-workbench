@@ -18,6 +18,13 @@ pub fn place(
         ));
     }
     let corners = super::walls::body_corners(strip, body, polarity)?;
+    from_corners(strip, &corners)
+}
+
+pub(super) fn from_corners(
+    strip: &Strip,
+    corners: &super::walls::BodyCorners,
+) -> Result<EndplateLines, EngineError> {
     let [left, right] = if super::back_to_film::facing(strip)? == ImageRight::PatientLeft {
         [1, 0]
     } else {
