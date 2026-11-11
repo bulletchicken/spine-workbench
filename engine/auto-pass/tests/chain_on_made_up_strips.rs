@@ -435,14 +435,7 @@ fn noise_degrades_precision_without_losing_the_body_order() {
     assert!(noisy_spread / 2.0 > clean_spread);
 }
 
-fn paired_trap(corrupted: FilmKind) -> (usize, usize, bool) {
-    let mut front = fixture(Template::Standard, FilmKind::Front, 0.0, 17);
-    let mut side = fixture(Template::Standard, FilmKind::Side, 0.0, 17);
-    let damaged = if corrupted == FilmKind::Front {
-        &mut front
-    } else {
-        &mut side
-    };
+fn hide_first_body(damaged: &mut Fixture) {
     let cols = damaged.strip.cols as usize;
     let first = damaged.plates[0];
     let sacrum = damaged.plates.last().unwrap()[1] + 8.0;
@@ -459,6 +452,16 @@ fn paired_trap(corrupted: FilmKind) -> (usize, usize, bool) {
         }
     }
     damaged.barcode = barcode(&damaged.strip);
+}
+
+fn paired_trap(corrupted: FilmKind) -> (usize, usize, bool) {
+    let mut front = fixture(Template::Standard, FilmKind::Front, 0.0, 17);
+    let mut side = fixture(Template::Standard, FilmKind::Side, 0.0, 17);
+    hide_first_body(if corrupted == FilmKind::Front {
+        &mut front
+    } else {
+        &mut side
+    });
     let front_evidence =
         LatticeEvidence::build(&front.strip, &front.barcode, Polarity::BoneBright).unwrap();
     let side_evidence =
@@ -527,5 +530,56 @@ fn both_block_orders_correct_a_front_naming_trap() {
     assert!(
         paired < independent,
         "independent {independent}, paired {paired}"
+    );
+}
+
+#[test]
+fn completed_surveys_correct_a_hidden_c7_naming_shift() {
+    use auto_pass::chain_search::paired::{self, SurveyView};
+    let front = fixture(Template::Standard, FilmKind::Front, 0.0, 17);
+    let mut side = fixture(Template::Standard, FilmKind::Side, 0.0, 17);
+    hide_first_body(&mut side);
+    let options = options(Some(Template::Standard));
+    let f = survey::search(&front.strip, &front.barcode, &options).unwrap();
+    let s = survey::search(&side.strip, &side.barcode, &options).unwrap();
+    let errors = |chain: &SettledChain, fixture: &Fixture| {
+        chain
+            .boundaries
+            .bodies
+            .iter()
+            .zip(&fixture.plates)
+            .filter(|(body, truth)| {
+                let centre = 0.5 * (body.sup.row + body.inf.row);
+                (centre - 0.5 * (truth[0] + truth[1])).abs() > 0.5 * (truth[1] - truth[0])
+            })
+            .count()
+    };
+    let independent = errors(&f.settled, &front) + errors(&s.settled, &side);
+    let geometry = |search: &survey::FilmSearch| ViewGeometry {
+        z: search.evidence.z.clone(),
+        observed: search.evidence.observed.clone(),
+        scale_assumed: false,
+    };
+    let f_geometry = geometry(&f);
+    let s_geometry = geometry(&s);
+    let joint = paired::settle(
+        SurveyView {
+            strip: &front.strip,
+            survey: f,
+            geometry: f_geometry,
+        },
+        SurveyView {
+            strip: &side.strip,
+            survey: s,
+            geometry: s_geometry,
+        },
+        &options,
+    )
+    .unwrap();
+    let coupled = errors(&joint.front.settled, &front) + errors(&joint.side.settled, &side);
+    assert!(independent > 0, "the hidden C7 must produce a naming trap");
+    assert!(
+        coupled < independent,
+        "independent {independent}, paired {coupled}"
     );
 }
