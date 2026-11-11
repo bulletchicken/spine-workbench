@@ -1,0 +1,18 @@
+/* Three vertebrae on a small dark plate. Drawn in ink: lumen is kept for
+   the next action, so the mark never competes with the one lit thing. */
+:where(.brand-mark) {
+  flex: none;
+  width: 26px;
+  height: 26px;
+}
+
+.brand-mark-plate {
+  fill: var(--room-2);
+  stroke: var(--line-3);
+  stroke-width: 1px;
+}
+
+.brand-mark-body {
+  fill: var(--ink-1);
+  stroke: none;
+}

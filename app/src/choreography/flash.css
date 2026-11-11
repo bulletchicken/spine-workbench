@@ -1,0 +1,25 @@
+/* flash: something new arrives lit, then fades to its own colours. An
+   outline on a film starts as a broad white line with a white wash; the
+   frame of a rung on the ladder starts with a white ground. One set of
+   keyframes serves both: a shape reads the stroke and fill, a box reads the
+   background.
+
+     animation: flash var(--t-slow) var(--ease-out);
+
+   Give it to the one thing that is new and draws itself: the outline's own
+   path, the rung's own frame. Never to a group, or to a box with drawings
+   inside it. Fill, stroke and stroke-width inherit, so while the flash runs
+   everything inside that leaves one of them unsaid is drawn white and 6 px
+   wide as well. Every sign in look-and-feel states its own fill and stroke
+   for that reason, so a glyph beside a flashing frame keeps its shape.
+
+   It ends on the part's own colours, so the keyframes say only where it
+   starts. */
+@keyframes flash {
+  from {
+    background-color: rgb(255 255 255 / 0.5);
+    fill: rgb(255 255 255 / 0.34);
+    stroke: #fff;
+    stroke-width: 6px;
+  }
+}

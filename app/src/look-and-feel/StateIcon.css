@@ -1,0 +1,70 @@
+/* The state a row or a chip is in, as a sign and a colour. The six signs are
+   six different shapes, so they are told apart with no colour at all. */
+:where(.state-icon) {
+  flex: none;
+  width: var(--icon-size, 18px);
+  height: var(--icon-size, 18px);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--icon-stroke, 1.6px);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  /* Waiting. Not --ink-4, which falls under 3:1 on a card. */
+  color: var(--ink-3);
+}
+
+:where(.state-icon[data-state='ok']) {
+  color: var(--sure);
+}
+
+:where(.state-icon[data-state='warn'], .state-icon[data-state='needs']) {
+  color: var(--look);
+}
+
+:where(.state-icon[data-state='bad']) {
+  color: var(--needs);
+}
+
+:where(.state-icon[data-state='you']) {
+  color: var(--by-you);
+}
+
+:where(.state-icon[data-state='busy']) {
+  color: var(--lumen-mid);
+}
+
+.state-icon-solid {
+  fill: currentColor;
+  stroke: none;
+}
+
+.state-icon-track {
+  opacity: 0.28;
+}
+
+/* Waiting: twelve dots, evenly round the ring. */
+.state-icon-dots {
+  stroke-dasharray: 0.001 1;
+}
+
+/* Busy: the arc turns once in the time a slot's sheen takes to rise. */
+.state-icon[data-state='busy'] {
+  animation: state-icon-turn var(--t-reading) linear infinite;
+}
+
+@keyframes state-icon-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Nothing loops under reduced motion: the arc stands still. */
+[data-motion='reduced'] .state-icon[data-state='busy'] {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .state-icon[data-state='busy'] {
+    animation: none;
+  }
+}

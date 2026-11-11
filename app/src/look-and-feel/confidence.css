@@ -1,0 +1,81 @@
+/* How sure the app is of a vertebra, as colour and line. This is the one
+   place `data-conf` becomes either: an outline on a film, a rung of the
+   ladder and a chip of the legend all read these properties, so the three
+   can never disagree, and no part writes a `[data-conf]` rule of its own.
+   Each state also has a glyph (ConfidenceGlyph) and a word, so nothing rests
+   on hue alone.
+
+     --c                 the state's colour
+     --conf-wash         the tint inside an outline, and inside a rung's frame
+
+   An outline on a film:
+     --conf-line         its width, in screen pixels
+     --conf-dash         its dash pattern, in screen pixels
+     --conf-cap          how each dash ends
+     --conf-fade         how strongly the outline shows
+     --conf-casing-fade  how strongly the dark casing under it shows
+
+   A rung of the ladder and a chip of the legend:
+     --conf-edge         the same line as a CSS border style
+     --conf-edge-w       its width as the line under a legend chip
+     --conf-frame-w      its width as a rung's frame
+     --conf-bar          the bar at a rung's edge, as a background
+     --conf-bar-w        the bar's width
+     --conf-rung-fade    how strongly the whole rung shows */
+[data-conf] {
+  --c: var(--sure);
+  --conf-wash: transparent;
+  --conf-line: 2px;
+  --conf-dash: var(--dash-sure);
+  --conf-cap: butt;
+  --conf-fade: 1;
+  --conf-casing-fade: 1;
+  --conf-edge: solid;
+  --conf-edge-w: 2px;
+  --conf-frame-w: 1.5px;
+  --conf-bar: var(--c);
+  --conf-bar-w: 4px;
+  --conf-rung-fade: 1;
+}
+
+[data-conf='look'] {
+  --c: var(--look);
+  --conf-dash: var(--dash-look);
+  --conf-edge: dashed;
+  --conf-bar: repeating-linear-gradient(180deg, var(--c) 0 4px, transparent 4px 7px);
+}
+
+/* Dotted and heavier, with a tint: the one state that asks for a person. The
+   dots sit half a pixel further apart than --dash-needs, so the round ends
+   of a line this wide stay apart. */
+[data-conf='needs'] {
+  --c: var(--needs);
+  --conf-wash: var(--needs-wash);
+  --conf-line: 3.2px;
+  --conf-dash: 1.5 5.5;
+  --conf-cap: round;
+  --conf-edge: dotted;
+  --conf-edge-w: 3px;
+  --conf-frame-w: 2px;
+  --conf-bar: repeating-linear-gradient(180deg, var(--c) 0 2px, transparent 2px 5px);
+  --conf-bar-w: 5px;
+}
+
+[data-conf='byyou'] {
+  --c: var(--by-you);
+  --conf-line: 2.2px;
+}
+
+/* Not counted: C7 above T1 and any outline below L5. Drawn as inferred, and
+   faint: a thin line on a thin casing, and a rung that stands back. */
+[data-conf='sacrum'] {
+  --c: var(--inferred);
+  --conf-line: 1.4px;
+  --conf-dash: var(--dash-inferred);
+  --conf-fade: 0.75;
+  --conf-casing-fade: 0.4;
+  --conf-edge: dashed;
+  --conf-edge-w: 1px;
+  --conf-frame-w: 1px;
+  --conf-rung-fade: 0.6;
+}

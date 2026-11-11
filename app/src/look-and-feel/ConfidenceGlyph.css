@@ -1,0 +1,38 @@
+/* The glyph takes its colour from --c, which confidence.css sets wherever
+   `data-conf` stands: on the glyph itself, or on the vertebra, rung or chip
+   around it. */
+:where(.confidence-glyph) {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  overflow: visible;
+}
+
+/* Every shape states both its fill and its stroke. The two inherit, so a
+   shape that left one unsaid would take it from whatever is around it: the
+   white line of `flash`, for one, running on a group that holds the glyph. */
+.confidence-glyph-solid {
+  fill: var(--c);
+  stroke: none;
+}
+
+.confidence-glyph-line {
+  fill: none;
+  stroke: var(--c);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* The dark line under a glyph drawn on a film, so it reads on bright bone. */
+.confidence-glyph-casing {
+  fill: none;
+  stroke: var(--casing);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Under a glyph with a hollow, the casing is a whole disc. */
+.confidence-glyph-casing-disc {
+  fill: var(--casing);
+  stroke: none;
+}

@@ -1,0 +1,21 @@
+/* The four view figures share one line, one head and one stance. Each is a
+   60 by 120 drawing; the part it sits in sets how large it stands. */
+:where(.view-figure) {
+  flex: none;
+  width: 60px;
+  aspect-ratio: 1 / 2;
+  overflow: visible;
+}
+
+.view-figure {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* The spine: seven dashes from the neck to the pelvis, however it curves. */
+.view-figure-spine {
+  stroke-dasharray: 3 4;
+}

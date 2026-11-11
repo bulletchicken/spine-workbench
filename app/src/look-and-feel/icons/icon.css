@@ -1,0 +1,36 @@
+/* Size and line for every icon: the set drawn for this app, on a 20 px grid,
+   and Lucide's, on its own grid of 24. Both are 20 px across with a 1.6 px
+   line unless the part they sit in says otherwise, by setting --icon-size
+   or --icon-stroke (the line's width when the icon is 20 px; it thins and
+   thickens with the icon). An icon takes the colour of the text around it.
+
+   Every rule here weighs nothing, so a part's own CSS always wins. */
+:where(.icon, .lucide) {
+  flex: none;
+  width: var(--icon-size, 20px);
+  height: var(--icon-size, 20px);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--icon-stroke, 1.6px);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* The same line on screen is 1.2 times as many of Lucide's units. */
+:where(.lucide) {
+  stroke-width: calc(var(--icon-stroke, 1.6px) * 1.2);
+}
+
+/* Playback signs are solid, so they read at a glance on the transport. A
+   solid shape weighs more than a line drawing of the same size, so they are
+   drawn at four fifths, with the line widened to stay 1.6 px on screen. */
+:where(.icon[data-icon='play'], .icon[data-icon='pause'], .icon[data-icon='skip']) {
+  fill: currentColor;
+  stroke-width: calc(var(--icon-stroke, 1.6px) * 1.5);
+  scale: 0.8;
+}
+
+/* A drawn icon's lighter lines: the wand's sparks, the ruler's ticks. */
+.icon-fine {
+  stroke-width: calc(var(--icon-stroke, 1.6px) * 0.85);
+}

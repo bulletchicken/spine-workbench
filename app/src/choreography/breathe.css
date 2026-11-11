@@ -1,0 +1,54 @@
+/* breathe: the only loop in the app. The one lit thing breathes: the lit
+   button's glow, a pair of choice cards more softly, the ring on a film.
+
+   The keyframes move one number, --breath, from 0 (breathed out) to 1
+   (breathed in) and back, and each part turns that number into its own
+   light: the reach of a glow, the strength of a ring. A part that is not
+   breathing rests at 0.5, half a breath.
+
+   A part breathes by taking the whole animation, never the keyframes'
+   name alone:
+
+     animation: var(--breathing);
+
+   Each thing that glows takes it itself. --breath does not inherit, so a
+   box that breathes does not make what is inside it breathe: each card of
+   a pair takes the animation, not the pair.
+
+   Under reduced motion --breathing is `none`, so nothing loops and every
+   lit thing holds its resting light. */
+@property --breath {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0.5;
+}
+
+:root {
+  --breathing: breathe var(--breathe) ease-in-out infinite;
+
+  /* The colour of the breathing light: the blue of --lumen-glow, as bare
+     channels, so a lit part can give it a strength that follows the breath:
+     rgb(var(--breath-light) / calc(0.3 + 0.25 * var(--breath))). */
+  --breath-light: 110 190 255;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --breathing: none;
+  }
+}
+
+[data-motion='reduced'] {
+  --breathing: none;
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    --breath: 0;
+  }
+
+  50% {
+    --breath: 1;
+  }
+}

@@ -1,0 +1,16 @@
+/* roll: a changed name rises into place as it brightens, on the films and
+   the ladder in the same moment, each a little later the further it is from
+   the edit.
+
+     animation: roll var(--t-base) var(--ease-out) both;
+     animation-delay: calc(var(--i, 0) * var(--stagger));
+
+   It rises 8 px unless the part sets --roll: a rung sets less, and a name
+   drawn on a film sets it in film pixels, as geometry, so the rise is 8 px
+   on screen at any zoom. */
+@keyframes roll {
+  from {
+    opacity: 0;
+    transform: translateY(var(--roll, 8px));
+  }
+}

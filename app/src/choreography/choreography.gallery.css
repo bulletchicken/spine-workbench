@@ -1,0 +1,199 @@
+/* Only for this area's gallery page: each shared animation on a stand-in for
+   the parts that will use it. */
+.motion-gallery-again {
+  align-self: flex-start;
+  height: 28px;
+  padding: 0 10px;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-pill);
+  color: var(--ink-1);
+  font-size: var(--text-small);
+  font-weight: 600;
+}
+
+.motion-gallery-again:hover {
+  border-color: var(--line-3);
+  background: var(--room-3);
+}
+
+.motion-gallery-stack {
+  display: grid;
+  gap: var(--s-4);
+  justify-items: start;
+}
+
+.motion-gallery-row {
+  display: flex;
+  gap: var(--s-6);
+  align-items: center;
+}
+
+/* ---- breathe: one breath, three lights ---- */
+.motion-gallery-lit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 240px;
+  min-height: 48px;
+  border-radius: var(--r-3);
+  background: linear-gradient(180deg, var(--lumen-hi), var(--lumen) 58%, color-mix(in srgb, var(--lumen) 48%, var(--lumen-mid)));
+  box-shadow:
+    0 0 0 1px rgb(255 255 255 / 0.55) inset,
+    0 0 calc(18px + 16px * var(--breath)) rgb(var(--breath-light) / calc(0.3 + 0.25 * var(--breath))),
+    0 0 2px color-mix(in srgb, var(--lumen-mid) 90%, transparent);
+  color: var(--on-lumen);
+  font: 600 var(--text-lead) / 20px var(--font-ui);
+  animation: var(--breathing);
+}
+
+.motion-gallery-choices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-2);
+  width: 240px;
+}
+
+.motion-gallery-choice {
+  padding: 12px;
+  border: 1px solid var(--lumen-deep);
+  border-radius: var(--r-3);
+  background: var(--lumen-wash);
+  box-shadow: 0 0 calc(12px + 12px * var(--breath)) rgb(var(--breath-light) / calc(0.1 + 0.16 * var(--breath)));
+  font-weight: 600;
+  line-height: 18px;
+  animation: var(--breathing);
+}
+
+.motion-gallery-film {
+  display: block;
+  border-radius: var(--r-film);
+  background: var(--well);
+}
+
+.motion-gallery-bone {
+  fill: #8d949c;
+}
+
+.motion-gallery-ring {
+  fill: color-mix(in srgb, var(--lumen) 14%, transparent);
+  fill-opacity: calc(0.5 + 0.5 * var(--breath));
+  stroke: var(--lumen-hi);
+  stroke-opacity: calc(0.7 + 0.3 * var(--breath));
+  stroke-width: 2.6px;
+  filter: drop-shadow(0 0 8px var(--lumen-mid));
+  animation: var(--breathing);
+}
+
+/* ---- settle: guide lines, then cards ---- */
+.motion-gallery-guide {
+  display: grid;
+  gap: var(--s-3);
+  width: 320px;
+}
+
+.motion-gallery-line {
+  animation: settle var(--t-calm) var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * var(--stagger-line));
+}
+
+.motion-gallery-eyebrow {
+  color: var(--ink-3);
+  font: 500 var(--text-micro) / var(--lh-micro) var(--font-ui);
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+}
+
+.motion-gallery-voice {
+  font: 400 var(--text-voice) / var(--lh-voice) var(--font-voice);
+  letter-spacing: -0.012em;
+}
+
+.motion-gallery-body {
+  color: var(--ink-2);
+}
+
+.motion-gallery-card {
+  padding: 14px var(--s-4);
+  border: 1px solid var(--line-1);
+  border-radius: var(--r-3);
+  background: var(--room-2);
+  box-shadow: var(--lift-1);
+  color: var(--ink-2);
+  font-size: var(--text-small);
+  line-height: var(--lh-small);
+  animation: settle var(--t-calm) var(--ease-out) both;
+  animation-delay: calc(3 * var(--stagger-line) + var(--i, 0) * var(--stagger-card));
+}
+
+/* ---- roll: names, each later the further from the edit ---- */
+.motion-gallery-names {
+  display: grid;
+  gap: 6px;
+  font: 500 var(--text-small) / 1 var(--font-data);
+}
+
+.motion-gallery-name {
+  display: flex;
+  gap: var(--s-2);
+  align-items: center;
+}
+
+.motion-gallery-name > span {
+  animation: roll var(--t-base) var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * var(--stagger));
+}
+
+.motion-gallery-name[data-edited='yes'] {
+  color: var(--by-you);
+}
+
+.motion-gallery-name i {
+  width: 20px;
+  height: 1px;
+  background: var(--line-3);
+}
+
+/* ---- flash: a new outline on a film, a new rung on the ladder. The
+   outline's own path takes it, and the rung's own frame: never the rung,
+   which holds a glyph and a name ---- */
+.motion-gallery-outline-casing {
+  fill: none;
+  stroke: var(--casing);
+  stroke-width: 5px;
+  stroke-linejoin: round;
+}
+
+.motion-gallery-outline {
+  fill: var(--conf-wash);
+  stroke: var(--c);
+  stroke-width: var(--conf-line);
+  stroke-linejoin: round;
+  animation: flash var(--t-slow) var(--ease-out);
+}
+
+.motion-gallery-rungs {
+  display: grid;
+  gap: 3px;
+}
+
+.motion-gallery-rung {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.motion-gallery-rung-frame {
+  width: 38px;
+  height: 30px;
+  border: var(--conf-frame-w) var(--conf-edge) var(--c);
+  border-radius: 3px;
+  box-shadow: 0 0 0 1px var(--casing);
+  animation: flash var(--t-slow) var(--ease-out);
+}
+
+.motion-gallery-rung-name {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  font: 500 10.5px / 1 var(--font-data);
+}

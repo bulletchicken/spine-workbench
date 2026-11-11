@@ -1,0 +1,29 @@
+/* settle: a guide line or a card arrives, rising a little as it brightens.
+   It ends on the part's own opacity and place, so the keyframes say only
+   where it starts.
+
+     animation: settle var(--t-calm) var(--ease-out) both;
+     animation-delay: calc(var(--i, 0) * var(--stagger-line));
+
+   Under reduced motion light still arrives and nothing travels: the rise is
+   zero, and the line only brightens. */
+:root {
+  --settle-rise: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --settle-rise: 0px;
+  }
+}
+
+[data-motion='reduced'] {
+  --settle-rise: 0px;
+}
+
+@keyframes settle {
+  from {
+    opacity: 0;
+    transform: translateY(var(--settle-rise));
+  }
+}

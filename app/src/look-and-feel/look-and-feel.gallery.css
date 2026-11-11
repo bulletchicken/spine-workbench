@@ -1,0 +1,607 @@
+/* Only for this area's gallery pages: the surroundings a part is shown in. */
+
+/* ---- shared ---- */
+.look-gallery-set {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-5) var(--s-6);
+  align-items: flex-start;
+}
+
+.look-gallery-item {
+  display: grid;
+  justify-items: center;
+  gap: var(--s-2);
+  min-width: 64px;
+  color: var(--ink-1);
+}
+
+.look-gallery-name {
+  color: var(--ink-3);
+  font: 500 var(--text-micro) / var(--lh-micro) var(--font-data);
+  white-space: nowrap;
+}
+
+.look-gallery-worded {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-small);
+  line-height: 16px;
+  white-space: nowrap;
+}
+
+.look-gallery-large {
+  width: 60px;
+  height: 60px;
+}
+
+.look-gallery-size-60 {
+  --icon-size: 60px;
+}
+
+/* ---- a patch of film: grey bone on a dark ground, as a mark sees it ---- */
+.look-gallery-film {
+  display: block;
+  border-radius: var(--r-film);
+  background: var(--well);
+}
+
+.look-gallery-film-soft {
+  fill: #2a2f36;
+}
+
+.look-gallery-film-bone {
+  fill: #8d949c;
+}
+
+.look-gallery-film-bright {
+  fill: #c9ced4;
+}
+
+/* An outline as the marks draw it: a dark casing, then the state's own line. */
+.look-gallery-outline-casing {
+  fill: none;
+  stroke: var(--casing);
+  stroke-width: 5px;
+  stroke-linejoin: round;
+  opacity: var(--conf-casing-fade);
+}
+
+.look-gallery-outline {
+  fill: var(--conf-wash);
+  stroke: var(--c);
+  stroke-width: var(--conf-line);
+  stroke-dasharray: var(--conf-dash);
+  stroke-linecap: var(--conf-cap);
+  stroke-linejoin: round;
+  opacity: var(--conf-fade);
+}
+
+.look-gallery-film-label {
+  fill: var(--ink-1);
+  stroke: var(--casing);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+  paint-order: stroke;
+  font: 500 11.5px var(--font-data);
+}
+
+/* ---- a rung of the ladder ---- */
+.look-gallery-rungs {
+  display: grid;
+  gap: 3px;
+  width: 100px;
+}
+
+.look-gallery-rung {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 30px;
+  opacity: var(--conf-rung-fade);
+}
+
+.look-gallery-rung-bar {
+  position: absolute;
+  top: 1px;
+  bottom: 1px;
+  left: 1px;
+  width: var(--conf-bar-w);
+  border-radius: 2px;
+  background: var(--conf-bar);
+}
+
+.look-gallery-rung-frame {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 8px;
+  width: 38px;
+  border: var(--conf-frame-w) var(--conf-edge) var(--c);
+  border-radius: 3px;
+  background: var(--conf-wash);
+  box-shadow: 0 0 0 1px var(--casing);
+}
+
+.look-gallery-rung-name {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 52px;
+  color: var(--ink-1);
+  font: 500 10.5px / 1 var(--font-data);
+}
+
+/* ---- a legend chip ---- */
+.look-gallery-legend {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  width: 302px;
+}
+
+.look-gallery-chip {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 5px 8px;
+  padding: 7px 10px 9px;
+  border: 1px solid var(--line-1);
+  border-radius: var(--r-2);
+  background: var(--room-1);
+}
+
+.look-gallery-chip-count {
+  font: 500 16px / 20px var(--font-data);
+}
+
+.look-gallery-chip-line {
+  grid-column: 1 / -1;
+  height: 0;
+  margin-top: 2px;
+  border-top: var(--conf-edge-w) var(--conf-edge) var(--c);
+}
+
+/* ---- state icons where they are used ---- */
+.look-gallery-rows {
+  width: 300px;
+  padding: 6px var(--s-4);
+  border: 1px solid var(--line-1);
+  border-radius: var(--r-3);
+  background: var(--room-2);
+}
+
+.look-gallery-row {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  padding: 9px 0;
+  border-top: 1px solid var(--line-1);
+}
+
+.look-gallery-row:first-child {
+  border-top: 0;
+}
+
+.look-gallery-row .state-icon {
+  margin-top: 1px;
+}
+
+.look-gallery-row b {
+  display: block;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+.look-gallery-row span {
+  display: block;
+  color: var(--ink-3);
+  font-size: var(--text-small);
+  line-height: 17px;
+}
+
+.look-gallery-fact {
+  --icon-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 20px;
+  padding: 0 7px 0 5px;
+  border: 1px solid var(--line-1);
+  border-radius: var(--r-pill);
+  background: var(--room-2);
+  color: var(--ink-2);
+  font: 500 10.5px / 1 var(--font-data);
+}
+
+.look-gallery-fact[data-state='needs'] {
+  border-color: rgb(255 210 63 / 0.4);
+  background: var(--look-wash);
+  color: var(--look);
+}
+
+/* ---- icons where they are used ---- */
+.look-gallery-dock {
+  display: grid;
+  gap: 3px;
+  width: calc(var(--dock-w) - 10px);
+  padding: 5px;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-3);
+  background: var(--glass);
+  box-shadow: var(--lift-2);
+}
+
+.look-gallery-tool {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+  padding: 8px 0 6px;
+  border-radius: var(--r-2);
+  color: var(--ink-2);
+}
+
+.look-gallery-tool[data-held='yes'] {
+  background: var(--room-4);
+  box-shadow:
+    inset 0 0 0 1px var(--line-3),
+    inset 2px 0 0 var(--ink-1);
+  color: var(--ink-1);
+}
+
+.look-gallery-tool-word {
+  font-size: 10.5px;
+  font-weight: 500;
+  line-height: 12px;
+}
+
+.look-gallery-tool kbd {
+  position: absolute;
+  top: 4px;
+  right: 5px;
+  color: var(--ink-3);
+  font-size: 9px;
+}
+
+.look-gallery-dock-rule {
+  height: 1px;
+  margin: 2px 6px;
+  background: var(--line-2);
+}
+
+/* Under 1200 the dock is icons alone: the words and the key letters go. */
+@media (max-width: 1199px) {
+  .look-gallery-tool {
+    padding: 9px 0;
+  }
+
+  .look-gallery-tool-word,
+  .look-gallery-tool kbd {
+    display: none;
+  }
+}
+
+.look-gallery-transport {
+  --icon-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  height: 46px;
+  padding: 0 var(--s-4);
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-pill);
+  background: var(--glass);
+  box-shadow: var(--lift-2);
+  color: var(--ink-2);
+}
+
+.look-gallery-lit {
+  --icon-size: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-3);
+  min-height: 48px;
+  padding: 8px 20px;
+  border-radius: var(--r-3);
+  background: linear-gradient(180deg, var(--lumen-hi), var(--lumen) 58%, color-mix(in srgb, var(--lumen) 48%, var(--lumen-mid)));
+  box-shadow: var(--glow-lumen);
+  color: var(--on-lumen);
+  font: 600 var(--text-lead) / 20px var(--font-ui);
+}
+
+.look-gallery-case-tile {
+  --icon-size: 40px;
+  --icon-stroke: 1.3px;
+  display: grid;
+  place-items: center;
+  width: 80px;
+  height: 80px;
+  border-radius: var(--r-4);
+  background: linear-gradient(180deg, var(--lumen-hi), var(--lumen));
+  box-shadow: var(--glow-lumen);
+  color: var(--on-lumen);
+}
+
+.look-gallery-unreadable {
+  --icon-size: 34px;
+  --icon-stroke: 1.1px;
+  display: grid;
+  justify-items: center;
+  gap: var(--s-2);
+  width: 190px;
+  padding: var(--s-5) var(--s-3);
+  border: 1.5px dotted var(--needs);
+  border-radius: var(--r-2);
+  background: var(--needs-wash);
+  text-align: center;
+}
+
+.look-gallery-unreadable .icon {
+  color: var(--needs);
+}
+
+.look-gallery-unreadable b {
+  font-weight: 600;
+}
+
+.look-gallery-unreadable span {
+  color: var(--ink-2);
+  font-size: var(--text-small);
+  line-height: 17px;
+}
+
+.look-gallery-size-12 {
+  --icon-size: 12px;
+}
+
+.look-gallery-size-16 {
+  --icon-size: 16px;
+}
+
+.look-gallery-size-18 {
+  --icon-size: 18px;
+}
+
+.look-gallery-sizes {
+  display: grid;
+  gap: var(--s-3);
+}
+
+.look-gallery-size-row {
+  display: flex;
+  gap: var(--s-4);
+  align-items: center;
+  color: var(--ink-1);
+}
+
+.look-gallery-size-row > .look-gallery-name {
+  width: 40px;
+}
+
+/* ---- figures in the slots they stand in. Four share the row as the four
+   bays share the bench: as wide as at 1440 where there is room, and
+   narrower together where there is not ---- */
+.look-gallery-slots {
+  --slot-w: 235px;
+  display: flex;
+  gap: var(--bay-gap);
+  width: calc(4 * var(--slot-w) + 3 * var(--bay-gap));
+  max-width: 100%;
+}
+
+.look-gallery-slot {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: var(--s-3);
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  height: 420px;
+  border: 1px dashed var(--line-3);
+  border-radius: var(--r-2);
+  background:
+    radial-gradient(120% 55% at 50% 0%, rgb(150 200 255 / 0.075), rgb(150 200 255 / 0.012) 70%),
+    linear-gradient(180deg, rgb(190 215 255 / 0.03), rgb(190 215 255 / 0.008));
+  color: var(--ink-3);
+  font-size: var(--text-small);
+  line-height: 16px;
+}
+
+.look-gallery-slot .view-figure {
+  width: 46%;
+  max-width: 92px;
+  opacity: 0.8;
+}
+
+.look-gallery-slot[data-lit='yes'] {
+  border-color: var(--lumen-mid);
+  background: var(--lumen-wash);
+  color: var(--ink-1);
+}
+
+.look-gallery-slots[data-size='small'] {
+  --slot-w: 150px;
+}
+
+.look-gallery-slots[data-size='small'] .look-gallery-slot {
+  height: 300px;
+}
+
+/* ---- the brand mark beside the name ---- */
+.look-gallery-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+
+.look-gallery-brand-large {
+  width: 104px;
+  height: 104px;
+}
+
+/* ---- the type specimen ---- */
+.look-gallery-type {
+  display: grid;
+  gap: var(--s-4);
+  width: 640px;
+}
+
+.look-gallery-type-row {
+  display: grid;
+  grid-template-columns: 128px minmax(0, 1fr);
+  gap: var(--s-4);
+  align-items: baseline;
+}
+
+.look-gallery-type-row > span:first-child {
+  color: var(--ink-3);
+  font: 500 var(--text-micro) / var(--lh-micro) var(--font-data);
+}
+
+/* As wide as the guide's own column: 368 less its padding, 312 less a little under 1200. */
+.look-gallery-guide {
+  width: calc(var(--guide-w) - 2 * var(--s-6));
+}
+
+@media (max-width: 1199px) {
+  .look-gallery-guide {
+    width: calc(var(--guide-w) - 2 * var(--s-5));
+  }
+}
+
+.look-gallery-guide > .look-gallery-voice {
+  margin: var(--s-3) 0;
+  text-wrap: balance;
+}
+
+.look-gallery-guide > .look-gallery-body {
+  text-wrap: pretty;
+}
+
+.look-gallery-voice {
+  font: 400 var(--text-voice) / var(--lh-voice) var(--font-voice);
+  letter-spacing: -0.012em;
+}
+
+.look-gallery-voice-title {
+  font: 400 28px / 32px var(--font-voice);
+  letter-spacing: -0.01em;
+}
+
+.look-gallery-hero {
+  font: 400 var(--text-hero) / var(--lh-hero) var(--font-voice);
+}
+
+.look-gallery-body {
+  color: var(--ink-2);
+}
+
+.look-gallery-lead {
+  font: 600 var(--text-lead) / var(--lh-lead) var(--font-ui);
+}
+
+.look-gallery-small {
+  color: var(--ink-3);
+  font-size: var(--text-small);
+  line-height: var(--lh-small);
+}
+
+.look-gallery-caps {
+  color: var(--ink-3);
+  font: 500 var(--text-micro) / var(--lh-micro) var(--font-ui);
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+}
+
+.look-gallery-title-number {
+  font: 500 var(--text-title) / var(--lh-title) var(--font-data);
+}
+
+.look-gallery-data {
+  font: 500 var(--text-small) / var(--lh-small) var(--font-data);
+}
+
+.look-gallery-weights {
+  display: flex;
+  gap: var(--s-5);
+}
+
+.look-gallery-weights > :nth-child(1) {
+  font-weight: 400;
+}
+
+.look-gallery-weights > :nth-child(2) {
+  font-weight: 500;
+}
+
+.look-gallery-weights > :nth-child(3) {
+  font-weight: 600;
+}
+
+.look-gallery-ink-1 {
+  color: var(--ink-1);
+}
+
+.look-gallery-ink-2 {
+  color: var(--ink-2);
+}
+
+.look-gallery-ink-3 {
+  color: var(--ink-3);
+}
+
+.look-gallery-ink-4 {
+  color: var(--ink-4);
+  font: 400 24px / 30px var(--font-ui);
+}
+
+.look-gallery-inks {
+  display: grid;
+  gap: var(--s-2);
+  width: 300px;
+}
+
+.look-gallery-card {
+  padding: 14px var(--s-4);
+  border: 1px solid var(--line-1);
+  border-radius: var(--r-3);
+  background: var(--room-2);
+  box-shadow: var(--lift-1);
+}
+
+.look-gallery-figures-column {
+  display: grid;
+  gap: 2px;
+  justify-self: start;
+  font: 500 var(--text-body) / var(--lh-body) var(--font-data);
+  text-align: right;
+}
+
+/* Key hints: an arrow or a held key is an icon, as tall as the letters and
+   with a line that weighs what theirs does. */
+.look-gallery-keys {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  align-items: center;
+}
+
+.look-gallery-keys kbd {
+  --icon-size: var(--text-micro);
+  --icon-stroke: 2px;
+  display: inline-flex;
+  gap: 1px;
+  align-items: center;
+  padding: var(--s-1) 6px;
+  border-radius: var(--r-1);
+  background: var(--room-3);
+  box-shadow: inset 0 0 0 1px var(--line-2);
+  color: var(--ink-2);
+  font: 500 var(--text-micro) / 1 var(--font-data);
+}
