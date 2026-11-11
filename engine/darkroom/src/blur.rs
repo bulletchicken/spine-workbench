@@ -10,6 +10,13 @@
 //! length plus one box width. Every blur reads past the edge with the
 //! mirror rule of [`crate::grey_image::reflect_index`]. Sums run in f64.
 //!
+//! Rows are filtered one at a time. Columns are filtered all at once, a
+//! whole row of them per step, so every read runs along memory; the mirror
+//! rule is worked out only for reads that fall off the image. A row, or a
+//! whole plane before a column pass, whose values are all finite skips the
+//! checks for values that are not (below), which change nothing there. All
+//! of it gives what filtering each column on its own would, sum for sum.
+//!
 //! The cascade's width differs from the Gaussian it stands in for by the
 //! rounding of its pass count, and at whole sigmas it is narrower: see
 //! [`box_widths`] for by how much.
@@ -35,23 +42,15 @@ pub fn gaussian(image: &GreyImage<f32>, sigma: f64) -> Option<GreyImage<f32>> {
         let kernel = sampled_gaussian(sigma)?;
         filter_separable(image, &kernel, &kernel)
     } else {
-        let widths = box_widths(sigma)?;
-        Some(map_lines(
-            image,
-            |line| cascade(line, &widths),
-            |line| cascade(line, &widths),
-        ))
+        let boxes = box_widths(sigma)?.map(|width| Pass::Box((width - 1) / 2));
+        Some(separable(image, &boxes, &boxes))
     }
 }
 
 /// One box blur of radius `radius` px (width `2·radius + 1`) along each axis.
 pub fn box_blur(image: &GreyImage<f32>, radius: u32) -> GreyImage<f32> {
-    let radius = radius as usize;
-    map_lines(
-        image,
-        |line| box_mean(line, radius),
-        |line| box_mean(line, radius),
-    )
+    let pass = [Pass::Box(radius as usize)];
+    separable(image, &pass, &pass)
 }
 
 /// Correlates the image with `kernel_x` along each row, then with `kernel_y`
@@ -66,10 +65,10 @@ pub fn filter_separable(
     if !is_odd_length(kernel_x) || !is_odd_length(kernel_y) {
         return None;
     }
-    Some(map_lines(
+    Some(separable(
         image,
-        |line| correlate(line, kernel_x),
-        |line| correlate(line, kernel_y),
+        &[Pass::Kernel(kernel_x)],
+        &[Pass::Kernel(kernel_y)],
     ))
 }
 
@@ -150,104 +149,224 @@ fn is_odd_length(kernel: &[f64]) -> bool {
     !kernel.is_empty() && kernel.len() % 2 == 1
 }
 
-/// Runs the three box passes of `widths` one after another on a line.
-fn cascade(line: &[f64], widths: &[usize; 3]) -> Vec<f64> {
-    widths.iter().fold(line.to_vec(), |current, &width| {
-        box_mean(&current, (width - 1) / 2)
-    })
+/// One pass of a separable filter along every line of one axis.
+#[derive(Clone, Copy)]
+enum Pass<'a> {
+    /// Correlation with a kernel of odd length.
+    Kernel(&'a [f64]),
+    /// A box mean of this radius.
+    Box(usize),
+}
+
+/// The index a read at `index` takes on a line of `len`: itself when it is
+/// on the line, otherwise the mirror rule.
+fn mirrored(index: i64, len: usize) -> usize {
+    match usize::try_from(index) {
+        Ok(inside) if inside < len => inside,
+        _ => reflect_index(index, len as u32).unwrap_or(0),
+    }
+}
+
+/// A value as a sum reads it: itself when finite, otherwise NaN. When the
+/// caller has found every value finite (`CHECKED` false), itself.
+fn read_for_sum<const CHECKED: bool>(value: f64) -> f64 {
+    if !CHECKED || value.is_finite() {
+        value
+    } else {
+        f64::NAN
+    }
+}
+
+/// A value as a running sum holds it: itself when finite, otherwise 0, with
+/// the value counted apart. When every value is finite, itself.
+fn held_in_sum<const CHECKED: bool>(value: f64) -> f64 {
+    if !CHECKED || value.is_finite() {
+        value
+    } else {
+        0.0
+    }
+}
+
+/// 1 when a running sum must count `value` apart, otherwise 0.
+fn counted_apart<const CHECKED: bool>(value: f64) -> i64 {
+    i64::from(CHECKED && !value.is_finite())
 }
 
 /// The mean of each value and the `radius` values either side of it, read
-/// past the edges by the mirror rule. Running sum, so the cost is the length
-/// of the line plus one box width. The sum holds only finite values, and a
+/// past the edges by the mirror rule. The line is mirrored out once, then a
+/// running sum slides along it, so the cost is the length of the line plus
+/// one box width. The sum holds only finite values, and a
 /// count of the others in the window makes those means NaN, so a bad value
 /// spoils only the windows that hold it.
-fn box_mean(line: &[f64], radius: usize) -> Vec<f64> {
+fn box_mean<const CHECKED: bool>(line: &[f64], radius: usize) -> Vec<f64> {
     let len = line.len();
     if len == 0 {
         return Vec::new();
     }
-    let radius = radius as i64;
-    let width = (2 * radius + 1) as f64;
-    let at = |index: i64| line[reflect_index(index, len as u32).unwrap_or(0)];
+    let span = 2 * radius + 1;
+    let width = span as f64;
+    let reach = radius as i64;
+    let padded: Vec<f64> = (-reach..=len as i64 + reach)
+        .map(|index| line[mirrored(index, len)])
+        .collect();
     let mut sum = 0.0f64;
     let mut not_finite = 0i64;
-    for value in (-radius..=radius).map(at) {
-        if value.is_finite() {
-            sum += value;
-        } else {
-            not_finite += 1;
-        }
+    for &value in &padded[..span] {
+        sum += held_in_sum::<CHECKED>(value);
+        not_finite += counted_apart::<CHECKED>(value);
     }
     let mut means = Vec::with_capacity(len);
-    for i in 0..len as i64 {
+    for (&leaving, &entering) in padded.iter().zip(&padded[span..]) {
         means.push(if not_finite > 0 {
             f64::NAN
         } else {
             sum / width
         });
-        let (entering, leaving) = (at(i + 1 + radius), at(i - radius));
-        if entering.is_finite() {
-            sum += entering;
-        } else {
-            not_finite += 1;
-        }
-        if leaving.is_finite() {
-            sum -= leaving;
-        } else {
-            not_finite -= 1;
-        }
+        sum += held_in_sum::<CHECKED>(entering) - held_in_sum::<CHECKED>(leaving);
+        not_finite += counted_apart::<CHECKED>(entering) - counted_apart::<CHECKED>(leaving);
     }
     means
 }
 
+/// [`box_mean`] down every column of `source`, a `width` by `height`
+/// plane, into `target`, a whole row at a time, with one running sum and
+/// one count per column.
+fn box_columns<const CHECKED: bool>(
+    source: &[f64],
+    target: &mut [f64],
+    width: usize,
+    height: usize,
+    radius: usize,
+) {
+    let radius = radius as i64;
+    let box_width = (2 * radius + 1) as f64;
+    let row = |y: i64| {
+        let start = mirrored(y, height) * width;
+        &source[start..start + width]
+    };
+    let mut sum = vec![0.0f64; width];
+    let mut not_finite = vec![0i64; width];
+    for y in -radius..=radius {
+        for ((s, bad), &value) in sum.iter_mut().zip(not_finite.iter_mut()).zip(row(y)) {
+            *s += held_in_sum::<CHECKED>(value);
+            *bad += counted_apart::<CHECKED>(value);
+        }
+    }
+    for (y, means) in target.chunks_mut(width).enumerate() {
+        let y = y as i64;
+        let (entering, leaving) = (row(y + 1 + radius), row(y - radius));
+        if CHECKED {
+            for ((mean, &s), &bad) in means.iter_mut().zip(&sum).zip(&not_finite) {
+                *mean = if bad > 0 { f64::NAN } else { s / box_width };
+            }
+            let windows = sum.iter_mut().zip(not_finite.iter_mut());
+            for ((s, bad), (&new, &old)) in windows.zip(entering.iter().zip(leaving)) {
+                *s += held_in_sum::<CHECKED>(new) - held_in_sum::<CHECKED>(old);
+                *bad += counted_apart::<CHECKED>(new) - counted_apart::<CHECKED>(old);
+            }
+        } else {
+            for (mean, &s) in means.iter_mut().zip(&sum) {
+                *mean = s / box_width;
+            }
+            for (s, (&new, &old)) in sum.iter_mut().zip(entering.iter().zip(leaving)) {
+                *s += new - old;
+            }
+        }
+    }
+}
+
 /// Correlates one line with a kernel of odd length, reading past the edges
 /// by the mirror rule. A value that is not finite is read as NaN, so every
-/// output whose window holds it is NaN, whatever the kernel's signs.
-fn correlate(line: &[f64], kernel: &[f64]) -> Vec<f64> {
+/// output whose window holds it is NaN, whatever the kernel's signs. The
+/// line is mirrored out once, then each weight is added in over the whole
+/// line, so every output sums its products in kernel order.
+fn correlate<const CHECKED: bool>(line: &[f64], kernel: &[f64]) -> Vec<f64> {
     let len = line.len();
     if len == 0 {
         return Vec::new();
     }
-    let radius = (kernel.len() as i64 - 1) / 2;
-    let at = |index: i64| {
-        let value = line[reflect_index(index, len as u32).unwrap_or(0)];
-        if value.is_finite() { value } else { f64::NAN }
-    };
-    (0..len as i64)
-        .map(|i| {
-            kernel
-                .iter()
-                .enumerate()
-                .map(|(k, &weight)| weight * at(i + k as i64 - radius))
-                .sum::<f64>()
-        })
-        .collect()
+    let radius = (kernel.len() / 2) as i64;
+    let padded: Vec<f64> = (-radius..len as i64 + radius)
+        .map(|index| read_for_sum::<CHECKED>(line[mirrored(index, len)]))
+        .collect();
+    let mut sums = vec![0.0f64; len];
+    for (k, &weight) in kernel.iter().enumerate() {
+        for (sum, &value) in sums.iter_mut().zip(&padded[k..k + len]) {
+            *sum += weight * value;
+        }
+    }
+    sums
 }
 
-/// Applies `along_x` to every row and then `along_y` to every column, in f64,
-/// and returns the result on the same placement. An empty image stays empty.
-fn map_lines(
-    image: &GreyImage<f32>,
-    along_x: impl Fn(&[f64]) -> Vec<f64>,
-    along_y: impl Fn(&[f64]) -> Vec<f64>,
-) -> GreyImage<f32> {
+/// [`correlate`] down every column of `source`, a `width` by `height`
+/// plane, into `target`, a whole row at a time.
+fn correlate_columns<const CHECKED: bool>(
+    source: &[f64],
+    target: &mut [f64],
+    width: usize,
+    height: usize,
+    kernel: &[f64],
+) {
+    let radius = (kernel.len() / 2) as i64;
+    for (y, sums) in target.chunks_mut(width).enumerate() {
+        sums.fill(0.0);
+        for (k, &weight) in kernel.iter().enumerate() {
+            let start = mirrored(y as i64 + k as i64 - radius, height) * width;
+            for (sum, &value) in sums.iter_mut().zip(&source[start..start + width]) {
+                *sum += weight * read_for_sum::<CHECKED>(value);
+            }
+        }
+    }
+}
+
+/// Whether every value is finite, so a pass may skip the checks that keep
+/// a bad value to the windows that hold it. Every value is read, without
+/// stopping at the first bad one, so the check runs on several at once.
+fn all_finite(values: &[f64]) -> bool {
+    values
+        .iter()
+        .fold(true, |finite, value| finite & value.is_finite())
+}
+
+/// One pass along a row, with the checks only when the row needs them.
+fn row_pass(row: &[f64], pass: Pass) -> Vec<f64> {
+    match (pass, all_finite(row)) {
+        (Pass::Kernel(kernel), true) => correlate::<false>(row, kernel),
+        (Pass::Kernel(kernel), false) => correlate::<true>(row, kernel),
+        (Pass::Box(radius), true) => box_mean::<false>(row, radius),
+        (Pass::Box(radius), false) => box_mean::<true>(row, radius),
+    }
+}
+
+/// One pass down every column of `plane` into `target`, with the checks
+/// only when the plane needs them.
+fn column_pass(plane: &[f64], target: &mut [f64], width: usize, height: usize, pass: Pass) {
+    match (pass, all_finite(plane)) {
+        (Pass::Kernel(k), true) => correlate_columns::<false>(plane, target, width, height, k),
+        (Pass::Kernel(k), false) => correlate_columns::<true>(plane, target, width, height, k),
+        (Pass::Box(r), true) => box_columns::<false>(plane, target, width, height, r),
+        (Pass::Box(r), false) => box_columns::<true>(plane, target, width, height, r),
+    }
+}
+
+/// Runs the passes of `along_x`, in order, along every row, then those of
+/// `down` down every column, in f64, and returns the result on the same
+/// placement. Column passes go from one plane into a second and back. An
+/// empty image stays empty.
+fn separable(image: &GreyImage<f32>, along_x: &[Pass], down: &[Pass]) -> GreyImage<f32> {
     let (width, height) = (image.width() as usize, image.height() as usize);
     let mut plane: Vec<f64> = image.pixels().iter().map(|&v| f64::from(v)).collect();
     if width > 0 && height > 0 {
         for row in plane.chunks_mut(width) {
-            let filtered = along_x(row);
-            row.copy_from_slice(&filtered);
+            for &pass in along_x {
+                let filtered = row_pass(row, pass);
+                row.copy_from_slice(&filtered);
+            }
         }
-        let mut column = vec![0.0; height];
-        for x in 0..width {
-            for (y, value) in column.iter_mut().enumerate() {
-                *value = plane[y * width + x];
-            }
-            let filtered = along_y(&column);
-            for (y, value) in filtered.into_iter().enumerate() {
-                plane[y * width + x] = value;
-            }
+        let mut spare = vec![0.0f64; plane.len()];
+        for &pass in down {
+            column_pass(&plane, &mut spare, width, height, pass);
+            core::mem::swap(&mut plane, &mut spare);
         }
     }
     let pixels: Vec<f32> = plane.into_iter().map(|v| v as f32).collect();
@@ -419,7 +538,7 @@ mod tests {
         // are whole numbers, held exactly, and the one division by 3 rounds
         // by at most a part in 1e16; 1e-12 sits far above that and far below
         // the 1/3 that repeating the edge value, (1, 1, 2), would cost.
-        let means = box_mean(&[1.0, 2.0, 3.0], 1);
+        let means = box_mean::<false>(&[1.0, 2.0, 3.0], 1);
         assert!((means[0] - 5.0 / 3.0).abs() < 1e-12);
         assert!((means[1] - 2.0).abs() < 1e-12);
         assert!((means[2] - 7.0 / 3.0).abs() < 1e-12);
@@ -440,10 +559,10 @@ mod tests {
         // Radius 1 over [1, NaN, 1, 1, 1, 1]: the windows of outputs 0, 1
         // and 2 hold index 1 (output 0 by the mirror, reading index −1 as 1).
         // Outputs 3 to 5 hold only ones, so their means are exactly 1.
-        let means = box_mean(&[1.0, f64::NAN, 1.0, 1.0, 1.0, 1.0], 1);
+        let means = box_mean::<true>(&[1.0, f64::NAN, 1.0, 1.0, 1.0, 1.0], 1);
         assert!(means[..3].iter().all(|m| m.is_nan()), "{means:?}");
         assert_eq!(&means[3..], &[1.0, 1.0, 1.0]);
-        let infinite = box_mean(&[1.0, 1.0, 1.0, 1.0, f64::INFINITY], 1);
+        let infinite = box_mean::<true>(&[1.0, 1.0, 1.0, 1.0, f64::INFINITY], 1);
         assert_eq!(&infinite[..3], &[1.0, 1.0, 1.0]);
         assert!(infinite[3].is_nan() && infinite[4].is_nan());
     }
@@ -501,6 +620,124 @@ mod tests {
         assert_eq!(sampled_gaussian(5461.5), None);
         assert_eq!(sampled_gaussian(1e19), None);
         assert_eq!(sampled_gaussian(1e300), None);
+    }
+
+    /// A fixed, irregular grid of values in [0, 1) from a multiplicative
+    /// hash of the position, with NaN at (3, 2) and +∞ at (9, 11) when
+    /// `spoiled` and the image is large enough to hold them.
+    fn speckled(width: u32, height: u32, spoiled: bool) -> GreyImage<f32> {
+        let pixels = (0..height)
+            .flat_map(|y| (0..width).map(move |x| (x, y)))
+            .map(|(x, y)| match (x, y) {
+                (3, 2) if spoiled => f32::NAN,
+                (9, 11) if spoiled => f32::INFINITY,
+                _ => {
+                    let n = u64::from(x).wrapping_mul(73_856_093)
+                        ^ u64::from(y).wrapping_mul(19_349_663);
+                    ((n.wrapping_mul(0x9E37_79B9_7F4A_7C15) >> 40) as f64 / (1u64 << 24) as f64)
+                        as f32
+                }
+            })
+            .collect();
+        GreyImage::new(width, height, pixels, Placement::FILM).expect("sizes match")
+    }
+
+    /// The definition of a separable filter, written out pixel by pixel:
+    /// each row output the sum of `kernel_x` times the values its window
+    /// reads, every read placed by [`reflect_index`] and a value that is not
+    /// finite read as NaN, then the same down each column of the result.
+    fn by_definition(image: &[f64], width: u32, height: u32, kx: &[f64], ky: &[f64]) -> Vec<f64> {
+        let read = |v: f64| if v.is_finite() { v } else { f64::NAN };
+        let (w, h) = (width as usize, height as usize);
+        let window = |kernel: &[f64], centre: usize, len: u32, value: &dyn Fn(usize) -> f64| {
+            let radius = (kernel.len() / 2) as i64;
+            kernel
+                .iter()
+                .enumerate()
+                .map(|(k, weight)| {
+                    let at =
+                        reflect_index(centre as i64 + k as i64 - radius, len).expect("len > 0");
+                    weight * read(value(at))
+                })
+                .sum::<f64>()
+        };
+        let across: Vec<f64> = (0..w * h)
+            .map(|i| window(kx, i % w, width, &|x| image[(i / w) * w + x]))
+            .collect();
+        (0..w * h)
+            .map(|i| window(ky, i / w, height, &|y| across[y * w + i % w]))
+            .collect()
+    }
+
+    #[test]
+    fn the_whole_row_passes_give_what_the_definition_gives() {
+        // Columns are filtered a whole row at a time, the mirror rule is
+        // skipped for reads on the image, and a line or plane found wholly
+        // finite skips the checks for bad values, so the results are checked
+        // against the definition written out pixel by pixel: on an odd size
+        // with a NaN and an infinity (whose rows without them, and every
+        // column pass, take the checked route), on the same size with no
+        // bad value (every pass unchecked), and on a 5 × 4 image whose
+        // kernels reach past both ends more than once. Correlation adds the
+        // same products in the same order, so it must agree exactly (NaN
+        // where the definition is NaN). Box means are running sums, against
+        // the definition's sums of `1/w` weights: both sums of up to 15
+        // values within 1 round in f64 by under 1e-14, so the f32 results
+        // agree to one f32 rounding, 1e-7 for values within 1: 2e-7.
+        let same = |got: &GreyImage<f32>, want: &[f64], tolerance: f64, what: &str| {
+            for (i, (&a, &b)) in got.pixels().iter().zip(want).enumerate() {
+                let a = f64::from(a);
+                let b = f64::from(b as f32);
+                let agree = (a.is_nan() && b.is_nan()) || (a - b).abs() <= tolerance;
+                assert!(agree, "{what}, pixel {i}: {a} against {b}");
+            }
+        };
+        let boxes = |radii: &[usize]| -> Vec<Vec<f64>> {
+            radii
+                .iter()
+                .map(|&r| vec![1.0 / (2 * r + 1) as f64; 2 * r + 1])
+                .collect()
+        };
+        for (width, height, spoiled) in [(23u32, 17u32, true), (23, 17, false), (5, 4, true)] {
+            let picture = speckled(width, height, spoiled);
+            let plane: Vec<f64> = picture.pixels().iter().map(|&v| f64::from(v)).collect();
+            let kx = [0.2, -0.5, 1.3];
+            let ky = [0.1, 0.7, 0.4, -0.3, 0.9];
+            let got = filter_separable(&picture, &kx, &ky).expect("odd kernels");
+            same(
+                &got,
+                &by_definition(&plane, width, height, &kx, &ky),
+                0.0,
+                "kernels",
+            );
+            // An infinite weight makes infinities between the passes, which
+            // the second pass must read as NaN too, even through a kernel
+            // of one sign, where they would otherwise add up to infinity.
+            let smooth = [0.25, 0.5, 0.25];
+            let got = filter_separable(&picture, &[f64::INFINITY], &smooth).expect("odd kernels");
+            let want = by_definition(&plane, width, height, &[f64::INFINITY], &smooth);
+            same(&got, &want, 0.0, "an infinite weight");
+            let kernel = sampled_gaussian(1.9).expect("valid sigma");
+            let got = gaussian(&picture, 1.9).expect("valid sigma");
+            let want = by_definition(&plane, width, height, &kernel, &kernel);
+            same(&got, &want, 0.0, "sigma 1.9");
+            for sigma in [2.6, 4.0] {
+                let widths = box_widths(sigma).expect("valid sigma");
+                let radii = widths.map(|w| (w - 1) / 2);
+                let mut want = plane.clone();
+                for kernel in boxes(&radii) {
+                    want = by_definition(&want, width, height, &kernel, &[1.0]);
+                }
+                for kernel in boxes(&radii) {
+                    want = by_definition(&want, width, height, &[1.0], &kernel);
+                }
+                let got = gaussian(&picture, sigma).expect("valid sigma");
+                same(&got, &want, 2e-7, &format!("sigma {sigma}"));
+            }
+            let square = boxes(&[2]).remove(0);
+            let want = by_definition(&plane, width, height, &square, &square);
+            same(&box_blur(&picture, 2), &want, 2e-7, "box radius 2");
+        }
     }
 
     #[test]
