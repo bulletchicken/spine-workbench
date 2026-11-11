@@ -1,0 +1,15 @@
+/* The layers over a film. The SVG covers the viewport and lets every press
+   through to the viewer; a part that is a button turns its own pointer
+   events back on. Line widths and dash lengths are screen pixels. */
+.layer-stack {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.layer-stack * {
+  vector-effect: non-scaling-stroke;
+}

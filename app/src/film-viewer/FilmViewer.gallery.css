@@ -1,0 +1,84 @@
+/* The film viewer's gallery page: bays like the bench's, and a test layer
+   drawn the way marks are, a dark casing under every line. */
+.film-viewer-stage {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  margin: 0;
+}
+
+.film-viewer-stage__bay {
+  position: relative;
+  border-radius: var(--r-3);
+  background: var(--well);
+  border: 1px solid var(--line-1);
+  overflow: hidden;
+}
+
+.film-viewer-stage__caption {
+  display: flex;
+  justify-content: space-between;
+  font: 600 var(--text-micro) / var(--lh-micro) var(--font-ui);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+
+.film-viewer-stage__zoom {
+  font-family: var(--font-data);
+  color: var(--ink-3);
+  text-transform: none;
+}
+
+.film-viewer-row {
+  display: flex;
+  gap: var(--bay-gap);
+}
+
+.test-marks__edge {
+  fill: none;
+  stroke: var(--lumen-mid);
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+}
+
+.test-marks__casing {
+  fill: none;
+  stroke: var(--casing);
+  stroke-width: 4;
+  stroke-linejoin: round;
+}
+
+.test-marks__outline {
+  fill: var(--sure-wash);
+  stroke: var(--sure);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+/* Drawn in screen pixels about a film point, whatever the zoom, glides included. */
+.test-marks__screen-sized {
+  transform: scale(calc(1 / var(--film-zoom)));
+}
+
+.test-marks__label {
+  font-size: 11.5px;
+  fill: var(--ink-1);
+  font-family: var(--font-data);
+  text-anchor: end;
+  dominant-baseline: central;
+  paint-order: stroke;
+  stroke: var(--casing);
+  stroke-width: 3;
+}
+
+.test-marks__probe {
+  fill: none;
+  stroke: var(--look);
+  stroke-width: 1.5;
+}
+
+.test-marks__cross {
+  stroke: var(--look);
+  stroke-width: 1;
+}

@@ -1,0 +1,44 @@
+/* One film on screen. The viewer fills the box it is given (a bay's
+   viewport); the canvas, the layers and the HUDs all cover it exactly, so
+   the film and everything drawn on it share one set of screen pixels. */
+.film-viewer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* The light around a hung film, on a box that follows the film's outline. */
+.film-viewer__glow {
+  position: absolute;
+  border-radius: var(--r-film);
+  box-shadow: var(--glow-film);
+  pointer-events: none;
+}
+
+.film-viewer__glow[hidden] {
+  display: none;
+}
+
+.film-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.film-canvas[hidden] {
+  display: none;
+}
+
+/* HUDs are drawn in screen pixels. Like the layers, they let presses
+   through to the film; a HUD's own controls turn pointer events back on. */
+.film-viewer__huds {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
