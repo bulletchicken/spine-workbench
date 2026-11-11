@@ -157,7 +157,6 @@ enum Population {
     Adult,
 }
 
-#[expect(dead_code, reason = "a command reads its arguments once it is built")]
 #[derive(Args)]
 struct PassArgs {
     /// One to four films, each as KIND=PATH.
@@ -169,7 +168,6 @@ struct PassArgs {
     population: Population,
 }
 
-#[expect(dead_code, reason = "a command reads its arguments once it is built")]
 #[derive(Args)]
 struct FramesArgs {
     /// Compare with the recorded frames instead of writing them, and fail

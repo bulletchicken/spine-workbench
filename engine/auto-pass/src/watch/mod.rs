@@ -4,3 +4,6 @@
 pub mod chain_pass;
 pub mod film_pass;
 pub mod frames;
+
+pub use chain_pass::ChainPass;
+pub use film_pass::FilmPass;

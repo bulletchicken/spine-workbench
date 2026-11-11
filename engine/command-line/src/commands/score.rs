@@ -18,7 +18,7 @@ use std::time::{SystemTime, UNIX_EPOCH};
 type Finder<'a> = dyn FnMut(&ScoringFilm<'_>) -> Result<FilmMarks, EngineError> + 'a;
 
 pub fn run(args: &ScoreArgs) -> Outcome {
-    run_with_finder(args, None)
+    crate::commands::pass::score(args, |args, finder| run_with_finder(args, Some(finder)))
 }
 
 /// The native automatic pass plugs in here when its entry point is built.
