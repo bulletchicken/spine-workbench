@@ -14,7 +14,7 @@ built.
 | what the project is and how to run it | `README.md` |
 | how we branch, commit and review | `CONTRIBUTING.md` |
 | the licence and third-party credits | `LICENSE`, `NOTICE` |
-| the licence text of each bundled typeface | `third-party-licences/` |
+| the licence text of each bundled typeface and bone model | `third-party-licences/` |
 | the Rust workspace, its pinned dependencies, the build profiles | `Cargo.toml`, `Cargo.lock` |
 | the Rust toolchain | `rust-toolchain.toml` |
 | the Rust formatting and lint rules (no clocks, threads, files, std float maths) | `rustfmt.toml`, `clippy.toml` |
@@ -42,6 +42,13 @@ built.
 | this page's path check | `chores/src/map.rs` |
 | the commit message rules | `chores/check-commit-message.sh` |
 | the git hook that runs them on every commit | `chores/git-hooks/commit-msg` |
+
+## Bone shapes (`bone-prep/`)
+
+| I want to change… | Open |
+|---|---|
+| where the vertebra shapes come from, their licence, and what was done to them | `bone-prep/README.md` |
+| how a vertebra's body is found and the bone moved into its own frame | `bone-prep/prepare_bones.py` |
 
 ## The engine (`engine/`)
 
@@ -241,6 +248,7 @@ The folders and import rules in one picture: `app/README.md`.
 | the step contract | `app/src/steps/step-contract.ts` |
 | the tool contract | `app/src/toolbox/tool-contract.ts` |
 | the film-to-screen transform | `app/src/film-viewer/film-space.ts` |
+| the vertebra shapes the 3D view draws, and how they are read | `app/public/bones/vertebrae.json`, `app/public/bones/vertebrae.bin`, `app/src/spine-3d/bones/read-bones.ts` |
 | the case edits | `app/src/case-state/case-edits.ts` |
 | the design's tokens, unchanged | `app/src/look-and-feel/tokens.css` |
 | a duration the design names that is not a token | `app/src/look-and-feel/named-timings.css` |

@@ -1,0 +1,606 @@
+{
+  "credit": "BodyParts3D, © The Database Center for Life Science licensed under CC Attribution 4.0 International",
+  "licence": "CC BY 4.0, https://creativecommons.org/licenses/by/4.0/",
+  "source": "BodyParts3D 4.0, partof_BP3D_4.0_obj_99, https://dbarchive.biosciencedbc.jp/en/bodyparts3d/",
+  "changes": "Repeated points joined; each bone moved into a frame of its own. No shape was altered.",
+  "frame": "Origin at the middle of the vertebral body; x forward, y to the patient's left, z up the body; millimetres.",
+  "file": "vertebrae.bin: little-endian; each bone's points as float32 x, y, z from pointsAt, its triangles as uint16 corners from trianglesAt.",
+  "reference": "referenceCentre and referenceAxes (the bone's x, y and z axes) put a bone back where it stood in the source, in the same patient axes.",
+  "byteLength": 561216,
+  "bones": [
+    {
+      "level": "C7",
+      "source": "FJ3172",
+      "height": 13.2,
+      "halfWidth": 13.78,
+      "halfDepth": 8.32,
+      "referenceCentre": [
+        80.71,
+        -0.66,
+        1374.16
+      ],
+      "referenceAxes": [
+        [
+          0.93042,
+          0.0,
+          -0.3665
+        ],
+        [
+          0.0032,
+          0.99996,
+          0.00812
+        ],
+        [
+          0.36649,
+          -0.00873,
+          0.93038
+        ]
+      ],
+      "pointCount": 906,
+      "triangleCount": 1820,
+      "pointsAt": 0,
+      "trianglesAt": 280584
+    },
+    {
+      "level": "T1",
+      "source": "FJ3158",
+      "height": 15.02,
+      "halfWidth": 16.02,
+      "halfDepth": 9.31,
+      "referenceCentre": [
+        76.33,
+        -0.78,
+        1356.94
+      ],
+      "referenceAxes": [
+        [
+          0.91355,
+          0.0,
+          -0.40674
+        ],
+        [
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.40674,
+          -0.0,
+          0.91355
+        ]
+      ],
+      "pointCount": 850,
+      "triangleCount": 1700,
+      "pointsAt": 10872,
+      "trianglesAt": 291504
+    },
+    {
+      "level": "T2",
+      "source": "FJ3160",
+      "height": 17.25,
+      "halfWidth": 14.18,
+      "halfDepth": 10.27,
+      "referenceCentre": [
+        71.34,
+        -0.75,
+        1338.27
+      ],
+      "referenceAxes": [
+        [
+          0.9205,
+          0.0,
+          -0.39073
+        ],
+        [
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.39073,
+          -0.0,
+          0.9205
+        ]
+      ],
+      "pointCount": 969,
+      "triangleCount": 1938,
+      "pointsAt": 21072,
+      "trianglesAt": 301704
+    },
+    {
+      "level": "T3",
+      "source": "FJ3163",
+      "height": 18.16,
+      "halfWidth": 13.02,
+      "halfDepth": 11.04,
+      "referenceCentre": [
+        63.89,
+        -0.53,
+        1317.1
+      ],
+      "referenceAxes": [
+        [
+          0.93667,
+          0.0,
+          -0.35021
+        ],
+        [
+          0.00306,
+          0.99996,
+          0.00817
+        ],
+        [
+          0.35019,
+          -0.00873,
+          0.93664
+        ]
+      ],
+      "pointCount": 1019,
+      "triangleCount": 2038,
+      "pointsAt": 32700,
+      "trianglesAt": 313332
+    },
+    {
+      "level": "T4",
+      "source": "FJ3166",
+      "height": 18.72,
+      "halfWidth": 12.21,
+      "halfDepth": 11.91,
+      "referenceCentre": [
+        56.66,
+        -0.77,
+        1295.2
+      ],
+      "referenceAxes": [
+        [
+          0.96815,
+          0.0,
+          -0.25038
+        ],
+        [
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.25038,
+          -0.0,
+          0.96815
+        ]
+      ],
+      "pointCount": 1033,
+      "triangleCount": 2066,
+      "pointsAt": 44928,
+      "trianglesAt": 325560
+    },
+    {
+      "level": "T5",
+      "source": "FJ3169",
+      "height": 19.52,
+      "halfWidth": 12.74,
+      "halfDepth": 12.79,
+      "referenceCentre": [
+        53.05,
+        -0.65,
+        1271.43
+      ],
+      "referenceAxes": [
+        [
+          0.98902,
+          0.0,
+          -0.14781
+        ],
+        [
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.14781,
+          -0.0,
+          0.98902
+        ]
+      ],
+      "pointCount": 1140,
+      "triangleCount": 2280,
+      "pointsAt": 57324,
+      "trianglesAt": 337956
+    },
+    {
+      "level": "T6",
+      "source": "FJ3171",
+      "height": 20.43,
+      "halfWidth": 13.44,
+      "halfDepth": 13.81,
+      "referenceCentre": [
+        51.81,
+        -0.53,
+        1246.12
+      ],
+      "referenceAxes": [
+        [
+          0.99756,
+          0.0,
+          -0.06976
+        ],
+        [
+          -0.00122,
+          0.99985,
+          -0.01741
+        ],
+        [
+          0.06975,
+          0.01745,
+          0.99741
+        ]
+      ],
+      "pointCount": 1124,
+      "triangleCount": 2248,
+      "pointsAt": 71004,
+      "trianglesAt": 351636
+    },
+    {
+      "level": "T7",
+      "source": "FJ3173",
+      "height": 21.53,
+      "halfWidth": 15.77,
+      "halfDepth": 14.99,
+      "referenceCentre": [
+        51.39,
+        -0.67,
+        1220.33
+      ],
+      "referenceAxes": [
+        [
+          0.99692,
+          0.0,
+          0.07846
+        ],
+        [
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          -0.07846,
+          0.0,
+          0.99692
+        ]
+      ],
+      "pointCount": 1287,
+      "triangleCount": 2574,
+      "pointsAt": 84492,
+      "trianglesAt": 365124
+    },
+    {
+      "level": "T8",
+      "source": "FJ3174",
+      "height": 21.48,
+      "halfWidth": 15.38,
+      "halfDepth": 15.86,
+      "referenceCentre": [
+        55.04,
+        -0.68,
+        1193.88
+      ],
+      "referenceAxes": [
+        [
+          0.98629,
+          0.0,
+          0.16505
+        ],
+        [
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          -0.16505,
+          0.0,
+          0.98629
+        ]
+      ],
+      "pointCount": 1212,
+      "triangleCount": 2424,
+      "pointsAt": 99936,
+      "trianglesAt": 380568
+    },
+    {
+      "level": "T9",
+      "source": "FJ3175",
+      "height": 22.84,
+      "halfWidth": 17.07,
+      "halfDepth": 16.5,
+      "referenceCentre": [
+        59.25,
+        -0.68,
+        1168.43
+      ],
+      "referenceAxes": [
+        [
+          0.9763,
+          0.0,
+          0.21644
+        ],
+        [
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          -0.21644,
+          0.0,
+          0.9763
+        ]
+      ],
+      "pointCount": 1293,
+      "triangleCount": 2586,
+      "pointsAt": 114480,
+      "trianglesAt": 395112
+    },
+    {
+      "level": "T10",
+      "source": "FJ3154",
+      "height": 23.88,
+      "halfWidth": 18.24,
+      "halfDepth": 16.91,
+      "referenceCentre": [
+        64.89,
+        -0.66,
+        1141.14
+      ],
+      "referenceAxes": [
+        [
+          0.96593,
+          0.0,
+          0.25882
+        ],
+        [
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          -0.25882,
+          0.0,
+          0.96593
+        ]
+      ],
+      "pointCount": 1395,
+      "triangleCount": 2790,
+      "pointsAt": 129996,
+      "trianglesAt": 410628
+    },
+    {
+      "level": "T11",
+      "source": "FJ3155",
+      "height": 24.4,
+      "halfWidth": 18.59,
+      "halfDepth": 17.3,
+      "referenceCentre": [
+        73.46,
+        -0.68,
+        1113.61
+      ],
+      "referenceAxes": [
+        [
+          0.9703,
+          0.0,
+          0.24192
+        ],
+        [
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          -0.24192,
+          0.0,
+          0.9703
+        ]
+      ],
+      "pointCount": 1337,
+      "triangleCount": 2674,
+      "pointsAt": 146736,
+      "trianglesAt": 427368
+    },
+    {
+      "level": "T12",
+      "source": "FJ3156",
+      "height": 26.17,
+      "halfWidth": 19.59,
+      "halfDepth": 17.82,
+      "referenceCentre": [
+        82.74,
+        -0.6,
+        1085.46
+      ],
+      "referenceAxes": [
+        [
+          0.96815,
+          0.0,
+          0.25038
+        ],
+        [
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          -0.25038,
+          0.0,
+          0.96815
+        ]
+      ],
+      "pointCount": 1386,
+      "triangleCount": 2772,
+      "pointsAt": 162780,
+      "trianglesAt": 443412
+    },
+    {
+      "level": "L1",
+      "source": "FJ3157",
+      "height": 26.51,
+      "halfWidth": 20.06,
+      "halfDepth": 17.24,
+      "referenceCentre": [
+        91.17,
+        -0.69,
+        1055.5
+      ],
+      "referenceAxes": [
+        [
+          0.97237,
+          0.0,
+          0.23345
+        ],
+        [
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          -0.23345,
+          0.0,
+          0.97237
+        ]
+      ],
+      "pointCount": 1486,
+      "triangleCount": 2972,
+      "pointsAt": 179412,
+      "trianglesAt": 460044
+    },
+    {
+      "level": "L2",
+      "source": "FJ3159",
+      "height": 29.19,
+      "halfWidth": 20.89,
+      "halfDepth": 17.13,
+      "referenceCentre": [
+        96.47,
+        -0.55,
+        1023.77
+      ],
+      "referenceAxes": [
+        [
+          0.9954,
+          0.0,
+          0.09585
+        ],
+        [
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          -0.09585,
+          0.0,
+          0.9954
+        ]
+      ],
+      "pointCount": 1607,
+      "triangleCount": 3214,
+      "pointsAt": 197244,
+      "trianglesAt": 477876
+    },
+    {
+      "level": "L3",
+      "source": "FJ3162",
+      "height": 29.78,
+      "halfWidth": 20.67,
+      "halfDepth": 17.6,
+      "referenceCentre": [
+        96.56,
+        -0.64,
+        989.63
+      ],
+      "referenceAxes": [
+        [
+          0.99255,
+          0.0,
+          -0.12187
+        ],
+        [
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.12187,
+          -0.0,
+          0.99255
+        ]
+      ],
+      "pointCount": 1636,
+      "triangleCount": 3272,
+      "pointsAt": 216528,
+      "trianglesAt": 497160
+    },
+    {
+      "level": "L4",
+      "source": "FJ3165",
+      "height": 28.79,
+      "halfWidth": 22.95,
+      "halfDepth": 17.91,
+      "referenceCentre": [
+        89.66,
+        -0.67,
+        957.73
+      ],
+      "referenceAxes": [
+        [
+          0.94832,
+          0.0,
+          -0.3173
+        ],
+        [
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.3173,
+          -0.0,
+          0.94832
+        ]
+      ],
+      "pointCount": 1756,
+      "triangleCount": 3512,
+      "pointsAt": 236160,
+      "trianglesAt": 516792
+    },
+    {
+      "level": "L5",
+      "source": "FJ3168",
+      "height": 30.63,
+      "halfWidth": 23.21,
+      "halfDepth": 19.47,
+      "referenceCentre": [
+        77.11,
+        -0.69,
+        924.59
+      ],
+      "referenceAxes": [
+        [
+          0.95106,
+          0.0,
+          -0.30902
+        ],
+        [
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.30902,
+          -0.0,
+          0.95106
+        ]
+      ],
+      "pointCount": 1946,
+      "triangleCount": 3892,
+      "pointsAt": 257232,
+      "trianglesAt": 537864
+    }
+  ]
+}

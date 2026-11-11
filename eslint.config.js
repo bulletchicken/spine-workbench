@@ -98,6 +98,7 @@ const ABOVE_THE_BLOCKS = [
   'view-state',
   'engine-room',
   'film-viewer',
+  'spine-3d',
   'bench',
   'marks',
   'ladder',
@@ -134,7 +135,7 @@ const AREAS = [
   { files: 'app/src/steps/[0-9]-*/**/*.{ts,tsx}', banned: [SHAPES_ONLY, ENGINE_INSIDES, OTHER_STEPS, ENGINE_DOOR_ONLY] },
   { files: 'app/src/{look-and-feel,choreography,building-blocks}/**/*.{ts,tsx}', banned: [SHAPES_ONLY, ENGINE_INSIDES, ...DRAWS_ONLY] },
   {
-    files: 'app/src/film-viewer/**/*.{ts,tsx}',
+    files: 'app/src/{film-viewer,spine-3d}/**/*.{ts,tsx}',
     banned: [SHAPES_ONLY, ENGINE_INSIDES, NO_STEPS, NO_CASE_STATE, NO_VIEW_STATE, NO_ENGINE_ROOM],
   },
   {

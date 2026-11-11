@@ -13,6 +13,9 @@ const REVIEWED: Record<string, string> = {
   'http://www.w3.org/1998/Math/MathML': 'the MathML namespace, in React DOM',
   'http://www.w3.org/XML/1998/namespace': 'the XML namespace for xml: attributes, in React DOM',
   'https://react.dev/errors/': 'the start of the text of React’s production error messages',
+  'https://creativecommons.org/licenses/by/4.0/':
+    'the licence of the bone shapes, as text in bones/vertebrae.json: the licence asks to be named by its address wherever the shapes go',
+  'https://dbarchive.biosciencedbc.jp/en/bodyparts3d/': 'where the bone shapes come from, as text in the same file',
 };
 
 const ADDRESS = /(?:https?|wss?):\/\/[A-Za-z0-9\-._~:/?#[\]@!$&*+,;=%]*/g;

@@ -9,6 +9,7 @@
 *.wasm binary
 *.spinecase binary
 *.woff2 binary
+*.bin binary
 
 # Written by tools, never edited by hand: collapsed in review diffs.
 app/src/shapes/generated/** linguist-generated=true

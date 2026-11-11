@@ -13,6 +13,7 @@ reaches it only through the engine room.
 | `src/guide/` | the left column's one sentence, its one lit action and its cards |
 | `src/bench/` | the films, hung: bays, the lane between Front and Side, the toasts |
 | `src/film-viewer/` | one film on screen: pixels on the GPU, layers over them, its camera |
+| `src/spine-3d/` | the spine in three dimensions; so far, the vertebra shapes it will draw |
 | `src/marks/` | what is drawn on a film: outlines, pins, pedicle rings, landmarks |
 | `src/ladder/` | the unrolled spine between the Front and Side films |
 | `src/auto-pass/` | the automatic pass, as something to watch: its recording, clock and layers |
@@ -53,7 +54,7 @@ ESLint enforces these rules (`eslint.config.js`, the `AREAS` list).
                                 the engine only through its door
   marks · ladder · guide        draw from props: never steps, case-state, view-state,
                                 engine-room, bench, auto-pass or toolbox
-  film-viewer                   never steps, case-state, view-state or engine-room
+  film-viewer · spine-3d        never steps, case-state, view-state or engine-room
   review                        of the app's own areas, only shapes, words and
                                 look-and-feel/data-attributes
   look-and-feel · choreography · building-blocks
