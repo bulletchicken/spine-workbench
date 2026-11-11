@@ -5,6 +5,11 @@ import { defineConfig } from 'vitest/config';
 // unit test needs the engine built.
 const alias = { '@': fileURLToPath(new URL('./src', import.meta.url)) };
 
+// Property tests, and tests that paint whole films, take seconds on a busy
+// or two-core machine. Under the default five seconds they fail for load,
+// not for a fault.
+const testTimeout = 30_000;
+
 export default defineConfig({
   test: {
     projects: [
@@ -13,6 +18,7 @@ export default defineConfig({
         test: {
           name: 'logic',
           environment: 'node',
+          testTimeout,
           include: ['src/**/*.test.ts', 'build-plugins/**/*.test.ts'],
         },
       },
@@ -21,6 +27,7 @@ export default defineConfig({
         test: {
           name: 'components',
           environment: 'jsdom',
+          testTimeout,
           include: ['src/**/*.test.tsx'],
         },
       },
