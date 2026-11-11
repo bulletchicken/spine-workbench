@@ -123,7 +123,6 @@ struct OpenArgs {
 /// A film on the command line: `front=PATH`, `side=PATH`,
 /// `bend-left=PATH` or `bend-right=PATH`. The kind is always stated,
 /// never guessed from the file name.
-#[expect(dead_code, reason = "a command reads its arguments once it is built")]
 #[derive(Clone)]
 struct FilmPath {
     kind: shapes::film::FilmKind,

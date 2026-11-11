@@ -70,5 +70,215 @@
     "verdict": "refuse",
     "code": "case-invalid-value",
     "detail": "marks[2].landmarks.c7.pinned"
+  },
+  {
+    "file": "invalid/not-json.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "line 2 column 0"
+  },
+  {
+    "file": "invalid/nan.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "line 1 column 1"
+  },
+  {
+    "file": "invalid/infinity.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "line 1 column 1"
+  },
+  {
+    "file": "invalid/wrong-format.json",
+    "verdict": "refuse",
+    "code": "case-wrong-format",
+    "detail": "format"
+  },
+  {
+    "file": "invalid/version-zero.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "version"
+  },
+  {
+    "file": "invalid/missing-null.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "films[0].keptTags"
+  },
+  {
+    "file": "invalid/wrong-type.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "films[0].image.width"
+  },
+  {
+    "file": "invalid/duplicate-film.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "films[1].kind"
+  },
+  {
+    "file": "invalid/wrong-image-path.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "films[0].image.path"
+  },
+  {
+    "file": "invalid/width-zero.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "films[0].image.width"
+  },
+  {
+    "file": "invalid/width-over-limit.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "films[0].image.width"
+  },
+  {
+    "file": "invalid/height-zero.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "films[0].image.height"
+  },
+  {
+    "file": "invalid/height-over-limit.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "films[0].image.height"
+  },
+  {
+    "file": "invalid/bits-stored-zero.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "films[0].image.bitsStored"
+  },
+  {
+    "file": "invalid/bits-stored-over-limit.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "films[0].image.bitsStored"
+  },
+  {
+    "file": "invalid/orphan-marks.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "marks[0].film"
+  },
+  {
+    "file": "invalid/duplicate-marks.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "marks[3].film"
+  },
+  {
+    "file": "invalid/repeated-level.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "marks[0].vertebrae[1].level"
+  },
+  {
+    "file": "invalid/level-outside-template.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "marks[0].vertebrae[0].level"
+  },
+  {
+    "file": "invalid/extension-without-flag.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "marks[0].vertebrae[0].level"
+  },
+  {
+    "file": "invalid/short-top-count.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "marks[0].naming.fromTop"
+  },
+  {
+    "file": "invalid/reversed-bottom-count.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "marks[0].naming.fromBottom"
+  },
+  {
+    "file": "invalid/top-count-outside-template.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "marks[0].naming.fromTop"
+  },
+  {
+    "file": "invalid/wrong-l5-confirmation.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "marks[0].naming.l5ConfirmedOn"
+  },
+  {
+    "file": "invalid/missing-c7.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "marks[2].landmarks.c7"
+  },
+  {
+    "file": "invalid/c7-hand-placed.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "marks[2].landmarks.c7.source"
+  },
+  {
+    "file": "invalid/c7-wrong-inference.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "marks[2].landmarks.c7.inferred"
+  },
+  {
+    "file": "invalid/blank-outside-film.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "films[0].blanked[0]"
+  },
+  {
+    "file": "invalid/blank-crossed-edges.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "films[0].blanked[0]"
+  },
+  {
+    "file": "invalid/scale-too-small.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "films[0].geometry.mmPerPx"
+  },
+  {
+    "file": "invalid/scale-too-large.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "films[0].geometry.mmPerPx"
+  },
+  {
+    "file": "invalid/repeated-vertebra-id.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "marks[1].vertebrae[0].id"
+  },
+  {
+    "file": "invalid/reused-next-id.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "nextVertebraId"
+  },
+  {
+    "file": "invalid/long-app-version.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "savedWith.app"
+  },
+  {
+    "file": "invalid/app-version-free-text.json",
+    "verdict": "refuse",
+    "code": "case-invalid-value",
+    "detail": "savedWith.app"
   }
 ]

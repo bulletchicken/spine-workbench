@@ -1,0 +1,75 @@
+archives/valid/minimal.spinecase	accept	
+archives/valid/four-films.spinecase	accept	
+archives/invalid/not-a-zip.spinecase	case-not-a-zip	
+archives/invalid/truncated-zip.spinecase	case-not-a-zip	
+archives/invalid/unknown-entry.spinecase	case-unknown-entry	
+archives/invalid/parent-path.spinecase	case-unknown-entry	
+archives/invalid/absolute-path.spinecase	case-unknown-entry	
+archives/invalid/backslash-path.spinecase	case-unknown-entry	
+archives/invalid/directory-entry.spinecase	case-unknown-entry	
+archives/invalid/duplicate-entry.spinecase	case-unknown-entry	
+archives/invalid/unlisted-film.spinecase	case-unknown-entry	films/side.png
+archives/invalid/missing-case.spinecase	case-invalid-value	case.json
+archives/invalid/missing-readme.spinecase	case-invalid-value	README.txt
+archives/invalid/missing-film.spinecase	case-missing-film	films/front.png
+archives/invalid/wrong-png-size.spinecase	case-film-size-mismatch	films/front.png
+archives/invalid/wrong-png-depth.spinecase	case-film-size-mismatch	films/front.png
+archives/invalid/corrupt-png.spinecase	case-invalid-value	films/front.png
+archives/invalid/json-size-limit.spinecase	case-too-large	case.json
+archives/invalid/readme-size-limit.spinecase	case-too-large	README.txt
+archives/invalid/png-size-limit.spinecase	case-too-large	films/front.png
+archives/invalid/compression-ratio.spinecase	case-too-large	case.json
+archives/invalid/encrypted-entry.spinecase	case-not-a-zip	
+archives/invalid/unsupported-compression.spinecase	case-not-a-zip	
+archives/invalid/local-path-substitution.spinecase	case-unknown-entry	
+archives/invalid/corrupt-entry-crc.spinecase	case-not-a-zip	
+archives/invalid/json-not-utf8.spinecase	case-invalid-value	case.json
+archives/invalid/png-decode-budget.spinecase	case-too-large	films/front.png
+archives/invalid/nonzero-blanked-pixel.spinecase	case-invalid-value	films/front.png
+archives/invalid/blanked-low-bits.spinecase	case-invalid-value	films/front.png
+archives/invalid/zip64-oversized-count.spinecase	case-too-large	archive
+archives/invalid/json-unknown-field.spinecase	case-unknown-field	films[0].fileName
+archives/invalid/json-version-2.spinecase	case-newer-version	version
+archives/invalid/json-missing-format.spinecase	case-wrong-format	format
+archives/invalid/json-bad-level.spinecase	case-invalid-value	marks[0].vertebrae[0].level
+archives/invalid/json-point-off-film.spinecase	case-invalid-value	marks[0].vertebrae[0].marks.points.supL.at
+archives/invalid/json-levels-out-of-order.spinecase	case-invalid-value	marks[0].vertebrae[1].level
+archives/invalid/json-repeated-key.spinecase	case-invalid-value	nextVertebraId
+archives/invalid/json-c7-without-vertebra.spinecase	case-invalid-value	marks[1].landmarks.c7
+archives/invalid/json-c7-off-its-vertebra.spinecase	case-invalid-value	marks[2].landmarks.c7.at
+archives/invalid/json-c7-pinned.spinecase	case-invalid-value	marks[2].landmarks.c7.pinned
+archives/invalid/json-not-json.spinecase	case-invalid-value	line 2 column 0
+archives/invalid/json-nan.spinecase	case-invalid-value	line 1 column 1
+archives/invalid/json-infinity.spinecase	case-invalid-value	line 1 column 1
+archives/invalid/json-wrong-format.spinecase	case-wrong-format	format
+archives/invalid/json-version-zero.spinecase	case-invalid-value	version
+archives/invalid/json-missing-null.spinecase	case-invalid-value	films[0].keptTags
+archives/invalid/json-wrong-type.spinecase	case-invalid-value	films[0].image.width
+archives/invalid/json-duplicate-film.spinecase	case-invalid-value	films[1].kind
+archives/invalid/json-wrong-image-path.spinecase	case-invalid-value	films[0].image.path
+archives/invalid/json-width-zero.spinecase	case-invalid-value	films[0].image.width
+archives/invalid/json-width-over-limit.spinecase	case-invalid-value	films[0].image.width
+archives/invalid/json-height-zero.spinecase	case-invalid-value	films[0].image.height
+archives/invalid/json-height-over-limit.spinecase	case-invalid-value	films[0].image.height
+archives/invalid/json-bits-stored-zero.spinecase	case-invalid-value	films[0].image.bitsStored
+archives/invalid/json-bits-stored-over-limit.spinecase	case-invalid-value	films[0].image.bitsStored
+archives/invalid/json-orphan-marks.spinecase	case-invalid-value	marks[0].film
+archives/invalid/json-duplicate-marks.spinecase	case-invalid-value	marks[3].film
+archives/invalid/json-repeated-level.spinecase	case-invalid-value	marks[0].vertebrae[1].level
+archives/invalid/json-level-outside-template.spinecase	case-invalid-value	marks[0].vertebrae[0].level
+archives/invalid/json-extension-without-flag.spinecase	case-invalid-value	marks[0].vertebrae[0].level
+archives/invalid/json-short-top-count.spinecase	case-invalid-value	marks[0].naming.fromTop
+archives/invalid/json-reversed-bottom-count.spinecase	case-invalid-value	marks[0].naming.fromBottom
+archives/invalid/json-top-count-outside-template.spinecase	case-invalid-value	marks[0].naming.fromTop
+archives/invalid/json-wrong-l5-confirmation.spinecase	case-invalid-value	marks[0].naming.l5ConfirmedOn
+archives/invalid/json-missing-c7.spinecase	case-invalid-value	marks[2].landmarks.c7
+archives/invalid/json-c7-hand-placed.spinecase	case-invalid-value	marks[2].landmarks.c7.source
+archives/invalid/json-c7-wrong-inference.spinecase	case-invalid-value	marks[2].landmarks.c7.inferred
+archives/invalid/json-blank-outside-film.spinecase	case-invalid-value	films[0].blanked[0]
+archives/invalid/json-blank-crossed-edges.spinecase	case-invalid-value	films[0].blanked[0]
+archives/invalid/json-scale-too-small.spinecase	case-invalid-value	films[0].geometry.mmPerPx
+archives/invalid/json-scale-too-large.spinecase	case-invalid-value	films[0].geometry.mmPerPx
+archives/invalid/json-repeated-vertebra-id.spinecase	case-invalid-value	marks[1].vertebrae[0].id
+archives/invalid/json-reused-next-id.spinecase	case-invalid-value	nextVertebraId
+archives/invalid/json-long-app-version.spinecase	case-invalid-value	savedWith.app
+archives/invalid/json-app-version-free-text.spinecase	case-invalid-value	savedWith.app

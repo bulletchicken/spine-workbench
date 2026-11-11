@@ -1,0 +1,829 @@
+{
+  "format": "spine-case",
+  "version": 1,
+  "savedWith": {
+    "app": "0.1.0"
+  },
+  "films": [
+    {
+      "kind": "front",
+      "image": {
+        "path": "films/front.png",
+        "width": 1600,
+        "height": 3200,
+        "bitsStored": 12
+      },
+      "source": "dicom",
+      "keptTags": {
+        "sopClass": "1.2.840.10008.5.1.4.1.1.1.1",
+        "modality": "DX",
+        "presentationIntent": "for-presentation",
+        "manufacturer": "Example Imaging",
+        "modelName": "Upright 2",
+        "photometric": "monochrome1",
+        "bitsStored": 12,
+        "pixelSpacing": [
+          0.15,
+          0.15
+        ],
+        "imagerPixelSpacing": [
+          0.15,
+          0.15
+        ],
+        "nominalScannedPixelSpacing": null,
+        "pixelSpacingCalibration": null,
+        "estimatedMagnification": null,
+        "distanceSourceToDetector": 1800.0,
+        "distanceSourceToPatient": 1600.0,
+        "pixelAspectRatio": null,
+        "patientOrientation": [
+          "L",
+          "F"
+        ],
+        "viewPosition": "pa",
+        "imageLaterality": null,
+        "rescaleSlope": 1.0,
+        "rescaleIntercept": 0.0,
+        "windowCentre": 2048.0,
+        "windowWidth": 4096.0,
+        "windowFunction": "linear",
+        "shutters": null,
+        "lossyCompression": false,
+        "lossyRatio": null,
+        "burnedInAnnotation": false,
+        "transferSyntax": "explicit-little-endian",
+        "numberOfFrames": 1
+      },
+      "values": {
+        "offset": 0,
+        "inverted": true,
+        "invertedByUser": false,
+        "modality": {
+          "kind": "linear",
+          "slope": 1.0,
+          "intercept": 0.0
+        }
+      },
+      "flags": [],
+      "blanked": [
+        {
+          "left": 20.0,
+          "top": 30.0,
+          "right": 300.0,
+          "bottom": 90.0
+        }
+      ],
+      "geometry": {
+        "mmPerPx": 2.001,
+        "mmPerPxVertical": null,
+        "scale": {
+          "source": "file",
+          "rule": "detector-from-distances"
+        },
+        "quarterTurns": 0,
+        "imageRight": "patient-left",
+        "confirmed": {
+          "upright": true,
+          "leftRight": true,
+          "facing": false,
+          "scale": true,
+          "polarity": true,
+          "privacy": true
+        }
+      }
+    },
+    {
+      "kind": "side",
+      "image": {
+        "path": "films/side.png",
+        "width": 1400,
+        "height": 3200,
+        "bitsStored": 16
+      },
+      "source": "png",
+      "keptTags": null,
+      "values": {
+        "offset": 0,
+        "inverted": false,
+        "invertedByUser": false,
+        "modality": {
+          "kind": "linear",
+          "slope": 1.0,
+          "intercept": 0.0
+        }
+      },
+      "flags": [],
+      "blanked": [],
+      "geometry": {
+        "mmPerPx": 0.125,
+        "mmPerPxVertical": null,
+        "scale": {
+          "source": "ruler",
+          "rulers": [
+            {
+              "a": [
+                100.0,
+                200.0
+              ],
+              "b": [
+                100.0,
+                1000.0
+              ],
+              "mm": 100.0
+            }
+          ]
+        },
+        "quarterTurns": 0,
+        "imageRight": "anterior",
+        "confirmed": {
+          "upright": true,
+          "leftRight": false,
+          "facing": true,
+          "scale": true,
+          "polarity": true,
+          "privacy": true
+        }
+      }
+    },
+    {
+      "kind": "bend-left",
+      "image": {
+        "path": "films/bend-left.png",
+        "width": 1200,
+        "height": 2400,
+        "bitsStored": 8
+      },
+      "source": "jpeg",
+      "keptTags": null,
+      "values": {
+        "offset": 0,
+        "inverted": false,
+        "invertedByUser": false,
+        "modality": {
+          "kind": "linear",
+          "slope": 1.0,
+          "intercept": 0.0
+        }
+      },
+      "flags": [
+        "lossy"
+      ],
+      "blanked": [],
+      "geometry": {
+        "mmPerPx": null,
+        "mmPerPxVertical": null,
+        "scale": null,
+        "quarterTurns": 2,
+        "imageRight": "patient-left",
+        "confirmed": {
+          "upright": true,
+          "leftRight": false,
+          "facing": false,
+          "scale": false,
+          "polarity": true,
+          "privacy": true
+        }
+      }
+    },
+    {
+      "kind": "bend-right",
+      "image": {
+        "path": "films/bend-right.png",
+        "width": 1200,
+        "height": 2400,
+        "bitsStored": 8
+      },
+      "source": "jpeg",
+      "keptTags": null,
+      "values": {
+        "offset": 0,
+        "inverted": true,
+        "invertedByUser": true,
+        "modality": {
+          "kind": "linear",
+          "slope": 1.0,
+          "intercept": 0.0
+        }
+      },
+      "flags": [
+        "lossy",
+        "colour-converted"
+      ],
+      "blanked": [],
+      "geometry": {
+        "mmPerPx": null,
+        "mmPerPxVertical": null,
+        "scale": null,
+        "quarterTurns": 0,
+        "imageRight": null,
+        "confirmed": {
+          "upright": false,
+          "leftRight": false,
+          "facing": false,
+          "scale": false,
+          "polarity": false,
+          "privacy": false
+        }
+      }
+    }
+  ],
+  "marks": [
+    {
+      "film": "front",
+      "vertebrae": [
+        {
+          "id": 1,
+          "level": "L4",
+          "marks": {
+            "kind": "front",
+            "points": {
+              "supL": {
+                "at": [
+                  860.5,
+                  2400.0
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "supR": {
+                "at": [
+                  700.0,
+                  2392.25
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infL": {
+                "at": [
+                  866.0,
+                  2560.0
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infR": {
+                "at": [
+                  704.5,
+                  2555.5
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "pedL": {
+                "seen": "visible",
+                "at": [
+                  830.0,
+                  2440.0
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false,
+                "ringScore": 0.75
+              },
+              "pedR": {
+                "seen": "visible",
+                "at": [
+                  735.0,
+                  2437.5
+                ],
+                "source": "pin",
+                "pinned": true,
+                "inferred": false,
+                "ringScore": null
+              }
+            }
+          },
+          "confidence": {
+            "score": 0.9375,
+            "band": "high",
+            "reasons": [],
+            "calibrated": false,
+            "endplateSpreadPx": {
+              "sup": 1.5,
+              "inf": 2.0
+            },
+            "margin": 4.25
+          },
+          "outline": null
+        },
+        {
+          "id": 2,
+          "level": "L5",
+          "marks": {
+            "kind": "front",
+            "points": {
+              "supL": {
+                "at": [
+                  870.0,
+                  2602.0
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "supR": {
+                "at": [
+                  700.0,
+                  2600.0
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infL": {
+                "at": [
+                  872.0,
+                  2760.0
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infR": {
+                "at": [
+                  698.0,
+                  2758.0
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "pedL": {
+                "seen": "not-visible",
+                "source": "auto"
+              },
+              "pedR": {
+                "seen": "visible",
+                "at": [
+                  740.0,
+                  2640.0
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": true,
+                "ringScore": null
+              }
+            }
+          },
+          "confidence": {
+            "score": 0.75,
+            "band": "medium",
+            "reasons": [
+              "pedicle-hidden"
+            ],
+            "calibrated": false,
+            "endplateSpreadPx": {
+              "sup": 1.5,
+              "inf": 2.0
+            },
+            "margin": 4.25
+          },
+          "outline": [
+            [
+              700.0,
+              2600.0
+            ],
+            [
+              870.0,
+              2602.0
+            ],
+            [
+              872.0,
+              2760.0
+            ],
+            [
+              698.0,
+              2758.0
+            ]
+          ]
+        }
+      ],
+      "landmarks": {
+        "c7": null,
+        "sacrumTop": {
+          "view": "front",
+          "sacL": {
+            "at": [
+              880.0,
+              2810.0
+            ],
+            "source": "auto",
+            "pinned": false,
+            "inferred": false
+          },
+          "sacR": {
+            "at": [
+              690.0,
+              2805.0
+            ],
+            "source": "auto",
+            "pinned": false,
+            "inferred": false
+          }
+        },
+        "hips": [
+          {
+            "side": "left",
+            "centre": {
+              "at": [
+                1100.0,
+                3000.0
+              ],
+              "source": "auto",
+              "pinned": false,
+              "inferred": false
+            },
+            "radiusPx": 160.0
+          },
+          {
+            "side": "right",
+            "centre": {
+              "at": [
+                460.0,
+                2990.0
+              ],
+              "source": "auto",
+              "pinned": false,
+              "inferred": false
+            },
+            "radiusPx": 158.5
+          }
+        ]
+      },
+      "naming": {
+        "template": "standard",
+        "chosenBy": "engine",
+        "alternatives": [
+          {
+            "template": "standard",
+            "chance": 0.875
+          },
+          {
+            "template": "extra-lumbar",
+            "chance": 0.0625
+          }
+        ],
+        "fromTop": null,
+        "fromBottom": [
+          "L4",
+          "L5"
+        ],
+        "flags": [
+          "top-anchor-weak"
+        ],
+        "l5ConfirmedOn": null
+      },
+      "namedFor": "patient-left"
+    },
+    {
+      "film": "side",
+      "vertebrae": [
+        {
+          "id": 3,
+          "level": "L4",
+          "marks": {
+            "kind": "side",
+            "points": {
+              "supA": {
+                "at": [
+                  820.0,
+                  2380.0
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "supP": {
+                "at": [
+                  600.0,
+                  2390.0
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infA": {
+                "at": [
+                  830.0,
+                  2560.0
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infP": {
+                "at": [
+                  605.0,
+                  2565.0
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              }
+            }
+          },
+          "confidence": {
+            "score": 0.96875,
+            "band": "high",
+            "reasons": [],
+            "calibrated": false,
+            "endplateSpreadPx": {
+              "sup": 1.5,
+              "inf": 2.0
+            },
+            "margin": 4.25
+          },
+          "outline": null
+        },
+        {
+          "id": 4,
+          "level": "L5",
+          "marks": {
+            "kind": "side",
+            "points": {
+              "supA": {
+                "at": [
+                  835.0,
+                  2600.0
+                ],
+                "source": "region-wand",
+                "pinned": false,
+                "inferred": false
+              },
+              "supP": {
+                "at": [
+                  610.0,
+                  2605.0
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infA": {
+                "at": [
+                  840.0,
+                  2770.0
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infP": {
+                "at": [
+                  612.0,
+                  2775.0
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              }
+            }
+          },
+          "confidence": {
+            "score": 0.5,
+            "band": "low",
+            "reasons": [
+              "edited-by-user"
+            ],
+            "calibrated": false,
+            "endplateSpreadPx": null,
+            "margin": null
+          },
+          "outline": null
+        }
+      ],
+      "landmarks": {
+        "c7": null,
+        "sacrumTop": {
+          "view": "side",
+          "sacA": {
+            "at": [
+              850.0,
+              2820.0
+            ],
+            "source": "auto",
+            "pinned": false,
+            "inferred": false
+          },
+          "sacP": {
+            "at": [
+              640.0,
+              2830.0
+            ],
+            "source": "auto",
+            "pinned": false,
+            "inferred": false
+          }
+        },
+        "hips": [
+          {
+            "side": "merged",
+            "centre": {
+              "at": [
+                900.0,
+                3010.0
+              ],
+              "source": "auto",
+              "pinned": false,
+              "inferred": false
+            },
+            "radiusPx": null
+          }
+        ]
+      },
+      "naming": {
+        "template": "standard",
+        "chosenBy": "engine",
+        "alternatives": [
+          {
+            "template": "standard",
+            "chance": 0.875
+          },
+          {
+            "template": "extra-lumbar",
+            "chance": 0.0625
+          }
+        ],
+        "fromTop": null,
+        "fromBottom": [
+          "L4",
+          "L5"
+        ],
+        "flags": [
+          "top-anchor-weak"
+        ],
+        "l5ConfirmedOn": null
+      },
+      "namedFor": "anterior"
+    },
+    {
+      "film": "bend-left",
+      "vertebrae": [
+        {
+          "id": 7,
+          "level": "C7",
+          "marks": {
+            "kind": "bending",
+            "lines": {
+              "sup": [
+                {
+                  "at": [
+                    560.0,
+                    2310.0
+                  ],
+                  "source": "auto",
+                  "pinned": false,
+                  "inferred": false
+                },
+                {
+                  "at": [
+                    660.0,
+                    2316.0
+                  ],
+                  "source": "auto",
+                  "pinned": false,
+                  "inferred": false
+                }
+              ],
+              "inf": [
+                {
+                  "at": [
+                    558.0,
+                    2270.0
+                  ],
+                  "source": "auto",
+                  "pinned": false,
+                  "inferred": false
+                },
+                {
+                  "at": [
+                    658.0,
+                    2274.0
+                  ],
+                  "source": "auto",
+                  "pinned": false,
+                  "inferred": false
+                }
+              ]
+            }
+          },
+          "confidence": {
+            "score": 0.625,
+            "band": "medium",
+            "reasons": [],
+            "calibrated": false,
+            "endplateSpreadPx": {
+              "sup": 1.5,
+              "inf": 2.0
+            },
+            "margin": 4.25
+          },
+          "outline": null
+        },
+        {
+          "id": 5,
+          "level": "T1",
+          "marks": {
+            "kind": "bending",
+            "lines": {
+              "sup": [
+                {
+                  "at": [
+                    556.0,
+                    2262.0
+                  ],
+                  "source": "auto",
+                  "pinned": false,
+                  "inferred": false
+                },
+                {
+                  "at": [
+                    660.0,
+                    2267.0
+                  ],
+                  "source": "auto",
+                  "pinned": false,
+                  "inferred": false
+                }
+              ],
+              "inf": [
+                {
+                  "at": [
+                    553.0,
+                    2218.0
+                  ],
+                  "source": "auto",
+                  "pinned": false,
+                  "inferred": false
+                },
+                {
+                  "at": [
+                    658.0,
+                    2222.0
+                  ],
+                  "source": "auto",
+                  "pinned": false,
+                  "inferred": false
+                }
+              ]
+            }
+          },
+          "confidence": {
+            "score": 0.625,
+            "band": "medium",
+            "reasons": [],
+            "calibrated": false,
+            "endplateSpreadPx": {
+              "sup": 1.5,
+              "inf": 2.0
+            },
+            "margin": 4.25
+          },
+          "outline": null
+        }
+      ],
+      "landmarks": {
+        "c7": {
+          "at": [
+            609.0,
+            2292.5
+          ],
+          "source": "auto",
+          "pinned": false,
+          "inferred": false
+        },
+        "sacrumTop": null,
+        "hips": []
+      },
+      "naming": {
+        "template": "standard",
+        "chosenBy": "user",
+        "alternatives": [
+          {
+            "template": "standard",
+            "chance": 0.875
+          },
+          {
+            "template": "extra-lumbar",
+            "chance": 0.0625
+          }
+        ],
+        "fromTop": [
+          "C7",
+          "T1"
+        ],
+        "fromBottom": null,
+        "flags": [
+          "bottom-anchor-weak"
+        ],
+        "l5ConfirmedOn": null
+      },
+      "namedFor": "patient-left"
+    }
+  ],
+  "nextVertebraId": 8
+}
