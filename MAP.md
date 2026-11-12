@@ -291,13 +291,48 @@ The folders and import rules in one picture: `app/README.md`.
 | what can be set on a drawn spine, a film and the stage | `app/src/spine-3d/scene/drawn-spine.ts`, `app/src/spine-3d/scene/film-wall.ts`, `app/src/spine-3d/scene/stage.ts` |
 | the 3D view as a part a screen places | `app/src/spine-3d/view/Spine3D.tsx` |
 | the case edits | `app/src/case-state/case-edits.ts` |
-| the design's tokens, unchanged | `app/src/look-and-feel/tokens.css` |
-| a duration the design names that is not a token | `app/src/look-and-feel/named-timings.css` |
+| how the product looks, moves and speaks, and why | `DESIGN.md` |
+| the design system's values and parts, never edited in the app | `app/src/look-and-feel/tokens.css`, `app/src/look-and-feel/components.css` |
+| the earlier look's tokens, for parts no longer on the page | `app/src/look-and-feel/earlier-tokens.css` |
+| a duration the earlier parts name that is not a token | `app/src/look-and-feel/named-timings.css` |
 | the one stylesheet, which imports the shared ones in order | `app/src/look-and-feel/base.css` |
 | the values of the data attributes that carry state to CSS | `app/src/look-and-feel/data-attributes.ts` |
 | what a gallery page holds | `app/src/gallery/gallery-page.ts` |
 | the preview notice, error wording, evidence entries, the one word for each idea | `app/src/words/preview-notice.ts`, `app/src/words/faults.ts`, `app/src/words/evidence-ledger.ts`, `app/src/words/glossary.ts` |
 | the rule against outcome claims in the wording | `app/src/words/never-claim.test.ts` |
+
+### Films and Find
+
+| I want to change… | Open |
+|---|---|
+| the bar, steps, notice and the frame around the moments | `app/src/app-shell/AppFrame.tsx`, `app/src/app-shell/AppFrame.test.tsx`, `app/src/app-shell/AppFrame.gallery.tsx`, `app/src/app-shell/TopBar.tsx`, `app/src/app-shell/TopBar.gallery.tsx`, `app/src/app-shell/StepSwitch.tsx`, `app/src/app-shell/PreviewNotice.tsx` |
+| the dock and its eight scenes | `app/src/guide/Dock.tsx`, `app/src/guide/Dock.css`, `app/src/guide/Dock.test.tsx`, `app/src/guide/Dock.gallery.tsx`, `app/src/guide/Dock.gallery.css`, `app/src/guide/dock-spec.ts` |
+| the shared step control | `app/src/building-blocks/Segmented.tsx`, `app/src/building-blocks/Segmented.test.tsx`, `app/src/building-blocks/Segmented.gallery.tsx` |
+| state carried to the design system on the page | `app/src/look-and-feel/page-state.ts`, `app/src/look-and-feel/page-state.test.tsx` |
+| the rules that keep styles in the design system | `app/src/look-and-feel/names-only.test.ts` |
+| the drawings in the empty film places | `app/src/look-and-feel/figures/PlaceGlyph.tsx`, `app/src/look-and-feel/figures/PlaceGlyph.gallery.tsx` |
+| the stage and its persistent bench | `app/src/bench/Stage.tsx`, `app/src/bench/Stage.test.tsx`, `app/src/bench/Stage.gallery.tsx`, `app/src/bench/Stage.gallery.css`, `app/src/bench/Bench.tsx` |
+| the four film places and their reading faces | `app/src/bench/FilmPlaces.tsx` |
+| the film tiles and their thumbnail handover | `app/src/bench/FilmTile.tsx`, `app/src/bench/FilmTile.css`, `app/src/bench/HungFilm.tsx` |
+| where films and their names sit in each moment | `app/src/bench/stage-layout.ts`, `app/src/bench/stage-layout.test.ts` |
+| framing a whole film, its spine or one vertebra | `app/src/bench/film-framing.ts`, `app/src/bench/film-framing.test.ts` |
+| films travelling between moments and their cameras gliding | `app/src/bench/fly-tiles.ts`, `app/src/bench/fly-tiles.test.ts`, `app/src/bench/glide-cameras.ts` |
+| taking films in, choosing a place and watching a drop | `app/src/bench/film-intake.ts`, `app/src/bench/film-intake.test.ts`, `app/src/bench/assign-places.ts`, `app/src/bench/assign-places.test.ts`, `app/src/bench/drop-files.ts`, `app/src/bench/drop-files.test.tsx` |
+| forgetting the films and starting over | `app/src/bench/start-over.ts`, `app/src/bench/start-over.test.ts` |
+| drawing the search result and review on the stage | `app/src/bench/find-on-stage.ts`, `app/src/bench/find-on-stage.test.tsx` |
+| the Films moment and its dock states | `app/src/steps/1-films/step.ts`, `app/src/steps/1-films/FilmsScreen.tsx`, `app/src/steps/1-films/FilmsScreen.test.tsx`, `app/src/steps/1-films/films-dock.ts`, `app/src/steps/1-films/films-dock.test.ts` |
+| the Find moment, search run and progress | `app/src/steps/2-find/step.ts`, `app/src/steps/2-find/FindScreen.tsx`, `app/src/steps/2-find/FindScreen.test.tsx`, `app/src/steps/2-find/find-run.ts`, `app/src/steps/2-find/find-run.test.ts`, `app/src/steps/2-find/search-progress.ts`, `app/src/steps/2-find/search-progress.test.ts` |
+| the Find dock, review and search-failure words | `app/src/steps/2-find/find-dock.ts`, `app/src/steps/2-find/find-dock.test.ts` |
+| the finished search as a replay, its clock and player | `app/src/auto-pass/find-replay.ts`, `app/src/auto-pass/find-replay.test.ts`, `app/src/auto-pass/find-replay-clock.ts`, `app/src/auto-pass/find-replay-clock.test.ts`, `app/src/auto-pass/ReplayPlayer.tsx`, `app/src/auto-pass/ReplayPlayer.test.tsx` |
+| the marks drawn on a film and their corner order | `app/src/marks/mark-to-draw.ts`, `app/src/marks/from-film-marks.ts`, `app/src/marks/from-film-marks.test.ts`, `app/src/marks/MarksOverlay.tsx`, `app/src/marks/MarksOverlay.test.tsx`, `app/src/marks/MarksOverlay.gallery.tsx` |
+| the travelling light over a film | `app/src/marks/TravellingLight.tsx`, `app/src/marks/TravellingLight.test.tsx` |
+| the outline styles and their gallery surroundings | `app/src/marks/marks.css`, `app/src/marks/marks.gallery.css` |
+| which outlines and levels need a look | `app/src/review/needs-a-look.ts`, `app/src/review/needs-a-look.test.ts`, `app/src/review/look-levels.ts`, `app/src/review/look-levels.test.ts` |
+| the current dock, film intake and Find state | `app/src/view-state/dock-now.ts`, `app/src/view-state/dock-now.test.ts`, `app/src/view-state/film-intake.ts`, `app/src/view-state/film-intake.test.ts`, `app/src/view-state/find-state.ts`, `app/src/view-state/find-state.test.ts` |
+| a newly opened film as an unconfirmed case record | `app/src/open-and-save/film-record.ts`, `app/src/open-and-save/film-record.test.ts` |
+| the made-up sample case and its fixed recipe | `app/src/made-up-spines/the-sample-case.ts`, `app/src/made-up-spines/the-sample-case.test.ts` |
+| optional front films kept on this machine and their build rules | `app/src/sample-films/sample-films.ts`, `app/src/sample-films/sample-films.test.ts`, `app/src/sample-films/README.md` |
+| the words for film places, films, Find and outlines | `app/src/words/film-names.ts`, `app/src/words/stage.ts`, `app/src/words/films.ts`, `app/src/words/find.ts`, `app/src/words/marks.ts`, `app/src/words/system-words.test.ts` |
 
 ## The proof (`proving-ground/`)
 
@@ -310,7 +345,7 @@ The proof ladder: `proving-ground/README.md`.
 | the known answers the 3D view's placing is held to | `proving-ground/known-answers/spine-3d/placed-bodies.json` |
 | the real engine in Node | `proving-ground/parity/contract.test.ts` |
 | the trained finder's native answer, and the browser build held to it | `proving-ground/known-answers/trained-pass/front.json`, `proving-ground/parity/trained-pass.test.ts`, `engine/trained-finder/tests/finds_the_vertebrae_on_a_made_up_film.rs` |
-| the no-network browser test | `proving-ground/in-the-browser/no-network/nothing-leaves.spec.ts` |
+| the offline Films-to-Find journey and its 640-wide layout checks | `proving-ground/in-the-browser/no-network/nothing-leaves.spec.ts` |
 | the content-policy browser test | `proving-ground/in-the-browser/no-network/content-policy.spec.ts` |
 | the proof that the no-network test sees a worker's violations | `proving-ground/in-the-browser/no-network/worker-violations-are-seen.spec.ts` |
 | the reviewed list of addresses in the build | `proving-ground/in-the-browser/no-network/no-outside-urls-in-build.test.ts` |

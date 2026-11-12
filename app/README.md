@@ -4,35 +4,47 @@ Everything you see and click, in TypeScript and React. The computing
 happens in the Rust engine, which runs in background workers; the app
 reaches it only through the engine room.
 
+## Commands
+
+- `pnpm dev`: development, with the stand-in engine; add `?engine=real` to read your own films.
+- `pnpm build`: production, with the real engine and no films from `src/sample-films/on-this-machine/`.
+- `pnpm --filter ./app preview`: serve the production build with the content policy header.
+- `pnpm --filter ./app films-on-this-machine`: deliberately build with local sample films into
+  the ignored `app/films-on-this-machine/dist/` folder, then serve that copy on this computer with
+  the same content policy header. Never publish that folder.
+
+Real films need the real engine in development (`/?engine=real`); the stand-in reads only its own.
+
 ## Folders
 
 | Folder | Holds |
 |---|---|
-| `src/steps/` | the four steps, numbered in the order a surgeon uses them: `1-films`, `2-size-and-facing`, `3-find`, `4-adjust` |
-| `src/app-shell/` | the frame around every step, which never rearranges: top bar, step rail, guide column, status line |
-| `src/guide/` | the left column's one sentence, its one lit action and its cards |
-| `src/bench/` | the films, hung: bays, the lane between Front and Side, the toasts |
+| `src/steps/` | the moments, numbered in the order they are used: `1-films`, `2-find` |
+| `src/app-shell/` | the frame round every moment: the bar, the step control, the stage, the dock, the notice |
+| `src/guide/` | the dock's one sentence and its one button |
+| `src/bench/` | the stage: the films in their places, and how they move between moments |
 | `src/film-viewer/` | one film on screen: pixels on the GPU, layers over them, its camera |
 | `src/spine-3d/` | the spine in three dimensions: bone shapes placed by a fit, with the films it came from; not mounted yet |
-| `src/marks/` | what is drawn on a film: outlines, pins, pedicle rings, landmarks |
+| `src/marks/` | what is drawn on a film: outlines, their names, the travelling light |
 | `src/ladder/` | the unrolled spine between the Front and Side films |
-| `src/auto-pass/` | the automatic pass, as something to watch: its recording, clock and layers |
+| `src/auto-pass/` | the automatic pass, as something to watch: its recording, clock and layers, and the replay of a finished search |
 | `src/toolbox/` | the adjusting tools you pick up, the tool dock, the magnifier and the ruler |
 | `src/review/` | what needs a person, worked out from the case as pure functions |
 | `src/on-this-device/` | the badge and popover that show nothing leaves this computer |
 | `src/case-sheet/` | saving the case as one file |
 | `src/reopen-case/` | a saved case, read strictly and hung again |
-| `src/made-up-spines/` | "Try a made-up spine" and its answer key |
+| `src/made-up-spines/` | the made-up sample case |
 | `src/engine-room/` | the loader, the workers, their messages and the engine client |
 | `src/case-state/` | the open case (what gets saved) and its undo history |
 | `src/view-state/` | what you are looking at right now (never saved) |
 | `src/open-and-save/` | files in and out, with no network and no screens |
 | `src/shapes/` | the shared types, generated from the Rust shapes |
-| `src/look-and-feel/` | tokens, base styles, type and icons |
+| `src/look-and-feel/` | the design system's two stylesheets, what the app adds beside them, and the signs it draws |
 | `src/choreography/` | how things move: shared keyframes and the one animation loop |
 | `src/building-blocks/` | small UI pieces more than one area uses, and the one key listener |
 | `src/words/` | every sentence the user reads |
 | `src/sample-case/` | dev and tests only: the one fixed story every screen can be opened in |
+| `src/sample-films/` | real front films kept on this machine only; included in development and the deliberate local build, excluded from production; never committed |
 | `src/gallery/` | dev only: every part in every state, at `?gallery` |
 | `build-plugins/` | the content policy and the engine build, as Vite plugins |
 
@@ -48,7 +60,7 @@ ESLint enforces these rules (`eslint.config.js`, the `AREAS` list).
       │
       │  may import
       ▼
-  bench · toolbox · on-this-device · case-sheet · reopen-case · made-up-spines · open-and-save
+  bench · toolbox · on-this-device · case-sheet · reopen-case · made-up-spines · open-and-save · sample-films
                                 never steps; the engine only through its door
   auto-pass                     never steps, case-state, bench or toolbox;
                                 the engine only through its door
