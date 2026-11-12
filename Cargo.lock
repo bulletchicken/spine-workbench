@@ -1961,6 +1961,7 @@ dependencies = [
  "serde-wasm-bindgen",
  "shapes",
  "toolbox",
+ "trained-finder",
  "wasm-bindgen",
  "wasm-bindgen-test",
 ]

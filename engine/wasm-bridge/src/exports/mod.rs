@@ -11,3 +11,4 @@ pub mod made_up_spines;
 pub mod scorekeeper;
 pub mod shapes;
 pub mod toolbox;
+pub mod trained_finder;

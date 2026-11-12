@@ -22,6 +22,7 @@ joint-fit = { path = "../joint-fit" }
 made-up-spines = { path = "../made-up-spines" }
 scorekeeper = { path = "../scorekeeper" }
 toolbox = { path = "../toolbox" }
+trained-finder = { path = "../trained-finder" }
 js-sys.workspace = true
 serde.workspace = true
 serde-wasm-bindgen.workspace = true
