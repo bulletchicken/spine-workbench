@@ -1756,6 +1756,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "trained-finder"
+version = "0.1.0"
+dependencies = [
+ "darkroom",
+ "film-reader",
+ "libm",
+ "made-up-spines",
+ "serde",
+ "serde_json",
+ "sha2",
+ "shapes",
+]
+
+[[package]]
 name = "transpose"
 version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"

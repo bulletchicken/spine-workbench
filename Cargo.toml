@@ -79,3 +79,15 @@ overflow-checks = true
 # Native tests run on full-size films; optimise dependencies even in dev.
 [profile.dev.package."*"]
 opt-level = 2
+
+# The trained finder is one long sum of products. Unoptimised, reading a
+# single film takes minutes, so the crate is always built at full speed:
+# its tests still run with overflow checks, and the browser's dev build
+# drops them, because they stop the convolutions from being vectorised.
+[profile.dev.package.trained-finder]
+opt-level = 3
+
+[profile.wasm-dev.package.trained-finder]
+opt-level = 3
+debug-assertions = false
+overflow-checks = false

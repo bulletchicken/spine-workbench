@@ -147,7 +147,9 @@ update.
 
 - **Anything that identifies a patient.** Real films, datasets and
   hand-marked cases live in `local-only/`, which git ignores. Tests write
-  their own fixtures or use made-up spines.
+  their own fixtures or use made-up spines. The trained finder's weights
+  are numbers learned from real films and are in the repository; the
+  films themselves are not.
 - **Network calls.** The app makes none. The content policy, the lint
   rule and the browser tests enforce it; none of the three is ever
   loosened to make something pass.

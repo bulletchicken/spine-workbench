@@ -32,3 +32,17 @@ BodyParts3D
   The vertebrae from C7 to L5 of release 4.0 are in app/public/bones/,
   changed by bone-prep/prepare_bones.py: repeated points are joined and
   each bone is moved into a frame of its own. No shape was altered.
+
+Trained finder
+
+Weights learned from SpineWeb Dataset 16
+  The weights in engine/trained-finder/weights/ were learned from the
+  labelled front spine films of SpineWeb Dataset 16, as released for
+  the AASCE 2019 challenge. The films are not in this repository. The
+  dataset asks that any publication resulting from any use of it cite:
+  Wu H, Bailey C, Rasoulinejad P, Li S. Automatic landmark estimation
+  for adolescent idiopathic scoliosis assessment using BoostNet.
+  Medical Image Computing and Computer Assisted Intervention (MICCAI
+  2017), pages 127 to 135.
+  (https://doi.org/10.1007/978-3-319-66182-7_15)
+  What the weights are: engine/trained-finder/weights/README.md
