@@ -11,13 +11,19 @@ changes only through a contract-change pull request. The source is
 - **Film workers:** one per loaded film, up to four. Each holds that
   film's `FilmDesk`.
 - **Spine worker:** exactly one. It runs the chain pass (which needs every
-  film), the case checks, packing and unpacking case files, made-up spines
-  and answer-key comparisons.
+  film), the case checks, packing and unpacking case files, made-up spines,
+  answer-key comparisons and fitting films as one 3D spine.
 - Workers never talk to each other. The main thread's auto-pass conductor
   runs film passes in parallel, hands their small results to the spine
   worker's chain pass, then asks each film worker to place points.
 - Every worker instantiates the same compiled module. Workers never fetch:
   the main thread compiles the engine once and posts the module.
+
+The spine fit is a plain, replaceable job; it sends no progress or frames.
+
+| Job | Input | Output | Worker | Stepped | Replaceable |
+|---|---|---|---|---|---|
+| `fit-spine` | `FitFromFilms` | `SpineFit` | spine | no | yes |
 
 ## Messages
 
@@ -59,8 +65,8 @@ cancel { id }            ───────▶   (stepped jobs stop between s
    `app/src/engine-room/job-table.ts` (see the [engine API](engine-api.md)),
    so a wrong payload is a compile error rather than a refusal.
 5. **One job at a time** per worker. Jobs the table marks `replaceable`
-   (hover previews, live checks) keep at most one waiting; a newer one
-   replaces it. A replaced call rejects with `pass-cancelled`. So do the
+   (hover previews, live checks, spine fits) keep at most one waiting; a
+   newer one replaces it. A replaced call rejects with `pass-cancelled`. So do the
    waiting and running calls on a film that is replaced or retired (the
    [engine API](engine-api.md) says which): the main thread rejects them
    itself, cancels their stepped jobs, and drops any later message for

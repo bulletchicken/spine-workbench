@@ -33,6 +33,7 @@ import type {
   FilmKind,
   FilmMarks,
   FilmPassResult,
+  FitFromFilms,
   GeometryGuess,
   MadeUpRecipe,
   MadeUpSpine,
@@ -43,6 +44,7 @@ import type {
   RegionWandInput,
   RegionWandOutput,
   ScaleResult,
+  SpineFit,
   ToolPreview,
   ToolPreviewInput,
   TrainedPassResult,
@@ -131,6 +133,7 @@ export interface JobTable {
     input: { marks: FilmMarks[]; key: AnswerKey };
     output: AnswerKeyComparison;
   };
+  'fit-spine': { input: FitFromFilms; output: SpineFit };
 }
 
 export type JobName = keyof JobTable;
@@ -170,4 +173,5 @@ export const JOBS: { readonly [J in JobName]: JobRules } = {
   'unpack-case': { worker: 'spine', stepped: false, replaceable: false },
   'make-up-spine': { worker: 'spine', stepped: false, replaceable: false },
   'compare-with-answer-key': { worker: 'spine', stepped: false, replaceable: true },
+  'fit-spine': { worker: 'spine', stepped: false, replaceable: true },
 };

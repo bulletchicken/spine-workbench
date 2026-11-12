@@ -9,4 +9,15 @@ import type { VertebraPose } from "./VertebraPose";
 /**
  * A vertebra fitted from all its placed marks and the chain's priors.
  */
-export type FittedVertebra = { level: Level, pose: VertebraPose, angles: FitAngles, sd: FitStandardDeviations, inferred: InferredFit, rmsMm: FitRmsMm, };
+export type FittedVertebra = { level: Level, pose: VertebraPose, angles: FitAngles, sd: FitStandardDeviations, inferred: InferredFit, rmsMm: FitRmsMm, 
+/**
+ * The tilt read straight from the front film's four corners, in
+ * radians: the line from the middle of the body's right side to the
+ * middle of its left side, in the patient's own sense so that it
+ * compares with `sideTiltRad`. Positive when the patient's left side
+ * is higher, as `rotX(+θ)` raises it, whichever way the film faces.
+ * `null` when the vertebra has no front marks. Unlike `sideTiltRad`,
+ * which moves with the lean and twist the fit gives the body, this is
+ * what the film shows.
+ */
+cornerTiltRad: number | null, };

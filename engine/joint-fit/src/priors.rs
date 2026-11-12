@@ -102,10 +102,11 @@ pub fn rows(problem: &Problem, numbers: &[f64], differentiate: bool) -> Vec<Row>
     // A missing view cannot determine its lean/tilt. Interpolate that
     // named angle from neighbours with the same weak angular scale;
     // at a chain end use the nearest neighbour (there is no bracketing pair).
+    // Where the typical spine gives the lean, it alone decides it.
     for (i, observation) in problem.observations.iter().enumerate() {
         for (missing, angle) in [
             (observation.front.is_none(), 0),
-            (observation.side.is_none(), 1),
+            (observation.side.is_none() && problem.typical.is_none(), 1),
         ] {
             if !missing || n < 2 {
                 continue;

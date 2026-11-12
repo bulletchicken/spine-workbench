@@ -1,6 +1,6 @@
 [package]
 name = "joint-fit"
-description = "Fit one three-dimensional spine to marks on two films."
+description = "Fit one three-dimensional spine to marks on one film or two."
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
@@ -12,6 +12,8 @@ shapes = { path = "../shapes" }
 forward-model = { path = "../forward-model" }
 nalgebra.workspace = true
 libm.workspace = true
+serde.workspace = true
+serde_json.workspace = true
 thiserror.workspace = true
 
 [dev-dependencies]

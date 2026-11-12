@@ -38,6 +38,7 @@ and tests only, never shipped) both implement it.
 | `openCase(bytes)` | `OpenedCase` | `unpack-case`; it opens no film |
 | `makeUpSpine(recipe)` | `MadeUpSpine` | `make-up-spine` |
 | `compareWithAnswerKey(marks, key)` | `AnswerKeyComparison` | `compare-with-answer-key` |
+| `fitSpine(input)` | `SpineFit` | `fit-spine` |
 
 `openCase` reads and checks the file and opens no film. The screen then
 opens each film through `openFilm` with its saved record. `openFilm` for
@@ -129,11 +130,22 @@ holds one film, so its jobs never say which.
 | `unpack-case` | spine | `{ bytes }` | `OpenedCase` | | |
 | `make-up-spine` | spine | `MadeUpRecipe` | `MadeUpSpine` | | |
 | `compare-with-answer-key` | spine | `{ marks: FilmMarks[], key }` | `AnswerKeyComparison` | | yes |
+| `fit-spine` | spine | `FitFromFilms` | `SpineFit` | | yes |
 
 `OpenedCase` (`{ case, films: FilmPng[] }`) and `MadeUpSpine`
 (`{ films: FilmPng[], answerKey }`) are generated shapes like every other;
 only `OpenedFilm`, which the film worker puts together from two engine
 calls, is declared in `job-table.ts`.
+
+`fitSpine` needs no open film: `FitFromFilms` carries the marks, geometry,
+stored size and mark spread for one front film or a front and side pair.
+It names whether built-in typical values may fill what the films cannot
+show, and carries any twist readings made elsewhere. `SpineFit` reports
+whether lengths are measured or drawn at a typical size, the curve used
+to choose the typical profile, and each film's effective scale and origin
+pixel. Each vertebra carries the tilt read from its front corners beside
+the model's angles. The caller drops an answer if its marks have changed.
+The stand-in has no fit story and refuses this job with `engine-out-of-sync`.
 
 Notes on inputs:
 
@@ -222,6 +234,7 @@ slices.
 | `case_checks.rs` | `check_case(case) → CheckFinding[]` | `case-invalid-value` |
 | `case_file.rs` | `pack_case(opened) → Uint8Array`; `unpack_case(bytes) → OpenedCase`; `FilmDesk.encode_png(film) → Uint8Array` | `case-*` |
 | `made_up_spines.rs` | `make_up_spine(recipe) → MadeUpSpine` | `made-up-unsatisfiable` |
+| `joint_fit.rs` | `fit_spine(input) → SpineFit`; `fit_from_films(input) → SpineFit` | `pass-no-spine-found`, `tool-refused`, `case-invalid-value` |
 | `scorekeeper.rs` | `compare_with_answer_key(marks, key) → AnswerKeyComparison` | `case-invalid-value` |
 
 Any export can also fail with `engine-out-of-memory` or end in a panic

@@ -1,6 +1,7 @@
 //! Validated marks and parallel cameras in the provisional film frame.
 
 use crate::FitError;
+use crate::typical_spine::Typical;
 use forward_model::cameras::parallel::ParallelCamera;
 use nalgebra::Vector2;
 use shapes::film::FilmKind;
@@ -8,7 +9,7 @@ use shapes::film_geometry::{FilmGeometry, ImageRight};
 use shapes::levels::Level;
 use shapes::marks::{FrontMarks, Mark, SideMarks};
 use shapes::pixels::Px;
-use shapes::spine_fit::FitInput;
+use shapes::spine_fit::{FitInput, TwistReading};
 use shapes::vertebra::{FilmMarks, VertebraMarks};
 use std::collections::BTreeMap;
 
@@ -16,6 +17,13 @@ pub struct Observations {
     pub level: Level,
     pub front: Option<FrontMarks>,
     pub side: Option<SideMarks>,
+    /// One standard deviation of a placed corner on the front and the side
+    /// film, mm.
+    pub spread_mm: [f64; 2],
+    /// The part of a corner's error all four corners share on the front and
+    /// the side film, mm.
+    pub shared_mm: [f64; 2],
+    pub twist_reading: Option<TwistReading>,
 }
 
 impl Observations {
@@ -28,23 +36,66 @@ impl Observations {
 pub struct Problem {
     pub observations: Vec<Observations>,
     pub front: ParallelCamera,
-    pub side: ParallelCamera,
+    pub side: Option<ParallelCamera>,
     pub front_spacing: [f64; 2],
     pub side_spacing: [f64; 2],
+    /// Each observation's typical values, when a typical spine was asked for.
+    pub typical: Option<Typical>,
+    /// Scale the covariance by the residual variance, as the two-film fit
+    /// with its fixed mark weights does.
+    pub rescale_covariance: bool,
+}
+
+/// One film's marks, geometry and stored size, as the problem reads them.
+pub struct Film<'a> {
+    pub marks: &'a FilmMarks,
+    pub geometry: &'a FilmGeometry,
+    pub size: [u32; 2],
 }
 
 impl Problem {
     pub fn new(input: &FitInput) -> Result<Self, FitError> {
-        let front = camera(&input.front_geometry, input.front_size, FilmKind::Front)?;
-        let side = camera(&input.side_geometry, input.side_size, FilmKind::Side)?;
-        validate_marks(&input.front, FilmKind::Front, front.image_right)?;
-        validate_marks(&input.side, FilmKind::Side, side.image_right)?;
+        let problem = Self::of_films(
+            Film {
+                marks: &input.front,
+                geometry: &input.front_geometry,
+                size: input.front_size,
+            },
+            Some(Film {
+                marks: &input.side,
+                geometry: &input.side_geometry,
+                size: input.side_size,
+            }),
+        )?;
+        if input.front.vertebrae.is_empty() || input.side.vertebrae.is_empty() {
+            return Err(FitError::Underconstrained);
+        }
+        Ok(problem)
+    }
+
+    /// Cameras, validated marks and observations by level, with a corner
+    /// spread of 1 mm and none of it shared, no twist readings and no
+    /// typical values.
+    pub fn of_films(front: Film, side: Option<Film>) -> Result<Self, FitError> {
+        let front_camera = camera(front.geometry, front.size, FilmKind::Front)?;
+        let side_camera = side
+            .as_ref()
+            .map(|film| camera(film.geometry, film.size, FilmKind::Side))
+            .transpose()?;
+        validate_marks(front.marks, FilmKind::Front, front_camera.image_right)?;
+        if let (Some(film), Some(camera)) = (&side, &side_camera) {
+            validate_marks(film.marks, FilmKind::Side, camera.image_right)?;
+        }
+        let side_vertebrae = side.as_ref().map_or(&[][..], |film| &film.marks.vertebrae);
         let mut by_level = BTreeMap::new();
-        for v in input.front.vertebrae.iter().chain(&input.side.vertebrae) {
+        for v in front.marks.vertebrae.iter().chain(side_vertebrae) {
             let entry = by_level.entry(v.level).or_insert(Observations {
                 level: v.level,
                 front: None,
                 side: None,
+                spread_mm: [1.0, 1.0],
+                shared_mm: [0.0, 0.0],
+                twist_reading: None,
             });
             match v.marks {
                 VertebraMarks::Front { points } => entry.front = Some(points),
@@ -55,43 +106,49 @@ impl Problem {
         if by_level.is_empty() {
             return Err(FitError::NoMarks);
         }
-        if input.front.vertebrae.is_empty() || input.side.vertebrae.is_empty() {
-            return Err(FitError::Underconstrained);
-        }
+        // An empty film has no lowest vertebra; callers refuse it before
+        // its camera is used.
         let origin = |marks: &FilmMarks, camera: &ParallelCamera| {
-            let corners = marks
-                .vertebrae
-                .last()
-                .expect("nonempty view")
-                .marks
-                .corners();
+            let Some(last) = marks.vertebrae.last() else {
+                return Vector2::zeros();
+            };
+            let corners = last.marks.corners();
             (upright(camera, corners[2].at) + upright(camera, corners[3].at)) * 0.5
         };
         Ok(Self {
             observations: by_level.into_values().collect(),
             front: ParallelCamera {
-                origin: origin(&input.front, &front),
-                ..front
+                origin: origin(front.marks, &front_camera),
+                ..front_camera
             },
-            side: ParallelCamera {
-                origin: origin(&input.side, &side),
-                ..side
-            },
-            front_spacing: spacing(&input.front_geometry),
-            side_spacing: spacing(&input.side_geometry),
+            side: side
+                .as_ref()
+                .zip(side_camera)
+                .map(|(film, camera)| ParallelCamera {
+                    origin: origin(film.marks, &camera),
+                    ..camera
+                }),
+            front_spacing: spacing(front.geometry),
+            side_spacing: side
+                .as_ref()
+                .map_or([1.0, 1.0], |film| spacing(film.geometry)),
+            typical: None,
+            rescale_covariance: true,
         })
     }
 
     /// Positive offset means add this height to side-film millimetres to
-    /// express them in the front film's provisional vertical frame.
-    pub fn side_camera(&self, scale_log: f64, offset: f64) -> ParallelCamera {
+    /// express them in the front film's provisional vertical frame. `None`
+    /// when there is no side film.
+    pub fn side_camera(&self, scale_log: f64, offset: f64) -> Option<ParallelCamera> {
+        let side = self.side?;
         let scale = libm::exp(scale_log);
-        let spacing = self.side.upright_mm_per_px.map(|s| s * scale);
-        ParallelCamera {
+        let spacing = side.upright_mm_per_px.map(|s| s * scale);
+        Some(ParallelCamera {
             upright_mm_per_px: spacing,
-            origin: self.side.origin + Vector2::new(0.0, offset / spacing[1]),
-            ..self.side
-        }
+            origin: side.origin + Vector2::new(0.0, offset / spacing[1]),
+            ..side
+        })
     }
 }
 

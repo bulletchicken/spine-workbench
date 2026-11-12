@@ -28,6 +28,7 @@ import type {
   Film,
   FilmKind,
   FilmMarks,
+  FitFromFilms,
   GeometryGuess,
   MadeUpRecipe,
   MadeUpSpine,
@@ -40,6 +41,7 @@ import type {
   RegionWandInput,
   RegionWandOutput,
   ScaleResult,
+  SpineFit,
   Stage,
   ToolPreview,
   ToolPreviewInput,
@@ -127,6 +129,8 @@ export interface EngineClient {
    * screen lets go by.
    */
   compareWithAnswerKey(marks: FilmMarks[], key: AnswerKey): Promise<AnswerKeyComparison>;
+  /** Fit one front film or a front and side pair. The caller drops stale answers. */
+  fitSpine(input: FitFromFilms): Promise<SpineFit>;
 }
 
 /** Live reports from a long call, and a way to stop it. */

@@ -1,7 +1,9 @@
-//! Initial poses from corner midpoints, endplate slopes and pedicle offsets.
+//! Initial poses from corner midpoints, endplate slopes, pedicle offsets,
+//! twist readings and, with no side film, the typical spine.
 
 use crate::parameters::{COUNT, SIZES};
 use crate::problem::{Problem, millimetres};
+use crate::typical_spine::Typical;
 use forward_model::cameras::parallel::ParallelCamera;
 use forward_model::rotation::{rot_x, rot_y, rot_z, rotation_vector_from_matrix};
 use nalgebra::{DVector, Vector2};
@@ -39,7 +41,10 @@ pub fn start(problem: &Problem) -> DVector<f64> {
     let sides: Vec<_> = problem
         .observations
         .iter()
-        .map(|v| v.side.map(|m| view(&problem.side, m.corners())))
+        .map(|v| {
+            let camera = problem.side.as_ref()?;
+            v.side.map(|m| view(camera, m.corners()))
+        })
         .collect();
     let offset = fronts
         .iter()
@@ -96,6 +101,11 @@ pub fn start(problem: &Problem) -> DVector<f64> {
             }
         }
     }
+    if let Some(typical) = &problem.typical
+        && sides.iter().all(Option::is_none)
+    {
+        typical_side_view(&mut poses, typical);
+    }
     for (i, observation) in problem.observations.iter().enumerate() {
         if let Some(front) = observation.front {
             let p = &mut poses[i];
@@ -115,11 +125,14 @@ pub fn start(problem: &Problem) -> DVector<f64> {
                 );
             }
         }
+        if let Some(reading) = observation.twist_reading {
+            poses[i][5] = reading.twist_rad;
+        }
     }
     let seen: Vec<_> = problem
         .observations
         .iter()
-        .map(|v| v.has_pedicle())
+        .map(|v| v.has_pedicle() || v.twist_reading.is_some())
         .collect();
     for i in 0..n {
         if !seen[i] {
@@ -137,6 +150,25 @@ pub fn start(problem: &Problem) -> DVector<f64> {
     }
     values[n * COUNT + 1] = offset;
     values
+}
+
+/// With no side view anywhere: typical lean, side wedge and depths, the
+/// height the projected one implies at that lean, and front-to-back places
+/// stacked up from the lowest vertebra.
+fn typical_side_view(poses: &mut [[f64; COUNT]], typical: &Typical) {
+    for (p, level) in poses.iter_mut().zip(&typical.levels) {
+        p[4] = level.lean_rad.mean;
+        p[8] = level.side_wedge_rad.mean;
+        p[6] /= libm::cos(p[4]);
+        let ratio = libm::exp(level.log_depth_to_width.mean);
+        p[10] = ratio * p[9];
+        p[12] = ratio * p[11];
+    }
+    for i in (0..poses.len().saturating_sub(1)).rev() {
+        let rise = poses[i][2] - poses[i + 1][2];
+        let lean = 0.5 * (poses[i][4] + poses[i + 1][4]);
+        poses[i][0] = poses[i + 1][0] + rise * libm::tan(lean);
+    }
 }
 
 fn interpolate(poses: &[[f64; COUNT]], seen: &[bool], i: usize, field: usize) -> f64 {

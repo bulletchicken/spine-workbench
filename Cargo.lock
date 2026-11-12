@@ -892,6 +892,8 @@ dependencies = [
  "made-up-spines",
  "nalgebra",
  "proptest",
+ "serde",
+ "serde_json",
  "shapes",
  "thiserror",
 ]

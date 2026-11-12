@@ -49,6 +49,7 @@ built.
 |---|---|
 | where the vertebra shapes come from, their licence, and what was done to them | `bone-prep/README.md` |
 | how a vertebra's body and its endplates are found, and the bone moved into its own frame | `bone-prep/prepare_bones.py` |
+| the typical spine the one-film fit falls back on: its sources, how it is built, and the file it writes | `bone-prep/typical-spine.md`, `bone-prep/typical_spine.py`, `engine/joint-fit/typical-spine/typical-spine.json` |
 
 ## The trained finder's numbers (`finder-prep/`)
 
@@ -144,6 +145,9 @@ The crate map, the dependency rules and the patient frame in one picture:
 | I want to change… | Open |
 |---|---|
 | fitting front and side marks as one spine | `engine/joint-fit/src/lib.rs` |
+| fitting one front film, with a typical spine for what it cannot show | `engine/joint-fit/src/from_films.rs` |
+| finding the curves on the front film, and the largest one choosing the typical side profile | `engine/joint-fit/src/front_curves.rs` |
+| the typical twist the largest curve gives its vertebrae | `engine/joint-fit/src/curve_twist.rs` |
 | the joint fit's browser export | `engine/wasm-bridge/src/exports/joint_fit.rs` |
 
 ### Reading films (`engine/film-reader/`)

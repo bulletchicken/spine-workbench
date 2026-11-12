@@ -1,4 +1,4 @@
-//! Residual-variance covariance without LM damping, propagated to reported coordinates.
+//! Covariance without LM damping, propagated to reported coordinates.
 
 use crate::FitError;
 use crate::levenberg_marquardt::Solution;
@@ -7,7 +7,10 @@ use crate::patient_origin;
 use nalgebra::{DMatrix, DVector};
 use shapes::spine_fit::FitStandardDeviations;
 
-pub fn covariance(solution: &Solution) -> Result<DMatrix<f64>, FitError> {
+/// With `rescale`, the inverse normal matrix is scaled by the residual
+/// variance. Without it, the weights are taken as standard deviations in
+/// real units, so a value only a prior decides keeps that prior's spread.
+pub fn covariance(solution: &Solution, rescale: bool) -> Result<DMatrix<f64>, FitError> {
     let normal = &solution.normal;
     let cholesky = normal
         .matrix
@@ -19,7 +22,11 @@ pub fn covariance(solution: &Solution) -> Result<DMatrix<f64>, FitError> {
         .checked_sub(solution.numbers.len())
         .filter(|&n| n > 0)
         .ok_or(FitError::Underconstrained)?;
-    let covariance = cholesky.inverse() * (normal.cost / dof as f64);
+    let covariance = if rescale {
+        cholesky.inverse() * (normal.cost / dof as f64)
+    } else {
+        cholesky.inverse()
+    };
     if covariance.iter().any(|x| !x.is_finite()) {
         return Err(FitError::NumericalFailure);
     }

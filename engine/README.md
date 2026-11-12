@@ -19,6 +19,7 @@ same code compiled to WebAssembly.
 | `toolbox/` | the maths behind the region wand, the boundary wand and pins |
 | `case-checks/` | is the spine complete and in order? |
 | `case-file/` | one zip per case, read strictly |
+| `joint-fit/` | fits marks on one film or two to one three-dimensional spine, with a typical spine for what one film cannot show |
 | `scorekeeper/` | choosing methods with numbers; never touches the disk |
 | `command-line/` | the `spine` binary: the same engine, natively |
 | `wasm-bridge/` | the only crate that knows about the browser |

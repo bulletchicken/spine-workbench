@@ -2,7 +2,9 @@
 
 use crate::problem::Problem;
 use crate::residuals::Row;
-use crate::{FitError, parameters, priors, residuals};
+use crate::{
+    FitError, gauge, parameters, priors, residuals, stacking, twist_readings, typical_rows,
+};
 use nalgebra::{DMatrix, DVector};
 use shapes::spine_fit::FitStopReason;
 
@@ -26,6 +28,10 @@ fn all_rows(problem: &Problem, numbers: &[f64], differentiate: bool) -> Option<V
     }
     let mut rows = residuals::rows(problem, numbers, differentiate)?;
     rows.extend(priors::rows(problem, numbers, differentiate));
+    rows.extend(typical_rows::rows(problem, numbers, differentiate));
+    rows.extend(stacking::rows(problem, numbers, differentiate));
+    rows.extend(twist_readings::rows(problem, numbers, differentiate));
+    rows.extend(gauge::rows(problem, numbers, differentiate));
     rows.iter()
         .all(|r| r.value.is_finite() && r.derivatives.iter().all(|x| x.1.is_finite()))
         .then_some(rows)

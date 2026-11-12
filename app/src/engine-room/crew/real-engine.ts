@@ -16,6 +16,7 @@ import type {
   FilmKind,
   FilmMarks,
   FilmPng,
+  FitFromFilms,
   GeometryGuess,
   MadeUpRecipe,
   MadeUpSpine,
@@ -26,6 +27,7 @@ import type {
   RegionWandInput,
   RegionWandOutput,
   ScaleResult,
+  SpineFit,
   ToolPreview,
   ToolPreviewInput,
 } from '@/shapes';
@@ -113,6 +115,10 @@ export class RealEngine implements EngineClient {
 
   compareWithAnswerKey(marks: FilmMarks[], key: AnswerKey): Promise<AnswerKeyComparison> {
     return this.#onSpine('compare-with-answer-key', { marks, key });
+  }
+
+  fitSpine(input: FitFromFilms): Promise<SpineFit> {
+    return this.#onSpine('fit-spine', input);
   }
 
   /** Closes every worker. The screens never need it; tests and a page being torn down do. */

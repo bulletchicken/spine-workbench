@@ -42,7 +42,7 @@ pub fn marks(
     problem: &Problem,
     observation: &Observations,
     numbers: &[f64],
-    side: &ParallelCamera,
+    side: Option<&ParallelCamera>,
 ) -> Option<Marks> {
     let v = vertebra(numbers);
     let mut result = Marks {
@@ -52,22 +52,31 @@ pub fn marks(
     };
     if let Some(observed) = observation.front {
         let predicted = front_marks(&v, &problem.front).ok()?;
+        let sd = observation.spread_mm[0];
         for (o, p) in observed.corners().into_iter().zip(predicted.corners()) {
-            append(&mut result, o, p, problem.front_spacing, 1.0, 0);
+            append(&mut result, o, p, problem.front_spacing, sd, 0);
         }
         for (o, p) in [
             (observed.ped_l, predicted.ped_l),
             (observed.ped_r, predicted.ped_r),
         ] {
             if let Some(o) = o.mark() {
-                append(&mut result, o, p.mark()?, problem.front_spacing, 2.0, 0);
+                append(
+                    &mut result,
+                    o,
+                    p.mark()?,
+                    problem.front_spacing,
+                    2.0 * sd,
+                    0,
+                );
             }
         }
     }
     if let Some(observed) = observation.side {
-        let predicted = side_marks(&v, side).ok()?;
+        let predicted = side_marks(&v, side?).ok()?;
+        let sd = observation.spread_mm[1];
         for (o, p) in observed.corners().into_iter().zip(predicted.corners()) {
-            append(&mut result, o, p, problem.side_spacing, 1.0, 1);
+            append(&mut result, o, p, problem.side_spacing, sd, 1);
         }
     }
     result
@@ -84,7 +93,7 @@ pub fn rows(problem: &Problem, numbers: &[f64], differentiate: bool) -> Option<V
     let mut rows = Vec::new();
     for (i, observation) in problem.observations.iter().enumerate() {
         let local = &numbers[i * COUNT..(i + 1) * COUNT];
-        let values = marks(problem, observation, local, &side)?.weighted;
+        let values = marks(problem, observation, local, side.as_ref())?.weighted;
         let mut block: Vec<_> = values
             .into_iter()
             .map(|value| Row {
@@ -109,8 +118,8 @@ pub fn rows(problem: &Problem, numbers: &[f64], differentiate: bool) -> Option<V
                     p[j] += h;
                     m[j] -= h;
                     (
-                        marks(problem, observation, &p, &side)?,
-                        marks(problem, observation, &m, &side)?,
+                        marks(problem, observation, &p, side.as_ref())?,
+                        marks(problem, observation, &m, side.as_ref())?,
                     )
                 } else {
                     let mut p = [numbers[global], numbers[global + 1]];
@@ -122,13 +131,13 @@ pub fn rows(problem: &Problem, numbers: &[f64], differentiate: bool) -> Option<V
                             problem,
                             observation,
                             local,
-                            &problem.side_camera(p[0], p[1]),
+                            problem.side_camera(p[0], p[1]).as_ref(),
                         )?,
                         marks(
                             problem,
                             observation,
                             local,
-                            &problem.side_camera(m[0], m[1]),
+                            problem.side_camera(m[0], m[1]).as_ref(),
                         )?,
                     )
                 };
