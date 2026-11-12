@@ -14,6 +14,7 @@ use shapes::errors::{EngineError, ErrorCode};
 use shapes::film::{
     DisplayWindow, ModalityMap, Photometric, PixelValues, WindowFunction, WindowSource,
 };
+use std::borrow::Cow;
 
 /// An exact nearest-rank P1/P99 window over the central 60% of columns and
 /// 80% of rows. Tiny images retain at least one row and column. A flat image
@@ -109,31 +110,10 @@ pub fn thumbnail(film: &DecodedFilm, max_side: u32) -> Result<Vec<u8>, EngineErr
         f64::from(film.image.height()) / f64::from(height),
     )
     .ok_or_else(crate::invalid_film)?;
-    let fallback;
-    let window = if matches!(
-        &film.facts.default_window,
-        DisplayWindow::CentreWidth {
-            function: WindowFunction::Sigmoid,
-            ..
-        }
-    ) {
-        fallback = default_window(&film.image, film.facts.bits_stored, &film.facts.values);
-        &fallback
-    } else {
-        &film.facts.default_window
-    };
-    let monochrome_one = film
-        .facts
-        .kept_tags
-        .as_ref()
-        .is_some_and(|tags| tags.photometric == Some(Photometric::Monochrome1));
+    let view = opening_view(film);
     let mut pixels = crate::allocate(reduced.pixels().len())?;
     for &pixel in reduced.pixels() {
-        let modality = modality_value(f64::from(pixel), film.facts.bits_stored, &film.facts.values);
-        let mut value = window_value(modality, window);
-        if monochrome_one {
-            value = 1.0 - value;
-        }
+        let mut value = view(f64::from(pixel));
         if film.facts.values.inverted_by_user {
             value = 1.0 - value;
         }
@@ -151,6 +131,39 @@ pub fn thumbnail(film: &DecodedFilm, max_side: u32) -> Result<Vec<u8>, EngineErr
         writer.finish().map_err(|_| crate::invalid_film())?;
     }
     Ok(png)
+}
+
+/// How the film opens on screen, from 0 (black) to 1 (white), for a stored
+/// value: the modality map, then the opening window, then a MONOCHROME1
+/// film turned back so bone stays bright. The user's own flip is left to
+/// the caller. The thumbnail and [`crate::eight_bit`] both read a film
+/// through this, so the slot preview and the finder see the same levels.
+pub(crate) fn opening_view(film: &DecodedFilm) -> impl Fn(f64) -> f64 + '_ {
+    let window = if matches!(
+        &film.facts.default_window,
+        DisplayWindow::CentreWidth {
+            function: WindowFunction::Sigmoid,
+            ..
+        }
+    ) {
+        Cow::Owned(default_window(
+            &film.image,
+            film.facts.bits_stored,
+            &film.facts.values,
+        ))
+    } else {
+        Cow::Borrowed(&film.facts.default_window)
+    };
+    let monochrome_one = film
+        .facts
+        .kept_tags
+        .as_ref()
+        .is_some_and(|tags| tags.photometric == Some(Photometric::Monochrome1));
+    move |pixel| {
+        let modality = modality_value(pixel, film.facts.bits_stored, &film.facts.values);
+        let value = window_value(modality, &window);
+        if monochrome_one { 1.0 - value } else { value }
+    }
 }
 
 fn modality_value(pixel: f64, bits: u8, values: &PixelValues) -> f64 {

@@ -13,6 +13,7 @@
 //! | [`png_jpeg`] | 8- and 16-bit greyscale; colour to luminance |
 //! | [`dicom`] | the keep-list, pixel data, grey levels, scale tags |
 //! | [`display_pixels`] | the half-float copy for the GPU |
+//! | [`eight_bit`] | the film as 8-bit grey, the way it opens on screen |
 //! | [`thumbnail`] | the small preview for the film slots |
 //! | `test_support` | test DICOM writers (feature `test-support`) |
 
@@ -21,6 +22,7 @@
 pub mod decoded_film;
 pub mod dicom;
 pub mod display_pixels;
+pub mod eight_bit;
 pub mod png_jpeg;
 pub mod sniff;
 #[cfg(any(test, feature = "test-support"))]
