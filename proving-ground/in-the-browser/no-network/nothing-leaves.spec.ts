@@ -12,7 +12,10 @@
 //    and exactly one fetch: the engine's own hashed .wasm;
 // 5. goes offline as soon as the engine is ready, then makes the sample
 //    case, finds its spine, reviews it, revisits both moments at 640 wide
-//    and starts over;
+//    and starts over. In WebKit it goes offline once the four films are
+//    in: each film starts a worker of its own, and WebKit will not load a
+//    worker's script offline unless the server lets it keep a copy, which
+//    `vite preview` does not;
 // 6. at the end of the journey, waits until the violations, requests and
 //    sockets hold still for a second (test-rig/hold-still.ts) before it
 //    reads them, so a call made on a timer within about a second of the
@@ -102,7 +105,7 @@ async function layoutFaults(page: Page): Promise<string[]> {
   return faults;
 }
 
-test('nothing leaves the machine', async ({ baseURL, context, page }) => {
+test('nothing leaves the machine', async ({ baseURL, browserName, context, page }) => {
   // Drawing four films, the real search and a review each have their own wait below.
   test.setTimeout(240_000);
   if (baseURL === undefined) throw new Error('playwright.config.ts sets baseURL');
@@ -115,7 +118,9 @@ test('nothing leaves the machine', async ({ baseURL, context, page }) => {
   await page.goto('/');
   const status = page.getByTestId('engine-status');
   await expect(status).toHaveAttribute('data-status', 'ready');
-  await context.setOffline(true);
+  // See 5 above: WebKit must still be able to load the film workers' script.
+  const offlineFromTheStart = browserName !== 'webkit';
+  if (offlineFromTheStart) await context.setOffline(true);
 
   // Check the initial pair before opening films starts one worker per film kind.
   await expect(status).toHaveAttribute('data-status', 'ready');
@@ -141,6 +146,7 @@ test('nothing leaves the machine', async ({ baseURL, context, page }) => {
   }
   await expect(sentence).toHaveText('All four films are in.');
   await fourFilms(page);
+  if (!offlineFromTheStart) await context.setOffline(true);
   await dock.getByRole('button', { name: 'Find the spine', exact: true }).click();
   await expect(steps.getByRole('button', { name: 'Find', exact: true })).toHaveAttribute('aria-current', 'true');
   await expect(sentence).toHaveText(FOUND, { timeout: 90_000 });
