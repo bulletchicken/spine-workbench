@@ -6,6 +6,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "films-on-this-machine": "vite build --mode films-on-this-machine && vite preview --mode films-on-this-machine --host 127.0.0.1",
     "test": "vitest run"
   },
   "dependencies": {

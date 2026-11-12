@@ -111,6 +111,7 @@ const ABOVE_THE_BLOCKS = [
   'reopen-case',
   'made-up-spines',
   'open-and-save',
+  'sample-films',
   'app-shell',
   'gallery',
 ];
@@ -148,7 +149,7 @@ const AREAS = [
     banned: [SHAPES_ONLY, ENGINE_INSIDES, NO_STEPS, NO_CASE_STATE, NO_BENCH, NO_TOOLBOX, ENGINE_DOOR_ONLY],
   },
   {
-    files: 'app/src/{bench,toolbox,on-this-device,case-sheet,reopen-case,made-up-spines,open-and-save}/**/*.{ts,tsx}',
+    files: 'app/src/{bench,toolbox,on-this-device,case-sheet,reopen-case,made-up-spines,open-and-save,sample-films}/**/*.{ts,tsx}',
     banned: [SHAPES_ONLY, ENGINE_INSIDES, NO_STEPS, ENGINE_DOOR_ONLY],
   },
 ];

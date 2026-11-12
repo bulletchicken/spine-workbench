@@ -1,0 +1,9 @@
+/* One stage owns the shared cameras. Its room follows the frame's sizes. */
+.stage-gallery { width: var(--frame-w); }
+.stage-gallery-scenes { display: flex; flex-wrap: wrap; gap: var(--space-4); }
+.stage-gallery-moments { display: flex; gap: var(--space-8); margin-bottom: var(--space-16); }
+.stage-gallery .stage {
+  width: 100%;
+  height: calc(var(--frame-h) - var(--stage-top) - var(--stage-bottom));
+  pointer-events: none;
+}

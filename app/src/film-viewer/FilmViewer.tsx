@@ -129,13 +129,15 @@ export function FilmViewer({
   useLayoutEffect(() => {
     const element = root.current;
     if (element === null) return undefined;
-    const measure = () => {
-      const box = element.getBoundingClientRect();
-      viewportNow.current = { width: box.width, height: box.height };
-      setViewport((was) => (was.width === box.width && was.height === box.height ? was : { width: box.width, height: box.height }));
+    const measure = (width: number, height: number) => {
+      viewportNow.current = { width, height };
+      setViewport((was) => (was.width === width && was.height === height ? was : { width, height }));
     };
-    measure();
-    const observer = new ResizeObserver(measure);
+    measure(element.clientWidth, element.clientHeight);
+    const observer = new ResizeObserver((entries) => {
+      const box = entries[0]?.contentRect;
+      if (box !== undefined) measure(box.width, box.height);
+    });
     observer.observe(element);
     return () => {
       observer.disconnect();

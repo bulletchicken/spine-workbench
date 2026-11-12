@@ -1,0 +1,128 @@
+import { useEffect, useState } from 'react';
+import { caseStore } from '@/case-state/case-store';
+import { filmPixels } from '@/case-state/film-pixels';
+import { FILM_KINDS } from '@/case-state/selectors';
+import { EngineFailure, type EngineClient } from '@/engine-room/engine-client';
+import { useEngine } from '@/engine-room/use-engine';
+import { makeTheSampleCase } from '@/made-up-spines/the-sample-case';
+import { filmRecordFrom } from '@/open-and-save/film-record';
+import { openAFilm } from '@/open-and-save/open-a-film';
+import { pickFilms } from '@/open-and-save/pick-files';
+import { readBytes } from '@/open-and-save/read-bytes';
+import { readDroppedFiles, type DroppedFile } from '@/open-and-save/read-dropped-files';
+import { sampleFilmFilesFor } from '@/sample-films/sample-films';
+import type { ErrorCode, FilmKind } from '@/shapes';
+import { currentStep } from '@/view-state/current-step';
+import { findState } from '@/view-state/find-state';
+import { filmIntake, type FilmIntakeState, type IntakeNotice } from '@/view-state/film-intake';
+import { assignPlaces } from './assign-places';
+import { watchForDroppedFiles } from './drop-files';
+import { clearFilms, queueFilmChange } from './start-over';
+import type { Held } from './Stage';
+
+function failureCode(error: unknown): ErrorCode {
+  return error instanceof EngineFailure ? error.error.code : 'engine-crashed';
+}
+
+function backToFilms(): IntakeNotice | null {
+  if (currentStep.getState().slug !== 'find') return null;
+  const phase = findState.getState().phase;
+  currentStep.getState().go('films');
+  return phase === 'searching' || phase === 'replaying' ? { kind: 'search-stopped' } : null;
+}
+
+/** File judging is shared by a drop and the picker; neither keeps file names. */
+async function takeTold(engine: EngineClient, told: readonly DroppedFile[], onPlace: FilmKind | null, from: FilmIntakeState['from'], sample: number | null = null): Promise<void> {
+  if (told.length === 0) return;
+  const stopped = backToFilms();
+  filmIntake.getState().tell(null);
+  const blobs = told.flatMap((file) => file.kind === 'film' ? [file.blob] : []);
+  const refusals: (ErrorCode | 'a-saved-case')[] = told.flatMap((file) => file.kind === 'refused' ? [file.code] : file.kind === 'case' ? ['a-saved-case' as const] : []);
+  const wasFrom = filmIntake.getState().from;
+  if (blobs.length > 0 && (from !== 'yours' || wasFrom === 'sample-film' || wasFrom === 'made-up-case')) clearFilms(engine);
+  const filled = caseStore.getState().case.films.map((film) => film.kind);
+  const { places, leftOut } = assignPlaces(blobs.length, onPlace, filled);
+  const openings = places.map((kind, index) => ({ kind, blob: blobs[index] })).sort((a, b) => FILM_KINDS.indexOf(a.kind) - FILM_KINDS.indexOf(b.kind));
+  if (places.length > 0) filmIntake.getState().source(from, sample);
+  filmIntake.getState().begin(openings.map(({ kind }) => kind));
+  for (const { kind, blob } of openings) {
+    if (blob === undefined) continue;
+    const opening = { read: false };
+    let kept = false;
+    try {
+      const bytes = await readBytes(blob);
+      const film = await openAFilm({
+        openFilm: async (...args) => {
+          const answer = await engine.openFilm(...args);
+          opening.read = true;
+          return answer;
+        },
+        displayPixels: (place) => engine.displayPixels(place),
+      }, kind, bytes, null);
+      caseStore.getState().apply([{ kind: 'set-film', film: filmRecordFrom(film.facts) }]);
+      kept = true;
+    } catch (error) {
+      const code = failureCode(error);
+      if (code !== 'pass-cancelled') {
+        if (opening.read) {
+          engine.retireFilm(kind);
+          filmPixels.getState().retired(kind);
+          caseStore.getState().apply([{ kind: 'remove-film', film: kind }]);
+        }
+        refusals.push(code);
+      }
+    } finally {
+      filmIntake.getState().read(kind, kept);
+    }
+  }
+  filmIntake.getState().tell(refusals.length > 0
+    ? { kind: 'refused', count: refusals.length, code: refusals[0] ?? 'film-unknown-format' }
+    : leftOut > 0 ? { kind: 'left-out', count: leftOut } : stopped);
+  if (caseStore.getState().case.films.length === 0) filmIntake.getState().source(null);
+}
+
+export function takeIn(engine: EngineClient, blobs: readonly Blob[], onPlace: FilmKind | null): Promise<void> {
+  return queueFilmChange(async () => { await takeTold(engine, await readDroppedFiles(blobs), onPlace, 'yours'); });
+}
+
+export async function chooseFilms(engine: EngineClient, onPlace: FilmKind | null = null): Promise<void> {
+  const told = await pickFilms();
+  await queueFilmChange(async () => { await takeTold(engine, told, onPlace, 'yours'); });
+}
+
+export function takeInNextSample(engine: EngineClient): Promise<void> {
+  return queueFilmChange(async () => {
+    try {
+      const files = await sampleFilmFilesFor(engine);
+      const next = Math.min(filmIntake.getState().nextSample, files.length);
+      const file = files[next];
+      if (file !== undefined) {
+        await takeTold(engine, [{ kind: 'film', blob: new Blob([file.bytes()]) }], 'front', 'sample-film', next);
+        filmIntake.getState().next(next + 1);
+        return;
+      }
+      backToFilms();
+      clearFilms(engine);
+      filmIntake.getState().source('made-up-case');
+      filmIntake.getState().make(true);
+      const films = await makeTheSampleCase(engine);
+      filmIntake.getState().make(false);
+      await takeTold(engine, films.map(({ png }) => ({ kind: 'film', blob: new Blob([new Uint8Array(png)]) })), null, 'made-up-case');
+      filmIntake.getState().next(0);
+    } catch (error) {
+      const code = failureCode(error);
+      if (code !== 'pass-cancelled') filmIntake.getState().tell({ kind: 'refused', count: 1, code });
+      if (caseStore.getState().case.films.length === 0) filmIntake.getState().source(null);
+    } finally {
+      filmIntake.getState().make(false);
+    }
+  });
+}
+
+/** The bench owns the window's one watcher for the whole visit. */
+export function useFilmIntake(): { held: Held; pressPlace: (kind: FilmKind) => void } {
+  const engine = useEngine();
+  const [held, setHeld] = useState<Held>({ over: false, target: null });
+  useEffect(() => watchForDroppedFiles({ held: setHeld, dropped: (files, place) => { void takeIn(engine, files, place); } }), [engine]);
+  return { held, pressPlace: (kind) => { void chooseFilms(engine, kind); } };
+}

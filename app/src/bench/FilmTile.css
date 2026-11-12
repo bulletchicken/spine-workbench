@@ -1,0 +1,3 @@
+.tile > .film { inset: 0; }
+.film > .hung-film { position: absolute; inset: 0; }
+.tiles[data-flying] .tile { pointer-events: none; }

@@ -19,8 +19,10 @@ globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 // The viewer measures itself as 400 × 800 here, draws nothing, captures
 // nothing, and hears of a new pixel ratio only when a test says so.
 class StillResizeObserver {
-  observe() {
-    return undefined;
+  static viewers: { element: Element; notify: ResizeObserverCallback }[] = [];
+  constructor(private readonly notify: ResizeObserverCallback) {}
+  observe(element: Element) {
+    StillResizeObserver.viewers.push({ element, notify: this.notify });
   }
   disconnect() {
     return undefined;
@@ -38,6 +40,7 @@ function pixelRatioBecomes(ratio: number) {
 }
 
 beforeEach(() => {
+  StillResizeObserver.viewers = [];
   resolutionQueries.clear();
   vi.stubGlobal('devicePixelRatio', 1);
   vi.stubGlobal('matchMedia', () => {
@@ -57,6 +60,8 @@ beforeEach(() => {
   });
   vi.stubGlobal('ResizeObserver', StillResizeObserver);
   vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(null);
+  vi.spyOn(HTMLElement.prototype, 'clientWidth', 'get').mockReturnValue(400);
+  vi.spyOn(HTMLElement.prototype, 'clientHeight', 'get').mockReturnValue(800);
   vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue(DOMRect.fromRect({ x: 0, y: 0, width: 400, height: 800 }));
   Object.assign(HTMLElement.prototype, {
     setPointerCapture: () => undefined,
@@ -126,6 +131,19 @@ function pointer(type: string, x: number, y: number, extra: { button?: number; t
 }
 
 describe('the film viewer', () => {
+  it('measures its layout size, not its transformed box', () => {
+    vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue(DOMRect.fromRect({ x: 20, y: 30, width: 200, height: 400 }));
+    const told: { width: number; height: number }[] = [];
+    show(<FilmViewer pixels={null} placement={placement} label="Front film" onViewport={(box) => told.push(box)} />);
+    expect(told).toEqual([{ width: 400, height: 800 }]);
+    const observation = StillResizeObserver.viewers.find(({ element }) => element === viewer());
+    if (observation === undefined) throw new Error('no viewport observer');
+    act(() => {
+      observation.notify([{ target: viewer(), contentRect: DOMRect.fromRect({ width: 322, height: 644 }), borderBoxSize: [], contentBoxSize: [], devicePixelContentBoxSize: [] }], {} as ResizeObserver);
+    });
+    expect(told.at(-1)).toEqual({ width: 322, height: 644 });
+    expect([host.querySelector('canvas')?.width, host.querySelector('canvas')?.height]).toEqual([322, 644]);
+  });
   it('hands a click to the tool in film pixels, as a press and a release', () => {
     const { tool, heard } = listeningTool();
     show(<FilmViewer pixels={null} placement={placement} tool={tool} label="Front film" />);
