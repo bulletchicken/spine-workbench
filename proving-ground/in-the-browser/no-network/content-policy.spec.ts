@@ -14,7 +14,7 @@
 import { expect, test, type Page, type Worker } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { CONTENT_POLICY } from '../../../app/build-plugins/content-policy';
+import { CONTENT_POLICY, CONTENT_POLICY_HEADER } from '../../../app/build-plugins/content-policy';
 import { builtFiles, builtText } from '../test-rig/built-app';
 import { PolicyRecorder } from '../test-rig/policy-violations';
 import { RequestLedger } from '../test-rig/request-ledger';
@@ -79,8 +79,9 @@ const tryFetch = (url: string) =>
   });
 
 test('the policy is in the page, first in its head, and in every file’s header', async ({ page, request }) => {
+  expect(CONTENT_POLICY_HEADER).toBe(`${CONTENT_POLICY}; frame-ancestors 'self'`);
   const response = await page.goto('/');
-  expect(response?.headers()['content-security-policy']).toBe(CONTENT_POLICY);
+  expect(response?.headers()['content-security-policy']).toBe(CONTENT_POLICY_HEADER);
   const first = await page.evaluate(() => {
     const element = document.head.firstElementChild;
     return { tag: element?.tagName, equiv: element?.getAttribute('http-equiv'), content: element?.getAttribute('content') };
@@ -90,7 +91,7 @@ test('the policy is in the page, first in its head, and in every file’s header
   for (const file of builtFiles()) {
     const served = await request.get(`/${file}`);
     expect(served.status(), file).toBe(200);
-    expect(served.headers()['content-security-policy'], file).toBe(CONTENT_POLICY);
+    expect(served.headers()['content-security-policy'], file).toBe(CONTENT_POLICY_HEADER);
   }
 });
 

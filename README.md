@@ -53,9 +53,10 @@ Other commands:
 | `cargo spine <command>` | the same engine on the command line |
 
 The production build is a static site. Serve it with the
-`Content-Security-Policy` header from `app/build-plugins/content-policy.ts`
-on every file, as `pnpm --filter ./app preview` does: the app's workers
-take their policy from that header.
+`Content-Security-Policy` header set to `CONTENT_POLICY_HEADER` from
+`app/build-plugins/content-policy.ts` on every file, as
+`pnpm --filter ./app preview` does: the app's workers take their policy
+from that header.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for how to work on it and
 [MAP.md](MAP.md) for where everything is.

@@ -1,11 +1,14 @@
 // The content policy: the browser's own guard that nothing leaves the
-// machine. This is the only copy of the policy string.
+// machine. The tag and header policies are defined here.
 //
 // It is delivered twice. Production builds carry it as the first element
 // of index.html's <head>, and the build fails if it is not there. `vite
 // preview` also sends it as a response header on every file, because a
 // dedicated worker takes its policy from its own response and ignores the
-// page's meta tag. A host serving the built app must send the same header.
+// page's meta tag. The header adds frame-ancestors 'self', which only a
+// header can enforce: other sites cannot frame the app. Its distinct text
+// also lets the refusal counter tell the two policies apart. A host
+// serving the built app must send CONTENT_POLICY_HEADER on every file.
 //
 // Development has no policy: hot reload needs inline code. So every policy
 // test runs against the production build.
@@ -29,6 +32,8 @@ export const CONTENT_POLICY = [
   "base-uri 'none'",
   "form-action 'none'",
 ].join('; ');
+
+export const CONTENT_POLICY_HEADER = `${CONTENT_POLICY}; frame-ancestors 'self'`;
 
 export const POLICY_META = `<meta http-equiv="Content-Security-Policy" content="${CONTENT_POLICY}">`;
 
@@ -64,7 +69,7 @@ export function contentPolicy(): Plugin {
     },
     configurePreviewServer(server) {
       server.middlewares.use((_request, response, next) => {
-        response.setHeader('Content-Security-Policy', CONTENT_POLICY);
+        response.setHeader('Content-Security-Policy', CONTENT_POLICY_HEADER);
         next();
       });
     },

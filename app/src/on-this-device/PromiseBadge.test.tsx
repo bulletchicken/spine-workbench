@@ -4,7 +4,8 @@
 // document; the browser tests hold the policy itself.
 
 import { act } from 'react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+import { CONTENT_POLICY, CONTENT_POLICY_HEADER } from '../../build-plugins/content-policy';
 import { find, focusOn, pressKey, pressOn, putOnThePage } from '@/building-blocks/test-rig/on-the-page';
 import scenes from './on-this-device.scenes';
 import { popoverOpen, usePopoverOpen } from './popover-open';
@@ -26,8 +27,8 @@ function Wired() {
 }
 
 /** The browser refusing `address` under the policy's `rule`, as it tells the page. */
-function refuse(address: string, rule: string): void {
-  const refusal = Object.assign(new Event('securitypolicyviolation'), { blockedURI: address, effectiveDirective: rule });
+function refuse(address: string, rule: string, policy = CONTENT_POLICY): void {
+  const refusal = Object.assign(new Event('securitypolicyviolation'), { blockedURI: address, effectiveDirective: rule, originalPolicy: policy });
   act(() => {
     document.dispatchEvent(refusal);
   });
@@ -65,9 +66,15 @@ describe('the promise', () => {
     pressOn(find('.promise-badge'));
     expect(document.querySelector('.promise-blocked')).toBeNull();
 
-    // An outside picture, refused. The policy is held twice, so the browser says so twice.
-    refuse('https://example.org/picture.png', 'img-src');
-    refuse('https://example.org/picture.png', 'img-src');
+    // The header and tag each report one refusal. Even a whole second apart, it is one attempt.
+    vi.useFakeTimers({ toFake: ['Date'] });
+    try {
+      refuse('https://example.org/picture.png', 'img-src', CONTENT_POLICY);
+      vi.setSystemTime(Date.now() + 1000);
+      refuse('https://example.org/picture.png', 'img-src', CONTENT_POLICY_HEADER);
+    } finally {
+      vi.useRealTimers();
+    }
     expect(find('.promise-blocked').textContent).toBe('The browser blocked 1 attempt to reach outside the app. Nothing was sent.');
 
     // A refusal that is not about an address outside changes nothing.

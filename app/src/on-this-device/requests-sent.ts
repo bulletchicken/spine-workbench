@@ -4,8 +4,8 @@
 //
 // Two things are counted, and both are told by where an address leads,
 // never by what kind of call made it:
-// - `blocked`: every time the content policy refused an address outside
-//   the app, from the event the browser raises when it does.
+// - `blocked`: attempts the content policy refused outside the app,
+//   from the events the browser raises when it does.
 // - `sent`: every resource the page asked for from another origin and the
 //   policy did not refuse, from the browser's own record of what it asked
 //   for. The record is read from its start, so nothing asked for before
@@ -14,9 +14,13 @@
 //   refused is taken out: it was asked for, and it never left.
 //
 // A page can hold its policy twice, as a header and as a tag in its head,
-// and then the browser reports one refusal twice, a moment apart. Reports
-// of the same address under the same rule within `SAME_MOMENT_MS` are one
-// attempt.
+// and then the browser reports one refusal twice. Each event carries the
+// policy's text in originalPolicy. Count outside reports for each text
+// and take the largest count: each policy reports each attempt once, so
+// the count is exact with one policy or with our two distinct policies,
+// whatever the order or timing of their reports. If a host repeats the
+// tag's exact text in its header, both copies go into one count instead:
+// that is an upper bound, which can count one attempt twice.
 //
 // It watches the page. A worker's own refusals are raised inside the
 // worker and are not counted here; the policy still refuses them.
@@ -26,12 +30,9 @@ import { useSyncExternalStore } from 'react';
 export interface RequestsSent {
   /** Requests for another origin that the policy did not refuse. */
   sent: number;
-  /** Attempts the browser refused before they left. */
+  /** Attempts refused outside the app; an upper bound if policy copies have identical text. */
   blocked: number;
 }
-
-/** Reports of one refusal arrive within a few milliseconds of each other; a person's next attempt does not. */
-export const SAME_MOMENT_MS = 50;
 
 /** True when `address` leads somewhere other than `own`, the page's origin. An address that leads nowhere (eval, inline, data) is not outside. */
 export function leadsOutside(address: string, own: string): boolean {
@@ -50,8 +51,8 @@ export interface Refusal {
   address: string;
   /** The rule of the policy that refused it. */
   rule: string;
-  /** When it was reported, in milliseconds. */
-  at: number;
+  /** The text of the policy that reported it, from the event's originalPolicy. */
+  policy: string;
 }
 
 /** An address without its fragment, which the browser's record keeps and its refusals drop. */
@@ -72,7 +73,7 @@ export function createTally(own: string) {
   const askedFor: string[] = [];
   /** Every address outside the app the policy refused, and that address's origin when the browser gave no more. */
   const refusedAddresses = new Set<string>();
-  const lastRefused = new Map<string, number>();
+  const refusalsByPolicy = new Map<string, number>();
   let blocked = 0;
   let now: RequestsSent = { sent: 0, blocked: 0 };
   const listeners = new Set<() => void>();
@@ -94,16 +95,15 @@ export function createTally(own: string) {
       settle();
     },
     /** The content policy refused something. */
-    refused: ({ address, rule, at }: Refusal): void => {
+    refused: ({ address, policy }: Refusal): void => {
       if (!leadsOutside(address, own)) return;
       refusedAddresses.add(withoutFragment(address));
       // A refusal that gives an origin and nothing more stands for every address there.
       const { origin, pathname, search } = new URL(address);
       if (pathname === '/' && search === '') refusedAddresses.add(origin);
-      const key = `${rule} ${address}`;
-      const last = lastRefused.get(key);
-      lastRefused.set(key, at);
-      if (last === undefined || at - last > SAME_MOMENT_MS) blocked += 1;
+      const count = (refusalsByPolicy.get(policy) ?? 0) + 1;
+      refusalsByPolicy.set(policy, count);
+      blocked = Math.max(blocked, count);
       settle();
     },
     watch: (listener: () => void): (() => void) => {
@@ -126,7 +126,7 @@ function pageTally(): Tally {
     for (const entry of list.getEntries()) tally.asked(entry.name);
   }).observe({ type: 'resource', buffered: true });
   document.addEventListener('securitypolicyviolation', (event) => {
-    tally.refused({ address: event.blockedURI, rule: event.effectiveDirective, at: event.timeStamp });
+    tally.refused({ address: event.blockedURI, rule: event.effectiveDirective, policy: event.originalPolicy });
   });
   counting = tally;
   return tally;

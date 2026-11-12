@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CONTENT_POLICY, POLICY_META, policyComesFirst } from './content-policy';
+import { CONTENT_POLICY, CONTENT_POLICY_HEADER, POLICY_META, policyComesFirst } from './content-policy';
 
 function directives(): Map<string, string[]> {
   return new Map(
@@ -25,6 +25,11 @@ describe('the content policy', () => {
 
   it('never allows inline code, eval or another host', () => {
     expect(CONTENT_POLICY).not.toMatch(/'unsafe-inline'|'unsafe-eval'|https?:|\*/);
+  });
+
+  it('adds the header-only framing rule without changing the tag policy', () => {
+    expect(CONTENT_POLICY_HEADER).toBe(`${CONTENT_POLICY}; frame-ancestors 'self'`);
+    expect(CONTENT_POLICY).not.toContain('frame-ancestors');
   });
 
   it('must be the first element in the head, exactly', () => {

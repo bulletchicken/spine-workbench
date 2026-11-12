@@ -16,11 +16,15 @@ status line read.
 
 `useRequestsSent()` gives `{ sent, blocked }` and follows both.
 
-- **blocked** is every time the content policy refused an address
-  outside the app, from the event the browser raises when it does. A page
-  that holds its policy twice, as a header and as a tag, is told of one
-  refusal twice, a moment apart: reports of the same address under the
-  same rule within 50 ms are one attempt.
+- **blocked** counts attempts the content policy refused outside the
+  app. The browser reports each attempt once for each policy, giving its
+  text as `originalPolicy`. The counter counts outside reports for each
+  text and takes the largest count. With one policy, every report is an
+  attempt; with our tag and header, whose texts differ by the header's
+  extra `frame-ancestors 'self'` rule, each policy counts every attempt
+  once. Report order and timing do not matter. If a host instead repeats
+  the tag's exact text in its header, both copies go into one count:
+  that is an upper bound and can count one attempt twice.
 - **sent** is every resource the page asked for from another origin that
   the policy did not refuse, read from the browser's own record of what
   it asked for, from the record's start. The browser lists a refused
