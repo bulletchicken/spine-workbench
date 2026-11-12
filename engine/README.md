@@ -15,6 +15,7 @@ same code compiled to WebAssembly.
 | `film-reader/` | bytes in, one greyscale film out; DICOM tags not on the keep-list dropped |
 | `film-geometry/` | which way up, which way it faces, how big a pixel is |
 | `auto-pass/` | the watchable top-down vertebra search |
+| `trained-finder/` | a small trained network that finds the vertebrae on a real front film, its weights compiled in |
 | `toolbox/` | the maths behind the region wand, the boundary wand and pins |
 | `case-checks/` | is the spine complete and in order? |
 | `case-file/` | one zip per case, read strictly |
@@ -34,20 +35,21 @@ made-up-spines  ──▶ darkroom, forward-model
 film-reader     ──▶ darkroom
 film-geometry   ──▶ darkroom, film-reader
 auto-pass       ──▶ darkroom, film-reader, forward-model
+trained-finder  ──▶ darkroom, film-reader
 toolbox         ──▶ darkroom, film-reader, auto-pass
 case-checks     ──▶ shapes
 case-file       ──▶ shapes
 scorekeeper     ──▶ forward-model, made-up-spines, film-reader, auto-pass, toolbox, case-file
-command-line    ──▶ film-reader, film-geometry, auto-pass, toolbox, case-checks,
-                    case-file, made-up-spines, scorekeeper
+command-line    ──▶ film-reader, film-geometry, auto-pass, trained-finder, toolbox,
+                    case-checks, case-file, made-up-spines, scorekeeper
 wasm-bridge     ──▶ the same crates as command-line, never command-line itself
 ```
 
-Tests of `film-geometry`, `auto-pass` and `toolbox` also use
-`made-up-spines`. `cargo chores seams` keeps the rules that matter: only
-`wasm-bridge` reaches browser crates, no crate reaches a network crate,
-and the bridge never reaches `command-line`, `chores` or command-line
-tools.
+Tests of `film-geometry`, `auto-pass`, `trained-finder` and `toolbox`
+also use `made-up-spines`. `cargo chores seams` keeps the rules that
+matter: only `wasm-bridge` reaches browser crates, no crate reaches a
+network crate, and the bridge never reaches `command-line`, `chores` or
+command-line tools.
 
 ## The patient frame in one picture
 

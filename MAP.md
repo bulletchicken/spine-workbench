@@ -50,6 +50,15 @@ built.
 | where the vertebra shapes come from, their licence, and what was done to them | `bone-prep/README.md` |
 | how a vertebra's body is found and the bone moved into its own frame | `bone-prep/prepare_bones.py` |
 
+## The trained finder's numbers (`finder-prep/`)
+
+| I want to change… | Open |
+|---|---|
+| what the two scripts need, when to run them, and what they write | `finder-prep/README.md` |
+| the weights: what they are, what they were trained on, and the citation they need | `engine/trained-finder/weights/README.md`, `engine/trained-finder/weights/` |
+| how the trained networks are packed into the one weight file | `finder-prep/pack_weights.py` |
+| how the known answers are recorded from the training code's own pipeline | `finder-prep/make_known_answers.py`, `engine/trained-finder/tests/known-answers/README.md` |
+
 ## The engine (`engine/`)
 
 The crate map, the dependency rules and the patient frame in one picture:
@@ -150,6 +159,7 @@ The crate map, the dependency rules and the patient frame in one picture:
 | rescale, bits stored, MONOCHROME1 | `engine/film-reader/src/dicom/grey_levels.rs` |
 | DICOM spacing tags | `engine/film-reader/src/dicom/scale_tags.rs` |
 | the half-float copy for the GPU | `engine/film-reader/src/display_pixels.rs` |
+| the film as 8-bit grey, the way it opens on screen | `engine/film-reader/src/eight_bit.rs` |
 | thumbnails | `engine/film-reader/src/thumbnail.rs` |
 | test DICOM writers | `engine/film-reader/src/test_support.rs` |
 
@@ -181,6 +191,25 @@ The crate map, the dependency rules and the patient frame in one picture:
 | the steppers and their frames | `engine/auto-pass/src/watch/film_pass.rs`, `engine/auto-pass/src/watch/chain_pass.rs`, `engine/auto-pass/src/watch/frames.rs` |
 | one-call native entry points | `engine/auto-pass/src/run.rs` |
 
+### The trained finder (`engine/trained-finder/`)
+
+| I want to change… | Open |
+|---|---|
+| what it does, how well, and where it fails | `engine/trained-finder/README.md` |
+| the shapes the stages hand on: a peak, a reading, a chain link | `engine/trained-finder/src/outline.rs` |
+| reading the compiled-in weights, the chain priors and the framing settings | `engine/trained-finder/src/weights/mod.rs`, `engine/trained-finder/src/weights/table.rs` |
+| the film as the network is shown it: through its record, upright, 8-bit, shrunk to 384 by 768 | `engine/trained-finder/src/intake/as_shown.rs`, `engine/trained-finder/src/intake/shrink.rs` |
+| the convolution kernel and the other layers | `engine/trained-finder/src/layers/conv.rs`, `engine/trained-finder/src/layers/pointwise.rs`, `engine/trained-finder/src/layers/resample.rs`, `engine/trained-finder/src/layers/group_norm.rs`, `engine/trained-finder/src/layers/activation.rs`, `engine/trained-finder/src/layers/softmax_mean.rs`, `engine/trained-finder/src/grid.rs` |
+| the main network, and how one reading is cut into units | `engine/trained-finder/src/spine_net/mod.rs`, `engine/trained-finder/src/spine_net/stepped.rs` |
+| peaks and outlines from the network's maps, and how much two outlines overlap | `engine/trained-finder/src/reading/mod.rs`, `engine/trained-finder/src/overlap.rs` |
+| the crop for a second reading | `engine/trained-finder/src/framing/mod.rs` |
+| the chain: seventeen in order, one gap filled | `engine/trained-finder/src/chain/mod.rs`, `engine/trained-finder/src/chain/costs.rs` |
+| the corner patch, the corner network, and how far a corner may move | `engine/trained-finder/src/corners/patch.rs`, `engine/trained-finder/src/corners/corner_net.rs`, `engine/trained-finder/src/corners/settle.rs` |
+| the order of the work, its units and its frames | `engine/trained-finder/src/watch/search.rs`, `engine/trained-finder/src/watch/trained_pass.rs` |
+| the marks it hands back | `engine/trained-finder/src/to_marks.rs` |
+| one-call native entry points | `engine/trained-finder/src/run.rs` |
+| the tests against the known answers, and the stepper's tests | `engine/trained-finder/tests/finds_the_vertebrae_on_a_made_up_film.rs`, `engine/trained-finder/tests/spine_net_matches_the_known_answers.rs` |
+
 ### The adjusting tools' maths (`engine/toolbox/`)
 
 | I want to change… | Open |
@@ -208,7 +237,7 @@ The crate map, the dependency rules and the patient frame in one picture:
 | a dataset reader | `engine/scorekeeper/src/datasets/aasce_2019.rs`, `engine/scorekeeper/src/datasets/vertebrae_keypoints_50.rs`, `engine/scorekeeper/src/datasets/hand_marked.rs`, `engine/scorekeeper/src/datasets/made_up.rs` |
 | a metric | `engine/scorekeeper/src/metrics/corner_error.rs`, `engine/scorekeeper/src/metrics/vertebrae_found.rs`, `engine/scorekeeper/src/metrics/level_naming.rs`, `engine/scorekeeper/src/metrics/cobb_from_corners.rs`, `engine/scorekeeper/src/metrics/clicks_to_good_outline.rs` |
 | the simulated user and the by-hand baseline | `engine/scorekeeper/src/simulated_user/region_wand_clicker.rs`, `engine/scorekeeper/src/simulated_user/boundary_clicker.rs`, `engine/scorekeeper/src/simulated_user/by_hand_layout.rs` |
-| a scoring suite | `engine/scorekeeper/src/suites/ci.rs`, `engine/scorekeeper/src/suites/auto_pass_front.rs`, `engine/scorekeeper/src/suites/auto_pass_side.rs`, `engine/scorekeeper/src/suites/two_films_voting.rs`, `engine/scorekeeper/src/suites/region_wand.rs` |
+| a scoring suite | `engine/scorekeeper/src/suites/ci.rs`, `engine/scorekeeper/src/suites/auto_pass_front.rs`, `engine/scorekeeper/src/suites/trained_finder_front.rs`, `engine/scorekeeper/src/suites/auto_pass_side.rs`, `engine/scorekeeper/src/suites/two_films_voting.rs`, `engine/scorekeeper/src/suites/region_wand.rs` |
 | reports | `engine/scorekeeper/src/report/markdown.rs`, `engine/scorekeeper/src/report/json.rs`, `engine/scorekeeper/src/report/overlay_svg.rs` |
 
 ### The `spine` command (`engine/command-line/`)
@@ -217,6 +246,7 @@ The crate map, the dependency rules and the patient frame in one picture:
 |---|---|
 | the subcommands and their arguments | `engine/command-line/src/main.rs` |
 | `spine make-up`, `open`, `pass`, `frames`, `case`, `score` | `engine/command-line/src/commands/make_up.rs`, `engine/command-line/src/commands/open.rs`, `engine/command-line/src/commands/pass.rs`, `engine/command-line/src/commands/frames.rs`, `engine/command-line/src/commands/case.rs`, `engine/command-line/src/commands/score.rs` |
+| which finder reads the front film in `spine pass` and `spine score`, and how the films' answers are joined, as the app's conductor joins them | `engine/command-line/src/commands/pass.rs` |
 
 ### The door to the browser (`engine/wasm-bridge/`)
 
@@ -226,7 +256,7 @@ The crate map, the dependency rules and the patient frame in one picture:
 | `FilmDesk` | `engine/wasm-bridge/src/film_desk.rs` |
 | how values cross into JavaScript | `engine/wasm-bridge/src/crossing.rs` |
 | thrown errors and the last panic | `engine/wasm-bridge/src/faults.rs` |
-| the export of one crate (same name as the crate) | `engine/wasm-bridge/src/exports/mod.rs`, `engine/wasm-bridge/src/exports/info.rs`, `engine/wasm-bridge/src/exports/shapes.rs`, `engine/wasm-bridge/src/exports/film_reader.rs`, `engine/wasm-bridge/src/exports/film_geometry.rs`, `engine/wasm-bridge/src/exports/auto_pass.rs`, `engine/wasm-bridge/src/exports/toolbox.rs`, `engine/wasm-bridge/src/exports/case_checks.rs`, `engine/wasm-bridge/src/exports/case_file.rs`, `engine/wasm-bridge/src/exports/made_up_spines.rs`, `engine/wasm-bridge/src/exports/scorekeeper.rs` |
+| the export of one crate (same name as the crate) | `engine/wasm-bridge/src/exports/mod.rs`, `engine/wasm-bridge/src/exports/info.rs`, `engine/wasm-bridge/src/exports/shapes.rs`, `engine/wasm-bridge/src/exports/film_reader.rs`, `engine/wasm-bridge/src/exports/film_geometry.rs`, `engine/wasm-bridge/src/exports/auto_pass.rs`, `engine/wasm-bridge/src/exports/toolbox.rs`, `engine/wasm-bridge/src/exports/case_checks.rs`, `engine/wasm-bridge/src/exports/case_file.rs`, `engine/wasm-bridge/src/exports/made_up_spines.rs`, `engine/wasm-bridge/src/exports/scorekeeper.rs`, `engine/wasm-bridge/src/exports/trained_finder.rs` |
 
 ## The app (`app/`)
 
@@ -244,6 +274,7 @@ The folders and import rules in one picture: `app/README.md`.
 | the worker messages | `app/src/engine-room/messages.ts` |
 | the one fetch: loading the engine | `app/src/engine-room/load-engine.ts` |
 | how a worker boots | `app/src/engine-room/workers/boot.ts`, `app/src/engine-room/workers/film-worker/film.worker.ts`, `app/src/engine-room/workers/spine-worker/spine.worker.ts` |
+| the trained finder's job, on the front film's worker | `app/src/engine-room/workers/film-worker/jobs/trained-pass.ts` |
 | what the stand-in's story must hold | `app/src/sample-case/story-shape.ts` |
 | the step contract | `app/src/steps/step-contract.ts` |
 | the tool contract | `app/src/toolbox/tool-contract.ts` |
@@ -267,6 +298,7 @@ The proof ladder: `proving-ground/README.md`.
 | a golden case file or its verdict | `proving-ground/known-answers/case-files/verdicts.json` |
 | the known answer for swapping left/right names | `proving-ground/known-answers/side-swap.json` |
 | the real engine in Node | `proving-ground/parity/contract.test.ts` |
+| the trained finder's native answer, and the browser build held to it | `proving-ground/known-answers/trained-pass/front.json`, `proving-ground/parity/trained-pass.test.ts`, `engine/trained-finder/tests/finds_the_vertebrae_on_a_made_up_film.rs` |
 | the no-network browser test | `proving-ground/in-the-browser/no-network/nothing-leaves.spec.ts` |
 | the content-policy browser test | `proving-ground/in-the-browser/no-network/content-policy.spec.ts` |
 | the proof that the no-network test sees a worker's violations | `proving-ground/in-the-browser/no-network/worker-violations-are-seen.spec.ts` |

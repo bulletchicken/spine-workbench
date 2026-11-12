@@ -19,6 +19,7 @@ The first part is being built now.
 - **Rust** does the computing, compiled to WebAssembly and run in background workers.
 - **TypeScript and React** do everything you see and click.
 - The same Rust also runs from the command line, so every calculation is tested on made-up spines with known answers before it touches a real film.
+- On a real front film the vertebrae are found by a small trained network, written by hand in that Rust with its weights compiled in. How it was judged, and where it fails, is in [`engine/trained-finder/README.md`](engine/trained-finder/README.md).
 
 ## Run it
 
