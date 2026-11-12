@@ -12,7 +12,11 @@
 // either bending slot); a film of another view answers as the slot's own
 // story film, so every answer is one the slot can hold, as the engine's
 // are. A film pass's strip names the story film it answered as, so the
-// chain pass on the spine worker can follow it too.
+// chain pass on the spine worker can follow it too. A trained pass answers
+// as the film pass, chain pass and points together would, from the same
+// story, so a pass asking for either finder gets the same frames, marks
+// and warnings; only the front-and-side check is missing, as it is from
+// the engine.
 
 import type { StandInStory } from '@/sample-case/story-shape';
 import type { Film, FilmFacts, FilmKind, FilmMarks, ScaleResult, Stage } from '@/shapes';
@@ -145,6 +149,25 @@ export function filmJobs(story: StandInStory, scripts: StandInScripts): StandInJ
         if (marks === undefined) throw new EngineFailure({ code: 'pass-no-spine-found', message: 'the story has no marks for this film', detail: told });
         return renumbered({ ...marks, film: chain.film }, firstVertebraId);
       });
+    },
+    // The stand-in knows no network: a trained pass tells the same story as
+    // the hand-built stages, the film's frames from every stage (the chain's
+    // too) over the whole pass's time, then its marks and warnings.
+    'trained-pass': ({ film, firstVertebraId }, room) => {
+      const { story: told } = held(room);
+      const { frames: all, warnings, marks } = story.pass;
+      const found = marks.find((each) => each.film === told);
+      if (found === undefined) throw new EngineFailure({ code: 'pass-no-spine-found', message: 'the story has no marks for this film', detail: told });
+      const frames = all.filter((frame) => frame.film === told).map((frame) => ({ ...frame, film: film.kind }));
+      return {
+        kind: 'pass',
+        frames,
+        gapMs: pace(scripts) / Math.max(1, frames.length),
+        answer: () => ({
+          marks: renumbered({ ...found, film: film.kind }, firstVertebraId),
+          warnings: warnings.filter((warning) => warning.film === told).map((warning) => ({ ...warning, film: film.kind })),
+        }),
+      };
     },
     'tool-preview': (input, room) => answer(adjust.previewMs, () => previewTool(tool(room), input, adjust)),
     'region-wand': (input, room) => answer(adjust.wandMs, () => regionWand(tool(room), input, adjust)),

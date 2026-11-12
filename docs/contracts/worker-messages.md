@@ -67,9 +67,10 @@ cancel { id }            ───────▶   (stepped jobs stop between s
    them.
 6. **Transfers.** `output` and frame payloads go in the transfer list;
    nothing is copied twice.
-7. **Stepped jobs** (`film-pass`, `chain-pass`) run in slices of about
-   8 ms, timed in the worker with `performance.now()`; the engine itself
-   has no clock. Progress is sent at most ten times a second. Every frame
+7. **Stepped jobs** (`film-pass`, `chain-pass`, `trained-pass`) run in
+   slices of about 8 ms, timed in the worker with `performance.now()`;
+   the engine itself has no clock. Progress is sent at most ten times a
+   second. Every frame
    is kept except two kinds, which may be thinned to thirty a second,
    newest kept: `joint-progress` frames, and `evidence` frames with
    `final: false` whose `map` is not `wavefront`. A frame held back is

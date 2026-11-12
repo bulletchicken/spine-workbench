@@ -149,6 +149,23 @@ describe('the stand-in engine', () => {
     expect(progress.length).toBeGreaterThan(0);
   });
 
+  it('answers a pass that asks for the trained finder from the same story, with no two-film check', async () => {
+    const client = start();
+    await openAll(client);
+    const frames: WatchFrame[] = [];
+    const result = await client.runAutoPass(
+      { caseVersion: 12, films: KINDS.map(recordOf), options: { acquisition: 'unknown', population: 'adolescent', template: null }, firstVertebraId: 100, frontFinder: 'trained' },
+      { onFrame: (frame) => frames.push(frame) },
+    );
+    expect(result.twoFilms).toBeNull();
+    expect(result.warnings).toEqual(story.pass.warnings);
+    expect(result.marks.map((marks) => ({ ...marks, vertebrae: marks.vertebrae.map((vertebra) => ({ ...vertebra, id: vertebra.id - 100 })) }))).toEqual(story.pass.marks);
+    // The front film's trained pass plays its story frames from every stage, the chain's included.
+    const told = story.pass.frames.filter((frame) => frame.film === 'front' && frame.kind === 'chain-locked');
+    expect(told).not.toHaveLength(0);
+    expect(frames.filter((frame) => frame.film === 'front' && frame.kind === 'chain-locked')).toEqual(told);
+  });
+
   it('runs a pass over two films with no two-film check unless front and side are both in it', async () => {
     const client = start();
     await openAll(client);

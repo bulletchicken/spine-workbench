@@ -51,7 +51,7 @@ matches the job table.
 | `crew/call-scope.ts` | one call from start to answer, and every way it can be stopped |
 | `crew/film-bytes.ts` | each open film's bytes, for a fresh worker to read again |
 | `crew/real-engine.ts` | `EngineClient` over the crew |
-| `crew/auto-pass-conductor.ts` | film passes side by side, the chain pass, then points film by film |
+| `crew/auto-pass-conductor.ts` | film passes side by side, the chain pass, then points film by film; with the trained finder, its pass on the front film beside them, and the chain pass and points for the other films only |
 | `crew/spawn-worker.ts`, `crew/start-real-engine.ts` | real workers, and the real engine started |
 | `crew/test-rig.ts` | fake workers for the crew's tests, running the real job loop |
 | `workers/boot.ts` | how a worker starts, finds its job files and runs jobs |
@@ -71,8 +71,9 @@ A job is one file and nothing else: no list to edit, no registration.
    `workers/film-worker/jobs/<job>.ts` or `workers/spine-worker/jobs/<job>.ts`.
 2. Default-export `defineJob('<job>', handler)`. A plain job gives
    `run(input, room)` and returns the job's output. A stepped job
-   (`film-pass`, `chain-pass`) gives `start(input, room)` and returns a
-   pass with `advance(workUnits)`, `finish()` and `free()`. The types of
+   (`film-pass`, `chain-pass`, `trained-pass`) gives `start(input,
+   room)` and returns a pass with `advance(workUnits)`, `finish()` and
+   `free()`. The types of
    `input` and the answer come from the job table, so a wrong one does
    not compile. `finish()` must consume the engine's pass (in Rust,
    `fn finish(self)`), because the step loop calls `free()` only when a
@@ -132,8 +133,9 @@ export default defineJob('film-pass', {
 });
 ```
 
-The stand-in already answers every job from its story, so adding a job
-to the engine changes nothing in `stand-in/`.
+The stand-in answers from its story only the jobs it has a handler for
+(`stand-in/film-jobs.ts`, `stand-in/spine-jobs.ts`); any other job fails
+there with `engine-out-of-sync`, so a job the screens call needs one.
 
 ## The crew's rules
 
@@ -184,7 +186,7 @@ How it answers:
 | `openFilm` | the story film whose file has exactly these bytes, after a moment, or the film one of the made-up spine's PNGs shows, with the made-up spine's facts (`madeUp.films`); anything else is `film-unknown-format` |
 | `displayPixels`, `senseGeometry` | the pixels of the story film the bytes show; its guess, or the made-up spine's guess for a film opened from its PNG (for a film of another view, the slot's own story film's guess: see below) |
 | `scaleFromRuler`, `scaleFromKnownObject` | the length in mm over the length in pixels; too short is `scale-too-short`, no length `scale-bad-length` |
-| `runAutoPass` | each film's story frames, then the chain's, through the real step loop; the story's marks with ids counting up from the first free id, film by film |
+| `runAutoPass` | each film's story frames, then the chain's, through the real step loop; the story's marks with ids counting up from the first free id, film by film. The same whatever `frontFinder` says: with `trained`, the front film's trained pass plays its story frames from every stage and answers its story marks, and the chain pass runs on the other films, so only the front-and-side check is missing |
 | `previewTool`, `regionWand`, `boundaryWand`, `resolvePins` | plain geometry over the marks given (`stand-in/tool-preview.ts`, `region-wand.ts`, `boundary-wand.ts`, `pins.ts`) |
 | `checkCase` | worked out from the case given, by the sample case's `findingsAt` rules and a few more (`stand-in/checks.ts`) |
 | `saveCase`, `openCase` | a case file of its own (JSON, not the engine's zip) that reads back exactly, each film stored as the made-up spine's PNG of it; `openCase` opens no film, and refuses the story's refused case with its error |

@@ -28,7 +28,7 @@ and tests only, never shipped) both implement it.
 | `senseGeometry(kind)` | `GeometryGuess` | `sense-geometry` |
 | `scaleFromRuler(kind, a, b, mm)` | `ScaleResult` | `scale-from-ruler` |
 | `scaleFromKnownObject(kind, near, edge, diameterMm)` | `ScaleResult` | `scale-from-known-object` |
-| `runAutoPass(input, run?)` | `AutoPassResult` | `film-pass` on every film, `chain-pass`, `place-points` on every film |
+| `runAutoPass(input, run?)` | `AutoPassResult` | `film-pass` on every film, `chain-pass`, `place-points` on every film; with `frontFinder: 'trained'`, `trained-pass` on the front film in place of all three for it |
 | `previewTool(kind, input)` | `ToolPreview` | `tool-preview` |
 | `regionWand(kind, input)` | `RegionWandOutput` | `region-wand` |
 | `boundaryWand(kind, input)` | `BoundaryWandOutput` | `boundary-wand` |
@@ -76,7 +76,8 @@ can drop an answer that is stale (the rules in
 
 `AutoPassInput.caseVersion` is the version the films were taken from.
 The client stamps it on `AutoPassResult.caseVersion` itself: the jobs
-between workers (`film-pass`, `chain-pass`, `place-points`) never reach
+between workers (`film-pass`, `chain-pass`, `place-points`,
+`trained-pass`) never reach
 the case store, so they carry no version and no answer reaches it
 without one. The screens then apply the result as one action: one
 `replace-marks` edit per entry of `AutoPassResult.marks`, in order:
@@ -117,6 +118,7 @@ holds one film, so its jobs never say which.
 | `scale-from-known-object` | film | `{ near, edge, diameterMm }` | `ScaleResult` | | |
 | `film-pass` | film | `{ film: Film }` | `FilmPassResult` | yes | |
 | `place-points` | film | `{ chain: FilmChain, firstVertebraId }` | `FilmMarks` | | |
+| `trained-pass` | film | `{ film: Film, firstVertebraId }` | `TrainedPassResult` | yes | |
 | `tool-preview` | film | `ToolPreviewInput` | `ToolPreview` | | yes |
 | `region-wand` | film | `RegionWandInput` | `RegionWandOutput` | | |
 | `boundary-wand` | film | `BoundaryWandInput` | `BoundaryWandOutput` | | |
@@ -157,9 +159,18 @@ Notes on inputs:
   trained vertebra finder (`engine/trained-finder`), made for real front
   films. The screens set it from where the films came from; it is never
   guessed from the pixels. Side and bending films always get the
-  hand-built search. With `trained`, the front film runs the trained
-  finder as its own pass on its worker and the hand-built stages run on
-  the films that are left. The auto pass crate's own one-call entry
+  hand-built search. With `trained` and a front film among the films,
+  `runAutoPass` runs `trained-pass` on the front film's worker, side by
+  side with `film-pass` on each other film; `chain-pass` and
+  `place-points` then run for the other films only, and not at all when
+  there are none. The chain pass never sees the front film, so
+  `twoFilms` is `null`. The marks come back in the order of
+  `AutoPassInput.films`, and the warnings of every pass are joined, each
+  once: each film's pass warnings in that order (the front film's from
+  its trained pass), then the chain's. Replacing or retiring any of the
+  films, or the signal, stops all of it, as with the hand-built stages.
+  With `trained` and no front film, or with `hand-built`, every film
+  gets the hand-built stages. The auto pass crate's own one-call entry
   (`auto_pass::run::auto_pass`) does not route on it: it runs the
   hand-built stages on every film it is given.
 - The trained finder answers with a `TrainedPassResult`: the front film's
@@ -174,6 +185,16 @@ Notes on inputs:
   film. Each film starts one above the highest id given to any earlier
   film in the pass, and at `AutoPassInput.firstVertebraId` while none has
   been.
+- `trained-pass` takes its first vertebra id too, and gives its
+  vertebrae consecutive ids from there, at most seventeen. It must have
+  it when it starts, before any other film has placed its points, so
+  `runAutoPass` starts it at `AutoPassInput.firstVertebraId`; when the
+  front film's turn comes in the order of `films`, its ids are all moved
+  up together to start one above the highest id given to any earlier
+  film. Ids therefore rise film after film in that order, as the case
+  store needs to keep every film's edit, with none reserved or skipped;
+  with the front film first, as the case keeps its films, nothing
+  moves.
 - `scale-from-known-object` takes where the user pressed (the object's
   centre), where they let go (on its rim, the circle fit's starting
   radius), and the object's true diameter.
@@ -196,6 +217,7 @@ slices.
 | `film_reader.rs` | `FilmDesk.open(bytes, kind) → FilmDesk`; `FilmDesk.open_saved(png, film) → FilmDesk`; `.facts() → FilmFacts`; `.thumbnail(maxSide) → Uint8Array`; `.display_pixels() → Uint16Array`; `.free()` | `film-*` |
 | `film_geometry.rs` | `FilmDesk.sense_geometry() → GeometryGuess`; `.scale_from_ruler(a, b, mm)` and `.scale_from_known_object(near, edge, diameterMm) → ScaleResult` | `geometry-*`, `scale-*` |
 | `auto_pass.rs` | `FilmDesk.start_film_pass(film) → FilmPass`; `FilmPass.advance(workUnits) → Step`; `FilmPass.finish() → FilmPassResult`; `ChainPass.start(results, options)`, `.advance()`, `.finish() → ChainAnswer`; `FilmDesk.place_points(chain, firstVertebraId) → FilmMarks` | `pass-*` |
+| `trained_finder.rs` | `FilmDesk.start_trained_pass(film, firstVertebraId) → TrainedPass`; `TrainedPass.advance(workUnits) → Step`; `TrainedPass.finish() → TrainedPassResult` (consumes the pass) | `pass-no-spine-found`, `pass-cancelled`; `engine-out-of-sync` for a record that is not a front film's, does not match the pixels, or faces anterior or posterior; `case-invalid-value` for a blanked box off the film |
 | `toolbox.rs` | `FilmDesk.tool_preview(input)`, `.region_wand(input)`, `.boundary_wand(input)`, `.resolve_pins(input)` | `tool-*` |
 | `case_checks.rs` | `check_case(case) → CheckFinding[]` | `case-invalid-value` |
 | `case_file.rs` | `pack_case(opened) → Uint8Array`; `unpack_case(bytes) → OpenedCase`; `FilmDesk.encode_png(film) → Uint8Array` | `case-*` |

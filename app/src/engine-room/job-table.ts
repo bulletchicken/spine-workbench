@@ -45,6 +45,7 @@ import type {
   ScaleResult,
   ToolPreview,
   ToolPreviewInput,
+  TrainedPassResult,
 } from '@/shapes';
 import type { WorkerRole } from './messages';
 
@@ -104,6 +105,14 @@ export interface JobTable {
    * from `firstVertebraId` upwards, so ids stay unique across the case.
    */
   'place-points': { input: { chain: FilmChain; firstVertebraId: number }; output: FilmMarks };
+  /**
+   * The trained finder on this front film, stepped, read through the
+   * film's record: its facing, its brightness and its blanked boxes. It
+   * finds, names and settles the vertebrae on its own, with no chain pass
+   * after it. New vertebrae take ids from `firstVertebraId` upwards, one
+   * each, never more than seventeen.
+   */
+  'trained-pass': { input: { film: Film; firstVertebraId: number }; output: TrainedPassResult };
   'tool-preview': { input: ToolPreviewInput; output: ToolPreview };
   'region-wand': { input: RegionWandInput; output: RegionWandOutput };
   'boundary-wand': { input: BoundaryWandInput; output: BoundaryWandOutput };
@@ -150,6 +159,7 @@ export const JOBS: { readonly [J in JobName]: JobRules } = {
   'scale-from-known-object': { worker: 'film', stepped: false, replaceable: false },
   'film-pass': { worker: 'film', stepped: true, replaceable: false },
   'place-points': { worker: 'film', stepped: false, replaceable: false },
+  'trained-pass': { worker: 'film', stepped: true, replaceable: false },
   'tool-preview': { worker: 'film', stepped: false, replaceable: true },
   'region-wand': { worker: 'film', stepped: false, replaceable: false },
   'boundary-wand': { worker: 'film', stepped: false, replaceable: false },

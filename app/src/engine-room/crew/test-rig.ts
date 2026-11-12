@@ -9,7 +9,9 @@
 // with "panic" panic when opened, and "panic again" only when opened a
 // second time. A region wand click with case version −1 panics. A film
 // whose name holds "slow" makes its passes long; one whose name holds
-// "mixed" makes them mix frames the step loop may thin with keyframes.
+// "mixed" makes them mix frames the step loop may thin with keyframes;
+// one whose name holds "no spine" fails its film pass or trained pass. A
+// trained pass answers three vertebrae, its names flagged as estimated.
 
 import {
   SHAPES_FINGERPRINT,
@@ -22,6 +24,7 @@ import {
   type GeometryGuess,
   type OpenedCase,
   type Step,
+  type TrainedPassResult,
   type WatchFrame,
 } from '@/shapes';
 import { EngineFailure } from '../engine-client';
@@ -161,6 +164,25 @@ export const FILM_JOBS: Record<string, unknown> = {
           naming: input.chain.naming,
           namedFor: deskName(room),
         }) as unknown as FilmMarks,
+    }),
+  },
+  'trained-pass': {
+    default: defineJob('trained-pass', {
+      start: (input, room) => {
+        const name = deskName(room);
+        if (name.includes('no spine')) throw new EngineFailure({ code: 'pass-no-spine-found', message: 'no spine', detail: name });
+        const film = input.film.kind;
+        return fakePass(film, 'evidence', fakePassSlices(name, 3), name.includes('mixed'), (): TrainedPassResult => ({
+          marks: {
+            film,
+            vertebrae: [0, 1, 2].map((step) => ({ id: input.firstVertebraId + step })),
+            landmarks: { c7: null, sacrumTop: null, hips: [] },
+            naming: { template: 'standard', chosenBy: 'engine', alternatives: [], fromTop: null, fromBottom: null, flags: ['estimated'], l5ConfirmedOn: null },
+            namedFor: name,
+          } as unknown as FilmMarks,
+          warnings: [{ code: 'low-evidence', film, level: null, region: null }],
+        }));
+      },
     }),
   },
 };
