@@ -1,72 +1,56 @@
 # app-shell
 
-The frame around every step. It never rearranges: learn it once.
+The one stage, with a capsule bar above it and a dock and notice below.
+The same bench stays mounted as the step changes. All three regions sit
+inside the centred frame; extra window space becomes margin.
 
 ```
-+--------------------+--------------------------------------------------+
-| TopBar             |  StepRail        PromiseBadge  UndoRedo  Save    |   56
-+--------------------+--------------------------------------------------+
-| GuideColumn        |  the bench region                                |
-|   the step's       |    bench/Bench.tsx            (found by path)    |
-|   Screen           |    case-sheet/CaseSheet.tsx   (found by path)    |
-+--------------------+--------------------------------------------------+
-| StatusLine                                                            |   28
-+-----------------------------------------------------------------------+
+app-frame
+  glow
+  frame
+    bar: brand, steps, badge
+    note: the promise and its count
+    stage: Bench, CaseSheet
+    the step's Screen, inside OpeningCase when present
+    dock: the current sentence and actions
+    notice
 ```
-
-`AppFrame` mounts the bench once, for the whole visit, so films never
-unmount between steps. The step on screen renders its guide into the
-guide column and tells the bench what it wants.
 
 | File | Holds |
 |---|---|
-| `AppFrame.tsx` | the three rows; `data-step`, `data-motion` and `data-tool` on the root |
-| `TopBar.tsx` | the mark and name, the case, the rail, the promise, undo and redo, Save case |
-| `StepRail.tsx`, `rail-steps.ts` | the numbered journey, and what each step shows, worked out from the case |
-| `CaseTitle.tsx`, `case-saved.ts` | the case's name, and whether it is saved |
-| `UndoRedo.tsx` | two buttons whose tooltips name the action |
-| `StatusLine.tsx`, `status-readings.ts` | the standing claim; the pointer in millimetres; the pixel size; requests sent |
-| `GuideColumn.tsx` | the left column: the step's `Screen`, inside the opening screen when there is one |
+| `AppFrame.tsx` | the frame, its persistent stage and shared dock; `data-step`, `data-motion` and `data-tool` on the root, `data-moment` on the page |
+| `TopBar.tsx`, `StepSwitch.tsx` | the name, the step control and the badge; the note is a sibling of the bar |
+| `PreviewNotice.tsx` | the approved notice and the engine status and version hooks used by browser tests |
+| `rail-steps.ts` | the current step and which steps may be opened, worked out from the case |
 | `room-parts.ts` | finds the bench, the case sheet and the opening screen by path |
-| `what-is-live.ts` | where undo and redo answer, and when Save case does |
-| `frame-actions.ts`, `global-keys.ts` | undo, redo and save, by button and by Cmd or Ctrl+Z, Shift, and S |
-| `use-top-bar.ts`, `use-engine-status.ts` | the stores and the engine, read for the frame |
-| `step-attribute.ts` | the design's short `data-step` name for a slug that has one |
+| `use-top-bar.ts`, `use-engine-status.ts` | the stores and engine state read by the frame |
+| `step-attribute.ts` | the short `data-step` name for a slug that has one |
 | `dev-scenes.ts` | development only: `?scene=<name>` |
 
-## What a part mounted in the frame can rely on
+The step's `Screen` hands its sentence and actions to the dock with
+`useShowInDock`. It is keyed by its slug and mounted outside the footer,
+inside `OpeningCase` when that part exists. The frame reads dock updates
+in a separate component, so handing up new words never redraws the
+screen that supplied them.
 
-- **The root** is the nearest ancestor with `data-step`, and it is always
-  there, steps or none. The bench writes `data-lane` on it. `data-motion`
-  is `reduced` when the system asks or view-state's preference does.
-- **The bench region** is positioned and clips, so a dialog mounted in it
-  veils the bench and nothing else. The frame draws the hairline down
-  its left edge, over the region's first column of pixels: a part that
-  fills the region and draws a line of its own in that place falls under
-  it, and the line is never doubled. The rule under the top bar is the
-  top bar's.
-- **The lit button stands down** while view-state says the case sheet is
-  open, so there is one ink button on the page.
-- **Tab order** is the order of the page: top bar, guide, bench.
+The room's parts default-export their components. `bench/Bench.tsx`
+mounts in `main.stage`, followed by `case-sheet/CaseSheet.tsx`.
+`reopen-case/OpeningCase.tsx` wraps the step's screen. Missing parts leave
+the frame whole. Tests hand in their own parts and need no bench.
 
-## The rail
+The dock's primary stands down to the secondary look and gives up Enter
+while the case sheet is open. A failed engine takes over the dock with
+its fault title and a reload sentence. The notice retains
+`data-testid="engine-status"`, `data-status` and the spoken
+`data-testid="engine-version"`.
 
-A step shows a tick when its `canLeave` says everything it settles is
-settled. Every step before the one on screen can be pressed: going back
-is always allowed. A later step can be pressed only when it, and every
-step from the one on screen up to it, is done, and it can be opened. The
-rail never starts a step's work: that is the lit button's.
+Tab follows the page: step options, badge, stage controls, dock controls.
+The step control draws the registered steps. With no step after Find it
+adds an unreachable 3D option; a registered later step takes that place.
+Undo, Redo, Save and the case name are not mounted or wired here. Their earlier
+components, key handling and tests remain in the tree, as do `StepRail`,
+`GuideColumn`, `StatusLine` and their supporting readers.
 
-With more than four steps the done ones fold down to their ticks. Under
-1200 px, and at any width where the names do not fit beside the bar's
-actions (the rail measures itself and says `data-tight`), only the step
-on screen keeps its name. A folded name is in a tooltip, and what is
-spoken is always whole.
-
-## Development
-
-| Address | Shows |
-|---|---|
-| `?scene=<name>` | the app in a named state; a `*.scenes.ts` file anywhere under `src/` default-exports a list of `DevScene` |
-| `?motion=reduced` | reduced motion for this visit |
-| `?gallery=app-shell/AppFrame` | the frame on four fixture steps |
+`components.css` supplies the frame's parts. `AppFrame.css` only bounds
+the root. The system’s tokens hide the product name at 600 wide or less.
+No minimum width prevents the frame from shrinking.

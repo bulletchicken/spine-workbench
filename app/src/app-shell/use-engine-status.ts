@@ -1,17 +1,15 @@
 // Whether the engine has started. The frame asks it for its info once;
-// the answer, or the failure, is what the status line carries for the
+// the answer, or the failure, is what the frame carries for the
 // browser's guards and for the person.
 
 import { useEffect, useState } from 'react';
-import { say } from '@/building-blocks/toast/say';
 import { EngineFailure } from '@/engine-room/engine-client';
 import { useEngine } from '@/engine-room/use-engine';
 import type { EngineError, EngineInfo } from '@/shapes';
-import { faultWords } from '@/words/faults';
 
 export type EngineStatus = { status: 'starting' } | { status: 'ready'; info: EngineInfo } | { status: 'failed'; error: EngineError };
 
-/** The engine's state, from `starting` to `ready` or `failed`. A failure is also said once, as a toast. */
+/** The engine's state, from `starting` to `ready` or `failed`. */
 export function useEngineStatus(): EngineStatus {
   const engine = useEngine();
   const [status, setStatus] = useState<EngineStatus>({ status: 'starting' });
@@ -27,8 +25,6 @@ export function useEngineStatus(): EngineStatus {
         const error: EngineError =
           cause instanceof EngineFailure ? cause.error : { code: 'engine-load-failed', message: 'the engine did not start', detail: String(cause) };
         setStatus({ status: 'failed', error });
-        const words = faultWords(error.code);
-        say(`${words.title}. ${words.whatToDo}`, { tone: 'note' });
       },
     );
     return () => {

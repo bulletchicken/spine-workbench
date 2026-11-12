@@ -1,53 +1,21 @@
-import { useRef } from 'react';
-import { Popover } from '@/building-blocks/Popover';
-import { Icon } from '@/look-and-feel/icons/Icon';
+import type { Ref } from 'react';
 import { ON_THIS_DEVICE_WORDS as WORDS } from '@/words/on-this-device';
-import './PromiseBadge.css';
-import { PromisePopover } from './PromisePopover';
-import type { RequestsSent } from './requests-sent';
 
 interface PromiseBadgeProps {
-  requests: RequestsSent;
-  /** The popover is open. */
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  ref?: Ref<HTMLButtonElement>;
 }
 
-/**
- * "On this device only · 0 sent", always in the top bar. A press opens
- * the popover that makes the promise checkable; Escape, a press outside
- * or focus moving on closes it. The popover is placed against the badge's
- * nearest positioned ancestor, which in the app is the top bar.
- */
-export function PromiseBadge({ requests, open, onOpenChange }: PromiseBadgeProps) {
-  const badge = useRef<HTMLButtonElement>(null);
+/** The promise stays in view; its count lives in the note it opens. */
+export function PromiseBadge({ open, onOpenChange, ref }: PromiseBadgeProps) {
   return (
-    <>
-      <button
-        ref={badge}
-        type="button"
-        className="promise-badge"
-        aria-haspopup="dialog"
-        aria-expanded={open}
-        onClick={() => {
-          onOpenChange(!open);
-        }}
-      >
-        <Icon name="on-device" />
-        <span>{WORDS.badge}</span>
-        <b className="promise-badge-sent">{WORDS.sent(requests.sent)}</b>
-      </button>
-      <Popover
-        open={open}
-        onClose={() => {
-          onOpenChange(false);
-        }}
-        anchor={badge}
-        label={WORDS.badge}
-        className="promise-popover"
-      >
-        <PromisePopover requests={requests} />
-      </Popover>
-    </>
+    <button ref={ref} type="button" className="badge" aria-haspopup="dialog" aria-expanded={open} onClick={() => { onOpenChange(!open); }}>
+      <svg viewBox="0 0 18 18" aria-hidden="true">
+        <rect x="3.75" y="8" width="10.5" height="7" rx="2" />
+        <path d="M6 8V5.75a3 3 0 0 1 6 0V8" />
+      </svg>
+      {WORDS.badge}
+    </button>
   );
 }

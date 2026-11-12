@@ -1,28 +1,33 @@
-// The promise in the top bar: the badge and its popover, wired to the
+// The promise in the top bar: the badge and its note, wired to the
 // page's own counter as the app wires them. A refusal by the content
 // policy is raised here as the browser raises it, as an event on the
 // document; the browser tests hold the policy itself.
 
-import { act } from 'react';
-import { describe, expect, it, vi } from 'vitest';
+import { act, useRef } from 'react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { CONTENT_POLICY, CONTENT_POLICY_HEADER } from '../../build-plugins/content-policy';
+import { Popover } from '@/building-blocks/Popover';
 import { find, focusOn, pressKey, pressOn, putOnThePage } from '@/building-blocks/test-rig/on-the-page';
+import { ON_THIS_DEVICE_WORDS } from '@/words/on-this-device';
 import scenes from './on-this-device.scenes';
 import { popoverOpen, usePopoverOpen } from './popover-open';
 import { PromiseBadge } from './PromiseBadge';
+import { PromisePopover } from './PromisePopover';
 import { useRequestsSent } from './requests-sent';
 
-/** The badge as the frame mounts it: on the app's popover flag and the page's counter. */
+/** The same sibling note and shared anchor as the bar, without a bench. */
 function Wired() {
   const { open } = usePopoverOpen();
+  const badge = useRef<HTMLButtonElement>(null);
+  const requests = useRequestsSent();
+  const setOpen = (next: boolean) => { popoverOpen.getState().setOpen(next); };
   return (
-    <PromiseBadge
-      requests={useRequestsSent()}
-      open={open}
-      onOpenChange={(next) => {
-        popoverOpen.getState().setOpen(next);
-      }}
-    />
+    <div className="frame">
+      <PromiseBadge ref={badge} open={open} onOpenChange={setOpen} />
+      <Popover anchor={badge} open={open} onClose={() => { setOpen(false); }} label={ON_THIS_DEVICE_WORDS.badge} className="note glass">
+        <PromisePopover requests={requests} />
+      </Popover>
+    </div>
   );
 }
 
@@ -34,37 +39,61 @@ function refuse(address: string, rule: string, policy = CONTENT_POLICY): void {
   });
 }
 
+beforeEach(() => { popoverOpen.getState().setOpen(false); });
+
 describe('the promise', () => {
-  it('reads "0 sent" on a page that has asked nothing of anywhere else', () => {
+  it('shows no count on the badge and keeps its closed note in the page', () => {
     putOnThePage(<Wired />);
-    expect(find('.promise-badge').textContent).toBe('On this device only0 sent');
-    expect(find('.promise-badge').getAttribute('aria-expanded')).toBe('false');
-    expect(document.querySelector('[role="dialog"]')).toBeNull();
+    const badge = find('.badge');
+    expect(badge.textContent).toBe('On this device only');
+    expect(badge.getAttribute('aria-expanded')).toBe('false');
+    expect(badge.getAttribute('aria-haspopup')).toBe('dialog');
+    expect(find('.badge svg').getAttribute('viewBox')).toBe('0 0 18 18');
+    expect(find('.badge rect').getAttribute('width')).toBe('10.5');
+    expect(find('.badge path').getAttribute('d')).toBe('M6 8V5.75a3 3 0 0 1 6 0V8');
+    expect(find('.note').classList.contains('open')).toBe(false);
+    expect(find('.note').getAttribute('aria-hidden')).toBe('true');
+    expect(find('.note').hasAttribute('inert')).toBe(true);
   });
 
-  it('opens from the badge, and Escape closes it and gives focus back', () => {
+  it('says the lead line, live request count and bone credit, and closes on Escape with focus returned', () => {
     putOnThePage(<Wired />);
-    const badge = find('.promise-badge');
+    const badge = find('.badge');
     focusOn(badge);
-    // Enter or Space on the focused badge is its click.
     pressOn(badge);
-    const popover = find('[role="dialog"]');
-    expect(popover.getAttribute('aria-label')).toBe('On this device only');
+    const note = find('[role="dialog"]');
+    expect(note.getAttribute('aria-label')).toBe('On this device only');
     expect(badge.getAttribute('aria-expanded')).toBe('true');
-    expect(popover.textContent).toContain('Nothing leaves this computer.');
-    expect(find('.promise-count').textContent).toBe('0requests sent this session');
-    expect(document.querySelectorAll('.promise-guards li')).toHaveLength(3);
-    expect(document.activeElement).toBe(popover);
-
+    expect(find('.note-lead').textContent).toBe('Your films never leave this computer.');
+    expect(find('.note-count').textContent).toBe('Requests sent: 0');
+    expect(find('.note-count .num').textContent).toBe('0');
+    expect(find('.note-credit').textContent).toBe(ON_THIS_DEVICE_WORDS.boneCredit);
+    expect(document.activeElement).toBe(note);
     expect(pressKey('Escape').defaultPrevented).toBe(true);
-    expect(document.querySelector('[role="dialog"]')).toBeNull();
+    expect(find('[role="dialog"]')).toBe(note);
+    expect(note.classList.contains('open')).toBe(false);
     expect(document.activeElement).toBe(badge);
   });
 
-  it('shows a line when the browser refuses an address outside the app, and counts attempts, not reports', () => {
+  it('closes on a second badge press, a press outside, and focus moving on', () => {
+    putOnThePage(<><Wired /><button type="button" id="outside">Outside</button></>);
+    const badge = find('.badge');
+    pressOn(badge);
+    pressOn(badge);
+    expect(find('.note').classList.contains('open')).toBe(false);
+    pressOn(badge);
+    pressOn(find('#outside'));
+    expect(find('.note').classList.contains('open')).toBe(false);
+    pressOn(badge);
+    focusOn(find('#outside'));
+    expect(find('.note').classList.contains('open')).toBe(false);
+    expect(document.activeElement).toBe(find('#outside'));
+  });
+
+  it('counts refused attempts rather than duplicate reports, under the request count', () => {
     putOnThePage(<Wired />);
-    pressOn(find('.promise-badge'));
-    expect(document.querySelector('.promise-blocked')).toBeNull();
+    pressOn(find('.badge'));
+    expect(document.querySelector('.note-blocked')).toBeNull();
 
     // The header and tag each report one refusal. Even a whole second apart, it is one attempt.
     vi.useFakeTimers({ toFake: ['Date'] });
@@ -75,31 +104,25 @@ describe('the promise', () => {
     } finally {
       vi.useRealTimers();
     }
-    expect(find('.promise-blocked').textContent).toBe('The browser blocked 1 attempt to reach outside the app. Nothing was sent.');
+    expect(find('.note-blocked').textContent).toBe('The browser blocked 1 attempt to reach outside the app. Nothing was sent.');
+    expect(find('.note-blocked').previousElementSibling).toBe(find('.note-count'));
 
     // A refusal that is not about an address outside changes nothing.
     refuse('eval', 'script-src');
-    expect(find('.promise-blocked').textContent).toContain('1 attempt');
+    expect(find('.note-blocked').textContent).toContain('1 attempt');
 
     refuse('https://example.net/', 'connect-src');
-    expect(find('.promise-blocked').textContent).toContain('2 attempts');
+    expect(find('.note-blocked').textContent).toContain('2 attempts');
     // Refused is not sent: the count stays at nothing.
-    expect(find('.promise-count b').textContent).toBe('0');
-    expect(find('.promise-badge-sent').textContent).toBe('0 sent');
-    act(() => {
-      popoverOpen.getState().setOpen(false);
-    });
+    expect(find('.note-count .num').textContent).toBe('0');
+    expect(find('.badge').textContent).toBe('On this device only');
   });
 
   it('is opened by its scene, as a press would', async () => {
     putOnThePage(<Wired />);
     const scene = scenes.find((each) => each.name === 'on-this-device');
-    await act(async () => {
-      await scene?.enter({ engine: {} as never });
-    });
-    expect(find('[role="dialog"]').textContent).toContain('Nothing leaves this computer.');
-    act(() => {
-      popoverOpen.getState().setOpen(false);
-    });
+    await act(async () => { await scene?.enter({ engine: {} as never }); });
+    expect(find('.note').classList.contains('open')).toBe(true);
+    expect(find('.note-lead').textContent).toBe('Your films never leave this computer.');
   });
 });

@@ -53,6 +53,12 @@ describe('the rail', () => {
     expect(open(4, 'size-and-facing')).toEqual([true, false, true, true]);
   });
 
+  it('opens no later step while a film is being read, and still lets a person go back', () => {
+    // The case still holds what the film being read is about to replace.
+    expect(railSteps(STEPS, caseWith(3), 'films', true).map((each) => each.open)).toEqual([false, false, false, false]);
+    expect(railSteps(STEPS, caseWith(4), 'size-and-facing', true).map((each) => each.open)).toEqual([true, false, false, false]);
+  });
+
   it('closes the way forward when the step on screen is no longer settled', () => {
     const unsettled: StepContract = { ...step(2, 'size-and-facing'), canLeave: () => false };
     const rail = railSteps([STEPS[0], unsettled, STEPS[2], STEPS[3]].filter((each) => each !== undefined), caseWith(4), 'size-and-facing');

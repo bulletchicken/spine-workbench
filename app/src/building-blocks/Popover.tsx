@@ -1,6 +1,5 @@
 import { useEffectEvent, useLayoutEffect, useRef, type ReactNode, type RefObject } from 'react';
 import { useKey } from './keyboard/use-key';
-import './Popover.css';
 
 interface PopoverProps {
   open: boolean;
@@ -10,34 +9,46 @@ interface PopoverProps {
   anchor: RefObject<HTMLElement | null>;
   /** Its spoken name. */
   label: string;
-  /** Which side of its place it opens on, and which edge it lines up with. */
-  side?: 'below' | 'above';
-  align?: 'start' | 'centre' | 'end';
+  /** Its look and its place: the caller passes the design system's classes (the trust note's are `note glass`). */
   className?: string;
   children: ReactNode;
 }
 
-/**
- * A paper panel that opens beside the control that asked for it and gets
- * out of the way easily. It is placed against its nearest positioned
- * ancestor, so wrap the control and the popover in one positioned
- * element, or give it a place of its own through `className`.
- */
-export function Popover({ open, ...rest }: PopoverProps) {
-  return open ? <OpenPopover {...rest} /> : null;
+/** Focus goes back to the opener, unless the person has already put it somewhere else. */
+function giveFocusBack(panel: HTMLElement, opener: HTMLElement | null) {
+  const focused = document.activeElement;
+  if (focused === null || focused === document.body || panel.contains(focused)) opener?.focus({ preventScroll: true });
 }
 
-function OpenPopover({ onClose, anchor, label, side = 'below', align = 'end', className, children }: Omit<PopoverProps, 'open'>) {
+/**
+ * A panel beside the control that asked for it, which gets out of the way
+ * easily. It is always on the page; `open` adds the class `open` and nothing
+ * else, so the design system's own rules show it and hide it, each with its
+ * fade. While closed it is hidden from assistive technology and takes no
+ * focus or press. It has no look of its own.
+ */
+export function Popover({ open, onClose, anchor, label, className, children }: PopoverProps) {
   const panel = useRef<HTMLDivElement>(null);
   const close = useEffectEvent(onClose);
 
-  useKey('popover', ['Escape'], onClose);
+  const wasOpen = useRef(false);
 
-  // A layout effect, so that on the way out the panel is still on the
-  // page and can say whether focus was inside it.
+  useKey('popover', ['Escape'], onClose, () => open);
+
+  // Layout effects, so that as it closes, before the browser has moved focus
+  // out of a panel that is now inert, they can still say whether focus was
+  // inside it. Focus is given back in the effect itself and not in a cleanup:
+  // React puts focus back where it was once it has changed the page, and the
+  // panel is still on the page.
   useLayoutEffect(() => {
     const opened = panel.current;
     if (opened === null) return;
+    if (!open) {
+      if (wasOpen.current) giveFocusBack(opened, anchor.current);
+      wasOpen.current = false;
+      return;
+    }
+    wasOpen.current = true;
     const opener = anchor.current;
     opened.focus({ preventScroll: true });
 
@@ -53,22 +64,21 @@ function OpenPopover({ onClose, anchor, label, side = 'below', align = 'end', cl
     return () => {
       document.removeEventListener('pointerdown', onPointerDown, true);
       opened.removeEventListener('focusout', onFocusOut);
-      // Focus goes back to the opener unless the person has already put it somewhere else.
-      const focused = document.activeElement;
-      if (focused === null || focused === document.body || opened.contains(focused)) opener?.focus({ preventScroll: true });
+    };
+  }, [open, anchor]);
+
+  // Taken off the page while open: there is no later effect to give focus back, so it is given now.
+  useLayoutEffect(() => {
+    const element = panel.current;
+    const opener = anchor.current;
+    return () => {
+      if (wasOpen.current && element !== null) giveFocusBack(element, opener);
     };
   }, [anchor]);
 
+  const classes = [className, open ? 'open' : undefined].filter((each) => each !== undefined).join(' ');
   return (
-    <div
-      ref={panel}
-      role="dialog"
-      aria-label={label}
-      tabIndex={-1}
-      className={className === undefined ? 'popover' : `popover ${className}`}
-      data-side={side}
-      data-align={align}
-    >
+    <div ref={panel} role="dialog" aria-label={label} tabIndex={-1} className={classes === '' ? undefined : classes} aria-hidden={open ? undefined : true} inert={!open}>
       {children}
     </div>
   );

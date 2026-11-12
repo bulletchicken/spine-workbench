@@ -2,9 +2,9 @@ import type { ComponentProps, ReactNode } from 'react';
 import './Button.css';
 
 interface ButtonProps extends Omit<ComponentProps<'button'>, 'type' | 'disabled' | 'onClick'> {
-  /** `standard` has a face and an edge; `text` is the words alone, for a quiet action. */
+  /** `standard` is the design's secondary button, a white pill with a hairline edge; `text` is its quiet button, the words alone. */
   look?: 'standard' | 'text';
-  /** `large` stands a standard button beside a lit one. */
+  /** `large` is the design's size for the secondary button; `regular` is the smaller one earlier parts ask for. */
   size?: 'regular' | 'large';
   /** Cannot be pressed, and is left out of the tab order. */
   disabled?: boolean;
@@ -16,17 +16,17 @@ interface ButtonProps extends Omit<ComponentProps<'button'>, 'type' | 'disabled'
 }
 
 /**
- * A button that is not the next action: outlined, or the words alone.
- * The one lit button, the only solid ink on a page, is the guide's, and
- * nothing here is ever solid.
+ * A button that is not the next action. It wears the design system's class
+ * for its look (`quiet` or `secondary`, from components.css) beside `button`,
+ * a hook other stylesheets place it by. The one black button, the next step
+ * of the moment, is the guide's, and nothing here is ever black.
  */
 export function Button({ look = 'standard', size = 'regular', disabled = false, busy = false, onPress, className, children, ...rest }: ButtonProps) {
   return (
     <button
       {...rest}
       type="button"
-      className={className === undefined ? 'button' : `button ${className}`}
-      data-look={look}
+      className={['button', look === 'text' ? 'quiet' : 'secondary', className].filter((each) => each !== undefined).join(' ')}
       data-size={size}
       disabled={disabled}
       aria-busy={busy || undefined}

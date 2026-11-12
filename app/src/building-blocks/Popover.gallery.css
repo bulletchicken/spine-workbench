@@ -1,4 +1,4 @@
-/* For the Popover page: a control with room for its popover, and what the popover holds.
+/* For the Popover page: a control with room for its popover.
    Gallery only: nothing here is part of a block, and none of it is in a production build. */
 
 .blocks-gallery-pop-room {
@@ -14,84 +14,7 @@
   justify-content: flex-end;
 }
 
-.blocks-gallery-pop-room[data-side='above'] {
-  align-items: flex-end;
-}
-
 .blocks-gallery-anchor {
   position: relative;
   display: inline-flex;
-}
-
-.blocks-gallery-pop-title {
-  margin: 0;
-  font: 400 26px / 30px var(--font-voice);
-  letter-spacing: -0.01em;
-}
-
-.blocks-gallery-pop-sub {
-  margin: 6px 0 0;
-  color: var(--ink-2);
-}
-
-.blocks-gallery-guards {
-  display: grid;
-  margin: var(--s-4) 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.blocks-gallery-guards li {
-  display: grid;
-  grid-template-columns: 20px 1fr;
-  gap: 10px;
-  padding: 10px 0;
-  border-top: 1px solid var(--line-1);
-}
-
-.blocks-gallery-guards svg {
-  width: 18px;
-  height: 18px;
-  margin-top: 1px;
-  color: var(--sure);
-}
-
-.blocks-gallery-guards b {
-  display: block;
-  font-weight: 500;
-  line-height: 20px;
-}
-
-.blocks-gallery-guards span {
-  display: block;
-  color: var(--ink-3);
-  font-size: var(--text-small);
-  line-height: 17px;
-}
-
-.blocks-gallery-pop-count {
-  box-sizing: border-box;
-  display: flex;
-  align-items: baseline;
-  gap: var(--s-3);
-  padding: var(--s-3) 0;
-  border-top: 1px solid var(--rule);
-  border-bottom: 1px solid var(--rule);
-}
-
-.blocks-gallery-pop-count b {
-  color: var(--ink-1);
-  font: 500 40px / 40px var(--font-data);
-  font-variant-numeric: slashed-zero;
-}
-
-.blocks-gallery-pop-count span {
-  color: var(--ink-2);
-}
-
-.blocks-gallery-pop-fine {
-  margin: var(--s-3) 0 0;
-  color: var(--ink-3);
-  font-size: var(--text-small);
-  line-height: 17px;
 }

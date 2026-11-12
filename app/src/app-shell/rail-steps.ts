@@ -1,4 +1,5 @@
-// What the rail shows for each step, worked out from the case alone.
+// What the rail shows for each step, worked out from the case, and from
+// whether films are still being read.
 //
 // A step is `now` when it is on screen, `done` when everything it settles
 // is settled (the step's own `canLeave`), and `todo` otherwise. Going back
@@ -7,7 +8,8 @@
 // it has nothing left to do itself: it and every step from the one on
 // screen up to it are done, and it can be opened. So the rail never drops
 // a person into a step whose work has not started; that way forward is
-// the lit button's.
+// the lit button's. While a film is being read no later step can be
+// pressed at all: the case still holds what the film is about to replace.
 
 import type { CaseFileV1 } from '@/shapes';
 import type { StepContract } from '@/steps/step-contract';
@@ -26,8 +28,8 @@ export function stepOnScreen(steps: readonly StepContract[], slug: string): Step
   return steps.find((step) => step.slug === slug) ?? steps[0] ?? null;
 }
 
-/** The rail for `steps`, in order, with the step whose slug is `slug` on screen. */
-export function railSteps(steps: readonly StepContract[], c: CaseFileV1, slug: string): RailStep[] {
+/** The rail for `steps`, in order, with the step whose slug is `slug` on screen. `reading` says a film is being read or drawn. */
+export function railSteps(steps: readonly StepContract[], c: CaseFileV1, slug: string, reading = false): RailStep[] {
   const now = Math.max(0, steps.findIndex((step) => step.slug === slug));
   const done = steps.map((step) => step.canLeave(c));
   return steps.map((step, at) => ({
@@ -35,6 +37,6 @@ export function railSteps(steps: readonly StepContract[], c: CaseFileV1, slug: s
     number: step.number,
     title: step.title,
     state: at === now ? 'now' : done[at] === true ? 'done' : 'todo',
-    open: at < now || (at > now && step.isReady(c) && done.slice(now, at + 1).every(Boolean)),
+    open: at < now || (!reading && at > now && step.isReady(c) && done.slice(now, at + 1).every(Boolean)),
   }));
 }

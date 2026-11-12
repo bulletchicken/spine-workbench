@@ -1,0 +1,23 @@
+/* The dock's look is the design system's: .dock, .scene, .say and .meter, in components.css. This is
+   the one thing it does not cover: a wait whose meter has said nothing for a while. The bar keeps
+   its place, dimmed, and a light runs along the whole track, so a long step of a search never
+   looks like a stopped one. */
+.meter.waiting { position: relative; }
+.meter.waiting i { opacity: 0.4; }
+.meter.waiting::after {
+  content: ''; position: absolute; inset: 0; width: 40%; border-radius: var(--r-hair);
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  animation: meter-waiting var(--dur-pulse) var(--ease-pulse) infinite;
+}
+@keyframes meter-waiting {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(250%); }
+}
+
+/* Nothing travels or loops under reduced motion: the track takes a still wash instead. */
+@media (prefers-reduced-motion: reduce) {
+  .meter.waiting { background: var(--accent-fill); }
+  .meter.waiting::after { display: none; }
+}
+[data-motion='reduced'] .meter.waiting { background: var(--accent-fill); }
+[data-motion='reduced'] .meter.waiting::after { display: none; }

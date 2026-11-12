@@ -1,45 +1,17 @@
-import { StateIcon } from '@/look-and-feel/StateIcon';
 import { ON_THIS_DEVICE_WORDS as WORDS } from '@/words/on-this-device';
-import './PromisePopover.css';
+import { SHELL_WORDS } from '@/words/shell';
 import type { RequestsSent } from './requests-sent';
 
-interface PromisePopoverProps {
-  requests: RequestsSent;
-}
-
-/**
- * The promise, checkable: that nothing leaves this computer, the three
- * guards that keep it so in plain words, and the count of requests sent,
- * which is read from the browser. When the browser has refused an attempt
- * to reach outside, a line says how many.
- */
-export function PromisePopover({ requests }: PromisePopoverProps) {
+/** The browser's count, followed by the credit for the bone shapes. */
+export function PromisePopover({ requests }: { requests: RequestsSent }) {
   return (
-    <div className="promise">
-      <h2 className="promise-title">{WORDS.title}</h2>
-      <p className="promise-sub">{WORDS.sub}</p>
-      <ol className="promise-guards">
-        {WORDS.guards.map((guard) => (
-          <li key={guard.title}>
-            <StateIcon state="ok" />
-            <div>
-              <b>{guard.title}</b>
-              <span>{guard.line}</span>
-            </div>
-          </li>
-        ))}
-      </ol>
-      <p className="promise-count">
-        <b>{requests.sent}</b>
-        <span>{WORDS.countLine(requests.sent)}</span>
-      </p>
-      {requests.blocked > 0 && (
-        <p className="promise-blocked">
-          <StateIcon state="warn" />
-          <span>{WORDS.blocked(requests.blocked)}</span>
-        </p>
-      )}
-      <p className="promise-fine">{WORDS.fine}</p>
-    </div>
+    <>
+      <div>
+        <p className="note-lead">{WORDS.lead}</p>
+        <p className="note-count">{SHELL_WORDS.requestsSent} <span className="num">{requests.sent}</span></p>
+        {requests.blocked > 0 && <p className="note-blocked">{WORDS.blocked(requests.blocked)}</p>}
+      </div>
+      <p className="note-credit">{WORDS.boneCredit}</p>
+    </>
   );
 }

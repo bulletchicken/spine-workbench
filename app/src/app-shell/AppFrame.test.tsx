@@ -1,10 +1,6 @@
-// The frame, mounted on the stand-in engine: with no steps at all, then
-// on a two-step fixture numbered 2 and 4, as the steps may land in any
-// order. The fixture steps are plain components; the bench, the sheet and
-// the opening screen are stand-ins handed in where the app would find
-// its own.
-
-import { act, useLayoutEffect, useRef, type ReactNode } from 'react';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { act, useLayoutEffect, type ReactNode } from 'react';
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { saidNow } from '@/building-blocks/toast/say';
 import { find, focusOn, pressKey, pressOn, putOnThePage } from '@/building-blocks/test-rig/on-the-page';
@@ -13,347 +9,255 @@ import { emptyCase } from '@/case-state/empty-case';
 import { EngineFailure, type EngineClient } from '@/engine-room/engine-client';
 import { startStandInEngine } from '@/engine-room/stand-in/stand-in-engine';
 import { EngineProvider } from '@/engine-room/use-engine';
-import { Guide } from '@/guide/Guide';
 import { popoverOpen } from '@/on-this-device/popover-open';
-import { caseAt } from '@/sample-case/stages';
 import type { StepContract } from '@/steps/step-contract';
 import { activeTool } from '@/view-state/active-tool';
 import { caseSheetOpen } from '@/view-state/case-sheet-open';
 import { currentStep } from '@/view-state/current-step';
-import { pointer } from '@/view-state/pointer';
+import { dockNow, useShowInDock } from '@/view-state/dock-now';
 import { preferences } from '@/view-state/preferences';
-import { savedState } from '@/view-state/saved-state';
 import { faultWords } from '@/words/faults';
 import { PREVIEW_NOTICE } from '@/words/preview-notice';
 import { AppFrame } from './AppFrame';
 import type { RoomParts } from './room-parts';
 
-const NO_PARTS: RoomParts = { Bench: null, CaseSheet: null, OpeningCase: null };
+// The frame's tests stand alone while other room parts are being built.
+vi.mock('./room-parts', () => ({ findRoomParts: () => ({ Bench: null, CaseSheet: null, OpeningCase: null }) }));
 
+const NO_PARTS: RoomParts = { Bench: null, CaseSheet: null, OpeningCase: null };
+const read = (path: string) => readFileSync(fileURLToPath(new URL(path, import.meta.url)), 'utf8');
+const nothing = () => undefined;
 function fixtureStep(number: number, slug: string, title: string, more: Partial<StepContract> = {}): StepContract {
-  const Screen = () => <Guide spec={{ eyebrow: [title], sentence: `This is ${title}.`, lit: { label: `Go on from ${title}`, press: () => undefined } }} />;
+  function Screen() {
+    useShowInDock({ scene: 'ready', sentence: `This is ${title}.`, primary: { label: 'Find the spine', press: nothing } });
+    return null;
+  }
   return { number, slug, title, Screen, isReady: () => true, canLeave: () => false, ...more };
 }
-
-/** The two steps a half-landed app might have: numbers 2 and 4, and no step 1. Adjust opens once a film is in the case. */
-const TWO_STEPS = [fixtureStep(2, 'size-and-facing', 'Size & facing'), fixtureStep(4, 'adjust', 'Adjust', { isReady: (c) => c.films.length > 0 })];
-
-const FRONT_FILM = caseAt('four-films-up').case.films.find((film) => film.kind === 'front');
-
-let systemAsksForReduced = false;
+const STEPS = [fixtureStep(1, 'films', 'Films'), fixtureStep(2, 'find', 'Find')];
+let systemReduced = false;
+const motionListeners = new Set<() => void>();
 const engines: { stop(): void }[] = [];
 
-async function mountFrame(steps: readonly StepContract[], parts: RoomParts = NO_PARTS, engine?: EngineClient): Promise<void> {
-  const running = engine ?? startStandInEngine();
-  if (engine === undefined) engines.push(running as EngineClient & { stop(): void });
-  putOnThePage(
-    <EngineProvider engine={running}>
-      <AppFrame steps={steps} parts={parts} />
-    </EngineProvider>,
-  );
-  // The engine answers a moment after it is asked.
-  await act(async () => {
-    await running.info().catch(() => undefined);
-  });
+function mount(steps: readonly StepContract[] = [], parts: RoomParts = NO_PARTS, given?: EngineClient) {
+  const engine = given ?? startStandInEngine();
+  if (given === undefined) engines.push(engine as EngineClient & { stop(): void });
+  const page = putOnThePage(<EngineProvider engine={engine}><AppFrame steps={steps} parts={parts} /></EngineProvider>);
+  return { page, engine };
 }
-
-const root = () => find('.app-frame');
+async function ready(engine: EngineClient) {
+  await act(async () => { await engine.info().catch(nothing); });
+}
+const button = (label: string) => {
+  const found = [...document.querySelectorAll<HTMLButtonElement>('.steps button')].find((each) => each.textContent === label);
+  if (found === undefined) throw new Error(`no step named ${label}`);
+  return found;
+};
 
 beforeEach(() => {
-  systemAsksForReduced = false;
-  vi.stubGlobal(
-    'matchMedia',
-    vi.fn(() => ({ matches: systemAsksForReduced, addEventListener: () => undefined, removeEventListener: () => undefined })),
-  );
+  systemReduced = false;
+  motionListeners.clear();
+  vi.stubGlobal('matchMedia', vi.fn(() => ({
+    matches: systemReduced,
+    addEventListener: (_: string, listener: () => void) => { motionListeners.add(listener); },
+    removeEventListener: (_: string, listener: () => void) => { motionListeners.delete(listener); },
+  })));
+  currentStep.getState().go('films');
+  caseStore.getState().apply([{ kind: 'open-case', case: emptyCase() }]);
+  caseSheetOpen.getState().setOpen(false);
+  popoverOpen.getState().setOpen(false);
+  activeTool.getState().pick(null);
+  preferences.getState().setMotion('system', false);
+  dockNow.getState().show(null);
 });
+afterEach(() => { for (const engine of engines.splice(0)) engine.stop(); });
+afterAll(() => { vi.unstubAllGlobals(); });
 
-// Runs before the frame is taken down, so the stores are put back while the system's setting still answers.
-afterEach(() => {
-  act(() => {
-    currentStep.getState().go('films');
-    caseStore.getState().apply([{ kind: 'open-case', case: emptyCase() }]);
-    caseSheetOpen.getState().setOpen(false);
-    popoverOpen.getState().setOpen(false);
-    activeTool.getState().pick(null);
-    pointer.getState().leave();
-    preferences.getState().setMotion('system', false);
-    savedState.setState({ name: null, mark: null });
-  });
-  for (const engine of engines.splice(0)) engine.stop();
-});
-
-afterAll(() => {
-  vi.unstubAllGlobals();
-});
-
-describe('the frame with no steps', () => {
-  it('stands whole: top bar, an empty guide, an empty bench and the status line', async () => {
-    await mountFrame([]);
-    expect(find('.top-bar').textContent).toContain('Spine Workbench');
-    expect(find('.case-title').textContent).toBe('Untitled caseNot saved yet');
-    expect(find('.guide-column').children).toHaveLength(0);
-    expect(find('.app-frame-bench').children).toHaveLength(0);
-    expect(document.querySelectorAll('.step-rail-step')).toHaveLength(0);
-    // The bench writes `data-lane` on the nearest element with `data-step`, so the attribute is there even now.
-    expect(root().getAttribute('data-step')).toBe('');
-  });
-
-  it('shows the approved notice word for word, and a count of nothing sent', async () => {
-    await mountFrame([]);
-    expect(find('.status-line-claim').textContent).toBe(PREVIEW_NOTICE.short);
-    expect(find('.status-line-sent').textContent).toBe('Requests sent: 0');
+describe('the one stage frame', () => {
+  it('stands whole without steps or a bench: glow, frame, bar, stage, dock and notice', async () => {
+    const { engine } = mount();
+    await ready(engine);
+    expect(find('.app-frame > .glow').getAttribute('aria-hidden')).toBe('true');
+    const frame = find('.app-frame > .frame');
+    expect(frame.querySelector(':scope > header.bar.glass')).not.toBeNull();
+    expect(find('main.stage').getAttribute('aria-label')).toBe('The films');
+    expect(find('main.stage').children).toHaveLength(0);
+    expect(find('footer.dock.glass').getAttribute('aria-label')).toBe('What to do now');
+    expect(document.querySelectorAll('.scene')).toHaveLength(8);
+    expect(document.querySelector('.scene.on')).toBeNull();
+    expect(frame.querySelector(':scope > p.notice')).not.toBeNull();
+    expect(find('.app-frame').getAttribute('data-step')).toBe('');
+    expect(document.querySelector('.guide-column, .status-line, .case-title, .top-bar-save')).toBeNull();
+    expect(find('.brand-mark').getAttribute('viewBox')).toBe('0 0 20 20');
+    expect(document.querySelectorAll('.brand-mark rect')).toHaveLength(3);
   });
 
-  it('carries the engine’s state and version where the browser’s guards read them', async () => {
-    const engine = startStandInEngine();
-    engines.push(engine);
-    putOnThePage(
-      <EngineProvider engine={engine}>
-        <AppFrame steps={[]} parts={NO_PARTS} />
-      </EngineProvider>,
-    );
-    expect(find('[data-testid="engine-status"]').getAttribute('data-status')).toBe('starting');
+  it('keeps the approved notice word for word and the browser’s engine hooks', async () => {
+    const { engine } = mount();
+    const notice = find('p.notice');
+    expect(notice.firstChild?.textContent).toBe(PREVIEW_NOTICE.short);
+    expect(notice.getAttribute('data-testid')).toBe('engine-status');
+    expect(notice.getAttribute('data-status')).toBe('starting');
     expect(document.querySelector('[data-testid="engine-version"]')).toBeNull();
-    const info = await engine.info();
-    await act(async () => {
-      await Promise.resolve();
-    });
-    expect(find('[data-testid="engine-status"]').getAttribute('data-status')).toBe('ready');
-    expect(find('[data-testid="engine-version"]').textContent).toBe(info.engineVersion);
+    await ready(engine);
+    expect(notice.getAttribute('data-status')).toBe('ready');
+    expect(find('[data-testid="engine-version"]').closest('.spoken-only')).not.toBeNull();
+    expect(find('[data-testid="engine-version"]').textContent).toBe((await engine.info()).engineVersion);
+    expect(document.querySelectorAll('[data-testid="engine-status"]')).toHaveLength(1);
+    expect(document.querySelectorAll('[data-testid="engine-version"]')).toHaveLength(1);
   });
 
-  it('says so in words, in the status line and once as a toast, when the engine does not start', async () => {
-    const failing = { info: () => Promise.reject(new EngineFailure({ code: 'engine-load-failed', message: 'no engine', detail: null })) } as unknown as EngineClient;
-    await mountFrame([], NO_PARTS, failing);
-    expect(find('[data-testid="engine-status"]').getAttribute('data-status')).toBe('failed');
-    const fault = find('.status-line-fault').textContent;
-    expect(fault).toBe(faultWords('engine-load-failed').title);
-    expect(saidNow()?.line).toContain(fault);
-    expect(saidNow()?.tone).toBe('note');
-  });
-});
-
-describe('the frame on steps 2 and 4', () => {
-  it('puts the first step there is on screen, under the design’s short name', async () => {
-    await mountFrame(TWO_STEPS);
-    expect(root().getAttribute('data-step')).toBe('facing');
-    expect(find('.guide-column h1').textContent).toBe('This is Size & facing.');
-    expect([...document.querySelectorAll('.step-rail-step')].map((step) => [step.getAttribute('data-state'), step.querySelector('.step-rail-number')?.textContent])).toEqual([
-      ['now', '2'],
-      ['todo', '4'],
-    ]);
-    expect(find('[aria-current="step"]').textContent).toContain('Step 2, Size & facing');
+  it('puts an engine failure in the dock, with no action or toast', async () => {
+    const before = saidNow();
+    const engine = { info: () => Promise.reject(new EngineFailure({ code: 'engine-load-failed', message: 'no engine', detail: null })) } as unknown as EngineClient;
+    mount(STEPS, NO_PARTS, engine);
+    await ready(engine);
+    expect(find('p.notice').getAttribute('data-status')).toBe('failed');
+    expect(find('.scene.on').getAttribute('data-scene')).toBe('engine');
+    expect(find('.scene.on h2').textContent).toBe(`${faultWords('engine-load-failed').title}.`);
+    expect(find('.scene.on p').textContent).toBe('Reload the page to try again.');
+    expect(find('.scene.on').querySelector('button')).toBeNull();
+    expect(pressKey('Enter').defaultPrevented).toBe(false);
+    expect(saidNow()).toBe(before);
   });
 
-  it('follows the step on screen, and lets a step behind be pressed to go back', async () => {
-    await mountFrame(TWO_STEPS);
-    act(() => {
-      currentStep.getState().go('adjust');
-    });
-    expect(root().getAttribute('data-step')).toBe('adjust');
-    expect(find('.guide-column h1').textContent).toBe('This is Adjust.');
-    const back = find('.step-rail-step button');
-    expect(back.textContent).toContain('Step 2, Size & facing');
-    pressOn(back);
-    expect(currentStep.getState().slug).toBe('size-and-facing');
-    expect(root().getAttribute('data-step')).toBe('facing');
+  it('shows the first available step and hands its words to the single dock outside the screen', async () => {
+    const steps = [fixtureStep(2, 'size-and-facing', 'Films'), fixtureStep(4, 'find', 'Find')];
+    const { engine } = mount(steps);
+    await ready(engine);
+    expect(find('.app-frame').getAttribute('data-step')).toBe('facing');
+    expect(document.documentElement.getAttribute('data-moment')).toBe('films');
+    expect(button('Films').getAttribute('aria-current')).toBe('true');
+    expect(find('.scene.on h2').textContent).toBe('This is Films.');
+    act(() => { currentStep.getState().go('find'); });
+    expect(find('.app-frame').getAttribute('data-step')).toBe('find');
+    expect(document.documentElement.getAttribute('data-moment')).toBe('find');
+    expect(find('.scene.on h2').textContent).toBe('This is Find.');
+    expect(document.querySelectorAll('footer.dock')).toHaveLength(1);
   });
 
-  it('stops in order: top bar, then the guide, then the bench', async () => {
-    const Bench = () => <button type="button">A film slot</button>;
-    await mountFrame(TWO_STEPS, { ...NO_PARTS, Bench });
-    const stops = [...document.querySelectorAll<HTMLElement>('button:not(:disabled), [href], [tabindex]:not([tabindex="-1"])')];
-    const place = (within: string) => stops.map((stop, at) => (stop.closest(within) === null ? -1 : at)).filter((at) => at !== -1);
-    const [bar, guide, bench] = [place('.top-bar'), place('.guide-column'), place('.app-frame-bench')];
-    expect(bar.length).toBeGreaterThan(0);
-    expect(guide.length).toBeGreaterThan(0);
-    expect(bench).toHaveLength(1);
-    expect(Math.max(...bar)).toBeLessThan(Math.min(...guide));
-    expect(Math.max(...guide)).toBeLessThan(Math.min(...bench));
-    expect(bar.length + guide.length + bench.length).toBe(stops.length);
+  it('lets a step behind be pressed, and keeps a step ahead disabled until its way opens', async () => {
+    const steps = [fixtureStep(1, 'films', 'Films', { canLeave: (c) => c.nextVertebraId > 1 }), fixtureStep(2, 'find', 'Find', { canLeave: () => true })];
+    const { engine } = mount(steps);
+    await ready(engine);
+    expect([...document.querySelectorAll('.steps button')].map((each) => each.textContent)).toEqual(['Films', 'Find', '3D']);
+    expect(button('Find').disabled).toBe(true);
+    pressOn(button('Find'));
+    expect(currentStep.getState().slug).toBe('films');
+    act(() => { caseStore.getState().apply([{ kind: 'open-case', case: { ...emptyCase(), nextVertebraId: 2 } }]); });
+    expect(button('Find').disabled).toBe(false);
+    pressOn(button('Find'));
+    expect(button('Find').getAttribute('aria-current')).toBe('true');
+    expect(find('.steps').style.getPropertyValue('--at')).toBe('1');
+    expect(button('Films').disabled).toBe(false);
+    pressOn(button('Films'));
+    expect(currentStep.getState().slug).toBe('films');
+    expect(button('3D').disabled).toBe(true);
+    pressOn(button('3D'));
+    expect(currentStep.getState().slug).toBe('films');
   });
 
-  it('carries reduced motion and the tool in hand on its root', async () => {
-    await mountFrame(TWO_STEPS);
-    expect(root().getAttribute('data-motion')).toBe('full');
-    expect(root().hasAttribute('data-tool')).toBe(false);
-    act(() => {
-      preferences.getState().setMotion('reduced', false);
-      activeTool.getState().pick('boundary-wand');
-    });
-    expect(root().getAttribute('data-motion')).toBe('reduced');
-    expect(root().getAttribute('data-tool')).toBe('boundary');
-    act(() => {
-      activeTool.getState().pick('pin');
-    });
-    expect(root().getAttribute('data-tool')).toBe('pins');
-    act(() => {
-      activeTool.getState().pick('ruler');
-    });
-    expect(root().hasAttribute('data-tool')).toBe(false);
+  it('draws a registered step after Find once and follows its availability and destination', async () => {
+    const steps = [
+      fixtureStep(1, 'films', 'Films', { canLeave: () => true }),
+      fixtureStep(2, 'find', 'Find', { canLeave: () => true }),
+      fixtureStep(3, 'spine', '3D', { canLeave: () => true, isReady: (c) => c.nextVertebraId > 1 }),
+    ];
+    const { engine } = mount(steps);
+    await ready(engine);
+    expect([...document.querySelectorAll('.steps button')].map((each) => each.textContent)).toEqual(['Films', 'Find', '3D']);
+    expect(button('3D').disabled).toBe(true);
+    pressOn(button('3D'));
+    expect(currentStep.getState().slug).toBe('films');
+    act(() => { caseStore.getState().apply([{ kind: 'open-case', case: { ...emptyCase(), nextVertebraId: 2 } }]); });
+    expect(button('3D').disabled).toBe(false);
+    pressOn(button('3D'));
+    expect(currentStep.getState().slug).toBe('spine');
+    expect(button('3D').getAttribute('aria-current')).toBe('true');
+    expect(find('.steps').style.getPropertyValue('--at')).toBe('2');
   });
 
-  it('is in reduced motion when the system asks, whatever the app’s own preference', async () => {
-    systemAsksForReduced = true;
-    await mountFrame(TWO_STEPS);
-    expect(root().getAttribute('data-motion')).toBe('reduced');
-  });
-});
-
-describe('the room’s parts', () => {
-  it('mounts the bench and the sheet in the bench region, and stands the opening screen round the step', async () => {
-    const Bench = () => <div className="fixture-bench" />;
-    const CaseSheet = () => <div className="fixture-sheet" />;
-    const OpeningCase = ({ children }: { children: ReactNode }) => <div className="fixture-opening">{children}</div>;
-    await mountFrame(TWO_STEPS, { Bench, CaseSheet, OpeningCase });
-    expect([...find('.app-frame-bench').children].map((child) => child.className)).toEqual(['fixture-bench', 'fixture-sheet']);
-    expect(find('.guide-column .fixture-opening h1').textContent).toBe('This is Size & facing.');
-  });
-
-  it('gives the bench a root to write `data-lane` on', async () => {
-    function Bench() {
-      const here = useRef<HTMLDivElement>(null);
-      useLayoutEffect(() => {
-        here.current?.closest('[data-step]')?.setAttribute('data-lane', 'ladder');
-      }, []);
-      return <div ref={here} />;
+  it('orders focusable controls as steps, badge, stage, dock', async () => {
+    function Bench() { return <button type="button">Choose the Front film</button>; }
+    function Screen() {
+      useShowInDock({ scene: 'add', sentence: 'Add the four films.', helper: { kind: 'words', words: [{ link: 'choose them', press: nothing } satisfies { link: string; press: () => void }] }, quiet: { label: 'Use the sample case', press: nothing }, primary: { label: 'Find the spine', press: nothing } });
+      return null;
     }
-    await mountFrame([], { ...NO_PARTS, Bench });
-    expect(root().getAttribute('data-lane')).toBe('ladder');
+    const { engine } = mount([fixtureStep(1, 'films', 'Films', { Screen })], { ...NO_PARTS, Bench });
+    await ready(engine);
+    const order = [...document.querySelectorAll<HTMLButtonElement>('button')].filter((each) => !each.disabled && each.closest('[inert]') === null).map((each) => each.textContent);
+    expect(order).toEqual(['Films', 'On this device only', 'Choose the Front film', 'choose them', 'Use the sample case', 'Find the spine']);
   });
 
-  it('stands the guide’s lit button down while the case sheet is open', async () => {
-    await mountFrame(TWO_STEPS);
-    expect(find('.lit-button').hasAttribute('data-stood-down')).toBe(false);
-    act(() => {
-      caseSheetOpen.getState().setOpen(true);
-    });
-    expect(find('.lit-button').hasAttribute('data-stood-down')).toBe(true);
-  });
-});
-
-describe('undo, redo and save', () => {
-  const hangAFilm = () => {
-    if (FRONT_FILM === undefined) throw new Error('the sample case has a front film');
-    act(() => {
-      caseStore.getState().apply([{ kind: 'set-film', film: FRONT_FILM }]);
-    });
-  };
-  const films = () => caseStore.getState().case.films.length;
-  const button = (name: string) => find(`.top-bar-actions button[aria-label="${name}"]`);
-
-  it('answer Cmd or Ctrl+Z, with Shift for redo, in the Adjust step, and say what was done', async () => {
-    await mountFrame(TWO_STEPS);
-    hangAFilm();
-    act(() => {
-      currentStep.getState().go('adjust');
-    });
-    expect(pressKey('z', { ctrlKey: true }).defaultPrevented).toBe(true);
-    expect(films()).toBe(0);
-    expect(saidNow()?.line).toBe('Undid: hung a film.');
-    expect(pressKey('Z', { metaKey: true, shiftKey: true }).defaultPrevented).toBe(true);
-    expect(films()).toBe(1);
-    expect(saidNow()?.line).toBe('Redid: hung a film.');
+  it('follows both motion preferences and keeps the tool attribute', async () => {
+    const { engine } = mount();
+    await ready(engine);
+    expect(find('.app-frame').getAttribute('data-motion')).toBe('full');
+    act(() => { preferences.getState().setMotion('reduced', false); });
+    expect(find('.app-frame').getAttribute('data-motion')).toBe('reduced');
+    act(() => { preferences.getState().setMotion('system', false); systemReduced = true; for (const listener of motionListeners) listener(); });
+    expect(find('.app-frame').getAttribute('data-motion')).toBe('reduced');
+    act(() => { systemReduced = false; for (const listener of motionListeners) listener(); activeTool.getState().pick('region-wand'); });
+    expect(find('.app-frame').getAttribute('data-motion')).toBe('full');
+    expect(find('.app-frame').getAttribute('data-tool')).toBe('region');
   });
 
-  it('name the action in their tooltips, and are pressed like any button', async () => {
-    await mountFrame(TWO_STEPS);
-    hangAFilm();
-    act(() => {
-      currentStep.getState().go('adjust');
-    });
-    const tip = (name: string) => button(name).closest('.tooltip-anchor')?.querySelector('[role="tooltip"]')?.textContent;
-    expect(tip('Undo')).toBe('Undo: Hung a film');
-    expect(tip('Redo')).toBe('Nothing to redo');
-    expect(button('Redo').getAttribute('aria-disabled')).toBe('true');
-    pressOn(button('Undo'));
-    expect(films()).toBe(0);
-    expect(tip('Undo')).toBe('Nothing to undo');
-    expect(tip('Redo')).toBe('Redo: Hung a film');
-    pressOn(button('Redo'));
-    expect(films()).toBe(1);
+  it('mounts the bench and sheet in the stage once, and wraps the keyed screen outside the footer', async () => {
+    let mounts = 0;
+    function Bench() { useLayoutEffect(() => { mounts += 1; }, []); return <div id="bench" />; }
+    function CaseSheet() { return <div id="case-sheet" />; }
+    function OpeningCase({ children }: { children: ReactNode }) { return <div id="opening-case">{children}</div>; }
+    const { engine } = mount(STEPS, { Bench, CaseSheet, OpeningCase });
+    await ready(engine);
+    const bench = find('main.stage > #bench');
+    expect(find('main.stage > #case-sheet')).not.toBeNull();
+    expect(find('#opening-case').closest('footer')).toBeNull();
+    expect(find('#opening-case').nextElementSibling).toBe(find('.dock'));
+    act(() => { currentStep.getState().go('find'); });
+    expect(find('main.stage > #bench')).toBe(bench);
+    expect(mounts).toBe(1);
+    expect(find('.scene.on h2').textContent).toBe('This is Find.');
   });
 
-  it('leave the case alone outside the Adjust step, and the key with whoever else wants it', async () => {
-    await mountFrame(TWO_STEPS);
-    hangAFilm();
-    expect(pressKey('z', { metaKey: true }).defaultPrevented).toBe(false);
-    expect(films()).toBe(1);
-    expect(button('Undo').getAttribute('aria-disabled')).toBe('true');
-    pressOn(button('Undo'));
-    expect(films()).toBe(1);
+  it('stands the dock primary down while the case sheet is open', async () => {
+    const { engine } = mount(STEPS);
+    await ready(engine);
+    const primary = find('.scene.on button');
+    expect(primary.className).toBe('primary');
+    act(() => { caseSheetOpen.getState().setOpen(true); });
+    expect(primary.className).toBe('secondary');
+    expect(pressKey('Enter').defaultPrevented).toBe(false);
   });
 
-  it('open the case sheet on Cmd or Ctrl+S and from the button, once there is a case to save', async () => {
-    await mountFrame(TWO_STEPS);
-    // Nothing to save yet: the key is still taken, so the browser never offers to save the page.
-    expect((button('Save case') as HTMLButtonElement).disabled).toBe(true);
-    expect(pressKey('s', { metaKey: true }).defaultPrevented).toBe(true);
-    expect(caseSheetOpen.getState().open).toBe(false);
-
-    hangAFilm();
-    expect((button('Save case') as HTMLButtonElement).disabled).toBe(false);
-    pressKey('s', { ctrlKey: true });
-    expect(caseSheetOpen.getState().open).toBe(true);
-
-    act(() => {
-      caseSheetOpen.getState().setOpen(false);
-    });
-    pressOn(button('Save case'));
-    expect(caseSheetOpen.getState().open).toBe(true);
-  });
-
-  it('do not answer a plain Z or S', async () => {
-    await mountFrame(TWO_STEPS);
-    hangAFilm();
-    act(() => {
-      currentStep.getState().go('adjust');
-    });
-    expect(pressKey('z').defaultPrevented).toBe(false);
-    expect(pressKey('s').defaultPrevented).toBe(false);
-    expect(films()).toBe(1);
-    expect(caseSheetOpen.getState().open).toBe(false);
-  });
-});
-
-describe('the case, the pointer and the promise', () => {
-  it('says the case holds unsaved work once a film is in it, and that it is saved once it is', async () => {
-    await mountFrame(TWO_STEPS);
-    const state = () => find('.case-title-state');
-    act(() => {
-      if (FRONT_FILM !== undefined) caseStore.getState().apply([{ kind: 'set-film', film: FRONT_FILM }]);
-    });
-    expect(state().textContent).toBe('Changes not saved');
-    expect(state().hasAttribute('data-saved')).toBe(false);
-    act(() => {
-      savedState.getState().setName('spine-case-2026-11-12');
-      savedState.getState().markSaved(caseStore.getState().version);
-    });
-    expect(find('.case-title').textContent).toBe('spine-case-2026-11-12Saved just now');
-    expect(state().hasAttribute('data-saved')).toBe(true);
-  });
-
-  it('reads the pointer in pixels on a film with no size', async () => {
-    await mountFrame(TWO_STEPS);
-    act(() => {
-      if (FRONT_FILM !== undefined) caseStore.getState().apply([{ kind: 'set-film', film: FRONT_FILM }]);
-      pointer.getState().move({ film: 'front', at: [120.2, 340.7], screen: [0, 0] });
-    });
-    expect(find('.status-line-readings').textContent).toContain('x 120 px  y 341 px');
-    act(() => {
-      pointer.getState().leave();
-    });
-    expect(find('.status-line-readings').textContent).not.toContain('px');
-  });
-
-  it('opens the promise from the keyboard, and Escape closes it', async () => {
-    await mountFrame(TWO_STEPS);
-    const badge = find('.promise-badge');
+  it('opens the note from the keyboard, closes on Escape and returns focus to the badge', async () => {
+    const { engine } = mount(STEPS);
+    await ready(engine);
+    const badge = find('.badge');
     focusOn(badge);
+    expect(pressKey('Enter').defaultPrevented).toBe(false);
     pressOn(badge);
-    expect(find('[role="dialog"]').textContent).toContain('Nothing leaves this computer.');
+    const note = find('.frame > .note.glass');
+    expect(note.classList.contains('open')).toBe(true);
+    expect(note.closest('.bar')).toBeNull();
+    expect(document.activeElement).toBe(note);
+    expect(note.textContent).toContain('Your films never leave this computer.');
     pressKey('Escape');
-    expect(document.querySelector('[role="dialog"]')).toBeNull();
+    expect(note.classList.contains('open')).toBe(false);
+    expect(note.hasAttribute('inert')).toBe(true);
     expect(document.activeElement).toBe(badge);
+  });
+
+  it('takes no undo, redo or Save keys', async () => {
+    const { engine } = mount(STEPS);
+    await ready(engine);
+    for (const init of [{ metaKey: true }, { ctrlKey: true }]) {
+      for (const key of ['z', 's']) expect(pressKey(key, init).defaultPrevented).toBe(false);
+      expect(pressKey('Z', { ...init, shiftKey: true }).defaultPrevented).toBe(false);
+    }
+    expect(caseSheetOpen.getState().open).toBe(false);
+  });
+
+  it('adds no minimum width or replacement layout rules', () => {
+    expect(read('./AppFrame.css').trim()).toBe('.app-frame { position: absolute; inset: 0; overflow: hidden; }');
   });
 });

@@ -6,11 +6,12 @@ draws. Each has a page in the gallery (`?gallery` in development).
 
 | Block | File | What it is |
 |---|---|---|
-| `Button` | `Button.tsx` | a button that is not the next action: `standard` or `text`, `regular` or `large`, with disabled and busy states |
+| `Button` | `Button.tsx` | a button that is not the next action, wearing the design system's class: `standard` is `.secondary`, a white pill with a hairline edge; `text` is `.quiet`, words only. `regular` or `large`, with disabled and busy states |
 | `IconButton` | `IconButton.tsx` | an icon with a spoken name and a tooltip that can name the action a press would do |
 | `Kbd` | `Kbd.tsx` | a key hint, written as this machine's keyboard prints it (⌘Z or Ctrl+Z) |
 | `Tooltip` | `Tooltip.tsx` | a few words beside a control, on hover and on keyboard focus |
-| `Popover` | `Popover.tsx` | a paper panel with a keyline beside the control that opened it; Escape, a press outside or focus moving on closes it |
+| `Popover` | `Popover.tsx` | a panel beside the control that opened it, always on the page; `open` adds the class `open`, and the caller's classes (the design system's `note glass`) give its look and both fades. Escape, a press outside or focus moving on closes it |
+| `Segmented` | `Segmented.tsx` | the design system's `.seg`: a pill of options with a white thumb that slides under the chosen one, the steps of the journey |
 | `Dialog` | `Dialog.tsx` | a sheet of paper over a veil, with focus kept inside it and every key kept from what is behind it |
 | `Slider` | `Slider.tsx` | a slider cut into named parts, for the pointer and the keyboard |
 | `Toasts`, `say()` | `toast/` | one line at the foot of the bench saying what just happened, with at most one action |
@@ -27,11 +28,18 @@ draws. Each has a page in the gallery (`?gallery` in development).
   against their nearest positioned ancestor. That is how a dialog's veil
   covers one region and not the window, and it keeps every block inside
   the app root, where `data-motion` and the tokens reach it.
-- **State reaches CSS through attributes** (`data-look`, `data-shown`,
-  `aria-pressed`, `aria-expanded`, `aria-disabled`, `aria-busy`), never
-  through a style set from script. The slider sets only `--span` and
-  `--p`, which are geometry.
-- **Every duration is a token.** With `data-motion="reduced"` a popover,
+- **A block wears the design system's class** where the system draws the
+  part (`quiet`, `secondary`, `seg`; the popover takes its caller's), and
+  `app/src/look-and-feel/components.css` holds the rules. A block's own
+  stylesheet holds only what the system does not cover.
+- **State reaches CSS through classes and attributes** (`open`,
+  `data-size`, `data-none`, `aria-pressed`, `aria-expanded`,
+  `aria-current`, `aria-disabled`, `aria-busy`), never through a style set
+  from script.
+  The slider sets only `--span` and `--p`, and the step control only
+  `--at`, which are geometry.
+- **Every duration is a token.** With `data-motion="reduced"` a popover
+  fades in and out without moving, the step control's thumb jumps to its option,
   a dialog and a toast are there at once and the busy ring stands still.
   How long a toast stays is `--t-toast-stay`, which is not motion and is
   never shortened.

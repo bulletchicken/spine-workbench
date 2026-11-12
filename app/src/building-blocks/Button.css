@@ -1,137 +1,20 @@
-/* A button that is not the next action: outlined, or the words alone.
-   Neither is ever solid. The one solid ink button on a page is the next
-   action, and that is a part of its own. */
-.button {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  height: 34px;
-  margin: 0;
-  padding: 0 14px;
-  border: 1px solid var(--line-3);
-  border-radius: var(--r-2);
-  background: var(--room-0);
-  color: var(--ink-1);
-  font: 600 13px / 1 var(--font-ui);
-  white-space: nowrap;
-  cursor: pointer;
-  user-select: none;
-  -webkit-user-select: none;
-  transition:
-    background var(--t-base),
-    border-color var(--t-base),
-    color var(--t-base),
-    opacity var(--t-base),
-    transform var(--t-instant);
-}
+/* The look of a Button is the design system's: .quiet and .secondary, in components.css. These are
+   the few things it does not cover. */
+.button { position: relative; }
+.button-content { display: inline-flex; align-items: center; gap: var(--space-6); }
 
-.button[data-size='large'] {
-  height: 42px;
-}
-
-.button-content {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--s-2);
-  transition: opacity var(--t-base);
-}
-
-.button svg {
-  flex: none;
-  width: 18px;
-  height: 18px;
-}
-
-.button:hover:not(:disabled, [aria-disabled='true']),
-.button[aria-expanded='true'] {
-  border-color: var(--ink-1);
-  background: var(--room-3);
-}
-
-.button:active:not(:disabled, [aria-disabled='true']),
-.button[aria-pressed='true'] {
-  border-color: var(--ink-1);
-  background: var(--room-4);
-}
-
-.button:active:not(:disabled, [aria-disabled='true']) {
-  transform: translateY(1px);
-}
-
-.button:focus-visible {
-  /* The ring is a shadow; the clear outline is what forced colours draw in its place.
-     The radius is said again so the ring keeps this control's own shape. */
-  outline: 2px solid transparent;
-  outline-offset: 2px;
-  border-radius: var(--r-2);
-  box-shadow: var(--focus-ring);
-}
-
-.button:disabled {
-  opacity: 0.42;
-  cursor: default;
-}
-
-/* ---- text: the words alone ----
-   No edge, so the words start exactly its 10 px of padding in: a row of
-   quiet actions pulled out by that much lines up with the sentence above. */
-.button[data-look='text'] {
-  height: 30px;
-  padding: 0 10px;
-  border: 0;
-  background: transparent;
-  color: var(--ink-2);
-}
-
-.button[data-look='text']:hover:not(:disabled, [aria-disabled='true']),
-.button[data-look='text'][aria-expanded='true'] {
-  background: var(--room-3);
-  color: var(--ink-1);
-}
-
-.button[data-look='text']:active:not(:disabled, [aria-disabled='true']),
-.button[data-look='text'][aria-pressed='true'] {
-  background: var(--room-4);
-  color: var(--ink-1);
-}
-
-/* ---- busy: the words step back and a ring turns in their place ---- */
-.button[aria-busy='true'] {
-  cursor: progress;
-}
-
-.button[aria-busy='true'] .button-content {
-  opacity: 0;
-}
-
+/* Busy: the words step back and a ring turns in their place. */
+.button[aria-busy='true'] { cursor: progress; }
+.button[aria-busy='true'] .button-content { opacity: 0; }
 .button-working {
-  position: absolute;
-  inset: 0;
-  box-sizing: border-box;
-  width: 16px;
-  height: 16px;
-  margin: auto;
-  border: 1.6px solid currentColor;
-  border-right-color: transparent;
-  border-radius: 50%;
+  position: absolute; inset: 0; width: var(--space-16); height: var(--space-16); margin: auto;
+  border: var(--mark-stroke) solid currentColor; border-right-color: transparent; border-radius: 50%;
   animation: button-working var(--t-reading) linear infinite;
 }
-
-@keyframes button-working {
-  to {
-    transform: rotate(360deg);
-  }
-}
+@keyframes button-working { to { transform: rotate(360deg); } }
 
 /* Nothing loops under reduced motion: the ring stands still. */
-[data-motion='reduced'] .button-working {
-  animation: none;
-}
-
+[data-motion='reduced'] .button-working { animation: none; }
 @media (prefers-reduced-motion: reduce) {
-  .button-working {
-    animation: none;
-  }
+  .button-working { animation: none; }
 }

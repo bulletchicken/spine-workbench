@@ -10,6 +10,10 @@ export const SHELL_WORDS = {
 
   // What each region of the frame is called when it is spoken.
   stepsLabel: 'Steps',
+  stepThree: '3D',
+  stageLabel: 'The films',
+  dockLabel: 'What to do now',
+  reload: 'Reload the page to try again.',
   guideLabel: 'What to do now',
   benchLabel: 'The bench',
   statusLabel: 'Status',

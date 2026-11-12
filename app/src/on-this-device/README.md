@@ -1,18 +1,24 @@
 # on-this-device
 
-Nothing leaves this computer, and a person can check: the badge in the
-top bar, the popover it opens, and the counter both of them and the
-status line read.
+The badge says "On this device only" at every moment. Its note shows
+"Your films never leave this computer.", the live request count and the
+credit for the bone shapes. The badge has no count on it.
 
 | File | Holds |
 |---|---|
-| `PromiseBadge.tsx` | "On this device only · 0 sent"; a press opens the popover |
-| `PromisePopover.tsx` | the three guards in plain words, the count, and a line when the browser refused something |
-| `requests-sent.ts` | the counter: what the page asked of another origin, and what the content policy refused |
-| `popover-open.ts` | whether the popover is open, so a scene can open it |
-| `on-this-device.scenes.ts` | the scene `on-this-device`: the app with the popover open |
+| `PromiseBadge.tsx` | the badge and its lock; accepts the bar's shared anchor ref |
+| `PromisePopover.tsx` | the note's lead line, count, refused-attempt line and credit |
+| `requests-sent.ts` | what the page asked of another origin, and what the policy refused |
+| `popover-open.ts` | whether the note is open, also used by a development scene |
+| `on-this-device.scenes.ts` | the `on-this-device` scene, with the note open |
 
-## The counter
+The bar mounts the badge and note as siblings. `Popover` keeps the note
+in the page, inert and hidden from assistive technology while closed.
+Opening moves focus onto it. Escape returns focus to the badge; a
+second badge press, a press outside or focus moving on also closes it.
+The note is dense glass, below the badge, with its right edge on the
+bar's. The system supplies its width, stacked lines, refused-attempt line,
+opening and closing transitions.
 
 `useRequestsSent()` gives `{ sent, blocked }` and follows both.
 
@@ -33,7 +39,5 @@ status line read.
   leaves, so this stays at zero; in development, where there is no
   policy, it counts what really went.
 
-A request is told by where its address leads, never by what kind of call
-made it, so nothing here names a network API. The counter watches the
-page: a refusal inside a worker is raised in the worker and is not
-counted here, though the policy refuses it all the same.
+A refusal inside a worker is raised there and is not counted by this
+page's tally, though the policy still refuses it.

@@ -26,7 +26,8 @@ const page: GalleryPage = {
   area: 'guide',
   part: 'LitButton',
   states: [
-    { name: 'The next action', show: () => <Counted label="Choose films" /> },
+    { name: 'The next action', show: () => <Counted label="Find the spine" /> },
+    { name: 'Disabled before its time', show: () => <LitButton label="Find the spine" disabled onPress={nothing} /> },
     {
       name: 'With the icon of the tool it uses',
       show: () => (
@@ -36,7 +37,7 @@ const page: GalleryPage = {
       ),
     },
     {
-      name: 'A long label wraps and keeps its key',
+      name: 'A long label stays on one line',
       show: () => (
         <div className="guide-gallery-part">
           <LitButton label="Go back to what was skipped earlier" icon="check" onPress={nothing} />

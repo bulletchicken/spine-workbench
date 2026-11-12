@@ -8,6 +8,7 @@ import { find, focusOn, pointerOff, pointerOnto, pressKey, pressOn, putOnThePage
 import { GuideCard } from './cards/GuideCard';
 import { Guide } from './Guide';
 import type { Choice, GuideSpec } from './guide-spec';
+import { LitButton } from './LitButton';
 import { LitStandsDown } from './lit-stands-down';
 
 const lit = (press: () => void, quiet: () => void = () => undefined): GuideSpec => ({
@@ -34,7 +35,7 @@ describe('the lit button', () => {
     putOnThePage(<Guide spec={lit(press)} />);
     expect(pressKey('Enter').defaultPrevented).toBe(true);
     expect(press).toHaveBeenCalledTimes(1);
-    pressOn(find('.lit-button'));
+    pressOn(find('.primary'));
     expect(press).toHaveBeenCalledTimes(2);
   });
 
@@ -68,16 +69,27 @@ describe('the lit button', () => {
         <Guide spec={lit(press)} />
       </LitStandsDown>,
     );
-    expect(find('.lit-button').hasAttribute('data-stood-down')).toBe(true);
+    expect(find('.secondary').classList.contains('secondary')).toBe(true);
     expect(pressKey('Enter').defaultPrevented).toBe(false);
     expect(press).not.toHaveBeenCalled();
   });
 
-  it('shows the Enter key, and the icon it is given', () => {
+  it('draws no key hint, and the icon it is given', () => {
     putOnThePage(<Guide spec={{ ...lit(() => undefined), lit: { label: 'Split T12 at the gap', icon: 'boundary-wand', press: () => undefined } }} />);
-    expect(find('.lit-button kbd').textContent).toBe('Enter');
-    expect(document.querySelector('.lit-button svg')).not.toBeNull();
-    expect(find('.lit-button').textContent).toContain('Split T12 at the gap');
+    expect(document.querySelector('.primary kbd')).toBeNull();
+    expect(document.querySelector('.primary svg')).not.toBeNull();
+    expect(find('.primary').textContent).toContain('Split T12 at the gap');
+  });
+});
+
+describe('a disabled primary button', () => {
+  it('takes no press and no Enter while disabled', () => {
+    const press = vi.fn();
+    putOnThePage(<LitButton label="Find the spine" disabled onPress={press} />);
+    expect((find('.primary') as HTMLButtonElement).disabled).toBe(true);
+    pressOn(find('.primary'));
+    expect(pressKey('Enter').defaultPrevented).toBe(false);
+    expect(press).not.toHaveBeenCalled();
   });
 });
 
@@ -116,7 +128,7 @@ describe('a pair of choices', () => {
     expect(pressKey('Enter').defaultPrevented).toBe(false);
     expect(left).not.toHaveBeenCalled();
     expect(right).not.toHaveBeenCalled();
-    expect(document.querySelector('.lit-button')).toBeNull();
+    expect(document.querySelector('.primary')).toBeNull();
   });
 
   it('says which card the pointer or the focus is on, and lights the card it is told to', () => {
@@ -192,15 +204,15 @@ describe('the words', () => {
   it('stay as they are when only what is offered changes', () => {
     const nothing = () => undefined;
     const page = putOnThePage(<Guide spec={lit(nothing)} />);
-    const button = find('.lit-button');
+    const button = find('.primary');
     expect(
       changesDuring(() => {
         page.show(<Guide spec={{ ...lit(nothing), lit: { label: 'Choose another file', press: nothing } }} />);
       }),
     ).toEqual([]);
     // What is offered is new, so it arrives afresh.
-    expect(find('.lit-button')).not.toBe(button);
-    expect(find('.lit-button').textContent).toContain('Choose another file');
+    expect(find('.primary')).not.toBe(button);
+    expect(find('.primary').textContent).toContain('Choose another file');
   });
 
   it('keep a quiet action that is offered again as the same button, with its focus', () => {

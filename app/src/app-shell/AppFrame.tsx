@@ -1,98 +1,77 @@
 import { memo } from 'react';
 import { useStore } from 'zustand';
-import { caseStore, useCase } from '@/case-state/case-store';
 import { motionMode } from '@/choreography/reduced-motion';
 import { useSystemReducedMotion } from '@/choreography/use-system-reduced-motion';
+import { Dock } from '@/guide/Dock';
+import { LitStandsDown } from '@/guide/lit-stands-down';
 import type { ToolAttr } from '@/look-and-feel/data-attributes';
-import { useRequestsSent } from '@/on-this-device/requests-sent';
+import { usePageState } from '@/look-and-feel/page-state';
 import { allSteps } from '@/steps/all-steps';
 import type { StepContract } from '@/steps/step-contract';
 import type { ToolId } from '@/toolbox/tool-contract';
 import { activeTool } from '@/view-state/active-tool';
 import { useCaseSheetOpen } from '@/view-state/case-sheet-open';
-import { currentStep, useCurrentStep } from '@/view-state/current-step';
-import { usePointer } from '@/view-state/pointer';
+import { useCurrentStep } from '@/view-state/current-step';
+import { useDockNow } from '@/view-state/dock-now';
 import { usePreferences } from '@/view-state/preferences';
+import { faultWords } from '@/words/faults';
 import { SHELL_WORDS } from '@/words/shell';
 import './AppFrame.css';
-import { useGlobalKeys } from './global-keys';
-import { GuideColumn } from './GuideColumn';
+import { PreviewNotice } from './PreviewNotice';
 import { stepOnScreen } from './rail-steps';
 import { findRoomParts, type RoomParts } from './room-parts';
-import { pixelSizeShown, positionOf } from './status-readings';
-import { StatusLine } from './StatusLine';
 import { stepAttribute } from './step-attribute';
 import { TopBar } from './TopBar';
 import { useEngineStatus, type EngineStatus } from './use-engine-status';
 import { useTopBar } from './use-top-bar';
-import { saveIsLive, undoIsLive } from './what-is-live';
 
-/** `data-tool` for the three adjusting tools. The ruler and no tool at all leave the attribute off. */
 const TOOL_ATTRIBUTES: Partial<Record<ToolId, ToolAttr>> = { pin: 'pins', 'region-wand': 'region', 'boundary-wand': 'boundary' };
-
 const FOUND_STEPS = allSteps();
 const FOUND_PARTS = findRoomParts();
 
-/** The top bar, drawn from the stores. On its own, so an edit to the case draws the bar again and not the room. */
+/** Case edits redraw the bar without redrawing the stage. */
 function LiveTopBar({ steps }: { steps: readonly StepContract[] }) {
   return <TopBar {...useTopBar(steps)} />;
 }
 
-/** The status line, drawn from the stores. On its own, so the pointer moving over a film draws this line again and nothing else. */
-function LiveStatusLine({ engine }: { engine: EngineStatus }) {
-  const reading = usePointer().reading;
-  const c = useCase((store) => store.case);
-  const { sent } = useRequestsSent();
-  return <StatusLine engine={engine} position={positionOf(reading, c)} pixelSize={pixelSizeShown(c, reading?.film ?? null)} sent={sent} />;
+/** Dock updates stay here, so a step handing up new words does not redraw itself. */
+function LiveDock({ engine }: { engine: EngineStatus }) {
+  const spec = useDockNow();
+  return <Dock spec={engine.status === 'failed' ? {
+    scene: 'engine',
+    sentence: `${faultWords(engine.error.code).title}.`,
+    helper: { kind: 'words', words: [SHELL_WORDS.reload] },
+  } : spec} />;
 }
 
-/**
- * The bench region: the bench, mounted once for the whole visit, and the
- * case sheet over it. Drawn again only if its parts change, which they
- * never do, so a step changing or a tool being picked up leaves it be.
- */
+/** The same bench stays mounted as the step changes. */
 const BenchRegion = memo(function BenchRegion({ Bench, CaseSheet }: Pick<RoomParts, 'Bench' | 'CaseSheet'>) {
   return (
-    <section className="app-frame-bench" aria-label={SHELL_WORDS.benchLabel}>
+    <main className="stage" aria-label={SHELL_WORDS.stageLabel}>
       {Bench !== null && <Bench />}
       {CaseSheet !== null && <CaseSheet />}
-    </section>
+    </main>
   );
 });
 
 interface AppFrameProps {
-  /** The steps, in order. The app's own, found by their folders, unless a test or a gallery page hands in others. */
   steps?: readonly StepContract[];
-  /** The bench, the case sheet and the opening screen. The app's own, found by their paths, unless handed in. */
   parts?: RoomParts;
 }
 
-/**
- * The frame that never rearranges: three rows, the top bar, the room and
- * the status line, with the room split into the guide column and the
- * bench. Learn it once.
- *
- * The bench is mounted once and stays mounted, so films never unmount
- * between steps; the step on screen renders its guide into the guide
- * column and tells the bench what it wants. The frame's root carries the
- * state every part's CSS may read: `data-step`, `data-motion` and
- * `data-tool`. (`data-lane` is the bench's to write, on this same root.)
- */
+/** The one stage, with a fixed bar, dock and notice inside the centred frame. */
 export function AppFrame({ steps = FOUND_STEPS, parts = FOUND_PARTS }: AppFrameProps) {
   const { slug } = useCurrentStep();
   const onScreen = stepOnScreen(steps, slug);
   const systemAsksForReduced = useSystemReducedMotion();
   const appAsksForReduced = usePreferences().motion === 'reduced';
-  // The tool alone: a drag starting or the magnifier turning on is not the frame's to draw.
   const tool = useStore(activeTool, (state) => state.tool);
   const sheetIsOpen = useCaseSheetOpen().open;
   const engine = useEngineStatus();
-
-  // What is live is asked at each press, of the stores themselves.
-  useGlobalKeys({
-    undoIsLive: () => undoIsLive(stepOnScreen(steps, currentStep.getState().slug)?.slug ?? null),
-    saveIsLive: () => saveIsLive(steps, caseStore.getState().case),
-  });
+  const Screen = onScreen?.Screen;
+  const OpeningCase = parts.OpeningCase;
+  const screen = Screen === undefined ? null : <Screen key={onScreen?.slug} />;
+  usePageState('moment', onScreen?.slug === 'find' ? 'find' : 'films');
 
   return (
     <div
@@ -101,12 +80,16 @@ export function AppFrame({ steps = FOUND_STEPS, parts = FOUND_PARTS }: AppFrameP
       data-motion={motionMode(systemAsksForReduced, appAsksForReduced)}
       data-tool={tool === null ? undefined : TOOL_ATTRIBUTES[tool]}
     >
-      <LiveTopBar steps={steps} />
-      <main className="app-frame-room">
-        <GuideColumn step={onScreen} OpeningCase={parts.OpeningCase} sheetIsOpen={sheetIsOpen} />
+      <div className="glow" aria-hidden="true" />
+      <div className="frame">
+        <LiveTopBar steps={steps} />
         <BenchRegion Bench={parts.Bench} CaseSheet={parts.CaseSheet} />
-      </main>
-      <LiveStatusLine engine={engine} />
+        <LitStandsDown value={sheetIsOpen}>
+          {OpeningCase === null ? screen : <OpeningCase>{screen}</OpeningCase>}
+          <LiveDock engine={engine} />
+        </LitStandsDown>
+        <PreviewNotice engine={engine} />
+      </div>
     </div>
   );
 }

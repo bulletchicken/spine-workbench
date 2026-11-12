@@ -1,0 +1,2 @@
+/* The dock keeps the same column width as the bar, outside a whole frame. */
+.dock-gallery { width: var(--col); }

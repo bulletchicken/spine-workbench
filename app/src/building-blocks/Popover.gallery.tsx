@@ -1,32 +1,29 @@
-import { CircleCheck, House } from 'lucide-react';
-import { useRef, useState, type ComponentProps } from 'react';
+import { useRef, useState } from 'react';
 import type { GalleryPage } from '@/gallery/gallery-page';
 import { Button } from './Button';
 import { Popover } from './Popover';
 import './Popover.gallery.css';
 
-const GUARDS = [
-  ['The browser blocks it.', 'A content policy allows no address outside the app.'],
-  ['The code is not allowed to ask.', 'A lint rule bans every kind of network call.'],
-  ['A test watches the wire.', 'The build fails if a single request leaves.'],
-] as const;
-
-/** A control and its popover, holding what the on-device badge will show. */
-function Badge({ startOpen, side, align }: { startOpen: boolean } & Required<Pick<ComponentProps<typeof Popover>, 'side' | 'align'>>) {
+/**
+ * A control and its popover, wearing the design system's trust note (`note glass`) as it is
+ * drawn there: a sheet as wide as the bar, the lead line and the count on the left, the credit on
+ * the right behind a hairline.
+ */
+function Badge({ startOpen }: { startOpen: boolean }) {
   const [open, setOpen] = useState(startOpen);
   const badge = useRef<HTMLButtonElement>(null);
   return (
-    <div className="blocks-gallery-pop-room" data-side={side} data-align={align}>
-      <div className="blocks-gallery-anchor">
+    <div className="blocks-gallery-pop-room" data-align="end" style={{ width: 'var(--col-max)', height: 'auto' }}>
+      <div className="blocks-gallery-anchor" style={{ flexDirection: 'column', alignItems: 'flex-end', gap: 'var(--space-8)' }}>
         <Button
           ref={badge}
+          look="text"
           aria-haspopup="dialog"
           aria-expanded={open}
           onPress={() => {
             setOpen(!open);
           }}
         >
-          <House />
           On this device only
         </Button>
         <Popover
@@ -36,29 +33,15 @@ function Badge({ startOpen, side, align }: { startOpen: boolean } & Required<Pic
           }}
           anchor={badge}
           label="On this device only"
-          side={side}
-          align={align}
+          className="note glass"
         >
-          <h3 className="blocks-gallery-pop-title">Nothing leaves this computer.</h3>
-          <p className="blocks-gallery-pop-sub">There is no server and no account. Three guards keep it that way.</p>
-          <ol className="blocks-gallery-guards">
-            {GUARDS.map(([title, line]) => (
-              <li key={title}>
-                <CircleCheck />
-                <div>
-                  <b>{title}</b>
-                  <span>{line}</span>
-                </div>
-              </li>
-            ))}
-          </ol>
-          <div className="blocks-gallery-pop-count">
-            <b>0</b>
-            <span>requests sent this session</span>
+          <div>
+            <p className="note-lead">Your films never leave this computer.</p>
+            <p className="note-count">
+              Requests sent: <span className="num">0</span>
+            </p>
           </div>
-          <p className="blocks-gallery-pop-fine">
-            Films are also stripped on the way in: names, IDs, dates and the file name itself are dropped. Turn the Wi-Fi off and everything still works.
-          </p>
+          <p className="note-credit">Bone shapes: BodyParts3D, © The Database Center for Life Science licensed under CC Attribution 4.0 International.</p>
         </Popover>
       </div>
     </div>
@@ -69,9 +52,8 @@ const page: GalleryPage = {
   area: 'building-blocks',
   part: 'Popover',
   states: [
-    { name: 'Open, below, lined up with its end', show: () => <Badge startOpen side="below" align="end" /> },
-    { name: 'Closed: opens below, from its start', show: () => <Badge startOpen={false} side="below" align="start" /> },
-    { name: 'Closed: opens above, from its start', show: () => <Badge startOpen={false} side="above" align="start" /> },
+    { name: 'Open: the note fades in and comes down from under its control', show: () => <Badge startOpen /> },
+    { name: 'Closed: on the page, unseen, inert; press the control to open it', show: () => <Badge startOpen={false} /> },
   ],
 };
 

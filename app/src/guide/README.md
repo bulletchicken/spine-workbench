@@ -1,75 +1,45 @@
 # guide
 
-The left column's voice: one sentence about what to do now, one lit
-button that does it, and this state's cards. Everything here draws from
-props. Nothing in this folder reads the case, the view state or the
-engine, so every state can be shown in the gallery (`?gallery=guide/Guide`).
-
-A step's `Screen` renders one guide, from a pure function of its state:
-
-```tsx
-<Guide spec={sizeAndFacingGuide(state)}>
-  <FilmFactsCard films={facts} />
-</Guide>
-```
+The dock's one sentence and next action. Everything here draws from
+props: nothing reads the case, view state or engine.
 
 | File | Holds |
 |---|---|
-| `guide-spec.ts` | `GuideSpec`: what a step tells the guide to say and offer |
-| `Guide.tsx` | eyebrow, sentence, paragraph, the action, quiet actions, then the cards |
-| `LitButton.tsx` | the next action: the one solid ink button on a page |
-| `ChoiceCards.tsx` | two equal answers to a question only a person may answer |
-| `HalfFilmFigure.tsx` | a film in small with one half picked out, for a choice's `figure` |
-| `QuietActions.tsx` | at most two text buttons under the action |
-| `lit-stands-down.ts` | the frame's word that a sheet has the lit button for now |
-| `cards/GuideCard.tsx` | the frame every card shares: a ruled section with a heading and a count |
-| `cards/CardRows.tsx` | rows with the sign of their state, a title and lines |
-| `cards/` | the seven cards, and `standing-check-rows.ts`, which words the review's standing checks |
+| `dock-spec.ts` | the eight scenes, helper kinds and optional quiet and primary actions |
+| `Dock.tsx` | one footer with all eight scenes, and one spoken status line |
+| `Dock.css` | the one look the system's dock does not cover: a wait's meter that has stood still |
+| `LitButton.tsx` | the primary button, or the secondary look while a sheet has the primary |
+| `lit-stands-down.ts` | the frame's word that a sheet has the primary for now |
 
-## What the guide keeps
+A step calls `useShowInDock` in `view-state/dock-now.ts`. The frame mounts
+one `Dock` and passes it the current spec. The eight scenes are `add`,
+`reading`, `ready`, `finding`, `found`, `review`, `failed` and `engine`.
+Only one has `on`; the others are inert and hidden from assistive
+technology. Each keeps its last words and controls while it fades out.
+Its presses and Enter handling are asleep as soon as it stops being on.
 
-- **One sentence, one light.** A spec has at most one of `lit` and
-  `choices`. With neither, nothing is lit: there is nothing to do, or the
-  person is finished.
-- **Enter presses the lit button**, from anywhere, once per press. A
-  focused button keeps Enter for itself, so Enter on a quiet action
-  presses that action. While a sheet with a lit button of its own is
-  open the guide's stands down to an outline and gives Enter up; the
-  frame says when, through `LitStandsDown`.
-- **A choice has no default.** Its two keys answer it (`keys`, as
-  `KeyboardEvent.key` names; the first is shown on the card), and
-  `ChoiceCards` is the only place they are answered, so a twin on the
-  film (a half of the film, an A or B badge) is a pointer target and
-  never listens for keys. Enter answers nothing. A card reports the
-  pointer and the keyboard's focus through `onHotChoice`, and lights from
-  `hotChoice`, so the card and its twin on the film light together.
-- **A sentence is spoken once.** The eyebrow, sentence and paragraph are
-  one polite live region. They are drawn afresh only when they read
-  differently, so a render that says the same (new functions, a card lit
-  from the film) touches nothing and speaks nothing.
-- **Lines arrive; what stays, stays.** New words and a new offer arrive
-  with `settle`, each line a moment after the one above. A card arrives
-  once, when it is first shown: give a card a `key` if it can change
-  places, and it will not arrive again.
+Within a scene, quiet and primary buttons keep their nodes and focus
+when labels change. New sentence and helper words fade in. The spoken
+status line changes only when the words read differently; a running
+count and progress meter stay outside it. A new meter replaces the
+waiting meter when the outline count starts.
 
-## The cards
+Enter presses the current enabled primary once, unless a focused
+control keeps Enter for itself. Disabled and sleeping buttons take no
+press. A sheet makes the dock primary secondary and takes its Enter.
+No key hint is drawn on the button. A spec with no primary offers no
+Enter action. The found scene can therefore offer its quiet review
+action alone while there is no later moment to open.
 
-Each takes plain props and counts for itself.
+The helper may hold text and links, an amber dot with words, a meter
+with words, or a mono count and meter. Every sentence and helper stays
+on one line, ending with an ellipsis before it can touch a button. At
+900 wide or less the sentence uses Body, medium. The design system’s
+classes and tokens supply these rules and every size, colour, surface and
+transition.
 
-| Card | Props | Its count |
-|---|---|---|
-| `FilmsCard` | each film's name and the face of its slot | films up, of films |
-| `FilmFactsCard` | each film's name, state and two facts | films set, of films |
-| `WhatHappensCard` | none | none |
-| `NarrationCard` | the lines, which is live, how many are finished | none |
-| `HowSureCard` | the tally, `calibrated`, `withKey` | none |
-| `ChecksCard` | rows; `standingCheckRows` words the review's | rows passing, of rows |
-| `StrictReadCard` | each line and its state | lines checked, of lines |
-
-`ChecksCard` flashes a row once when it turns from open to passing.
-`HowSureCard` says "Not yet checked against real films." until it is
-told the engine's confidence has been (`Confidence.calibrated`).
-
-The cards' fixed words are in `words/guide.ts`. A sentence that belongs
-to a step, a film's name, the six narration lines and the strict-read
-lines come in as props from the words file of whoever shows the card.
+The earlier `Guide`, `guide-spec.ts`, `ChoiceCards`, `QuietActions`,
+`HalfFilmFigure` and `cards/` remain available with their tests and
+gallery pages. They are no longer mounted in the one stage frame.
+Their choices keep their own keys and their quiet actions keep focus
+when offered again. `LitButton` still accepts their optional icon.

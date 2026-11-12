@@ -28,6 +28,7 @@ function Badge({ onClose = () => undefined }: { onClose?: () => void }) {
         }}
         anchor={badge}
         label="On this device only"
+        className="note glass"
       >
         <p>Nothing leaves this computer.</p>
         <a href="#guards">The three guards</a>
@@ -39,7 +40,9 @@ function Badge({ onClose = () => undefined }: { onClose?: () => void }) {
   );
 }
 
-const popover = () => document.querySelector<HTMLElement>('[role="dialog"]');
+/** The panel: always on the page, open or not. */
+const popover = () => find('[role="dialog"]');
+const isOpen = () => popover().classList.contains('open');
 
 const letGo: (() => void)[] = [];
 afterEach(() => {
@@ -47,11 +50,20 @@ afterEach(() => {
 });
 
 describe('Popover', () => {
-  it('is not on the page until it is open', () => {
+  it('is on the page while closed, hidden from assistive technology and inert, without the class open', () => {
     putOnThePage(<Badge />);
-    expect(popover()).toBeNull();
+    expect(popover().getAttribute('aria-label')).toBe('On this device only');
+    expect(popover().getAttribute('aria-hidden')).toBe('true');
+    expect(popover().hasAttribute('inert')).toBe(true);
+    expect(isOpen()).toBe(false);
+  });
+
+  it('opens by adding the class open and nothing else of its own', () => {
+    putOnThePage(<Badge />);
     pressOn(find('[data-testid="badge"]'));
-    expect(popover()?.getAttribute('aria-label')).toBe('On this device only');
+    expect(popover().getAttribute('class')).toBe('note glass open');
+    expect(popover().hasAttribute('aria-hidden')).toBe(false);
+    expect(popover().hasAttribute('inert')).toBe(false);
   });
 
   it('takes focus when it opens, so its name is spoken', () => {
@@ -71,7 +83,7 @@ describe('Popover', () => {
     const event = pressKey('Escape');
     expect(closed).toHaveBeenCalledTimes(1);
     expect(event.defaultPrevented).toBe(true);
-    expect(popover()).toBeNull();
+    expect(isOpen()).toBe(false);
     expect(document.activeElement).toBe(badge);
   });
 
@@ -90,14 +102,14 @@ describe('Popover', () => {
     putOnThePage(<Badge />);
     pressOn(find('[data-testid="badge"]'));
     pressOn(document.body);
-    expect(popover()).toBeNull();
+    expect(isOpen()).toBe(false);
   });
 
   it('stays open through a press inside it', () => {
     putOnThePage(<Badge />);
     pressOn(find('[data-testid="badge"]'));
     pressOn(find('p'));
-    expect(popover()).not.toBeNull();
+    expect(isOpen()).toBe(true);
   });
 
   it('leaves a press on its own control to that control: one press closes it, and it does not open again', () => {
@@ -107,7 +119,7 @@ describe('Popover', () => {
     pressOn(badge);
     pressOn(badge);
     expect(closed).not.toHaveBeenCalled();
-    expect(popover()).toBeNull();
+    expect(isOpen()).toBe(false);
   });
 
   it('closes when focus moves on to something else, and leaves focus there', () => {
@@ -115,7 +127,7 @@ describe('Popover', () => {
     pressOn(find('[data-testid="badge"]'));
     const elsewhere = find('[data-testid="elsewhere"]');
     focusOn(elsewhere);
-    expect(popover()).toBeNull();
+    expect(isOpen()).toBe(false);
     expect(document.activeElement).toBe(elsewhere);
   });
 
@@ -123,6 +135,16 @@ describe('Popover', () => {
     putOnThePage(<Badge />);
     pressOn(find('[data-testid="badge"]'));
     focusOn(find('a'));
-    expect(popover()).not.toBeNull();
+    expect(isOpen()).toBe(true);
+  });
+
+  it('while closed takes no key: Escape is left to whoever comes next', () => {
+    const closed = vi.fn();
+    const leaveReview = vi.fn();
+    letGo.push(takeKeys('review', ['Escape'], leaveReview));
+    putOnThePage(<Badge onClose={closed} />);
+    pressKey('Escape');
+    expect(closed).not.toHaveBeenCalled();
+    expect(leaveReview).toHaveBeenCalledTimes(1);
   });
 });

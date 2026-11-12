@@ -64,16 +64,18 @@ describe('Button', () => {
     expect(pressLit).not.toHaveBeenCalled();
   });
 
-  it('carries its look and size to CSS as data attributes, and passes other attributes through', () => {
-    putOnThePage(
-      <Button look="text" size="large" aria-expanded data-autofocus>
+  it('wears the design system’s class for its look, carries its size as a data attribute, and passes other attributes through', () => {
+    const page = putOnThePage(
+      <Button look="text" size="large" className="guide-action" aria-expanded data-autofocus>
         Watch again
       </Button>,
     );
     const button = find('button');
-    expect(button.dataset.look).toBe('text');
+    expect([...button.classList]).toEqual(['button', 'quiet', 'guide-action']);
     expect(button.dataset.size).toBe('large');
     expect(button.getAttribute('aria-expanded')).toBe('true');
     expect(button.hasAttribute('data-autofocus')).toBe(true);
+    page.show(<Button>Done</Button>);
+    expect([...find('button').classList]).toEqual(['button', 'secondary']);
   });
 });
