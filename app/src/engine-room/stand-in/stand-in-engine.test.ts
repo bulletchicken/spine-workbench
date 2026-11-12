@@ -358,7 +358,8 @@ describe('the stand-in at the slow pace', () => {
   it('keeps a pass of few frames alive through long gaps, so the crew never takes it for stuck', async () => {
     vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'performance'] });
     // Three film-stage frames per film, as the sample case's pass has: at the slow pace's
-    // 24 s, 60% of it over three frames leaves 4.8 s between them, past the crew's 2 s.
+    // 24 s, 60% of it over three frames leaves 4.8 s between them: long gaps, which the
+    // empty slices between frames must fill so the crew always hears from the pass.
     const few = { ...story, pass: { ...story.pass, frames: story.pass.frames.filter((frame) => frame.kind === 'stage-started') } };
     const client = startStandInEngine({ story: few, scripts: { ...QUICK, find: { ...DEFAULT_SCRIPTS.find, placePointsMs: 0 }, pace: 'slow' } });
     engine = client;

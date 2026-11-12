@@ -88,8 +88,10 @@ A job is one file and nothing else: no list to edit, no registration.
    views into wasm memory: every buffer in an answer or a frame is handed
    over in the transfer list.
 5. A stepped job's `start` must return quickly: the main thread replaces
-   a worker that says nothing about its pass for two seconds, and the
-   time `start` takes counts.
+   a worker that says nothing about its pass for thirty seconds
+   (`STUCK_PASS_MS`; it is that long only until the hand-built search's
+   two slow stages are cut into small steps), and the time `start` takes
+   counts.
 
 The worker finds the file with `import.meta.glob`, and checks it at
 start-up: a file named after no job, in the wrong worker's folder, or

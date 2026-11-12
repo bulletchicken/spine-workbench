@@ -15,7 +15,8 @@
 //   later frame is sent, so frames go out in the order they were made.
 //
 // The main thread counts a pass as stuck when no message about it has
-// come for two seconds, and replaces the worker. Progress after every
+// come for the stuck-pass limit (`STUCK_PASS_MS` in the crew), and
+// replaces the worker. Progress after every
 // slice that ends at least 100 ms after the last is what tells it the
 // pass is alive.
 

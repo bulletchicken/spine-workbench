@@ -1,6 +1,7 @@
 import type { CaseFileV1, FilmMarks, ToolPreviewInput } from '@/shapes';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { EngineFailure } from '../engine-client';
+import { STUCK_PASS_MS } from './crew-member';
 import { ENGINE_INFO, PANIC_MESSAGE, fakeCrew, filmFile, outcome, pixelsOf, settle } from './test-rig';
 
 const preview = (caseVersion: number): ToolPreviewInput => ({
@@ -252,7 +253,7 @@ describe('crashes', () => {
     expect(await rig.engine.displayPixels('front')).toEqual(pixelsOf('front A'));
   });
 
-  it('replaces a worker whose pass says nothing for two seconds', async () => {
+  it('replaces a worker whose pass says nothing for longer than the limit', async () => {
     vi.useFakeTimers();
     const rig = fakeCrew();
     const opening = rig.engine.openFilm('front', filmFile('front slow'), null);
@@ -264,7 +265,7 @@ describe('crashes', () => {
     const settled = outcome(pass);
     await vi.advanceTimersByTimeAsync(5);
     worker.silent = true;
-    await vi.advanceTimersByTimeAsync(1999);
+    await vi.advanceTimersByTimeAsync(STUCK_PASS_MS - 1);
     expect(worker.terminated).toBe(false);
     await vi.advanceTimersByTimeAsync(2);
     expect(worker.terminated).toBe(true);

@@ -5,7 +5,8 @@
 // worker that has been replaced, are dropped.
 //
 // When its worker crashes (a panic, an error event, or a slice of a pass
-// running past two seconds), the job it was running fails with the crash,
+// running past the stuck-pass limit), the job it was running fails with
+// the crash,
 // a fresh worker starts from the compiled module already in hand, and a
 // film worker reads its film again from the bytes the crew kept before
 // any waiting job runs. A worker that fails while starting is not
@@ -46,8 +47,19 @@ export interface Ticket {
   failed(error: EngineError): void;
 }
 
-/** A pass's worker is replaced when this long goes by with no word about it. */
-export const STUCK_PASS_MS = 2000;
+/**
+ * A pass's worker is replaced when this long goes by with no word about
+ * it.
+ *
+ * Thirty seconds, because two stages of the hand-built search are still
+ * single steps: its evidence maps take 1.5 to 3.4 s on a full-size film in
+ * the browser on a fast laptop, and its chain has one step of nearly 5 s.
+ * At the two seconds this limit was first set to, that search could never
+ * finish in a browser. The trained finder's steps are about a millisecond.
+ * Bring the limit back down once those two stages are cut into small
+ * steps.
+ */
+export const STUCK_PASS_MS = 30_000;
 
 export interface MemberHooks {
   /** The worker's first `ready`. */
@@ -264,7 +276,7 @@ export class CrewMember {
     this.#stopWatchdog();
     this.#watchdog = setTimeout(() => {
       this.#watchdog = null;
-      this.#crash({ code: 'engine-crashed', message: 'a slice of a pass ran past two seconds', detail: job });
+      this.#crash({ code: 'engine-crashed', message: 'a slice of a pass ran past the stuck-pass limit', detail: job });
     }, STUCK_PASS_MS);
   }
 

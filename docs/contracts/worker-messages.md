@@ -83,7 +83,7 @@ cancel { id }            ───────▶   (stepped jobs stop between s
    sent or dropped before any later frame is sent, so frames arrive in
    the order they were emitted (see [watch frames](watch-frames.md)).
 8. **Cancel** is a flag checked between slices. The pass is freed and the
-   job ends `failed` with `pass-cancelled`. A slice that runs past two
+   job ends `failed` with `pass-cancelled`. A slice that runs past thirty
    seconds gets the worker terminated and replaced.
 9. **Crashes.** A Rust panic ends in a WebAssembly trap. The panic hook
    has already stored the message; the worker reads `last_panic()`, posts
