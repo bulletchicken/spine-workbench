@@ -1,12 +1,14 @@
 //! `spine pass KIND=PATH...`: runs the whole auto pass on one to four films
-//! with no browser, and prints every film's marks as JSON.
+//! with no browser, and prints every film's marks as JSON. With
+//! `--front-finder trained`, the trained finder reads the front film and
+//! the hand-built stages the rest, joined as the app joins them.
 
 use crate::{Acquisition, Outcome, PassArgs, Population};
 use film_reader::decoded_film::DecodedFilm;
 use scorekeeper::datasets::ScoringFilm;
-use shapes::auto_pass::{AutoPassInput, ChainOptions, FrontFinder};
+use shapes::auto_pass::{AutoPassInput, AutoPassResult, ChainOptions, FrontFinder, PassWarning};
 use shapes::errors::{EngineError, ErrorCode};
-use shapes::film::{Film, FilmImage};
+use shapes::film::{Film, FilmImage, FilmKind};
 use shapes::film_geometry::FilmGeometry;
 use shapes::vertebra::FilmMarks;
 use std::collections::BTreeSet;
@@ -48,11 +50,116 @@ pub fn run(args: &PassArgs) -> Outcome {
             template: None,
         },
         first_vertebra_id: 1,
-        front_finder: FrontFinder::HandBuilt,
+        front_finder: match args.front_finder {
+            crate::FrontFinder::Trained => FrontFinder::Trained,
+            crate::FrontFinder::HandBuilt => FrontFinder::HandBuilt,
+        },
     };
-    let answer = auto_pass::run::auto_pass(&input, &decoded)?;
+    let answer = conduct_auto_pass(&input, &decoded)?;
     println!("{}", serde_json::to_string_pretty(&answer)?);
     Ok(())
+}
+
+/// The whole auto pass, routed on `input.front_finder` the way the app's
+/// conductor (`app/src/engine-room/crew/auto-pass-conductor.ts`) routes it;
+/// this is its native stand-in.
+///
+/// With the hand-built finder, or no front film, every film goes through
+/// the hand-built stages, exactly as `auto_pass::run::auto_pass` runs them.
+/// With the trained finder, the front film goes to the trained finder on
+/// its own, and the hand-built stages run on the films that are left (not
+/// at all when there are none). The answer keeps the input's film order;
+/// vertebra ids count up from `first_vertebra_id` film after film in that
+/// order, none reused; each warning comes once, every film's own first, in
+/// film order, then the chain's. `two_films` comes only from the
+/// hand-built chain, which needs a front and a side film together, so it
+/// is always empty when the front film went to the trained finder.
+pub(super) fn conduct_auto_pass(
+    input: &AutoPassInput,
+    decoded: &[DecodedFilm],
+) -> Result<AutoPassResult, EngineError> {
+    let trained_front = match input.front_finder {
+        FrontFinder::Trained => input
+            .films
+            .iter()
+            .position(|film| film.kind == FilmKind::Front),
+        FrontFinder::HandBuilt => None,
+    };
+    let Some(trained_front) = trained_front else {
+        return auto_pass::run::auto_pass(input, decoded);
+    };
+    if decoded.len() != input.films.len() {
+        return Err(EngineError::new(
+            ErrorCode::EngineOutOfSync,
+            "a pass needs one decoded film per film record",
+        ));
+    }
+    let mut film_results = Vec::new();
+    let mut caches = Vec::new();
+    for (index, (image, film)) in decoded.iter().zip(&input.films).enumerate() {
+        if index != trained_front {
+            let (result, cache) = auto_pass::run::film_pass(image, film)?;
+            film_results.push(result);
+            caches.push(cache);
+        }
+    }
+    let chain = if film_results.is_empty() {
+        None
+    } else {
+        Some(auto_pass::run::chain_pass(&film_results, &input.options)?)
+    };
+    let mut next_id = input.first_vertebra_id;
+    let mut marks = Vec::with_capacity(input.films.len());
+    let mut warnings: Vec<PassWarning> = Vec::new();
+    let mut hand_built = film_results.iter().zip(&caches);
+    for (index, (image, film)) in decoded.iter().zip(&input.films).enumerate() {
+        let placed = if index == trained_front {
+            let found = trained_finder::run::find_on_front_film(image, film, next_id)?;
+            warnings.extend(found.warnings);
+            found.marks
+        } else {
+            let (result, cache) = hand_built
+                .next()
+                .expect("a film pass ran on every film but the front");
+            warnings.extend(result.warnings.iter().cloned());
+            let found = chain
+                .as_ref()
+                .and_then(|chain| chain.films.iter().find(|found| found.film == film.kind))
+                .ok_or_else(|| {
+                    EngineError::new(
+                        ErrorCode::EngineOutOfSync,
+                        "the chain pass gave no chain for a film it was given",
+                    )
+                })?;
+            auto_pass::run::place_points(cache, found, next_id)?
+        };
+        next_id = next_id
+            .checked_add(placed.vertebrae.len() as u32)
+            .ok_or_else(|| {
+                EngineError::new(ErrorCode::EngineOutOfSync, "vertebra ids exhausted")
+            })?;
+        marks.push(placed);
+    }
+    if let Some(chain) = &chain {
+        warnings.extend(
+            chain
+                .films
+                .iter()
+                .flat_map(|found| found.warnings.iter().cloned()),
+        );
+    }
+    let mut once_each = Vec::with_capacity(warnings.len());
+    for warning in warnings {
+        if !once_each.contains(&warning) {
+            once_each.push(warning);
+        }
+    }
+    Ok(AutoPassResult {
+        case_version: input.case_version,
+        marks,
+        two_films: chain.and_then(|chain| chain.two_films),
+        warnings: once_each,
+    })
 }
 
 /// The decoder's non-identifying facts plus the geometry chosen by the caller.
@@ -77,14 +184,7 @@ pub(super) fn record(decoded: &DecodedFilm, geometry: FilmGeometry) -> Film {
 
 /// The scorekeeper supplies pixels and geometry; its answer key stays outside.
 pub(super) fn find_marks(input: &ScoringFilm<'_>) -> Result<FilmMarks, EngineError> {
-    let decoded = film_reader::read_film(input.bytes, input.kind)?;
-    if decoded.facts.width != input.width || decoded.facts.height != input.height {
-        return Err(EngineError::new(
-            ErrorCode::EngineOutOfSync,
-            "the scoring dimensions do not match the decoded film",
-        ));
-    }
-    let film = record(&decoded, input.geometry.clone());
+    let (decoded, film) = scoring_record(input)?;
     let input = AutoPassInput {
         case_version: 0,
         films: vec![film],
@@ -106,6 +206,26 @@ pub(super) fn find_marks(input: &ScoringFilm<'_>) -> Result<FilmMarks, EngineErr
                 "the pass returned no film marks",
             )
         })
+}
+
+/// The trained finder on one scoring film, read as `find_marks` reads it.
+fn find_marks_trained(input: &ScoringFilm<'_>) -> Result<FilmMarks, EngineError> {
+    let (decoded, film) = scoring_record(input)?;
+    Ok(trained_finder::run::find_on_front_film(&decoded, &film, 1)?.marks)
+}
+
+/// A scoring film decoded, checked against the size the dataset gave, and
+/// its record.
+fn scoring_record(input: &ScoringFilm<'_>) -> Result<(DecodedFilm, Film), EngineError> {
+    let decoded = film_reader::read_film(input.bytes, input.kind)?;
+    if decoded.facts.width != input.width || decoded.facts.height != input.height {
+        return Err(EngineError::new(
+            ErrorCode::EngineOutOfSync,
+            "the scoring dimensions do not match the decoded film",
+        ));
+    }
+    let film = record(&decoded, input.geometry.clone());
+    Ok((decoded, film))
 }
 
 /// The fixed made-up set exercises every film kind through the full pass.
@@ -298,16 +418,26 @@ fn statistic(value: Option<f64>) -> String {
 /// A failed search contributes an empty prediction to scoring, never a
 /// fabricated layout. This adapter is used only by the dataset harness;
 /// the native and browser pass entry points retain their error result.
+///
+/// The suite chooses the finder. The auto pass's searches fail in several
+/// ways that mean "nothing to find here"; the trained finder's are finding
+/// no vertebra at all and a film too small to search. Any other error stops
+/// the run.
 fn score_dataset(
     args: &crate::ScoreArgs,
     dataset: impl FnOnce(&crate::ScoreArgs, &mut Finder<'_>) -> Outcome,
 ) -> Outcome {
     use serde_json::json;
     use std::time::Instant;
+    let trained = matches!(args.suite, crate::Suite::TrainedFinderFront);
     let mut runs = Vec::new();
     let mut finder = |input: &ScoringFilm<'_>| {
         let started = Instant::now();
-        let outcome = find_marks(input);
+        let outcome = if trained {
+            find_marks_trained(input)
+        } else {
+            find_marks(input)
+        };
         let seconds = started.elapsed().as_secs_f64();
         let row = runs.len() + 1;
         let error = outcome.as_ref().err().map(|error| error.code);
@@ -318,12 +448,14 @@ fn score_dataset(
             Err(error)
                 if matches!(
                     error.code,
-                    ErrorCode::PassNoSpineFound
-                        | ErrorCode::PassFilmTooSmall
-                        | ErrorCode::PassFlatFilm
-                        | ErrorCode::PassTooLittleUsable
-                        | ErrorCode::PassStripTooShort
-                ) =>
+                    ErrorCode::PassNoSpineFound | ErrorCode::PassFilmTooSmall
+                ) || (!trained
+                    && matches!(
+                        error.code,
+                        ErrorCode::PassFlatFilm
+                            | ErrorCode::PassTooLittleUsable
+                            | ErrorCode::PassStripTooShort
+                    )) =>
             {
                 eprintln!("film row {row}: search failed with {:?}", error.code);
                 Ok(empty_prediction(input))
@@ -401,6 +533,8 @@ fn empty_prediction(input: &ScoringFilm<'_>) -> FilmMarks {
 mod tests {
     use super::*;
     use scorekeeper::metrics::{Prediction, Quad, ScoreFlag, score_film};
+    use shapes::made_up::{MadeUpRecipe, RecipeName, Tier};
+    use shapes::naming::NamingFlag;
 
     #[test]
     fn a_failed_search_counts_all_truth_as_missed_without_zero_corner_errors() {
@@ -440,5 +574,91 @@ mod tests {
         assert!(score.corner_px.is_empty() && score.corner_norm.is_empty());
         assert_eq!(score.smape_term, Some(100.0));
         assert!(score.flags.contains(&ScoreFlag::InsufficientForCobb));
+    }
+
+    /// A small made-up film of a straight spine, one millimetre a pixel,
+    /// as its PNG decodes: the recipe the auto pass's own tests read.
+    fn made_up_film(kind: FilmKind) -> DecodedFilm {
+        use made_up_spines::{answer_key, film_layout::FilmLayout, film_painter, patient, recipes};
+        let recipe = MadeUpRecipe {
+            name: RecipeName::Straight,
+            seed: 17,
+            tier: Tier::T0,
+        };
+        let seed = u64::from(recipe.seed);
+        let patient = patient::make_up_patient(recipe.name, recipe.seed).unwrap();
+        let spine = answer_key::spine_for(&patient, kind);
+        let mut drawing = recipes::film_recipes(&recipe, seed)
+            .into_iter()
+            .find(|drawing| drawing.kind == kind)
+            .unwrap();
+        drawing.mm_per_px = 1.0;
+        let layout = FilmLayout::new(&drawing, spine);
+        let painted = film_painter::paint(&drawing, &layout, &patient, spine, seed);
+        film_reader::read_film(&made_up_spines::film_png::encode(&painted), kind).unwrap()
+    }
+
+    /// The trained finder on the front film, ids from 5.
+    fn trained_input(decoded: &[DecodedFilm]) -> AutoPassInput {
+        AutoPassInput {
+            case_version: 3,
+            films: decoded
+                .iter()
+                .map(|film| record(film, FilmGeometry::UNKNOWN))
+                .collect(),
+            options: ChainOptions {
+                acquisition: shapes::auto_pass::Acquisition::Unknown,
+                population: shapes::auto_pass::Population::Adolescent,
+                template: None,
+            },
+            first_vertebra_id: 5,
+            front_finder: FrontFinder::Trained,
+        }
+    }
+
+    #[test]
+    fn a_front_film_alone_goes_to_the_trained_finder_and_no_chain_runs() {
+        let decoded = [made_up_film(FilmKind::Front)];
+        let answer = conduct_auto_pass(&trained_input(&decoded), &decoded).unwrap();
+        assert_eq!(answer.case_version, 3);
+        let [front] = answer.marks.as_slice() else {
+            panic!("one film's marks per film");
+        };
+        assert_eq!(front.film, FilmKind::Front);
+        assert!(!front.vertebrae.is_empty());
+        // Only the trained finder flags its names as estimates.
+        assert_eq!(front.naming.flags, [NamingFlag::Estimated]);
+        let ids: Vec<u32> = front.vertebrae.iter().map(|vertebra| vertebra.id).collect();
+        assert_eq!(ids, (5..).take(ids.len()).collect::<Vec<u32>>());
+        assert!(answer.two_films.is_none());
+    }
+
+    /// Side first and then front, so the front's ids must count on from
+    /// the side's. Ignored because the hand-built pass on even a small film
+    /// takes about fifteen seconds unoptimised; run it with `--ignored`.
+    #[test]
+    #[ignore = "the hand-built pass takes about fifteen seconds in a test build"]
+    fn a_trained_front_film_joins_the_hand_built_films_in_film_order() {
+        let decoded = [made_up_film(FilmKind::Side), made_up_film(FilmKind::Front)];
+        let answer = conduct_auto_pass(&trained_input(&decoded), &decoded).unwrap();
+        let [side, front] = answer.marks.as_slice() else {
+            panic!("one film's marks per film");
+        };
+        assert_eq!((side.film, front.film), (FilmKind::Side, FilmKind::Front));
+        assert!(!side.vertebrae.is_empty() && !front.vertebrae.is_empty());
+        assert_eq!(front.naming.flags, [NamingFlag::Estimated]);
+        assert!(!side.naming.flags.contains(&NamingFlag::Estimated));
+        let ids: Vec<u32> = side
+            .vertebrae
+            .iter()
+            .chain(&front.vertebrae)
+            .map(|vertebra| vertebra.id)
+            .collect();
+        assert_eq!(ids, (5..).take(ids.len()).collect::<Vec<u32>>());
+        // The hand-built chain saw no front film to check the side against.
+        assert!(answer.two_films.is_none());
+        for (index, warning) in answer.warnings.iter().enumerate() {
+            assert!(!answer.warnings[..index].contains(warning));
+        }
     }
 }

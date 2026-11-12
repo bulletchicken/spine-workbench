@@ -46,7 +46,8 @@ enum Command {
     MakeUp(MakeUpArgs),
     /// Open a film and print its size, kept tags and scale.
     Open(OpenArgs),
-    /// Run the auto pass on films and print their marks as JSON.
+    /// Run the auto pass on films and print their marks as JSON; the
+    /// trained finder can read the front film.
     Pass(PassArgs),
     /// Record the watch frames of an auto pass, or check them for drift.
     Frames(FramesArgs),
@@ -157,6 +158,16 @@ enum Population {
     Adult,
 }
 
+/// Which finder reads the front film. The app asks for the trained one on
+/// real films and the hand-built one on made-up films.
+#[derive(Clone, Copy, ValueEnum)]
+enum FrontFinder {
+    /// The trained network: made for real front films.
+    Trained,
+    /// The hand-built search every other film gets.
+    HandBuilt,
+}
+
 #[derive(Args)]
 struct PassArgs {
     /// One to four films, each as KIND=PATH.
@@ -166,6 +177,10 @@ struct PassArgs {
     acquisition: Acquisition,
     #[arg(long, value_enum, default_value_t = Population::Adolescent)]
     population: Population,
+    /// Which finder reads the front film; the other films always get the
+    /// hand-built search.
+    #[arg(long, value_enum, default_value_t = FrontFinder::HandBuilt)]
+    front_finder: FrontFinder,
 }
 
 #[derive(Args)]
@@ -212,6 +227,8 @@ enum Suite {
     /// The made-up-spine suite CI gates on.
     Ci,
     AutoPassFront,
+    /// The trained finder on real front films.
+    TrainedFinderFront,
     AutoPassSide,
     TwoFilmsVoting,
     RegionWand,

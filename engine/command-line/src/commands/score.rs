@@ -39,7 +39,7 @@ fn run_with_finder(args: &ScoreArgs, mut finder: Option<&mut Finder<'_>>) -> Out
     }
     let audit = match args.suite {
         Suite::AasceLabels => true,
-        Suite::AutoPassFront => {
+        Suite::AutoPassFront | Suite::TrainedFinderFront => {
             if finder.is_none() {
                 return Err(
                     "the automatic finder is not built; use aasce-labels for a label audit".into(),
@@ -116,11 +116,22 @@ fn run_with_finder(args: &ScoreArgs, mut finder: Option<&mut Finder<'_>>) -> Out
     ] {
         label_sha256.insert(name.to_owned(), json::sha256(bytes));
     }
-    let mode = if audit {
-        "label audit (truth against published angles)"
-    } else {
-        "finder scoring"
+    let mode = match args.suite {
+        Suite::AasceLabels => "label audit (truth against published angles)",
+        Suite::TrainedFinderFront => "finder scoring: trained-finder-front",
+        _ => "finder scoring",
     };
+    let mut parameters = format!("{split}\n{mode}\niou=0.5\n");
+    let mut notes = caveats(audit);
+    if matches!(args.suite, Suite::TrainedFinderFront) {
+        // The weights decide the answer as much as the code does, so the
+        // fingerprint and the report both name them.
+        let weights = trained_finder_weights()?;
+        parameters.push_str(&format!("weights={weights}\n"));
+        notes.push(format!(
+            "The trained finder's weights: finder-weights.bin, SHA-256 {weights}."
+        ));
+    }
     let report = Report::new(
         Provenance {
             engine_version: env!("CARGO_PKG_VERSION").to_owned(),
@@ -131,10 +142,10 @@ fn run_with_finder(args: &ScoreArgs, mut finder: Option<&mut Finder<'_>>) -> Out
             mode: mode.to_owned(),
             listing_sha256: json::sha256(&filenames),
             label_sha256,
-            parameters_sha256: json::sha256(format!("{split}\n{mode}\niou=0.5\n").as_bytes()),
+            parameters_sha256: json::sha256(parameters.as_bytes()),
         },
         films,
-        caveats(audit),
+        notes,
     );
     let out = args
         .out
@@ -160,6 +171,16 @@ fn run_with_finder(args: &ScoreArgs, mut finder: Option<&mut Finder<'_>>) -> Out
         );
     }
     Ok(())
+}
+
+/// The weight file's SHA-256 as the trained finder's compiled-in table
+/// records it.
+fn trained_finder_weights() -> Result<String, Box<dyn std::error::Error>> {
+    let table: serde_json::Value = serde_json::from_str(trained_finder::weights::WEIGHT_TABLE)?;
+    table["sha256"]["finder-weights.bin"]
+        .as_str()
+        .map(str::to_owned)
+        .ok_or_else(|| "the trained finder's weight table names no weight file".into())
 }
 
 fn label_score(
@@ -293,9 +314,11 @@ mod tests {
         assert_eq!(jpeg_dimensions(&bad), None);
     }
 
-    #[test]
-    fn label_audit_writes_both_reports_and_refuses_missing_films() {
-        let root = std::env::temp_dir().join(format!("spine-score-fake-{}", std::process::id()));
+    /// A one-film dataset in the AASCE layout under the system's temporary
+    /// folder: seventeen flat, evenly spaced labels and `film` as its one
+    /// JPEG, named `fixture.jpg`.
+    fn tiny_dataset(folder: &str, film: &[u8]) -> PathBuf {
+        let root = std::env::temp_dir().join(format!("{folder}-{}", std::process::id()));
         fs::create_dir_all(root.join("labels/test")).unwrap();
         fs::create_dir_all(root.join("data/test")).unwrap();
         let mut columns = Vec::new();
@@ -314,17 +337,14 @@ mod tests {
         fs::write(root.join("labels/test/filenames.csv"), b"fixture.jpg\n").unwrap();
         fs::write(root.join("labels/test/landmarks.csv"), csv).unwrap();
         fs::write(root.join("labels/test/angles.csv"), b"0,0,0\n").unwrap();
-        fs::write(
-            root.join("data/test/fixture.jpg"),
-            [
-                0xff, 0xd8, 0xff, 0xc0, 0, 11, 8, 0, 200, 0, 100, 1, 1, 0x11, 0, 0xff, 0xda, 0, 2,
-                0xff, 0xd9,
-            ],
-        )
-        .unwrap();
-        let args = ScoreArgs {
-            suite: Suite::AasceLabels,
-            data: Some(root.clone()),
+        fs::write(root.join("data/test/fixture.jpg"), film).unwrap();
+        root
+    }
+
+    fn score_args(suite: Suite, root: &Path) -> ScoreArgs {
+        ScoreArgs {
+            suite,
+            data: Some(root.to_path_buf()),
             split: Split::Test,
             method: Method::Auto,
             count: None,
@@ -332,7 +352,19 @@ mod tests {
             tier: None,
             jobs: Some(1),
             out: Some(root.join("report")),
-        };
+        }
+    }
+
+    #[test]
+    fn label_audit_writes_both_reports_and_refuses_missing_films() {
+        let root = tiny_dataset(
+            "spine-score-fake",
+            &[
+                0xff, 0xd8, 0xff, 0xc0, 0, 11, 8, 0, 200, 0, 100, 1, 1, 0x11, 0, 0xff, 0xda, 0, 2,
+                0xff, 0xd9,
+            ],
+        );
+        let args = score_args(Suite::AasceLabels, &root);
         run(&args).expect("the complete header fixture can be audited");
         let json = fs::read_to_string(root.join("report/summary.json")).unwrap();
         let report: serde_json::Value = serde_json::from_str(&json).unwrap();
@@ -350,5 +382,61 @@ mod tests {
         assert!(!error.contains("fixture.jpg"));
         assert!(!root.join("report").exists());
         fs::remove_dir_all(root).unwrap();
+    }
+
+    /// A baseline JPEG of one flat mid-grey channel, `width` by `height`,
+    /// both multiples of 32: every 8 by 8 block holds only a zero DC
+    /// difference and an end of block, each a one-bit code, so the scan is
+    /// all zero bits.
+    fn flat_grey_jpeg(width: u16, height: u16) -> Vec<u8> {
+        let mut bytes = vec![0xff, 0xd8];
+        // Every quantiser 1.
+        bytes.extend([0xff, 0xdb, 0, 67, 0]);
+        bytes.extend([1; 64]);
+        // Baseline, 8 bits, one channel sampled 1 by 1, quantiser 0.
+        bytes.extend([0xff, 0xc0, 0, 11, 8]);
+        bytes.extend(height.to_be_bytes());
+        bytes.extend(width.to_be_bytes());
+        bytes.extend([1, 1, 0x11, 0]);
+        // DC and AC tables, each one symbol (0) with the one-bit code 0.
+        for table in [0x00, 0x10] {
+            bytes.extend([0xff, 0xc4, 0, 20, table, 1]);
+            bytes.extend([0; 15]);
+            bytes.push(0);
+        }
+        bytes.extend([0xff, 0xda, 0, 8, 1, 1, 0x00, 0, 63, 0]);
+        let blocks = usize::from(width / 8) * usize::from(height / 8);
+        bytes.extend(vec![0; blocks * 2 / 8]);
+        bytes.extend([0xff, 0xd9]);
+        bytes
+    }
+
+    /// The tiny dataset is made here, as the label audit's is, but with a
+    /// film that decodes: flat grey, on which the trained finder finds no
+    /// vertebra. That must count as an empty prediction, not stop the run.
+    #[test]
+    fn the_trained_finder_suite_counts_a_film_with_nothing_found_as_missed() {
+        let root = tiny_dataset("spine-score-trained", &flat_grey_jpeg(64, 128));
+        let args = score_args(Suite::TrainedFinderFront, &root);
+        run(&args).expect("a film with nothing found is scored, not refused");
+        let text = fs::read_to_string(root.join("report/summary.json")).unwrap();
+        let markdown = fs::read_to_string(root.join("report/summary.md")).unwrap();
+        fs::remove_dir_all(&root).unwrap();
+        let report: serde_json::Value = serde_json::from_str(&text).unwrap();
+        assert_eq!(report["summary"]["eligible"], 17);
+        assert_eq!(report["summary"]["found"], 0);
+        assert_eq!(report["summary"]["failedSearches"], 1);
+        assert_eq!(report["finderRuns"][0]["error"], "pass-no-spine-found");
+        let mode = "finder scoring: trained-finder-front";
+        assert_eq!(report["provenance"]["mode"], mode);
+        assert!(markdown.starts_with(&format!("# AASCE 2019: {mode}\n")));
+        let weights = trained_finder_weights().unwrap();
+        assert_eq!(weights.len(), 64);
+        assert_eq!(
+            report["provenance"]["parametersSha256"],
+            json::sha256(format!("test\n{mode}\niou=0.5\nweights={weights}\n").as_bytes())
+        );
+        assert!(markdown.contains(&weights));
+        assert!(!text.contains("fixture.jpg") && !markdown.contains("fixture.jpg"));
     }
 }

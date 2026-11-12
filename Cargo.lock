@@ -331,6 +331,7 @@ dependencies = [
  "serde_json",
  "shapes",
  "toolbox",
+ "trained-finder",
 ]
 
 [[package]]
