@@ -29,9 +29,10 @@ BodyParts3D
   (https://dbarchive.biosciencedbc.jp/en/bodyparts3d/)
   Creative Commons Attribution 4.0 International, in
   third-party-licences/bodyparts3d-CC-BY-4.0.txt
-  The vertebrae from C7 to L5 of release 4.0 are in app/public/bones/,
-  changed by bone-prep/prepare_bones.py: repeated points are joined and
-  each bone is moved into a frame of its own. No shape was altered.
+  The vertebrae from C7 to L5 of release 4.0 are in
+  app/src/spine-3d/bones/, changed by bone-prep/prepare_bones.py:
+  repeated points are joined and each bone is moved into a frame of its
+  own. No shape was altered.
 
 Trained finder
 

@@ -48,7 +48,7 @@ built.
 | I want to change… | Open |
 |---|---|
 | where the vertebra shapes come from, their licence, and what was done to them | `bone-prep/README.md` |
-| how a vertebra's body is found and the bone moved into its own frame | `bone-prep/prepare_bones.py` |
+| how a vertebra's body and its endplates are found, and the bone moved into its own frame | `bone-prep/prepare_bones.py` |
 
 ## The trained finder's numbers (`finder-prep/`)
 
@@ -279,7 +279,7 @@ The folders and import rules in one picture: `app/README.md`.
 | the step contract | `app/src/steps/step-contract.ts` |
 | the tool contract | `app/src/toolbox/tool-contract.ts` |
 | the film-to-screen transform | `app/src/film-viewer/film-space.ts` |
-| the vertebra shapes the 3D view draws, and how they are read | `app/public/bones/vertebrae.json`, `app/public/bones/vertebrae.bin`, `app/src/spine-3d/bones/read-bones.ts` |
+| the vertebra shapes the 3D view draws, how they are read, and how they reach the app without a fetch | `app/src/spine-3d/bones/vertebrae.json`, `app/src/spine-3d/bones/vertebrae.bin`, `app/src/spine-3d/bones/read-bones.ts`, `app/src/spine-3d/bones/load-bones.ts` |
 | the case edits | `app/src/case-state/case-edits.ts` |
 | the design's tokens, unchanged | `app/src/look-and-feel/tokens.css` |
 | a duration the design names that is not a token | `app/src/look-and-feel/named-timings.css` |

@@ -12,6 +12,9 @@ export default defineConfig({
     alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
   },
   worker: { format: 'es' },
+  // The bone shapes are a binary file that the 3D view imports as text
+  // (`?inline`), so they arrive inside a script and are never fetched.
+  assetsInclude: ['**/*.bin'],
   build: {
     // Chrome and Safari 16.4 and later: the oldest browsers whose
     // WebAssembly has the 128-bit SIMD the engine is built with.

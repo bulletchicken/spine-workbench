@@ -1,6 +1,6 @@
 """Prepare the vertebra shapes the 3D view draws.
 
-    python3 bone-prep/prepare_bones.py path/to/partof_BP3D_4.0_obj_99.zip [app/public/bones]
+    python3 bone-prep/prepare_bones.py path/to/partof_BP3D_4.0_obj_99.zip [app/src/spine-3d/bones]
 
 Reads the eighteen vertebrae from C7 to L5 out of the BodyParts3D 4.0 archive
 (see README.md for where it comes from and its licence) and writes
@@ -10,7 +10,10 @@ Nothing is reshaped. Points the archive repeats are joined, and each bone is
 moved into a frame of its own: origin at the middle of the vertebral body,
 x forward, y to the patient's left, z up the body, in millimetres. The body's
 height, half width and half depth are measured and stored beside it, so a
-fitted vertebra can place the bone and stretch it to size.
+fitted vertebra can place the bone and stretch it to size. So are its two
+endplates, as the vertebra model describes them (the centre and half sizes of
+each rim, and the wedges between them), so the bone's own endplates can be
+made to sit on a fitted vertebra's.
 """
 
 import hashlib
@@ -31,6 +34,11 @@ LEVELS = [
     ("T6", "FJ3171"), ("T7", "FJ3173"), ("T8", "FJ3174"), ("T9", "FJ3175"), ("T10", "FJ3154"), ("T11", "FJ3155"),
     ("T12", "FJ3156"), ("L1", "FJ3157"), ("L2", "FJ3159"), ("L3", "FJ3162"), ("L4", "FJ3165"), ("L5", "FJ3168"),
 ]
+
+# An endplate's rim is looked for in this many directions round the body, and
+# measured on a cut this far inside the body from the plane through it (mm).
+RIM_DIRECTIONS = 36
+RIM_INSET = 2.0
 
 
 def sub(a, b):
@@ -194,11 +202,133 @@ def measure(points, triangles):
     }
 
 
+def solve3(m, v):
+    """Solve the 3 by 3 system m x = v by Cramer's rule."""
+    def det(a):
+        return (a[0][0] * (a[1][1] * a[2][2] - a[1][2] * a[2][1]) - a[0][1] * (a[1][0] * a[2][2] - a[1][2] * a[2][0])
+                + a[0][2] * (a[1][0] * a[2][1] - a[1][1] * a[2][0]))
+    whole = det(m)
+    return [det([[v[r] if c == k else m[r][c] for c in range(3)] for r in range(3)]) / whole for k in range(3)]
+
+
+def rim_plane(local, triangles, body, side):
+    """The plane z = a + b x + c y through one endplate's rim, in the bone's frame.
+
+    `side` is +1 for the top endplate and -1 for the bottom. The bone is cut by
+    upright planes through its z axis, turned in even steps; in each direction
+    the rim is the highest (or lowest) point of the body's outline within its
+    footprint, an oval of the body's half depth and half width, leaving out the
+    cupped middle of the endplate. Cuts follow the surface exactly, so long thin
+    triangles on the walls do not matter. A direction whose point sits well off
+    the plane (a lip, or the root of the arch behind) is dropped and the plane
+    fitted again. Returns the plane, the rim points kept and how many there were.
+    """
+    hd, hw = body["halfDepth"], body["halfWidth"]
+    outermost = {}
+    for k in range(RIM_DIRECTIONS // 2):
+        turn = math.pi * k / (RIM_DIRECTIONS // 2)
+        along = (math.cos(turn), math.sin(turn), 0.0)
+        for outline in cut(local, triangles, (0.0, 0.0, 0.0), (-along[1], along[0], 0.0)):
+            if not holds([(dot(p, along), p[2]) for p in outline], (0.0, 0.0)):
+                continue
+            for p in outline:
+                reach = (p[0] / hd) ** 2 + (p[1] / hw) ** 2
+                if 0.5 <= reach <= 1.1 and p[2] * side > 0:
+                    direction = (k, dot(p, along) > 0)
+                    if direction not in outermost or p[2] * side > outermost[direction][2] * side:
+                        outermost[direction] = p
+    ring = [outermost[k] for k in sorted(outermost)]
+    while True:
+        rows = [(1.0, p[0], p[1]) for p in ring]
+        plane = solve3([[sum(r[i] * r[j] for r in rows) for j in range(3)] for i in range(3)],
+                       [sum(r[i] * p[2] for r, p in zip(rows, ring)) for i in range(3)])
+        off = [abs(p[2] - plane[0] - plane[1] * p[0] - plane[2] * p[1]) for p in ring]
+        limit = max(3 * sorted(off)[len(off) // 2], 0.5)
+        kept = [p for p, d in zip(ring, off) if d <= limit]
+        if len(kept) == len(ring):
+            return plane, ring, len(outermost)
+        ring = kept
+
+
+def chord_ends(outline, along, at):
+    """Where a closed 2D outline crosses the line on which coordinate 1 - along equals `at`.
+
+    Returns the smallest and largest crossing along the line.
+    """
+    other = 1 - along
+    ends = []
+    for p, q in zip(outline, outline[1:] + outline[:1]):
+        if (p[other] > at) != (q[other] > at):
+            t = (at - p[other]) / (q[other] - p[other])
+            ends.append(p[along] + t * (q[along] - p[along]))
+    return min(ends), max(ends)
+
+
+def endplate(local, triangles, body, side):
+    """One endplate as the vertebra model describes it: its centre, half width and half depth.
+
+    The plane through the rim gives the endplate's tilt. The surface is then
+    cut by a plane parallel to it, just inside the body, and the cut is
+    measured across and front to back along the endplate's own axes, through
+    its middle (found by halving both spans until it settles): the arch behind
+    and the corners never lie on those two lines. The centre is the middle of
+    both spans, moved back onto the rim plane.
+    """
+    (a, b, c), ring, directions = rim_plane(local, triangles, body, side)
+    normal = unit((-b, -c, 1.0))
+    # As in docs/conventions/signs-and-wedges.md: across toward the left, then front to back.
+    across = unit(sub((0.0, 1.0, 0.0), mul(normal, normal[1])))
+    back = cross(normal, across)
+    origin = sub((0.0, 0.0, a), mul(normal, side * RIM_INSET))
+    outlines = [[(dot(sub(p, origin), across), dot(sub(p, origin), back)) for p in o]
+                for o in cut(local, triangles, origin, normal)]
+    middle = (0.0, 0.0)
+    for _ in range(4):
+        # The body's outline is the largest that spans the middle both ways; it
+        # may be open where the rim dips, so it need not strictly enclose it.
+        outline = max((o for o in outlines if all(min(p[k] for p in o) < middle[k] < max(p[k] for p in o) for k in (0, 1))),
+                      key=lambda o: area_and_middle(o)[0])
+        u = chord_ends(outline, 0, middle[1])
+        v = chord_ends(outline, 1, middle[0])
+        middle = ((u[0] + u[1]) / 2, (v[0] + v[1]) / 2)
+    centre = add(add(origin, mul(normal, side * RIM_INSET)), add(mul(across, middle[0]), mul(back, middle[1])))
+    off = [abs(p[2] - a - b * p[0] - c * p[1]) for p in ring]
+    return {
+        "centre": centre,
+        "halfWidth": (u[1] - u[0]) / 2,
+        "halfDepth": (v[1] - v[0]) / 2,
+        "normal": normal,
+        "rim": (len(ring), directions, math.sqrt(sum(d * d for d in off) / len(off)), max(off)),
+    }
+
+
+def wedges(top, bottom):
+    """The front and side wedges between two endplates, signed as docs/conventions/signs-and-wedges.md.
+
+    Each normal is written as rotX(front) rotY(side) applied to z; the wedge is
+    the top's angle less the bottom's. Front is positive when the left is
+    taller, side when the front is shorter.
+    """
+    def turns(n):
+        return math.atan2(-n[1], n[2]), math.atan2(n[0], math.hypot(n[1], n[2]))
+    (front_top, side_top), (front_bottom, side_bottom) = turns(top["normal"]), turns(bottom["normal"])
+    return front_top - front_bottom, side_top - side_bottom
+
+
+def as_written(plate):
+    """An endplate as vertebrae.json holds it."""
+    return {
+        "centre": [round(c, 2) for c in plate["centre"]],
+        "halfWidth": round(plate["halfWidth"], 2),
+        "halfDepth": round(plate["halfDepth"], 2),
+    }
+
+
 def main():
     if len(sys.argv) < 2:
         sys.exit(__doc__)
     archive_path = sys.argv[1]
-    out = sys.argv[2] if len(sys.argv) > 2 else "app/public/bones"
+    out = sys.argv[2] if len(sys.argv) > 2 else "app/src/spine-3d/bones"
     with open(archive_path, "rb") as handle:
         digest = hashlib.sha256(handle.read()).hexdigest()
     if digest != ARCHIVE_SHA256:
@@ -213,12 +343,20 @@ def main():
                 sys.exit(f"{level} ({file_id}) is not a closed surface.")
             body = measure(points, triangles)
             local = [tuple(round(dot(sub(p, body["centre"]), axis), 2) for axis in body["axes"]) for p in points]
+            top, bottom = endplate(local, triangles, body, 1), endplate(local, triangles, body, -1)
+            wedge_front, wedge_side = wedges(top, bottom)
             bones.append({
                 "level": level,
                 "source": file_id,
                 "height": round(body["height"], 2),
                 "halfWidth": round(body["halfWidth"], 2),
                 "halfDepth": round(body["halfDepth"], 2),
+                "body": {
+                    "top": as_written(top),
+                    "bottom": as_written(bottom),
+                    "wedgeFront": round(wedge_front, 5),
+                    "wedgeSide": round(wedge_side, 5),
+                },
                 "referenceCentre": [round(c, 2) for c in body["centre"]],
                 "referenceAxes": [[round(c, 5) for c in axis] for axis in body["axes"]],
                 "pointCount": len(points),
@@ -228,6 +366,14 @@ def main():
             all_triangles.append(triangles)
             print(f"{level:>3} {file_id}: {len(points):4d} points, {len(triangles):4d} triangles, body "
                   f"{body['height']:.1f} high, {2 * body['halfWidth']:.1f} wide, {2 * body['halfDepth']:.1f} deep (mm)")
+            between = math.sqrt(dot(sub(top["centre"], bottom["centre"]), sub(top["centre"], bottom["centre"])))
+            print(f"    endplate centres {between:.1f} apart ({between / body['height']:.2f} of the height), "
+                  f"off the z axis by {math.hypot(*top['centre'][:2]):.1f} (top) and {math.hypot(*bottom['centre'][:2]):.1f} "
+                  f"(bottom); wedges {math.degrees(wedge_front):+.1f} front, {math.degrees(wedge_side):+.1f} side (degrees)")
+            for name, plate in (("top", top), ("bottom", bottom)):
+                kept, rims, spread, worst = plate["rim"]
+                print(f"    {name:>6} rim: plane through {kept} of {rims} points, {spread:.2f} mm root mean square off it, "
+                      f"{worst:.2f} at most")
 
     # Every bone's points first, then every bone's triangles: each block then
     # starts on a boundary its number type needs.
@@ -251,6 +397,9 @@ def main():
                 "its triangles as uint16 corners from trianglesAt.",
         "reference": "referenceCentre and referenceAxes (the bone's x, y and z axes) put a bone back where it stood "
                      "in the source, in the same patient axes.",
+        "body": "body gives each bone's vertebral body as the vertebra model describes one, in the bone's own frame: "
+                "the centre and half sizes of each endplate's rim, and the front and side wedges between the two, "
+                "signed as docs/conventions/signs-and-wedges.md.",
         "byteLength": len(data),
         "bones": bones,
     }

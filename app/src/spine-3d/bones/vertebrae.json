@@ -6,6 +6,7 @@
   "frame": "Origin at the middle of the vertebral body; x forward, y to the patient's left, z up the body; millimetres.",
   "file": "vertebrae.bin: little-endian; each bone's points as float32 x, y, z from pointsAt, its triangles as uint16 corners from trianglesAt.",
   "reference": "referenceCentre and referenceAxes (the bone's x, y and z axes) put a bone back where it stood in the source, in the same patient axes.",
+  "body": "body gives each bone's vertebral body as the vertebra model describes one, in the bone's own frame: the centre and half sizes of each endplate's rim, and the front and side wedges between the two, signed as docs/conventions/signs-and-wedges.md.",
   "byteLength": 561216,
   "bones": [
     {
@@ -14,6 +15,28 @@
       "height": 13.2,
       "halfWidth": 13.78,
       "halfDepth": 8.32,
+      "body": {
+        "top": {
+          "centre": [
+            -0.24,
+            0.08,
+            6.46
+          ],
+          "halfWidth": 12.47,
+          "halfDepth": 7.95
+        },
+        "bottom": {
+          "centre": [
+            0.09,
+            0.03,
+            -6.18
+          ],
+          "halfWidth": 13.68,
+          "halfDepth": 8.3
+        },
+        "wedgeFront": 0.01903,
+        "wedgeSide": 0.09847
+      },
       "referenceCentre": [
         80.71,
         -0.66,
@@ -47,6 +70,28 @@
       "height": 15.02,
       "halfWidth": 16.02,
       "halfDepth": 9.31,
+      "body": {
+        "top": {
+          "centre": [
+            0.0,
+            0.3,
+            7.38
+          ],
+          "halfWidth": 13.59,
+          "halfDepth": 8.78
+        },
+        "bottom": {
+          "centre": [
+            0.04,
+            0.04,
+            -7.51
+          ],
+          "halfWidth": 15.8,
+          "halfDepth": 9.27
+        },
+        "wedgeFront": 0.00517,
+        "wedgeSide": 0.06961
+      },
       "referenceCentre": [
         76.33,
         -0.78,
@@ -80,6 +125,28 @@
       "height": 17.25,
       "halfWidth": 14.18,
       "halfDepth": 10.27,
+      "body": {
+        "top": {
+          "centre": [
+            -0.14,
+            -0.16,
+            7.98
+          ],
+          "halfWidth": 13.87,
+          "halfDepth": 9.12
+        },
+        "bottom": {
+          "centre": [
+            -0.02,
+            0.12,
+            -9.15
+          ],
+          "halfWidth": 13.84,
+          "halfDepth": 10.26
+        },
+        "wedgeFront": -0.01089,
+        "wedgeSide": -0.03152
+      },
       "referenceCentre": [
         71.34,
         -0.75,
@@ -113,6 +180,28 @@
       "height": 18.16,
       "halfWidth": 13.02,
       "halfDepth": 11.04,
+      "body": {
+        "top": {
+          "centre": [
+            0.32,
+            0.04,
+            8.53
+          ],
+          "halfWidth": 12.78,
+          "halfDepth": 10.55
+        },
+        "bottom": {
+          "centre": [
+            -0.09,
+            -0.17,
+            -8.95
+          ],
+          "halfWidth": 12.48,
+          "halfDepth": 10.94
+        },
+        "wedgeFront": 0.00825,
+        "wedgeSide": -0.02228
+      },
       "referenceCentre": [
         63.89,
         -0.53,
@@ -146,6 +235,28 @@
       "height": 18.72,
       "halfWidth": 12.21,
       "halfDepth": 11.91,
+      "body": {
+        "top": {
+          "centre": [
+            0.55,
+            0.12,
+            9.07
+          ],
+          "halfWidth": 11.83,
+          "halfDepth": 10.84
+        },
+        "bottom": {
+          "centre": [
+            0.22,
+            0.11,
+            -9.44
+          ],
+          "halfWidth": 11.85,
+          "halfDepth": 11.62
+        },
+        "wedgeFront": 0.00153,
+        "wedgeSide": -0.01184
+      },
       "referenceCentre": [
         56.66,
         -0.77,
@@ -179,6 +290,28 @@
       "height": 19.52,
       "halfWidth": 12.74,
       "halfDepth": 12.79,
+      "body": {
+        "top": {
+          "centre": [
+            0.12,
+            -0.02,
+            9.39
+          ],
+          "halfWidth": 12.39,
+          "halfDepth": 11.61
+        },
+        "bottom": {
+          "centre": [
+            -0.12,
+            -0.07,
+            -9.8
+          ],
+          "halfWidth": 11.92,
+          "halfDepth": 12.58
+        },
+        "wedgeFront": 0.00316,
+        "wedgeSide": 0.06731
+      },
       "referenceCentre": [
         53.05,
         -0.65,
@@ -212,6 +345,28 @@
       "height": 20.43,
       "halfWidth": 13.44,
       "halfDepth": 13.81,
+      "body": {
+        "top": {
+          "centre": [
+            -0.52,
+            -0.27,
+            9.97
+          ],
+          "halfWidth": 12.82,
+          "halfDepth": 12.81
+        },
+        "bottom": {
+          "centre": [
+            0.27,
+            0.14,
+            -9.62
+          ],
+          "halfWidth": 13.26,
+          "halfDepth": 13.68
+        },
+        "wedgeFront": 0.00786,
+        "wedgeSide": 0.06721
+      },
       "referenceCentre": [
         51.81,
         -0.53,
@@ -245,6 +400,28 @@
       "height": 21.53,
       "halfWidth": 15.77,
       "halfDepth": 14.99,
+      "body": {
+        "top": {
+          "centre": [
+            0.6,
+            0.02,
+            10.59
+          ],
+          "halfWidth": 15.55,
+          "halfDepth": 14.26
+        },
+        "bottom": {
+          "centre": [
+            0.07,
+            0.02,
+            -10.39
+          ],
+          "halfWidth": 14.59,
+          "halfDepth": 14.96
+        },
+        "wedgeFront": -0.00128,
+        "wedgeSide": 0.07895
+      },
       "referenceCentre": [
         51.39,
         -0.67,
@@ -278,6 +455,28 @@
       "height": 21.48,
       "halfWidth": 15.38,
       "halfDepth": 15.86,
+      "body": {
+        "top": {
+          "centre": [
+            0.31,
+            -0.16,
+            10.71
+          ],
+          "halfWidth": 14.74,
+          "halfDepth": 15.41
+        },
+        "bottom": {
+          "centre": [
+            0.04,
+            0.0,
+            -10.09
+          ],
+          "halfWidth": 15.35,
+          "halfDepth": 15.81
+        },
+        "wedgeFront": 0.00167,
+        "wedgeSide": 0.04734
+      },
       "referenceCentre": [
         55.04,
         -0.68,
@@ -311,6 +510,28 @@
       "height": 22.84,
       "halfWidth": 17.07,
       "halfDepth": 16.5,
+      "body": {
+        "top": {
+          "centre": [
+            0.29,
+            -0.06,
+            10.96
+          ],
+          "halfWidth": 16.38,
+          "halfDepth": 16.26
+        },
+        "bottom": {
+          "centre": [
+            0.06,
+            0.02,
+            -11.06
+          ],
+          "halfWidth": 16.98,
+          "halfDepth": 16.34
+        },
+        "wedgeFront": -0.00291,
+        "wedgeSide": 0.02315
+      },
       "referenceCentre": [
         59.25,
         -0.68,
@@ -344,6 +565,28 @@
       "height": 23.88,
       "halfWidth": 18.24,
       "halfDepth": 16.91,
+      "body": {
+        "top": {
+          "centre": [
+            0.21,
+            0.05,
+            11.29
+          ],
+          "halfWidth": 17.18,
+          "halfDepth": 16.53
+        },
+        "bottom": {
+          "centre": [
+            -0.06,
+            0.02,
+            -12.2
+          ],
+          "halfWidth": 18.12,
+          "halfDepth": 16.9
+        },
+        "wedgeFront": -0.00186,
+        "wedgeSide": -0.01073
+      },
       "referenceCentre": [
         64.89,
         -0.66,
@@ -377,6 +620,28 @@
       "height": 24.4,
       "halfWidth": 18.59,
       "halfDepth": 17.3,
+      "body": {
+        "top": {
+          "centre": [
+            0.12,
+            -0.08,
+            11.85
+          ],
+          "halfWidth": 17.96,
+          "halfDepth": 17.13
+        },
+        "bottom": {
+          "centre": [
+            -0.07,
+            0.05,
+            -12.48
+          ],
+          "halfWidth": 18.33,
+          "halfDepth": 17.1
+        },
+        "wedgeFront": 0.00324,
+        "wedgeSide": 0.01296
+      },
       "referenceCentre": [
         73.46,
         -0.68,
@@ -410,6 +675,28 @@
       "height": 26.17,
       "halfWidth": 19.59,
       "halfDepth": 17.82,
+      "body": {
+        "top": {
+          "centre": [
+            0.05,
+            -0.15,
+            12.1
+          ],
+          "halfWidth": 18.78,
+          "halfDepth": 17.76
+        },
+        "bottom": {
+          "centre": [
+            -0.7,
+            0.01,
+            -13.09
+          ],
+          "halfWidth": 19.44,
+          "halfDepth": 16.88
+        },
+        "wedgeFront": -0.00047,
+        "wedgeSide": -0.02193
+      },
       "referenceCentre": [
         82.74,
         -0.6,
@@ -443,6 +730,28 @@
       "height": 26.51,
       "halfWidth": 20.06,
       "halfDepth": 17.24,
+      "body": {
+        "top": {
+          "centre": [
+            -0.04,
+            -0.03,
+            12.93
+          ],
+          "halfWidth": 20.05,
+          "halfDepth": 17.19
+        },
+        "bottom": {
+          "centre": [
+            -0.33,
+            -0.03,
+            -13.29
+          ],
+          "halfWidth": 19.78,
+          "halfDepth": 16.24
+        },
+        "wedgeFront": 0.01611,
+        "wedgeSide": -0.04315
+      },
       "referenceCentre": [
         91.17,
         -0.69,
@@ -476,6 +785,28 @@
       "height": 29.19,
       "halfWidth": 20.89,
       "halfDepth": 17.13,
+      "body": {
+        "top": {
+          "centre": [
+            -0.25,
+            -0.03,
+            13.08
+          ],
+          "halfWidth": 19.44,
+          "halfDepth": 17.1
+        },
+        "bottom": {
+          "centre": [
+            0.38,
+            0.03,
+            -14.08
+          ],
+          "halfWidth": 20.73,
+          "halfDepth": 16.48
+        },
+        "wedgeFront": -0.00223,
+        "wedgeSide": -0.14837
+      },
       "referenceCentre": [
         96.47,
         -0.55,
@@ -509,6 +840,28 @@
       "height": 29.78,
       "halfWidth": 20.67,
       "halfDepth": 17.6,
+      "body": {
+        "top": {
+          "centre": [
+            -0.08,
+            -0.01,
+            14.6
+          ],
+          "halfWidth": 20.59,
+          "halfDepth": 17.03
+        },
+        "bottom": {
+          "centre": [
+            -0.22,
+            -0.03,
+            -14.03
+          ],
+          "halfWidth": 20.03,
+          "halfDepth": 17.39
+        },
+        "wedgeFront": 0.00278,
+        "wedgeSide": -0.09897
+      },
       "referenceCentre": [
         96.56,
         -0.64,
@@ -542,6 +895,28 @@
       "height": 28.79,
       "halfWidth": 22.95,
       "halfDepth": 17.91,
+      "body": {
+        "top": {
+          "centre": [
+            0.03,
+            0.07,
+            13.4
+          ],
+          "halfWidth": 20.38,
+          "halfDepth": 17.7
+        },
+        "bottom": {
+          "centre": [
+            0.02,
+            0.03,
+            -13.43
+          ],
+          "halfWidth": 22.82,
+          "halfDepth": 17.79
+        },
+        "wedgeFront": -0.00136,
+        "wedgeSide": -0.0924
+      },
       "referenceCentre": [
         89.66,
         -0.67,
@@ -575,6 +950,28 @@
       "height": 30.63,
       "halfWidth": 23.21,
       "halfDepth": 19.47,
+      "body": {
+        "top": {
+          "centre": [
+            0.43,
+            0.07,
+            15.5
+          ],
+          "halfWidth": 22.85,
+          "halfDepth": 18.49
+        },
+        "bottom": {
+          "centre": [
+            -0.68,
+            0.01,
+            -12.43
+          ],
+          "halfWidth": 23.21,
+          "halfDepth": 19.68
+        },
+        "wedgeFront": 0.00046,
+        "wedgeSide": -0.1758
+      },
       "referenceCentre": [
         77.11,
         -0.69,
