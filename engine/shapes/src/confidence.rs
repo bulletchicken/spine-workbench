@@ -65,8 +65,9 @@ pub enum ConfidenceReason {
     LevelUncertain,
     /// The user changed it.
     EditedByUser,
-    /// It sits where the film shows nothing (cropped off): placed from the
-    /// chain alone.
+    /// It sits where the film shows nothing (cropped off), or the trained
+    /// finder's chain filled it in between its neighbours without seeing
+    /// it: placed from the chain alone.
     NoEvidence,
     /// Its endplate tilts disagree with its neighbours'.
     TiltInconsistent,

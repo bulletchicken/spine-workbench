@@ -3,7 +3,7 @@
 
 use film_reader::decoded_film::DecodedFilm;
 use made_up_spines::{answer_key, film_layout::FilmLayout, film_painter, patient, recipes};
-use shapes::auto_pass::{Acquisition, AutoPassInput, ChainOptions, Population};
+use shapes::auto_pass::{Acquisition, AutoPassInput, ChainOptions, FrontFinder, Population};
 use shapes::film::{
     DisplayWindow, Film, FilmFacts, FilmImage, FilmKind, PixelValues, SourceFormat, WindowFunction,
     WindowSource,
@@ -80,5 +80,6 @@ pub fn input(films: Vec<Film>) -> AutoPassInput {
             template: None,
         },
         first_vertebra_id: 1000,
+        front_finder: FrontFinder::HandBuilt,
     }
 }

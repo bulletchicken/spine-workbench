@@ -4,7 +4,7 @@
 use crate::{Acquisition, Outcome, PassArgs, Population};
 use film_reader::decoded_film::DecodedFilm;
 use scorekeeper::datasets::ScoringFilm;
-use shapes::auto_pass::{AutoPassInput, ChainOptions};
+use shapes::auto_pass::{AutoPassInput, ChainOptions, FrontFinder};
 use shapes::errors::{EngineError, ErrorCode};
 use shapes::film::{Film, FilmImage};
 use shapes::film_geometry::FilmGeometry;
@@ -48,6 +48,7 @@ pub fn run(args: &PassArgs) -> Outcome {
             template: None,
         },
         first_vertebra_id: 1,
+        front_finder: FrontFinder::HandBuilt,
     };
     let answer = auto_pass::run::auto_pass(&input, &decoded)?;
     println!("{}", serde_json::to_string_pretty(&answer)?);
@@ -93,6 +94,7 @@ pub(super) fn find_marks(input: &ScoringFilm<'_>) -> Result<FilmMarks, EngineErr
             template: None,
         },
         first_vertebra_id: 1,
+        front_finder: FrontFinder::HandBuilt,
     };
     auto_pass::run::auto_pass(&input, &[decoded])?
         .marks

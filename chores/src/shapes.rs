@@ -16,7 +16,8 @@
 use crate::Outcome;
 use serde_json::Value;
 use shapes::auto_pass::{
-    AutoPassInput, AutoPassResult, ChainAnswer, ChainOptions, FilmPassResult, Step,
+    AutoPassInput, AutoPassResult, ChainAnswer, ChainOptions, FilmPassResult, FrontFinder, Step,
+    TrainedPassResult,
 };
 use shapes::case_file_v1::{CaseFileV1, OpenedCase};
 use shapes::checks::CheckFinding;
@@ -100,7 +101,7 @@ fn clear(folder: &Path) -> Outcome {
 /// worker message, or a list the app checks its own constants against.
 fn write_types(folder: &Path) -> Outcome {
     let config = Config::new().with_out_dir(folder);
-    let exports: [Export; 33] = [
+    let exports: [Export; 35] = [
         CaseFileV1::export_all,
         OpenedCase::export_all,
         EngineInfo::export_all,
@@ -110,6 +111,8 @@ fn write_types(folder: &Path) -> Outcome {
         ScaleResult::export_all,
         AutoPassInput::export_all,
         AutoPassResult::export_all,
+        FrontFinder::export_all,
+        TrainedPassResult::export_all,
         FilmPassResult::export_all,
         ChainOptions::export_all,
         ChainAnswer::export_all,

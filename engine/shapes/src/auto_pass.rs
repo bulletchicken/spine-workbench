@@ -92,6 +92,19 @@ pub struct ChainOptions {
     pub template: Option<Template>,
 }
 
+/// Which finder reads the front film. The app sets it from where the films
+/// came from; it is never guessed from the pixels.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
+#[cfg_attr(feature = "typescript", derive(ts_rs::TS))]
+#[serde(rename_all = "kebab-case")]
+pub enum FrontFinder {
+    /// The trained network (`engine/trained-finder`): made for real front
+    /// films.
+    Trained,
+    /// The hand-built search, the same one every other film gets.
+    HandBuilt,
+}
+
 /// Everything the auto pass needs from the app.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
 #[cfg_attr(feature = "typescript", derive(ts_rs::TS))]
@@ -114,6 +127,23 @@ pub struct AutoPassInput {
     /// one is dropped (the rules in `app/src/case-state/case-edits.ts`),
     /// so one id never ends up on two vertebrae.
     pub first_vertebra_id: u32,
+    /// Which finder reads the front film. The caller routes on it: the
+    /// trained finder runs as its own pass on the front film's worker, and
+    /// the hand-built stages then run on the films that are left. The auto
+    /// pass's own one-call entry (`auto_pass::run::auto_pass`) does not
+    /// route: it runs the hand-built stages on every film it is given.
+    pub front_finder: FrontFinder,
+}
+
+/// What the trained finder hands back for one front film.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[cfg_attr(feature = "typescript", derive(ts_rs::TS))]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct TrainedPassResult {
+    /// The front film's marks, shaped exactly as the auto pass shapes
+    /// them, with the names flagged as estimates.
+    pub marks: FilmMarks,
+    pub warnings: Vec<PassWarning>,
 }
 
 /// What a film pass hands to the chain pass.

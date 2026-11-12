@@ -152,6 +152,23 @@ Notes on inputs:
 - `film-pass` takes the film's record: its geometry, its brightness and
   its blanked boxes, which are left out of every map. `runAutoPass` sends
   each film of `AutoPassInput.films`.
+- `AutoPassInput.frontFinder` says which finder reads the front film:
+  `hand-built`, the search every other film gets, or `trained`, the
+  trained vertebra finder (`engine/trained-finder`), made for real front
+  films. The screens set it from where the films came from; it is never
+  guessed from the pixels. Side and bending films always get the
+  hand-built search. With `trained`, the front film runs the trained
+  finder as its own pass on its worker and the hand-built stages run on
+  the films that are left. The auto pass crate's own one-call entry
+  (`auto_pass::run::auto_pass`) does not route on it: it runs the
+  hand-built stages on every film it is given.
+- The trained finder answers with a `TrainedPassResult`: the front film's
+  `FilmMarks`, shaped as the auto pass shapes them, and its warnings. Its
+  level names are placed from where each vertebra sits, not counted from
+  the first rib or the sacrum, so its naming carries the `estimated` flag:
+  the names are an estimate until the user confirms L5. A
+  vertebra its chain filled in between its neighbours, without seeing it,
+  has every corner marked inferred and the `no-evidence` reason.
 - `place-points` takes the first free vertebra id, since ids are unique
   across the case and never reused. `runAutoPass` places points film by
   film. Each film starts one above the highest id given to any earlier

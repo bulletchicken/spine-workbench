@@ -30,7 +30,7 @@ export async function rebuildStrip(engine: Pick<EngineClient, 'runAutoPass'>, fi
 
   // The chain options and ids reach only the chain search, which never
   // runs; the answer is dropped, so they are the defaults.
-  const input: AutoPassInput = { caseVersion: 0, films: [film], options: { acquisition: 'unknown', population: 'adolescent', template: null }, firstVertebraId: 0 };
+  const input: AutoPassInput = { caseVersion: 0, films: [film], options: { acquisition: 'unknown', population: 'adolescent', template: null }, firstVertebraId: 0, frontFinder: 'hand-built' };
   let recording = startRecording([film.kind]);
   const found: { strip: FilmStrip | null } = { strip: null };
   const onFrame = (frame: WatchFrame) => {

@@ -90,7 +90,7 @@ describe('the stand-in telling the sample case', () => {
     await vi.advanceTimersByTimeAsync(10);
     await opening;
     let ended = false;
-    const passing = codeOf(client.runAutoPass({ caseVersion: 1, films: [recordOf('front')], options: { acquisition: 'unknown', population: 'adult', template: null }, firstVertebraId: 1 })).finally(() => {
+    const passing = codeOf(client.runAutoPass({ caseVersion: 1, films: [recordOf('front')], options: { acquisition: 'unknown', population: 'adult', template: null }, firstVertebraId: 1, frontFinder: 'hand-built' })).finally(() => {
       ended = true;
     });
     // The slow pace's whole pass is 24 s: still running at 23.5 s, answered by 25 s.

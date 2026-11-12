@@ -63,7 +63,7 @@ const twoFilmCase = { format: 'spine-case' as const, version: 1 as const, savedW
 const pass = (signal?: AbortSignal): [AutoPassInput, { onFrame(frame: WatchFrame): void; signal?: AbortSignal }, WatchFrame[]] => {
   const frames: WatchFrame[] = [];
   return [
-    { caseVersion: 1, films: [recordOf('front'), recordOf('side')], options: { acquisition: 'unknown', population: 'adult', template: null }, firstVertebraId: 0 },
+    { caseVersion: 1, films: [recordOf('front'), recordOf('side')], options: { acquisition: 'unknown', population: 'adult', template: null }, firstVertebraId: 0, frontFinder: 'hand-built' },
     { onFrame: (frame) => frames.push(frame), ...(signal === undefined ? {} : { signal }) },
     frames,
   ];

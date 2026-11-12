@@ -6,7 +6,7 @@ import { fakeCrew, filmFile, outcome, settle } from './test-rig';
 const record = (kind: FilmKind) => ({ kind }) as Film;
 
 function passOver(kinds: FilmKind[], firstVertebraId = 10): AutoPassInput {
-  return { caseVersion: 7, films: kinds.map(record), options: { acquisition: 'unknown', population: 'adult', template: null }, firstVertebraId };
+  return { caseVersion: 7, films: kinds.map(record), options: { acquisition: 'unknown', population: 'adult', template: null }, firstVertebraId, frontFinder: 'hand-built' };
 }
 
 async function twoFilms(front = 'front A', side = 'side A') {

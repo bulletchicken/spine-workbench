@@ -124,7 +124,7 @@ describe('the stand-in engine', () => {
     const frames: WatchFrame[] = [];
     const progress: string[] = [];
     const result = await client.runAutoPass(
-      { caseVersion: 12, films: KINDS.map(recordOf), options: { acquisition: 'unknown', population: 'adolescent', template: null }, firstVertebraId: 100 },
+      { caseVersion: 12, films: KINDS.map(recordOf), options: { acquisition: 'unknown', population: 'adolescent', template: null }, firstVertebraId: 100, frontFinder: 'hand-built' },
       { onFrame: (frame) => frames.push(frame), onProgress: ({ stage }) => progress.push(stage) },
     );
     expect(result.caseVersion).toBe(12);
@@ -152,7 +152,7 @@ describe('the stand-in engine', () => {
   it('runs a pass over two films with no two-film check unless front and side are both in it', async () => {
     const client = start();
     await openAll(client);
-    const result = await client.runAutoPass({ caseVersion: 1, films: [recordOf('front'), recordOf('bend-left')], options: { acquisition: 'unknown', population: 'adult', template: null }, firstVertebraId: 0 });
+    const result = await client.runAutoPass({ caseVersion: 1, films: [recordOf('front'), recordOf('bend-left')], options: { acquisition: 'unknown', population: 'adult', template: null }, firstVertebraId: 0, frontFinder: 'hand-built' });
     expect(result.twoFilms).toBeNull();
     expect(result.marks.map((marks) => marks.vertebrae.map((vertebra) => vertebra.id))).toEqual([
       [0, 1, 2],
@@ -269,7 +269,7 @@ describe('the stand-in engine', () => {
     expect(await client.senseGeometry('side')).toEqual(story.films.side.guess);
     const frames: WatchFrame[] = [];
     const result = await client.runAutoPass(
-      { caseVersion: 1, films: [recordOf('front'), recordOf('side')], options: { acquisition: 'unknown', population: 'adult', template: null }, firstVertebraId: 0 },
+      { caseVersion: 1, films: [recordOf('front'), recordOf('side')], options: { acquisition: 'unknown', population: 'adult', template: null }, firstVertebraId: 0, frontFinder: 'hand-built' },
       { onFrame: (frame) => frames.push(frame) },
     );
     // Each slot takes the marks its view holds: pedicles and patient left or right on the front film.
@@ -301,7 +301,7 @@ describe('the stand-in engine', () => {
     await client.openFilm('bend-right', story.films['bend-left'].file, null);
     const frames: WatchFrame[] = [];
     await client.runAutoPass(
-      { caseVersion: 1, films: [recordOf('bend-left'), recordOf('bend-right')], options: { acquisition: 'unknown', population: 'adult', template: null }, firstVertebraId: 0 },
+      { caseVersion: 1, films: [recordOf('bend-left'), recordOf('bend-right')], options: { acquisition: 'unknown', population: 'adult', template: null }, firstVertebraId: 0, frontFinder: 'hand-built' },
       { onFrame: (frame) => frames.push(frame) },
     );
     const told = (kind: WatchFrame['kind']) => story.pass.frames.find((frame) => frame.kind === kind && frame.film === 'bend-left');
@@ -320,7 +320,7 @@ describe('the stand-in engine', () => {
     expect(await client.senseGeometry('bend-left')).toEqual(story.films['bend-right'].guess);
     expect(await client.senseGeometry('bend-right')).toEqual(story.films['bend-left'].guess);
     const result = await client.runAutoPass(
-      { caseVersion: 1, films: [recordOf('bend-left'), recordOf('bend-right')], options: { acquisition: 'unknown', population: 'adult', template: null }, firstVertebraId: 0 },
+      { caseVersion: 1, films: [recordOf('bend-left'), recordOf('bend-right')], options: { acquisition: 'unknown', population: 'adult', template: null }, firstVertebraId: 0, frontFinder: 'hand-built' },
       {},
     );
     const told = (kind: FilmKind) => story.pass.marks.find((marks) => marks.film === kind) as FilmMarks;
@@ -352,7 +352,7 @@ describe('the stand-in at the slow pace', () => {
     let ended = false;
     const passing = codeOf(
       client.runAutoPass(
-        { caseVersion: 1, films: [recordOf('front')], options: { acquisition: 'unknown', population: 'adult', template: null }, firstVertebraId: 0 },
+        { caseVersion: 1, films: [recordOf('front')], options: { acquisition: 'unknown', population: 'adult', template: null }, firstVertebraId: 0, frontFinder: 'hand-built' },
         { onFrame: (frame) => frames.push(frame) },
       ),
     ).finally(() => {
@@ -377,7 +377,7 @@ describe('the stand-in at the slow pace', () => {
     await opening;
     let ended = false;
     const passing = codeOf(
-      client.runAutoPass({ caseVersion: 1, films: [recordOf('front')], options: { acquisition: 'unknown', population: 'adult', template: null }, firstVertebraId: 0 }),
+      client.runAutoPass({ caseVersion: 1, films: [recordOf('front')], options: { acquisition: 'unknown', population: 'adult', template: null }, firstVertebraId: 0, frontFinder: 'hand-built' }),
     ).finally(() => {
       ended = true;
     });

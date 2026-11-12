@@ -121,7 +121,7 @@
         },
         {
           "const": "no-evidence",
-          "description": "It sits where the film shows nothing (cropped off): placed from the\nchain alone.",
+          "description": "It sits where the film shows nothing (cropped off), or the trained\nfinder's chain filled it in between its neighbours without seeing\nit: placed from the chain alone.",
           "type": "string"
         },
         {
@@ -1221,6 +1221,11 @@
         {
           "const": "films-disagree-on-count",
           "description": "The front and side films chose different counts.",
+          "type": "string"
+        },
+        {
+          "const": "estimated",
+          "description": "The names were placed by the trained finder from where each\nvertebra sits and how big it is, not counted from the first rib or\nthe sacrum: an estimate until L5 is confirmed.",
           "type": "string"
         }
       ]

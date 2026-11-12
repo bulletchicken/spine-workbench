@@ -260,7 +260,7 @@ describe('crashes', () => {
     await opening;
     const worker = rig.filmWorkers()[0];
     if (worker === undefined) throw new Error('no film worker');
-    const pass = rig.engine.runAutoPass({ caseVersion: 1, films: [{ kind: 'front' } as CaseFileV1['films'][number]], options: { acquisition: 'unknown', population: 'adult', template: null }, firstVertebraId: 0 });
+    const pass = rig.engine.runAutoPass({ caseVersion: 1, films: [{ kind: 'front' } as CaseFileV1['films'][number]], options: { acquisition: 'unknown', population: 'adult', template: null }, firstVertebraId: 0, frontFinder: 'hand-built' });
     const settled = outcome(pass);
     await vi.advanceTimersByTimeAsync(5);
     worker.silent = true;

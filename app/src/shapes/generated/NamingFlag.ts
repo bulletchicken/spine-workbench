@@ -3,4 +3,4 @@
 /**
  * Something about a film's naming the user should look at.
  */
-export type NamingFlag = "non-standard-count" | "close-alternative" | "ends-disagree" | "top-anchor-weak" | "bottom-anchor-weak" | "names-unknown" | "films-disagree-on-count";
+export type NamingFlag = "non-standard-count" | "close-alternative" | "ends-disagree" | "top-anchor-weak" | "bottom-anchor-weak" | "names-unknown" | "films-disagree-on-count" | "estimated";

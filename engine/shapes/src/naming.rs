@@ -99,6 +99,10 @@ pub enum NamingFlag {
     NamesUnknown,
     /// The front and side films chose different counts.
     FilmsDisagreeOnCount,
+    /// The names were placed by the trained finder from where each
+    /// vertebra sits and how big it is, not counted from the first rib or
+    /// the sacrum: an estimate until L5 is confirmed.
+    Estimated,
 }
 
 /// How likely a count is, from the template scores. Not calibrated, and

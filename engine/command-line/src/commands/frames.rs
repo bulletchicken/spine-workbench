@@ -5,7 +5,9 @@
 
 use crate::{FramesArgs, Outcome};
 use auto_pass::watch::{ChainPass, FilmPass};
-use shapes::auto_pass::{Acquisition, AutoPassInput, AutoPassResult, ChainOptions, Population};
+use shapes::auto_pass::{
+    Acquisition, AutoPassInput, AutoPassResult, ChainOptions, FrontFinder, Population,
+};
 use shapes::film::FilmKind;
 use shapes::made_up::{MadeUpRecipe, RecipeName, Tier};
 use std::fs;
@@ -41,6 +43,7 @@ pub fn run(args: &FramesArgs) -> Outcome {
             template: None,
         },
         first_vertebra_id: 1,
+        front_finder: FrontFinder::HandBuilt,
     };
     let mut frames = Vec::new();
     let mut film_pass = FilmPass::new(Rc::clone(&decoded), film)?;
