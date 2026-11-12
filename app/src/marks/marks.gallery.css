@@ -1,0 +1,30 @@
+/* The outlines' gallery page. Gallery only: the tile, its film and the outlines wear the design
+   system's classes; this gives each tile a room of its own, as the stage would. */
+.marks-stage {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--caption-gap);
+  margin: 0;
+}
+
+/* The stage places a tile in its own box; here each tile has a room of its size. */
+.marks-stage-room {
+  position: relative;
+}
+
+/* The film viewer fills its tile, as the stage's tile has it. */
+.marks-stage .tile > .film {
+  inset: 0;
+}
+
+.marks-stage-caption {
+  color: var(--ink-2);
+  font: var(--type-caption);
+  letter-spacing: var(--track-caption);
+  text-align: center;
+}
+
+.marks-stage-row {
+  display: flex;
+  gap: var(--tile-gap);
+}

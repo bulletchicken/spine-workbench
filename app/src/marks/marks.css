@@ -1,0 +1,7 @@
+/* components.css sizes a mark by --k, the screen pixels one film pixel covers. The film viewer
+   already writes that number on itself at every placement, glides included, as --film-zoom. */
+.film-viewer { --k: var(--film-zoom); }
+
+/* The viewer's layer stack holds every line to one width on screen. A mark divides by the zoom
+   itself, and its dashes draw it on, so that is turned off for a mark's shapes. */
+.layer-stack .mark :is(polygon, text) { vector-effect: none; }
