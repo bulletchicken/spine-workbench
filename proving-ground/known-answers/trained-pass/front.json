@@ -1,0 +1,1159 @@
+{
+  "recipe": {
+    "name": "straight",
+    "seed": 7,
+    "tier": "t2"
+  },
+  "firstVertebraId": 1000,
+  "film": {
+    "kind": "front",
+    "image": {
+      "path": "films/front.png",
+      "width": 1409,
+      "height": 3128,
+      "bitsStored": 16
+    },
+    "source": "png",
+    "keptTags": null,
+    "values": {
+      "offset": 0,
+      "inverted": false,
+      "invertedByUser": false,
+      "modality": {
+        "kind": "linear",
+        "slope": 1.0,
+        "intercept": 0.0
+      }
+    },
+    "flags": [],
+    "blanked": [],
+    "geometry": {
+      "mmPerPx": null,
+      "mmPerPxVertical": null,
+      "scale": null,
+      "quarterTurns": 0,
+      "imageRight": null,
+      "confirmed": {
+        "upright": false,
+        "leftRight": false,
+        "facing": false,
+        "scale": false,
+        "polarity": false,
+        "privacy": false
+      }
+    }
+  },
+  "result": {
+    "marks": {
+      "film": "front",
+      "vertebrae": [
+        {
+          "id": 1000,
+          "level": "T1",
+          "marks": {
+            "kind": "front",
+            "points": {
+              "supL": {
+                "at": [
+                  746.067386079775,
+                  549.4706665546184
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "supR": {
+                "at": [
+                  649.3675101896974,
+                  557.875705521604
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infL": {
+                "at": [
+                  743.7180096463002,
+                  599.3311041210732
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infR": {
+                "at": [
+                  653.1026119978449,
+                  608.8843509150072
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "pedL": {
+                "seen": "not-visible",
+                "source": "auto"
+              },
+              "pedR": {
+                "seen": "not-visible",
+                "source": "auto"
+              }
+            }
+          },
+          "confidence": {
+            "score": 0.36769285798072815,
+            "band": "low",
+            "reasons": [
+              "level-uncertain"
+            ],
+            "calibrated": false,
+            "endplateSpreadPx": null,
+            "margin": null
+          },
+          "outline": null
+        },
+        {
+          "id": 1001,
+          "level": "T2",
+          "marks": {
+            "kind": "front",
+            "points": {
+              "supL": {
+                "at": [
+                  747.0573597724298,
+                  630.0466843468926
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "supR": {
+                "at": [
+                  650.4136041166878,
+                  632.1264699917405
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infL": {
+                "at": [
+                  744.4964352878936,
+                  685.6030920332164
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infR": {
+                "at": [
+                  650.5937986850017,
+                  690.2268494185971
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "pedL": {
+                "seen": "not-visible",
+                "source": "auto"
+              },
+              "pedR": {
+                "seen": "not-visible",
+                "source": "auto"
+              }
+            }
+          },
+          "confidence": {
+            "score": 0.4768039882183075,
+            "band": "low",
+            "reasons": [
+              "level-uncertain"
+            ],
+            "calibrated": false,
+            "endplateSpreadPx": null,
+            "margin": null
+          },
+          "outline": null
+        },
+        {
+          "id": 1002,
+          "level": "T3",
+          "marks": {
+            "kind": "front",
+            "points": {
+              "supL": {
+                "at": [
+                  750.4286957240117,
+                  709.1869715840271
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "supR": {
+                "at": [
+                  646.36177218977,
+                  717.9060814462237
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infL": {
+                "at": [
+                  748.6425552469617,
+                  755.3078953182293
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infR": {
+                "at": [
+                  649.102432987282,
+                  767.4369609394814
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "pedL": {
+                "seen": "not-visible",
+                "source": "auto"
+              },
+              "pedR": {
+                "seen": "not-visible",
+                "source": "auto"
+              }
+            }
+          },
+          "confidence": {
+            "score": 0.43733397126197815,
+            "band": "low",
+            "reasons": [
+              "level-uncertain"
+            ],
+            "calibrated": false,
+            "endplateSpreadPx": null,
+            "margin": null
+          },
+          "outline": null
+        },
+        {
+          "id": 1003,
+          "level": "T4",
+          "marks": {
+            "kind": "front",
+            "points": {
+              "supL": {
+                "at": [
+                  735.4048497961222,
+                  783.3979319774295
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "supR": {
+                "at": [
+                  556.6396502422266,
+                  784.4712966436794
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infL": {
+                "at": [
+                  737.4455985658192,
+                  849.5559757774103
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infR": {
+                "at": [
+                  561.1021186640274,
+                  856.3117847512424
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "pedL": {
+                "seen": "not-visible",
+                "source": "auto"
+              },
+              "pedR": {
+                "seen": "not-visible",
+                "source": "auto"
+              }
+            }
+          },
+          "confidence": {
+            "score": 0.45402616262435913,
+            "band": "low",
+            "reasons": [
+              "level-uncertain"
+            ],
+            "calibrated": false,
+            "endplateSpreadPx": null,
+            "margin": null
+          },
+          "outline": null
+        },
+        {
+          "id": 1004,
+          "level": "T5",
+          "marks": {
+            "kind": "front",
+            "points": {
+              "supL": {
+                "at": [
+                  747.4380273413423,
+                  960.5945262886437
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "supR": {
+                "at": [
+                  567.6804439479153,
+                  958.9139307518055
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infL": {
+                "at": [
+                  748.3619229154203,
+                  1021.0978771098563
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infR": {
+                "at": [
+                  571.5826097770649,
+                  1019.7126002122421
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "pedL": {
+                "seen": "not-visible",
+                "source": "auto"
+              },
+              "pedR": {
+                "seen": "not-visible",
+                "source": "auto"
+              }
+            }
+          },
+          "confidence": {
+            "score": 0.507717490196228,
+            "band": "low",
+            "reasons": [
+              "level-uncertain"
+            ],
+            "calibrated": false,
+            "endplateSpreadPx": null,
+            "margin": null
+          },
+          "outline": null
+        },
+        {
+          "id": 1005,
+          "level": "T6",
+          "marks": {
+            "kind": "front",
+            "points": {
+              "supL": {
+                "at": [
+                  750.2126812194113,
+                  1042.4790241007718
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "supR": {
+                "at": [
+                  568.3576955597828,
+                  1040.4502133944081
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infL": {
+                "at": [
+                  749.5644744545657,
+                  1105.1923875127932
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infR": {
+                "at": [
+                  568.6632414173337,
+                  1104.8010471499738
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "pedL": {
+                "seen": "not-visible",
+                "source": "auto"
+              },
+              "pedR": {
+                "seen": "not-visible",
+                "source": "auto"
+              }
+            }
+          },
+          "confidence": {
+            "score": 0.5817439556121826,
+            "band": "low",
+            "reasons": [
+              "level-uncertain"
+            ],
+            "calibrated": false,
+            "endplateSpreadPx": null,
+            "margin": null
+          },
+          "outline": null
+        },
+        {
+          "id": 1006,
+          "level": "T7",
+          "marks": {
+            "kind": "front",
+            "points": {
+              "supL": {
+                "at": [
+                  752.5513142020593,
+                  1133.381874288602
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "supR": {
+                "at": [
+                  570.5795601744048,
+                  1124.1591980962064
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infL": {
+                "at": [
+                  746.0160373212501,
+                  1206.127648057489
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infR": {
+                "at": [
+                  562.2571616429889,
+                  1199.3096769488295
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "pedL": {
+                "seen": "not-visible",
+                "source": "auto"
+              },
+              "pedR": {
+                "seen": "not-visible",
+                "source": "auto"
+              }
+            }
+          },
+          "confidence": {
+            "score": 0.5795066356658936,
+            "band": "low",
+            "reasons": [
+              "level-uncertain"
+            ],
+            "calibrated": false,
+            "endplateSpreadPx": null,
+            "margin": null
+          },
+          "outline": null
+        },
+        {
+          "id": 1007,
+          "level": "T8",
+          "marks": {
+            "kind": "front",
+            "points": {
+              "supL": {
+                "at": [
+                  837.581033368068,
+                  1204.8278621915078
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "supR": {
+                "at": [
+                  654.1020700754023,
+                  1244.4974638913202
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infL": {
+                "at": [
+                  863.1489314716865,
+                  1306.334972412928
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infR": {
+                "at": [
+                  673.5963404946955,
+                  1341.1303117010889
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "pedL": {
+                "seen": "not-visible",
+                "source": "auto"
+              },
+              "pedR": {
+                "seen": "not-visible",
+                "source": "auto"
+              }
+            }
+          },
+          "confidence": {
+            "score": 0.4444849491119385,
+            "band": "low",
+            "reasons": [
+              "level-uncertain"
+            ],
+            "calibrated": false,
+            "endplateSpreadPx": null,
+            "margin": null
+          },
+          "outline": null
+        },
+        {
+          "id": 1008,
+          "level": "T9",
+          "marks": {
+            "kind": "front",
+            "points": {
+              "supL": {
+                "at": [
+                  753.2973315873553,
+                  1407.6116854556046
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "supR": {
+                "at": [
+                  640.2340765533029,
+                  1408.8070949102366
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infL": {
+                "at": [
+                  751.1221038420832,
+                  1487.2252027328263
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infR": {
+                "at": [
+                  642.5152951856277,
+                  1487.796895211458
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "pedL": {
+                "seen": "not-visible",
+                "source": "auto"
+              },
+              "pedR": {
+                "seen": "not-visible",
+                "source": "auto"
+              }
+            }
+          },
+          "confidence": {
+            "score": 0.3699984550476074,
+            "band": "low",
+            "reasons": [
+              "level-uncertain"
+            ],
+            "calibrated": false,
+            "endplateSpreadPx": null,
+            "margin": null
+          },
+          "outline": null
+        },
+        {
+          "id": 1009,
+          "level": "T10",
+          "marks": {
+            "kind": "front",
+            "points": {
+              "supL": {
+                "at": [
+                  757.3790101893478,
+                  1527.7513035306265
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "supR": {
+                "at": [
+                  636.5559005297665,
+                  1529.2332105173011
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infL": {
+                "at": [
+                  754.4671617267034,
+                  1600.6431826356495
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infR": {
+                "at": [
+                  639.7730735727378,
+                  1606.327735602658
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "pedL": {
+                "seen": "not-visible",
+                "source": "auto"
+              },
+              "pedR": {
+                "seen": "not-visible",
+                "source": "auto"
+              }
+            }
+          },
+          "confidence": {
+            "score": 0.3450506329536438,
+            "band": "low",
+            "reasons": [
+              "level-uncertain"
+            ],
+            "calibrated": false,
+            "endplateSpreadPx": null,
+            "margin": null
+          },
+          "outline": null
+        },
+        {
+          "id": 1010,
+          "level": "T11",
+          "marks": {
+            "kind": "front",
+            "points": {
+              "supL": {
+                "at": [
+                  760.3186745336241,
+                  1637.4994401947433
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "supR": {
+                "at": [
+                  632.8934164712548,
+                  1635.3598315717604
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infL": {
+                "at": [
+                  755.3746367750366,
+                  1712.1569418319082
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infR": {
+                "at": [
+                  635.8482119404858,
+                  1709.4737138910368
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "pedL": {
+                "seen": "not-visible",
+                "source": "auto"
+              },
+              "pedR": {
+                "seen": "not-visible",
+                "source": "auto"
+              }
+            }
+          },
+          "confidence": {
+            "score": 0.38846245408058167,
+            "band": "low",
+            "reasons": [
+              "level-uncertain"
+            ],
+            "calibrated": false,
+            "endplateSpreadPx": null,
+            "margin": null
+          },
+          "outline": null
+        },
+        {
+          "id": 1011,
+          "level": "T12",
+          "marks": {
+            "kind": "front",
+            "points": {
+              "supL": {
+                "at": [
+                  765.9983636068204,
+                  1726.7046125056684
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "supR": {
+                "at": [
+                  626.2678281179511,
+                  1732.2197354914103
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infL": {
+                "at": [
+                  766.779082646402,
+                  1806.3783014986207
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infR": {
+                "at": [
+                  628.4260565844683,
+                  1812.2311013972744
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "pedL": {
+                "seen": "not-visible",
+                "source": "auto"
+              },
+              "pedR": {
+                "seen": "not-visible",
+                "source": "auto"
+              }
+            }
+          },
+          "confidence": {
+            "score": 0.5724552273750305,
+            "band": "low",
+            "reasons": [
+              "level-uncertain"
+            ],
+            "calibrated": false,
+            "endplateSpreadPx": null,
+            "margin": null
+          },
+          "outline": null
+        },
+        {
+          "id": 1012,
+          "level": "L1",
+          "marks": {
+            "kind": "front",
+            "points": {
+              "supL": {
+                "at": [
+                  771.2590926285408,
+                  1845.2899862631969
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "supR": {
+                "at": [
+                  617.7997321948596,
+                  1850.240145433714
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infL": {
+                "at": [
+                  773.0674739032618,
+                  1928.678117825848
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infR": {
+                "at": [
+                  618.3883139919182,
+                  1934.2715372941946
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "pedL": {
+                "seen": "not-visible",
+                "source": "auto"
+              },
+              "pedR": {
+                "seen": "not-visible",
+                "source": "auto"
+              }
+            }
+          },
+          "confidence": {
+            "score": 0.7243217825889587,
+            "band": "medium",
+            "reasons": [
+              "level-uncertain"
+            ],
+            "calibrated": false,
+            "endplateSpreadPx": null,
+            "margin": null
+          },
+          "outline": null
+        },
+        {
+          "id": 1013,
+          "level": "L2",
+          "marks": {
+            "kind": "front",
+            "points": {
+              "supL": {
+                "at": [
+                  765.713194180206,
+                  1979.7292359583541
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "supR": {
+                "at": [
+                  614.4392130480037,
+                  1982.9671394370987
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infL": {
+                "at": [
+                  764.6432047865469,
+                  2064.826263469092
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infR": {
+                "at": [
+                  611.5193336975947,
+                  2069.037099708417
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "pedL": {
+                "seen": "not-visible",
+                "source": "auto"
+              },
+              "pedR": {
+                "seen": "not-visible",
+                "source": "auto"
+              }
+            }
+          },
+          "confidence": {
+            "score": 0.6771377921104431,
+            "band": "medium",
+            "reasons": [
+              "level-uncertain"
+            ],
+            "calibrated": false,
+            "endplateSpreadPx": null,
+            "margin": null
+          },
+          "outline": null
+        },
+        {
+          "id": 1014,
+          "level": "L3",
+          "marks": {
+            "kind": "front",
+            "points": {
+              "supL": {
+                "at": [
+                  775.3411058653768,
+                  2118.0162612591143
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "supR": {
+                "at": [
+                  602.0734268074447,
+                  2120.282401219082
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infL": {
+                "at": [
+                  783.3235357590986,
+                  2211.5642648149824
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infR": {
+                "at": [
+                  599.9543223712551,
+                  2213.913243672415
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "pedL": {
+                "seen": "not-visible",
+                "source": "auto"
+              },
+              "pedR": {
+                "seen": "not-visible",
+                "source": "auto"
+              }
+            }
+          },
+          "confidence": {
+            "score": 0.7637395858764648,
+            "band": "medium",
+            "reasons": [
+              "level-uncertain"
+            ],
+            "calibrated": false,
+            "endplateSpreadPx": null,
+            "margin": null
+          },
+          "outline": null
+        },
+        {
+          "id": 1015,
+          "level": "L4",
+          "marks": {
+            "kind": "front",
+            "points": {
+              "supL": {
+                "at": [
+                  788.0941742922671,
+                  2238.249278404625
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "supR": {
+                "at": [
+                  586.8645944201671,
+                  2250.807467341881
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infL": {
+                "at": [
+                  795.5323793237476,
+                  2358.6752161518866
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infR": {
+                "at": [
+                  589.6985534428592,
+                  2371.7531395745923
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "pedL": {
+                "seen": "not-visible",
+                "source": "auto"
+              },
+              "pedR": {
+                "seen": "not-visible",
+                "source": "auto"
+              }
+            }
+          },
+          "confidence": {
+            "score": 0.6420231461524963,
+            "band": "medium",
+            "reasons": [
+              "level-uncertain"
+            ],
+            "calibrated": false,
+            "endplateSpreadPx": null,
+            "margin": null
+          },
+          "outline": null
+        },
+        {
+          "id": 1016,
+          "level": "L5",
+          "marks": {
+            "kind": "front",
+            "points": {
+              "supL": {
+                "at": [
+                  752.6529008594781,
+                  2467.5040188305165
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "supR": {
+                "at": [
+                  636.9432189399099,
+                  2436.5888381763725
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infL": {
+                "at": [
+                  741.7905422506591,
+                  2575.264345369338
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "infR": {
+                "at": [
+                  622.9201294853862,
+                  2541.004892150625
+                ],
+                "source": "auto",
+                "pinned": false,
+                "inferred": false
+              },
+              "pedL": {
+                "seen": "not-visible",
+                "source": "auto"
+              },
+              "pedR": {
+                "seen": "not-visible",
+                "source": "auto"
+              }
+            }
+          },
+          "confidence": {
+            "score": 0.4496246874332428,
+            "band": "low",
+            "reasons": [
+              "level-uncertain"
+            ],
+            "calibrated": false,
+            "endplateSpreadPx": null,
+            "margin": null
+          },
+          "outline": null
+        }
+      ],
+      "landmarks": {
+        "c7": null,
+        "sacrumTop": null,
+        "hips": []
+      },
+      "naming": {
+        "template": "standard",
+        "chosenBy": "engine",
+        "alternatives": [],
+        "fromTop": null,
+        "fromBottom": null,
+        "flags": [
+          "estimated"
+        ],
+        "l5ConfirmedOn": null
+      },
+      "namedFor": "patient-left"
+    },
+    "warnings": []
+  }
+}

@@ -17,18 +17,30 @@
 //! | [`grid`] | a stack of float maps: channels by rows by columns |
 //! | [`layers`] | convolution, upsampling, pooling, group norm, activations |
 //! | [`weights`] | the trained numbers, compiled in and read strictly |
+//! | [`intake`] | a film as the network was taught to see one |
 //! | [`spine_net`] | the main network, run in small steps |
 //! | [`reading`] | the network's maps read as peaks and outlines |
 //! | [`overlap`] | how much two outlines overlap |
+//! | [`framing`] | a full-length film cropped to its spine for a second look |
+//! | [`chain`] | the seventeen picked in order, a one-vertebra gap filled |
 //! | [`corners`] | each corner settled on the full-size film |
+//! | [`to_marks`] | the answer as the marks the rest of the engine reads |
+//! | [`watch`] | the stepper and its frames |
+//! | [`run`] | one-call entry points for native use |
 
 #![forbid(unsafe_code)]
 
+pub mod chain;
 pub mod corners;
+pub mod framing;
 pub mod grid;
+pub mod intake;
 pub mod layers;
 pub mod outline;
 pub mod overlap;
 pub mod reading;
+pub mod run;
 pub mod spine_net;
+pub mod to_marks;
+pub mod watch;
 pub mod weights;

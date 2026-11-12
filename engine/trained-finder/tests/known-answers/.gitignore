@@ -1,0 +1,4 @@
+# The exact pictures and patches are checked by their SHA-256 in
+# manifest.json. make_known_answers.py also writes the bytes here, for
+# whoever is chasing a mismatch; they are not kept in git.
+*_u8.bin
