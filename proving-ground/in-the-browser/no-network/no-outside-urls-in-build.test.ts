@@ -14,8 +14,11 @@ const REVIEWED: Record<string, string> = {
   'http://www.w3.org/XML/1998/namespace': 'the XML namespace for xml: attributes, in React DOM',
   'https://react.dev/errors/': 'the start of the text of React’s production error messages',
   'https://creativecommons.org/licenses/by/4.0/':
-    'the licence of the bone shapes, as text in bones/vertebrae.json: the licence asks to be named by its address wherever the shapes go',
-  'https://dbarchive.biosciencedbc.jp/en/bodyparts3d/': 'where the bone shapes come from, as text in the same file',
+    'the licence of the bone shapes, as text in their list (spine-3d/bones/vertebrae.json), which is built into the 3D view: the licence asks to be named by its address wherever the shapes go',
+  'https://dbarchive.biosciencedbc.jp/en/bodyparts3d/': 'where the bone shapes come from, as text in the same list',
+  'http://www.w3.org/1999/xhtml': 'the XHTML namespace: three.js makes its canvases with createElementNS',
+  'https://jcgt.org/published/0007/04/01/':
+    'a paper cited in a comment inside the text of one of three.js’s shaders (sampling for rough reflections); the text is kept whole because it is a string',
 };
 
 const ADDRESS = /(?:https?|wss?):\/\/[A-Za-z0-9\-._~:/?#[\]@!$&*+,;=%]*/g;

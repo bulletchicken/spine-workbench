@@ -1,0 +1,95 @@
+/* The rooms the 3D view's gallery pages show a spine in. The soft glow is
+   the one the design puts behind the spine; the app's own tokens do not
+   hold it yet, so its colour is named here and nowhere else. */
+.spine-room {
+  --spine-glow: #e9f0f9;
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  margin: 0;
+  max-width: 100%;
+}
+
+.spine-room-box {
+  position: relative;
+  overflow: hidden;
+  width: 560px;
+  max-width: 100%;
+  aspect-ratio: 560 / 720;
+  background: var(--room-0);
+  border: 1px solid var(--line-1);
+}
+
+.spine-room[data-size='wide'] .spine-room-box {
+  width: 880px;
+  aspect-ratio: 880 / 720;
+}
+
+.spine-room[data-size='small'] .spine-room-box {
+  width: 280px;
+  aspect-ratio: 280 / 480;
+}
+
+.spine-room-glow {
+  position: absolute;
+  left: 20%;
+  top: 18%;
+  width: 60%;
+  height: 60%;
+  border-radius: 50%;
+  background: var(--spine-glow);
+  filter: blur(70px);
+  pointer-events: none;
+}
+
+.spine-room-under {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  width: 100%;
+}
+
+.spine-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-4);
+}
+
+.spine-dial {
+  display: grid;
+  grid-template-columns: 9.5em minmax(0, 1fr) 3em;
+  align-items: center;
+  gap: var(--s-3);
+  font: var(--text-small) / var(--lh-small) var(--font-ui);
+  color: var(--ink-2);
+}
+
+.spine-dial-value {
+  font-family: var(--font-data);
+  color: var(--ink-3);
+  text-align: right;
+}
+
+/* The marks a fit was given, drawn by the page over the canvas: thin, with a dark casing, as on a film. */
+.spine-marks {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.spine-marks-casing {
+  fill: none;
+  stroke: var(--casing);
+  stroke-opacity: 0.6;
+  stroke-width: 3;
+  stroke-linejoin: round;
+}
+
+.spine-marks-outline {
+  fill: none;
+  stroke: var(--ink-1-film);
+  stroke-width: 1;
+  stroke-linejoin: round;
+}

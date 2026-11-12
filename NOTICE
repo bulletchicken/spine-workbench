@@ -4,8 +4,8 @@ Copyright 2026 Jeremy Su
 This product is licensed under the Apache License, Version 2.0 (see
 LICENSE).
 
-Third-party material bundled with the app (typefaces, bone models) is
-credited below, each with its licence, when it is added.
+Third-party material bundled with the app (typefaces, bone models,
+libraries) is credited below, each with its licence, when it is added.
 
 Typefaces
 
@@ -47,3 +47,11 @@ Weights learned from SpineWeb Dataset 16
   2017), pages 127 to 135.
   (https://doi.org/10.1007/978-3-319-66182-7_15)
   What the weights are: engine/trained-finder/weights/README.md
+
+Libraries
+
+three.js
+  Copyright 2010-2026 three.js authors
+  (https://github.com/mrdoob/three.js)
+  MIT License, in third-party-licences/three-MIT.txt
+  Draws the spine in three dimensions.

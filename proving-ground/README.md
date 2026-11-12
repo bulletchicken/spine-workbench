@@ -23,6 +23,7 @@ here, in four rungs, each one closer to real use:
 | Path | Proves |
 |---|---|
 | `known-answers/case-files/` | strict reading: every file and the verdict it must get |
+| `known-answers/spine-3d/` | the 3D view places a bone's body where the engine's forward model puts the vertebra's: endplate centres and body corners in the patient and on four films, read by `app/src/spine-3d/placing/known-answers.test.ts` |
 | `known-answers/side-swap.json` | swapping a film's left/right (or anterior/posterior) names keeps every point's position and flags; read by `engine/shapes/tests/side_swap.rs` and, once it exists, the case reducer's test |
 | `parity/contract.test.ts` | the release engine runs in Node, reports the app's shapes fingerprint, and every golden case file crosses into JavaScript and back unchanged |
 | `parity/trained-pass.test.ts`, `known-answers/trained-pass/` | the trained finder in the release engine gives exactly the native engine's answer on a made-up front film, as front-film marks the strict reader takes, names flagged as estimates; the native answer is held to the same file by `engine/trained-finder/tests/finds_the_vertebrae_on_a_made_up_film.rs` |

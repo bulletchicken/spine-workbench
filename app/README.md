@@ -13,7 +13,7 @@ reaches it only through the engine room.
 | `src/guide/` | the left column's one sentence, its one lit action and its cards |
 | `src/bench/` | the films, hung: bays, the lane between Front and Side, the toasts |
 | `src/film-viewer/` | one film on screen: pixels on the GPU, layers over them, its camera |
-| `src/spine-3d/` | the spine in three dimensions; so far, the vertebra shapes it will draw |
+| `src/spine-3d/` | the spine in three dimensions: bone shapes placed by a fit, with the films it came from; not mounted yet |
 | `src/marks/` | what is drawn on a film: outlines, pins, pedicle rings, landmarks |
 | `src/ladder/` | the unrolled spine between the Front and Side films |
 | `src/auto-pass/` | the automatic pass, as something to watch: its recording, clock and layers |

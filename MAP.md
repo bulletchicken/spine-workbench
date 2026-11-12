@@ -284,6 +284,12 @@ The folders and import rules in one picture: `app/README.md`.
 | the tool contract | `app/src/toolbox/tool-contract.ts` |
 | the film-to-screen transform | `app/src/film-viewer/film-space.ts` |
 | the vertebra shapes the 3D view draws, how they are read, and how they reach the app without a fetch | `app/src/spine-3d/bones/vertebrae.json`, `app/src/spine-3d/bones/vertebrae.bin`, `app/src/spine-3d/bones/read-bones.ts`, `app/src/spine-3d/bones/load-bones.ts` |
+| how a bone is shaped to a fitted vertebra | `app/src/spine-3d/placing/shape-bone.ts` |
+| how a patient point lands on a film, in the app | `app/src/spine-3d/placing/film-camera.ts` |
+| the 3D view's camera: no perspective to a narrow lens, and the named views | `app/src/spine-3d/looking/lens.ts`, `app/src/spine-3d/looking/named-views.ts` |
+| the bone colour, the lights and the shadow of the 3D stage | `app/src/spine-3d/scene/look.ts` |
+| what can be set on a drawn spine, a film and the stage | `app/src/spine-3d/scene/drawn-spine.ts`, `app/src/spine-3d/scene/film-wall.ts`, `app/src/spine-3d/scene/stage.ts` |
+| the 3D view as a part a screen places | `app/src/spine-3d/view/Spine3D.tsx` |
 | the case edits | `app/src/case-state/case-edits.ts` |
 | the design's tokens, unchanged | `app/src/look-and-feel/tokens.css` |
 | a duration the design names that is not a token | `app/src/look-and-feel/named-timings.css` |
@@ -301,6 +307,7 @@ The proof ladder: `proving-ground/README.md`.
 |---|---|
 | a golden case file or its verdict | `proving-ground/known-answers/case-files/verdicts.json` |
 | the known answer for swapping left/right names | `proving-ground/known-answers/side-swap.json` |
+| the known answers the 3D view's placing is held to | `proving-ground/known-answers/spine-3d/placed-bodies.json` |
 | the real engine in Node | `proving-ground/parity/contract.test.ts` |
 | the trained finder's native answer, and the browser build held to it | `proving-ground/known-answers/trained-pass/front.json`, `proving-ground/parity/trained-pass.test.ts`, `engine/trained-finder/tests/finds_the_vertebrae_on_a_made_up_film.rs` |
 | the no-network browser test | `proving-ground/in-the-browser/no-network/nothing-leaves.spec.ts` |

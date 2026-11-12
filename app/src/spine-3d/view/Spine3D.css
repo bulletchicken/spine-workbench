@@ -1,0 +1,32 @@
+/* The spine in 3D. The canvas fills the box it is given and is clear, so
+   whatever is behind it shows round the spine: the page, or a film laid
+   under it. Nothing is drawn round it: no frame, no grid, no floor. */
+.spine-3d {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.spine-3d-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* A canvas that a hand may turn says so. */
+.spine-3d-canvas[data-hand='free'] {
+  cursor: grab;
+}
+
+.spine-3d-canvas[data-hand='on-a-bone'] {
+  cursor: pointer;
+}
+
+.spine-3d-canvas[data-hand='turning'] {
+  cursor: grabbing;
+}
