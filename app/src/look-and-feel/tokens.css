@@ -1,246 +1,427 @@
-/* ==========================================================================
-   Spine Workbench · design tokens  ("Clinical White")
-   One rule to remember: ink means go, colour means data.
-   The page is white and ruled. Exactly one thing on screen is solid ink: the
-   next action. The only hues are the four confidence colours, and each is
-   also a line pattern, a glyph and a word, so nothing rests on hue alone.
+/* Spine Workbench: tokens.
+   Every value the interface uses, by name. components.css uses these names and nothing else.
+   DESIGN.md at the root of the repository says what each value is for.
+   Change a value here, then follow "Keeping this current" in DESIGN.md. */
 
-   What changed from the dark "Reading Room" tokens, and why
-   - One theme, light. The room is white paper with one neutral grey scale.
-     A film is still read on black, so --well is black and never themed.
-   - Two grounds. Everything is seen either on paper or on a film, and the
-     two need opposite inks. Each ink, line, lumen and confidence token has a
-     value for each ground (--ink-1-paper, --ink-1-film). The plain name
-     (--ink-1) is the one for the ground you stand on: paper by default, film
-     inside data-ground="film". Component CSS uses the plain names only.
-   - Rules, not boxes. --rule is the one hairline the frame is drawn with.
-     Radii are small. Nothing floats on a shadow, nothing is glass, nothing
-     glows: --lift-*, --glass-blur and --glow-lumen are kept so no name has
-     to change, and now say "none". What floats is paper with a --keyline.
-   - Lumen keeps its name and its meaning, the next action. On paper it is
-     ink; on film it is white. It no longer has a hue.
-   - Confidence has an on-paper set, dark enough for white (4.5:1 or more
-     for the four states), beside the on-film set, which is unchanged.
-   - Every name the dark tokens had is still here.
-   ========================================================================== */
 :root {
-  color-scheme: light;
 
-  /* ---- Paper: white, and one neutral grey scale ---------------------------- */
-  --room-0: #ffffff;                 /* the page */
-  --room-1: #ffffff;                 /* guide, bars */
-  --room-2: #ffffff;                 /* ruled sections, where the dark design had cards */
-  --room-3: #f3f4f5;                 /* under the pointer */
-  --room-4: #e8eaec;                 /* pressed, selected */
-  --well:   #000000;                 /* behind a film, always; never themed */
-  --rule:   #cfd3d8;                 /* the hairline: every line that runs across the window */
-  --keyline: #111417;                /* the line round anything that floats: a popover, a sheet, a toast */
+  /* ---------- Colour: the page ---------- */
 
-  /* ---- Ink, lines and lumen, for each ground --------------------------------
-     On paper, contrast is worked out on white (#ffffff); on --room-3 it is
-     about 9% lower. On film it is worked out on the well (#000000). */
-  --ink-1-paper: #111417;            /* 18.5:1  text */
-  --ink-2-paper: #41474e;            /*  9.4:1  secondary text */
-  --ink-3-paper: #636a72;            /*  5.5:1  captions, labels */
-  --ink-4-paper: #8a9198;            /*  3.2:1  decoration and 24 px or larger only, never small text */
-  --ink-1-film:  #f4f6f8;            /* 19.4:1 */
-  --ink-2-film:  #c2c8cf;            /* 12.5:1 */
-  --ink-3-film:  #98a0a9;            /*  7.9:1 */
-  --ink-4-film:  #6b737c;            /*  4.4:1  decoration only */
+  --page: #fff;                                  /* the page */
+  --page-soft: #f6f7f9;                          /* the foot of the page */
+  --page-wash-1: #fcfcfd;                        /* two steps between them, so the wash starts without a line */
+  --page-wash-2: #f9fafb;
+  --page-wash: linear-gradient(var(--page) 52%, var(--page-wash-1) 72%, var(--page-wash-2) 86%, var(--page-soft));
+  --glow: #e9f0f9;                               /* the one soft glow behind the spine */
+  --glow-quiet: rgba(233, 240, 249, 0.8);        /* the same glow, quieter, behind the films */
 
-  --line-1-paper: #e4e7ea;           /* a lighter rule, between rows inside a section */
-  --line-2-paper: #cfd3d8;           /* the same grey as --rule */
-  --line-3-paper: #868c93;           /* 3.4:1  the outline of a control */
-  --line-1-film:  rgba(255, 255, 255, .12);
-  --line-2-film:  rgba(255, 255, 255, .22);
-  --line-3-film:  rgba(255, 255, 255, .45);
+  /* ---------- Colour: ink ---------- */
 
-  /* Lumen: the next action. Ink on paper, white on film. Never a hue. */
-  --lumen-hi-paper:   #2c3238;       /* the ink button under the pointer */
-  --lumen-paper:      #111417;       /* the one solid ink button */
-  --lumen-mid-paper:  #111417;       /* the focus ring, and a sign that points at the action */
-  --lumen-deep-paper: #111417;       /* the line round a pair of choices */
-  --lumen-glow-paper: rgba(17, 20, 23, 0);
-  --lumen-wash-paper: rgba(17, 20, 23, .05);
-  --on-lumen-paper:   #ffffff;       /* text on the ink button, 18.5:1 */
-  --lumen-hi-film:    #ffffff;       /* the ring, the ghost line, a letter that is set */
-  --lumen-film:       #ffffff;
-  --lumen-mid-film:   #c9d0d7;
-  --lumen-deep-film:  #98a0a9;
-  --lumen-glow-film:  rgba(255, 255, 255, 0);
-  --lumen-wash-film:  rgba(255, 255, 255, .14);
-  --on-lumen-film:    #0b0d0f;       /* text on a white badge on a film */
+  --ink: #0d0d0d;                                /* main text, the primary button */
+  --ink-2: #5d5d5d;                              /* second text: helpers, names, quiet buttons */
+  --ink-3: #8f8f8f;                              /* words on a disabled primary button. Not for reading text */
+  --ink-faint: rgba(13, 13, 13, 0.3);            /* a step not yet reached; the drawing in an empty place */
+  --ink-faint-hover: rgba(13, 13, 13, 0.44);     /* that drawing when pointed at, and while its film is being read */
+  --ink-hover: #2e2e2e;                          /* the primary button when pointed at */
+  --ink-pressed: #000;                           /* the primary button when pressed */
+  --on-ink: #fff;                                /* words on the primary button */
 
-  /* ---- Confidence: the only hues in the app -------------------------------
-     Each state has its own line, glyph and word, and one colour per ground.
-       sure      solid line      filled dot     "Sure"
-       look      dashed line     half dot       "Worth a look"
-       needs     dotted, heavier hollow ring    "Needs you"
-       by-you    solid, strongest tick          "Set by you"
-       inferred  long dash       hollow, short dash, always with the word
+  --line: rgba(13, 13, 13, 0.08);                /* hairlines; the pressed fill of quiet controls */
+  --line-strong: rgba(13, 13, 13, 0.4);          /* the edge of glass when more contrast is asked for */
+  --fill: rgba(13, 13, 13, 0.04);                /* the hover fill of quiet controls; a disabled primary button */
+  --track: rgba(13, 13, 13, 0.05);               /* the track of the step and view controls */
+  --thumb: #fff;                                 /* the thumb that slides in that track */
+  --underline: rgba(13, 13, 13, 0.28);           /* under a text link at rest */
+  --underline-gap: 3px;                          /* from the words to that line */
 
-     On film (unchanged; drawn over a dark casing, contrast against the well):
-       sure 11.2:1, look 14.5:1, needs 6.7:1, by-you 19.8:1, inferred 10.0:1.
-     On paper (contrast against white):
-       sure 6.4:1, look 4.7:1, needs 8.4:1, by-you 18.5:1, inferred 3.9:1.
-     "Set by you" is the strongest neutral of its ground: white on film, ink on
-     paper. "Inferred" is a mark and never small text, so 3:1 is its floor.
+  --soft-1: #f3f4f7;                             /* an empty film place */
+  --soft-2: #edeff3;                             /* the same, pointed at, or while its film is being read */
+  --soft-3: #e8eaef;                             /* the same, pressed */
 
-     Told apart without hue. CIE76 distance of the closest pair among all five,
-     with a colour-vision simulation (Machado 2009), for typical / red-blind /
-     green-blind / blue-blind vision: on paper 45 / 27 / 25 / 25, on film
-     25 / 23 / 26 / 25. As greys (CIE L*) the paper set is five steps:
-     by-you 6, needs 33, sure 40, look 49, inferred 54; on film, in the same
-     order, 98, 60, 77, 86, 73. Line, glyph and word carry the rest. */
-  --sure-paper:     #0b57d0;
-  --look-paper:     #a86400;
-  --needs-paper:    #9c1022;
-  --by-you-paper:   #111417;
-  --inferred-paper: #7b828a;
-  --sure-film:      #5cc8ff;
-  --look-film:      #ffd23f;
-  --needs-film:     #f0626e;
-  --by-you-film:    #f4f9ff;
-  --inferred-film:  #aab4c3;
-  --sure-wash-paper:   rgba(11, 87, 208, .07);
-  --look-wash-paper:   rgba(168, 100, 0, .09);
-  --needs-wash-paper:  rgba(156, 16, 34, .06);
-  --by-you-wash-paper: rgba(17, 20, 23, .05);
-  --sure-wash-film:    rgba(92, 200, 255, .13);
-  --look-wash-film:    rgba(255, 210, 63, .14);
-  --needs-wash-film:   rgba(240, 98, 110, .16);
-  --by-you-wash-film:  rgba(244, 249, 255, .10);
-  --dash-sure: none;
-  --dash-look: 7 5;
-  --dash-needs: 1.5 5;
-  --dash-inferred: 12 6;
-  --casing: rgba(2, 4, 8, .78);      /* dark line under every mark on a film, so it reads on bright bone */
+  /* ---------- Colour: the two signals ---------- */
 
-  /* ---- Type ---------------------------------------------------------------- */
-  --font-voice: "Instrument Serif", "Iowan Old Style", "Charter", "Hoefler Text", Georgia, serif;
-  --font-ui:    "Geist", "Inter", ui-sans-serif, system-ui, -apple-system, "SF Pro Text", "Segoe UI", sans-serif;
-  --font-data:  "Geist Mono", "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  --text-micro: 11px;   --lh-micro: 16px;     /* caps labels, key hints */
-  --text-small: 12px;   --lh-small: 18px;     /* captions, chips */
-  --text-body:  14px;   --lh-body:  21px;     /* everything read as a sentence */
-  --text-lead:  16px;   --lh-lead:  24px;     /* the ink button */
-  --text-title: 20px;   --lh-title: 26px;     /* section numbers */
-  --text-voice: 32px;   --lh-voice: 36px;     /* the guide's one sentence */
-  --text-hero:  48px;   --lh-hero:  50px;     /* the L and R side letters */
-  --track-caps: .09em;
+  --accent: #0a7cff;                             /* focus, the vertebra pointed at, progress, a place files are held over, the ring of the one they are over */
+  --accent-soft: rgba(10, 124, 255, 0.12);       /* a wash for a selected thing. Open: named in the build, used by nothing yet */
+  --accent-fill: rgba(10, 124, 255, 0.2);        /* inside the outline pointed at */
+  --accent-edge: rgba(10, 124, 255, 0.4);        /* the ring of a place while files are held over the window */
+  --accent-wash: #e7f1fe;                        /* the fill of that place */
 
-  /* ---- Space (4-point) ------------------------------------------------------ */
-  --s-1: 4px;  --s-2: 8px;  --s-3: 12px; --s-4: 16px; --s-5: 20px;
-  --s-6: 24px; --s-8: 32px; --s-10: 40px; --s-12: 48px; --s-16: 64px;
+  --look: #f5a524;                               /* "needs a look" */
+  --look-fill: rgba(245, 165, 36, 0.14);         /* inside an outline that needs a look */
+  --look-pulse: rgba(245, 165, 36, 0.5);         /* the top of its one pulse when the find ends */
 
-  /* ---- Radius: small and few. A well is square. ------------------------------ */
-  --r-film: 0px;  --r-1: 2px;  --r-2: 3px;  --r-3: 4px;  --r-4: 6px;  --r-pill: 999px;
+  /* ---------- Colour: on film and in 3D ---------- */
 
-  /* ---- Elevation: there is none. Kept by name; what floats wears --keyline. -- */
-  --lift-1: none;
-  --lift-2: none;
-  --lift-3: none;
-  --glass: #ffffff;
-  --glass-blur: none;
-  --glow-lumen: none;
-  --glow-film: 0 0 0 1px rgba(255, 255, 255, .14);   /* a hairline round a film on its well */
+  --film: #000;                                  /* behind every film */
+  --film-edge: rgba(255, 255, 255, 0.1);         /* a faint lit edge inside every tile */
+  --film-edge-hover: rgba(255, 255, 255, 0.6);   /* that edge on a film in the rail when pointed at */
+  --mark: rgba(255, 255, 255, 0.9);              /* the outline of a vertebra */
+  --mark-fill: rgba(255, 255, 255, 0.06);        /* inside it */
+  --mark-name: rgba(255, 255, 255, 0.92);        /* its name. As built it is 0.8, with no casing */
+  /* The casings. Decided, being built. A casing is a mark's own shape drawn again beneath it,
+     wider and dark, so the mark reads on any film. The film itself is never changed to help.
+     The darker the line, the darker its casing: each keeps its line 3 to 1 even over white bone. */
+  --mark-casing: rgba(0, 0, 0, 0.45);            /* under a white outline */
+  --mark-casing-look: rgba(0, 0, 0, 0.65);       /* under an amber outline */
+  --mark-casing-on: rgba(0, 0, 0, 0.8);          /* under a blue outline */
+  --mark-name-casing: rgba(0, 0, 0, 0.55);       /* under a name's letters */
+  /* The light of the find, down the film, and its fade at the two sides. The light is an SVG shape
+     in the film's own layer. An SVG paint cannot read a CSS gradient, so the same stops are written
+     out again where the shape is drawn. Keep them equal to these two. */
+  --find-light: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.08) 34%, rgba(255, 255, 255, 0.22) 50%, rgba(255, 255, 255, 0.08) 66%, rgba(255, 255, 255, 0));
+  --find-light-mask: linear-gradient(to right, transparent, #000 26%, #000 74%, transparent);
 
-  /* ---- Motion: things arrive, cameras move, nothing bounces for fun ---------- */
-  --t-instant: 90ms;    /* hover, press */
-  --t-quick:   160ms;   /* buttons, chips, pin drop */
-  --t-base:    240ms;   /* popovers, ticks, toasts, label roll */
-  --t-calm:    420ms;   /* guide lines, sections, lamp-on */
-  --t-slow:    700ms;   /* bays re-hanging, focus pull, case fold */
-  --t-cinema:  1400ms;  /* reserved for the pass */
-  --ease-out:    cubic-bezier(.2, .8, .2, 1);     /* arrivals */
-  --ease-in-out: cubic-bezier(.65, 0, .35, 1);    /* cameras and bays */
-  --ease-lens:   cubic-bezier(.7, 0, .2, 1);      /* the unroll */
-  --ease-snap:   cubic-bezier(.2, 1.4, .4, 1);    /* lock-in, pin drop: one small overshoot */
-  --breathe: 2.6s;                                /* the only loop: the ring on a film */
-  --stagger: 22ms;                                /* per level, for rolls and cascades */
+  --bone: #ece7df;                               /* bone. The 3D spine keeps its own copy; keep the two equal */
+  --spine-shadow: rgba(20, 24, 32, 0.55);        /* the centre of the soft round shadow under the spine */
 
-  /* ---- Layout: the bench is ruled edge to edge; bays touch --------------------- */
-  --bar-h: 56px;        /* top bar */
-  --foot-h: 28px;       /* status line */
-  --guide-w: 368px;     /* the guide, on the left */
-  --bench-pad: 0px;
-  --bay-gap: 0px;
-  --bay-head: 32px;
-  --dock-w: 68px;       /* the tool column (Adjust only) */
-  --ladder-w: 108px;    /* the ladder between Front and Side */
-  --lane-w: 204px;      /* the same lane while the pass plays */
-  --bends-w: 150px;     /* the two bending films, stacked */
+  /* ---------- Type ---------- */
+
+  --font-sans: Geist, ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;   /* numbers and vertebra names only */
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;                        /* nothing heavier */
+
+  --size-display: 44px;   --line-display: 48px;   --track-display: -0.025em;   /* the start sentence */
+  --size-heading: 18px;   --line-heading: 24px;   --track-heading: -0.01em;    /* the dock's sentence, a panel's title */
+  --size-body: 15px;      --line-body: 22px;                                   /* body, the primary button, the product name */
+  --size-small: 13px;     --line-small: 18px;                                  /* helpers, quiet controls */
+  --line-row: 20px;                                                            /* a measurement's name: 13 on 20 */
+  --size-caption: 12px;   --line-caption: 16px;   --track-caption: 0.01em;     /* film names, the notice, small print */
+  --size-value: 16px;     --line-value: 20px;                                  /* a measurement's value, mono */
+  --line-chip: 24px;                                                           /* the name chip: 12 on 24, mono */
+  --size-mark: 11px;                                                           /* a vertebra's name on film. The smallest text */
+
+  /* Ready-made `font` values, one for each role set in the sans face. Numbers take the size of
+     the text they sit in and add the class .num, which gives them the mono face. */
+  --type-display: var(--weight-semibold) var(--size-display)/var(--line-display) var(--font-sans);
+  --type-heading: var(--weight-semibold) var(--size-heading)/var(--line-heading) var(--font-sans);
+  --type-body: var(--weight-regular) var(--size-body)/var(--line-body) var(--font-sans);
+  --type-body-medium: var(--weight-medium) var(--size-body)/var(--line-body) var(--font-sans);
+  --type-small: var(--weight-regular) var(--size-small)/var(--line-small) var(--font-sans);
+  --type-small-medium: var(--weight-medium) var(--size-small)/var(--line-small) var(--font-sans);
+  --type-row: var(--weight-medium) var(--size-small)/var(--line-row) var(--font-sans);
+  --type-caption: var(--weight-medium) var(--size-caption)/var(--line-caption) var(--font-sans);
+  /* The dock's sentence: the heading. In a window 900 wide or less it is body, medium: see Smaller windows. */
+  --type-say: var(--type-heading);
+  --track-say: var(--track-heading);
+
+  /* ---------- Space ---------- */
+
+  /* The scale: steps of 4. Every distance that places a part on the page is one of these,
+     except the two noted under Layout (the notice and the name chip). */
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-28: 28px;
+  --space-40: 40px;
+  --space-48: 48px;
+  --space-60: 60px;
+  /* Half steps, for the inside of a part: padding in a control, an icon beside its words, a count
+     beside its bar, the gaps in the dock and the panel. */
+  --space-2: 2px;
+  --space-6: 6px;
+  --space-10: 10px;
+  --space-14: 14px;
+  /* Named distances that are on neither. */
+  --primary-pad: 22px;                           /* each side of the primary button's words */
+  --panel-list-top: 18px;                        /* between the panel's title and its first row */
+  --brand-gap: 7px;                              /* from the product mark's box to the product's name */
+
+  /* ---------- Shape ---------- */
+
+  --r-hair: 2px;                                 /* the progress bar */
+  --r-text: 4px;                                 /* the focus ring's corner on a text link */
+  --r-small: 10px;                               /* a film in the rail */
+  --r-medium: 14px;                              /* the two bending films while they are tucked beside the others */
+  --r-large: 20px;                               /* a film tile, an empty place */
+  --r-xlarge: 28px;                              /* the measurements panel, the trust note, sheets */
+  --r-pill: 999px;                               /* every button and control, the bar, the dock */
+
+  --hairline: 1px;                               /* every hairline, the edge of glass, the lit edge inside a tile */
+
+  /* ---------- Depth ---------- */
+
+  --shadow-film: 0 1px 2px rgba(0, 0, 0, 0.06), 0 18px 40px -14px rgba(0, 0, 0, 0.26);     /* layer 2: a film tile */
+  --shadow-thumb: 0 1px 3px -1px rgba(0, 0, 0, 0.16), 0 0 0 0.5px rgba(13, 13, 13, 0.06);  /* the thumb in a step or view control */
+  /* The shadow of layer 3 is part of the glass recipe below. */
+
+  /* Layers, back to front. */
+  --z-spine: 1;                                  /* the 3D canvas */
+  --z-stage: 2;                                  /* films, places, the panel */
+  --z-chip: 5;                                   /* the name chip beside the pointer */
+  --z-bar: 30;                                   /* the bar and the dock */
+  --z-popover: 40;                               /* the trust note */
+
+  /* ---------- Glass ---------- */
+
+  /* One recipe, four thicknesses. Thicker when it carries more text or may sit over a film. */
+  --glass-thin: rgba(255, 255, 255, 0.66);       /* the bar, the dock */
+  --glass-regular: rgba(255, 255, 255, 0.72);    /* the measurements panel */
+  --glass-thick: rgba(255, 255, 255, 0.8);       /* the name chip */
+  --glass-dense: rgba(255, 255, 255, 0.88);      /* the trust note, which may open over a film */
+  --glass-blur: blur(24px) saturate(180%);
+  --glass-border: var(--hairline) solid rgba(255, 255, 255, 0.7);
+  --glass-shadow: 0 0 0 1px rgba(13, 13, 13, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 12px 32px rgba(0, 0, 0, 0.08);
+  --glass-solid: #fbfbfc;                        /* what glass becomes when transparency is reduced */
+
+  /* ---------- Focus ---------- */
+
+  --ring-width: 2px;                             /* in --accent. Also the ring of the one place or film that held files are over */
+  --ring-gap: 2px;
+
+  /* ---------- Icons and marks ---------- */
+
+  --icon-small: 18px;                            /* the lock in the trust badge */
+  --icon-medium: 20px;                           /* the product mark */
+  --icon-stroke: 1.5;                            /* in the icon's own units; round caps and joins, no fill */
+  --mark-stroke: 1.5px;                          /* outlines on film; the ring of a place while files are held */
+  --mark-casing-stroke: 3.5px;                   /* Decided, being built: the casing beneath an outline. 1 shows at each side of the line */
+  --mark-name-casing-stroke: 3px;                /* Decided, being built: the casing under a name. Half of it, 1.5, shows around each letter */
+
+  /* ---------- Sizes of parts ---------- */
+
+  --chip-h: 26px;
+  --step-w: 60px;        --step-h: 28px;         /* one option of the step control */
+  --view-w: 64px;        --view-h: 36px;         /* one option of the view control */
+  --badge-h: 32px;
+  --quiet-h: 36px;
+  --primary-h: 44px;                             /* also the secondary button */
+  --bar-h: 48px;
+  --dock-h: 72px;
+  --meter-w: 72px;       --meter-h: 3px;         /* the progress bar */
+  --dot: 7px;                                    /* the amber dot in the dock */
+  --place-drawing-w: 52px;                       /* the line drawing in an empty place */
+  --place-drawing-h: 95px;
+  --panel-w: 320px;
+  --panel-pad: 24px;                             /* top and sides of the panel */
+  --panel-pad-bottom: 10px;
+  --panel-row-gap: 16px;
+  --panel-note-top: 20px;                        /* above the line under the list */
+  --panel-note-pad: 14px;                        /* below that line */
+  --panel-acts-top: 6px;
+
+  /* ---------- Layout ---------- */
+
+  --col-max: 720px;                              /* the bar and the dock share one width */
+  --inset: 24px;                                 /* where their words start */
+  --bar-top: 16px;
+  --bar-cols: 1fr auto 1fr;                      /* the bar's three columns: name, steps, badge. The side ones are equal, so the steps sit in the middle */
+  --brand-name-display: inline;                  /* the product's name beside its mark. Not shown in a window 600 wide or less: see Smaller windows */
+  --note-top: 72px;                              /* the trust note: 8 under the bar */
+  --note-w: 312px;                               /* the trust note, as a popover under its badge */
+  --stage-top: 88px;
+  --stage-bottom: 140px;
+  --dock-bottom: 44px;
+  --notice-bottom: 14px;                         /* a half step: one of two placing distances off the scale */
+  --spine-top: 48px;                             /* the 3D canvas starts behind the bar */
+  --spine-trim: 160px;                           /* and is this much shorter than the frame: it ends just under the dock's top edge */
+  --glow-y: 46%;                                 /* the glow's centre, from the top of the window */
+  --glow-w-quiet: 40%;   --glow-h-quiet: 42%;    /* the quiet glow behind the films: an oval this share of the window */
+  --glow-blur-quiet: 80px;
+  --glow-w-wide: 50%;    --glow-h-wide: 56%;     /* the wider glow behind the spine */
+  --glow-blur-wide: 100px;
+
+  /* The rest of this group is read by script, which works out where each film sits. */
+  --films: 4;                                    /* how many films there are. The first tile sits above the next */
+  --tile-aspect: 0.5;                            /* a film tile's width over its height */
+  --tile-gap: 24px;                              /* between tiles */
+  --tile-h-films: 420px;                         /* the tallest a tile gets on the Films moment */
+  --tile-share: 0.62;                            /* or this share of the stage's height, if that is less */
+  --head-gap: 48px;                              /* under the display sentence */
+  --clear: 60px;                                 /* kept free above the sentence and below the names */
+  --caption-room: 28px;                          /* the room a film's name takes under its tile */
+  --caption-gap: 10px;                           /* from the tile to the top of its name */
+  --tuck-gap: 12px;                              /* between the two tucked bending films */
+  --rail-h: 132px;                               /* a film in the rail */
+  --rail-gap: 12px;
+  --film-h: 1300;                                /* film pixels: how tall the film is that --name-room, --light-h and --light-edge are written for */
+  --name-room: 24;                               /* film pixels: the view is nudged right to leave room for the names */
+  --light-h: 200;                                /* film pixels: how tall the light of the find is */
+  --light-edge: 60;                              /* film pixels: it starts this far above T1 and ends this far below L5 */
+  /* A film pixel is not one size across films. On a film of another height, script scales each of
+     the three by that film's own height over --film-h. */
+  --chip-dx: 14px;                               /* the name chip, from the pointer. 14 is a half step: the other placing distance off the scale */
+  --chip-dy: 16px;
+
+  /* The frame. Decided, being built. */
+  --frame-max-w: 1280px;                         /* the scene is never wider than this */
+  --frame-margin: 48px;                          /* and keeps at least this much clear at each side. 16 in a window 900 wide or less: see Smaller windows */
+  --tile-max-h: 820px;                           /* a film tile is never shown taller than this, at any moment */
+  --frame-max-h: calc(var(--tile-max-h) + var(--caption-room) + var(--stage-top) + var(--stage-bottom));
+  --frame-w: min(var(--frame-max-w), calc(100vw - 2 * var(--frame-margin)));
+  --frame-h: min(var(--frame-max-h), 100vh);
+  --col: min(var(--col-max), var(--frame-w));
+
+  /* Without the frame, the stage is the window less this much at each side. */
+  --gutter: 40px;
+
+  /* Breakpoints. CSS cannot read these in a media query, so the same numbers are written out in
+     the media queries below. They are named here so there is one place to look them up. */
+  --break-compact-w: 1240px;                     /* at or under this width, or */
+  --break-compact-h: 800px;                      /* at or under this height, the panel tightens */
+  --break-narrow-w: 900px;                       /* at or under this the frame's margin is 16 and the dock's sentence is body, medium. Decided, being built: the measurements become a sheet */
+  --break-small-w: 600px;                        /* at or under this the bar shows the product mark without the product's name */
+
+  /* ---------- Motion: the three everyday speeds ---------- */
+
+  --ease-settle: cubic-bezier(0.22, 1, 0.36, 1); /* eases out and settles. Appearing, and every scene change */
+  --ease-quick: cubic-bezier(0.2, 0, 0, 1);      /* hover and press */
+  --ease-fade: ease;                             /* plain fades */
+  --ease-meter: ease-out;                        /* the progress bar */
+  --ease-pulse: ease-in-out;                     /* the one pulse of an outline that needs a look */
+
+  --dur-quick: 140ms;                            /* hover, press, anything leaving */
+  --dur-appear: 280ms;                           /* anything arriving; the thumb sliding */
+  --dur-scene: 640ms;                            /* a film travelling between moments */
+
+  --quick: var(--dur-quick) var(--ease-quick);
+  --appear: var(--dur-appear) var(--ease-settle);
+  --scene: var(--dur-scene) var(--ease-settle);
+
+  /* ---------- Motion: timings that belong to one scene change ---------- */
+
+  --dur-say-out: 120ms;                          /* the dock's sentence leaves */
+  --dur-fade: 160ms;                             /* the films fade out and in when movement is turned off */
+  --dur-say-in: 240ms;                           /* the dock's sentence arrives; everything fades on "Start over" */
+  --dur-fill: 320ms;                             /* a step of the progress bar; the fill of an outline */
+  --dur-rise: 420ms;                             /* the stage on first paint; the spine fading up */
+  --dur-land: 520ms;                             /* a film landing; the primary button becoming ready */
+  --dur-view: 600ms;                             /* the camera moving to another view */
+  --dur-draw: 620ms;                             /* an outline drawing itself */
+  --dur-push: 800ms;                             /* a film pushing in, or easing back, inside its tile */
+  --dur-slow: 900ms;                             /* the glow changing; a landing film easing back to size */
+  --dur-pulse: 1400ms;                           /* the pulse of the outlines that need a look. It peaks 35% of the way through */
+  --dur-light-lead: 700ms;                       /* the films settle before the light starts */
+  --dur-light: 4400ms;                           /* the light's journey down the spine */
+  --light-in: 0.05;                              /* the light has faded in by this share of its journey */
+  --light-out: 0.93;                             /* and starts to fade out at this share */
+  --dur-hold: 560ms;                             /* after the last vertebra, and after "Looks right" */
+  --dur-saved: 1800ms;                           /* how long "Saved on this device" stays */
+
+  --stagger: 40ms;                               /* between things that arrive or travel together */
+  /* --stagger-land, --delay-land and --hold-land time four films that arrive together. Where each
+     film lands when it has been read, as in the app, they are not used: a film lands the moment it
+     is ready, and the dock changes when the last one has been read. */
+  --stagger-land: 60ms;                          /* between films as they start to land */
+  --delay-land: 80ms;                            /* before the first film starts to land */
+  --delay-in: 100ms;                             /* the dock's sentence, and the spine, wait this long */
+  --delay-turn: 120ms;                           /* then the spine starts to turn */
+  --delay-display: 160ms;                        /* the start sentence returning */
+  --delay-caption: 200ms;                        /* a film's name returning; outline widths wait this long after a scene change */
+  --delay-name: 220ms;                           /* a vertebra's name after its outline starts; the panel */
+  --delay-late: 260ms;                           /* an outline's fill; the first measurement row */
+  --delay-marks: 320ms;                          /* the outlines returning when the films come back to Find */
+  --hold-land: 360ms;                            /* waited before the dock changes. It starts 60 after the last film starts to land, not when that film has landed: the dock changes at 680, and the last film has landed at 780 */
+  --hold-leave: 260ms;                           /* "Start over": the scene fades for this long before it is reset */
+
+  /* ---------- Motion: distances and sizes ---------- */
+
+  --rise: 8px;                                   /* things arrive from this far below */
+  --rise-small: 4px;                             /* the dock's sentence; a place lifting under held files */
+  --drop-note: 6px;                              /* the trust note comes down from this far above */
+  --press: 0.97;                                 /* a button, pressed */
+  --press-seg: 0.95;                             /* an option of a step or view control, pressed */
+  --press-badge: 0.98;                           /* the trust badge, pressed */
+  --from-ready: 0.94;                            /* the primary button grows from this when it becomes ready */
+  --from-note: 0.985;                            /* the trust note grows from this */
+  --from-film: 1.06;                             /* a landing film eases back from this */
+  --zoom-find: 1.3;                              /* the most Front and Side are pushed in during Find, as a multiple of the film shown whole */
+  --zoom-find-small: 1.15;                       /* the same for the two bending films */
+  --zoom-review: 2;                              /* Front and Side while one vertebra is reviewed */
+  --dim: 0.3;                                    /* the other outlines during review */
 }
 
-/* ---- The ground you stand on ---------------------------------------------------
-   Paper unless an ancestor says data-ground="film". A paper label laid on a
-   film says data-ground="paper" to turn back. Both blocks set the same names. */
-:root,
-[data-ground="paper"] {
-  --ink-1: var(--ink-1-paper);
-  --ink-2: var(--ink-2-paper);
-  --ink-3: var(--ink-3-paper);
-  --ink-4: var(--ink-4-paper);
-  --line-1: var(--line-1-paper);
-  --line-2: var(--line-2-paper);
-  --line-3: var(--line-3-paper);
-  --lumen-hi: var(--lumen-hi-paper);
-  --lumen: var(--lumen-paper);
-  --lumen-mid: var(--lumen-mid-paper);
-  --lumen-deep: var(--lumen-deep-paper);
-  --lumen-glow: var(--lumen-glow-paper);
-  --lumen-wash: var(--lumen-wash-paper);
-  --on-lumen: var(--on-lumen-paper);
-  --sure: var(--sure-paper);
-  --look: var(--look-paper);
-  --needs: var(--needs-paper);
-  --by-you: var(--by-you-paper);
-  --inferred: var(--inferred-paper);
-  --sure-wash: var(--sure-wash-paper);
-  --look-wash: var(--look-wash-paper);
-  --needs-wash: var(--needs-wash-paper);
-  --by-you-wash: var(--by-you-wash-paper);
-  --focus-ring: 0 0 0 2px #ffffff, 0 0 0 4px var(--ink-1-paper);
-}
-[data-ground="film"] {
-  --ink-1: var(--ink-1-film);
-  --ink-2: var(--ink-2-film);
-  --ink-3: var(--ink-3-film);
-  --ink-4: var(--ink-4-film);
-  --line-1: var(--line-1-film);
-  --line-2: var(--line-2-film);
-  --line-3: var(--line-3-film);
-  --lumen-hi: var(--lumen-hi-film);
-  --lumen: var(--lumen-film);
-  --lumen-mid: var(--lumen-mid-film);
-  --lumen-deep: var(--lumen-deep-film);
-  --lumen-glow: var(--lumen-glow-film);
-  --lumen-wash: var(--lumen-wash-film);
-  --on-lumen: var(--on-lumen-film);
-  --sure: var(--sure-film);
-  --look: var(--look-film);
-  --needs: var(--needs-film);
-  --by-you: var(--by-you-film);
-  --inferred: var(--inferred-film);
-  --sure-wash: var(--sure-wash-film);
-  --look-wash: var(--look-wash-film);
-  --needs-wash: var(--needs-wash-film);
-  --by-you-wash: var(--by-you-wash-film);
-  --focus-ring: 0 0 0 2px #000000, 0 0 0 4px var(--ink-1-film);
-}
+/* ---------- Smaller windows ---------- */
 
-/* One breakpoint. Below it the guide narrows, the tool column drops its words and the rail keeps only numbers. */
-@media (max-width: 1199px) {
+/* 900 wide or less: the frame keeps less margin, so the films, the bar and the dock have the room,
+   and the dock's sentence steps down to body, medium, so every scene fits on one line. */
+@media (max-width: 900px) {
   :root {
-    --guide-w: 312px;
-    --text-voice: 27px; --lh-voice: 31px;
-    --text-hero: 36px;  --lh-hero: 38px;
-    --dock-w: 46px; --ladder-w: 84px; --lane-w: 176px; --bends-w: 104px;
+    --frame-margin: 16px;
+    --type-say: var(--type-body-medium);
+    --track-say: 0;
   }
 }
 
-/* Reduced motion: things still arrive, nothing travels, nothing loops. */
-@media (prefers-reduced-motion: reduce) {
-  :root { --t-quick: 1ms; --t-base: 1ms; --t-calm: 120ms; --t-slow: 160ms; --t-cinema: 160ms; --stagger: 0ms; }
+/* 600 wide or less: the bar's three parts no longer fit. The product's name is not shown, the mark
+   stays, and the steps sit in the middle of what is left. */
+@media (max-width: 600px) {
+  :root {
+    --bar-cols: auto 1fr auto;
+    --brand-name-display: none;
+  }
 }
-[data-motion="reduced"] { --t-quick: 1ms; --t-base: 1ms; --t-calm: 120ms; --t-slow: 160ms; --t-cinema: 160ms; --stagger: 0ms; }
+
+/* 1240 wide or less, or 800 tall or less: the measurements panel tightens. */
+@media (max-width: 1240px), (max-height: 800px) {
+  :root {
+    --panel-w: 312px;
+    --panel-pad: 20px;
+    --panel-pad-bottom: 8px;
+    --panel-list-top: 14px;
+    --panel-row-gap: 12px;
+    --panel-note-top: 16px;
+    --panel-note-pad: 12px;
+    --panel-acts-top: 4px;
+  }
+}
+
+/* ---------- People who ask for less ---------- */
+
+/* Less transparency: glass becomes a solid surface with no blur. */
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --glass-thin: var(--glass-solid);
+    --glass-regular: var(--glass-solid);
+    --glass-thick: var(--glass-solid);
+    --glass-dense: var(--glass-solid);
+    --glass-blur: none;
+  }
+}
+
+/* More contrast: glass becomes plain white with a clear edge. */
+@media (prefers-contrast: more) {
+  :root {
+    --glass-thin: var(--page);
+    --glass-regular: var(--page);
+    --glass-thick: var(--page);
+    --glass-dense: var(--page);
+    --glass-blur: none;
+    --glass-shadow: 0 0 0 var(--hairline) var(--line-strong);
+  }
+}
+
+/* Less motion: fades only. Nothing rises, drops, grows or shrinks. components.css turns off the
+   rest: travelling films, outlines that draw themselves, the light, the sliding thumb. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --rise: 0px;
+    --rise-small: 0px;
+    --drop-note: 0px;
+    --press: 1;
+    --press-seg: 1;
+    --press-badge: 1;
+    --from-ready: 1;
+    --from-note: 1;
+    --from-film: 1;
+  }
+}
+
+/* The same answers for the app's own setting for less motion: data-motion="reduced" on the app's
+   root. Keep this block equal to the one above. */
+[data-motion="reduced"] {
+  --rise: 0px;
+  --rise-small: 0px;
+  --drop-note: 0px;
+  --press: 1;
+  --press-seg: 1;
+  --press-badge: 1;
+  --from-ready: 1;
+  --from-note: 1;
+  --from-film: 1;
+}

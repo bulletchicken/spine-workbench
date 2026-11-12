@@ -2,8 +2,8 @@
 // by hand: 2.6 s is 2600 ms; a curve is checked at the one point its
 // definition gives without solving anything (see curve.test.ts).
 
-import { describe, expect, it } from 'vitest';
-import { curveIn, millisecondsIn } from './timing';
+import { describe, expect, it, vi } from 'vitest';
+import { curveIn, durationOf, millisecondsIn, numberOf } from './timing';
 
 describe('millisecondsIn', () => {
   it('reads milliseconds and seconds', () => {
@@ -19,11 +19,44 @@ describe('millisecondsIn', () => {
     expect(millisecondsIn('160ms ')).toBe(160);
   });
 
+  it('reads a --dur-, a --delay- and a --hold- token as any other, where a part stands', () => {
+    // These tests run without a page, so the computed style is handed over as a browser would.
+    const set: Record<string, string> = { '--dur-push': ' 800ms', '--delay-in': ' 100ms', '--hold-leave': ' 260ms' };
+    vi.stubGlobal('getComputedStyle', () => ({ getPropertyValue: (name: string) => set[name] ?? '' }));
+    const part = {} as Element;
+    expect(durationOf(part, '--dur-push')).toBe(800);
+    expect(durationOf(part, '--delay-in')).toBe(100);
+    expect(durationOf(part, '--hold-leave')).toBe(260);
+    vi.unstubAllGlobals();
+  });
+
   it('refuses what is not a time, so a mistyped name fails loudly', () => {
     expect(() => millisecondsIn('')).toThrow('not a CSS time');
     expect(() => millisecondsIn('700')).toThrow('not a CSS time');
     expect(() => millisecondsIn('12px')).toThrow('not a CSS time');
     expect(() => millisecondsIn('cubic-bezier(.2, .8, .2, 1)')).toThrow('not a CSS time');
+  });
+});
+
+describe('numberOf', () => {
+  // Without a page, the computed style is handed over as a browser would, spaces and all.
+  const reading = (value: string) => {
+    vi.stubGlobal('getComputedStyle', () => ({ getPropertyValue: () => value }));
+    try {
+      return numberOf({} as Element, '--zoom-find');
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  };
+
+  it('reads the design’s plain numbers', () => {
+    expect(reading(' 1.3')).toBe(1.3);
+    expect(reading(' 0.05')).toBe(0.05);
+  });
+
+  it('refuses a length and an unset name, so a mistyped name fails loudly', () => {
+    expect(() => reading(' 24px')).toThrow('not a CSS number');
+    expect(() => reading('')).toThrow('not a CSS number');
   });
 });
 

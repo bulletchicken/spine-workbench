@@ -39,7 +39,6 @@
 
 .step-rail-number {
   --icon-size: 12px;
-  --icon-stroke: 2px;
   display: grid;
   flex: none;
   place-items: center;

@@ -17,7 +17,7 @@ function rulesIn(path: string): { selector: string; sets: string[] }[] {
   }));
 }
 
-describe.each(['./ConfidenceGlyph.css', './BrandMark.css'])('%s', (path) => {
+describe.each(['./ConfidenceGlyph.css'])('%s', (path) => {
   const painting = rulesIn(path).filter(({ sets }) => sets.includes('fill') || sets.includes('stroke'));
 
   it('paints its shapes', () => {

@@ -1,28 +1,12 @@
-/* ==========================================================================
-   Spine Workbench · design tokens  ("Clinical White")
-   One rule to remember: ink means go, colour means data.
-   The page is white and ruled. Exactly one thing on screen is solid ink: the
-   next action. The only hues are the four confidence colours, and each is
-   also a line pattern, a glyph and a word, so nothing rests on hue alone.
+/* Tokens of the earlier look. Parts that are no longer on the page still read them, so they are
+   kept here, all together, with the values they had. Nothing new reads anything in this file.
+   When a part is restyled its tokens come out of here.
 
-   What changed from the dark "Reading Room" tokens, and why
-   - One theme, light. The room is white paper with one neutral grey scale.
-     A film is still read on black, so --well is black and never themed.
-   - Two grounds. Everything is seen either on paper or on a film, and the
-     two need opposite inks. Each ink, line, lumen and confidence token has a
-     value for each ground (--ink-1-paper, --ink-1-film). The plain name
-     (--ink-1) is the one for the ground you stand on: paper by default, film
-     inside data-ground="film". Component CSS uses the plain names only.
-   - Rules, not boxes. --rule is the one hairline the frame is drawn with.
-     Radii are small. Nothing floats on a shadow, nothing is glass, nothing
-     glows: --lift-*, --glass-blur and --glow-lumen are kept so no name has
-     to change, and now say "none". What floats is paper with a --keyline.
-   - Lumen keeps its name and its meaning, the next action. On paper it is
-     ink; on film it is white. It no longer has a hue.
-   - Confidence has an on-paper set, dark enough for white (4.5:1 or more
-     for the four states), beside the on-film set, which is unchanged.
-   - Every name the dark tokens had is still here.
-   ========================================================================== */
+   The earlier look had two grounds, paper and a film, each with its own inks: the plain name
+   (--ink-1) is handed over by the ground a part stands on, paper by default and film inside
+   data-ground="film". The design's own tokens (tokens.css) own --ink-2, --ink-3 and --look on
+   the page, so the paper hand-over no longer sets them; an earlier part drawn on a film keeps
+   its light inks. */
 :root {
   color-scheme: light;
 
@@ -117,9 +101,9 @@
   --casing: rgba(2, 4, 8, .78);      /* dark line under every mark on a film, so it reads on bright bone */
 
   /* ---- Type ---------------------------------------------------------------- */
-  --font-voice: "Instrument Serif", "Iowan Old Style", "Charter", "Hoefler Text", Georgia, serif;
-  --font-ui:    "Geist", "Inter", ui-sans-serif, system-ui, -apple-system, "SF Pro Text", "Segoe UI", sans-serif;
-  --font-data:  "Geist Mono", "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --font-voice: var(--font-sans);
+  --font-ui:    var(--font-sans);
+  --font-data:  var(--font-mono);
   --text-micro: 11px;   --lh-micro: 16px;     /* caps labels, key hints */
   --text-small: 12px;   --lh-small: 18px;     /* captions, chips */
   --text-body:  14px;   --lh-body:  21px;     /* everything read as a sentence */
@@ -134,16 +118,15 @@
   --s-6: 24px; --s-8: 32px; --s-10: 40px; --s-12: 48px; --s-16: 64px;
 
   /* ---- Radius: small and few. A well is square. ------------------------------ */
-  --r-film: 0px;  --r-1: 2px;  --r-2: 3px;  --r-3: 4px;  --r-4: 6px;  --r-pill: 999px;
+  --r-film: 0px;  --r-1: 2px;  --r-2: 3px;  --r-3: 4px;  --r-4: 6px;
 
   /* ---- Elevation: there is none. Kept by name; what floats wears --keyline. -- */
   --lift-1: none;
   --lift-2: none;
   --lift-3: none;
   --glass: #ffffff;
-  --glass-blur: none;
   --glow-lumen: none;
-  --glow-film: 0 0 0 1px rgba(255, 255, 255, .14);   /* a hairline round a film on its well */
+  --glow-film: none;                               /* the film viewer's own hairline round a film: off, because a tile has its lit edge */
 
   /* ---- Motion: things arrive, cameras move, nothing bounces for fun ---------- */
   --t-instant: 90ms;    /* hover, press */
@@ -157,10 +140,8 @@
   --ease-lens:   cubic-bezier(.7, 0, .2, 1);      /* the unroll */
   --ease-snap:   cubic-bezier(.2, 1.4, .4, 1);    /* lock-in, pin drop: one small overshoot */
   --breathe: 2.6s;                                /* the only loop: the ring on a film */
-  --stagger: 22ms;                                /* per level, for rolls and cascades */
 
   /* ---- Layout: the bench is ruled edge to edge; bays touch --------------------- */
-  --bar-h: 56px;        /* top bar */
   --foot-h: 28px;       /* status line */
   --guide-w: 368px;     /* the guide, on the left */
   --bench-pad: 0px;
@@ -174,12 +155,11 @@
 
 /* ---- The ground you stand on ---------------------------------------------------
    Paper unless an ancestor says data-ground="film". A paper label laid on a
-   film says data-ground="paper" to turn back. Both blocks set the same names. */
+   film says data-ground="paper" to turn back. Both blocks set the same names, but
+   for --ink-2 and --ink-3, which on the page are the design's own. */
 :root,
 [data-ground="paper"] {
   --ink-1: var(--ink-1-paper);
-  --ink-2: var(--ink-2-paper);
-  --ink-3: var(--ink-3-paper);
   --ink-4: var(--ink-4-paper);
   --line-1: var(--line-1-paper);
   --line-2: var(--line-2-paper);
@@ -192,7 +172,6 @@
   --lumen-wash: var(--lumen-wash-paper);
   --on-lumen: var(--on-lumen-paper);
   --sure: var(--sure-paper);
-  --look: var(--look-paper);
   --needs: var(--needs-paper);
   --by-you: var(--by-you-paper);
   --inferred: var(--inferred-paper);
@@ -218,7 +197,6 @@
   --lumen-wash: var(--lumen-wash-film);
   --on-lumen: var(--on-lumen-film);
   --sure: var(--sure-film);
-  --look: var(--look-film);
   --needs: var(--needs-film);
   --by-you: var(--by-you-film);
   --inferred: var(--inferred-film);
@@ -241,6 +219,6 @@
 
 /* Reduced motion: things still arrive, nothing travels, nothing loops. */
 @media (prefers-reduced-motion: reduce) {
-  :root { --t-quick: 1ms; --t-base: 1ms; --t-calm: 120ms; --t-slow: 160ms; --t-cinema: 160ms; --stagger: 0ms; }
+  :root { --t-quick: 1ms; --t-base: 1ms; --t-calm: 120ms; --t-slow: 160ms; --t-cinema: 160ms; }
 }
-[data-motion="reduced"] { --t-quick: 1ms; --t-base: 1ms; --t-calm: 120ms; --t-slow: 160ms; --t-cinema: 160ms; --stagger: 0ms; }
+[data-motion="reduced"] { --t-quick: 1ms; --t-base: 1ms; --t-calm: 120ms; --t-slow: 160ms; --t-cinema: 160ms; }

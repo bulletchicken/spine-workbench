@@ -328,7 +328,6 @@
 /* The saved case: ink-lined and never solid, because once a case is saved nothing asks to be pressed. */
 .look-gallery-case-tile {
   --icon-size: 40px;
-  --icon-stroke: 1.3px;
   display: grid;
   place-items: center;
   width: 80px;
@@ -341,7 +340,6 @@
 
 .look-gallery-unreadable {
   --icon-size: 34px;
-  --icon-stroke: 1.1px;
   display: grid;
   justify-items: center;
   gap: var(--s-2);
@@ -614,7 +612,6 @@
 
 .look-gallery-keys kbd {
   --icon-size: var(--text-micro);
-  --icon-stroke: 2px;
   display: inline-flex;
   gap: 1px;
   align-items: center;

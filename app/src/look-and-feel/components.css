@@ -1,0 +1,651 @@
+/* Spine Workbench: components.
+   Reference styles for every part of the interface. They use the names in tokens.css and nothing
+   else. No colour, size or timing is written here as a number. What is written as a number:
+   0 and 1 for "none" and "all"; 50% and 100% for "half" and "whole"; "/ 2" and "* -1" inside a
+   sum; "* 1px" where a number set by script becomes a length; the dash pattern that lets an
+   outline draw itself; and one keyframe position, which CSS will not read from a token.
+   DESIGN.md says what each part is for and how it behaves.
+
+   How a page is put together
+     <body class="app">
+       <div class="glow"></div>
+       <div class="frame">
+         <header class="bar glass"> .brand  .seg.steps  .badge </header>
+         <div class="note glass"> ... </div>
+         <canvas class="spine"></canvas>
+         <main class="stage"> .display  .dropzone > button.place  .tiles > .tile + .caption  .panel.glass </main>
+         <footer class="dock glass"> .scene > .say + buttons </footer>
+         <p class="notice"> ... </p>
+       </div>
+       <div class="chip glass num"></div>
+     </body>
+
+   A part looks the same wherever it is put. Where it sits is said by its parent: the rules that
+   begin ".frame >", ".stage >" and "body >" place it. Outside those parents a part stays in the
+   ordinary flow of the page.
+
+   Set by script on <html>
+     data-moment   films | find | three
+     data-films    empty (some place is empty and nothing is being read) | landing (something is
+                   being read) | ready (all four films are in)
+     data-ready    once the first layout is done
+     data-drag     while files are held over the window
+     data-leaving  while "Start over" fades the scene out
+
+   Set on the app's root
+     data-motion   reduced, when the app's own setting asks for less motion
+
+   Set by script on a part
+     data-reading      on a place whose film is being read
+     data-drop-target  on the one place or tile that held files are over
+     data-names        on | off, on a tile: whether its vertebra names show
+     data-away         on the name of a film that is not on the stage in Find
+     data-fresh        on a span round words that have just changed inside a scene of the dock
+
+   Set by script as numbers, without units
+     on .stage     --head-y, --zx --zy --zw --zh, --tw --th
+     on .tile      --i (0 to 3), --bw --bh (its own width and height, in pixels), --x --y (where it
+                   sits), --s (1 at rest; a tile in flight starts from another size), --z --tx --ty
+                   (how far the film is pushed in), --k (screen pixels for one film pixel: where
+                   a film viewer of the app's own draws the film, the viewer writes it); and --r,
+                   one of the radius tokens
+     on .caption   --i --cx --cy        on .place  --i --px
+     on .seg       --at (which option the thumb is under)
+     on .meter     --p (0 to 1)         on .measures li  --i
+
+   State classes for showing a part in a fixed state: .is-hover .is-pressed .is-focus .is-drag.
+   They show a state without a pointer. Never use them in the product. */
+
+/* How many screen pixels one film pixel covers inside a tile. Registered as a number so the
+   outline width and the name size can follow a tile smoothly while it moves. */
+@property --k { syntax: "<number>"; inherits: true; initial-value: 1; }
+
+/* ---------- The page ---------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+html { height: 100%; }
+body {
+  margin: 0;
+  font: var(--type-body);
+  color: var(--ink);
+  background: var(--page);
+  -webkit-font-smoothing: antialiased;
+}
+/* The product is one screen. It never scrolls. */
+body.app { height: 100%; overflow: hidden; background: var(--page-wash); }
+h1, h2, h3, p, ul, figure { margin: 0; padding: 0; }
+ul { list-style: none; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+button:disabled { cursor: default; }
+
+/* The focus ring: one look for everything that can take focus. */
+:focus-visible, .is-focus { outline: var(--ring-width) solid var(--accent); outline-offset: var(--ring-gap); }
+
+/* ---------- Type roles ---------- */
+
+.t-display { font: var(--type-display); letter-spacing: var(--track-display); }
+.t-heading { font: var(--type-heading); letter-spacing: var(--track-heading); }
+.t-body { font: var(--type-body); }
+.t-small { font: var(--type-small); }
+.t-caption { font: var(--type-caption); letter-spacing: var(--track-caption); }
+/* Numbers and vertebra names. It takes its size from where it is used. */
+.num { font-family: var(--font-mono); font-weight: var(--weight-medium); font-variant-numeric: tabular-nums; }
+
+/* ---------- The page glow ---------- */
+
+/* The one soft glow behind whatever is on the stage: a quiet one for the films, a wider one for
+   the spine, cross-faded. Each is a blurred oval, not a gradient, so it has no edge and none of
+   the fine rings a very shallow gradient is drawn with. */
+.glow { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+body > .glow { position: fixed; }
+.glow::before, .glow::after {
+  content: ""; position: absolute; left: 50%; top: var(--glow-y); translate: -50% -50%; border-radius: 50%;
+  transition: opacity var(--dur-slow) var(--ease-fade);
+}
+.glow::before { width: var(--glow-w-quiet); height: var(--glow-h-quiet); background: var(--glow-quiet); filter: blur(var(--glow-blur-quiet)); }
+.glow::after { width: var(--glow-w-wide); height: var(--glow-h-wide); background: var(--glow); filter: blur(var(--glow-blur-wide)); opacity: 0; }
+[data-moment="three"] .glow::before { opacity: 0; }
+[data-moment="three"] .glow::after { opacity: 1; }
+
+/* ---------- Glass: only for what floats ---------- */
+
+.glass {
+  background: var(--glass-thin);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+/* A part chooses a thicker glass by setting its own background: see the note, the chip and the panel. */
+
+/* ---------- Buttons ---------- */
+
+/* The one next step of the moment. One on screen at most. */
+.primary {
+  flex: none; height: var(--primary-h); padding: 0 var(--primary-pad); border-radius: var(--r-pill);
+  background: var(--ink); color: var(--on-ink);
+  font: var(--type-body-medium); white-space: nowrap;
+  transition: background var(--quick), color var(--quick), transform var(--quick);
+}
+.primary:is(:hover, .is-hover) { background: var(--ink-hover); }
+.primary:is(:active, .is-pressed) { background: var(--ink-pressed); transform: scale(var(--press)); }
+.primary:disabled { background: var(--fill); color: var(--ink-3); transform: none; }
+
+/* Decided, being built: a way back that is not the next step. First use: "Done" in the comparison. */
+.secondary {
+  flex: none; height: var(--primary-h); padding: 0 var(--primary-pad); border-radius: var(--r-pill);
+  background: var(--page); box-shadow: inset 0 0 0 var(--hairline) var(--line);
+  font: var(--type-body-medium); white-space: nowrap;
+  transition: background var(--quick), transform var(--quick);
+}
+.secondary:is(:hover, .is-hover) { background: var(--page-soft); }
+.secondary:is(:active, .is-pressed) { background: var(--soft-2); transform: scale(var(--press)); }
+.secondary:disabled { background: var(--fill); color: var(--ink-3); box-shadow: none; transform: none; }
+/* The smaller size, as tall as a quiet button: data-size="regular". No part on the page uses it yet. */
+.secondary[data-size="regular"] { height: var(--quiet-h); padding: 0 var(--space-14); font: var(--type-small-medium); }
+
+/* Everything else a person can do: words only. The aria-expanded state is Decided, being built:
+   the "Measurements" button while its sheet is open. */
+.quiet {
+  flex: none; height: var(--quiet-h); padding: 0 var(--space-14); border-radius: var(--r-pill);
+  color: var(--ink-2);
+  font: var(--type-small-medium); white-space: nowrap;
+  transition: background var(--quick), color var(--quick), transform var(--quick);
+}
+.quiet:is(:hover, .is-hover, [aria-expanded="true"]) { background: var(--fill); color: var(--ink); }
+.quiet:is(:active, .is-pressed) { background: var(--line); transform: scale(var(--press)); }
+/* A quiet button has no disabled look: one that cannot be used is not shown. One that is
+   disabled all the same keeps its look at rest. */
+.quiet:disabled { background: none; color: var(--ink-2); transform: none; }
+
+/* A link inside a sentence. */
+.link {
+  font-weight: var(--weight-medium); color: var(--ink); border-radius: var(--r-text);
+  text-decoration: underline; text-decoration-color: var(--underline); text-underline-offset: var(--underline-gap);
+  transition: text-decoration-color var(--quick);
+}
+.link:is(:hover, .is-hover) { text-decoration-color: currentColor; }
+
+/* ---------- The step control and the view control ---------- */
+
+/* A pill of options with a white thumb that slides under the chosen one. It is a block grid: it
+   is as narrow as its options only inside a column sized to its content, which the bar gives it.
+   Shown alone, give it such a column. */
+.seg {
+  --w: var(--step-w); --h: var(--step-h);
+  position: relative; display: grid; grid-auto-flow: column; grid-auto-columns: var(--w);
+  padding: var(--space-2); border-radius: var(--r-pill); background: var(--track);
+}
+.seg::before {
+  content: ""; position: absolute; left: var(--space-2); top: var(--space-2); width: var(--w); height: var(--h);
+  border-radius: var(--r-pill); background: var(--thumb);
+  box-shadow: var(--shadow-thumb);
+  transform: translateX(calc(var(--at, 0) * var(--w)));
+  transition: transform var(--appear), opacity var(--quick);
+}
+/* No option is chosen: the thumb is hidden. */
+.seg[data-none]::before { opacity: 0; }
+.seg button {
+  position: relative; height: var(--h); border-radius: var(--r-pill);
+  font: var(--type-small-medium); color: var(--ink-2);
+  transition: color var(--quick), transform var(--quick);
+}
+.seg button:is(:hover, .is-hover):enabled, .seg button[aria-current="true"] { color: var(--ink); }
+.seg button:is(:active, .is-pressed):enabled { transform: scale(var(--press-seg)); }
+.seg button:disabled { color: var(--ink-faint); }
+.views { --w: var(--view-w); --h: var(--view-h); flex: none; margin-right: var(--space-2); }
+
+/* ---------- The capsule bar ---------- */
+
+/* The product's name, the three steps, the trust badge. As wide as the dock, so their edges line
+   up. The badge sits as far from the bar's end as from its top and bottom.
+     <div class="brand"> <svg/> <span class="brand-name">Spine Workbench</span> </div>
+   In a small window the three no longer fit. tokens.css then gives --bar-cols a narrow first
+   column and takes the product's name away; the mark stays and the steps sit in the middle. */
+.bar {
+  width: var(--col); height: var(--bar-h);
+  padding: 0 calc((var(--bar-h) - var(--badge-h)) / 2 - var(--hairline)) 0 calc(var(--inset) - var(--hairline)); border-radius: var(--r-pill);
+  display: grid; grid-template-columns: var(--bar-cols); align-items: center;
+}
+.bar .steps { justify-self: center; }
+.brand-name { display: var(--brand-name-display); }
+.frame > .bar { position: absolute; z-index: var(--z-bar); top: var(--bar-top); left: 50%; translate: -50% 0; }
+.brand {
+  display: flex; align-items: center; gap: var(--brand-gap);
+  font: var(--type-body-medium); white-space: nowrap;
+}
+/* The mark has air inside its box; this lines its ink up with the dock's words. */
+.brand svg { margin-left: calc(-1 * var(--space-4)); }
+.brand svg, .badge svg {
+  flex: none; fill: none; stroke: currentColor; stroke-width: var(--icon-stroke);
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.brand svg { width: var(--icon-medium); height: var(--icon-medium); }
+.badge svg { width: var(--icon-small); height: var(--icon-small); }
+
+/* The trust badge. It opens the trust note. */
+.badge {
+  justify-self: end; display: inline-flex; align-items: center; gap: var(--space-6);
+  height: var(--badge-h); padding: 0 var(--space-14) 0 var(--space-10); border-radius: var(--r-pill);
+  font: var(--type-small-medium); color: var(--ink-2); white-space: nowrap;
+  transition: background var(--quick), color var(--quick), transform var(--quick);
+}
+.badge:is(:hover, .is-hover, [aria-expanded="true"]) { background: var(--fill); color: var(--ink); }
+.badge:is(:active, .is-pressed) { background: var(--line); transform: scale(var(--press-badge)); }
+
+/* The trust note: a compact popover under its badge. It may open over the start sentence or a
+   film, so it is the densest glass. It opens from its top right corner, the corner under the badge.
+     <div class="note glass" role="dialog" aria-label="On this device only" tabindex="-1">
+       <div> <p class="note-lead"/> <p class="note-count"/> <p class="note-blocked"/> </div>
+       <p class="note-credit"/>
+     </div> */
+.note {
+  width: min(var(--note-w), var(--col));
+  padding: var(--space-16) var(--inset) var(--space-16) calc(var(--inset) - var(--hairline)); border-radius: var(--r-xlarge);
+  display: grid; row-gap: var(--space-12);
+  background: var(--glass-dense);
+  opacity: 0; visibility: hidden;
+  transform: translateY(calc(-1 * var(--drop-note))) scale(var(--from-note)); transform-origin: 100% 0;
+  transition: opacity var(--quick), transform var(--quick), visibility 0s var(--dur-quick);
+}
+.note.open {
+  opacity: 1; visibility: visible; transform: none;
+  transition: opacity var(--appear), transform var(--appear), visibility 0s;
+}
+/* Focus is moved onto the note when it opens, so its name is spoken. The note itself wears no ring. */
+.note:focus-visible { outline: none; }
+/* Its right edge sits on the bar's right edge. */
+.frame > .note { position: absolute; z-index: var(--z-popover); top: var(--note-top); right: calc(50% - var(--col) / 2); }
+.note-lead { font-weight: var(--weight-medium); white-space: nowrap; }
+.note-count { font: var(--type-small); color: var(--ink-2); }
+.note-count .num { color: var(--ink); }
+/* Shown only when the browser has refused an attempt to reach outside. */
+.note-blocked { margin-top: var(--space-8); font: var(--type-caption); letter-spacing: var(--track-caption); color: var(--ink-2); text-wrap: pretty; }
+.note-credit {
+  padding-top: var(--space-12); border-top: var(--hairline) solid var(--line);
+  font: var(--type-caption); letter-spacing: var(--track-caption); color: var(--ink-2); text-wrap: pretty;
+}
+
+/* ---------- The frame and the stage ---------- */
+
+/* Decided, being built. The whole scene sits in one frame in the middle of the window. The frame
+   stops growing at a comfortable size; a larger window only adds empty margin around it.
+   Without the frame, the stage is the window less --gutter at each side.
+   To lay a page out that way, set on :root
+     --frame-w: calc(100vw - 2 * var(--gutter));  --frame-h: 100vh;  --col: min(var(--col-max), var(--frame-w));
+   Every part then sits where the build puts it. One thing differs and cannot be seen: the 3D
+   canvas is as wide as the frame, where the build's is as wide as the window. */
+.frame { position: fixed; inset: 0; margin: auto; width: var(--frame-w); height: var(--frame-h); }
+
+/* Everything in the flow happens on the stage, and the same four films carry through it. */
+.stage { position: relative; }
+.frame > .stage {
+  position: absolute; z-index: var(--z-stage); top: var(--stage-top); bottom: var(--stage-bottom); left: 0; right: 0;
+  pointer-events: none;
+  opacity: 0; transition: opacity var(--dur-rise) var(--ease-fade);
+}
+[data-ready] .frame > .stage { opacity: 1; }
+
+/* The start sentence. Only the Films moment shows it. */
+.display { font: var(--type-display); letter-spacing: var(--track-display); text-align: center; text-wrap: balance; }
+.stage > .display {
+  position: absolute; left: 0; right: 0; top: calc(var(--head-y, 0) * 1px);
+  opacity: 0; visibility: hidden; transform: translateY(calc(-1 * var(--rise)));
+  transition: opacity var(--quick), transform var(--appear), visibility 0s var(--dur-appear);
+}
+[data-moment="films"] .stage > .display {
+  opacity: 1; visibility: visible; transform: none;
+  transition: opacity var(--appear) var(--delay-display), transform var(--scene) var(--delay-display), visibility 0s;
+}
+
+/* ---------- Empty film places ---------- */
+
+/* Four faint places, one for each film. The zone is a plain box and one place to drop; each
+   place in it is a button of its own, which chooses the film for that place.
+     <div class="dropzone"> <button class="place" aria-label="Choose the Front film"> <svg/> </button> (four) </div> */
+.stage > .dropzone {
+  position: absolute; left: calc(var(--zx) * 1px); top: calc(var(--zy) * 1px);
+  width: calc(var(--zw) * 1px); height: calc(var(--zh) * 1px);
+  opacity: 0; visibility: hidden;
+  transition: opacity var(--appear), visibility 0s var(--dur-appear);
+}
+/* The zone is drawn on the Films moment only. It stays when all four films are in: a place lies
+   out of sight under its film and still takes the press, which replaces that film. */
+[data-moment="films"]:is([data-films="empty"], [data-films="landing"], [data-films="ready"]) .stage > .dropzone {
+  opacity: 1; visibility: visible; transition-delay: 0s;
+}
+/* While a film is being read the places take no press. */
+:is([data-films="empty"], [data-films="ready"]) .dropzone { pointer-events: auto; }
+
+.place {
+  display: grid; place-items: center;
+  border-radius: var(--r-large); background: var(--soft-1); color: var(--ink-faint);
+  transition: opacity var(--appear), transform var(--appear), background var(--quick), color var(--quick), box-shadow var(--quick);
+}
+.dropzone > .place {
+  position: absolute; left: calc(var(--px) * 1px); top: 0;
+  width: calc(var(--tw) * 1px); height: calc(var(--th) * 1px);
+}
+.place svg {
+  width: var(--place-drawing-w); height: var(--place-drawing-h);
+  fill: none; stroke: currentColor; stroke-width: var(--icon-stroke); stroke-linejoin: round;
+}
+.place rect { vector-effect: non-scaling-stroke; }
+/* The four change together when the zone is pointed at or pressed. The zone is still one object:
+   the first file goes to the place pressed and the rest fill the empty places. */
+.dropzone:is(:hover, .is-hover) .place, .place.is-hover { background: var(--soft-2); color: var(--ink-faint-hover); }
+.dropzone:is(:active, .is-pressed) .place, .place.is-pressed { background: var(--soft-3); }
+/* Its film is being read: the pointed-at look, held still. Nothing loops. */
+.dropzone .place[data-reading] { background: var(--soft-2); color: var(--ink-faint-hover); }
+/* Files held over the window: the four places lift a little and turn blue, one after another. */
+[data-drag] .dropzone .place, .place.is-drag {
+  background: var(--accent-wash); color: var(--accent); box-shadow: inset 0 0 0 var(--mark-stroke) var(--accent-edge);
+  transform: translateY(calc(-1 * var(--rise-small))); transition-delay: calc(var(--i, 0) * var(--stagger));
+}
+/* The one place the held files are over has a firmer ring. */
+[data-drag] .dropzone .place[data-drop-target] { box-shadow: inset 0 0 0 var(--ring-width) var(--accent); }
+/* A film has landed on it. */
+.place.filled { opacity: 0; }
+
+/* ---------- Film tiles ---------- */
+
+/* A film tile. At rest it is at its real size: --bw and --bh are its own width and height, and
+   --s is 1. For a change of moment, script writes where the tile was into --x --y --s, then where
+   it rests, and the transition below carries it: the same tile moves and scales. */
+.tile {
+  position: absolute; left: 0; top: 0; z-index: calc(var(--films) - var(--i, 0));
+  width: calc(var(--bw) * 1px); height: calc(var(--bh) * 1px);
+  overflow: hidden; background: var(--film);
+  border-radius: calc(var(--r, var(--r-large)) / var(--s, 1));
+  box-shadow: var(--shadow-film);
+  transform: translate(calc(var(--x, 0) * 1px), calc(var(--y, 0) * 1px)) scale(var(--s, 1));
+  visibility: hidden;
+  transition: transform var(--scene) calc(var(--i, 0) * var(--stagger)), border-radius var(--scene) calc(var(--i, 0) * var(--stagger)), --k 0s var(--delay-caption);
+}
+/* Only while outlines are showing do they need to follow the film as it is pushed in.
+   Elsewhere the value waits until they have faded, then jumps. */
+[data-moment="find"] .tile {
+  pointer-events: auto;
+  transition: transform var(--scene) calc(var(--i, 0) * var(--stagger)), border-radius var(--scene) calc(var(--i, 0) * var(--stagger)), --k var(--dur-push) var(--ease-settle);
+}
+/* The film has landed. */
+.tile.in { visibility: visible; animation: land var(--dur-land) var(--ease-settle) backwards; }
+.tile.in .film { animation: ease-back var(--dur-slow) var(--ease-settle) backwards; }
+/* A faint lit edge, so a film reads as an object and not a hole in the page. */
+.tile::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  box-shadow: inset 0 0 0 var(--hairline) var(--film-edge);
+  transition: box-shadow var(--quick);
+}
+/* In 3D the films wait in the rail. Pointing at one lights its edge. */
+[data-moment="three"] .tile { pointer-events: auto; cursor: pointer; }
+[data-moment="three"] .tile:is(:hover, .is-hover)::after { box-shadow: inset 0 0 0 calc(var(--mark-stroke) / var(--s, 1)) var(--film-edge-hover); }
+/* The one film the held files are over: the firmer ring, on its lit edge. */
+[data-drag] .tile[data-drop-target]::after { box-shadow: inset 0 0 0 var(--ring-width) var(--accent); }
+@keyframes land { from { opacity: 0; translate: 0 var(--rise); } }
+@keyframes ease-back { from { scale: var(--from-film); } }
+
+/* The film inside its tile. At rest it is shown whole: script gives it the largest size that
+   fits the tile without cropping or stretching, and centres it on the tile's black. The push-in
+   is a transform. */
+.film {
+  position: absolute;
+  transform: translate(calc(var(--tx, 0) * 1px), calc(var(--ty, 0) * 1px)) scale(var(--z, 1));
+  transition: transform var(--dur-push) var(--ease-settle);
+}
+.film img { display: block; width: 100%; height: 100%; user-select: none; -webkit-user-drag: none; }
+
+/* The light that travels down the spine during the find. It is one shape in the film's own
+   layer, drawn in film pixels, so it moves with the film and never lights the black beside a
+   film that is shown whole.
+     <svg class="light" viewBox="0 0 {film width} {film height}" preserveAspectRatio="none" aria-hidden="true">
+       <linearGradient/>  down the shape, with the stops of --find-light
+       <mask/>            across the shape, with the stops of --find-light-mask
+       <rect class="travelling-light" width="{film width}" height="{--light-h, scaled to the film}"/>
+     </svg>
+   An SVG paint cannot read a CSS gradient, so the stops are written out in the markup: keep them
+   equal to the two tokens. Nothing is blended: white laid over a film adds the same light.
+   Script moves the shape and fades it by writing its y and opacity attributes, and takes it away
+   before and after the journey with display="none". No rule here may set those, or script loses. */
+.light { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.travelling-light { pointer-events: none; }
+
+/* Marks on film: thin, soft white; amber when one needs a look; blue when pointed at.
+   The casing is Decided, being built. Every outline is drawn twice. Beneath lies its casing: the
+   same path, wider and dark, with the faint fill under it. Above lies the line. So a mark reads
+   on any film, and the film itself is never changed to help it. A film is painted in this order:
+   every fill and casing first, then every line and name, so no casing darkens a neighbour's line.
+     <svg class="marks" role="group" aria-label="Outlines on the Front film">
+       <g class="mark under" data-level="T1" aria-hidden="true"> <polygon/> </g>          one for each vertebra, then
+       <g class="mark" data-level="T1" role="group" aria-label="T1"> <polygon/> <text/> </g>   one for each vertebra
+     </svg>
+   The two groups of a vertebra take the same state classes. An outline that needs a look is named
+   "T1, needs a look". An outline not yet found is hidden from a screen reader (aria-hidden).
+   Outside Find the outlines are out of reach as well as out of sight: once the layer has faded it
+   is hidden from the pointer and from a screen reader. */
+.marks {
+  position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none;
+  opacity: 0; visibility: hidden; transition: opacity var(--quick), visibility 0s var(--dur-quick);
+}
+[data-moment="find"] .marks { opacity: 1; visibility: visible; transition: opacity var(--appear) var(--delay-marks), visibility 0s; }
+.mark { transition: opacity var(--appear); }
+/* Not found yet: nothing shows. */
+.mark polygon {
+  fill: none;
+  stroke: var(--mark); stroke-width: calc(var(--mark-stroke) / var(--k));
+  stroke-linejoin: round; stroke-linecap: round;
+  stroke-dasharray: 1 2; stroke-dashoffset: 1;
+  transition: stroke-dashoffset var(--dur-draw) var(--ease-settle), fill-opacity var(--dur-fill) var(--ease-fade) var(--delay-late), stroke var(--appear), fill var(--appear);
+}
+/* Beneath the line: the faint fill, then the casing over the fill's edge. */
+.mark.under polygon {
+  fill: var(--mark-fill); fill-opacity: 0;
+  stroke: var(--mark-casing); stroke-width: calc(var(--mark-casing-stroke) / var(--k));
+}
+/* The name's casing is a dark stroke painted under its own letters. */
+.mark text {
+  font: var(--weight-medium) calc(var(--size-mark) / var(--k)) var(--font-mono); fill: var(--mark-name);
+  stroke: var(--mark-name-casing); stroke-width: calc(var(--mark-name-casing-stroke) / var(--k)); stroke-linejoin: round; paint-order: stroke;
+  transform: translate(calc(var(--space-8) / var(--k)), calc(var(--space-4) / var(--k)));
+  opacity: 0; transition: opacity var(--appear) var(--delay-name);
+}
+/* Found: the outline draws itself, then its name appears. */
+.mark.found polygon { stroke-dashoffset: 0; fill-opacity: 1; pointer-events: all; }
+.mark.found text { opacity: 1; }
+/* Needs a look. A darker line colour needs a darker casing: amber's is darker than white's. */
+.mark.look polygon { stroke: var(--look); }
+.mark.under.look polygon { fill: var(--look-fill); stroke: var(--mark-casing-look); }
+/* Pointed at. The same vertebra lights on every film. Blue is the darkest line, so its casing is the darkest. */
+.mark.on polygon { stroke: var(--accent); }
+.mark.under.on polygon { fill: var(--accent-fill); stroke: var(--mark-casing-on); }
+/* Names show on the large films only. */
+.tile[data-names="off"] text { display: none; }
+
+/* The find has ended: the outlines that need a look pulse once. The pulse peaks 35% of the way
+   through; a keyframe cannot read that from a token, so it is written here. */
+.tiles.marked .mark.under.look polygon { animation: look var(--dur-pulse) var(--ease-pulse); }
+@keyframes look { 35% { fill: var(--look-pulse); } }
+
+/* Review: every outline steps back but the one being looked at. */
+.tiles.reviewing .mark { opacity: var(--dim); }
+.tiles.reviewing .mark.focus { opacity: 1; }
+.tiles.reviewing .mark polygon { pointer-events: none; }
+
+/* A film's name, under its tile. */
+.caption {
+  position: absolute; left: 0; top: 0; white-space: nowrap;
+  font: var(--type-caption); letter-spacing: var(--track-caption); color: var(--ink-2);
+  transform: translate(calc(var(--cx, 0) * 1px - 50%), calc(var(--cy, 0) * 1px));
+  transition: transform var(--scene) calc(var(--i, 0) * var(--stagger)), opacity var(--appear) var(--delay-caption);
+}
+/* In the rail the films have no names. Nor has a place whose film is not on the stage in Find. */
+:is([data-moment="three"] .caption, .caption[data-away]) { opacity: 0; transition-delay: calc(var(--i, 0) * var(--stagger)), 0s; }
+
+/* Used while a layout is applied without movement, and for the fade that replaces movement. */
+.tiles { transition: opacity var(--dur-fade) var(--ease-fade); }
+.tiles.still, .tiles.still * { transition: none !important; }
+.tiles.fading { opacity: 0; }
+
+/* "Start over": the scene fades out before it is reset. */
+html[data-leaving] :is(.tiles, .spine, .panel) { opacity: 0; transition: opacity var(--dur-say-in) var(--ease-fade); }
+
+/* ---------- 3D ---------- */
+
+/* The canvas the spine is drawn on. It runs from just under the bar to just under the dock's top
+   edge. It is clear: the page glow shows through. */
+.frame > .spine {
+  position: absolute; z-index: var(--z-spine); left: 0; top: var(--spine-top); width: 100%; height: calc(100% - var(--spine-trim));
+  opacity: 0; visibility: hidden; transform: translateY(var(--rise));
+  transition: opacity var(--quick), visibility 0s var(--dur-quick), transform 0s var(--dur-quick);
+}
+[data-moment="three"] .frame > .spine {
+  opacity: 1; visibility: visible; transform: none;
+  transition: opacity var(--dur-rise) var(--ease-fade) var(--delay-in), transform var(--scene) var(--delay-in), visibility 0s;
+}
+
+/* The name chip: the name of the vertebra pointed at, beside the pointer. */
+.chip {
+  display: inline-block; height: var(--chip-h); padding: 0 var(--space-10); border-radius: var(--r-pill);
+  font-size: var(--size-caption); line-height: var(--line-chip); pointer-events: none;
+  background: var(--glass-thick);
+}
+body > .chip { position: fixed; z-index: var(--z-chip); left: 0; top: 0; opacity: 0; transition: opacity var(--quick); }
+[data-moment="three"] body > .chip.show { opacity: 1; }
+
+/* The measurements panel. */
+.panel {
+  width: var(--panel-w); padding: var(--panel-pad) var(--panel-pad) var(--panel-pad-bottom); border-radius: var(--r-xlarge);
+  background: var(--glass-regular);
+}
+.stage > .panel {
+  position: absolute; right: 0; top: 50%; translate: 0 -50%; pointer-events: auto;
+  opacity: 0; visibility: hidden; transform: translateY(var(--rise));
+  transition: opacity var(--quick), visibility 0s var(--dur-quick), transform 0s var(--dur-quick);
+}
+[data-moment="three"] .stage > .panel {
+  opacity: 1; visibility: visible; transform: none;
+  transition: opacity var(--appear) var(--delay-name), transform var(--appear) var(--delay-name), visibility 0s;
+}
+.panel h2 { font: var(--type-heading); letter-spacing: var(--track-heading); }
+
+/* One row for each measurement: its name, its value with its band, and what it was measured across. */
+.measures { margin-top: var(--panel-list-top); display: grid; row-gap: var(--panel-row-gap); }
+.measures li {
+  display: grid; grid-template-columns: 1fr auto; column-gap: var(--space-12); align-items: baseline;
+  opacity: 0; transform: translateY(var(--rise));
+}
+[data-moment="three"] .measures li {
+  opacity: 1; transform: none;
+  transition: opacity var(--appear) calc(var(--delay-late) + var(--i, 0) * var(--stagger)), transform var(--appear) calc(var(--delay-late) + var(--i, 0) * var(--stagger));
+}
+.m-name { font: var(--type-row); }
+.m-value { font-size: var(--size-value); line-height: var(--line-value); white-space: nowrap; }
+.m-band { margin-left: var(--space-6); font-size: var(--size-small); color: var(--ink-2); }
+.m-about { grid-column: 1 / -1; font: var(--type-caption); letter-spacing: var(--track-caption); color: var(--ink-2); }
+
+.panel-note {
+  margin-top: var(--panel-note-top); padding-top: var(--panel-note-pad); border-top: var(--hairline) solid var(--line);
+  font: var(--type-caption); letter-spacing: var(--track-caption); color: var(--ink-2);
+}
+/* The two quiet buttons hang out by their own padding, so their words line up with the rows. */
+.panel-acts { display: flex; justify-content: space-between; margin: var(--panel-acts-top) calc(-1 * var(--space-14)) 0; }
+
+/* ---------- The dock ---------- */
+
+/* One sentence and one button, whatever the moment. The button sits as far from the dock's end as
+   from its top and bottom. */
+.dock {
+  width: var(--col); height: var(--dock-h);
+  padding: 0 calc((var(--dock-h) - var(--primary-h)) / 2 - var(--hairline)) 0 calc(var(--inset) - var(--hairline)); border-radius: var(--r-pill);
+  display: grid; align-items: center;
+}
+.frame > .dock { position: absolute; z-index: var(--z-bar); left: 50%; bottom: var(--dock-bottom); translate: -50% 0; }
+/* The dock holds one scene for each state of the flow, all in the same place. Only one is on. */
+.scene {
+  grid-area: 1 / 1; min-width: 0; display: flex; align-items: center; gap: var(--space-6);
+  opacity: 0; visibility: hidden;
+  transition: opacity var(--dur-say-out) var(--ease-fade), visibility 0s var(--dur-say-out);
+}
+.scene.on { opacity: 1; visibility: visible; transition: opacity var(--dur-say-in) var(--ease-fade) var(--delay-in), visibility 0s; }
+.say { flex: 1; min-width: 0; transform: translateY(var(--rise-small)); transition: transform 0s var(--dur-say-out); }
+.scene.on .say { transform: none; transition: transform var(--appear) var(--delay-in); }
+/* One line each. A line ends in an ellipsis before it can wrap or touch a button. The sentence
+   is the heading; in a narrow window tokens.css steps --type-say down to body, medium, so that
+   the sentence, a quiet button and the primary button fit on one line. */
+.say h2 { font: var(--type-say); letter-spacing: var(--track-say); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.say p { font: var(--type-small); color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.say .num { color: var(--ink); margin-right: var(--space-10); }
+/* Words that change inside a scene fade in. Script puts data-fresh on a span round the words. */
+.say [data-fresh] { animation: say-change var(--appear) backwards; }
+@keyframes say-change { from { opacity: 0; } }
+.scene .quiet { margin-right: var(--space-2); }
+/* The moment the button becomes available. */
+.scene.on .primary:enabled { animation: ready var(--dur-land) var(--ease-settle) var(--delay-in) backwards; }
+@keyframes ready { from { opacity: 0; scale: var(--from-ready); } }
+
+/* The progress count's bar, and the amber dot that says "needs a look". */
+.meter {
+  display: inline-block; vertical-align: middle; width: var(--meter-w); height: var(--meter-h); margin-bottom: var(--space-2);
+  border-radius: var(--r-hair); background: var(--line); overflow: hidden;
+}
+.meter i {
+  display: block; height: 100%; border-radius: var(--r-hair); background: var(--accent);
+  transform-origin: 0 50%; transform: scaleX(var(--p, 0)); transition: transform var(--dur-fill) var(--ease-meter);
+}
+/* In the wait before the find's answer there is nothing to count: the bar stands before the words. */
+.say .meter + span { margin-left: var(--space-10); }
+.say .dot { display: inline-block; width: var(--dot); height: var(--dot); margin-right: var(--space-8); border-radius: 50%; background: var(--look); }
+
+/* ---------- The notice ---------- */
+
+/* Always on screen, word for word. */
+.notice { font: var(--type-caption); letter-spacing: var(--track-caption); color: var(--ink-2); text-align: center; }
+.frame > .notice { position: absolute; left: 0; right: 0; bottom: var(--notice-bottom); }
+
+/* ---------- People who ask for less motion ---------- */
+
+/* Fades only: nothing travels, draws itself or pushes in. tokens.css sets every rise, drop and
+   press to nothing; this turns off the rest. Script fades the films out, moves them, and fades
+   them in. */
+@media (prefers-reduced-motion: reduce) {
+  .tiles .tile, .tiles .film { transition: none; }
+  .caption { transition: opacity var(--appear); }
+  .seg::before { transition-property: opacity; }
+  .mark polygon { stroke-dasharray: none; opacity: 0; transition: opacity var(--appear), stroke var(--appear), fill var(--appear); }
+  .mark.found polygon { opacity: 1; }
+  .travelling-light { display: none; }
+}
+
+/* The same six answers for the app's own setting: data-motion="reduced" on the app's root. Keep
+   them equal to the block above. */
+[data-motion="reduced"] .tiles .tile, [data-motion="reduced"] .tiles .film { transition: none; }
+[data-motion="reduced"] .caption { transition: opacity var(--appear); }
+[data-motion="reduced"] .seg::before { transition-property: opacity; }
+[data-motion="reduced"] .mark polygon { stroke-dasharray: none; opacity: 0; transition: opacity var(--appear), stroke var(--appear), fill var(--appear); }
+[data-motion="reduced"] .mark.found polygon { opacity: 1; }
+[data-motion="reduced"] .travelling-light { display: none; }
+
+/* ---------- Decided, being built ---------- */
+
+/* These are sketches made from the decisions, not from a finished build. They use only values
+   that already exist. Replace them when the build lands. */
+
+/* Links: in 3D the outlines stay with their films, unseen. Pointing at a bone shows its outline
+   on the films in the rail as a small blue block. */
+[data-moment="three"][data-links] .marks { opacity: 1; visibility: visible; }
+[data-moment="three"][data-links] .mark { opacity: 0; }
+[data-moment="three"][data-links] .mark.on { opacity: 1; }
+[data-moment="three"][data-links] .mark.on polygon { fill: var(--accent); }
+
+/* Film beside spine: the stage in two equal halves, the film at the left and the spine at the
+   right, in the same view and at the same scale. */
+.compare { position: absolute; inset: 0; display: grid; grid-template-columns: 1fr 1fr; pointer-events: auto; }
+.compare > * { position: relative; min-width: 0; display: grid; place-items: center; }
+/* One height, drawn across both halves: light over the film, dark over the page. */
+.hair { position: absolute; z-index: var(--z-chip); left: 0; right: 0; height: var(--hairline); pointer-events: none; background: var(--ink-faint); }
+.hair.on-film { background: var(--film-edge-hover); }
+
+/* Narrow windows: the measurements open as a sheet. This sketch puts it above the dock; where it
+   sits is not decided. It may cover the spine and the films, so it is the densest glass. */
+.panel.sheet { width: min(var(--col), 100%); background: var(--glass-dense); }
+.stage > .panel.sheet { right: auto; left: 50%; top: auto; bottom: 0; translate: -50% 0; }

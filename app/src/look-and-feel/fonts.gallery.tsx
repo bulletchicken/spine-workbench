@@ -1,89 +1,60 @@
+import type { CSSProperties } from 'react';
 import type { GalleryPage } from '@/gallery/gallery-page';
 import { Icon } from './icons/Icon';
 import './look-and-feel.gallery.css';
+
+// Each role is shown in the token's own `font`, so the page shows what the tokens say and
+// nothing of its own. The gallery is for development only and is never built into the app.
+const ROLE: Record<string, CSSProperties> = {
+  display: { font: 'var(--type-display)', letterSpacing: 'var(--track-display)' },
+  heading: { font: 'var(--type-heading)', letterSpacing: 'var(--track-heading)' },
+  body: { font: 'var(--type-body)' },
+  bodyMedium: { font: 'var(--type-body-medium)' },
+  small: { font: 'var(--type-small)', color: 'var(--ink-2)' },
+  smallMedium: { font: 'var(--type-small-medium)', color: 'var(--ink-2)' },
+  caption: { font: 'var(--type-caption)', letterSpacing: 'var(--track-caption)', color: 'var(--ink-2)' },
+  mark: { font: 'var(--weight-medium) var(--size-mark) / 1 var(--font-mono)' },
+};
 
 const page: GalleryPage = {
   area: 'look-and-feel',
   part: 'Type specimen',
   states: [
     {
-      name: 'The guide’s type, at first launch',
-      show: () => (
-        <div className="look-gallery-guide">
-          <p className="look-gallery-caps">Step 1 of 4 · Films</p>
-          <h2 className="look-gallery-voice">Hang your four films.</h2>
-          <p className="look-gallery-body">
-            Front, side, and one bending each way. Drop the files anywhere on this window, or choose them.
-          </p>
-        </div>
-      ),
-    },
-    {
-      name: 'The guide’s type, at the result',
-      show: () => (
-        <div className="look-gallery-guide">
-          <p className="look-gallery-caps">Step 3 of 4 · Find</p>
-          <h2 className="look-gallery-voice">Found 17. Four need a look.</h2>
-          <p className="look-gallery-body">
-            Blue outlines are sure. Yellow and coral mark where the films were hard to read. We’ll go through those one at a time.
-          </p>
-        </div>
-      ),
-    },
-    {
-      name: 'Voice: Instrument Serif',
+      name: 'Geist: every role, from the start sentence to a film’s name',
       show: () => (
         <div className="look-gallery-type">
           <div className="look-gallery-type-row">
-            <span>voice 32/36</span>
-            <span className="look-gallery-voice">Hang your four films.</span>
+            <span>display 44/48</span>
+            <span style={ROLE.display}>Add the four films.</span>
           </div>
           <div className="look-gallery-type-row">
-            <span>voice 32/36</span>
-            <span className="look-gallery-voice">Found 17. Four need a look.</span>
+            <span>heading 18/24</span>
+            <span style={ROLE.heading}>17 vertebrae found. 2 need a look.</span>
           </div>
           <div className="look-gallery-type-row">
-            <span>title 28/32</span>
-            <span className="look-gallery-voice-title">Nothing leaves this computer.</span>
+            <span>body 15/22</span>
+            <span style={ROLE.body}>Your films never leave this computer.</span>
           </div>
           <div className="look-gallery-type-row">
-            <span>italic</span>
-            <span className="look-gallery-voice-title">
-              <i>Which vertebra is L5?</i>
-            </span>
+            <span>body medium</span>
+            <span style={ROLE.bodyMedium}>Find the spine</span>
           </div>
           <div className="look-gallery-type-row">
-            <span>hero 48/50</span>
-            <span className="look-gallery-hero">L R ?</span>
-          </div>
-        </div>
-      ),
-    },
-    {
-      name: 'Interface: Geist',
-      show: () => (
-        <div className="look-gallery-type">
-          <div className="look-gallery-type-row">
-            <span>lead 16/24</span>
-            <span className="look-gallery-lead">Choose films</span>
+            <span>small 13/18</span>
+            <span style={ROLE.small}>You can find the spine now, or add the others.</span>
           </div>
           <div className="look-gallery-type-row">
-            <span>body 14/21</span>
-            <span className="look-gallery-body">
-              Front, side, and one bending each way. Drop the files anywhere on this window, or choose them.
-            </span>
+            <span>small medium</span>
+            <span style={ROLE.smallMedium}>Start over</span>
           </div>
           <div className="look-gallery-type-row">
-            <span>small 12/18</span>
-            <span className="look-gallery-small">Counting from the first rib and from the sacrum disagree</span>
-          </div>
-          <div className="look-gallery-type-row">
-            <span>micro 11/16</span>
-            <span className="look-gallery-caps">Step 1 of 4 · Films</span>
+            <span>caption 12/16</span>
+            <span style={ROLE.caption}>Bending left</span>
           </div>
           <div className="look-gallery-type-row">
             <span>weights</span>
-            <span className="look-gallery-weights">
+            <span className="look-gallery-weights" style={ROLE.body}>
               <span>Regular 400</span>
               <span>Medium 500</span>
               <span>Semibold 600</span>
@@ -93,20 +64,28 @@ const page: GalleryPage = {
       ),
     },
     {
-      name: 'Data: Geist Mono, one width a figure, a slashed zero',
+      name: 'Geist Mono: numbers and vertebra names only, one width a figure',
       show: () => (
         <div className="look-gallery-type">
           <div className="look-gallery-type-row">
-            <span>title 20/26</span>
-            <span className="look-gallery-title-number">13 · 2 · 2 · 0</span>
+            <span>in a heading</span>
+            <span style={ROLE.heading}>
+              <span className="num">17</span> vertebrae found.
+            </span>
           </div>
           <div className="look-gallery-type-row">
-            <span>small 12/18</span>
-            <span className="look-gallery-data">C7 T1 T12 L5 · 0.45 mm/px · 312% · spine-case-2026-11-10.spinecase</span>
+            <span>in small</span>
+            <span style={ROLE.small}>
+              <span className="num">9 of 17</span>
+            </span>
+          </div>
+          <div className="look-gallery-type-row">
+            <span>on a film, 11</span>
+            <span style={ROLE.mark}>T1 T12 L1 L5</span>
           </div>
           <div className="look-gallery-type-row">
             <span>figures</span>
-            <span className="look-gallery-figures-column">
+            <span className="look-gallery-figures-column num">
               <span>1000.00 mm</span>
               <span>111.11 mm</span>
               <span>80.08 mm</span>
@@ -114,7 +93,9 @@ const page: GalleryPage = {
           </div>
           <div className="look-gallery-type-row">
             <span>told apart</span>
-            <span className="look-gallery-title-number">0O 1lI 5S 8B</span>
+            <span style={ROLE.heading}>
+              <span className="num">0O 1lI 5S 8B</span>
+            </span>
           </div>
           <div className="look-gallery-type-row">
             <span>key hints</span>
@@ -134,46 +115,23 @@ const page: GalleryPage = {
               <kbd>
                 <Icon name="command" />Z
               </kbd>
-              <kbd>
-                <Icon name="shift" />
-                <Icon name="command" />Z
-              </kbd>
-              <kbd>
-                <Icon name="option" />
-                <Icon name="arrow-up" />
-              </kbd>
               <kbd>Ctrl+Z</kbd>
               <kbd>Enter</kbd>
               <kbd>Esc</kbd>
-              <kbd>V</kbd>
             </span>
           </div>
         </div>
       ),
     },
     {
-      name: 'The four inks: on paper, on a row under the pointer, and on a film',
+      name: 'One ink scale on the page',
       show: () => (
-        <>
-          <div className="look-gallery-inks">
-            <span className="look-gallery-ink-1">Ink 1: text</span>
-            <span className="look-gallery-ink-2">Ink 2: secondary text</span>
-            <span className="look-gallery-ink-3">Ink 3: captions, labels</span>
-            <span className="look-gallery-ink-4">Ink 4: 24 px and larger only</span>
-          </div>
-          <div className="look-gallery-inks look-gallery-card">
-            <span className="look-gallery-ink-1">Ink 1: text</span>
-            <span className="look-gallery-ink-2">Ink 2: secondary text</span>
-            <span className="look-gallery-ink-3">Ink 3: captions, labels</span>
-            <span className="look-gallery-ink-4">Ink 4: 24 px and larger only</span>
-          </div>
-          <div className="look-gallery-inks look-gallery-on-film" data-ground="film">
-            <span className="look-gallery-ink-1">Ink 1: text</span>
-            <span className="look-gallery-ink-2">Ink 2: secondary text</span>
-            <span className="look-gallery-ink-3">Ink 3: captions, labels</span>
-            <span className="look-gallery-ink-4">Ink 4: 24 px and larger only</span>
-          </div>
-        </>
+        <div className="look-gallery-inks">
+          <span style={{ ...ROLE.body, color: 'var(--ink)' }}>Ink: sentences, the brand</span>
+          <span style={{ ...ROLE.body, color: 'var(--ink-2)' }}>Ink 2: helpers, names, quiet buttons</span>
+          <span style={{ ...ROLE.body, color: 'var(--ink-3)' }}>Ink 3: a disabled button’s words only</span>
+          <span style={{ ...ROLE.body, color: 'var(--ink-faint)' }}>Faint: a step not yet reached</span>
+        </div>
       ),
     },
   ],

@@ -15,7 +15,7 @@ function sheet(path: string): string {
 
 describe('the breath', () => {
   const css = sheet('./breathe.css');
-  const tokens = sheet('../look-and-feel/tokens.css');
+  const tokens = sheet('../look-and-feel/earlier-tokens.css');
 
   it('names no colour and casts no shadow: it is only a number', () => {
     expect(css).not.toMatch(/#[0-9a-f]{3,8}\b/i);

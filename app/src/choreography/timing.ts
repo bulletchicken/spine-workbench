@@ -9,8 +9,14 @@
 
 import { cubicBezier, linear, type Curve } from './curve';
 
-/** A duration or a gap: a token such as `--t-slow`, or one of the named timings. */
-export type DurationName = `--t-${string}` | `--stagger${string}` | '--breathe';
+/**
+ * A duration or a gap: a token such as `--dur-push`, `--delay-in` or `--hold-leave`, an
+ * earlier part's `--t-slow`, or one of the named timings.
+ */
+export type DurationName = `--t-${string}` | `--dur-${string}` | `--delay-${string}` | `--hold-${string}` | `--stagger${string}` | '--breathe';
+
+/** One of the design's plain numbers: how far a film is pushed in, the light's measures, a film's height. */
+export type NumberName = `--zoom-${string}` | `--light-${string}` | '--name-room' | '--film-h';
 
 /** One of the design's curves, such as `--ease-in-out`. */
 export type CurveName = `--ease-${string}`;
@@ -20,6 +26,13 @@ export function millisecondsIn(time: string): number {
   const read = /^(-?(?:\d+\.?\d*|\.\d+))(ms|s)$/.exec(time.trim());
   if (read === null) throw new Error(`not a CSS time: "${time}"`);
   return Number(read[1]) * (read[2] === 's' ? 1000 : 1);
+}
+
+/** A plain CSS number, `1.3` or `0.05`, as a number. */
+function numberIn(value: string): number {
+  const text = value.trim();
+  if (!/^-?(?:\d+\.?\d*|\.\d+)$/.test(text)) throw new Error(`not a CSS number: "${value}"`);
+  return Number(text);
 }
 
 /** A CSS easing, `cubic-bezier(.2, .8, .2, 1)` or `linear`, as a function. */
@@ -45,4 +58,22 @@ export function durationOf(part: Element, name: DurationName): number {
 /** A named curve where `part` stands, as a function. Read it once when a motion starts. */
 export function curveOf(part: Element, name: CurveName): Curve {
   return curveIn(getComputedStyle(part).getPropertyValue(name));
+}
+
+/** A named number where `part` stands. Read it once when a motion starts. */
+export function numberOf(part: Element, name: NumberName): number {
+  return numberIn(getComputedStyle(part).getPropertyValue(name));
+}
+
+/**
+ * A named duration on the page itself, for script that has no part to stand
+ * on: a store, or a run started at module scope.
+ */
+export function durationOnPage(name: DurationName): number {
+  return durationOf(document.documentElement, name);
+}
+
+/** A named number on the page itself, for script that has no part to stand on. */
+export function numberOnPage(name: NumberName): number {
+  return numberOf(document.documentElement, name);
 }

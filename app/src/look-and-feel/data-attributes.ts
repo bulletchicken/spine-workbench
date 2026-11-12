@@ -2,6 +2,10 @@
 // set is a type here, so the code that works a value out and the parts
 // that draw it agree without importing each other.
 
+/** `data-moment`, on `<html>`: the moment the design system's stylesheet draws. */
+export type MomentAttr = 'films' | 'find' | 'three';
+/** `data-films`, on `<html>`: some place is empty, a film is being read, or all four are in. */
+export type FilmsAttr = 'empty' | 'landing' | 'ready';
 /** `data-step`, on the app root. */
 export type StepAttr = 'films' | 'facing' | 'find' | 'adjust';
 /** `data-motion`, on the app root. */
@@ -16,5 +20,7 @@ export type SlotFace = 'empty' | 'reading' | 'hung' | 'bad';
 export type Conf = 'sure' | 'look' | 'needs' | 'byyou' | 'sacrum';
 /** `data-phase`, on a vertebra: how far the pass has brought it. */
 export type Phase = 'hidden' | 'ghost' | 'locked' | 'named' | 'coloured';
+/** An outline on a film: found, or needs a look (the class `look` on both of its groups). */
+export type OutlineLook = 'found' | 'look';
 /** `data-state`, on a fact chip, a check row and a card row. */
 export type RowState = 'ok' | 'needs' | 'warn' | 'bad' | 'you' | 'wait' | 'busy';

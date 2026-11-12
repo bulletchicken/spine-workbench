@@ -1,4 +1,4 @@
-// The typefaces come from the three font packages the app installs and
+// The typefaces come from the two font packages the app installs and
 // from nowhere else. This reads fonts.css as text and checks every source
 // it names, since the build's own scan sees fonts only once a screen
 // imports the stylesheet.
@@ -16,14 +16,13 @@ const faces = [...css.matchAll(/@font-face\s*\{([^}]*)\}/g)].map(([, body = ''])
   formats: [...body.matchAll(/format\(\s*'([^']+)'\s*\)/g)].map(([, format = '']) => format),
 }));
 
-const PACKAGES = ['@fontsource-variable/geist/', '@fontsource-variable/geist-mono/', '@fontsource/instrument-serif/'];
+const PACKAGES = ['@fontsource-variable/geist/', '@fontsource-variable/geist-mono/'];
 
 describe('fonts.css', () => {
-  it('declares the three families under the names the tokens use', () => {
-    expect(new Set(faces.map((face) => face.family))).toEqual(new Set(['Instrument Serif', 'Geist', 'Geist Mono']));
-    expect(/--font-voice:\s*"Instrument Serif"/.test(tokens)).toBe(true);
-    expect(/--font-ui:\s*"Geist"/.test(tokens)).toBe(true);
-    expect(/--font-data:\s*"Geist Mono"/.test(tokens)).toBe(true);
+  it('declares the two families under the names the tokens use', () => {
+    expect(new Set(faces.map((face) => face.family))).toEqual(new Set(['Geist', 'Geist Mono']));
+    expect(/--font-sans:\s*Geist,/.test(tokens)).toBe(true);
+    expect(/--font-mono:\s*"Geist Mono",/.test(tokens)).toBe(true);
   });
 
   it('gives every face exactly one source, a woff2 file', () => {
@@ -51,7 +50,7 @@ describe('fonts.css', () => {
     expect(css).not.toMatch(/@import/);
   });
 
-  it('ships both ranges of each family and style: Latin, and extended Latin', () => {
+  it('ships both ranges of each family, Latin and extended Latin, and no other file', () => {
     const cuts = faces.map((face) => face.sources[0]?.split('/').pop());
     expect(cuts.sort()).toEqual(
       [
@@ -59,10 +58,6 @@ describe('fonts.css', () => {
         'geist-latin-wght-normal.woff2',
         'geist-mono-latin-ext-wght-normal.woff2',
         'geist-mono-latin-wght-normal.woff2',
-        'instrument-serif-latin-400-italic.woff2',
-        'instrument-serif-latin-400-normal.woff2',
-        'instrument-serif-latin-ext-400-italic.woff2',
-        'instrument-serif-latin-ext-400-normal.woff2',
       ].sort(),
     );
   });
