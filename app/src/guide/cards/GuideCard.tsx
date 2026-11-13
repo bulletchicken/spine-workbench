@@ -1,6 +1,4 @@
-import { use, useId, type ReactNode } from 'react';
-import { placeStyle } from '@/choreography/stagger';
-import { CardPlace } from './card-place';
+import { useId, type ReactNode } from 'react';
 import './GuideCard.css';
 
 interface GuideCardProps {
@@ -20,11 +18,7 @@ interface GuideCardProps {
 export function GuideCard({ heading, count, className, children }: GuideCardProps) {
   const headingId = useId();
   return (
-    <section
-      className={className === undefined ? 'guide-card' : `guide-card ${className}`}
-      aria-labelledby={headingId}
-      style={placeStyle(use(CardPlace))}
-    >
+    <section className={className === undefined ? 'guide-card' : `guide-card ${className}`} aria-labelledby={headingId}>
       <h2 className="guide-card-head" id={headingId}>
         <span>{heading}</span>
         {count !== undefined && <b className="guide-card-count">{count}</b>}

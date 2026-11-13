@@ -1,6 +1,5 @@
-import { Children, Fragment, isValidElement, type ReactNode } from 'react';
+import { Fragment, type ReactNode } from 'react';
 import { placeStyle } from '@/choreography/stagger';
-import { CardPlace } from './cards/card-place';
 import { ChoiceCards } from './ChoiceCards';
 import './Guide.css';
 import type { GuideSpec, Said } from './guide-spec';
@@ -40,8 +39,10 @@ interface GuideProps {
  * are drawn afresh only when they read differently, so a sentence is
  * spoken once: a render that changes nothing said, such as the pointer
  * crossing a choice, leaves them untouched. Lines that are new arrive
- * with `settle`, one after another; lines and cards that stay do not
- * arrive again.
+ * with `settle`, one after another, and what stays does not arrive again.
+ * A card arrives when it is first drawn, in the turn of its place among
+ * the cards; as with any element, it stays while the step keeps drawing
+ * the same card in the same place, or under the same key.
  */
 export function Guide({ spec, children }: GuideProps) {
   return (
@@ -81,14 +82,7 @@ export function Guide({ spec, children }: GuideProps) {
           )}
         </Fragment>
       </div>
-      <div className="guide-cards">
-        {Children.toArray(children).map((card, place) => (
-          // Each card keeps the key it was given, so a card that stays is not drawn afresh and does not arrive again.
-          <CardPlace key={isValidElement(card) && card.key !== null ? card.key : place} value={place}>
-            {card}
-          </CardPlace>
-        ))}
-      </div>
+      <div className="guide-cards">{children}</div>
     </div>
   );
 }

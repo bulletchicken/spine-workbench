@@ -214,40 +214,43 @@ describe('the words', () => {
 describe('arriving', () => {
   const place = (element: Element) => (element as HTMLElement).style.getPropertyValue('--i');
 
-  it('gives each line its place, top to bottom, and each card its place among the cards', () => {
+  it('gives each line its place, top to bottom', () => {
     putOnThePage(
       <Guide spec={lit(() => undefined)}>
         <GuideCard heading="Films" count="0 of 4">
           rows
         </GuideCard>
-        <GuideCard heading="What happens to a film">rows</GuideCard>
       </Guide>,
     );
     expect([...document.querySelectorAll('.guide-line')].map(place)).toEqual(['0', '1', '2', '3', '4']);
-    expect([...document.querySelectorAll('.guide-card')].map(place)).toEqual(['0', '1']);
     expect(find('.guide-card-count').textContent).toBe('0 of 4');
   });
 
-  it('does not draw a card afresh when it stays while the words and the cards round it change', () => {
+  it('does not draw a card afresh when it stays while the words and the card above it change', () => {
     const nothing = () => undefined;
     const page = putOnThePage(
       <Guide spec={lit(nothing)}>
-        {null}
-        <GuideCard heading="How sure">cells</GuideCard>
+        <>
+          <GuideCard heading="What it is doing">lines</GuideCard>
+          <GuideCard heading="How sure">cells</GuideCard>
+        </>
       </Guide>,
     );
-    const stays = find('.guide-card');
+    const [doing, howSure] = document.querySelectorAll('.guide-card');
+    const Checks = () => <GuideCard heading="Checks">rows</GuideCard>;
     page.show(
       <Guide spec={asked(nothing, nothing)}>
-        <GuideCard heading="Checks">rows</GuideCard>
-        <GuideCard heading="How sure">cells</GuideCard>
+        <>
+          <Checks />
+          <GuideCard heading="How sure">cells</GuideCard>
+        </>
       </Guide>,
     );
     const cards = [...document.querySelectorAll('.guide-card')];
     expect(cards).toHaveLength(2);
-    expect(cards[1]).toBe(stays);
-    // It has moved down a place, and says so.
-    expect(cards.map(place)).toEqual(['0', '1']);
+    // The card that changed is new; the one under it is the very same element.
+    expect(cards[0]).not.toBe(doing);
+    expect(cards[1]).toBe(howSure);
   });
 
   it('shows at most two quiet actions', () => {

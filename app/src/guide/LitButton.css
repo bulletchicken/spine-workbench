@@ -56,3 +56,11 @@
 .lit-button[data-stood-down]:hover {
   background: var(--room-3);
 }
+
+/* In the narrow guide the label gets the room: less air round it, so fewer labels run to a second line. */
+@media (max-width: 1199px) {
+  .lit-button {
+    gap: var(--s-2);
+    padding: var(--s-2) var(--s-3);
+  }
+}

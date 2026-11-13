@@ -21,3 +21,13 @@
 .guide-gallery-part {
   width: calc(var(--guide-w) - 2 * var(--s-6));
 }
+
+@media (max-width: 1199px) {
+  .guide-gallery-column .gallery-note {
+    padding: var(--s-2) var(--s-5);
+  }
+
+  .guide-gallery-part {
+    width: calc(var(--guide-w) - 2 * var(--s-5));
+  }
+}

@@ -9,6 +9,20 @@
   animation-delay: calc(3 * var(--stagger-line) + var(--i, 0) * var(--stagger-card));
 }
 
+/* A card's place among the cards is where it stands, however the step
+   that draws it is written. A fourth card and any after it arrive together. */
+.guide-card:nth-child(2) {
+  --i: 1;
+}
+
+.guide-card:nth-child(3) {
+  --i: 2;
+}
+
+.guide-card:nth-child(n + 4) {
+  --i: 3;
+}
+
 .guide-card-head {
   display: flex;
   align-items: baseline;
