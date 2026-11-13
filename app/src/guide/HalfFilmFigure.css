@@ -1,0 +1,22 @@
+/* A film in small: black, like every film, and drawn in on-film inks. */
+.half-film-figure {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  height: 46px;
+  overflow: hidden;
+  background: var(--well);
+  color: var(--lumen-hi);
+  font: 400 20px / 46px var(--font-voice);
+  text-align: center;
+}
+
+.half-film-figure i {
+  font-style: normal;
+}
+
+.half-film-figure[data-half='left'] i:first-child,
+.half-film-figure[data-half='right'] i:last-child {
+  background: var(--lumen-wash);
+  box-shadow: inset 0 0 0 1px var(--line-3);
+}

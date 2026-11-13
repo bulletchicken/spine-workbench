@@ -1,0 +1,69 @@
+/* The key and the tally in one: four cells, ruled apart with the lighter
+   rule. The colour and the line under each cell are confidence.css's. */
+.how-sure {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 0;
+  border-top: 1px solid var(--line-1);
+}
+
+.how-sure-chip {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 6px var(--s-2);
+  padding: 9px var(--s-3) 11px 0;
+}
+
+.how-sure-chip:nth-child(even) {
+  padding: 9px 0 11px var(--s-3);
+  border-left: 1px solid var(--line-1);
+}
+
+.how-sure-chip:nth-child(n + 3) {
+  border-top: 1px solid var(--line-1);
+}
+
+.how-sure-word {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink-1);
+  font-size: var(--text-small);
+  line-height: var(--lh-micro);
+  white-space: nowrap;
+}
+
+.how-sure-count {
+  margin: 0;
+  font: 500 16px / 20px var(--font-data);
+  font-variant-numeric: tabular-nums slashed-zero;
+}
+
+/* A sample of the state's line, as it is drawn on a film. */
+.how-sure-chip::after {
+  content: '';
+  grid-column: 1 / -1;
+  height: 3px;
+  border-top: var(--conf-edge-w) var(--conf-edge) var(--c);
+}
+
+/* The note takes its rule from the cells above it. */
+.how-sure-note {
+  margin-top: 0;
+}
+
+@media (max-width: 1199px) {
+  .how-sure-word {
+    gap: var(--s-1);
+    font-size: var(--text-micro);
+  }
+
+  .how-sure-chip {
+    padding-right: var(--s-2);
+  }
+
+  .how-sure-chip:nth-child(even) {
+    padding-left: var(--s-2);
+  }
+}

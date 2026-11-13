@@ -1,0 +1,64 @@
+/* Six plain lines. The one being played is in ink and opened to a sentence
+   more; the ones before it are ticked. */
+.narration-line {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  align-items: start;
+  gap: 10px;
+  padding: 7px 0;
+  color: var(--ink-3);
+  transition: color var(--t-base);
+}
+
+.narration-number {
+  --icon-size: 12px;
+  --icon-stroke: 2px;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--line-3);
+  border-radius: 50%;
+  font: 500 var(--text-micro) / 1 var(--font-data);
+}
+
+.narration-title {
+  display: block;
+  font-weight: 500;
+  line-height: 22px;
+}
+
+/* narrate: the live line opens its explanation, a row growing from nothing to its own height. */
+.narration-more {
+  display: grid;
+  grid-template-rows: 0fr;
+  color: var(--ink-2);
+  font-size: var(--text-small);
+  line-height: 17px;
+  transition: grid-template-rows var(--t-calm) var(--ease-out);
+}
+
+.narration-more > span {
+  overflow: hidden;
+}
+
+.narration-line[data-done] {
+  color: var(--ink-2);
+}
+
+.narration-line[data-on] {
+  color: var(--ink-1);
+}
+
+.narration-line[data-on] .narration-title {
+  font-weight: 600;
+}
+
+.narration-line[data-on] .narration-number {
+  border: 1.5px solid var(--ink-1);
+  font-weight: 600;
+}
+
+.narration-line[data-on] .narration-more {
+  grid-template-rows: 1fr;
+}

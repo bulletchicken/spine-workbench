@@ -1,0 +1,71 @@
+/* The guide: what to do now, then this state's cards as ruled sections.
+   The column it stands in is the frame's; this is what the column holds. */
+.guide {
+  display: flex;
+  flex-direction: column;
+}
+
+.guide-say {
+  padding: var(--s-8) var(--s-6) var(--s-6);
+}
+
+/* A line arrives rising a little as it fades in, each a moment after the
+   one above. Under reduced motion the gap is nothing and nothing rises. */
+.guide-line {
+  animation: settle var(--t-calm) var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * var(--stagger-line));
+}
+
+.guide-eyebrow {
+  color: var(--ink-3);
+  font: 500 var(--text-micro) / var(--lh-micro) var(--font-ui);
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+}
+
+.guide-eyebrow b {
+  color: var(--ink-1);
+  font-weight: 600;
+}
+
+/* The one sentence, in the voice. */
+.guide-sentence {
+  margin: var(--s-3) 0;
+  font: 400 var(--text-voice) / var(--lh-voice) var(--font-voice);
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+}
+
+.guide-body {
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+
+.guide-body b {
+  color: var(--ink-1);
+  font-weight: 600;
+}
+
+.guide-action {
+  margin-top: var(--s-5);
+}
+
+.guide-quiet {
+  margin-top: var(--s-3);
+}
+
+/* Sections under the sentence: ruled edge to edge, never boxed, and ruled off below the last. */
+.guide-cards {
+  display: grid;
+  align-content: start;
+}
+
+.guide-cards:not(:empty) {
+  border-bottom: 1px solid var(--rule);
+}
+
+@media (max-width: 1199px) {
+  .guide-say {
+    padding: var(--s-6) var(--s-5) var(--s-5);
+  }
+}

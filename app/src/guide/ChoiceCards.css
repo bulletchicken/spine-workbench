@@ -1,0 +1,81 @@
+/* Two equal choices with no default. Each is lined in ink and neither is
+   solid: the one solid thing on a page is a next action, and here there is
+   none until a person has answered. They stand still. */
+.choice-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-2);
+}
+
+.choice-card {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  padding: var(--s-3) var(--s-3) 14px;
+  border: 1px solid var(--lumen-deep);
+  border-radius: var(--r-3);
+  background: var(--room-0);
+  text-align: left;
+  transition:
+    background var(--t-base),
+    box-shadow var(--t-base),
+    transform var(--t-instant);
+}
+
+/* Under the pointer, or lit from its twin on the film: a second ink line inside the first. */
+.choice-card:hover,
+.choice-card[data-hot] {
+  background: var(--room-3);
+}
+
+.choice-card:hover:not(:focus-visible),
+.choice-card[data-hot]:not(:focus-visible) {
+  box-shadow: inset 0 0 0 1px var(--lumen-deep);
+}
+
+.choice-card:active {
+  transform: translateY(1px);
+}
+
+.choice-card:focus-visible {
+  border-radius: var(--r-3);
+}
+
+.choice-card-key {
+  --icon-size: 12px;
+  --icon-stroke: 2px;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border: 1.5px solid var(--ink-1);
+  border-radius: 50%;
+  color: var(--ink-1);
+  font: 600 var(--text-small) / 1 var(--font-data);
+}
+
+.choice-card-tag {
+  position: absolute;
+  top: var(--s-3);
+  right: 10px;
+  padding: var(--s-1) 6px;
+  border: 1px solid var(--line-3);
+  border-radius: var(--r-1);
+  color: var(--ink-2);
+  font: 500 10px / 1 var(--font-data);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.choice-card-title {
+  font-size: var(--text-body);
+  font-weight: 600;
+  line-height: 18px;
+}
+
+.choice-card-line {
+  color: var(--ink-2);
+  font-size: var(--text-small);
+  line-height: var(--lh-micro);
+}

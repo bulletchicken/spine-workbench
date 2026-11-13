@@ -1,0 +1,23 @@
+/* For the guide's gallery pages: a column as wide as the guide's own, with
+   the frame's hairline down its right edge, so each state is seen as it
+   stands in the app. Gallery only: none of this is in a production build. */
+.guide-gallery-column {
+  width: var(--guide-w);
+  border-right: 1px solid var(--rule);
+  background: var(--room-1);
+}
+
+/* A plate that holds a column is as wide as the column, so the states stand side by side. */
+.gallery-plate:has(> .gallery-plate-body > .guide-gallery-column) {
+  flex: 0 0 auto;
+}
+
+.guide-gallery-column .gallery-note {
+  display: block;
+  padding: var(--s-2) var(--s-6);
+}
+
+/* A part of the guide shown alone, with the guide's own margins round it. */
+.guide-gallery-part {
+  width: calc(var(--guide-w) - 2 * var(--s-6));
+}

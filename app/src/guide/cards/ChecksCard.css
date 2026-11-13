@@ -1,0 +1,11 @@
+/* check-flash: a check that has just turned from open to passing flashes
+   its row once, from a grey wash back to paper. */
+.checks-card .card-row[data-flash] {
+  animation: check-flash var(--t-slow) var(--ease-out);
+}
+
+@keyframes check-flash {
+  from {
+    background: var(--room-4);
+  }
+}

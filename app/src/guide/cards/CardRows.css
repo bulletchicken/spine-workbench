@@ -1,0 +1,37 @@
+/* Rows inside a section, each under a lighter rule than the section's own. */
+.card-row {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  align-items: start;
+  gap: 10px;
+  padding: 9px 0;
+  border-top: 1px solid var(--line-1);
+}
+
+.card-row:last-child {
+  padding-bottom: 2px;
+}
+
+.card-row .state-icon {
+  margin-top: 1px;
+}
+
+.card-row-title {
+  display: block;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+.card-row-line {
+  display: block;
+  color: var(--ink-3);
+  font-size: var(--text-small);
+  line-height: 17px;
+}
+
+/* A row that warns or is wrong is read first: its lines are a step darker. */
+.card-row[data-state='warn'] .card-row-line,
+.card-row[data-state='needs'] .card-row-line,
+.card-row[data-state='bad'] .card-row-line {
+  color: var(--ink-2);
+}

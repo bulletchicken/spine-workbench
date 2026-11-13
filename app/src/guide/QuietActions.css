@@ -1,0 +1,10 @@
+/* A text button's words start its 10 px of padding in, so the row is
+   pulled out by that much at each end: the first action's words line up
+   with the sentence above, the second's end with the lit button's edge. */
+.quiet-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--s-2);
+  margin: 0 -10px;
+}
