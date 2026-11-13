@@ -5,6 +5,8 @@
   min-width: 0;
   padding-left: var(--s-4);
   border-left: 1px solid var(--rule);
+  /* Past its own edge the rail is cut off, never laid over the bar's actions. */
+  overflow-x: clip;
 }
 
 .step-rail ol {
@@ -128,7 +130,25 @@ button.step-rail-face:focus-visible {
   width: 10px;
 }
 
-/* A narrow window: only the current step keeps its name. */
+/* The names do not fit the room the bar has: only the current step keeps
+   its name. The rail says so itself, having measured (data-tight). */
+.step-rail[data-tight] .step-rail-step:not([data-state='now']) .step-rail-title {
+  display: none;
+}
+
+.step-rail[data-tight] .step-rail-step:not([data-state='now']) .step-rail-face {
+  padding: 0 6px;
+}
+
+.step-rail[data-tight] .step-rail-step:not([data-state='now']) .tooltip {
+  display: block;
+}
+
+.step-rail[data-tight] .step-rail-link {
+  width: var(--s-2);
+}
+
+/* A narrow window, under the one breakpoint: the same, whatever would fit. */
 @media (max-width: 1199px) {
   .step-rail {
     padding-left: var(--s-2);
@@ -148,7 +168,7 @@ button.step-rail-face:focus-visible {
 
   .step-rail-link,
   .step-rail[data-crowded] .step-rail-link {
-    width: 8px;
+    width: var(--s-2);
   }
 
   .step-rail[data-crowded] .step-rail-step:not([data-state='now']) .step-rail-face {

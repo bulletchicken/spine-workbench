@@ -57,9 +57,11 @@ is always allowed. A later step can be pressed only when it, and every
 step from the one on screen up to it, is done, and it can be opened. The
 rail never starts a step's work: that is the lit button's.
 
-With more than four steps the done ones fold down to their ticks, and
-under 1200 px only the step on screen keeps its name; a folded name is
-in a tooltip, and what is spoken is always whole.
+With more than four steps the done ones fold down to their ticks. Under
+1200 px, and at any width where the names do not fit beside the bar's
+actions (the rail measures itself and says `data-tight`), only the step
+on screen keeps its name. A folded name is in a tooltip, and what is
+spoken is always whole.
 
 ## Development
 
