@@ -1,0 +1,23 @@
+/* For the promise's gallery pages. Gallery only: none of this is in a production build. */
+
+/* A positioned place for the badge, with room under it for its popover. */
+.promise-gallery-place {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  width: 420px;
+  min-height: 560px;
+}
+
+.promise-gallery-place[data-closed] {
+  min-height: 0;
+}
+
+/* The popover's panel, standing still on the page: paper with a keyline. */
+.promise-gallery-panel {
+  width: 372px;
+  padding: var(--s-6);
+  border: 1px solid var(--keyline);
+  border-radius: var(--r-4);
+  background: var(--room-0);
+}

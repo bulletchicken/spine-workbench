@@ -1,119 +1,54 @@
-import { StrictMode, useEffect, useState } from 'react';
+import { StrictMode, type ReactNode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { EngineFailure } from './engine-room/engine-client';
-import { loadEngine } from './engine-room/load-engine';
-import type { FromWorker, ToWorker } from './engine-room/messages';
+import { AppFrame } from './app-shell/AppFrame';
+import { pickEngine } from './engine-room/pick-engine';
+import { EngineProvider } from './engine-room/use-engine';
 import './look-and-feel/base.css';
-import { faultWords } from './words/faults';
-import { PREVIEW_NOTICE } from './words/preview-notice';
-import type { EngineError, EngineInfo } from '@/shapes';
+import { preferences } from './view-state/preferences';
 
-// The bare app: it starts one film worker and the spine worker, hands each
-// the compiled engine, and shows the version they report.
-
-type EngineState =
-  | { status: 'starting' }
-  | { status: 'ready'; info: EngineInfo }
-  | { status: 'failed'; error: EngineError };
-
-function bootWorker(worker: Worker, module: WebAssembly.Module): Promise<EngineInfo> {
-  return new Promise((resolve, reject) => {
-    worker.addEventListener('message', ({ data }: MessageEvent<FromWorker>) => {
-      if (data.kind === 'ready') resolve(data.info);
-      else if (data.kind === 'crashed') reject(new EngineFailure(data.error));
-    });
-    worker.addEventListener('error', (event) => {
-      reject(new EngineFailure({ code: 'engine-load-failed', message: 'a worker did not start', detail: event.message }));
-    });
-    const boot: ToWorker = { kind: 'boot', module };
-    worker.postMessage(boot);
-  });
-}
-
-function startEngine(): { ready: Promise<EngineInfo>; stop(): void } {
-  const workers = [
-    new Worker(new URL('./engine-room/workers/film-worker/film.worker.ts', import.meta.url), { type: 'module' }),
-    new Worker(new URL('./engine-room/workers/spine-worker/spine.worker.ts', import.meta.url), { type: 'module' }),
-  ];
-  const ready = loadEngine()
-    .then((module) => Promise.all(workers.map((worker) => bootWorker(worker, module))))
-    .then(([film]) => {
-      if (film === undefined) throw new Error('no film worker');
-      return film;
-    });
-  return {
-    ready,
-    stop: () => {
-      for (const worker of workers) worker.terminate();
-    },
-  };
-}
-
-function App() {
-  const [engine, setEngine] = useState<EngineState>({ status: 'starting' });
-
-  useEffect(() => {
-    const started = startEngine();
-    let current = true;
-    started.ready.then(
-      (info) => {
-        if (current) setEngine({ status: 'ready', info });
-      },
-      (cause: unknown) => {
-        if (!current) return;
-        const error: EngineError =
-          cause instanceof EngineFailure
-            ? cause.error
-            : { code: 'engine-load-failed', message: 'the engine did not start', detail: String(cause) };
-        setEngine({ status: 'failed', error });
-      },
-    );
-    return () => {
-      current = false;
-      started.stop();
-    };
-  }, []);
-
-  return (
-    <main>
-      <h1>Spine Workbench</h1>
-      <p data-testid="engine-status" data-status={engine.status}>
-        {engine.status === 'starting' && 'Starting the engine…'}
-        {engine.status === 'ready' && (
-          <>
-            Engine <span data-testid="engine-version">{engine.info.engineVersion}</span> ready
-          </>
-        )}
-        {engine.status === 'failed' && (
-          <>
-            {faultWords(engine.error.code).title}. {faultWords(engine.error.code).whatToDo}
-          </>
-        )}
-      </p>
-      <p>{PREVIEW_NOTICE.short}</p>
-    </main>
-  );
-}
+// What the page mounts: the frame, on the engine chosen for this page.
+//
+// In development the address can ask for more, and a production build
+// holds none of it, because each branch below, and with it the only
+// import of what it reaches, is dropped when the build is made:
+//
+//   ?gallery          every part in every state, in place of the app
+//   ?scene=<name>     the app put in a named state from the sample case
+//   ?motion=reduced   reduced motion for this visit, whatever the system says
 
 const root = document.getElementById('root');
 if (root === null) throw new Error('index.html has no #root element');
 const page = createRoot(root);
+const asked = new URLSearchParams(window.location.search);
 
-// In development, ?gallery shows every part in every state in place of the
-// app. A production build has no gallery in it: this branch, and with it
-// the only import of gallery/, is dropped when the build is made.
-if (import.meta.env.DEV && new URLSearchParams(window.location.search).has('gallery')) {
-  void import('./gallery/Gallery').then(({ Gallery }) => {
+async function start(): Promise<void> {
+  const engine = await pickEngine(window.location.search);
+  const onTheEngine = (screen: ReactNode) => {
     page.render(
       <StrictMode>
-        <Gallery />
+        <EngineProvider engine={engine}>{screen}</EngineProvider>
       </StrictMode>,
     );
-  });
-} else {
-  page.render(
-    <StrictMode>
-      <App />
-    </StrictMode>,
-  );
+  };
+
+  if (import.meta.env.DEV) {
+    if (asked.get('motion') === 'reduced') preferences.getState().setMotion('reduced', false);
+    if (asked.has('gallery')) {
+      const { Gallery } = await import('./gallery/Gallery');
+      onTheEngine(<Gallery />);
+      return;
+    }
+  }
+
+  onTheEngine(<AppFrame />);
+
+  if (import.meta.env.DEV) {
+    const scene = asked.get('scene');
+    if (scene !== null) {
+      const { enterScene } = await import('./app-shell/dev-scenes');
+      await enterScene(scene, { engine });
+    }
+  }
 }
+
+void start();

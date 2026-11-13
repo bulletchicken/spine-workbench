@@ -1,0 +1,46 @@
+/* For the frame's gallery pages: a strip the height of the top bar or the
+   status line, and a window for the whole frame to fill. Gallery only:
+   none of this is in a production build. */
+.gallery-plate:has(.shell-gallery-bar, .shell-gallery-foot, .shell-gallery-window) {
+  flex-basis: 100%;
+}
+
+/* The top bar is laid out by the frame's first row; here a strip stands in for it. */
+.shell-gallery-bar {
+  position: relative;
+  display: grid;
+  width: 100%;
+  min-width: 960px;
+  height: var(--bar-h);
+}
+
+/* Room under a bar for the popover it opens. */
+.shell-gallery-bar[data-room] {
+  margin-bottom: 500px;
+}
+
+.shell-gallery-rail {
+  display: flex;
+  height: var(--bar-h);
+  border-bottom: 1px solid var(--rule);
+}
+
+.shell-gallery-foot {
+  display: grid;
+  width: 100%;
+  min-width: 960px;
+  height: var(--foot-h);
+}
+
+/* The whole frame, in a window of its own with a hairline round it. */
+.shell-gallery-window {
+  position: relative;
+  width: 100%;
+  height: 760px;
+  overflow: hidden;
+  outline: 1px solid var(--rule);
+}
+
+.shell-gallery-brand {
+  width: var(--guide-w);
+}

@@ -1,0 +1,80 @@
+.status-line {
+  position: relative;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+  padding: 0 var(--s-4) 0 var(--s-6);
+  border-top: 1px solid var(--rule);
+  background: var(--room-1);
+  color: var(--ink-3);
+  font-size: var(--text-small);
+  white-space: nowrap;
+}
+
+/* The standing claim gives way before a reading does. */
+.status-line-claim {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Everything measured or counted is set as data, with figures of one width. */
+.status-line-readings {
+  display: flex;
+  flex: none;
+  align-items: center;
+  align-self: stretch;
+  gap: var(--s-5);
+  font-family: var(--font-data);
+  font-size: var(--text-micro);
+  font-variant-numeric: tabular-nums slashed-zero;
+  white-space: pre;
+}
+
+.status-line-fault {
+  color: var(--needs);
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  font-weight: 500;
+}
+
+/* The count, ruled off from the readings by a hairline the height of the line. */
+.status-line-sent {
+  display: inline-flex;
+  align-items: center;
+  align-self: stretch;
+  gap: 6px;
+  padding-left: var(--s-4);
+  border-left: 1px solid var(--rule);
+}
+
+.status-line-sent b {
+  color: var(--ink-1);
+  font-weight: 600;
+}
+
+/* Spoken and not shown. */
+.status-line-spoken {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (max-width: 1199px) {
+  .status-line {
+    padding: 0 var(--s-3) 0 var(--s-5);
+  }
+
+  .status-line-readings {
+    gap: var(--s-3);
+  }
+
+  .status-line-sent {
+    padding-left: var(--s-3);
+  }
+}

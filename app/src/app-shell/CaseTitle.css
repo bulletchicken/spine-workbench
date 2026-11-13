@@ -1,0 +1,42 @@
+.case-title {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  min-width: 0;
+  color: var(--ink-3);
+  font-size: var(--text-small);
+  line-height: var(--lh-micro);
+}
+
+.case-title-name {
+  overflow: hidden;
+  color: var(--ink-2);
+  text-overflow: ellipsis;
+}
+
+.case-title-state {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+}
+
+/* A ring until the case is saved, then a solid dot. */
+.case-title-state i {
+  width: 7px;
+  height: 7px;
+  border: 1.5px solid var(--ink-4);
+  border-radius: 50%;
+  transition:
+    background var(--t-calm),
+    border-color var(--t-calm);
+}
+
+.case-title-state[data-saved] {
+  color: var(--ink-1);
+}
+
+.case-title-state[data-saved] i {
+  border-color: var(--ink-1);
+  background: var(--ink-1);
+}

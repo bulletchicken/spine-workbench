@@ -1,0 +1,157 @@
+/* The rail stands over the bench. Its left edge is the hairline between
+   the guide and the bench, carried up through the top bar. */
+.step-rail {
+  display: flex;
+  min-width: 0;
+  padding-left: var(--s-4);
+  border-left: 1px solid var(--rule);
+}
+
+.step-rail ol {
+  display: flex;
+  align-items: stretch;
+}
+
+.step-rail-step {
+  display: flex;
+}
+
+/* The tooltip's anchor is the step's whole height, so the ink line under the current step meets the bar's rule. */
+.step-rail-step .tooltip-anchor {
+  align-items: stretch;
+}
+
+.step-rail-face {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: 0 var(--s-3) 0 var(--s-2);
+  color: var(--ink-3);
+  font-weight: 500;
+  white-space: nowrap;
+  transition:
+    background var(--t-base),
+    color var(--t-base);
+}
+
+.step-rail-number {
+  --icon-size: 12px;
+  --icon-stroke: 2px;
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--line-3);
+  border-radius: 50%;
+  font: 500 var(--text-micro) / 1 var(--font-data);
+}
+
+.step-rail-step[data-state='done'] .step-rail-face {
+  color: var(--ink-2);
+}
+
+button.step-rail-face:hover {
+  background: var(--room-3);
+  color: var(--ink-1);
+}
+
+button.step-rail-face:focus-visible {
+  /* Inside the bar, so the ring is not cut off at the window's top edge. */
+  outline-offset: -4px;
+  border-radius: var(--r-2);
+  box-shadow: none;
+}
+
+/* Where you are: ink, and a two-pixel ink line that sits on the bar's own rule. */
+.step-rail-step[data-state='now'] .step-rail-face {
+  color: var(--ink-1);
+  font-weight: 600;
+}
+
+.step-rail-step[data-state='now'] .step-rail-face::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 2px;
+  background: var(--ink-1);
+}
+
+.step-rail-step[data-state='now'] .step-rail-number {
+  border: 1.5px solid var(--ink-1);
+  font-weight: 600;
+}
+
+.step-rail-link {
+  align-self: center;
+  width: 14px;
+  height: 1px;
+  background: var(--line-2);
+}
+
+.step-rail-link[data-done] {
+  background: var(--line-3);
+}
+
+/* Spoken and not shown: the step's number, name and state in one phrase. */
+.step-rail-spoken {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* A step's name is in a tooltip only while it is folded away. */
+.step-rail .tooltip {
+  display: none;
+}
+
+/* A crowded rail: the done steps fold down to their tick. */
+.step-rail[data-crowded] .step-rail-step[data-state='done'] .step-rail-title {
+  display: none;
+}
+
+.step-rail[data-crowded] .step-rail-step[data-state='done'] .step-rail-face {
+  padding: 0 6px;
+}
+
+.step-rail[data-crowded] .step-rail-step[data-state='done'] .tooltip {
+  display: block;
+}
+
+.step-rail[data-crowded] .step-rail-link {
+  width: 10px;
+}
+
+/* A narrow window: only the current step keeps its name. */
+@media (max-width: 1199px) {
+  .step-rail {
+    padding-left: var(--s-2);
+  }
+
+  .step-rail-step:not([data-state='now']) .step-rail-title {
+    display: none;
+  }
+
+  .step-rail-step:not([data-state='now']) .step-rail-face {
+    padding: 0 6px;
+  }
+
+  .step-rail-step:not([data-state='now']) .tooltip {
+    display: block;
+  }
+
+  .step-rail-link,
+  .step-rail[data-crowded] .step-rail-link {
+    width: 8px;
+  }
+
+  .step-rail[data-crowded] .step-rail-step:not([data-state='now']) .step-rail-face {
+    padding: 0 var(--s-1);
+  }
+}
