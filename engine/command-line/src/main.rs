@@ -21,6 +21,7 @@ mod commands {
     pub mod case;
     pub mod frames;
     pub mod make_up;
+    pub mod measure;
     pub mod open;
     pub mod pass;
     pub mod score;
@@ -57,6 +58,32 @@ enum Command {
     Score(ScoreArgs),
     /// Compare two scoring runs with a paired test.
     Compare(CompareArgs),
+    /// Find, fit and measure films, or measure a made-up spine.
+    Measure(MeasureArgs),
+}
+
+#[derive(Args)]
+struct MeasureArgs {
+    /// A made-up spine, fitted from its exact answer-key film marks.
+    #[arg(
+        long,
+        value_enum,
+        required_unless_present = "films",
+        requires = "seed",
+        conflicts_with = "films"
+    )]
+    recipe: Option<Recipe>,
+    #[arg(long, requires = "recipe", conflicts_with = "films")]
+    seed: Option<u32>,
+    /// One front film and optionally one side film, each as KIND=PATH.
+    #[arg(long = "film", value_parser = film_path, required_unless_present = "recipe", conflicts_with_all = ["recipe", "seed", "front_only"])]
+    films: Vec<FilmPath>,
+    /// Fit the made-up front film alone, with a typical spine for the absent view.
+    #[arg(long, requires = "recipe")]
+    front_only: bool,
+    /// Print the complete readings contract as JSON.
+    #[arg(long)]
+    json: bool,
 }
 
 /// The named made-up spine recipes.
@@ -325,6 +352,7 @@ fn main() -> ExitCode {
         Command::Case(args) => commands::case::run(&args),
         Command::Score(args) => commands::score::run(&args),
         Command::Compare(args) => commands::score::compare(&args),
+        Command::Measure(args) => commands::measure::run(&args),
     };
     match outcome {
         Ok(()) => ExitCode::SUCCESS,

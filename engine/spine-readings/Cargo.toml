@@ -1,0 +1,22 @@
+[package]
+name = "spine-readings"
+description = "Angles and curves on a fitted spine, with repeatable version bands."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+shapes = { path = "../shapes" }
+forward-model = { path = "../forward-model" }
+made-up-spines = { path = "../made-up-spines" }
+libm.workspace = true
+nalgebra.workspace = true
+thiserror.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+
+[dev-dependencies]
+joint-fit = { path = "../joint-fit" }
+proptest.workspace = true

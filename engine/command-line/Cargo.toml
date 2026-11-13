@@ -25,3 +25,5 @@ trained-finder = { path = "../trained-finder" }
 clap.workspace = true
 rayon.workspace = true
 serde_json.workspace = true
+joint-fit = { path = "../joint-fit" }
+spine-readings = { path = "../spine-readings" }

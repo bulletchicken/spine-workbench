@@ -10,5 +10,6 @@ pub mod joint_fit;
 pub mod made_up_spines;
 pub mod scorekeeper;
 pub mod shapes;
+pub mod spine_readings;
 pub mod toolbox;
 pub mod trained_finder;

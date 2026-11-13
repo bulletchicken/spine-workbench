@@ -32,6 +32,7 @@ use shapes::made_up::{AnswerKey, AnswerKeyComparison, MadeUpRecipe, MadeUpSpine}
 use shapes::marks::MarkName;
 use shapes::naming::Template;
 use shapes::spine_fit::{FitFromFilms, FitInput, SpineFit};
+use shapes::spine_readings::{ReadingsInput, SpineReadings};
 use shapes::toolbox::{
     BoundaryWandInput, BoundaryWandOutput, PinInput, PinOutput, RegionWandInput, RegionWandOutput,
     ToolPreview, ToolPreviewInput,
@@ -101,7 +102,7 @@ fn clear(folder: &Path) -> Outcome {
 /// worker message, or a list the app checks its own constants against.
 fn write_types(folder: &Path) -> Outcome {
     let config = Config::new().with_out_dir(folder);
-    let exports: [Export; 36] = [
+    let exports: [Export; 38] = [
         CaseFileV1::export_all,
         OpenedCase::export_all,
         EngineInfo::export_all,
@@ -138,6 +139,8 @@ fn write_types(folder: &Path) -> Outcome {
         LandmarkName::export_all,
         Level::export_all,
         shapes::pixels::Px::export_all,
+        ReadingsInput::export_all,
+        SpineReadings::export_all,
     ];
     for export in exports {
         export(&config).map_err(|error| format!("cannot write the TypeScript shapes: {error}"))?;

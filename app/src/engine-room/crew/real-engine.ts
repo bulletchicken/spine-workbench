@@ -30,6 +30,8 @@ import type {
   SpineFit,
   ToolPreview,
   ToolPreviewInput,
+  ReadingsInput,
+  SpineReadings,
 } from '@/shapes';
 import type { EngineClient, RunOptions } from '../engine-client';
 import type { JobInput, JobName, JobOutput, OpenedFilm } from '../job-table';
@@ -119,6 +121,10 @@ export class RealEngine implements EngineClient {
 
   fitSpine(input: FitFromFilms): Promise<SpineFit> {
     return this.#onSpine('fit-spine', input);
+  }
+
+  measureSpine(input: ReadingsInput): Promise<SpineReadings> {
+    return this.#onSpine('measure-spine', input);
   }
 
   /** Closes every worker. The screens never need it; tests and a page being torn down do. */

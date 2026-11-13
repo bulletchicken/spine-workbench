@@ -325,11 +325,13 @@ dependencies = [
  "clap",
  "film-geometry",
  "film-reader",
+ "joint-fit",
  "made-up-spines",
  "rayon",
  "scorekeeper",
  "serde_json",
  "shapes",
+ "spine-readings",
  "toolbox",
  "trained-finder",
 ]
@@ -1598,6 +1600,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "spine-readings"
+version = "0.1.0"
+dependencies = [
+ "forward-model",
+ "joint-fit",
+ "libm",
+ "made-up-spines",
+ "nalgebra",
+ "proptest",
+ "serde",
+ "serde_json",
+ "shapes",
+ "thiserror",
+]
+
+[[package]]
 name = "strength_reduce"
 version = "0.2.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1962,6 +1980,7 @@ dependencies = [
  "serde",
  "serde-wasm-bindgen",
  "shapes",
+ "spine-readings",
  "toolbox",
  "trained-finder",
  "wasm-bindgen",

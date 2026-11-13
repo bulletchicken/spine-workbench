@@ -23,6 +23,7 @@ same code compiled to WebAssembly.
 | `scorekeeper/` | choosing methods with numbers; never touches the disk |
 | `command-line/` | the `spine` binary: the same engine, natively |
 | `wasm-bridge/` | the only crate that knows about the browser |
+| `spine-readings/` | fitted angles, curves, every endplate pair and their version bands |
 
 ## Who depends on whom
 
@@ -42,13 +43,15 @@ case-checks     ──▶ shapes
 case-file       ──▶ shapes
 scorekeeper     ──▶ forward-model, made-up-spines, film-reader, auto-pass, toolbox, case-file
 command-line    ──▶ film-reader, film-geometry, auto-pass, trained-finder, toolbox,
-                    case-checks, case-file, made-up-spines, scorekeeper
+                    case-checks, case-file, made-up-spines, scorekeeper,
+                    joint-fit, spine-readings
 wasm-bridge     ──▶ the same crates as command-line, never command-line itself
+spine-readings  ──▶ forward-model, made-up-spines (its seeded streams)
 ```
 
 Tests of `film-geometry`, `auto-pass`, `trained-finder` and `toolbox`
-also use `made-up-spines`. `cargo chores seams` keeps the rules that
-matter: only `wasm-bridge` reaches browser crates, no crate reaches a
+also use `made-up-spines`; tests of `spine-readings` also use `joint-fit`.
+`cargo chores seams` keeps the rules that matter: only `wasm-bridge` reaches browser crates, no crate reaches a
 network crate, and the bridge never reaches `command-line`, `chores` or
 command-line tools.
 

@@ -159,6 +159,20 @@ export type * from './generated/WidthSample';
 export type * from './generated/WindowFunction';
 export type * from './generated/WindowSource';
 
+export type * from './generated/Band';
+export type * from './generated/BetweenReadings';
+export type * from './generated/BodySide';
+export type * from './generated/CurveReading';
+export type * from './generated/FitTier';
+export type * from './generated/LevelCount';
+export type * from './generated/NotMeasured';
+export type * from './generated/PairReading';
+export type * from './generated/Reading';
+export type * from './generated/ReadingsInput';
+export type * from './generated/SagittalReadings';
+export type * from './generated/SpineReadings';
+export type * from './generated/VertebraReading';
+
 export * from './generated/constants';
 export * from './generated/fingerprint';
 export * from './mark-names';

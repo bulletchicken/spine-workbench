@@ -46,6 +46,8 @@ import type {
   ToolPreview,
   ToolPreviewInput,
   WatchFrame,
+  ReadingsInput,
+  SpineReadings,
 } from '@/shapes';
 import type { OpenedFilm } from './job-table';
 
@@ -131,6 +133,8 @@ export interface EngineClient {
   compareWithAnswerKey(marks: FilmMarks[], key: AnswerKey): Promise<AnswerKeyComparison>;
   /** Fit one front film or a front and side pair. The caller drops stale answers. */
   fitSpine(input: FitFromFilms): Promise<SpineFit>;
+  /** Measure a fitted spine. A newer call replaces a waiting one; the caller drops stale answers. */
+  measureSpine(input: ReadingsInput): Promise<SpineReadings>;
 }
 
 /** Live reports from a long call, and a way to stop it. */

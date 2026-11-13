@@ -27,6 +27,7 @@ js-sys.workspace = true
 serde.workspace = true
 serde-wasm-bindgen.workspace = true
 wasm-bindgen.workspace = true
+spine-readings = { path = "../spine-readings" }
 
 [dev-dependencies]
 wasm-bindgen-test.workspace = true

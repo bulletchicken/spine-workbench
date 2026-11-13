@@ -91,6 +91,7 @@ The crate map, the dependency rules and the patient frame in one picture:
 | strict reading and canonical writing of case.json | `engine/shapes/src/reading.rs` |
 | the strict-reading, mark-name, golden-file and side-swap tests | `engine/shapes/tests/strict_reading.rs`, `engine/shapes/tests/mark_names_are_exact.rs`, `engine/shapes/tests/golden_case_files.rs`, `engine/shapes/tests/side_swap.rs` |
 | which watch frames may be thinned | `engine/shapes/tests/which_frames_may_be_thinned.rs` |
+| fitted spine readings: angles, curves, fixed-end Cobb, sagittal bends and every pair with version bands | `engine/shapes/src/spine_readings.rs` |
 
 ### Image filters (`engine/darkroom/`)
 
@@ -251,6 +252,7 @@ The crate map, the dependency rules and the patient frame in one picture:
 | the subcommands and their arguments | `engine/command-line/src/main.rs` |
 | `spine make-up`, `open`, `pass`, `frames`, `case`, `score` | `engine/command-line/src/commands/make_up.rs`, `engine/command-line/src/commands/open.rs`, `engine/command-line/src/commands/pass.rs`, `engine/command-line/src/commands/frames.rs`, `engine/command-line/src/commands/case.rs`, `engine/command-line/src/commands/score.rs` |
 | which finder reads the front film in `spine pass` and `spine score`, and how the films' answers are joined, as the app's conductor joins them | `engine/command-line/src/commands/pass.rs` |
+| `spine measure`: find, fit and measure front/side films, or measure a made-up spine | `engine/command-line/src/commands/measure.rs` |
 
 ### The door to the browser (`engine/wasm-bridge/`)
 
@@ -261,6 +263,13 @@ The crate map, the dependency rules and the patient frame in one picture:
 | how values cross into JavaScript | `engine/wasm-bridge/src/crossing.rs` |
 | thrown errors and the last panic | `engine/wasm-bridge/src/faults.rs` |
 | the export of one crate (same name as the crate) | `engine/wasm-bridge/src/exports/mod.rs`, `engine/wasm-bridge/src/exports/info.rs`, `engine/wasm-bridge/src/exports/shapes.rs`, `engine/wasm-bridge/src/exports/film_reader.rs`, `engine/wasm-bridge/src/exports/film_geometry.rs`, `engine/wasm-bridge/src/exports/auto_pass.rs`, `engine/wasm-bridge/src/exports/toolbox.rs`, `engine/wasm-bridge/src/exports/case_checks.rs`, `engine/wasm-bridge/src/exports/case_file.rs`, `engine/wasm-bridge/src/exports/made_up_spines.rs`, `engine/wasm-bridge/src/exports/scorekeeper.rs`, `engine/wasm-bridge/src/exports/trained_finder.rs` |
+
+### Fitted spine readings (`engine/spine-readings/`)
+
+| I want to change… | Open |
+|---|---|
+| fitted angles, curves and their version bands | `engine/spine-readings/README.md`, `engine/spine-readings/src/lib.rs` |
+| its browser export | `engine/wasm-bridge/src/exports/spine_readings.rs` |
 
 ## The app (`app/`)
 

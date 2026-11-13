@@ -42,6 +42,7 @@
 //! | [`errors`] | `EngineError` and every `ErrorCode` |
 //! | [`case_file_v1`] | `CaseFileV1`, the documented data file, and a case's contents with its PNGs |
 //! | [`reading`] | strict reading and canonical writing of `case.json` |
+//! | [`spine_readings`] | fitted angles, curves and version bands |
 
 #![forbid(unsafe_code)]
 
@@ -61,6 +62,7 @@ pub mod naming;
 pub mod pixels;
 pub mod reading;
 pub mod spine_fit;
+pub mod spine_readings;
 pub mod toolbox;
 pub mod vertebra;
 pub mod watch_frames;

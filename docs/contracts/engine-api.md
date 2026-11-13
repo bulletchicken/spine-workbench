@@ -39,6 +39,7 @@ and tests only, never shipped) both implement it.
 | `makeUpSpine(recipe)` | `MadeUpSpine` | `make-up-spine` |
 | `compareWithAnswerKey(marks, key)` | `AnswerKeyComparison` | `compare-with-answer-key` |
 | `fitSpine(input)` | `SpineFit` | `fit-spine` |
+| `measureSpine(input)` | `SpineReadings` | `measure-spine` |
 
 `openCase` reads and checks the file and opens no film. The screen then
 opens each film through `openFilm` with its saved record. `openFilm` for
@@ -131,6 +132,7 @@ holds one film, so its jobs never say which.
 | `make-up-spine` | spine | `MadeUpRecipe` | `MadeUpSpine` | | |
 | `compare-with-answer-key` | spine | `{ marks: FilmMarks[], key }` | `AnswerKeyComparison` | | yes |
 | `fit-spine` | spine | `FitFromFilms` | `SpineFit` | | yes |
+| `measure-spine` | spine | `ReadingsInput` | `SpineReadings` | | yes |
 
 `OpenedCase` (`{ case, films: FilmPng[] }`) and `MadeUpSpine`
 (`{ films: FilmPng[], answerKey }`) are generated shapes like every other;
@@ -146,6 +148,31 @@ to choose the typical profile, and each film's effective scale and origin
 pixel. Each vertebra carries the tilt read from its front corners beside
 the model's angles. The caller drops an answer if its marks have changed.
 The stand-in has no fit story and refuses this job with `engine-out-of-sync`.
+
+`measureSpine` needs no open film: `ReadingsInput` carries the fit and
+optional front, side and bending films. Its readings distinguish the value
+on the fit from the band over 1 to 256 versions (normally 32). Front-only
+fits keep side angles in `not-measured` with `no-side-film`; a side film
+that omits a needed vertebra uses `not-on-side-film` while keeping the
+`two-films` tier. Inferred twist stays `twist-not-measured`; typical values
+never enter measured bands. Each curve uses the nominal fit's fixed end vertebrae in every
+version, with uncertain choices of ends reported separately as counts.
+Only nominal curves whose absolute Cobb reaches the evidence floor enter
+`curves`; `versionsFound` counts versions in which that same fixed end pair
+still reaches the floor. The per-version Rust geometry used by level rules
+retains smaller curves.
+The caller drops stale answers. The stand-in answers with a straight-spine
+fixture on the supplied levels; it calculates no geometry or version bands.
+
+The native `spine measure` command accepts either `--recipe NAME --seed N`
+(optionally `--front-only`) or `--film front=PATH` with an optional
+`--film side=PATH`. The film path runs the trained front finder and the
+existing side pass, then the built-in typical fit and these same readings.
+A side film needs a stated scale; an unscaled front film uses typical size.
+Geometry proposals stay unconfirmed. With no facing cue the command says
+on stderr that it uses the pass's unconfirmed facing convention. Its
+compact header names the films used and whether lengths are measured or
+at typical size. `--json` prints only the complete readings object on stdout.
 
 Notes on inputs:
 
@@ -236,6 +263,7 @@ slices.
 | `made_up_spines.rs` | `make_up_spine(recipe) → MadeUpSpine` | `made-up-unsatisfiable` |
 | `joint_fit.rs` | `fit_spine(input) → SpineFit`; `fit_from_films(input) → SpineFit` | `pass-no-spine-found`, `tool-refused`, `case-invalid-value` |
 | `scorekeeper.rs` | `compare_with_answer_key(marks, key) → AnswerKeyComparison` | `case-invalid-value` |
+| `spine_readings.rs` | `measure_spine(input) → SpineReadings` | `case-invalid-value`, `pass-no-spine-found` |
 
 Any export can also fail with `engine-out-of-memory` or end in a panic
 (reported as `engine-crashed`), and refuses a value from JavaScript that

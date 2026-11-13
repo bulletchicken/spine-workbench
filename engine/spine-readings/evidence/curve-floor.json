@@ -1,0 +1,31 @@
+{
+  "value": {
+    "kind": "scalar",
+    "value": 10
+  },
+  "unit": "degrees",
+  "source": "sosort-2016",
+  "sources": [
+    {
+      "key": "sosort-2016",
+      "citation": {
+        "authors": "Negrini S, Donzelli S, Aulisa AG, Czaprowski D, Schreiber S, de Mauroy JC, Diers H, Grivas TB, Knott P, Kotwicki T, et al.",
+        "year": 2018,
+        "title": "2016 SOSORT guidelines: orthopaedic and rehabilitation treatment of idiopathic scoliosis during growth.",
+        "journal": "Scoliosis Spinal Disord.",
+        "volume": "13",
+        "issue": null,
+        "pages": "3"
+      },
+      "pmid": "29435499",
+      "doi": "10.1186/s13013-017-0145-8",
+      "pmcid": "PMC5795289",
+      "read": "full-text",
+      "n": null,
+      "population": "Idiopathic scoliosis during growth.",
+      "label": "guideline",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5795289/",
+      "notes": "Full-text transcription supplied with the curve-floor specification. The guideline reports the SRS threshold of Cobb 10 degrees or higher together with recognisable axial rotation. The engine uses only its angular floor to name contract curves; it makes no diagnostic classification from that floor."
+    }
+  ]
+}

@@ -48,6 +48,8 @@ import type {
   ToolPreview,
   ToolPreviewInput,
   TrainedPassResult,
+  ReadingsInput,
+  SpineReadings,
 } from '@/shapes';
 import type { WorkerRole } from './messages';
 
@@ -134,6 +136,7 @@ export interface JobTable {
     output: AnswerKeyComparison;
   };
   'fit-spine': { input: FitFromFilms; output: SpineFit };
+  'measure-spine': { input: ReadingsInput; output: SpineReadings };
 }
 
 export type JobName = keyof JobTable;
@@ -174,4 +177,5 @@ export const JOBS: { readonly [J in JobName]: JobRules } = {
   'make-up-spine': { worker: 'spine', stepped: false, replaceable: false },
   'compare-with-answer-key': { worker: 'spine', stepped: false, replaceable: true },
   'fit-spine': { worker: 'spine', stepped: false, replaceable: true },
+  'measure-spine': { worker: 'spine', stepped: false, replaceable: true },
 };
