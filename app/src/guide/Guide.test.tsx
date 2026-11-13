@@ -203,6 +203,31 @@ describe('the words', () => {
     expect(find('.lit-button').textContent).toContain('Choose another file');
   });
 
+  it('keep a quiet action that is offered again as the same button, with its focus', () => {
+    const nothing = () => undefined;
+    const skip = { label: 'Skip for now', press: nothing };
+    const page = putOnThePage(<Guide spec={{ ...lit(nothing), quiet: [{ label: 'It really is one', press: nothing }, skip] }} />);
+    const button = (label: string) => [...document.querySelectorAll<HTMLElement>('.quiet-actions button')].find((each) => each.textContent === label);
+    const skipButton = button('Skip for now');
+    if (skipButton === undefined) throw new Error('Skip for now is not on the page');
+    focusOn(skipButton);
+
+    page.show(
+      <Guide
+        spec={{
+          eyebrow: ['Needs you'],
+          sentence: 'T3 is hard to see.',
+          lit: { label: 'Add the missed bone', press: nothing },
+          quiet: [{ label: 'It looks right', press: nothing }, skip],
+        }}
+      />,
+    );
+    expect(button('Skip for now')).toBe(skipButton);
+    expect(document.activeElement).toBe(skipButton);
+    expect(button('It really is one')).toBeUndefined();
+    expect(button('It looks right')).toBeDefined();
+  });
+
   it('set strong words strong', () => {
     putOnThePage(<Guide spec={{ eyebrow: ['Needs you · ', { strong: '2 of 4' }], sentence: 'One vertebra is missing.', body: ['It is ', { strong: 'T12' }, '.'] }} />);
     expect(find('.guide-eyebrow b').textContent).toBe('2 of 4');
@@ -222,7 +247,7 @@ describe('arriving', () => {
         </GuideCard>
       </Guide>,
     );
-    expect([...document.querySelectorAll('.guide-line')].map(place)).toEqual(['0', '1', '2', '3', '4']);
+    expect([...document.querySelectorAll('.guide-line, .guide-quiet')].map(place)).toEqual(['0', '1', '2', '3', '4']);
     expect(find('.guide-card-count').textContent).toBe('0 of 4');
   });
 

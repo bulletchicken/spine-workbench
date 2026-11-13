@@ -60,6 +60,10 @@ const NARRATION = [
 
 const NO_COUNTS = { sure: 0, look: 0, needs: 0, byyou: 0 };
 
+/** How many of the sample case's vertebrae a person had set by the time it is all clear. */
+const SET_BY_YOU = tally(caseAt('all-clear').case.marks).byyou;
+const IN_WORDS = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
+
 /**
  * The checks and the tally as they stand at one moment of the sample
  * case's story. The standing three only, as the design draws them: the
@@ -342,7 +346,7 @@ const page: GalleryPage = {
       (say) => ({
         eyebrow: stepEyebrow(4, 4, 'Adjust'),
         sentence: 'Everything checks out.',
-        body: ['17 vertebrae, in order, named T1 to L5. Four were set by you.'],
+        body: [`17 vertebrae, in order, named T1 to L5. ${IN_WORDS[SET_BY_YOU] ?? String(SET_BY_YOU)} were set by you.`],
         lit: { label: 'Save the case', icon: 'case-file', press: say('Save the case') },
       }),
       <ResultCards stage="all-clear" withKey />,
@@ -365,7 +369,7 @@ const page: GalleryPage = {
       (say) => ({
         eyebrow: ['Saved'],
         sentence: 'Everything is as you left it.',
-        body: ['Read strictly from the case file: 4 films, 17 vertebrae, 4 of them set by you.'],
+        body: [`Read strictly from the case file: 4 films, 17 vertebrae, ${String(SET_BY_YOU)} of them set by you.`],
         quiet: [
           { label: 'Start a new case', press: say('Start a new case') },
           { label: 'Save again', press: say('Save again') },

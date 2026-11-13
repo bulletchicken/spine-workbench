@@ -15,12 +15,11 @@ function wordsOf(spec: GuideSpec): string {
   return JSON.stringify([spec.eyebrow, spec.sentence, spec.body ?? null]);
 }
 
-/** What the spec offers, as text. Which choice is lit is left out: a pointer passing over a card changes nothing that is offered. */
-function offerOf(spec: GuideSpec): string {
+/** The action the spec offers, as text. Which choice is lit is left out: a pointer passing over a card changes nothing that is offered. */
+function actionOf(spec: GuideSpec): string {
   return JSON.stringify([
     spec.lit === undefined ? null : [spec.lit.label, spec.lit.icon ?? null],
     spec.choices?.map((choice) => [choice.id, choice.keys, choice.title, choice.line, choice.tag ?? null]) ?? null,
-    spec.quiet?.map((action) => action.label) ?? null,
   ]);
 }
 
@@ -40,6 +39,8 @@ interface GuideProps {
  * spoken once: a render that changes nothing said, such as the pointer
  * crossing a choice, leaves them untouched. Lines that are new arrive
  * with `settle`, one after another, and what stays does not arrive again.
+ * A quiet action that is offered again is the very same button, so one
+ * that had the keyboard's focus keeps it from one state to the next.
  * A card arrives when it is first drawn, in the turn of its place among
  * the cards; as with any element, it stays while the step keeps drawing
  * the same card in the same place, or under the same key.
@@ -63,24 +64,22 @@ export function Guide({ spec, children }: GuideProps) {
             )}
           </Fragment>
         </div>
-        <Fragment key={offerOf(spec)}>
-          {spec.choices !== undefined ? (
-            <div className="guide-action guide-line" style={placeStyle(3)}>
-              <ChoiceCards choices={spec.choices} hot={spec.hotChoice} onHot={spec.onHotChoice} />
+        {spec.choices !== undefined ? (
+          <div key={actionOf(spec)} className="guide-action guide-line" style={placeStyle(3)}>
+            <ChoiceCards choices={spec.choices} hot={spec.hotChoice} onHot={spec.onHotChoice} />
+          </div>
+        ) : (
+          spec.lit !== undefined && (
+            <div key={actionOf(spec)} className="guide-action guide-line" style={placeStyle(3)}>
+              <LitButton label={spec.lit.label} icon={spec.lit.icon} onPress={spec.lit.press} />
             </div>
-          ) : (
-            spec.lit !== undefined && (
-              <div className="guide-action guide-line" style={placeStyle(3)}>
-                <LitButton label={spec.lit.label} icon={spec.lit.icon} onPress={spec.lit.press} />
-              </div>
-            )
-          )}
-          {spec.quiet !== undefined && spec.quiet.length > 0 && (
-            <div className="guide-quiet guide-line" style={placeStyle(4)}>
-              <QuietActions actions={spec.quiet} />
-            </div>
-          )}
-        </Fragment>
+          )
+        )}
+        {spec.quiet !== undefined && spec.quiet.length > 0 && (
+          <div className="guide-quiet" style={placeStyle(4)}>
+            <QuietActions actions={spec.quiet} />
+          </div>
+        )}
       </div>
       <div className="guide-cards">{children}</div>
     </div>

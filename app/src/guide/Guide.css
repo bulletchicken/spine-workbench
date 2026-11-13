@@ -54,6 +54,13 @@
   margin-top: var(--s-3);
 }
 
+/* Each quiet action arrives for itself, in the last line's turn, so one that
+   stays while the others change does not arrive again. */
+.guide-quiet .button {
+  animation: settle var(--t-calm) var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * var(--stagger-line));
+}
+
 /* Sections under the sentence: ruled edge to edge, never boxed, and ruled off below the last. */
 .guide-cards {
   display: grid;
