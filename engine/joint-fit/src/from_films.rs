@@ -10,28 +10,74 @@ use shapes::levels::Level;
 use shapes::spine_fit::{FitFromFilms, FitLengths, SpineFit, TypicalSource};
 use std::collections::BTreeSet;
 
-/// Fit the films' marks. A side film with no vertebrae counts as absent.
-/// Without a side film, or without a scale on the front film, the typical
-/// spine is needed; its values carry their own spread into the reported
-/// standard deviations, which are not rescaled by the fit's residual.
-/// The front film's largest curve chooses the typical side profile and
-/// gives its vertebrae their typical twist. When the front film's names are
-/// estimates, every typical value looked up by name takes a wider spread.
+/// Fit Front first, using Side when it supplies a usable, converged pair.
+/// A Side set aside by the fit leaves exactly the Front-only problem and
+/// result, including its length source, levels, spreads and placements.
 pub fn fit_from_films(input: &FitFromFilms) -> Result<SpineFit, FitError> {
     let (problem, lengths, curve_deg) = prepare(input)?;
-    let mut result = fit(&problem)?;
+    let paired = problem.side.is_some();
+    let solved = finish(input, &problem, lengths, curve_deg);
+    if paired && !matches!(&solved, Ok(fit) if fit.converged) {
+        let (problem, lengths, curve_deg) = prepare_selected(input, None)?;
+        return finish(input, &problem, lengths, curve_deg);
+    }
+    solved
+}
+
+fn finish(
+    input: &FitFromFilms,
+    problem: &Problem,
+    lengths: FitLengths,
+    curve_deg: f64,
+) -> Result<SpineFit, FitError> {
+    let mut result = fit(problem)?;
     result.lengths = lengths;
     result.typical_curve_deg = problem.typical.is_some().then_some(curve_deg);
+    result.front_film.facing_assumed = input.front.facing_assumed;
+    if let Some(placement) = &mut result.side_film {
+        placement.facing_assumed = input.side.as_ref().expect("a used Side").facing_assumed;
+    }
     Ok(result)
 }
 
-/// The problem to solve, whether its lengths are measured, and the largest
-/// curve's size in degrees.
+/// Validate Front independently, so a bad Side never hides a Front error.
+/// Two Side levels are needed to determine its relative vertical scale.
 pub fn prepare(input: &FitFromFilms) -> Result<(Problem, FitLengths, f64), FitError> {
+    let typical = match input.typical {
+        TypicalSource::BuiltIn => Some(typical_spine::built_in()),
+        TypicalSource::None => None,
+    };
+    let (geometry, _) = scale::front_geometry(&input.front, typical)?;
+    let mut front = Problem::of_films(
+        Film {
+            marks: &input.front.marks,
+            geometry: &geometry,
+            size: input.front.size,
+        },
+        None,
+    )?;
+    mark_spread::attach(&mut front, input.front.mark_spread, None)?;
     let side = input
         .side
         .as_ref()
-        .filter(|film| !film.marks.vertebrae.is_empty());
+        .filter(|film| film.marks.vertebrae.len() >= 2);
+    match prepare_selected(input, side) {
+        Err(
+            FitError::MissingFacing(shapes::film::FilmKind::Side)
+            | FitError::InvalidFacing(shapes::film::FilmKind::Side)
+            | FitError::InvalidSize(shapes::film::FilmKind::Side)
+            | FitError::InvalidScale(shapes::film::FilmKind::Side)
+            | FitError::InvalidMarks(shapes::film::FilmKind::Side)
+            | FitError::InvalidMarkSpread(shapes::film::FilmKind::Side),
+        ) => prepare_selected(input, None),
+        answer => answer,
+    }
+}
+
+fn prepare_selected(
+    input: &FitFromFilms,
+    side: Option<&shapes::spine_fit::FilmToFit>,
+) -> Result<(Problem, FitLengths, f64), FitError> {
     let levels: BTreeSet<Level> = input
         .front
         .marks
@@ -45,29 +91,37 @@ pub fn prepare(input: &FitFromFilms) -> Result<(Problem, FitLengths, f64), FitEr
         1 => return Err(FitError::TooFewVertebrae),
         _ => {}
     }
-    if input.front.marks.vertebrae.is_empty() {
-        return Err(FitError::Underconstrained);
-    }
     let typical = match input.typical {
         TypicalSource::BuiltIn => Some(typical_spine::built_in()),
         TypicalSource::None => None,
     };
-    let (front_geometry, lengths) = scale::front_geometry(&input.front, typical)?;
+    let (front_geometry, front_lengths) = scale::front_geometry(&input.front, typical)?;
+    let side_geometry = side.map(|film| scale::side_geometry(film, &front_geometry));
     let mut problem = Problem::of_films(
         Film {
             marks: &input.front.marks,
             geometry: &front_geometry,
             size: input.front.size,
         },
-        side.map(|film| Film {
-            marks: &film.marks,
-            geometry: &film.geometry,
-            size: film.size,
-        }),
+        side.zip(side_geometry.as_ref())
+            .map(|(film, geometry)| Film {
+                marks: &film.marks,
+                geometry,
+                size: film.size,
+            }),
     )?;
     if problem.side.is_none() && typical.is_none() {
         return Err(FitError::Underconstrained);
     }
+    problem.calibrated_pair = input.front.geometry.mm_per_px.is_some()
+        && side.is_some_and(|film| film.geometry.mm_per_px.is_some());
+    problem.side_is_length_anchor = input.front.geometry.mm_per_px.is_none()
+        && side.is_some_and(|film| film.geometry.mm_per_px.is_some());
+    let lengths = if problem.side_is_length_anchor {
+        FitLengths::Measured
+    } else {
+        front_lengths
+    };
     mark_spread::attach(
         &mut problem,
         input.front.mark_spread,
@@ -99,6 +153,56 @@ mod tests {
     use shapes::pixels::Px;
     use shapes::spine_fit::{FilmToFit, MarkSpread};
     use shapes::vertebra::VertebraMarks;
+
+    #[test]
+    fn a_pair_without_a_converged_finite_solution_retries_front_alone() {
+        let original = crate::answer_keys::upright_input();
+        let spread = MarkSpread::Millimetres {
+            sd_mm: 1.0,
+            shared_sd_mm: 0.0,
+        };
+        let input = FitFromFilms {
+            front: FilmToFit {
+                marks: original.front,
+                geometry: original.front_geometry,
+                size: original.front_size,
+                mark_spread: spread,
+                facing_assumed: true,
+            },
+            side: Some(FilmToFit {
+                marks: original.side,
+                geometry: shapes::film_geometry::FilmGeometry {
+                    mm_per_px: Some(1e-200),
+                    ..original.side_geometry
+                },
+                size: original.side_size,
+                mark_spread: spread,
+                facing_assumed: false,
+            }),
+            typical: TypicalSource::BuiltIn,
+            twist_readings: Vec::new(),
+        };
+        // A positive finite camera passes validation, but this extreme
+        // calibration cannot give a finite converged covariance. Confirm
+        // that the actual pair solve fails before exercising the retry.
+        let (problem, _, _) = prepare(&input).expect("valid pair inputs");
+        assert!(problem.side.is_some());
+        let pair = fit(&problem);
+        assert!(
+            !matches!(pair, Ok(ref result) if result.converged),
+            "{pair:?}"
+        );
+        let mut alone = input.clone();
+        alone.side = None;
+        assert_eq!(fit_from_films(&input), fit_from_films(&alone));
+        // Front errors still win even when Side cannot be solved.
+        let mut bad_front = input;
+        bad_front.front.geometry.image_right = None;
+        assert_eq!(
+            fit_from_films(&bad_front),
+            Err(FitError::MissingFacing(shapes::film::FilmKind::Front))
+        );
+    }
 
     /// Finder-like front marks, T1 to L5: no pedicles, each corner moved
     /// along each film axis by a normal step of 0.1 of its vertebra's
@@ -140,6 +244,7 @@ mod tests {
         assert_eq!(estimated_names::names_are_estimates(&marks), estimates);
         FitFromFilms {
             front: FilmToFit {
+                facing_assumed: false,
                 marks,
                 geometry: input.front_geometry,
                 size: input.front_size,

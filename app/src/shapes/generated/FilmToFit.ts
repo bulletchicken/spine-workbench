@@ -7,4 +7,11 @@ import type { MarkSpread } from "./MarkSpread";
  * One film's marks in original pixels, its geometry, its stored size in
  * pixels (width then height) and how far its corners may stray.
  */
-export type FilmToFit = { marks: FilmMarks, geometry: FilmGeometry, size: [number, number], markSpread: MarkSpread, };
+export type FilmToFit = { marks: FilmMarks, geometry: FilmGeometry, size: [number, number], markSpread: MarkSpread, 
+/**
+ * Whether the caller used an unconfirmed effective facing. Required
+ * on every request. The native default reads fit records written
+ * before this field was added as false. It does not change geometry
+ * or marks.
+ */
+facingAssumed: boolean, };

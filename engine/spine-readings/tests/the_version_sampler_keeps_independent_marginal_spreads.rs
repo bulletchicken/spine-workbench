@@ -60,10 +60,12 @@ fn nominal() -> SpineFit {
         front_film: shapes::spine_fit::FilmPlacement {
             mm_per_px: [1.0; 2],
             origin_px: [0.0; 2],
+            facing_assumed: false,
         },
         side_film: Some(shapes::spine_fit::FilmPlacement {
             mm_per_px: [1.0; 2],
             origin_px: [0.0; 2],
+            facing_assumed: false,
         }),
     }
 }

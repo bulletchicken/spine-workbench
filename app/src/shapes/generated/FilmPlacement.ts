@@ -11,9 +11,10 @@ export type FilmPlacement = {
 /**
  * Millimetres per pixel along a row, then down a column, of the film
  * as stored, as a film geometry's `mmPerPx` and `mmPerPxVertical`
- * give them: the film's stated scale; for a front film without one,
- * the provisional scale the fit drew it at (the same both ways); for
- * a side film, its stated scale times `sideScale`.
+ * give them, in the reported spine's common length gauge. A film
+ * without a stated scale starts from provisional spacing. A used
+ * Side's spacing includes `sideScale`; a measured Side anchors the
+ * common gauge when Front has no scale.
  */
 mmPerPx: [number, number], 
 /**
@@ -23,4 +24,10 @@ mmPerPx: [number, number],
  * `docs/conventions/pixel-space.md` says. A side film's includes
  * `sideOffsetMm`.
  */
-originPx: [number, number], };
+originPx: [number, number], 
+/**
+ * The used film's required input facing assumption, always written
+ * independently of scale and of the other film. The native default
+ * reads fit records written before this field was added as false.
+ */
+facingAssumed: boolean, };

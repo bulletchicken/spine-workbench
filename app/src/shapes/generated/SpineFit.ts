@@ -45,6 +45,8 @@ typicalCurveDeg: number | null,
  */
 frontFilm: FilmPlacement, 
 /**
- * Where the side film stands, or `null` when there is none.
+ * Where the side film stands. Null if and only if the Side film was
+ * not used: absent, or supplied and set aside by the fit itself.
+ * A supplied usable Side always has a placement.
  */
 sideFilm: FilmPlacement | null, };

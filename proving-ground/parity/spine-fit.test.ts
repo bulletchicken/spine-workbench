@@ -31,7 +31,7 @@ function markedFilm(fixture: MadeUpCase, side: boolean): FilmToFit {
         : { kind: 'front', points: { ...Object.fromEntries(Object.entries(marked).map(([name, at]) => [name, mark(at)])), pedL: unseen, pedR: unseen } as Extract<FilmMarks['vertebrae'][number]['marks'], { kind: 'front' }>['points'] },
     })),
   };
-  return { marks, geometry: film.geometry, size: film.size, markSpread: { kind: 'millimetres', sdMm: 1, sharedSdMm: 0 } };
+  return { marks, geometry: film.geometry, size: film.size, markSpread: { kind: 'millimetres', sdMm: 1, sharedSdMm: 0 }, facingAssumed: false };
 }
 
 beforeAll(async () => {
@@ -78,5 +78,39 @@ describe('films fitted as one spine', () => {
     expect(fit.vertebrae.map(({ pose }) => pose)).toStrictEqual(original.vertebrae.map(({ pose }) => pose));
     expect(fit.frontFilm).toStrictEqual(original.frontFilm);
     expect(fit.sideFilm).toStrictEqual(original.sideFilm);
+  });
+
+  it('echoes Front and Side independently and refuses null input facing', () => {
+    for (const frontAssumed of [false, true]) for (const sideAssumed of [false, true]) {
+      const front = { ...markedFilm(MADE_UP_CASE, false), facingAssumed: frontAssumed };
+      const side = { ...markedFilm(MADE_UP_CASE, true), facingAssumed: sideAssumed };
+      const fit = fit_from_films({ front, side, typical: 'none', twistReadings: [] } satisfies FitFromFilms) as SpineFit;
+      expect(fit.frontFilm.facingAssumed).toBe(frontAssumed);
+      expect(fit.sideFilm?.facingAssumed).toBe(sideAssumed);
+    }
+    expect(() => { fit_from_films({ front: { ...markedFilm(FRONT_ONLY_CASE, false), facingAssumed: null }, side: null, typical: 'built-in', twistReadings: [] }); }).toThrow();
+  });
+
+  it.each(['front', 'side'] as const)('refuses malformed %s wire input without required facing metadata or with null', (film) => {
+    const input = { front: markedFilm(MADE_UP_CASE, false), side: markedFilm(MADE_UP_CASE, true), typical: 'none', twistReadings: [] } satisfies FitFromFilms;
+    const incomplete: Partial<FilmToFit> = { ...input[film] };
+    delete incomplete.facingAssumed;
+    let failure: unknown;
+    try { fit_from_films({ ...input, [film]: incomplete }); }
+    catch (error) { failure = error; }
+    expect(failure).toMatchObject({ code: 'engine-out-of-sync', detail: `missing field ${film}.facingAssumed` });
+    expect(() => { fit_from_films({ ...input, [film]: { ...input[film], facingAssumed: null } }); }).toThrow();
+  });
+
+  it('reports a supplied unusable calibrated Side as unused without changing the Front-only answer', () => {
+    const front = { ...markedFilm(FRONT_ONLY_CASE, false), facingAssumed: true };
+    const side = { ...markedFilm(MADE_UP_CASE, true), facingAssumed: false };
+    side.marks.vertebrae = side.marks.vertebrae.slice(0, 1);
+    const input = { front, side: null, typical: 'built-in', twistReadings: [] } satisfies FitFromFilms;
+    const alone = fit_from_films(input) as SpineFit;
+    const fallback = fit_from_films({ ...input, side }) as SpineFit;
+    expect(fallback).toEqual(alone);
+    expect(fallback.sideFilm).toBeNull(); expect(fallback.lengths).toBe('typical-size');
+    expect(fallback.frontFilm.facingAssumed).toBe(true);
   });
 });

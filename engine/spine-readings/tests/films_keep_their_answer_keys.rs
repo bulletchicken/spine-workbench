@@ -117,6 +117,7 @@ fn film(answer: &FilmAnswer, template: Template, size: [u32; 2]) -> FilmToFit {
             sd_mm: 1.0,
             shared_sd_mm: 0.0,
         },
+        facing_assumed: false,
     }
 }
 

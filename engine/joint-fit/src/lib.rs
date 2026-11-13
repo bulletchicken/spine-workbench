@@ -117,6 +117,11 @@ fn report(
     let origin = patient_origin::index(problem);
     let translation = patient_origin::underside(numbers, origin);
     let global = problem.observations.len() * parameters::COUNT;
+    let unit = if problem.side_is_length_anchor {
+        libm::exp(-numbers[global])
+    } else {
+        1.0
+    };
     let side = problem.side_camera(numbers[global], numbers[global + 1]);
     let mut sum_squared = 0.0;
     let mut count = 0;
@@ -135,7 +140,30 @@ fn report(
         let mut v = parameters::vertebra(local);
         v.centre -= translation;
         let mut sd = uncertainty::standard_deviations(numbers, &covariance, i, origin);
+        if problem.side_is_length_anchor {
+            // The measured Side fixes the common gauge. Its fitted ratio
+            // is correlated with the provisional centres, so propagate
+            // that quotient before converting to the measured units.
+            let origin_jacobian = patient_origin::jacobian(numbers, origin);
+            for axis in 0..3 {
+                let mut derivative = nalgebra::DVector::zeros(numbers.len());
+                for j in 0..parameters::COUNT {
+                    derivative[origin * parameters::COUNT + j] = -origin_jacobian[(axis, j)];
+                }
+                derivative[i * parameters::COUNT + axis] += 1.0;
+                derivative[global] -= v.centre[axis];
+                sd.centre_mm[axis] =
+                    libm::sqrt(derivative.dot(&(&covariance * &derivative)).max(0.0));
+            }
+        }
         mark_spread::add_shared(&mut sd, observation);
+        v.centre *= unit;
+        v.height *= unit;
+        v.top_half_width *= unit;
+        v.top_half_depth *= unit;
+        v.bottom_half_width *= unit;
+        v.bottom_half_depth *= unit;
+        sd.centre_mm = sd.centre_mm.map(|s| s * unit);
         vertebrae.push(FittedVertebra {
             level: observation.level,
             pose: v.pose(observation.level),
@@ -151,26 +179,26 @@ fn report(
                 twist: !observation.has_pedicle() && observation.twist_reading.is_none(),
             },
             rms_mm: FitRmsMm {
-                front: rms(0),
-                side: rms(1),
+                front: rms(0).map(|s| s * unit),
+                side: rms(1).map(|s| s * unit),
             },
             corner_tilt_rad: corner_tilt::of(problem, observation),
         });
     }
     Ok(SpineFit {
         vertebrae,
-        side_scale: libm::exp(numbers[global]),
-        side_offset_mm: numbers[global + 1],
+        side_scale: libm::exp(numbers[global]) * unit,
+        side_offset_mm: numbers[global + 1] * unit,
         origin_level: problem.observations[origin].level,
         iterations: solution.iterations,
         converged: solution.stop_reason != FitStopReason::IterationLimit,
         stop_reason: solution.stop_reason,
-        rms_mm: libm::sqrt(sum_squared / count as f64),
+        rms_mm: libm::sqrt(sum_squared / count as f64) * unit,
         lengths: FitLengths::Measured,
         typical_curve_deg: None,
-        front_film: film_placement::of(&problem.front, &translation),
+        front_film: film_placement::in_units(&problem.front, &translation, unit),
         side_film: side
             .as_ref()
-            .map(|camera| film_placement::of(camera, &translation)),
+            .map(|camera| film_placement::in_units(camera, &translation, unit)),
     })
 }

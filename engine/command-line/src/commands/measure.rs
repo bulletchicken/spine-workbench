@@ -210,6 +210,8 @@ fn marked_film(
         geometry,
         size,
         mark_spread,
+        // The facing is the finder's own convention, not a confirmed one.
+        facing_assumed: true,
     }
 }
 
@@ -314,6 +316,8 @@ fn film(answer: &FilmAnswer, template: shapes::naming::Template, size: [u32; 2])
             sd_mm: 0.5,
             shared_sd_mm: 0.0,
         },
+        // A made-up film states its facing.
+        facing_assumed: false,
     }
 }
 

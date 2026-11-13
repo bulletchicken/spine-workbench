@@ -20,11 +20,21 @@ pub fn of(camera: &ParallelCamera, translation: &Vector3<f64>) -> FilmPlacement 
     };
     let across = translation.dot(&screen_right(camera.image_right));
     FilmPlacement {
+        facing_assumed: false,
         mm_per_px,
         origin_px: [
             camera.origin.x + across / su,
             camera.origin.y - translation.z / sv,
         ],
+    }
+}
+
+/// A change of the common length gauge leaves every film pixel fixed.
+pub fn in_units(camera: &ParallelCamera, translation: &Vector3<f64>, unit: f64) -> FilmPlacement {
+    let placement = of(camera, translation);
+    FilmPlacement {
+        mm_per_px: placement.mm_per_px.map(|s| s * unit),
+        ..placement
     }
 }
 
@@ -49,6 +59,7 @@ mod tests {
     fn front_only(input: FitInput) -> FitFromFilms {
         FitFromFilms {
             front: FilmToFit {
+                facing_assumed: false,
                 marks: input.front,
                 geometry: input.front_geometry,
                 size: input.front_size,
@@ -207,6 +218,42 @@ mod tests {
                 Some((&pair.side_geometry, pair.side_size)),
             ),
         ));
+        // All four calibration combinations rebuild the actual solver
+        // cameras, including the Side-only measured length gauge. A
+        // reconstruction error is numerical only: limit 1e-6 pixels.
+        let pair = front_only(input(RecipeName::RightThoracic40, 3, 0.0).0);
+        let original = input(RecipeName::RightThoracic40, 3, 0.0).0;
+        let side = FilmToFit {
+            facing_assumed: true,
+            marks: original.side,
+            geometry: original.side_geometry,
+            size: original.side_size,
+            mark_spread: pair.front.mark_spread,
+        };
+        for front_scaled in [false, true] {
+            for side_scaled in [false, true] {
+                let mut request = pair.clone();
+                request.side = Some(side.clone());
+                if !front_scaled {
+                    request.front.geometry.mm_per_px = None;
+                }
+                if !side_scaled {
+                    request.side.as_mut().expect("Side").geometry.mm_per_px = None;
+                }
+                let (problem, _, _) = from_films::prepare(&request).expect("pair prepares");
+                gaps.push((
+                    "ordinary pair",
+                    largest_gap(
+                        &problem,
+                        (&request.front.geometry, request.front.size),
+                        request
+                            .side
+                            .as_ref()
+                            .map(|film| (&film.geometry, film.size)),
+                    ),
+                ));
+            }
+        }
         eprintln!("largest gap, front and side, px: {gaps:?}");
         for (case, [front, side]) in gaps {
             assert!(front < 1e-6 && side < 1e-6, "{case}: {front} {side}");

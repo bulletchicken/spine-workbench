@@ -38,6 +38,7 @@ fn front_only(name: RecipeName, seed: u32, spread: MarkSpread) -> (FitFromFilms,
     (
         FitFromFilms {
             front: FilmToFit {
+                facing_assumed: false,
                 marks: input.front,
                 geometry: input.front_geometry,
                 size: input.front_size,
@@ -412,12 +413,14 @@ fn both_films_without_the_typical_spine_match_the_two_film_fit() {
     };
     let films = FitFromFilms {
         front: FilmToFit {
+            facing_assumed: false,
             marks: input.front.clone(),
             geometry: input.front_geometry.clone(),
             size: input.front_size,
             mark_spread: spread,
         },
         side: Some(FilmToFit {
+            facing_assumed: false,
             marks: input.side.clone(),
             geometry: input.side_geometry.clone(),
             size: input.side_size,
@@ -593,6 +596,7 @@ fn hand_made_film() -> FitFromFilms {
     );
     let mut input = FitFromFilms {
         front: FilmToFit {
+            facing_assumed: false,
             geometry,
             size,
             ..template.front

@@ -120,14 +120,16 @@ pub fn rows(problem: &Problem, numbers: &[f64], differentiate: bool) -> Vec<Row>
             }
         }
     }
-    let scale = libm::exp(numbers[n * COUNT]);
-    rows.push(Row {
-        value: (scale - 1.0) / SIDE_SCALE_SD,
-        derivatives: if differentiate {
-            vec![(n * COUNT, scale / SIDE_SCALE_SD)]
-        } else {
-            Vec::new()
-        },
-    });
+    if problem.calibrated_pair || problem.side.is_none() {
+        let scale = libm::exp(numbers[n * COUNT]);
+        rows.push(Row {
+            value: (scale - 1.0) / SIDE_SCALE_SD,
+            derivatives: if differentiate {
+                vec![(n * COUNT, scale / SIDE_SCALE_SD)]
+            } else {
+                Vec::new()
+            },
+        });
+    }
     rows
 }

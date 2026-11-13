@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { startStandInEngine } from './stand-in-engine';
 
 function input(side: boolean): ReadingsInput {
-  const placement: FilmPlacement = { mmPerPx: [0.5, 0.5], originPx: [100, 200] };
+  const placement: FilmPlacement = { mmPerPx: [0.5, 0.5], originPx: [100, 200], facingAssumed: false };
   const vertebra = (level: FittedVertebra['level']): FittedVertebra => ({
     level,
     pose: { level, centre: [0, 0, 10], rotation: [0, 0, 0], height: 20, wedgeFront: 0, wedgeSide: 0, topHalfWidth: 15, topHalfDepth: 10, bottomHalfWidth: 15, bottomHalfDepth: 10 },

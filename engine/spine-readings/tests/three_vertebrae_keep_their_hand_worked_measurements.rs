@@ -82,10 +82,12 @@ fn input(vertebrae: Vec<FittedVertebra>) -> ReadingsInput {
             front_film: shapes::spine_fit::FilmPlacement {
                 mm_per_px: [1.0; 2],
                 origin_px: [0.0; 2],
+                facing_assumed: false,
             },
             side_film: Some(shapes::spine_fit::FilmPlacement {
                 mm_per_px: [1.0; 2],
                 origin_px: [0.0; 2],
+                facing_assumed: false,
             }),
         },
         front: None,
@@ -271,6 +273,7 @@ fn film(kind: FilmKind, marks: Vec<(Level, VertebraMarks)>) -> FilmToFit {
                 })
                 .collect(),
         },
+        facing_assumed: false,
     }
 }
 

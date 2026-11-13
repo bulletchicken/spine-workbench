@@ -72,6 +72,7 @@ pub fn input(vertebrae: Vec<FittedVertebra>) -> ReadingsInput {
     let placement = FilmPlacement {
         mm_per_px: [2.0, 3.0],
         origin_px: [300.0, 400.0],
+        facing_assumed: false,
     };
     ReadingsInput {
         fit: SpineFit {
@@ -134,6 +135,7 @@ fn sacrum_film() -> FilmToFit {
             sd_mm: 1.0,
             shared_sd_mm: 0.0,
         },
+        facing_assumed: false,
     }
 }
 

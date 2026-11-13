@@ -60,6 +60,12 @@ pub struct FilmToFit {
     pub geometry: FilmGeometry,
     pub size: [u32; 2],
     pub mark_spread: MarkSpread,
+    /// Whether the caller used an unconfirmed effective facing. Required
+    /// on every request. The native default reads fit records written
+    /// before this field was added as false. It does not change geometry
+    /// or marks.
+    #[serde(default)]
+    pub facing_assumed: bool,
 }
 
 /// A twist measured outside the fit, with one standard deviation.
@@ -180,9 +186,10 @@ pub struct FittedVertebra {
 pub struct FilmPlacement {
     /// Millimetres per pixel along a row, then down a column, of the film
     /// as stored, as a film geometry's `mmPerPx` and `mmPerPxVertical`
-    /// give them: the film's stated scale; for a front film without one,
-    /// the provisional scale the fit drew it at (the same both ways); for
-    /// a side film, its stated scale times `sideScale`.
+    /// give them, in the reported spine's common length gauge. A film
+    /// without a stated scale starts from provisional spacing. A used
+    /// Side's spacing includes `sideScale`; a measured Side anchors the
+    /// common gauge when Front has no scale.
     pub mm_per_px: [f64; 2],
     /// The upright pixel where the patient origin lands: the film shown
     /// after its quarter turns, before any mirroring, x right and y down,
@@ -190,6 +197,11 @@ pub struct FilmPlacement {
     /// `docs/conventions/pixel-space.md` says. A side film's includes
     /// `sideOffsetMm`.
     pub origin_px: [f64; 2],
+    /// The used film's required input facing assumption, always written
+    /// independently of scale and of the other film. The native default
+    /// reads fit records written before this field was added as false.
+    #[serde(default)]
+    pub facing_assumed: bool,
 }
 
 /// Which stopping rule ended the solve.
@@ -232,7 +244,9 @@ pub struct SpineFit {
     pub typical_curve_deg: Option<f64>,
     /// Where the front film stands.
     pub front_film: FilmPlacement,
-    /// Where the side film stands, or `null` when there is none.
+    /// Where the side film stands. Null if and only if the Side film was
+    /// not used: absent, or supplied and set aside by the fit itself.
+    /// A supplied usable Side always has a placement.
     pub side_film: Option<FilmPlacement>,
 }
 
@@ -293,6 +307,7 @@ mod tests {
             front_film: FilmPlacement {
                 mm_per_px: [0.3, 0.3],
                 origin_px: [512.0, 1800.5],
+                facing_assumed: false,
             },
             side_film: None,
         }
@@ -316,6 +331,7 @@ mod tests {
         };
         FitFromFilms {
             front: FilmToFit {
+                facing_assumed: false,
                 marks,
                 geometry: FilmGeometry::UNKNOWN,
                 size: [100, 200],
@@ -355,7 +371,7 @@ mod tests {
         assert_eq!(vertebra["cornerTiltRad"], 0.02);
         assert_eq!(
             value["frontFilm"],
-            json!({"mmPerPx": [0.3, 0.3], "originPx": [512.0, 1800.5]})
+            json!({"mmPerPx": [0.3, 0.3], "originPx": [512.0, 1800.5], "facingAssumed": false})
         );
         assert_eq!(value["sideFilm"], json!(null));
         assert_eq!(
@@ -432,5 +448,74 @@ mod tests {
                 "{path}"
             );
         }
+    }
+
+    #[test]
+    fn native_legacy_records_default_facing_and_outputs_write_booleans() {
+        let mut value = serde_json::to_value(one_film()).expect("input serialises");
+        value["side"] = value["front"].clone();
+        for front in [false, true] {
+            for side in [false, true] {
+                value["front"]["facingAssumed"] = json!(front);
+                value["side"]["facingAssumed"] = json!(side);
+                let input: FitFromFilms = serde_json::from_value(value.clone()).expect("booleans");
+                assert_eq!(input.front.facing_assumed, front);
+                assert_eq!(input.side.expect("Side").facing_assumed, side);
+            }
+        }
+        for film in ["front", "side"] {
+            let mut omitted = value.clone();
+            omitted[film]
+                .as_object_mut()
+                .expect("film")
+                .remove("facingAssumed");
+            let input: FitFromFilms = serde_json::from_value(omitted).expect("old input");
+            let input = if film == "front" {
+                input.front
+            } else {
+                input.side.expect("Side")
+            };
+            assert!(!input.facing_assumed);
+            assert_eq!(
+                serde_json::to_value(input).expect("writes")["facingAssumed"],
+                false
+            );
+            let mut null = value.clone();
+            null[film]["facingAssumed"] = json!(null);
+            assert!(serde_json::from_value::<FitFromFilms>(null).is_err());
+            let mut extra = value.clone();
+            extra[film]["extra"] = json!(true);
+            assert!(serde_json::from_value::<FitFromFilms>(extra).is_err());
+        }
+        let mut value = serde_json::to_value(answer()).expect("result serialises");
+        value["sideFilm"] = value["frontFilm"].clone();
+        for film in ["frontFilm", "sideFilm"] {
+            value[film]
+                .as_object_mut()
+                .expect("placement")
+                .remove("facingAssumed");
+        }
+        let old: SpineFit = serde_json::from_value(value).expect("old placements");
+        assert!(!old.front_film.facing_assumed);
+        assert!(!old.side_film.expect("Side").facing_assumed);
+        let written = serde_json::to_value(old).expect("writes");
+        assert_eq!(written["frontFilm"]["facingAssumed"], false);
+        assert_eq!(written["sideFilm"]["facingAssumed"], false);
+    }
+
+    #[cfg(feature = "typescript")]
+    #[test]
+    fn typescript_facing_is_required_and_not_nullable() {
+        use ts_rs::TS;
+        let declaration = FilmToFit::decl(&ts_rs::Config::default());
+        assert!(
+            declaration.contains("facingAssumed: boolean"),
+            "{declaration}"
+        );
+        assert!(!declaration.contains("facingAssumed?"), "{declaration}");
+        assert!(!declaration.contains("boolean | null"), "{declaration}");
+        let placement = FilmPlacement::decl(&ts_rs::Config::default());
+        assert!(placement.contains("facingAssumed: boolean"), "{placement}");
+        assert!(!placement.contains("facingAssumed?"), "{placement}");
     }
 }

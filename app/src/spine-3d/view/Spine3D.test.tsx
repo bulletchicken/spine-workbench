@@ -185,7 +185,7 @@ describe('Spine3D', () => {
   it('rehangs films when the fit changes, using its scale even when the film has a stated one', () => {
     const films = { front: { ...front, pixels: null }, side: { ...side, pixels: null } };
     show(<Spine3D fit={fit} bones={bones} films={films} />);
-    const changed = { ...fit, frontFilm: { mmPerPx: [0.7, 0.8] as [number, number], originPx: [123, 456] as [number, number] }, sideFilm: null };
+    const changed = { ...fit, frontFilm: { facingAssumed: false, mmPerPx: [0.7, 0.8] as [number, number], originPx: [123, 456] as [number, number] }, sideFilm: null };
     show(<Spine3D fit={changed} bones={bones} films={films} />);
     expect(named('hangFilm').at(-1)).toEqual(['hangFilm', 'front', expect.objectContaining({ uprightMmPerPx: [0.7, 0.8], origin: [123, 456] }), null]);
     expect(named('hangFilm').filter(([, name]) => name === 'side')).toHaveLength(1);

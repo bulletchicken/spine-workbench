@@ -39,6 +39,12 @@ pub struct Problem {
     pub side: Option<ParallelCamera>,
     pub front_spacing: [f64; 2],
     pub side_spacing: [f64; 2],
+    /// Only two stated calibrations justify the relative-scale prior.
+    /// An absent Side still pins its unused scale to one.
+    pub calibrated_pair: bool,
+    /// Report the common length gauge in the measured Side's units when
+    /// the Front spacing was provisional.
+    pub side_is_length_anchor: bool,
     /// Each observation's typical values, when a typical spine was asked for.
     pub typical: Option<Typical>,
     /// Scale the covariance by the residual variance, as the two-film fit
@@ -133,6 +139,8 @@ impl Problem {
                 .as_ref()
                 .map_or([1.0, 1.0], |film| spacing(film.geometry)),
             typical: None,
+            calibrated_pair: true,
+            side_is_length_anchor: false,
             rescale_covariance: true,
         })
     }
