@@ -3,6 +3,7 @@ import { findReplay } from '@/auto-pass/find-replay-clock';
 import { shownAt } from '@/auto-pass/find-replay';
 import { caseStore } from '@/case-state/case-store';
 import { emptyCase } from '@/case-state/empty-case';
+import { filmPixels } from '@/case-state/film-pixels';
 import { EngineFailure, type RunOptions } from '@/engine-room/engine-client';
 import { smallStory } from '@/engine-room/stand-in/small-story';
 import { DEFAULT_SCRIPTS, startStandInEngine } from '@/engine-room/stand-in/stand-in-engine';
@@ -11,6 +12,7 @@ import type { AutoPassResult, FilmKind, WatchFrame } from '@/shapes';
 import { currentStep } from '@/view-state/current-step';
 import { filmIntake } from '@/view-state/film-intake';
 import { findState } from '@/view-state/find-state';
+import { fitSources } from '@/view-state/fit-sources';
 import { preferences } from '@/view-state/preferences';
 import { findRun } from './find-run';
 
@@ -36,7 +38,7 @@ beforeEach(() => {
   vi.stubGlobal('window', { matchMedia: () => ({ matches: false }) });
   preferences.getState().setMotion('system', false);
   currentStep.getState().go('find');
-  findRun.stop(); put(); filmIntake.getState().source('yours');
+  findRun.stop(); put(); filmIntake.getState().source('yours'); fitSources.getState().clear();
 });
 afterEach(() => { findRun.stop(); vi.restoreAllMocks(); vi.unstubAllGlobals(); vi.useRealTimers(); });
 
@@ -51,6 +53,7 @@ describe('running Find', () => {
     expect(findState.getState().phase).toBe('replaying');
     expect(caseStore.getState().case.marks).toEqual(expected.marks);
     expect(caseStore.getState().history.undo).toHaveLength(0);
+    for (const marks of expected.marks) expect(fitSources.getState().films[marks.film]).toEqual({ finder: marks.film === 'front' && from !== 'made-up-case' ? 'trained' : 'hand-built', opening: filmPixels.getState().openings[marks.film] });
   });
   it('lands one edit per film as one action, before the replay, then clears the history', async () => {
     const expected = result(); answer(expected); const apply = vi.spyOn(caseStore.getState(), 'apply'); const fresh = vi.spyOn(caseStore.getState(), 'startAfresh');
@@ -84,6 +87,7 @@ describe('running Find', () => {
     expect(called.mock.calls[0]?.[1]?.signal?.aborted).toBe(true);
     finish(late); await vi.advanceTimersByTimeAsync(140);
     expect(caseStore.getState().case.marks).toEqual([]);
+    expect(fitSources.getState().films).toEqual({});
     expect(findState.getState().phase).toBe('idle');
     currentStep.getState().go('find'); called.mockResolvedValue(result()); findRun.start(engine);
     await vi.advanceTimersByTimeAsync(760); findReplay.getState().advance(3000);
@@ -124,6 +128,17 @@ describe('running Find', () => {
     findRun.start(engine); await vi.advanceTimersByTimeAsync(1000);
     expect(findReplay.getState().plan).toBeNull();
     expect(caseStore.getState().case.marks.some((film) => film.film === 'front')).toBe(false);
+    expect(fitSources.getState().films.front).toBeUndefined();
+  });
+  it('records the finder actually requested even when intake changes before its reply', async () => {
+    let finish: (value: AutoPassResult) => void = () => undefined;
+    const expected = result();
+    const called = vi.spyOn(engine, 'runAutoPass').mockImplementation(() => new Promise((resolve) => { finish = resolve; }));
+    filmIntake.getState().source('made-up-case'); findRun.start(engine);
+    filmIntake.getState().source('yours'); finish(expected);
+    await vi.advanceTimersByTimeAsync(760);
+    expect(called.mock.calls[0]?.[0].frontFinder).toBe('hand-built');
+    expect(fitSources.getState().films.front?.finder).toBe('hand-built');
   });
   it('treats an answer containing only C7 on Front as no spine found', async () => {
     const value = result();

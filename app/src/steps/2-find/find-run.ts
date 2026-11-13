@@ -1,6 +1,7 @@
 import { findReplay } from '@/auto-pass/find-replay-clock';
 import { revealPlan } from '@/auto-pass/find-replay';
 import { caseStore } from '@/case-state/case-store';
+import { filmPixels } from '@/case-state/film-pixels';
 import { FILM_KINDS, marksOf } from '@/case-state/selectors';
 import { motionMode, SYSTEM_ASKS_FOR_REDUCED } from '@/choreography/reduced-motion';
 import { durationOnPage, numberOnPage } from '@/choreography/timing';
@@ -9,6 +10,7 @@ import { compareLevels, type CaseFileV1, type FilmKind } from '@/shapes';
 import { currentStep } from '@/view-state/current-step';
 import { filmIntake } from '@/view-state/film-intake';
 import { findState } from '@/view-state/find-state';
+import { fitSources } from '@/view-state/fit-sources';
 import { preferences } from '@/view-state/preferences';
 import { selection } from '@/view-state/selection';
 import { searchShare } from './search-progress';
@@ -68,6 +70,8 @@ function wait(ms: number, signal: AbortSignal): Promise<void> {
 
 async function search(engine: EngineClient, run: Run, only?: readonly FilmKind[]) {
   const { case: c, version } = caseStore.getState();
+  const openings = filmPixels.getState().openings;
+  const frontFinder = filmIntake.getState().from === 'made-up-case' ? 'hand-built' : 'trained';
   const films = FILM_KINDS.filter((kind) => only === undefined || only.includes(kind)).flatMap((kind) => c.films.filter((film) => film.kind === kind));
   findState.getState().searching(films.length);
   const began = performance.now();
@@ -78,7 +82,7 @@ async function search(engine: EngineClient, run: Run, only?: readonly FilmKind[]
       caseVersion: version, films,
       options: { acquisition: 'unknown', population: 'adolescent', template: null },
       firstVertebraId: c.nextVertebraId,
-      frontFinder: filmIntake.getState().from === 'made-up-case' ? 'hand-built' : 'trained',
+      frontFinder,
     }, {
       signal: run.controller.signal,
       onProgress: (progress) => { if (active === run) findState.getState().progress(searchShare(progress, films.length === 1 && films[0]?.kind === 'front')); },
@@ -87,6 +91,7 @@ async function search(engine: EngineClient, run: Run, only?: readonly FilmKind[]
     const report = caseStore.getState().apply(result.marks.map((marks) => ({ kind: 'replace-marks', marks, basedOn: result.caseVersion, cause: { by: 'auto-pass' } })));
     caseStore.getState().startAfresh();
     const kept = result.marks.filter((_, i) => report.outcomes[i]?.kept);
+    for (const marks of kept) fitSources.getState().kept(marks.film, marks.film === 'front' ? frontFinder : 'hand-built', openings[marks.film]);
     if (!kept.some((marks) => marks.film === 'front')) return;
     const sizes = Object.fromEntries(caseStore.getState().case.films.map((film) => [film.kind, { width: film.image.width, height: film.image.height }]));
     const plan = revealPlan(kept, sizes, { height: numberOnPage('--light-h'), edge: numberOnPage('--light-edge'), filmHeight: numberOnPage('--film-h') });
