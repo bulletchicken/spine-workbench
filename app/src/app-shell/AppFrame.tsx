@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { memo } from 'react';
+import { useStore } from 'zustand';
 import { caseStore, useCase } from '@/case-state/case-store';
 import { motionMode } from '@/choreography/reduced-motion';
 import { useSystemReducedMotion } from '@/choreography/use-system-reduced-motion';
@@ -7,7 +8,7 @@ import { useRequestsSent } from '@/on-this-device/requests-sent';
 import { allSteps } from '@/steps/all-steps';
 import type { StepContract } from '@/steps/step-contract';
 import type { ToolId } from '@/toolbox/tool-contract';
-import { useActiveTool } from '@/view-state/active-tool';
+import { activeTool } from '@/view-state/active-tool';
 import { useCaseSheetOpen } from '@/view-state/case-sheet-open';
 import { currentStep, useCurrentStep } from '@/view-state/current-step';
 import { usePointer } from '@/view-state/pointer';
@@ -45,6 +46,20 @@ function LiveStatusLine({ engine }: { engine: EngineStatus }) {
   return <StatusLine engine={engine} position={positionOf(reading, c)} pixelSize={pixelSizeShown(c, reading?.film ?? null)} sent={sent} />;
 }
 
+/**
+ * The bench region: the bench, mounted once for the whole visit, and the
+ * case sheet over it. Drawn again only if its parts change, which they
+ * never do, so a step changing or a tool being picked up leaves it be.
+ */
+const BenchRegion = memo(function BenchRegion({ Bench, CaseSheet }: Pick<RoomParts, 'Bench' | 'CaseSheet'>) {
+  return (
+    <section className="app-frame-bench" aria-label={SHELL_WORDS.benchLabel}>
+      {Bench !== null && <Bench />}
+      {CaseSheet !== null && <CaseSheet />}
+    </section>
+  );
+});
+
 interface AppFrameProps {
   /** The steps, in order. The app's own, found by their folders, unless a test or a gallery page hands in others. */
   steps?: readonly StepContract[];
@@ -68,21 +83,17 @@ export function AppFrame({ steps = FOUND_STEPS, parts = FOUND_PARTS }: AppFrameP
   const onScreen = stepOnScreen(steps, slug);
   const systemAsksForReduced = useSystemReducedMotion();
   const appAsksForReduced = usePreferences().motion === 'reduced';
-  const tool = useActiveTool().tool;
+  // The tool alone: a drag starting or the magnifier turning on is not the frame's to draw.
+  const tool = useStore(activeTool, (state) => state.tool);
   const sheetIsOpen = useCaseSheetOpen().open;
   const engine = useEngineStatus();
 
-  // The step on screen and the case are read at each press, from the stores themselves.
-  const [live] = useState(() => {
-    const slugNow = () => stepOnScreen(steps, currentStep.getState().slug)?.slug ?? null;
-    return {
-      undoIsLive: () => undoIsLive(slugNow()),
-      saveIsLive: () => saveIsLive(steps, caseStore.getState().case),
-    };
+  // What is live is asked at each press, of the stores themselves.
+  useGlobalKeys({
+    undoIsLive: () => undoIsLive(stepOnScreen(steps, currentStep.getState().slug)?.slug ?? null),
+    saveIsLive: () => saveIsLive(steps, caseStore.getState().case),
   });
-  useGlobalKeys(live);
 
-  const { Bench, CaseSheet, OpeningCase } = parts;
   return (
     <div
       className="app-frame"
@@ -92,11 +103,8 @@ export function AppFrame({ steps = FOUND_STEPS, parts = FOUND_PARTS }: AppFrameP
     >
       <LiveTopBar steps={steps} />
       <main className="app-frame-room">
-        <GuideColumn step={onScreen} OpeningCase={OpeningCase} sheetIsOpen={sheetIsOpen} />
-        <section className="app-frame-bench" aria-label={SHELL_WORDS.benchLabel}>
-          {Bench !== null && <Bench />}
-          {CaseSheet !== null && <CaseSheet />}
-        </section>
+        <GuideColumn step={onScreen} OpeningCase={parts.OpeningCase} sheetIsOpen={sheetIsOpen} />
+        <BenchRegion Bench={parts.Bench} CaseSheet={parts.CaseSheet} />
       </main>
       <LiveStatusLine engine={engine} />
     </div>

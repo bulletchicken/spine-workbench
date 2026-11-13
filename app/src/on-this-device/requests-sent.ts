@@ -1,14 +1,17 @@
-// The counter behind "0 sent": what this page has asked of anywhere but
-// its own origin, since it loaded. The badge, the popover and the status
-// line all read it.
+// The counter behind "0 sent": what this page has sent to anywhere but its
+// own origin, since it loaded. The badge, the popover and the status line
+// all read it.
 //
 // Two things are counted, and both are told by where an address leads,
 // never by what kind of call made it:
-// - `sent`: every resource the page asked for from another origin, from
-//   the browser's own record of what it loaded. The record is read from
-//   its start, so nothing asked for before the app was up is missed.
 // - `blocked`: every time the content policy refused an address outside
 //   the app, from the event the browser raises when it does.
+// - `sent`: every resource the page asked for from another origin and the
+//   policy did not refuse, from the browser's own record of what it asked
+//   for. The record is read from its start, so nothing asked for before
+//   the app was up is missed. The browser lists a refused request in that
+//   record too, as if it had failed on the way, so an address the policy
+//   refused is taken out: it was asked for, and it never left.
 //
 // A page can hold its policy twice, as a header and as a tag in its head,
 // and then the browser reports one refusal twice, a moment apart. Reports
@@ -21,7 +24,7 @@
 import { useSyncExternalStore } from 'react';
 
 export interface RequestsSent {
-  /** Requests that left for another origin. */
+  /** Requests for another origin that the policy did not refuse. */
   sent: number;
   /** Attempts the browser refused before they left. */
   blocked: number;
@@ -51,32 +54,57 @@ export interface Refusal {
   at: number;
 }
 
+/** An address without its fragment, which the browser's record keeps and its refusals drop. */
+function withoutFragment(address: string): string {
+  const url = new URL(address);
+  url.hash = '';
+  return url.href;
+}
+
 /**
  * A tally of what left and what was refused. The app has one, fed by the
- * browser; tests make their own and feed it by hand.
+ * browser; tests make their own and feed it by hand. The browser may tell
+ * of a refusal before or after it records the request, so the count of
+ * what was sent is worked out afresh from both each time either changes.
  */
 export function createTally(own: string) {
-  let now: RequestsSent = { sent: 0, blocked: 0 };
+  /** Every address outside the app the page asked for. */
+  const askedFor: string[] = [];
+  /** Every address outside the app the policy refused, and that address's origin when the browser gave no more. */
+  const refusedAddresses = new Set<string>();
   const lastRefused = new Map<string, number>();
+  let blocked = 0;
+  let now: RequestsSent = { sent: 0, blocked: 0 };
   const listeners = new Set<() => void>();
-  const set = (next: RequestsSent) => {
-    now = next;
+
+  const wasRefused = (address: string) => refusedAddresses.has(address) || refusedAddresses.has(new URL(address).origin);
+  const settle = () => {
+    const sent = askedFor.filter((address) => !wasRefused(address)).length;
+    if (sent === now.sent && blocked === now.blocked) return;
+    now = { sent, blocked };
     for (const listener of listeners) listener();
   };
+
   return {
     read: (): RequestsSent => now,
-    /** The browser loaded, or tried to load, something from `address`. */
+    /** The browser's record lists a request for `address`. */
     asked: (address: string): void => {
-      if (leadsOutside(address, own)) set({ ...now, sent: now.sent + 1 });
+      if (!leadsOutside(address, own)) return;
+      askedFor.push(withoutFragment(address));
+      settle();
     },
     /** The content policy refused something. */
     refused: ({ address, rule, at }: Refusal): void => {
       if (!leadsOutside(address, own)) return;
+      refusedAddresses.add(withoutFragment(address));
+      // A refusal that gives an origin and nothing more stands for every address there.
+      const { origin, pathname, search } = new URL(address);
+      if (pathname === '/' && search === '') refusedAddresses.add(origin);
       const key = `${rule} ${address}`;
       const last = lastRefused.get(key);
       lastRefused.set(key, at);
-      if (last !== undefined && at - last <= SAME_MOMENT_MS) return;
-      set({ ...now, blocked: now.blocked + 1 });
+      if (last === undefined || at - last > SAME_MOMENT_MS) blocked += 1;
+      settle();
     },
     watch: (listener: () => void): (() => void) => {
       listeners.add(listener);

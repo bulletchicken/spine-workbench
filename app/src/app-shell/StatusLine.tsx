@@ -1,3 +1,4 @@
+import { StateIcon } from '@/look-and-feel/StateIcon';
 import { faultWords } from '@/words/faults';
 import { PREVIEW_NOTICE } from '@/words/preview-notice';
 import { SHELL_WORDS } from '@/words/shell';
@@ -31,7 +32,12 @@ export function StatusLine({ engine, position, pixelSize, sent }: StatusLineProp
     <footer className="status-line" aria-label={SHELL_WORDS.statusLabel} data-testid="engine-status" data-status={engine.status}>
       <span className="status-line-claim">{PREVIEW_NOTICE.short}</span>
       <span className="status-line-readings">
-        {engine.status === 'failed' && <span className="status-line-fault">{faultWords(engine.error.code).title}</span>}
+        {engine.status === 'failed' && (
+          <span className="status-line-fault">
+            <StateIcon state="bad" />
+            {faultWords(engine.error.code).title}
+          </span>
+        )}
         {position !== null && <span>{SHELL_WORDS.position(position.x, position.y, position.unit)}</span>}
         {pixelSize !== null && <span>{SHELL_WORDS.pixelSize(pixelSize)}</span>}
         <span className="status-line-sent">

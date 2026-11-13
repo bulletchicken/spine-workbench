@@ -33,8 +33,13 @@
   white-space: pre;
 }
 
+/* A sign and a sentence: the sign carries the colour, the words are ink. */
 .status-line-fault {
-  color: var(--needs);
+  --icon-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink-1);
   font-family: var(--font-ui);
   font-size: var(--text-small);
   font-weight: 500;

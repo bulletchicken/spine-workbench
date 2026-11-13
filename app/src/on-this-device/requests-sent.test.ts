@@ -42,6 +42,28 @@ describe('the tally', () => {
     expect(tally.read()).toEqual({ sent: 2, blocked: 0 });
   });
 
+  it('does not count as sent what the policy refused, whichever the browser tells of first', () => {
+    // The browser lists a refused request in its record as well as raising the refusal.
+    const refusalFirst = createTally(OWN);
+    refusalFirst.refused({ address: 'https://example.org/picture.png', rule: 'img-src', at: 10 });
+    refusalFirst.asked('https://example.org/picture.png');
+    expect(refusalFirst.read()).toEqual({ sent: 0, blocked: 1 });
+
+    const recordFirst = createTally(OWN);
+    recordFirst.asked('https://example.org/picture.png#top');
+    expect(recordFirst.read().sent).toBe(1);
+    recordFirst.refused({ address: 'https://example.org/picture.png', rule: 'img-src', at: 10 });
+    expect(recordFirst.read()).toEqual({ sent: 0, blocked: 1 });
+  });
+
+  it('takes a refusal that names only an origin to cover every address there, and no other origin', () => {
+    const tally = createTally(OWN);
+    tally.asked('https://example.org/a/deep/path?x=1');
+    tally.asked('https://example.net/other');
+    tally.refused({ address: 'https://example.org', rule: 'connect-src', at: 3 });
+    expect(tally.read()).toEqual({ sent: 1, blocked: 1 });
+  });
+
   it('counts a refusal reported twice in the same moment as one attempt', () => {
     const tally = createTally(OWN);
     // The policy held as a header and as a tag: the browser reports the one refusal once for each.
@@ -83,6 +105,8 @@ describe('the tally', () => {
     tally.asked('https://example.org/a');
     tally.asked('https://spine.example/own');
     tally.refused({ address: 'https://example.org/b', rule: 'img-src', at: 9 });
+    // The same refusal told again changes nothing, so nobody is told.
+    tally.refused({ address: 'https://example.org/b', rule: 'img-src', at: 9.5 });
     expect(told).toBe(2);
     stop();
     tally.asked('https://example.org/c');
