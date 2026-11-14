@@ -109,15 +109,34 @@ ratio for a Prasad set. No shear modulus is derived or supplied.
 
 ## Retained assumptions and absences
 
-Films do not establish absolute joint stiffness. The assumed global 0.65–5.6
-log-uniform range calibrates this solver with 5.5 mm cobalt-chrome rods and no
-overbend against the published 192–439 N peak head-force range; it is not a
-measurement of the child. Salmingo et al. (2013), Clin Biomech, n=6,
-PMID 23273729, was read as the full author manuscript.
-Its forces were worked back from deformation of 6 mm titanium-alloy rods.
-The scale endpoints remain own inference; the published forces are the
-calibration target. The older Petit factors use another baseline and remain
-beside this prior. Rib axial/lateral multipliers remain
+Films do not establish absolute joint stiffness. The assumed global 0.72–1.66
+log-uniform range calibrates this solver, not the child. On the first
+placements of six surgical-size made-up spines, use scale 1, the existing
+middle correction draw and 6 mm titanium-alloy rods with no overbend. The
+six locking peaks, their geometric-mean centring rule and rounding are
+recorded in `joint-springs.json` and the crate README. Before endpoint
+rounding, the range's factor is exactly the published 439/192. The width
+equals the spread of the largest force across the six published patients,
+as if all of it came from stiffness; six patients are few, and the same
+report's summed forces spread by a factor of 3.1, so the true spread could
+be wider. The endpoints are rounded to the nearest hundredth (two decimal
+places), halfway values up. `salmingo-2013` records the largest screw force,
+192 to 439 N across six patients (Clin Biomech, n=6, PMID 23273729;
+full author-manuscript reading), worked back from rod deformation. The
+6 mm titanium-alloy rod is recorded for the same group's earlier
+three-patient report (`salmingo-2012`, PMID 22321374) and is assumed for
+the six. The reference-rod-diameter cell marks that borrowing as own
+inference. The reference forces are taken with the rods held rigid,
+before springback, so the rod chosen does not change them, while the
+published forces come from rods after they flexed. The six reference
+spines differ among themselves by a factor of 3.4 at scale 1, more than
+the published 2.29, so one spine's forces at the stored range can still
+pass 439 N. The full title, DOI and publication locator of the six-patient
+report are unrecorded and remain absent; the earlier report's other
+bibliographic fields also remain absent, and its read status is secondary.
+The scale endpoints remain own inference and absolute loads stay assumed;
+they are not a measurement of the child. The older Petit factors use another
+baseline and remain beside this prior. Rib axial/lateral multipliers remain
 own priors; literal flexion endpoints 1.08/2.14 remain absent rather than newly
 inferred. Adult/animal data do not calibrate individual paediatric tissue.
 
@@ -149,6 +168,9 @@ record's Dreischarf/Rohlmann naming disagreement remains documented.
 
 ## Bibliography and read status
 
+- `salmingo-2012` — Salmingo RA et al. (2012). PMID 22321374. [peer-reviewed; secondary]; n = 3. Earlier report recording 6 mm titanium-alloy rods, assumed for the same group's six-patient comparison. Other bibliographic fields and publication locator are not recorded; no abstract or full-text reading is claimed here.
+- `salmingo-2013` — Salmingo RA et al. (2013). Clin Biomech 28:122. PMID 23273729. [peer-reviewed; full-text]; n = 6. The largest screw force, 192 to 439 N across six patients, worked back from rod deformation. The 6 mm titanium-alloy rod is assumed from the earlier three-patient report. Full title, DOI and publication locator are not recorded.
+
 `Citation` carries authors/year/title/journal plus volume/issue/pages. `Source`
 adds PMCID and `recordNote`. `recordNote` says what the bibliographic
 confirmation covered (`bibliographic record and read status` or `bibliographic
@@ -159,9 +181,11 @@ qualification.
 
 The main source set identifies 34 unique papers, filling 35 source entries with
 the Keenan alias. Every identified paper has a title and supplied PMID/DOI.
-The 22 additional source keys include the Keenan alias. All 56 publication source entries have
-full author/title/journal/location records and a PMID. Only Liljenqvist has no
-DOI in its supplied record. Extra-source notes state “Bibliographic record
+The 22 additional source keys include the Keenan alias. The 56 publication
+source entries other than the two Salmingo reports have full
+author/title/journal/location records and a PMID. Only Liljenqvist among
+those has no DOI in its supplied record. The two Salmingo records retain
+unknown fields as absent. Extra-source notes state “Bibliographic record
 confirmed; numbers not independently checked”; their recorded read status is
 unchanged. Metadata confirmation does not turn into numerical verification.
 No citation is reconstructed from memory.

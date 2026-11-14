@@ -6,6 +6,9 @@ mod assembly;
 mod middle;
 mod values;
 
+#[cfg(test)]
+mod stiffness_calibration;
+
 use crate::BenchError;
 use crate::daily_loads::{self, DailyInputs};
 use crate::evidence::{Evidence, TableKind, Unit};

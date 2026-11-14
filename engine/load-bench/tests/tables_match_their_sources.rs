@@ -190,14 +190,15 @@ fn joint_springs_keep_the_published_units_and_the_disagreeing_tables() {
         &[("t1-t2-lb", 5.9), ("t1-t2-ar", 6.2), ("t11-t12-ar", 3.3)],
     );
     // The stiffness scale is a calibration of this solver against published
-    // head forces at locking, not a measurement of a child's stiffness.
+    // head forces worked back from flexed rods, not a measurement of a
+    // child's stiffness. The reference forces precede springback.
     check(
         &e,
         TableKind::JointSprings,
         "stiffness-scale",
         "project-assumptions",
         Unit::Ratio,
-        &[("lower", 0.65), ("upper", 5.6)],
+        &[("lower", 0.72), ("upper", 1.66)],
     );
     for term in ["lower", "upper"] {
         assert_eq!(
@@ -1615,8 +1616,43 @@ fn supplementary_records_close_the_remaining_citations_without_raising_read_stat
         .iter()
         .filter(|s| s.key != "project-assumptions")
         .collect();
-    assert_eq!(papers.len(), 56);
+    assert_eq!(papers.len(), 58);
     for paper in papers {
+        // The earlier report supplies the rod assumed for the six-patient
+        // comparison; missing bibliographic fields stay absent.
+        if paper.key == "salmingo-2012" {
+            assert_eq!(paper.citation.authors, "Salmingo RA et al.");
+            assert_eq!(paper.citation.year, 2012);
+            assert_eq!(paper.pmid.as_deref(), Some("22321374"));
+            assert_eq!(paper.read, Read::Secondary);
+            assert_eq!(paper.n.as_deref(), Some("3"));
+            assert!(paper.record_note.is_none());
+            assert!(paper.citation.title.is_none());
+            assert!(paper.citation.journal.is_none());
+            assert!(paper.citation.volume.is_none());
+            assert!(paper.citation.issue.is_none());
+            assert!(paper.citation.pages.is_none());
+            assert!(paper.doi.is_none());
+            assert!(paper.pmcid.is_none());
+            assert!(paper.url.is_none());
+            assert!(
+                paper
+                    .notes
+                    .contains("assumed for the six-patient comparison")
+            );
+            continue;
+        }
+        // The force calibration has a supplied manuscript reading and PMID,
+        // but no complete bibliographic record. Missing fields stay absent.
+        if paper.key == "salmingo-2013" {
+            assert_eq!(paper.pmid.as_deref(), Some("23273729"));
+            assert_eq!(paper.read, Read::FullText);
+            assert_eq!(paper.n.as_deref(), Some("6"));
+            assert!(paper.record_note.is_none());
+            assert!(paper.citation.title.is_none());
+            assert!(paper.doi.is_none());
+            continue;
+        }
         assert!(paper.record_note.is_some(), "{}", paper.key);
         assert!(
             paper

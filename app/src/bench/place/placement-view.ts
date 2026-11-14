@@ -1,6 +1,6 @@
 import type { AnchorProposal, BodySide, ImageRight, ImplantLayout, LayoutProposals, Level, LookCode } from '@/shapes';
 import { TEMPLATE_LEVELS } from '@/shapes';
-import { CANNOT_TELL_WORDS, SHARED_LOOK_WORDS, PLACE_WORDS as W, lookWords } from '@/words/place';
+import { DAILY_LOADS_WITHHELD, CANNOT_TELL_WORDS, SHARED_LOOK_WORDS, PLACE_LIMITS, PLACE_WORDS as W, lookWords } from '@/words/place';
 
 /** Facing names the body's side at the right of the upright front film. */
 export function filmSide(side: BodySide, namedFor: ImageRight): 'left' | 'right' {
@@ -53,3 +53,9 @@ export function placementCounts(result: LayoutProposals) {
   return { screws: anchors.filter((a) => a.kind === 'screw').length, hooks: anchors.filter((a) => a.kind === 'hook').length, empty: anchors.filter((a) => a.kind === 'none').length, looks: reviewItems(result).length };
 }
 export function countWords(result: LayoutProposals): string { const c = placementCounts(result); return W.counts(c.screws, c.hooks, c.empty); }
+
+/** Limits describe what is on the stage; placement comparison is a later piece. */
+export function limitsForPlacement(loaded:boolean,frontOnly:boolean,noScale:boolean,dailyLoads = !DAILY_LOADS_WITHHELD):string[] {
+  const always=new Set(['preview','tables','tablePopulations','bones','fit','names','frontOnly','noScale']);
+  return Object.entries(PLACE_LIMITS).filter(([key])=>key!=='comparison'&&(dailyLoads||(key!=='loads'&&key!=='walking'))&&(loaded||always.has(key))&&(key!=='frontOnly'||frontOnly)&&(key!=='noScale'||noScale)).map(([,line])=>line);
+}

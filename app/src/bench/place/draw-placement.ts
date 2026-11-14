@@ -1,16 +1,27 @@
 import { BufferGeometry, CurvePath, CylinderGeometry, Group, Line, LineCurve3, Mesh, Quaternion, SphereGeometry, TorusGeometry, TubeGeometry, Vector3 } from 'three';
-import type { ImplantLayout, SpineFit } from '@/shapes';
+import type { ImplantLayout, SpineFit, PartResult, RodLine, VertebraPose } from '@/shapes';
 import type { DrawnSpine } from '@/spine-3d/scene/drawn-spine';
 import type { SceneLayer } from '@/spine-3d/scene/scene-layer';
+import { anchorLoad, anchorPoint, movedPoint } from './load-view';
 import { FORMATION } from '@/spine-3d/scene/look';
 
 /** Symbolic heads and hooks; only screw shafts and rods use supplied dimensions. */
 export const PLACE_DRAWING = { bone: .55, reviewBone: .34, ink: .8, headRadius: 3.2, headDepth: 2, hookRadius: 4, hookWidth: .7, emptyWidth: .25, screwSegments: 10, ringRadiusPx: 10, ringWidthPx: 1.5, staggerMs: 60, arrivalMs: 1200, backAzimuth: 146, backElevation: 14 } as const;
-export interface DrawnPlacement { layer: SceneLayer; parts: Group[]; reveal(count: number, strength: number): void; remove(): void }
+export interface DrawnPlacement { layer: SceneLayer; parts: Group[]; reveal(count: number, strength: number): void; poses(poses: readonly VertebraPose[], loaded: boolean, rods: RodLine[] | null, target?: readonly VertebraPose[], riding?: boolean): void; point(id:string): [number,number,number] | null; loadTo(parts: readonly PartResult[] | null, normalise?: boolean): (p: number) => void; remove(): void }
 export function drawPlacement(spine: Pick<DrawnSpine, 'levels' | 'addLayer'>, fit: SpineFit, layout: ImplantLayout, unsettled: readonly string[]): DrawnPlacement {
   const layer = spine.addLayer(), geometries: BufferGeometry[] = [], parts: Group[] = [];
   const own = <T extends BufferGeometry>(geometry: T): T => { geometries.push(geometry); return geometry; };
   const paint = layer.flat(FORMATION.ink, PLACE_DRAWING.ink);
+  const inks = new Map<string, ReturnType<SceneLayer['flat']>>();
+  const ink = (id: string) => { let found=inks.get(id); if(found===undefined){found=layer.flat(FORMATION.ink,PLACE_DRAWING.ink);inks.set(id,found);} return found; };
+  const rodGroups = new Map<string, Group>();
+  let rodGeometry: BufferGeometry[] = [];
+  const rodObjects: Group['children'] = [], rodPoints=new Map<string,[number,number,number]>();
+  const middleOf=(points:readonly [number,number,number][]):[number,number,number]|null=>{
+    let length=0;const lengths=points.slice(1).map((point,i)=>{const d=new Vector3(...point).distanceTo(new Vector3(...(points[i]??point)));length+=d;return d;});
+    let left=length/2;for(const [i,d] of lengths.entries()){const a=points[i],b=points[i+1];if(a===undefined||b===undefined)continue;if(left<=d)return new Vector3(...a).lerp(new Vector3(...b),d===0?0:left/d).toArray();left-=d;}return points[0]??null;
+  };
+  const rodOwn = <T extends BufferGeometry>(geometry:T):T => { rodGeometry.push(geometry);return geometry; };
   const add = (group: Group, id: string, parent: Group) => { parent.add(group); layer.pointable(group, id); if (id === 'upper') parts.unshift(group); else if (id === 'lower') parts.splice(1, 0, group); else parts.push(group); };
   for (const [index, anchor] of layout.anchors.entries()) {
     const vertebra = fit.vertebrae.find((v) => v.level === anchor.level);
@@ -20,14 +31,15 @@ export function drawPlacement(spine: Pick<DrawnSpine, 'levels' | 'addLayer'>, fi
     group.position.copy(new Vector3(...anchor.entryMm).sub(new Vector3(...vertebra.pose.centre)).applyQuaternion(inverse));
     const direction = new Vector3(...anchor.directionUnit).applyQuaternion(inverse).normalize();
     group.quaternion.setFromUnitVectors(new Vector3(0, 1, 0), direction);
+    const anchorInk=ink(`anchor:${String(index)}`);
     if (anchor.kind === 'screw') {
       if (anchor.diameterMm !== null && anchor.lengthMm !== null) {
-        const shaft = new Mesh(own(new CylinderGeometry(anchor.diameterMm / 2, anchor.diameterMm / 2, anchor.lengthMm, PLACE_DRAWING.screwSegments)), paint);
+        const shaft = new Mesh(own(new CylinderGeometry(anchor.diameterMm / 2, anchor.diameterMm / 2, anchor.lengthMm, PLACE_DRAWING.screwSegments)), anchorInk);
         shaft.position.y = anchor.lengthMm / 2; group.add(shaft);
       }
-      const head = new Mesh(own(new CylinderGeometry(PLACE_DRAWING.headRadius, PLACE_DRAWING.headRadius, PLACE_DRAWING.headDepth, PLACE_DRAWING.screwSegments)), paint); group.add(head);
+      const head = new Mesh(own(new CylinderGeometry(PLACE_DRAWING.headRadius, PLACE_DRAWING.headRadius, PLACE_DRAWING.headDepth, PLACE_DRAWING.screwSegments)), anchorInk); group.add(head);
     } else {
-      const ring = new Mesh(own(new TorusGeometry(PLACE_DRAWING.hookRadius, anchor.kind === 'hook' ? PLACE_DRAWING.hookWidth : PLACE_DRAWING.emptyWidth, 6, 24, anchor.kind === 'hook' ? Math.PI * 1.5 : Math.PI * 2)), paint);
+      const ring = new Mesh(own(new TorusGeometry(PLACE_DRAWING.hookRadius, anchor.kind === 'hook' ? PLACE_DRAWING.hookWidth : PLACE_DRAWING.emptyWidth, 6, 24, anchor.kind === 'hook' ? Math.PI * 1.5 : Math.PI * 2)), anchorInk);
       ring.rotation.x = Math.PI / 2; group.add(ring);
     }
     add(group, `anchor:${String(index)}`, layer.onBone(anchor.level));
@@ -42,19 +54,67 @@ export function drawPlacement(spine: Pick<DrawnSpine, 'levels' | 'addLayer'>, fi
     }
     add(group, upper ? 'upper' : 'lower', layer.onBone(level));
   }
-  // A missing standing line stays missing. The contoured line belongs to a later moment.
-  for (const rod of layout.rods) {
-    if (rod.standingPointsMm.length < 2) continue;
-    const path = new CurvePath<Vector3>();
-    for (let i = 1; i < rod.standingPointsMm.length; i++) {
-      const a = rod.standingPointsMm[i - 1], b = rod.standingPointsMm[i];
-      if (a !== undefined && b !== undefined) path.add(new LineCurve3(new Vector3(...a), new Vector3(...b)));
+  const drawRods = (poses: readonly VertebraPose[], loaded: boolean, lines: RodLine[] | null, target?: readonly VertebraPose[], riding=false) => {
+    for(const object of rodObjects)layer.unpointable(object);rodObjects.length=0;rodPoints.clear();
+    for(const geometry of rodGeometry) geometry.dispose(); rodGeometry=[];
+    for(const group of rodGroups.values()) group.clear();
+    for (const rod of layout.rods) {
+      const anchors=layout.anchors.filter((a)=>a.side===rod.side && a.kind!=='none');
+      const seated=lines?.find((l)=>l.side===rod.side)?.pointsMm.map((point)=>{
+        if(target===undefined)return point;
+        const nearest=anchors.reduce<(typeof anchors)[number]|null>((best,a)=>best===null||new Vector3(...anchorPoint(a,fit,target)).distanceToSquared(new Vector3(...point))<new Vector3(...anchorPoint(best,fit,target)).distanceToSquared(new Vector3(...point))?a:best,null);
+        const from=target.find((p)=>p.level===nearest?.level),to=poses.find((p)=>p.level===nearest?.level);
+        return from===undefined||to===undefined?point:movedPoint(point,from,to);
+      });
+      const points=loaded ? seated ?? anchors.map((a)=>anchorPoint(a,fit,poses)) : riding ? anchors.map((a)=>anchorPoint(a,fit,poses)) : rod.standingPointsMm;
+      if(points.length<2) continue;
+      const middle=middleOf(points);if(middle!==null)rodPoints.set(`rod:${rod.side}`,middle);
+      let group=rodGroups.get(rod.side);
+      if(group===undefined) { group=new Group();rodGroups.set(rod.side,group);layer.onSpine.add(group);parts.push(group); }
+      const addLine=(points:readonly [number,number,number][],id:string)=>{
+        if(points.length<2)return;
+        const path = new CurvePath<Vector3>();
+        for(let i=1;i<points.length;i++){const a=points[i-1],b=points[i];if(a!==undefined&&b!==undefined)path.add(new LineCurve3(new Vector3(...a),new Vector3(...b)));}
+        const segment=new Group();segment.add(new Mesh(rodOwn(new TubeGeometry(path,Math.max(1,points.length-1),rod.diameterMm/2,PLACE_DRAWING.screwSegments,false)),ink(id)));
+        group.add(segment);layer.pointable(segment,id);rodObjects.push(segment);const middle=middleOf(points);if(middle!==null)rodPoints.set(id,middle);
+      };
+      if(!loaded || anchors.length<2) addLine(points,`rod:${rod.side}`);
+      else for(let i=1;i<anchors.length;i++){
+        const from=anchors[i-1],to=anchors[i];if(from===undefined||to===undefined)continue;
+        const a=anchorPoint(from,fit,poses),b=anchorPoint(to,fit,poses);
+        const nearest=(point:readonly number[])=>points.reduce((best,p,j)=>new Vector3(...p).distanceToSquared(new Vector3(...point))<new Vector3(...(points[best]??p)).distanceToSquared(new Vector3(...point))?j:best,0);
+        const ai=nearest(a),bi=nearest(b),low=i===1?0:Math.min(ai,bi),high=i===anchors.length-1?points.length-1:Math.max(ai,bi);
+        // The supplied line can continue beyond the outer heads. Keep that overhang.
+        const line=seated===undefined?[a,b]:points.slice(low,high+1);
+        addLine(line,`span:${rod.side}:${from.level}:${to.level}`);
+      }
+      for (const [i,at] of [points[0],points.at(-1)].entries()) if(at!==undefined) {
+        const from=anchors[i===0?0:anchors.length-2],to=anchors[i===0?1:anchors.length-1];
+        const id=loaded&&from!==undefined&&to!==undefined?`span:${rod.side}:${from.level}:${to.level}`:`rod:${rod.side}`;
+        const cap=new Mesh(rodOwn(new SphereGeometry(rod.diameterMm/2,10,6)),ink(id));cap.position.set(...at);group.add(cap);layer.pointable(cap,`rod:${rod.side}`);rodObjects.push(cap);
+      }
     }
-    const group = new Group(); group.add(new Mesh(own(new TubeGeometry(path, rod.standingPointsMm.length, rod.diameterMm / 2, PLACE_DRAWING.screwSegments, false)), paint));
-    const end = rod.standingPointsMm.at(-1), start = rod.standingPointsMm[0];
-    for (const at of [start, end]) if (at !== undefined) { const cap = new Mesh(own(new SphereGeometry(rod.diameterMm / 2, 10, 6)), paint); cap.position.set(...at); group.add(cap); }
-    add(group, `rod:${rod.side}`, layer.onSpine);
-  }
+    layer.changed();
+  };
+  drawRods(fit.vertebrae.map((v)=>v.pose),false,null);
   layer.changed();
-  return { layer, parts, reveal(count, strength) { parts.forEach((part, i) => { part.visible = i < count; }); paint.opacity = PLACE_DRAWING.ink * strength; layer.changed(); }, remove() { layer.remove(); for (const geometry of geometries) geometry.dispose(); } };
+  return { layer, parts,
+    poses: drawRods,
+    point: (id)=>rodPoints.get(id)??null,
+    loadTo(loads,normalise=false) {
+      // While daily stops are withheld, Rods-in ink uses the largest middle of its own kind.
+      const largest=(kind: 'anchor' | 'rod-span')=>Math.max(0,...(loads??[]).filter((p)=>p.part.kind===kind).map((p)=>p.share.p50));
+      const maxima=normalise?{anchor:largest('anchor'),'rod-span':largest('rod-span')}:null;
+      const transitions=[...inks].map(([id,material])=>{
+        const anchor=id.startsWith('anchor:')?layout.anchors[Number(id.slice(7))]:undefined;
+        const part=anchor?.kind==='none'?undefined:anchor===undefined?loads?.find((p)=>p.part.kind==='rod-span'?id===`span:${p.part.side}:${p.part.from}:${p.part.to}`:p.part.kind==='rod'&&id===`rod:${p.part.side}`):anchorLoad(loads??[],anchor);
+        const max=part!==undefined&&maxima!==null&&(part.part.kind==='anchor'||part.part.kind==='rod-span')?maxima[part.part.kind]:1;
+        const share=part===undefined||max===0?0:part.share.p50/max;
+        return {material,from:material.opacity,to:part===undefined?PLACE_DRAWING.ink:.25+.75*Math.max(0,Math.min(1,share))};
+      });
+      return (p)=>{for(const t of transitions)t.material.opacity=t.from+(t.to-t.from)*p;layer.changed();};
+    },
+    reveal(count, strength) { parts.forEach((part, i) => { part.visible = i < count; }); paint.opacity = PLACE_DRAWING.ink * strength;for(const material of inks.values())material.opacity=PLACE_DRAWING.ink*strength; layer.changed(); },
+    remove() { layer.remove(); for (const geometry of [...geometries,...rodGeometry]) geometry.dispose(); }
+  };
 }

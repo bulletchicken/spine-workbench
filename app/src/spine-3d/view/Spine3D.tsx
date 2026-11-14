@@ -22,7 +22,7 @@ import type { DrawnSpine } from '../scene/drawn-spine';
 import type { Pointed } from '../scene/pointed';
 import type { FilmPixels } from '../scene/film-wall';
 import { type HandTurning, attachHandTurning } from '../scene/hand-turning';
-import { modelSpine } from '../scene/spine-model';
+import { modelSpine, type SpineModel } from '../scene/spine-model';
 import { type FilmName, type Stage, makeStage } from '../scene/stage';
 import './Spine3D.css';
 
@@ -38,6 +38,8 @@ export interface Spine3DHandle {
   stage(): Stage | null;
   /** The spine drawn from `fit`. `null` until there is one. */
   spine(): DrawnSpine | null;
+  /** An unlit, non-pointable drawing sharing the fitted buffers. Its caller removes it. */
+  addFlatSpine(): DrawnSpine | null;
   /** Move the camera to a named view or to any view: over the design's 600 ms, or at once with `animate: false`. */
   lookFrom(view: ViewName | View, options?: { animate?: boolean }): void;
   /** Every bone solid, whole and in its fitted place, at once. */
@@ -102,6 +104,7 @@ export function Spine3D({
   const canvas = useRef<HTMLCanvasElement>(null);
   const stage = useRef<Stage | null>(null);
   const spine = useRef<DrawnSpine | null>(null);
+  const fittedModel = useRef<SpineModel | null>(null);
   const hand = useRef<HandTurning | null>(null);
   const moving = useRef<(() => void) | null>(null);
   const pointed = useRef<{ spine: DrawnSpine; level: Level } | null>(null);
@@ -171,13 +174,13 @@ export function Spine3D({
   useLayoutEffect(() => {
     const on = stage.current;
     if (on === null) return undefined;
-    const model = modelSpine(fit, bones);
+    const model = modelSpine(fit, bones); fittedModel.current=model;
     const drawn = on.addSpine(model);
     spine.current = drawn;
     told.current.onReady?.({ stage: on, spine: drawn });
     return () => {
       told.current.onReady?.(null);
-      spine.current = null;
+      spine.current = null; fittedModel.current=null;
       drawn.remove();
       model.dispose();
     };
@@ -256,6 +259,10 @@ export function Spine3D({
     () => ({
       stage: () => stage.current,
       spine: () => spine.current,
+      addFlatSpine: () => {
+        const on=stage.current,model=fittedModel.current,source=spine.current;
+        return on===null||model===null||source===null?null:on.addSpine(model,{shapesFrom:source,flat:true});
+      },
       lookFrom: (to, options) => {
         lookFrom.current(to, options);
       },

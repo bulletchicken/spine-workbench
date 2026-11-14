@@ -205,6 +205,24 @@ describe('the Place evidence ledger', () => {
     expect(added.sources.some((candidate) => source !== undefined && matches(candidate, source))).toBe(true);
   });
 
+  it('keeps the stiffness reference assumptions beside the published force range', () => {
+    const added = entry('place-bench-joint-springs-stiffness-scale');
+    expect(added.sources.map((source) => source.pmid)).toEqual(['14977223', '23273729', '22321374']);
+    expect(added.publishedNumber).toContain('reference rod diameter: 6 mm [own-inference; salmingo-2012]');
+    expect(added.publishedNumber).toContain('three-patient report and is assumed for the six patients');
+    expect(added.publishedNumber).toContain('largest screw force, 192 to 439 N across six patients');
+    expect(added.publishedNumber).toContain('as if all of it came from stiffness');
+    expect(added.publishedNumber).toContain('six patients are few');
+    expect(added.publishedNumber).toContain('summed forces spread by a factor of 3.1');
+    expect(added.publishedNumber).toContain('held rigid, before springback, so the rod chosen does not change them');
+    expect(added.publishedNumber).toContain('published forces come from rods after they flexed');
+    expect(added.publishedNumber).toContain('3.4 at scale 1, more than the published 2.29');
+    expect(added.publishedNumber).toContain('can still pass 439 N');
+    expect(added.publishedNumber).not.toMatch(/widest|per patient/);
+    expect(added.population).toContain('Sample: 6');
+    expect(added.population).toContain('Sample: 3');
+  });
+
   it('keeps the corrected axis, strength and exclusion distinctions beside the copied numbers', () => {
     const springs = entry('place-bench-joint-springs-t1-2-to-l4-5-intact').publishedNumber;
     expect(springs).toContain('moment 1: 448 N·mm/deg');

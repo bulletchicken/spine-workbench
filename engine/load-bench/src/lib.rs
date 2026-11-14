@@ -30,6 +30,10 @@
 
 #![forbid(unsafe_code)]
 
+// The same mechanical fixtures are used by unit and integration tests.
+#[cfg(test)]
+extern crate self as load_bench;
+
 pub mod anchor_demand;
 pub mod batch;
 pub mod chain;

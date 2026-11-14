@@ -32,7 +32,7 @@ export function Segmented({ label, options, chosen, onChoose, className }: Segme
       aria-label={label}
       data-none={at < 0 ? '' : undefined}
       // Where the thumb sits is geometry, so it is a number written on the element.
-      style={{ '--at': Math.max(at, 0) } as CSSProperties}
+      style={{ '--at': Math.max(at, 0), '--options': options.length } as CSSProperties}
     >
       {options.map((option) => (
         <button

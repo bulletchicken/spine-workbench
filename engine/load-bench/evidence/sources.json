@@ -1253,6 +1253,50 @@
       "notes": "Bibliographic record confirmed; numbers not independently checked. Confirming the record does not change the read status.",
       "pmcid": null,
       "recordNote": "bibliographic record only"
+    },
+    {
+      "key": "salmingo-2012",
+      "citation": {
+        "authors": "Salmingo RA et al.",
+        "year": 2012,
+        "title": null,
+        "journal": null,
+        "volume": null,
+        "issue": null,
+        "pages": null
+      },
+      "pmid": "22321374",
+      "doi": null,
+      "pmcid": null,
+      "recordNote": null,
+      "read": "secondary",
+      "n": "3",
+      "population": "Scoliosis correction patients with 6 mm titanium-alloy rods; earlier three-patient report from the same group as the six-patient report.",
+      "label": "peer-reviewed",
+      "url": null,
+      "notes": "The 6 mm titanium-alloy rod is recorded for this earlier three-patient report and is assumed for the six-patient comparison in Salmingo 2013 (PMID 23273729). Only the authors' group, year, PMID, sample and rod are recorded here; no abstract or full-text reading is claimed. Other bibliographic fields and the publication locator remain absent."
+    },
+    {
+      "key": "salmingo-2013",
+      "citation": {
+        "authors": "Salmingo RA et al.",
+        "year": 2013,
+        "title": null,
+        "journal": "Clin Biomech",
+        "volume": "28",
+        "issue": null,
+        "pages": "122"
+      },
+      "pmid": "23273729",
+      "doi": null,
+      "pmcid": null,
+      "recordNote": null,
+      "read": "full-text",
+      "n": "6",
+      "population": "Six scoliosis correction patients; 6 mm titanium-alloy rods are assumed from the same group's earlier three-patient report, Salmingo 2012 (PMID 22321374), rather than recorded for these six.",
+      "label": "peer-reviewed",
+      "url": null,
+      "notes": "Supplied full author-manuscript reading: the largest screw force, 192 to 439 N across six patients, was worked back from rod deformation. The 6 mm titanium-alloy rod is recorded for the same group's earlier three-patient report (Salmingo 2012, PMID 22321374) and is assumed for the six. Full bibliographic metadata and publication locator are not recorded. These forces calibrate the assumed solver scale; they are not measurements of this child."
     }
   ]
 }

@@ -123,6 +123,9 @@ A registration includes its children unless a child has its own registration.
 against the other layer objects. The owner frees its geometries; the layer
 frees its supplied materials. `remove()` is idempotent.
 
+`layer.unpointable(object)` releases an old part identity before its object is removed.
+Disposed geometries also leave the layer’s resource watch immediately.
+
 Per-bone `strength` veils the bones alone. Whole-spine
 `setSpine({ strength })` fades bones and layers together. The two supplied
 material kinds support ordinary mesh geometry; arbitrary shaders, skinning,
@@ -143,6 +146,8 @@ to 0–1. It changes drawing poses without changing `about(level)` or the fit.
 `settle()` returns to the fitted poses. Current bounds and landmarks follow
 the sampled poses.
 
+`handle.addFlatSpine()` gives a screen a flat drawing from the view’s existing model,
+without shaping the bones again; its caller removes it. At the stage level,
 `stage.addSpine(model, { shapesFrom: source, flat: true })` shares the
 source's shaped bone and cage buffers after checking dimensions and levels.
 Pass the same model to avoid shaping anything twice. Shared geometry stays

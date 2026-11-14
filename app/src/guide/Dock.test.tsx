@@ -176,3 +176,17 @@ describe('the dock', () => {
     expect(press).toHaveBeenCalledTimes(1);
   });
 });
+
+it('keeps focus on the active load controls as their slots change',()=>{
+  const page=putOnThePage(<Dock spec={{scene:'place',sentence:'Placed',focus:'primary',primary:{label:'Put it under load',press:nothing}}}/>);
+  expect(document.activeElement?.textContent).toBe('Put it under load');
+  page.show(<Dock spec={{scene:'place',sentence:'Loading',focus:'quiet',quiet:{label:'Stop',press:nothing}}}/>);
+  expect(document.activeElement?.textContent).toBe('Stop');
+  page.show(<Dock spec={{scene:'place',sentence:'Loaded',focus:'chosen-stop',stops:{chosen:'rods-in',choose:nothing}}}/>);
+  expect(document.activeElement?.textContent).toBe('Rods in');
+  page.show(<Dock spec={{scene:'place',sentence:'Failed',focus:'primary',primary:{label:'Try again',press:nothing},quiet:{label:'Back to the placement',press:nothing}}}/>);
+  expect(document.activeElement?.textContent).toBe('Try again');
+  focusOn(find('.scene.on > .button'));
+  page.show(<Dock spec={{scene:'place',sentence:'Placed',focus:'primary',primary:{label:'Put it under load',press:nothing}}}/>);
+  expect(document.activeElement?.textContent).toBe('Put it under load');
+});

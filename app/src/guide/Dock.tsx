@@ -1,7 +1,8 @@
-import { useEffect, useState, type CSSProperties } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
+import { LevelWords } from '@/building-blocks/LevelWords';
 import { Button } from '@/building-blocks/Button';
 import { Segmented } from '@/building-blocks/Segmented';
-import { PLACE_WORDS } from '@/words/place';
+import { LOAD_STOPS, SHOWN_LOAD_STOPS, PLACE_LOAD_WORDS, PLACE_WORDS } from '@/words/place';
 import { THREE_WORDS } from '@/words/three';
 import { SHELL_WORDS } from '@/words/shell';
 import type { DockHelper, DockScene, DockSpec } from './dock-spec';
@@ -55,10 +56,10 @@ function Helper({ helper, sentence, on }: { helper: DockHelper; sentence: string
       {words !== '' && (
         <span key={words} data-fresh="">
           {helper.kind === 'words'
-            ? helper.words.map((part, at) => typeof part === 'string' ? part : (
+            ? helper.words.map((part, at) => typeof part === 'string' ? <LevelWords key={at}>{part}</LevelWords> : (
               <button key={at} type="button" className="link" onClick={on ? part.press : undefined}>{part.link}</button>
             ))
-            : words}
+            : <LevelWords>{words}</LevelWords>}
         </span>
       )}
     </>
@@ -70,16 +71,20 @@ function Scene({ name, spec }: { name: DockScene; spec: DockSpec | null }) {
   const [last, setLast] = useState(spec);
   if (spec !== null && last !== spec) setLast(spec);
   const shown = spec ?? last;
-  const on = spec !== null;
+  const on = spec !== null, root=useRef<HTMLElement>(null), focus=shown?.focus;
+  useLayoutEffect(()=>{
+    if(!on||focus===undefined)return;
+    root.current?.querySelector<HTMLElement>(focus==='chosen-stop'?'.load-stops [aria-current="true"]':focus==='primary'?'.primary':'.button')?.focus();
+  },[on,focus,shown?.primary?.label,shown?.quiet?.label]);
   return (
-    <section className={on ? 'scene on' : 'scene'} data-scene={name} aria-hidden={on ? undefined : true} inert={!on}>
+    <section ref={root} className={on ? 'scene on' : 'scene'} data-scene={name} aria-hidden={on ? undefined : true} inert={!on}>
       {shown !== null && (
         <>
           <div className="say">
-            <h2><span key={shown.sentence} data-fresh="">{shown.sentence}</span></h2>
+            <h2><span key={shown.sentence} data-fresh=""><LevelWords>{shown.sentence}</LevelWords></span></h2>
             {shown.helper !== undefined && <p><Helper helper={shown.helper} sentence={shown.sentence} on={on} /></p>}
             {shown.small !== undefined && <p className="dock-small">{shown.small}</p>}
-            {shown.review !== undefined && <div className="place-review glass"><span className="num">{shown.review.count}</span><h3>{shown.review.label}</h3>{shown.review.sentences.map((sentence) => <p key={sentence}>{sentence}</p>)}{shown.review.details?.map((detail) => <details key={detail.summary}><summary>{detail.summary}</summary><ul>{detail.rows.map((row) => <li key={row}>{row}</li>)}</ul></details>)}</div>}
+            {shown.review !== undefined && <div className="place-review"><span className="num">{shown.review.count}</span><h3><LevelWords>{shown.review.label}</LevelWords></h3>{shown.review.sentences.map((sentence) => <p key={sentence}><LevelWords>{sentence}</LevelWords></p>)}{shown.review.details?.map((detail) => <details key={detail.summary}><summary>{detail.summary}</summary><ul>{detail.rows.map((row) => <li key={row}><LevelWords>{row}</LevelWords></li>)}</ul></details>)}</div>}
           </div>
           {shown.more !== undefined && <Button look="text" aria-expanded={shown.more.expanded} aria-controls={shown.more.controls} {...(on ? { onPress: shown.more.press } : {})}>{shown.more.label}</Button>}
           {shown.quiet !== undefined && <Button look="text" aria-expanded={shown.quiet.expanded} aria-controls={shown.quiet.controls} {...(on ? { onPress: shown.quiet.press } : {})}>{shown.quiet.label}</Button>}
@@ -87,6 +92,7 @@ function Scene({ name, spec }: { name: DockScene; spec: DockSpec | null }) {
           {shown.views !== undefined && <Segmented className="views" label={THREE_WORDS.view} chosen={shown.views.chosen} options={[
             { id: 'front', label: THREE_WORDS.frontView }, { id: 'side', label: THREE_WORDS.sideView }, { id: 'top', label: THREE_WORDS.topView }, ...(shown.views.back === true ? [{ id: 'back', label: PLACE_WORDS.back }] : []),
           ]} onChoose={(name) => { if (on && (name === 'front' || name === 'side' || name === 'top' || name === 'back')) shown.views?.choose(name); }} />}
+          {shown.stops !== undefined && <Segmented className="load-stops" label={PLACE_LOAD_WORDS.stops} chosen={shown.stops.chosen} options={SHOWN_LOAD_STOPS.map((id)=>({id,label:LOAD_STOPS[id]}))} onChoose={(name)=>{if(on && SHOWN_LOAD_STOPS.some((stop)=>stop===name))shown.stops?.choose(name as keyof typeof LOAD_STOPS);}} />}
           {shown.primary !== undefined && (
             <LitButton label={shown.primary.label} disabled={shown.primary.disabled} asleep={!on} onPress={shown.primary.press} />
           )}
