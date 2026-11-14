@@ -3,10 +3,15 @@
 pub mod decode;
 pub mod intake;
 pub mod network;
+mod pass;
 pub mod reading;
 pub mod resize;
+mod run;
 pub mod table;
+mod to_marks;
 pub mod weights;
+pub use pass::SidePass;
+pub use run::find_on_side_film;
 
 /// Whether the optional side packet was included in this build.
 pub fn available() -> bool {

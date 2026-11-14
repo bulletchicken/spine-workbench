@@ -18,6 +18,15 @@ pub fn run(args: &PassArgs) -> Outcome {
     if args.films.is_empty() || args.films.len() > 4 {
         return Err("the pass needs one to four films".into());
     }
+    let has_side = args.films.iter().any(|film| film.kind == FilmKind::Side);
+    if !has_side && (args.side_finder.is_some() || args.side_facing.is_some()) {
+        return Err("side-specific flags require side=PATH".into());
+    }
+    if matches!(args.side_finder, Some(crate::FrontFinder::Trained)) && args.side_facing.is_none() {
+        return Err(
+            "pass-facing-required: --side-finder trained requires --side-facing left|right".into(),
+        );
+    }
     let mut kinds = BTreeSet::new();
     let mut decoded = Vec::with_capacity(args.films.len());
     let mut films = Vec::with_capacity(args.films.len());
@@ -27,10 +36,19 @@ pub fn run(args: &PassArgs) -> Outcome {
         }
         let bytes = fs::read(&input.path).map_err(|_| "cannot read an input film")?;
         let pixels = film_reader::read_film(&bytes, input.kind)?;
-        let geometry = FilmGeometry {
+        let mut geometry = FilmGeometry {
             quarter_turns: pixels.facts.exif_quarter_turns.unwrap_or_default(),
             ..FilmGeometry::UNKNOWN
         };
+        if input.kind == FilmKind::Side
+            && let Some(facing) = args.side_facing
+        {
+            geometry.image_right = Some(match facing {
+                crate::SideFacing::Left => shapes::film_geometry::ImageRight::Posterior,
+                crate::SideFacing::Right => shapes::film_geometry::ImageRight::Anterior,
+            });
+            geometry.confirmed.facing = true;
+        }
         films.push(record(&pixels, geometry));
         decoded.push(pixels);
     }
@@ -54,41 +72,29 @@ pub fn run(args: &PassArgs) -> Outcome {
             crate::FrontFinder::Trained => FrontFinder::Trained,
             crate::FrontFinder::HandBuilt => FrontFinder::HandBuilt,
         },
-        side_finder: shapes::SideFinder::HandBuilt,
+        side_finder: match args.side_finder {
+            Some(crate::FrontFinder::Trained) => shapes::SideFinder::Trained,
+            _ => shapes::SideFinder::HandBuilt,
+        },
     };
     let answer = conduct_auto_pass(&input, &decoded)?;
     println!("{}", serde_json::to_string_pretty(&answer)?);
     Ok(())
 }
 
-/// The whole auto pass, routed on `input.front_finder` the way the app's
-/// conductor (`app/src/engine-room/crew/auto-pass-conductor.ts`) routes it;
-/// this is its native stand-in.
-///
-/// With the hand-built finder, or no front film, every film goes through
-/// the hand-built stages, exactly as `auto_pass::run::auto_pass` runs them.
-/// With the trained finder, the front film goes to the trained finder on
-/// its own, and the hand-built stages run on the films that are left (not
-/// at all when there are none). The answer keeps the input's film order;
-/// vertebra ids count up from `first_vertebra_id` film after film in that
-/// order, none reused; each warning comes once, every film's own first, in
-/// film order, then the chain's. `two_films` comes only from the
-/// hand-built chain, which needs a front and a side film together, so it
-/// is always empty when the front film went to the trained finder.
+/// Route selected standing views to their trained finder and only the
+/// remaining films to the hand-built chain. Preserve film order and ids.
 pub(super) fn conduct_auto_pass(
     input: &AutoPassInput,
     decoded: &[DecodedFilm],
 ) -> Result<AutoPassResult, EngineError> {
-    let trained_front = match input.front_finder {
-        FrontFinder::Trained => input
-            .films
-            .iter()
-            .position(|film| film.kind == FilmKind::Front),
-        FrontFinder::HandBuilt => None,
+    let trained = |film: &Film| {
+        (film.kind == FilmKind::Front && input.front_finder == FrontFinder::Trained)
+            || (film.kind == FilmKind::Side && input.side_finder == shapes::SideFinder::Trained)
     };
-    let Some(trained_front) = trained_front else {
+    if !input.films.iter().any(trained) {
         return auto_pass::run::auto_pass(input, decoded);
-    };
+    }
     if decoded.len() != input.films.len() {
         return Err(EngineError::new(
             ErrorCode::EngineOutOfSync,
@@ -97,8 +103,8 @@ pub(super) fn conduct_auto_pass(
     }
     let mut film_results = Vec::new();
     let mut caches = Vec::new();
-    for (index, (image, film)) in decoded.iter().zip(&input.films).enumerate() {
-        if index != trained_front {
+    for (image, film) in decoded.iter().zip(&input.films) {
+        if !trained(film) {
             let (result, cache) = auto_pass::run::film_pass(image, film)?;
             film_results.push(result);
             caches.push(cache);
@@ -113,9 +119,13 @@ pub(super) fn conduct_auto_pass(
     let mut marks = Vec::with_capacity(input.films.len());
     let mut warnings: Vec<PassWarning> = Vec::new();
     let mut hand_built = film_results.iter().zip(&caches);
-    for (index, (image, film)) in decoded.iter().zip(&input.films).enumerate() {
-        let placed = if index == trained_front {
-            let found = trained_finder::run::find_on_front_film(image, film, next_id)?;
+    for (image, film) in decoded.iter().zip(&input.films) {
+        let placed = if trained(film) {
+            let found = if film.kind == FilmKind::Side {
+                trained_finder::side::find_on_side_film(image, film, next_id)?
+            } else {
+                trained_finder::run::find_on_front_film(image, film, next_id)?
+            };
             warnings.extend(found.warnings);
             found.marks
         } else {

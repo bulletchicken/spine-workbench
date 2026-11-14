@@ -15,3 +15,5 @@ pub mod shapes;
 pub mod spine_readings;
 pub mod toolbox;
 pub mod trained_finder;
+
+pub mod side_finder;

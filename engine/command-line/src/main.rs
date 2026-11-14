@@ -198,6 +198,12 @@ enum FrontFinder {
     HandBuilt,
 }
 
+#[derive(Clone, Copy, ValueEnum)]
+enum SideFacing {
+    Left,
+    Right,
+}
+
 #[derive(Args)]
 struct PassArgs {
     /// One to four films, each as KIND=PATH.
@@ -211,6 +217,12 @@ struct PassArgs {
     /// hand-built search.
     #[arg(long, value_enum, default_value_t = FrontFinder::HandBuilt)]
     front_finder: FrontFinder,
+    /// Which finder reads the side film.
+    #[arg(long, value_enum)]
+    side_finder: Option<FrontFinder>,
+    /// The side of the upright picture the patient faces.
+    #[arg(long, value_enum)]
+    side_facing: Option<SideFacing>,
 }
 
 #[derive(Args)]
