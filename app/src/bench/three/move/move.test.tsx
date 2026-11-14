@@ -1,0 +1,28 @@
+import { afterEach, expect, it, vi } from 'vitest';
+import type { Stage } from '@/spine-3d/scene/stage';
+import type { DrawnSpine } from '@/spine-3d/scene/drawn-spine';
+import { createMove } from './index';
+const steps = vi.hoisted(() => new Set<(dt: number) => void>());
+vi.mock('@/choreography/one-loop', () => ({ joinLoop: (step: (dt: number) => void) => { steps.add(step); return () => { steps.delete(step); }; } }));
+vi.mock('@/choreography/timing', () => ({ durationOf: () => 160 }));
+afterEach(() => { vi.unstubAllGlobals(); steps.clear(); document.body.replaceChildren(); });
+it('has one seekable loop, settles fully on a press and consumes the resulting tile click', () => {
+  vi.stubGlobal('matchMedia', () => ({ matches: false, addEventListener: () => undefined, removeEventListener: () => undefined }));
+  const host = document.createElement('div'), stageElement = document.createElement('main'), canvas = document.createElement('canvas');
+  host.append(canvas); document.body.append(host, stageElement);
+  const clicked = vi.fn(); const tile = document.createElement('button'); tile.onclick = clicked; stageElement.append(tile);
+  const view = { azimuth: 34, elevation: 14, perspective: 1, pxPerMm: [1, 1] as const, aim: [0, 0, 0] as const, aimAt: [300, 300] as const };
+  const stage = { view: () => view, namedView: () => view, setView: vi.fn(), film: () => null, drawNow: vi.fn() } as unknown as Stage;
+  const set = vi.fn(), setSpine = vi.fn();
+  const spine = { set, setSpine, levels: ['T1', 'L5'], about: () => ({ pose: { centre: [0, 0, 0] } }) } as unknown as DrawnSpine;
+  const finish = vi.fn(), done = vi.fn();
+  const move = createMove({ stage, spine, canvas, host, stageElement, films: { moment: 'three', compared: null, separation: 0, shown: () => null, opening: () => null, set: vi.fn(), finish }, done });
+  move.play(); move.play(); expect(steps.size).toBe(1);
+  for (const p of [.8, .2, 1, 0]) move.set(p);
+  tile.dispatchEvent(new MouseEvent('pointerdown', { bubbles: true, cancelable: true })); tile.click();
+  expect(clicked).not.toHaveBeenCalled(); expect(done).toHaveBeenCalledTimes(1); expect(finish).toHaveBeenCalledTimes(1);
+  expect(set).toHaveBeenLastCalledWith({ cage: 0, pose: 1, reveal: 1, fill: 1, strength: 1, tint: 0 });
+  expect(setSpine).toHaveBeenLastCalledWith(expect.objectContaining({ depth: 1, fill: 1, shadow: 1, scale: 1 }));
+  expect(steps.size).toBe(0); expect(host.hasAttribute('data-moving')).toBe(false);
+  move.dispose();
+});
