@@ -1,0 +1,1444 @@
+{
+  "rows": [
+    {
+      "key": "head-neck",
+      "usage": "bench",
+      "description": "Borrowed head+neck mass",
+      "notes": "As printed in Keenan2015 equations4/5,attributed there to Winter DA, Biomechanics and Motor Control of Human Movement,4th ed,John Wiley & Sons,2009. Textbook not opened;no memory-based substitution. Original cadaver population eight males aged61–83.",
+      "values": [
+        {
+          "term": "fraction",
+          "value": 0.081,
+          "unit": "fraction-of-body-weight",
+          "source": "winter-via-keenan-2015",
+          "section": "citation-audit-physics-tables.md §A/§B7, Keenan2015 equations4/5 (Winter attributed)",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "each-arm-hand",
+      "usage": "bench",
+      "description": "Borrowed each arm+hand mass",
+      "notes": "As printed in Keenan2015 equations4/5,attributed there to Winter DA, Biomechanics and Motor Control of Human Movement,4th ed,John Wiley & Sons,2009. Textbook not opened;no memory-based substitution. Original cadaver population eight males aged61–83. Applying arms overT1–T4 is own inference.",
+      "values": [
+        {
+          "term": "fraction",
+          "value": 0.056,
+          "unit": "fraction-of-body-weight",
+          "source": "winter-via-keenan-2015",
+          "section": "citation-audit-physics-tables.md §A/§B7, Keenan2015 equations4/5 (Winter attributed)",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "trunk-slice-endpoints",
+      "usage": "bench",
+      "description": "Note endpoints for linear slice prior",
+      "notes": "Own inference from Keenan 0.6/58.2 and 1.5/58.2; note supplies these rounded fractions. Interpolation is a later modelling choice; no intermediate cells here.",
+      "values": [
+        {
+          "term": "t1",
+          "value": 0.01,
+          "unit": "fraction-of-body-weight",
+          "source": "project-assumptions",
+          "section": "growth-and-loads.md §4 Formula and TableE,own inference",
+          "basis": "own-inference",
+          "approximate": true
+        },
+        {
+          "term": "l5",
+          "value": 0.026,
+          "unit": "fraction-of-body-weight",
+          "source": "project-assumptions",
+          "section": "growth-and-loads.md §4 Formula and TableE,own inference",
+          "basis": "own-inference",
+          "approximate": true
+        }
+      ]
+    },
+    {
+      "key": "pearsall-slices",
+      "usage": "input",
+      "description": "Adult published trunk slice endpoints",
+      "notes": "Adult T1 differs from rounded AIS 0.010 fraction; retained separately, not converted.",
+      "values": [
+        {
+          "term": "t1",
+          "value": 1.1,
+          "unit": "%",
+          "source": "pearsall-1996",
+          "section": "growth-and-loads.md §4",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "l5",
+          "value": 2.6,
+          "unit": "%",
+          "source": "pearsall-1996",
+          "section": "growth-and-loads.md §4",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "trunk-total",
+          "value": 41.6,
+          "unit": "%",
+          "source": "pearsall-1996",
+          "section": "growth-and-loads.md §4",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "t1-fraction",
+          "value": 0.011,
+          "unit": "fraction-of-body-weight",
+          "source": "pearsall-1996",
+          "section": "growth-and-loads.md TableE",
+          "basis": "published",
+          "approximate": true
+        },
+        {
+          "term": "trunk-total-rounded-fraction",
+          "value": 0.42,
+          "unit": "fraction-of-body-weight",
+          "source": "pearsall-1996",
+          "section": "growth-and-loads.md TableE",
+          "basis": "published",
+          "approximate": true
+        }
+      ]
+    },
+    {
+      "key": "keenan-slices",
+      "usage": "input",
+      "description": "AIS slice inputs",
+      "notes": "No full 17-level table in note.",
+      "values": [
+        {
+          "term": "t1",
+          "value": 0.6,
+          "unit": "kg",
+          "source": "keenan-2014",
+          "section": "growth-and-loads.md §4",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "l5",
+          "value": 1.5,
+          "unit": "kg",
+          "source": "keenan-2014",
+          "section": "growth-and-loads.md §4",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "body-mean",
+          "value": 58.2,
+          "unit": "kg",
+          "source": "keenan-2014",
+          "section": "growth-and-loads.md §4",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "body-sd",
+          "value": 11.6,
+          "unit": "kg",
+          "source": "keenan-2014",
+          "section": "growth-and-loads.md §4",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "trunk-total",
+          "value": 27.8,
+          "unit": "%",
+          "source": "keenan-2014",
+          "section": "growth-and-loads.md §4",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "trunk-total-sd",
+          "value": 0.5,
+          "unit": "%",
+          "source": "keenan-2014",
+          "section": "growth-and-loads.md §4",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "trunk-total-fraction",
+          "value": 0.278,
+          "unit": "fraction-of-body-weight",
+          "source": "keenan-2014",
+          "section": "growth-and-loads.md TableE",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "slice-offset",
+      "usage": "bench",
+      "description": "Own sagittal offset prior beside raw gravity-line distances",
+      "notes": "Published28mm(SD5.6)is an unsigned3D body-centre/gravity-line distance;7.6mm(SD1.6)is left lateral. Using28/5.6as sagittal anterior offset distribution is own inference. Frontal centroid at body centre ignores the published left lateralization and remains own choice.",
+      "values": [
+        {
+          "term": "mean",
+          "value": 28,
+          "unit": "mm",
+          "source": "project-assumptions",
+          "section": "citation-audit-physics-tables.md §B9;SYNTHESIS §3.4, own sagittal reuse",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "sd",
+          "value": 5.6,
+          "unit": "mm",
+          "source": "project-assumptions",
+          "section": "citation-audit-physics-tables.md §B9;SYNTHESIS §3.4, own sagittal reuse",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "distance-3d-mean",
+          "value": 28,
+          "unit": "mm",
+          "source": "gangnet-2003",
+          "section": "citation-audit-physics-tables.md §A/§B9, unsigned3D and left lateral distances",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "distance-3d-sd",
+          "value": 5.6,
+          "unit": "mm",
+          "source": "gangnet-2003",
+          "section": "citation-audit-physics-tables.md §A/§B9, unsigned3D and left lateral distances",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "left-lateral-mean",
+          "value": 7.6,
+          "unit": "mm",
+          "source": "gangnet-2003",
+          "section": "citation-audit-physics-tables.md §A/§B9, unsigned3D and left lateral distances",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "left-lateral-sd",
+          "value": 1.6,
+          "unit": "mm",
+          "source": "gangnet-2003",
+          "section": "citation-audit-physics-tables.md §A/§B9, unsigned3D and left lateral distances",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "walking",
+      "usage": "bench",
+      "description": "Walking/standing endpoints",
+      "notes": "DISAGREE in measured quantity:lower1.28is load on an internal spinal fixation device;upper1.71is resultant force on a vertebral body replacement. Both normalized to their own standing reference. Sampling between these quantities/populations is own inference.",
+      "values": [
+        {
+          "term": "lower",
+          "value": 1.28,
+          "unit": "ratio",
+          "source": "rohlmann-2002",
+          "section": "citation-audit-physics-tables.md §A/§B9, rohlmann-2002",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "upper",
+          "value": 1.71,
+          "unit": "ratio",
+          "source": "rohlmann-2014-gait",
+          "section": "citation-audit-physics-tables.md §A/§B9, rohlmann-2014-gait",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "walking-published-percent",
+      "usage": "input",
+      "description": "Walking measurements in published units",
+      "notes": "Fixator128%is internal fixation-device load;VBR171%is vertebral-body-replacement resultant force,each relative to standing. Not the same measured quantity.",
+      "values": [
+        {
+          "term": "fixator",
+          "value": 128,
+          "unit": "%",
+          "source": "rohlmann-2002",
+          "section": "citation-audit-physics-tables.md §A/§B9, rohlmann-2002",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "vbr",
+          "value": 171,
+          "unit": "%",
+          "source": "rohlmann-2014-gait",
+          "section": "citation-audit-physics-tables.md §A/§B9, rohlmann-2014-gait",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "bending-forward",
+      "usage": "bench",
+      "description": "Standing-flexed pressure ratio",
+      "notes": "Pressure ratio borrowed as passive standing-load multiplier; one adult; no independent flexed posture or muscle forces.",
+      "values": [
+        {
+          "term": "multiple",
+          "value": 2.2,
+          "unit": "ratio",
+          "source": "project-assumptions",
+          "section": "growth-and-loads.md TableF,ratio1.1/0.5",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "standing-flexed",
+          "value": 1.1,
+          "unit": "MPa",
+          "source": "wilke-1999",
+          "section": "growth-and-loads.md §5",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "standing-relaxed",
+          "value": 0.5,
+          "unit": "MPa",
+          "source": "wilke-1999",
+          "section": "growth-and-loads.md §5",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "weight-if-absent",
+      "usage": "bench",
+      "description": "AIS model cohort weight endpoints",
+      "notes": "Sampling missing body weight uniformly over cohort range is own inference.",
+      "values": [
+        {
+          "term": "lower",
+          "value": 29,
+          "unit": "kg",
+          "source": "schmid-2020-ais",
+          "section": "growth-and-loads.md §5",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "upper",
+          "value": 63,
+          "unit": "kg",
+          "source": "schmid-2020-ais",
+          "section": "growth-and-loads.md §5",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "steps-very-low",
+      "usage": "bench",
+      "description": "Adult activity band very-low",
+      "notes": "Bench uses literal adult endpoints; applying to adolescents is own inference. Open end remains absent.",
+      "values": [
+        {
+          "term": "upper-exclusive",
+          "value": 5000,
+          "unit": "steps/day",
+          "source": "tudor-locke-2008",
+          "section": "growth-and-loads.md §5 adult step bands",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "steps-low",
+      "usage": "bench",
+      "description": "Adult activity band low",
+      "notes": "Bench uses literal adult endpoints; applying to adolescents is own inference. Open end remains absent.",
+      "values": [
+        {
+          "term": "lower-inclusive",
+          "value": 5000,
+          "unit": "steps/day",
+          "source": "tudor-locke-2008",
+          "section": "growth-and-loads.md §5 adult step bands",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "upper-inclusive",
+          "value": 7499,
+          "unit": "steps/day",
+          "source": "tudor-locke-2008",
+          "section": "growth-and-loads.md §5 adult step bands",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "steps-typical",
+      "usage": "bench",
+      "description": "Adult activity band typical",
+      "notes": "Bench uses literal adult endpoints; applying to adolescents is own inference. Open end remains absent.",
+      "values": [
+        {
+          "term": "lower-inclusive",
+          "value": 7500,
+          "unit": "steps/day",
+          "source": "tudor-locke-2008",
+          "section": "growth-and-loads.md §5 adult step bands",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "upper-inclusive",
+          "value": 9999,
+          "unit": "steps/day",
+          "source": "tudor-locke-2008",
+          "section": "growth-and-loads.md §5 adult step bands",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "steps-active",
+      "usage": "bench",
+      "description": "Adult activity band active",
+      "notes": "Bench uses literal adult endpoints; applying to adolescents is own inference. Open end remains absent.",
+      "values": [
+        {
+          "term": "lower-inclusive",
+          "value": 10000,
+          "unit": "steps/day",
+          "source": "tudor-locke-2008",
+          "section": "growth-and-loads.md §5 adult step bands",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "upper-inclusive",
+          "value": 12499,
+          "unit": "steps/day",
+          "source": "tudor-locke-2008",
+          "section": "growth-and-loads.md §5 adult step bands",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "steps-very-active",
+      "usage": "bench",
+      "description": "Adult activity band very-active",
+      "notes": "Bench uses literal adult endpoints; applying to adolescents is own inference. Open end remains absent.",
+      "values": [
+        {
+          "term": "lower-inclusive",
+          "value": 12500,
+          "unit": "steps/day",
+          "source": "tudor-locke-2008",
+          "section": "growth-and-loads.md §5 adult step bands",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "rounded-steps-low",
+      "usage": "beside",
+      "description": "Rounded bands in inferred TableF",
+      "notes": "DISAGREE with exact adult passage; retained beside it. SYNTHESIS copies these rounded endpoints.",
+      "values": [
+        {
+          "term": "lower",
+          "value": 5000,
+          "unit": "steps/day",
+          "source": "project-assumptions",
+          "section": "growth-and-loads.md TableF",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "upper",
+          "value": 7500,
+          "unit": "steps/day",
+          "source": "project-assumptions",
+          "section": "growth-and-loads.md TableF",
+          "basis": "own-inference",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "rounded-steps-typical",
+      "usage": "beside",
+      "description": "Rounded bands in inferred TableF",
+      "notes": "DISAGREE with exact adult passage; retained beside it. SYNTHESIS copies these rounded endpoints.",
+      "values": [
+        {
+          "term": "lower",
+          "value": 7500,
+          "unit": "steps/day",
+          "source": "project-assumptions",
+          "section": "growth-and-loads.md TableF",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "upper",
+          "value": 10000,
+          "unit": "steps/day",
+          "source": "project-assumptions",
+          "section": "growth-and-loads.md TableF",
+          "basis": "own-inference",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "rounded-steps-active",
+      "usage": "beside",
+      "description": "Rounded bands in inferred TableF",
+      "notes": "DISAGREE with exact adult passage; retained beside it. SYNTHESIS copies these rounded endpoints.",
+      "values": [
+        {
+          "term": "lower",
+          "value": 10000,
+          "unit": "steps/day",
+          "source": "project-assumptions",
+          "section": "growth-and-loads.md TableF",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "upper",
+          "value": 12500,
+          "unit": "steps/day",
+          "source": "project-assumptions",
+          "section": "growth-and-loads.md TableF",
+          "basis": "own-inference",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "rounded-steps-very-active",
+      "usage": "beside",
+      "description": "Rounded bands in inferred TableF",
+      "notes": "DISAGREE with exact adult passage; retained beside it. SYNTHESIS copies these rounded endpoints.",
+      "values": [
+        {
+          "term": "lower-exclusive",
+          "value": 12500,
+          "unit": "steps/day",
+          "source": "project-assumptions",
+          "section": "growth-and-loads.md TableF",
+          "basis": "own-inference",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "steps-if-absent",
+      "usage": "bench",
+      "description": "Not-given activity prior",
+      "notes": "Own inference spanning adolescent-by-18 and childhood-boy endpoints, not a single population range.",
+      "values": [
+        {
+          "term": "lower",
+          "value": 8000,
+          "unit": "steps/day",
+          "source": "project-assumptions",
+          "section": "SYNTHESIS.md §3.4;growth-and-loads.md §5",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "upper",
+          "value": 16000,
+          "unit": "steps/day",
+          "source": "project-assumptions",
+          "section": "SYNTHESIS.md §3.4;growth-and-loads.md §5",
+          "basis": "own-inference",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "child-steps",
+      "usage": "input",
+      "description": "Children/adolescent reference ranges",
+      "notes": "Review ranges; no established youth activity cut points.",
+      "values": [
+        {
+          "term": "boys-lower",
+          "value": 12000,
+          "unit": "steps/day",
+          "source": "tudor-locke-2011",
+          "section": "growth-and-loads.md §5",
+          "basis": "published",
+          "approximate": true
+        },
+        {
+          "term": "boys-upper",
+          "value": 16000,
+          "unit": "steps/day",
+          "source": "tudor-locke-2011",
+          "section": "growth-and-loads.md §5",
+          "basis": "published",
+          "approximate": true
+        },
+        {
+          "term": "girls-lower",
+          "value": 10000,
+          "unit": "steps/day",
+          "source": "tudor-locke-2011",
+          "section": "growth-and-loads.md §5",
+          "basis": "published",
+          "approximate": true
+        },
+        {
+          "term": "girls-upper",
+          "value": 13000,
+          "unit": "steps/day",
+          "source": "tudor-locke-2011",
+          "section": "growth-and-loads.md §5",
+          "basis": "published",
+          "approximate": true
+        },
+        {
+          "term": "by-18-lower",
+          "value": 8000,
+          "unit": "steps/day",
+          "source": "tudor-locke-2011",
+          "section": "growth-and-loads.md §5",
+          "basis": "published",
+          "approximate": true
+        },
+        {
+          "term": "by-18-upper",
+          "value": 9000,
+          "unit": "steps/day",
+          "source": "tudor-locke-2011",
+          "section": "growth-and-loads.md §5",
+          "basis": "published",
+          "approximate": true
+        }
+      ]
+    },
+    {
+      "key": "year",
+      "usage": "bench",
+      "description": "Cycle-count assumption",
+      "notes": "One cycle per recorded step; cycles=steps/day×365; no fusion or relaxation law.",
+      "values": [
+        {
+          "term": "days",
+          "value": 365,
+          "unit": "days/year",
+          "source": "project-assumptions",
+          "section": "growth-and-loads.md §5 Inferences;SYNTHESIS.md §3.6",
+          "basis": "own-inference",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "tissue-density",
+      "usage": "input",
+      "description": "AIS gravity model tissue-density input",
+      "notes": "Model-assigned density, not measured from the films.",
+      "values": [
+        {
+          "term": "density",
+          "value": 1040,
+          "unit": "kg/m³",
+          "source": "keenan-2015",
+          "section": "growth-and-loads.md §4 and TableE",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "annual-cycles-very-low",
+      "usage": "beside",
+      "description": "Rounded activity-table annual walking cycles",
+      "notes": "Copy Table F rounded values in millions; not recomputed from endpoints. Open boundaries remain open.",
+      "values": [
+        {
+          "term": "upper-exclusive",
+          "value": 1.8,
+          "unit": "million cycles/year",
+          "source": "project-assumptions",
+          "section": "growth-and-loads.md TableF",
+          "basis": "own-inference",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "annual-cycles-low",
+      "usage": "beside",
+      "description": "Rounded activity-table annual walking cycles",
+      "notes": "Copy Table F rounded values in millions; not recomputed from endpoints. Open boundaries remain open.",
+      "values": [
+        {
+          "term": "lower",
+          "value": 1.8,
+          "unit": "million cycles/year",
+          "source": "project-assumptions",
+          "section": "growth-and-loads.md TableF",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "upper",
+          "value": 2.7,
+          "unit": "million cycles/year",
+          "source": "project-assumptions",
+          "section": "growth-and-loads.md TableF",
+          "basis": "own-inference",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "annual-cycles-typical",
+      "usage": "beside",
+      "description": "Rounded activity-table annual walking cycles",
+      "notes": "Copy Table F rounded values in millions; not recomputed from endpoints. Open boundaries remain open.",
+      "values": [
+        {
+          "term": "lower",
+          "value": 2.7,
+          "unit": "million cycles/year",
+          "source": "project-assumptions",
+          "section": "growth-and-loads.md TableF",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "upper",
+          "value": 3.7,
+          "unit": "million cycles/year",
+          "source": "project-assumptions",
+          "section": "growth-and-loads.md TableF",
+          "basis": "own-inference",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "annual-cycles-active",
+      "usage": "beside",
+      "description": "Rounded activity-table annual walking cycles",
+      "notes": "Copy Table F rounded values in millions; not recomputed from endpoints. Open boundaries remain open.",
+      "values": [
+        {
+          "term": "lower",
+          "value": 3.7,
+          "unit": "million cycles/year",
+          "source": "project-assumptions",
+          "section": "growth-and-loads.md TableF",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "upper",
+          "value": 4.6,
+          "unit": "million cycles/year",
+          "source": "project-assumptions",
+          "section": "growth-and-loads.md TableF",
+          "basis": "own-inference",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "annual-cycles-very-active",
+      "usage": "beside",
+      "description": "Rounded activity-table annual walking cycles",
+      "notes": "Copy Table F rounded values in millions; not recomputed from endpoints. Open boundaries remain open.",
+      "values": [
+        {
+          "term": "lower-exclusive",
+          "value": 4.6,
+          "unit": "million cycles/year",
+          "source": "project-assumptions",
+          "section": "growth-and-loads.md TableF",
+          "basis": "own-inference",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "lying-relaxed",
+      "usage": "beside",
+      "description": "Lying load comparison",
+      "notes": "Under 0.3 VBR standing load; pressure ratio is a separate one-adult inferred comparison.",
+      "values": [
+        {
+          "term": "multiple-upper-exclusive",
+          "value": 0.3,
+          "unit": "ratio",
+          "source": "rohlmann-2008-standing",
+          "section": "growth-and-loads.md TableF",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "pressure-ratio",
+          "value": 0.2,
+          "unit": "ratio",
+          "source": "project-assumptions",
+          "section": "growth-and-loads.md TableF,0.1/0.5",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "lying-pressure",
+          "value": 0.1,
+          "unit": "MPa",
+          "source": "wilke-1999",
+          "section": "growth-and-loads.md §5 and TableF",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "standing-pressure",
+          "value": 0.5,
+          "unit": "MPa",
+          "source": "wilke-1999",
+          "section": "growth-and-loads.md §5 and TableF",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "sitting-unsupported",
+      "usage": "beside",
+      "description": "Unsupported sitting pressure comparison",
+      "notes": "Note rounds pressure ratio to about 0.9; no new division.",
+      "values": [
+        {
+          "term": "multiple",
+          "value": 0.9,
+          "unit": "ratio",
+          "source": "project-assumptions",
+          "section": "growth-and-loads.md TableF",
+          "basis": "own-inference",
+          "approximate": true
+        },
+        {
+          "term": "sitting-pressure",
+          "value": 0.46,
+          "unit": "MPa",
+          "source": "wilke-1999",
+          "section": "growth-and-loads.md §5 and TableF",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "standing-pressure",
+          "value": 0.5,
+          "unit": "MPa",
+          "source": "wilke-1999",
+          "section": "growth-and-loads.md §5 and TableF",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "stairs",
+      "usage": "beside",
+      "description": "VBR stairs/standing ratios",
+      "notes": "Adult VBR population, not posterior rods.",
+      "values": [
+        {
+          "term": "down",
+          "value": 2.25,
+          "unit": "ratio",
+          "source": "rohlmann-2014-gait",
+          "section": "growth-and-loads.md TableF",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "up",
+          "value": 2.65,
+          "unit": "ratio",
+          "source": "rohlmann-2014-gait",
+          "section": "growth-and-loads.md TableF",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "lifting-round-back",
+      "usage": "beside",
+      "description": "Round-back20 kg lift pressure comparison",
+      "notes": "One adult pressure input, not a prescribed paediatric load.",
+      "values": [
+        {
+          "term": "multiple",
+          "value": 4.6,
+          "unit": "ratio",
+          "source": "project-assumptions",
+          "section": "growth-and-loads.md TableF",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "lifting-pressure",
+          "value": 2.3,
+          "unit": "MPa",
+          "source": "wilke-1999",
+          "section": "growth-and-loads.md §5 and TableF",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "standing-pressure",
+          "value": 0.5,
+          "unit": "MPa",
+          "source": "wilke-1999",
+          "section": "growth-and-loads.md §5 and TableF",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "weight",
+          "value": 20,
+          "unit": "kg",
+          "source": "wilke-1999",
+          "section": "growth-and-loads.md §5 and TableF",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "lifting-small-weights",
+      "usage": "beside",
+      "description": "VBR lifting small weights",
+      "notes": "Published as up to 5 times standing; no frequency inferred.",
+      "values": [
+        {
+          "term": "multiple-upper-inclusive",
+          "value": 5,
+          "unit": "ratio",
+          "source": "rohlmann-2013-lifting",
+          "section": "growth-and-loads.md TableF;outcomes-over-time.md TableD",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "backpack-10-percent",
+      "usage": "beside",
+      "description": "AIS model apical load with carried weight",
+      "notes": "Range spans carriage configurations; adult passive stiffness borrowed in AIS model.",
+      "values": [
+        {
+          "term": "body-weight",
+          "value": 10,
+          "unit": "%",
+          "source": "schmid-2020-ais",
+          "section": "growth-and-loads.md TableF",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "multiple-lower",
+          "value": 1.5,
+          "unit": "ratio",
+          "source": "schmid-2020-ais",
+          "section": "growth-and-loads.md TableF",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "multiple-upper",
+          "value": 1.62,
+          "unit": "ratio",
+          "source": "schmid-2020-ais",
+          "section": "growth-and-loads.md TableF",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "backpack-15-percent",
+      "usage": "beside",
+      "description": "AIS model apical load with carried weight",
+      "notes": "Range spans carriage configurations; adult passive stiffness borrowed in AIS model.",
+      "values": [
+        {
+          "term": "body-weight",
+          "value": 15,
+          "unit": "%",
+          "source": "schmid-2020-ais",
+          "section": "growth-and-loads.md TableF",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "multiple-lower",
+          "value": 1.77,
+          "unit": "ratio",
+          "source": "schmid-2020-ais",
+          "section": "growth-and-loads.md TableF",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "multiple-upper",
+          "value": 1.94,
+          "unit": "ratio",
+          "source": "schmid-2020-ais",
+          "section": "growth-and-loads.md TableF",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "backpack-20-percent",
+      "usage": "beside",
+      "description": "AIS model apical load with carried weight",
+      "notes": "Range spans carriage configurations; adult passive stiffness borrowed in AIS model.",
+      "values": [
+        {
+          "term": "body-weight",
+          "value": 20,
+          "unit": "%",
+          "source": "schmid-2020-ais",
+          "section": "growth-and-loads.md TableF",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "multiple-lower",
+          "value": 2.03,
+          "unit": "ratio",
+          "source": "schmid-2020-ais",
+          "section": "growth-and-loads.md TableF",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "multiple-upper",
+          "value": 2.28,
+          "unit": "ratio",
+          "source": "schmid-2020-ais",
+          "section": "growth-and-loads.md TableF",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "scoliosis-vs-straight",
+      "usage": "beside",
+      "description": "Standing model geometry comparison",
+      "notes": "Same-patient undeformed model reference, not activity/standing ratio.",
+      "values": [
+        {
+          "term": "at-apex",
+          "value": 1.1,
+          "unit": "ratio",
+          "source": "schmid-2020-ais",
+          "section": "growth-and-loads.md TableF",
+          "basis": "published",
+          "approximate": true
+        },
+        {
+          "term": "below-apex",
+          "value": 1.18,
+          "unit": "ratio",
+          "source": "schmid-2020-ais",
+          "section": "growth-and-loads.md TableF",
+          "basis": "published",
+          "approximate": true
+        }
+      ]
+    },
+    {
+      "key": "adolescent-mvpa",
+      "usage": "beside",
+      "description": "Adolescent steps associated with activity duration",
+      "notes": "Association with60 minutes moderate-to-vigorous activity, not a youth cut-point system.",
+      "values": [
+        {
+          "term": "lower",
+          "value": 10000,
+          "unit": "steps/day",
+          "source": "tudor-locke-2011",
+          "section": "growth-and-loads.md §5 and TableF",
+          "basis": "published",
+          "approximate": true
+        },
+        {
+          "term": "upper",
+          "value": 11700,
+          "unit": "steps/day",
+          "source": "tudor-locke-2011",
+          "section": "growth-and-loads.md §5 and TableF",
+          "basis": "published",
+          "approximate": true
+        },
+        {
+          "term": "duration",
+          "value": 60,
+          "unit": "min",
+          "source": "tudor-locke-2011",
+          "section": "growth-and-loads.md §5 and TableF",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "vbr-supine",
+      "usage": "beside",
+      "description": "VBR supine relaxed preload",
+      "notes": "Across adult patients, not standing multiples.",
+      "values": [
+        {
+          "term": "lower",
+          "value": 42,
+          "unit": "N",
+          "source": "rohlmann-2014-activities",
+          "section": "outcomes-over-time.md §7 and TableD",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "upper",
+          "value": 96,
+          "unit": "N",
+          "source": "rohlmann-2014-activities",
+          "section": "outcomes-over-time.md §7 and TableD",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "vbr-month-one",
+      "usage": "beside",
+      "description": "First-month VBR sitting and standing",
+      "notes": "Three patients; distinct from two-patient Spine2008source.",
+      "values": [
+        {
+          "term": "lower",
+          "value": 150,
+          "unit": "N",
+          "source": "rohlmann-2008-month-one",
+          "section": "outcomes-over-time.md §7 and TableD",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "upper",
+          "value": 450,
+          "unit": "N",
+          "source": "rohlmann-2008-month-one",
+          "section": "outcomes-over-time.md §7 and TableD",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "walking-body-weight",
+      "usage": "beside",
+      "description": "Mean VBR walking peak fraction",
+      "notes": "Fraction of body weight, not multiple of standing.",
+      "values": [
+        {
+          "term": "fraction",
+          "value": 0.39,
+          "unit": "fraction-of-body-weight",
+          "source": "damm-2017",
+          "section": "outcomes-over-time.md §7 and TableD",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "walking-with-walker",
+      "usage": "beside",
+      "description": "Walker load comparison",
+      "notes": "Separate implant populations; no combination.",
+      "values": [
+        {
+          "term": "vbr-multiple",
+          "value": 0.62,
+          "unit": "ratio",
+          "source": "rohlmann-2014-gait",
+          "section": "outcomes-over-time.md TableD",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "fixator-change",
+          "value": -25,
+          "unit": "%",
+          "source": "rohlmann-1997-walker",
+          "section": "outcomes-over-time.md §7 and TableD",
+          "basis": "published",
+          "approximate": true
+        }
+      ]
+    },
+    {
+      "key": "stand-sit-bend-twist",
+      "usage": "beside",
+      "description": "Adult telemetry combined activities",
+      "notes": "Fixator ratios 111–120%; VBRactivities include peaks strictly above 1200 N; threshold is not an upper bound.",
+      "values": [
+        {
+          "term": "fixator-lower",
+          "value": 1.11,
+          "unit": "ratio",
+          "source": "rohlmann-2002",
+          "section": "outcomes-over-time.md TableD",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "fixator-upper",
+          "value": 1.2,
+          "unit": "ratio",
+          "source": "rohlmann-2002",
+          "section": "outcomes-over-time.md TableD",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "vbr-threshold-exclusive",
+          "value": 1200,
+          "unit": "N",
+          "source": "rohlmann-2014-activities",
+          "section": "outcomes-over-time.md §7 and TableD",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "vbr-upper-body-flexion",
+      "usage": "beside",
+      "description": "VBR flexion absolute forces",
+      "notes": "About450 N at 53 degrees and565 N on return to upright; not a within-posture uncertainty interval.",
+      "values": [
+        {
+          "term": "lower",
+          "value": 450,
+          "unit": "N",
+          "source": "rohlmann-2015-flexion",
+          "section": "outcomes-over-time.md §7 and TableD",
+          "basis": "published",
+          "approximate": true
+        },
+        {
+          "term": "upper",
+          "value": 565,
+          "unit": "N",
+          "source": "rohlmann-2015-flexion",
+          "section": "outcomes-over-time.md §7 and TableD",
+          "basis": "published",
+          "approximate": true
+        }
+      ]
+    },
+    {
+      "key": "vbr-lifting-peak",
+      "usage": "beside",
+      "description": "VBR lifting peak",
+      "notes": "Peak lifting10.8 kg crate; growth note separately gives1649 N, not substituted.",
+      "values": [
+        {
+          "term": "peak",
+          "value": 1650,
+          "unit": "N",
+          "source": "rohlmann-2014-activities",
+          "section": "outcomes-over-time.md §7 and TableD",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "backpack-absolute",
+      "usage": "beside",
+      "description": "VBR10 kg backpack increment",
+      "notes": "Adult VBR telemetry, not Schmid AIS model ratios.",
+      "values": [
+        {
+          "term": "weight",
+          "value": 10,
+          "unit": "kg",
+          "source": "rohlmann-2014-carrying",
+          "section": "outcomes-over-time.md §7 and TableD",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "force-increment",
+          "value": 35,
+          "unit": "N",
+          "source": "rohlmann-2014-carrying",
+          "section": "outcomes-over-time.md §7 and TableD",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "cycling",
+      "usage": "beside",
+      "description": "VBR ergometer load increments",
+      "notes": "Increments from cycling power comparison, not total forces.",
+      "values": [
+        {
+          "term": "power-lower",
+          "value": 25,
+          "unit": "W",
+          "source": "rohlmann-2014-cycling",
+          "section": "outcomes-over-time.md §7 and TableD",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "power-upper",
+          "value": 85,
+          "unit": "W",
+          "source": "rohlmann-2014-cycling",
+          "section": "outcomes-over-time.md §7 and TableD",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "force-increment-lower",
+          "value": 73,
+          "unit": "N",
+          "source": "rohlmann-2014-cycling",
+          "section": "outcomes-over-time.md §7 and TableD",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "force-increment-upper",
+          "value": 225,
+          "unit": "N",
+          "source": "rohlmann-2014-cycling",
+          "section": "outcomes-over-time.md §7 and TableD",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "whole-body-vibration",
+      "usage": "beside",
+      "description": "VBR vibration comparison",
+      "notes": "Relative to same posture; still below walking peaks.",
+      "values": [
+        {
+          "term": "force-change",
+          "value": 24,
+          "unit": "%",
+          "source": "rohlmann-2014-vibration",
+          "section": "outcomes-over-time.md §7 and TableD",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "orthosis",
+      "usage": "beside",
+      "description": "VBR orthosis comparison",
+      "notes": "Across26 activities; wide variation.",
+      "values": [
+        {
+          "term": "average-force-change",
+          "value": -9,
+          "unit": "%",
+          "source": "rohlmann-2013-orthosis",
+          "section": "outcomes-over-time.md §7 and TableD",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "hyperextension-force-change",
+          "value": -19,
+          "unit": "%",
+          "source": "rohlmann-2013-orthosis",
+          "section": "outcomes-over-time.md §7 and TableD",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    }
+  ],
+  "missing": [
+    {
+      "key": "steps-very-low.lower",
+      "reason": "Adult band is open below 5000; no finite lower endpoint supplied."
+    },
+    {
+      "key": "steps-very-active.upper",
+      "reason": "Adult band is open above 12500; no finite upper endpoint supplied."
+    },
+    {
+      "key": "youth-activity-cut-points",
+      "reason": "Explicitly not established."
+    },
+    {
+      "key": "intermediate-trunk-slices",
+      "reason": "No per-levelT2–L4numbers in note; reader never interpolates."
+    },
+    {
+      "key": "muscle-share",
+      "reason": "No muscle share of gravity for this passive bench."
+    }
+  ]
+}

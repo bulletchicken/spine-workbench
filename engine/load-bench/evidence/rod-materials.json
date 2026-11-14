@@ -1,0 +1,982 @@
+{
+  "rows": [
+    {
+      "key": "titanium-alloy",
+      "usage": "beside",
+      "description": "Wrought Ti-6Al-4V",
+      "notes": "Prasad Table1 set. Bench uses E114GPa only from this row;strength pair retained beside the bench. Printed yield upper1103MPa exceeds tensile upper965MPa;do not sample these strengths. No Poisson ratio/shear modulus supplied for this Prasad set.",
+      "values": [
+        {
+          "term": "young-modulus",
+          "value": 114,
+          "unit": "GPa",
+          "source": "prasad-2017",
+          "section": "citation-audit-physics-tables.md §A, prasad-2017 Table1",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "yield-lower",
+          "value": 827,
+          "unit": "MPa",
+          "source": "prasad-2017",
+          "section": "citation-audit-physics-tables.md §A, prasad-2017 Table1",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "yield-upper",
+          "value": 1103,
+          "unit": "MPa",
+          "source": "prasad-2017",
+          "section": "citation-audit-physics-tables.md §A, prasad-2017 Table1",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "uts-lower",
+          "value": 860,
+          "unit": "MPa",
+          "source": "prasad-2017",
+          "section": "citation-audit-physics-tables.md §A, prasad-2017 Table1",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "uts-upper",
+          "value": 965,
+          "unit": "MPa",
+          "source": "prasad-2017",
+          "section": "citation-audit-physics-tables.md §A, prasad-2017 Table1",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "cobalt-chrome",
+      "usage": "bench",
+      "description": "CoCrMo",
+      "notes": "Prasad Table1 set. Bench uses this Table1 yield/ultimate pair at one common quantile,as DECISIONS Rod strengths states. No Poisson ratio/shear modulus supplied for this Prasad set.",
+      "values": [
+        {
+          "term": "young-modulus",
+          "value": 240,
+          "unit": "GPa",
+          "source": "prasad-2017",
+          "section": "citation-audit-physics-tables.md §A, prasad-2017 Table1",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "yield-lower",
+          "value": 500,
+          "unit": "MPa",
+          "source": "prasad-2017",
+          "section": "citation-audit-physics-tables.md §A, prasad-2017 Table1",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "yield-upper",
+          "value": 1500,
+          "unit": "MPa",
+          "source": "prasad-2017",
+          "section": "citation-audit-physics-tables.md §A, prasad-2017 Table1",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "uts-lower",
+          "value": 900,
+          "unit": "MPa",
+          "source": "prasad-2017",
+          "section": "citation-audit-physics-tables.md §A, prasad-2017 Table1",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "uts-upper",
+          "value": 1540,
+          "unit": "MPa",
+          "source": "prasad-2017",
+          "section": "citation-audit-physics-tables.md §A, prasad-2017 Table1",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "stainless-steel",
+      "usage": "bench",
+      "description": "Stainless steel316L (Table1;condition unspecified)",
+      "notes": "Prasad Table1 set. Bench uses this Table1 yield/ultimate pair at one common quantile,as DECISIONS Rod strengths states. No Poisson ratio/shear modulus supplied for this Prasad set.",
+      "values": [
+        {
+          "term": "young-modulus",
+          "value": 193,
+          "unit": "GPa",
+          "source": "prasad-2017",
+          "section": "citation-audit-physics-tables.md §A, prasad-2017 Table1",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "yield-lower",
+          "value": 170,
+          "unit": "MPa",
+          "source": "prasad-2017",
+          "section": "citation-audit-physics-tables.md §A, prasad-2017 Table1",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "yield-upper",
+          "value": 310,
+          "unit": "MPa",
+          "source": "prasad-2017",
+          "section": "citation-audit-physics-tables.md §A, prasad-2017 Table1",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "uts-lower",
+          "value": 540,
+          "unit": "MPa",
+          "source": "prasad-2017",
+          "section": "citation-audit-physics-tables.md §A, prasad-2017 Table1",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "uts-upper",
+          "value": 1000,
+          "unit": "MPa",
+          "source": "prasad-2017",
+          "section": "citation-audit-physics-tables.md §A, prasad-2017 Table1",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "prasad-body-text",
+      "usage": "beside",
+      "description": "Alternative body-text values",
+      "notes": "DISAGREE with Table1. Bench selects only the titanium strength pair,through titanium-alloy-body-text. CoCr uses Table1 strengths;Ti modulus stays114GPa from Table1.",
+      "values": [
+        {
+          "term": "ti-young-modulus",
+          "value": 115,
+          "unit": "GPa",
+          "source": "prasad-2017",
+          "section": "implant-mechanics.md §4 Material properties",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "cocr-yield-lower",
+          "value": 448,
+          "unit": "MPa",
+          "source": "prasad-2017",
+          "section": "implant-mechanics.md §4 Material properties",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "cocr-yield-upper",
+          "value": 1606,
+          "unit": "MPa",
+          "source": "prasad-2017",
+          "section": "implant-mechanics.md §4 Material properties",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "ti-yield-lower",
+          "value": 896,
+          "unit": "MPa",
+          "source": "prasad-2017",
+          "section": "citation-audit-physics-tables.md §A/§B1, Prasad body text",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "ti-yield-upper",
+          "value": 1034,
+          "unit": "MPa",
+          "source": "prasad-2017",
+          "section": "citation-audit-physics-tables.md §A/§B1, Prasad body text",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "ti-uts-lower",
+          "value": 965,
+          "unit": "MPa",
+          "source": "prasad-2017",
+          "section": "citation-audit-physics-tables.md §A/§B1, Prasad body text",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "ti-uts-upper",
+          "value": 1103,
+          "unit": "MPa",
+          "source": "prasad-2017",
+          "section": "citation-audit-physics-tables.md §A/§B1, Prasad body text",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "cocr-uts-lower",
+          "value": 655,
+          "unit": "MPa",
+          "source": "prasad-2017",
+          "section": "citation-audit-physics-tables.md §A/§B1, Prasad body text",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "cocr-uts-upper",
+          "value": 1896,
+          "unit": "MPa",
+          "source": "prasad-2017",
+          "section": "citation-audit-physics-tables.md §A/§B1, Prasad body text",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "tachi-cocr",
+      "usage": "beside",
+      "description": "CoCr modulus printed in planner",
+      "notes": "DISAGREE; probable error or deliberate stiffening; bench uses Prasad 240 GPa. Audit confirms Poisson ratio0.3 for this separate material set,not for Prasad.",
+      "values": [
+        {
+          "term": "young-modulus",
+          "value": 420,
+          "unit": "GPa",
+          "source": "tachi-2021",
+          "section": "published-simulators.md §1 Japanese planner",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "poisson-ratio",
+          "value": 0.3,
+          "unit": "ratio",
+          "source": "tachi-2021",
+          "section": "citation-audit-physics-tables.md §A, tachi-2021",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "little-ti",
+      "usage": "beside",
+      "description": "Ti material set in FE planner",
+      "notes": "DISAGREE; as printed; bench uses Prasad set. Audit confirms Poisson ratio0.3 for this separate material set,not for Prasad.",
+      "values": [
+        {
+          "term": "young-modulus",
+          "value": 108,
+          "unit": "GPa",
+          "source": "little-2013",
+          "section": "published-simulators.md §2d",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "yield",
+          "value": 390,
+          "unit": "MPa",
+          "source": "little-2013",
+          "section": "published-simulators.md §2d",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "poisson-ratio",
+          "value": 0.3,
+          "unit": "ratio",
+          "source": "little-2013",
+          "section": "citation-audit-physics-tables.md §A, little-2013",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "jeong-ti-eli",
+      "usage": "beside",
+      "description": "Ti-6Al-4V ELI F1717 FE set",
+      "notes": "Separate set; do not silently attach its Poisson ratio to Prasad E = 114.",
+      "values": [
+        {
+          "term": "young-modulus",
+          "value": 108,
+          "unit": "GPa",
+          "source": "jeong-2025",
+          "section": "fast-physics-methods.md TableB",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "poisson-ratio",
+          "value": 0.342,
+          "unit": "ratio",
+          "source": "jeong-2025",
+          "section": "fast-physics-methods.md TableB",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "yield",
+          "value": 864,
+          "unit": "MPa",
+          "source": "jeong-2025",
+          "section": "fast-physics-methods.md TableB",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "song-ti",
+      "usage": "beside",
+      "description": "Ti pedicle FE set",
+      "notes": "Separate set; not a Poisson ratio for Prasad material set.",
+      "values": [
+        {
+          "term": "young-modulus",
+          "value": 113,
+          "unit": "GPa",
+          "source": "song-2021",
+          "section": "fast-physics-methods.md §6 and TableB",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "poisson-ratio",
+          "value": 0.3,
+          "unit": "ratio",
+          "source": "song-2021",
+          "section": "fast-physics-methods.md TableB",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "textbook-cocr",
+      "usage": "beside",
+      "description": "Textbook modulus via review",
+      "notes": "DISAGREE; loose textbook bounds cited by full-text review; bench uses Prasad.",
+      "values": [
+        {
+          "term": "young-modulus-lower",
+          "value": 200,
+          "unit": "GPa",
+          "source": "ohrt-nissen-2018",
+          "section": "fast-physics-methods.md §7",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "young-modulus-upper",
+          "value": 300,
+          "unit": "GPa",
+          "source": "ohrt-nissen-2018",
+          "section": "fast-physics-methods.md §7",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "textbook-ti",
+      "usage": "beside",
+      "description": "Textbook modulus via review",
+      "notes": "DISAGREE; loose textbook bounds cited by full-text review; bench uses Prasad.",
+      "values": [
+        {
+          "term": "young-modulus-lower",
+          "value": 110,
+          "unit": "GPa",
+          "source": "ohrt-nissen-2018",
+          "section": "fast-physics-methods.md §7",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "young-modulus-upper",
+          "value": 116,
+          "unit": "GPa",
+          "source": "ohrt-nissen-2018",
+          "section": "fast-physics-methods.md §7",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "textbook-steel",
+      "usage": "beside",
+      "description": "Textbook modulus via review",
+      "notes": "DISAGREE; loose textbook bounds cited by full-text review; bench uses Prasad.",
+      "values": [
+        {
+          "term": "young-modulus",
+          "value": 190,
+          "unit": "GPa",
+          "source": "ohrt-nissen-2018",
+          "section": "fast-physics-methods.md §7",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "ti6al7nb",
+      "usage": "beside",
+      "description": "Ti6Al7Nb rod as modelled",
+      "notes": "Different alloy and model set from wrought Ti-6Al-4V; no UTS supplied.",
+      "values": [
+        {
+          "term": "young-modulus",
+          "value": 105,
+          "unit": "GPa",
+          "source": "abe-2015",
+          "section": "implant-mechanics.md §4 Material properties",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "hardening-modulus",
+          "value": 2.41,
+          "unit": "GPa",
+          "source": "abe-2015",
+          "section": "implant-mechanics.md §4 Material properties",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "yield",
+          "value": 900,
+          "unit": "MPa",
+          "source": "abe-2015",
+          "section": "implant-mechanics.md §4 Material properties",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "yield-strain",
+          "value": 0.00857,
+          "unit": "ratio",
+          "source": "abe-2015",
+          "section": "implant-mechanics.md §4 Material properties",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "ultra-high-strength-steel",
+      "usage": "beside",
+      "description": "Ultra-high-strength steel comparison",
+      "notes": "Copy both the published ksi and the note’s approximate MPa; reader does not convert them.",
+      "values": [
+        {
+          "term": "uts",
+          "value": 200,
+          "unit": "ksi",
+          "source": "cidambi-2012",
+          "section": "implant-mechanics.md §4 Material properties",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "approximate-uts",
+          "value": 1380,
+          "unit": "MPa",
+          "source": "project-assumptions",
+          "section": "implant-mechanics.md §4 Material properties, approximate conversion in note",
+          "basis": "own-inference",
+          "approximate": true
+        }
+      ]
+    },
+    {
+      "key": "section-table-reference",
+      "usage": "input",
+      "description": "Reference inputs for computed section Table A",
+      "notes": "Inputs beside copied own-inference outputs; I=pi*d^4/64; Z=pi*d^3/32; EI=E*I; My=yield*Z. No new calculation.",
+      "values": [
+        {
+          "term": "titanium-yield",
+          "value": 900,
+          "unit": "MPa",
+          "source": "project-assumptions",
+          "section": "implant-mechanics.md TableA header",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "young-modulus-titanium",
+          "value": 114,
+          "unit": "GPa",
+          "source": "prasad-2017",
+          "section": "implant-mechanics.md §4 and TableA header",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "young-modulus-cobalt-chrome",
+          "value": 240,
+          "unit": "GPa",
+          "source": "prasad-2017",
+          "section": "implant-mechanics.md §4 and TableA header",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "young-modulus-stainless-steel",
+          "value": 193,
+          "unit": "GPa",
+          "source": "prasad-2017",
+          "section": "implant-mechanics.md §4 and TableA header",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "section-at-4.75mm",
+      "usage": "input",
+      "description": "Copied rod section table at 4.75mm",
+      "notes": "All entries copied at note precision, not recomputed. Reference moduli/yield in section-table-reference.",
+      "values": [
+        {
+          "term": "rod-diameter",
+          "value": 4.75,
+          "unit": "mm",
+          "source": "project-assumptions",
+          "section": "implant-mechanics.md TableA",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "second-moment",
+          "value": 25.0,
+          "unit": "mm⁴",
+          "source": "project-assumptions",
+          "section": "implant-mechanics.md TableA",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "section-modulus",
+          "value": 10.5,
+          "unit": "mm³",
+          "source": "project-assumptions",
+          "section": "implant-mechanics.md TableA",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "ei-titanium",
+          "value": 2.85,
+          "unit": "N·m²",
+          "source": "project-assumptions",
+          "section": "implant-mechanics.md TableA",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "ei-cobalt-chrome",
+          "value": 6.0,
+          "unit": "N·m²",
+          "source": "project-assumptions",
+          "section": "implant-mechanics.md TableA",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "ei-stainless-steel",
+          "value": 4.82,
+          "unit": "N·m²",
+          "source": "project-assumptions",
+          "section": "implant-mechanics.md TableA",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "yield-moment-titanium-at-900MPa",
+          "value": 9.5,
+          "unit": "N·m",
+          "source": "project-assumptions",
+          "section": "implant-mechanics.md TableA",
+          "basis": "own-inference",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "section-at-5.0mm",
+      "usage": "input",
+      "description": "Copied rod section table at 5.0mm",
+      "notes": "All entries copied at note precision, not recomputed. Reference moduli/yield in section-table-reference.",
+      "values": [
+        {
+          "term": "rod-diameter",
+          "value": 5.0,
+          "unit": "mm",
+          "source": "project-assumptions",
+          "section": "implant-mechanics.md TableA",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "second-moment",
+          "value": 30.7,
+          "unit": "mm⁴",
+          "source": "project-assumptions",
+          "section": "implant-mechanics.md TableA",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "section-modulus",
+          "value": 12.3,
+          "unit": "mm³",
+          "source": "project-assumptions",
+          "section": "implant-mechanics.md TableA",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "ei-titanium",
+          "value": 3.5,
+          "unit": "N·m²",
+          "source": "project-assumptions",
+          "section": "implant-mechanics.md TableA",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "ei-cobalt-chrome",
+          "value": 7.36,
+          "unit": "N·m²",
+          "source": "project-assumptions",
+          "section": "implant-mechanics.md TableA",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "ei-stainless-steel",
+          "value": 5.92,
+          "unit": "N·m²",
+          "source": "project-assumptions",
+          "section": "implant-mechanics.md TableA",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "yield-moment-titanium-at-900MPa",
+          "value": 11.0,
+          "unit": "N·m",
+          "source": "project-assumptions",
+          "section": "implant-mechanics.md TableA",
+          "basis": "own-inference",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "section-at-5.5mm",
+      "usage": "input",
+      "description": "Copied rod section table at 5.5 mm",
+      "notes": "All entries copied at note precision, not recomputed. Reference moduli/yield in section-table-reference.",
+      "values": [
+        {
+          "term": "rod-diameter",
+          "value": 5.5,
+          "unit": "mm",
+          "source": "project-assumptions",
+          "section": "implant-mechanics.md TableA",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "second-moment",
+          "value": 44.9,
+          "unit": "mm⁴",
+          "source": "project-assumptions",
+          "section": "implant-mechanics.md TableA",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "section-modulus",
+          "value": 16.3,
+          "unit": "mm³",
+          "source": "project-assumptions",
+          "section": "implant-mechanics.md TableA",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "ei-titanium",
+          "value": 5.12,
+          "unit": "N·m²",
+          "source": "project-assumptions",
+          "section": "implant-mechanics.md TableA",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "ei-cobalt-chrome",
+          "value": 10.78,
+          "unit": "N·m²",
+          "source": "project-assumptions",
+          "section": "implant-mechanics.md TableA",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "ei-stainless-steel",
+          "value": 8.67,
+          "unit": "N·m²",
+          "source": "project-assumptions",
+          "section": "implant-mechanics.md TableA",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "yield-moment-titanium-at-900MPa",
+          "value": 14.7,
+          "unit": "N·m",
+          "source": "project-assumptions",
+          "section": "implant-mechanics.md TableA",
+          "basis": "own-inference",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "section-at-6.0mm",
+      "usage": "input",
+      "description": "Copied rod section table at 6.0mm",
+      "notes": "All entries copied at note precision, not recomputed. Reference moduli/yield in section-table-reference.",
+      "values": [
+        {
+          "term": "rod-diameter",
+          "value": 6.0,
+          "unit": "mm",
+          "source": "project-assumptions",
+          "section": "implant-mechanics.md TableA",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "second-moment",
+          "value": 63.6,
+          "unit": "mm⁴",
+          "source": "project-assumptions",
+          "section": "implant-mechanics.md TableA",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "section-modulus",
+          "value": 21.2,
+          "unit": "mm³",
+          "source": "project-assumptions",
+          "section": "implant-mechanics.md TableA",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "ei-titanium",
+          "value": 7.25,
+          "unit": "N·m²",
+          "source": "project-assumptions",
+          "section": "implant-mechanics.md TableA",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "ei-cobalt-chrome",
+          "value": 15.27,
+          "unit": "N·m²",
+          "source": "project-assumptions",
+          "section": "implant-mechanics.md TableA",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "ei-stainless-steel",
+          "value": 12.28,
+          "unit": "N·m²",
+          "source": "project-assumptions",
+          "section": "implant-mechanics.md TableA",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "yield-moment-titanium-at-900MPa",
+          "value": 19.1,
+          "unit": "N·m",
+          "source": "project-assumptions",
+          "section": "implant-mechanics.md TableA",
+          "basis": "own-inference",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "section-at-6.35mm",
+      "usage": "input",
+      "description": "Copied rod section table at 6.35mm",
+      "notes": "All entries copied at note precision, not recomputed. Reference moduli/yield in section-table-reference.",
+      "values": [
+        {
+          "term": "rod-diameter",
+          "value": 6.35,
+          "unit": "mm",
+          "source": "project-assumptions",
+          "section": "implant-mechanics.md TableA",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "second-moment",
+          "value": 79.8,
+          "unit": "mm⁴",
+          "source": "project-assumptions",
+          "section": "implant-mechanics.md TableA",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "section-modulus",
+          "value": 25.1,
+          "unit": "mm³",
+          "source": "project-assumptions",
+          "section": "implant-mechanics.md TableA",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "ei-titanium",
+          "value": 9.1,
+          "unit": "N·m²",
+          "source": "project-assumptions",
+          "section": "implant-mechanics.md TableA",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "ei-cobalt-chrome",
+          "value": 19.15,
+          "unit": "N·m²",
+          "source": "project-assumptions",
+          "section": "implant-mechanics.md TableA",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "ei-stainless-steel",
+          "value": 15.4,
+          "unit": "N·m²",
+          "source": "project-assumptions",
+          "section": "implant-mechanics.md TableA",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "yield-moment-titanium-at-900MPa",
+          "value": 22.6,
+          "unit": "N·m",
+          "source": "project-assumptions",
+          "section": "implant-mechanics.md TableA",
+          "basis": "own-inference",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "titanium-alloy-body-text",
+      "usage": "bench",
+      "description": "Chosen titanium yield/ultimate pair from Prasad body text",
+      "notes": "DECISIONS Rod strengths:use one common quantile for yield896–1034MPa and ultimate965–1103MPa. Young modulus remains114GPa from Table1;do not replace it by body-text115GPa implicitly.",
+      "values": [
+        {
+          "term": "yield-lower",
+          "value": 896,
+          "unit": "MPa",
+          "source": "prasad-2017",
+          "section": "citation-audit-physics-tables.md §A/§B1, Prasad body text",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "yield-upper",
+          "value": 1034,
+          "unit": "MPa",
+          "source": "prasad-2017",
+          "section": "citation-audit-physics-tables.md §A/§B1, Prasad body text",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "uts-lower",
+          "value": 965,
+          "unit": "MPa",
+          "source": "prasad-2017",
+          "section": "citation-audit-physics-tables.md §A/§B1, Prasad body text",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "uts-upper",
+          "value": 1103,
+          "unit": "MPa",
+          "source": "prasad-2017",
+          "section": "citation-audit-physics-tables.md §A/§B1, Prasad body text",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    }
+  ],
+  "missing": [
+    {
+      "key": "titanium-alloy.shear-modulus",
+      "reason": "No published shear modulus in named notes; no E/2(1+nu) inferred."
+    },
+    {
+      "key": "titanium-alloy.poisson-ratio",
+      "reason": "No Poisson ratio for the primary Prasad set; Ti alternatives retained separately."
+    },
+    {
+      "key": "cobalt-chrome.shear-modulus",
+      "reason": "No published shear modulus in named notes; no E/2(1+nu) inferred."
+    },
+    {
+      "key": "cobalt-chrome.poisson-ratio",
+      "reason": "No Poisson ratio for the primary Prasad set; Ti alternatives retained separately."
+    },
+    {
+      "key": "stainless-steel.shear-modulus",
+      "reason": "No published shear modulus in named notes; no E/2(1+nu) inferred."
+    },
+    {
+      "key": "stainless-steel.poisson-ratio",
+      "reason": "No Poisson ratio for the primary Prasad set; Ti alternatives retained separately."
+    }
+  ]
+}

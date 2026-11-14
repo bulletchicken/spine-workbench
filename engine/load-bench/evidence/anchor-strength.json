@@ -1,0 +1,876 @@
+{
+  "rows": [
+    {
+      "key": "thoracic-anatomic",
+      "usage": "bench",
+      "description": "Adult thoracic screw, anatomic",
+      "notes": "Lower endpoint of bench T1–T8 range; T1–T8 assignment is own inference, not reported levels.",
+      "values": [
+        {
+          "term": "mean",
+          "value": 481,
+          "unit": "N",
+          "source": "lehman-2003",
+          "section": "implant-mechanics.md §1 Trajectory and TableB",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "se",
+          "value": 54,
+          "unit": "N",
+          "source": "lehman-2003",
+          "section": "implant-mechanics.md §1 Trajectory and TableB",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "thoracic-straight-forward",
+      "usage": "bench",
+      "description": "Adult thoracic screw, straight-forward",
+      "notes": "Upper endpoint of bench T1–T8 range; paired trajectories, not paediatric strength.",
+      "values": [
+        {
+          "term": "mean",
+          "value": 611,
+          "unit": "N",
+          "source": "lehman-2003",
+          "section": "implant-mechanics.md §1 Trajectory and TableB",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "se",
+          "value": 50,
+          "unit": "N",
+          "source": "lehman-2003",
+          "section": "implant-mechanics.md §1 Trajectory and TableB",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "thoracic-sampling",
+      "usage": "bench",
+      "description": "Thoracic screw prior endpoints",
+      "notes": "Own inference: sample uniformly between trajectory means at T1–T8; do not combine SEs or scale by screw size.",
+      "values": [
+        {
+          "term": "lower",
+          "value": 481,
+          "unit": "N",
+          "source": "lehman-2003",
+          "section": "implant-mechanics.md TableB",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "upper",
+          "value": 611,
+          "unit": "N",
+          "source": "lehman-2003",
+          "section": "implant-mechanics.md TableB",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "t4-t8-screw",
+      "usage": "beside",
+      "description": "Adult thoracic reference",
+      "notes": "Published screw mean in the named adult thoracic region; no reference screw dimensions supplied.",
+      "values": [
+        {
+          "term": "mean",
+          "value": 531,
+          "unit": "N",
+          "source": "liljenqvist-2001",
+          "section": "implant-mechanics.md §1 Thoracic screws against hooks",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "t9-t12-screw",
+      "usage": "bench",
+      "description": "Adult thoracic reference",
+      "notes": "Published screw mean in the named adult thoracic region; no reference screw dimensions supplied.",
+      "values": [
+        {
+          "term": "mean",
+          "value": 807,
+          "unit": "N",
+          "source": "liljenqvist-2001",
+          "section": "implant-mechanics.md §1 Thoracic screws against hooks",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "t4-t8-pedicle-hook",
+      "usage": "bench",
+      "description": "Adult thoracic reference",
+      "notes": "Applying T4–T8 hook value at other levels is own borrowing, not a per-level hook table.",
+      "values": [
+        {
+          "term": "mean",
+          "value": 321,
+          "unit": "N",
+          "source": "liljenqvist-2001",
+          "section": "implant-mechanics.md §1 Thoracic screws against hooks",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "laminar-hook",
+      "usage": "beside",
+      "description": "T9–T12 supralaminar hook reference",
+      "notes": "Supralaminar hooks used atT9–T12;600N. Confirmed in audited abstract.",
+      "values": [
+        {
+          "term": "mean",
+          "value": 600,
+          "unit": "N",
+          "source": "liljenqvist-2001",
+          "section": "citation-audit-physics-tables.md §A/§B6, liljenqvist-2001",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "lumbar-screw",
+      "usage": "bench",
+      "description": "Cadaveric lumbar7.0mm screw reference",
+      "notes": "Abstract does not state adulthood. Bench maps normal value toL1–L5 as own inference;reference length absent;no diameter/length scaling.",
+      "values": [
+        {
+          "term": "normal",
+          "value": 1056.4,
+          "unit": "N",
+          "source": "soshi-1991",
+          "section": "citation-audit-physics-tables.md §A/§B3, soshi-1991 abstract",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "osteoporosis-grade-i",
+          "value": 495.6,
+          "unit": "N",
+          "source": "soshi-1991",
+          "section": "citation-audit-physics-tables.md §A/§B3, soshi-1991 abstract",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "osteoporosis-grade-ii",
+          "value": 269.5,
+          "unit": "N",
+          "source": "soshi-1991",
+          "section": "citation-audit-physics-tables.md §A/§B3, soshi-1991 abstract",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "diameter",
+          "value": 7.0,
+          "unit": "mm",
+          "source": "soshi-1991",
+          "section": "implant-mechanics.md §1 Bone density",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "bone-density-multipliers",
+      "usage": "input",
+      "description": "Own rounded osteoporosis/normal ratios",
+      "notes": "Own arithmetic:grade-i=495.6/1056.4 rounded to0.47;grade-ii=269.5/1056.4 rounded to0.26. Ratios not printed in abstract. Published inputs retained here beside the derived ratios.",
+      "values": [
+        {
+          "term": "grade-i",
+          "value": 0.47,
+          "unit": "ratio",
+          "source": "project-assumptions",
+          "section": "citation-audit-physics-tables.md §B3, own rounded ratios",
+          "basis": "own-inference",
+          "approximate": true
+        },
+        {
+          "term": "grade-ii",
+          "value": 0.26,
+          "unit": "ratio",
+          "source": "project-assumptions",
+          "section": "citation-audit-physics-tables.md §B3, own rounded ratios",
+          "basis": "own-inference",
+          "approximate": true
+        },
+        {
+          "term": "normal-force",
+          "value": 1056.4,
+          "unit": "N",
+          "source": "soshi-1991",
+          "section": "citation-audit-physics-tables.md §A/§B3, published ratio inputs",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "grade-i-force",
+          "value": 495.6,
+          "unit": "N",
+          "source": "soshi-1991",
+          "section": "citation-audit-physics-tables.md §A/§B3, published ratio inputs",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "grade-ii-force",
+          "value": 269.5,
+          "unit": "N",
+          "source": "soshi-1991",
+          "section": "citation-audit-physics-tables.md §A/§B3, published ratio inputs",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "bone-prior",
+      "usage": "bench",
+      "description": "Bone-factor mixture",
+      "notes": "Own inference: two thirds normal; one third uniform 0.47–1.0. Cadaveric grade I floor deliberately wide; AIS prevalence does not calibrate paediatric pull-out. Soshi abstract does not state adulthood.",
+      "values": [
+        {
+          "term": "normal-factor",
+          "value": 1.0,
+          "unit": "ratio",
+          "source": "project-assumptions",
+          "section": "SYNTHESIS.md §3.4 bone factor",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "normal-share-numerator",
+          "value": 2,
+          "unit": "ratio",
+          "source": "project-assumptions",
+          "section": "SYNTHESIS.md §3.4 bone factor",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "normal-share-denominator",
+          "value": 3,
+          "unit": "ratio",
+          "source": "project-assumptions",
+          "section": "SYNTHESIS.md §3.4 bone factor",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "low-share-numerator",
+          "value": 1,
+          "unit": "ratio",
+          "source": "project-assumptions",
+          "section": "SYNTHESIS.md §3.4 bone factor",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "low-share-denominator",
+          "value": 3,
+          "unit": "ratio",
+          "source": "project-assumptions",
+          "section": "SYNTHESIS.md §3.4 bone factor",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "low-lower",
+          "value": 0.47,
+          "unit": "ratio",
+          "source": "project-assumptions",
+          "section": "SYNTHESIS.md §3.4 bone factor",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "low-upper",
+          "value": 1.0,
+          "unit": "ratio",
+          "source": "project-assumptions",
+          "section": "SYNTHESIS.md §3.4 bone factor",
+          "basis": "own-inference",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "ais-bone-prevalence",
+      "usage": "input",
+      "description": "Inputs behind bone-factor mixture",
+      "notes": "Cheng below −1 SD; Yip femoral-neck Z ≤ −1; neither measures screw capacity.",
+      "values": [
+        {
+          "term": "low-abmd",
+          "value": 38,
+          "unit": "%",
+          "source": "cheng-2000",
+          "section": "growth-and-loads.md §3",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "low-vbmd",
+          "value": 36,
+          "unit": "%",
+          "source": "cheng-2000",
+          "section": "growth-and-loads.md §3",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "osteopenia",
+          "value": 32.9,
+          "unit": "%",
+          "source": "yip-2016",
+          "section": "growth-and-loads.md §3",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "osteopenic-count",
+          "value": 169,
+          "unit": "people",
+          "source": "yip-2016",
+          "section": "growth-and-loads.md §3",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "cohort-count",
+          "value": 513,
+          "unit": "people",
+          "source": "yip-2016",
+          "section": "growth-and-loads.md §3",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "immature-pig",
+      "usage": "beside",
+      "description": "Immature pig context",
+      "notes": "Context only; not a human paediatric reference. Full-text precise group-mean extremes419.9/1341.2N retained separately from rounded old note420/1341N.",
+      "values": [
+        {
+          "term": "lower",
+          "value": 420,
+          "unit": "N",
+          "source": "le-cann-2015",
+          "section": "implant-mechanics.md §1 Young bone and TableB",
+          "basis": "published",
+          "approximate": true
+        },
+        {
+          "term": "upper",
+          "value": 1341,
+          "unit": "N",
+          "source": "le-cann-2015",
+          "section": "implant-mechanics.md §1 Young bone and TableB",
+          "basis": "published",
+          "approximate": true
+        },
+        {
+          "term": "full-text-lower",
+          "value": 419.9,
+          "unit": "N",
+          "source": "le-cann-2015",
+          "section": "citation-audit-physics-tables.md §A, le-cann-2015",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "full-text-upper",
+          "value": 1341.2,
+          "unit": "N",
+          "source": "le-cann-2015",
+          "section": "citation-audit-physics-tables.md §A, le-cann-2015",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "six-week-pig",
+      "usage": "beside",
+      "description": "Pig pull-out three months after six-week surgery",
+      "notes": "Six weeks old at surgery;pull-out three months later;data from two animals (three operated,one lost),L1–L5. Original note rounded dilated mean379N;abstract precision378.7N retained separately.",
+      "values": [
+        {
+          "term": "mean",
+          "value": 397,
+          "unit": "N",
+          "source": "yilmaz-2009",
+          "section": "citation-audit-physics-tables.md §A/§B4, yilmaz-2009 abstract",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "sd",
+          "value": 80,
+          "unit": "N",
+          "source": "yilmaz-2009",
+          "section": "citation-audit-physics-tables.md §A/§B4, yilmaz-2009 abstract",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "dilated-mean",
+          "value": 379,
+          "unit": "N",
+          "source": "yilmaz-2009",
+          "section": "citation-audit-physics-tables.md §A/§B4, yilmaz-2009 abstract",
+          "basis": "published",
+          "approximate": true
+        },
+        {
+          "term": "dilated-sd",
+          "value": 73,
+          "unit": "N",
+          "source": "yilmaz-2009",
+          "section": "citation-audit-physics-tables.md §A/§B4, yilmaz-2009 abstract",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "diameter",
+          "value": 4.0,
+          "unit": "mm",
+          "source": "yilmaz-2009",
+          "section": "citation-audit-physics-tables.md §A/§B4, yilmaz-2009 abstract",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "length",
+          "value": 20,
+          "unit": "mm",
+          "source": "yilmaz-2009",
+          "section": "citation-audit-physics-tables.md §A/§B4, yilmaz-2009 abstract",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "dilated-mean-abstract",
+          "value": 378.7,
+          "unit": "N",
+          "source": "yilmaz-2009",
+          "section": "citation-audit-physics-tables.md §A, Yilmaz abstract precision",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "osteoporotic-lumbar",
+      "usage": "beside",
+      "description": "Pull-out after cyclic loading",
+      "notes": "Table B endpoints retain the associated uncertainties and intermediate depth from the supplying paragraph.",
+      "values": [
+        {
+          "term": "mid-body",
+          "value": 583,
+          "unit": "N",
+          "source": "karami-2015",
+          "section": "implant-mechanics.md TableB;§1 Insertion depth",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "mid-body-sd",
+          "value": 306,
+          "unit": "N",
+          "source": "karami-2015",
+          "section": "implant-mechanics.md TableB;§1 Insertion depth",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "pericortical",
+          "value": 713,
+          "unit": "N",
+          "source": "karami-2015",
+          "section": "implant-mechanics.md TableB;§1 Insertion depth",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "pericortical-sd",
+          "value": 321,
+          "unit": "N",
+          "source": "karami-2015",
+          "section": "implant-mechanics.md TableB;§1 Insertion depth",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "bicortical",
+          "value": 797,
+          "unit": "N",
+          "source": "karami-2015",
+          "section": "implant-mechanics.md TableB;§1 Insertion depth",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "bicortical-sd",
+          "value": 285,
+          "unit": "N",
+          "source": "karami-2015",
+          "section": "implant-mechanics.md TableB;§1 Insertion depth",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "immature-calf",
+      "usage": "beside",
+      "description": "Immature calf diameter comparison",
+      "notes": "DISAGREE in precision: table853 versus body852.5; preserve both, never round or substitute.",
+      "values": [
+        {
+          "term": "six-mm-table",
+          "value": 853,
+          "unit": "N",
+          "source": "sairyo-1998",
+          "section": "implant-mechanics.md TableB",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "seven-mm",
+          "value": 1015,
+          "unit": "N",
+          "source": "sairyo-1998",
+          "section": "implant-mechanics.md TableB",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "six-mm-body-text",
+          "value": 852.5,
+          "unit": "N",
+          "source": "sairyo-1998",
+          "section": "implant-mechanics.md §1 Young bone",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "smaller-diameter",
+          "value": 6,
+          "unit": "mm",
+          "source": "sairyo-1998",
+          "section": "implant-mechanics.md TableB and §1",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "larger-diameter",
+          "value": 7,
+          "unit": "mm",
+          "source": "sairyo-1998",
+          "section": "implant-mechanics.md TableB and §1",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "immature-calf-hubbing",
+      "usage": "beside",
+      "description": "Immature calf thoracic hubbing",
+      "notes": "Immature animal comparison, not human paediatric strength.",
+      "values": [
+        {
+          "term": "non-hubbed",
+          "value": 922,
+          "unit": "N",
+          "source": "kang-2014",
+          "section": "implant-mechanics.md TableB;§1 Young bone",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "non-hubbed-sd",
+          "value": 112,
+          "unit": "N",
+          "source": "kang-2014",
+          "section": "implant-mechanics.md TableB;§1 Young bone",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "hubbed",
+          "value": 747,
+          "unit": "N",
+          "source": "kang-2014",
+          "section": "implant-mechanics.md TableB;§1 Young bone",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "hubbed-sd",
+          "value": 197,
+          "unit": "N",
+          "source": "kang-2014",
+          "section": "implant-mechanics.md TableB;§1 Young bone",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "foam-reference",
+      "usage": "beside",
+      "description": "ASTM F1839 foam reference",
+      "notes": "Not cadaver bone; do not use as a patient strength.",
+      "values": [
+        {
+          "term": "lower",
+          "value": 1568,
+          "unit": "N",
+          "source": "tsai-2009",
+          "section": "implant-mechanics.md TableB",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "upper",
+          "value": 1904,
+          "unit": "N",
+          "source": "tsai-2009",
+          "section": "implant-mechanics.md TableB",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "diameter",
+          "value": 6,
+          "unit": "mm",
+          "source": "tsai-2009",
+          "section": "implant-mechanics.md TableB",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "engaged-length",
+          "value": 30,
+          "unit": "mm",
+          "source": "tsai-2009",
+          "section": "implant-mechanics.md TableB",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "trajectory-multiplier",
+      "usage": "beside",
+      "description": "Pull-out comparison multiplier",
+      "notes": "One study; multipliers are not established to stack.",
+      "values": [
+        {
+          "term": "straight-forward-over-anatomic",
+          "value": 1.27,
+          "unit": "ratio",
+          "source": "lehman-2003",
+          "section": "implant-mechanics.md TableC",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "depth-multiplier",
+      "usage": "beside",
+      "description": "Pull-out comparison multiplier",
+      "notes": "One study; multipliers are not established to stack.",
+      "values": [
+        {
+          "term": "bicortical-over-mid-body",
+          "value": 1.37,
+          "unit": "ratio",
+          "source": "karami-2015",
+          "section": "implant-mechanics.md TableC",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "hubbing-multiplier",
+      "usage": "beside",
+      "description": "Pull-out comparison multiplier",
+      "notes": "One study; multipliers are not established to stack.",
+      "values": [
+        {
+          "term": "factor",
+          "value": 0.81,
+          "unit": "ratio",
+          "source": "kang-2014",
+          "section": "implant-mechanics.md TableC",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "direct-rotation-multiplier",
+      "usage": "beside",
+      "description": "Pull-out comparison multiplier",
+      "notes": "One study; multipliers are not established to stack.",
+      "values": [
+        {
+          "term": "factor",
+          "value": 0.65,
+          "unit": "ratio",
+          "source": "sariyilmaz-2021",
+          "section": "implant-mechanics.md TableC",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "diameter-multiplier",
+      "usage": "beside",
+      "description": "Diameter increment comparison",
+      "notes": "Range joins two studies; neither comparison significant. No new capacity scaling.",
+      "values": [
+        {
+          "term": "lower",
+          "value": 1.19,
+          "unit": "ratio",
+          "source": "sairyo-1998",
+          "section": "implant-mechanics.md TableC",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "upper",
+          "value": 1.24,
+          "unit": "ratio",
+          "source": "kueny-2014",
+          "section": "implant-mechanics.md TableC",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "diameter-increment",
+          "value": 1,
+          "unit": "mm",
+          "source": "kueny-2014",
+          "section": "implant-mechanics.md TableC",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "low-bmd-fatigue",
+      "usage": "beside",
+      "description": "Low versus high BMD cyclic comparison",
+      "notes": "Low BMD <80 versus high BMD >120 mg/cm³; no slope inferred.",
+      "values": [
+        {
+          "term": "fatigue-load",
+          "value": 0.6,
+          "unit": "ratio",
+          "source": "weiser-2017",
+          "section": "implant-mechanics.md TableC",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "cycles",
+          "value": 0.45,
+          "unit": "ratio",
+          "source": "weiser-2017",
+          "section": "implant-mechanics.md TableC",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "low-bmd-upper-exclusive",
+          "value": 80,
+          "unit": "mg/cm³",
+          "source": "weiser-2017",
+          "section": "implant-mechanics.md TableC",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "high-bmd-lower-exclusive",
+          "value": 120,
+          "unit": "mg/cm³",
+          "source": "weiser-2017",
+          "section": "implant-mechanics.md TableC",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "cortical-trajectory",
+      "usage": "beside",
+      "description": "Lumbar cortical versus traditional trajectory",
+      "notes": "P=0.08 as Table C prints it; not a significant effect.",
+      "values": [
+        {
+          "term": "yield-pull-out",
+          "value": 1.3,
+          "unit": "ratio",
+          "source": "santoni-2009",
+          "section": "implant-mechanics.md TableC",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "p",
+          "value": 0.08,
+          "unit": "ratio",
+          "source": "santoni-2009",
+          "section": "implant-mechanics.md TableC",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    }
+  ],
+  "missing": [
+    {
+      "key": "human-paediatric-pull-out",
+      "reason": "No human paediatric cadaver pull-out found."
+    },
+    {
+      "key": "thoracic-reference-screw-dimensions",
+      "reason": "Lehman/Liljenqvist screw diameter and length absent; Soshi does give 7.0 mm diameter."
+    },
+    {
+      "key": "lumbar-reference-screw-length",
+      "reason": "Soshi reference length absent."
+    }
+  ]
+}

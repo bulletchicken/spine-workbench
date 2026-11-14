@@ -1,0 +1,19 @@
+{
+  "what": "A uniform solid round Timoshenko cantilever under a transverse end force, at a short and a long span.",
+  "units": {"force": "N", "length": "mm", "moment": "N·mm", "angle": "radians", "modulus": "N/mm²", "stress": "N/mm² (MPa)", "area": "mm²", "secondMoment": "mm⁴", "shearCoefficient": "dimensionless"},
+  "axes": {"frame": "right-handed Cartesian, synthetic origin at the clamp", "x": "anterior, along the undeformed rod towards the tip", "y": "patient-left, along the applied force and positive deflection", "z": "superior, positive bending rotation axis", "vectorOrder": ["x", "y", "z"]},
+  "signConvention": "The clamp fixes all translations and rotations. The free tip carries endForceN and no end couple; no distributed load. Positive tip deflection is along +y; positive tipSectionRotationRad is about +z by the right-hand rule. This section rotation is FL²/(2EI), the requested bending tip slope; the centre-line tangent also contains the shear angle F/(kappa G A). maxBendingStressMpa is the positive largest absolute normal bending stress at the clamp. Linear elastic small-deflection theory, no axial force or torsion.",
+  "tolerance": {"relative": 1e-10, "absolute": 1e-12, "rule": "abs(actual - expected) <= absolute + relative * abs(expected), for each scalar in its stated unit", "why": "Closed forms with at least 16 significant digits. An exact shear-flexible Timoshenko element reproduces these end-loaded nodal deflections and section rotations even with one element; 2-4 elements need no mesh-error allowance. This is not a tolerance for shear-locking interpolation."},
+  "cases": [
+    {
+      "what": "5.5 mm diameter over 28 mm; shear adds about 2.1 percent of the bending deflection",
+      "input": {"clampMm": [0, 0, 0], "axisUnit": [1, 0, 0], "lengthMm": 28, "diameterMm": 5.5, "youngModulusNPerMm2": 110000, "shearModulusNPerMm2": 42000, "shearCoefficient": 0.9, "endForceN": [0, 10, 0], "endMomentNmm": [0, 0, 0]},
+      "expect": {"areaMm2": 23.758294442772811, "secondMomentMm4": 44.918025430867346, "bendingTipDeflectionMm": 0.014809469357372780, "shearTipDeflectionMm": 0.00031178195157273650, "tipDeflectionMm": 0.015121251308945516, "tipSectionRotationRad": 0.00079336442985925605, "maxBendingStressMpa": 17.142338573744640}
+    },
+    {
+      "what": "5.5 mm diameter over 200 mm; shear adds about 0.041 percent of the bending deflection",
+      "input": {"clampMm": [0, 0, 0], "axisUnit": [1, 0, 0], "lengthMm": 200, "diameterMm": 5.5, "youngModulusNPerMm2": 110000, "shearModulusNPerMm2": 42000, "shearCoefficient": 0.9, "endForceN": [0, 10, 0], "endMomentNmm": [0, 0, 0]},
+      "expect": {"areaMm2": 23.758294442772811, "secondMomentMm4": 44.918025430867346, "bendingTipDeflectionMm": 5.3970369378180684, "shearTipDeflectionMm": 0.0022270139398052607, "tipDeflectionMm": 5.3992639517578736, "tipSectionRotationRad": 0.040477777033635513, "maxBendingStressMpa": 122.44527552674743}
+    }
+  ]
+}
