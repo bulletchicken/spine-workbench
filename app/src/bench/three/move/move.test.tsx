@@ -52,7 +52,7 @@ it('uses a plain fade for reduced motion and lets Enter settle without starting 
 });
 
 
-it('draws the wall at the opening film pixels before hiding or resizing the Front tile', () => {
+it('keeps the Front tile until the opening wall has had a frame to present', () => {
   vi.stubGlobal('matchMedia', () => ({ matches: false, addEventListener: () => undefined, removeEventListener: () => undefined }));
   const host = document.createElement('div'), stageElement = document.createElement('main'), canvas = document.createElement('canvas'), tile = document.createElement('div');
   tile.className = 'tile'; tile.dataset.place = 'front'; tile.style.setProperty('--bw', '280'); tile.style.setProperty('--bh', '560');
@@ -63,7 +63,7 @@ it('draws the wall at the opening film pixels before hiding or resizing the Fron
   const rest: View = { azimuth: 34, elevation: 14, perspective: 1, pxPerMm: [1, 1], aim: [0, 170, 0], aimAt: [640, 400] };
   const placement = { size: { width: 100, height: 200 }, view: { quarterTurns: 0 as const, mirrored: false }, zoom: 2.8, pan: [0, 0] as const };
   const source: MoveFilm = { film: { size: placement.size, pixels: new Uint16Array(20000), thumbnail: new Uint8Array(), outlines: [], names: true, on: null, only: null, frame: { kind: 'whole' }, light: null }, opening: { x: 500, y: 100, width: 280, height: 560, placement }, rail: { x: 50, y: 300, width: 66, height: 132, placement: { ...placement, zoom: .66 } } };
-  let corners: readonly Vec3[] = [], view = from, picture: unknown = null;
+  let corners: readonly Vec3[] = [], view = from, picture: unknown = null, presented = 0;
   const wall = { camera, plane: () => filmPlane(camera, -30), values: () => ({ strength: 0, out: null, corner: 8, hinge: 1 }), set: vi.fn(), show: (pixels: unknown) => { picture = pixels; }, place: (points: readonly Vec3[] | null) => { corners = points ?? []; }, marks: vi.fn() } as unknown as FilmWall;
   const size = { width: 1280, height: 800 };
   const drawNow = vi.fn(() => {
@@ -74,9 +74,17 @@ it('draws the wall at the opening film pixels before hiding or resizing the Fron
   });
   const stage = { view: () => from, viewAlong: () => from, namedView: () => rest, bounds: () => ({ low: [-50, 0, -20], high: [50, 400, 20] }), size: () => size, setView: (next: View) => { view = next; }, toCanvas: (point: Vec3) => toCanvas(view, size, point), film: (name: string) => name === 'front' ? wall : null, drawNow } as unknown as Stage;
   const spine = { formation: { script: vi.fn(), threads: vi.fn(), time: vi.fn() }, levels: ['T1'], set: vi.fn(), setSpine: vi.fn(), pressOnto: vi.fn() } as unknown as DrawnSpine;
-  const set = vi.fn(() => { expect(drawNow).toHaveBeenCalledOnce(); tile.style.setProperty('--bw', '66'); });
+  const set = vi.fn(() => { expect(presented).toBeGreaterThan(0); tile.style.setProperty('--bw', '66'); });
   const move = createMove({ stage, spine, canvas, host, stageElement, films: { moment: 'three', compared: null, separation: 0, shown: () => shown, opening: () => shown, moveFilm: (name) => name === 'front' ? source : null, set, finish: vi.fn() }, done: vi.fn() });
   expect(tile.style.opacity).not.toBe('0'); move.play();
-  expect(drawNow).toHaveBeenCalledOnce(); expect(set).toHaveBeenCalledOnce(); expect(tile.style.opacity).toBe('0');
+  expect(drawNow).toHaveBeenCalledOnce(); expect(set).not.toHaveBeenCalled(); expect(tile.style.opacity).not.toBe('0');
+  const frame = [...steps][0]; if (frame === undefined) throw new Error('no-frame');
+  frame(0);
+  expect(drawNow).toHaveBeenCalledTimes(2); expect(set).not.toHaveBeenCalled();
+  expect(tile.style.opacity).not.toBe('0'); expect(tile.style.getPropertyValue('--bw')).toBe('280');
+  // The browser paints after this callback returns, before the next frame callback.
+  presented++;
+  frame(16);
+  expect(drawNow).toHaveBeenCalledTimes(3); expect(set).toHaveBeenCalledOnce(); expect(tile.style.opacity).toBe('0');
   move.dispose();
 });

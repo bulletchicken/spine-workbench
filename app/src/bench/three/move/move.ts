@@ -38,12 +38,13 @@ export function createMove(parts: MoveParts): Move {
     for (const part of parts.arrivalParts?.() ?? []) { part.style.removeProperty('opacity'); part.style.removeProperty('transform'); }
   };
   const stop = () => { leave?.(); leave = null; };
-  const set = (progress: number) => {
+  const set = (progress: number, holdFilm = false) => {
     host.setAttribute('data-moving', ''); stageElement.setAttribute('data-forming', '');
     if (points !== null) {
       const found = points.set(progress);
-      // The canvas must contain the replacement before its DOM film is hidden or resized.
-      stage.drawNow(); films.set(found.trips);
+      stage.drawNow();
+      if (holdFilm) return;
+      films.set(found.trips);
       stageElement.style.setProperty('--move-names', String(found.names));
       for (const tile of stageElement.querySelectorAll<HTMLElement>('.tile[data-place]')) {
         const kind = tile.dataset.place as import('@/shapes').FilmKind;
@@ -104,9 +105,16 @@ export function createMove(parts: MoveParts): Move {
   return { set, finish, cancel, play() {
     if (stopped || leave !== null) return;
     const fading = reduced();
-    if (!fading) set(0);
+    if (!fading) set(0, points !== null);
     else { host.setAttribute('data-moving', ''); stageElement.setAttribute('data-forming', ''); films.set({ front: 0, side: 0, 'bend-left': 0, 'bend-right': 0 }); host.style.opacity = '0'; }
+    let openingDrawn = false, handedOver = points === null;
     leave = joinLoop((dt) => {
+      if (!fading && !handedOver) {
+        // The first callback paints the opening wall with its DOM film still present.
+        // Only the following frame may remove that fallback and start the clock.
+        if (!openingDrawn) { openingDrawn = true; set(0, true); return; }
+        handedOver = true; set(0); return;
+      }
       elapsed += dt;
       if (fading) { for (const part of parts.arrivalParts?.() ?? []) { part.style.opacity = String(Math.max(0, (elapsed - fadeHalf) / fadeHalf)); part.style.transform = 'none'; } if (elapsed >= fadeHalf) { films.finish(); stage.setView(to); stageElement.style.setProperty('--move-mark', '0'); stageElement.style.setProperty('--move-names', '0'); } stageElement.style.setProperty('--move-film-opacity', String(elapsed < fadeHalf ? 1 - elapsed / fadeHalf : (elapsed - fadeHalf) / fadeHalf)); if (elapsed >= fadeHalf * 2) { finish(); return; } host.style.opacity = String(Math.max(0, (elapsed - fadeHalf) / fadeHalf)); }
       else if (elapsed >= LENGTH) finish(); else set(elapsed / LENGTH);

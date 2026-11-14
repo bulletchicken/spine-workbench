@@ -273,7 +273,7 @@ it('keeps the Find registration for formation and exposes the same rail tiles fo
   let driver: FilmDriver | null = null;
   const onFilmDriver = (next: FilmDriver | null) => { driver = next; };
   const current = (): FilmDriver => { if (driver === null) throw new Error('no film driver'); return driver; };
-  const front: StageFilm = { ...madeUpFilm(), size: { width: 586, height: 1300 }, frame: { kind: 'spine', box: { left: 220, right: 366, top: 200, bottom: 1100 }, names: true, most: 1.3 } };
+  const front: StageFilm = { ...madeUpFilm(), names: true, outlines: [{ key: 'T1', name: 'T1', spoken: 'T1', look: 'found', shown: true, quad: [[220, 200], [366, 200], [366, 220], [220, 220]] }], size: { width: 586, height: 1300 }, frame: { kind: 'spine', box: { left: 220, right: 366, top: 200, bottom: 1100 }, names: true, most: 1.3 } };
   await show({ moment: 'find', films: { ...empty, front, side: madeUpFilm() }, onFilmDriver });
   tick(800);
   const tile = find('.tile[data-place="front"]');
@@ -285,6 +285,9 @@ it('keeps the Find registration for formation and exposes the same rail tiles fo
   expect(['--x', '--y', '--bw', '--bh', '--s'].map((name) => tile.style.getPropertyValue(name))).toEqual(openingBox);
   expect(cameras.placementOf('front')).toEqual(before);
   expect(tile.style.opacity).not.toBe('0');
+  expect(find('.tiles').hasAttribute('data-holding')).toBe(true);
+  expect(tile.getAttribute('data-names')).toBe('on');
+  expect(tile.querySelector('.mark.found polygon')).not.toBeNull();
   expect(find('.tile[data-place="front"]')).toBe(tile);
   expect(current().opening(DOMRect.fromRect())?.pxPerFilmPx).toBe(zoom);
   act(() => { current().set({ front: 0, side: 0, 'bend-left': 0, 'bend-right': 0 }); });

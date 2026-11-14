@@ -297,7 +297,7 @@ export function Stage({ moment, films, reading, held, leaving, marked, reviewing
     <>
       <h1 ref={display} className="display" style={{ '--head-y': drawing.layout.displayTop } as CSSProperties}>{STAGE_WORDS.display}</h1>
       <FilmPlaces spots={drawing.places} faces={faces} target={held.target} {...(moment === 'films' && onPressPlace !== undefined ? { onPress: onPressPlace } : {})} />
-      <div ref={tiles} data-compared={compared ?? undefined} data-sheet={sheetOpen || undefined} className={['tiles', marked && 'marked', reviewing && 'reviewing'].filter(Boolean).join(' ')}>
+      <div ref={tiles} data-holding={forming && moment === 'three' || undefined} data-compared={compared ?? undefined} data-sheet={sheetOpen || undefined} className={['tiles', marked && 'marked', reviewing && 'reviewing'].filter(Boolean).join(' ')}>
         {FILM_ORDER.map((kind, index) => {
           const film = films[kind];
           const spot = (forming && moment === 'three' ? findOpening?.drawing.layout.spots[kind] : null) ?? drawing.layout.spots[kind] ?? drawing.places[kind];
@@ -305,7 +305,7 @@ export function Stage({ moment, films, reading, held, leaving, marked, reviewing
           const rail = compared === kind ? stageLayout({ ...measures, present: present.split(',') as FilmKind[], moment: 'three' }).spots[kind] : null;
           return (
             <Fragment key={kind}>
-              {film !== null && <FilmTile kind={kind} index={index} film={moment === 'three' ? { ...film, names: compared === kind, on: film.on, only: null, frame: forming ? findOpening?.films[kind]?.frame ?? film.frame : { kind: 'whole' }, light: null } : film} spot={spot} {...(moment === 'three' && onPressFilm !== undefined ? { onPress: () => { onPressFilm(kind); }, selected: compared === kind } : {})} glide={moment !== 'three'} replay={replay} target={held.target === kind}
+              {film !== null && <FilmTile kind={kind} index={index} film={moment === 'three' ? { ...film, names: forming ? findOpening?.films[kind]?.names ?? film.names : compared === kind, on: film.on, only: null, frame: forming ? findOpening?.films[kind]?.frame ?? film.frame : { kind: 'whole' }, light: null } : film} spot={spot} {...(moment === 'three' && onPressFilm !== undefined ? { onPress: () => { onPressFilm(kind); }, selected: compared === kind } : {})} glide={moment !== 'three'} replay={replay} target={held.target === kind}
                 {...((moment === 'find' && !reviewing || moment === 'three' && compared === kind) && onPoint !== undefined ? { onPoint: (key: string | null) => { onPoint(kind, key); } } : {})} />}
               {compared === kind && <button type="button" className="compare-slot" aria-label={THREE_WORDS.railSlot} onClick={() => onPressFilm?.(kind)} style={{ left: rail?.x, top: rail?.y, width: rail?.width, height: rail?.height }} />}
               {(moment !== 'three' || film !== null) && <div className="caption" data-place={kind} aria-hidden="true" data-away={moment === 'find' && film === null || undefined}

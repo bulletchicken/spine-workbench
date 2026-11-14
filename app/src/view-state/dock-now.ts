@@ -1,5 +1,5 @@
 // What the current step hands to the frame's one dock. Never saved with the case.
-import { useEffect } from 'react';
+import { useLayoutEffect } from 'react';
 import { useStore } from 'zustand';
 import { createStore } from 'zustand/vanilla';
 import type { DockSpec } from '@/guide/dock-spec';
@@ -20,7 +20,7 @@ export function useDockNow(): DockSpec | null {
 
 /** The step draws no dock of its own, and clears its words when it leaves. */
 export function useShowInDock(spec: DockSpec): void {
-  useEffect(() => {
+  useLayoutEffect(() => {
     dockNow.getState().show(spec);
     return () => { dockNow.getState().show(null); };
   }, [spec]);

@@ -1,5 +1,5 @@
 .stage { --move-names: 1; --move-mark: 1; --move-film-opacity: 1; }
-.frame > .spine[data-moving] { z-index: calc(var(--z-stage) + 1); opacity: 1; visibility: visible; transform: none; transition: none; pointer-events: none; }
+.app-frame .frame > .spine[data-moving] { z-index: calc(var(--z-stage) + 1); opacity: 1; visibility: visible; transform: none; transition: none; pointer-events: none; }
 .spine[data-moving] * { pointer-events: none; }
 .stage[data-forming] .tile, .stage[data-forming] .marks, .stage[data-forming] .mark, .stage[data-forming] .panel, .stage[data-forming] .measures li { transition: none; }
 .stage[data-forming] .marks { opacity: 1; visibility: visible; }
@@ -14,3 +14,6 @@
 .glow[data-forming]::after { opacity: var(--move-glow); transition: none; }
 
 .stage[data-forming] .tile:is([data-place="front"], [data-place="side"]) text { display: block; }
+
+/* Keep Find's outlines while the canvas prepares its first presented frame. */
+.tiles[data-holding] .marks { opacity: 1; visibility: visible; transition: none; }

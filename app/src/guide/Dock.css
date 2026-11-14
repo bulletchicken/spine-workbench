@@ -21,3 +21,9 @@
 }
 [data-motion='reduced'] .meter.waiting { background: var(--accent-fill); }
 [data-motion='reduced'] .meter.waiting::after { display: none; }
+
+/* Building and 3D hand their sentence over before paint, without an empty fade. */
+.dock .scene.on:is([data-scene="building"], [data-scene="three"]) { transition: none; }
+.dock .scene.on:is([data-scene="building"], [data-scene="three"]) .say { transform: none; transition: none; }
+.dock .scene.on:is([data-scene="building"], [data-scene="three"]) [data-fresh] { animation: none; }
+.dock:has(.scene.on:is([data-scene="building"], [data-scene="three"])) .scene:not(.on) { transition: none; }
