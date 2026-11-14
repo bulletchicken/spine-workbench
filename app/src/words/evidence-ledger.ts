@@ -5801,19 +5801,18 @@ export const EVIDENCE_LEDGER = [
   },
   {
     id: 'place-bench-daily-loads-slice-offset',
-    feature: 'Own sagittal offset prior beside raw gravity-line distances',
+    feature: 'Retained offset prior beside raw gravity-line distances',
     publishedNumber:
       'mean: 28 mm [own-inference; project-assumptions]; sd: 5.6 mm [own-inference; project-assumptions]; ' +
       'distance 3d mean: 28 mm [published; gangnet-2003]; distance 3d sd: 5.6 mm [published; gangnet-2003]; left ' +
       'lateral mean: 7.6 mm [published; gangnet-2003]; left lateral sd: 1.6 mm [published; gangnet-2003]. ' +
-      'Published28mm(SD5.6)is an unsigned3D body-centre/gravity-line distance;7.6mm(SD1.6)is left lateral. ' +
-      'Using28/5.6as sagittal anterior offset distribution is own inference. Frontal centroid at body centre ' +
-      'ignores the published left lateralization and remains own choice. Table use: bench.',
+      'In 34 healthy upright standing subjects (the abstract gives no ages), 28 mm (SD 5.6) is an unsigned ' +
+      '3D body-centre/gravity-line distance; 7.6 mm (SD 1.6) is the left lateral distance. Neither is a measured ' +
+      'anterior coordinate. The offset is still drawn but the daily loads do not use it. Table use: input.',
     population:
       'project-assumptions: No measured population; explicit project choices and calculations. ' +
       'Sample: not supplied. [own-inference; secondary]. gangnet-2003: 34 healthy upright standing ' +
-      'subjects, taken here as adults' +
-      ';the abstract supplies no ages. Sample: 34. [peer-reviewed; abstract].',
+      'subjects; the abstract supplies no ages. Sample: 34. [peer-reviewed; abstract].',
     sources: [
       {
         citation:
@@ -5831,10 +5830,12 @@ export const EVIDENCE_LEDGER = [
     id: 'place-bench-daily-loads-walking',
     feature: 'Walking/standing endpoints',
     publishedNumber:
-      'lower: 1.28 ratio [published; rohlmann-2002]; upper: 1.71 ratio [published; rohlmann-2014-gait]. DISAGREE ' +
-      'in measured quantity:lower1.28is load on an internal spinal fixation device;upper1.71is resultant force ' +
-      'on a vertebral body replacement. Both normalized to their own standing reference. Sampling between these ' +
-      'quantities/populations is own inference. Table use: bench.',
+      'lower: 1.28 ratio [published; rohlmann-2002]; upper: 1.71 ratio [published; rohlmann-2014-gait]. ' +
+      'The lower ratio is the whole load on a short posterior internal fixator; the upper ratio is the whole ' +
+      'resultant force on a vertebral body replacement. Adult populations differ and each is normalised to its ' +
+      'own standing reference. Sampling between these quantities is a project assumption. Applying the multiple ' +
+      'only to the load standing adds is this project’s reading because forces locked in by the correction do ' +
+      'not grow with posture. The low point of each walking cycle is assumed to equal standing. Table use: bench.',
     population:
       'rohlmann-2002: Adults with telemetered posterior internal fixators; fractures/degenerative disease, not ' +
       'scoliosis. Sample: 10. [peer-reviewed; abstract]. rohlmann-2014-gait: Adults with instrumented vertebral ' +
@@ -5893,8 +5894,9 @@ export const EVIDENCE_LEDGER = [
     feature: 'Standing-flexed pressure ratio',
     publishedNumber:
       'multiple: 2.2 ratio [own-inference; project-assumptions]; standing flexed: 1.1 MPa [published; ' +
-      'wilke-1999]; standing relaxed: 0.5 MPa [published; wilke-1999]. Pressure ratio borrowed as passive ' +
-      'standing-load multiplier; one adult; no independent flexed posture or muscle forces. Table use: bench.',
+      'wilke-1999]; standing relaxed: 0.5 MPa [published; wilke-1999]. One adult’s L4–L5 disc pressures are ' +
+      '1.1 MPa in standing flexed and 0.5 MPa in relaxed standing; their ratio is 2.2. A disc-pressure comparison, ' +
+      'not a force multiple measured at posterior implants; the bench does not use it. Table use: beside.',
     population:
       'project-assumptions: No measured population; explicit project choices and calculations. ' +
       'Sample: not supplied. [own-inference; secondary]. wilke-1999: Man aged45, 70 kg; intradiscal pressure ' +
@@ -6418,11 +6420,14 @@ export const EVIDENCE_LEDGER = [
   },
   {
     id: 'place-bench-daily-loads-stand-sit-bend-twist',
-    feature: 'Adult telemetry combined activities',
+    feature: 'Adult fixator loads during standing up, sitting down, lateral bending and axial rotation while standing',
     publishedNumber:
       'fixator lower: 1.11 ratio [published; rohlmann-2002]; fixator upper: 1.2 ratio [published; ' +
-      'rohlmann-2002]; vbr threshold exclusive: 1200 N [published; rohlmann-2014-activities]. Fixator ratios ' +
-      '111–120 percent; VBRactivities include peaks strictly above 1200 N; threshold is not an upper bound. ' +
+      'rohlmann-2002]; vbr threshold exclusive: 1200 N [published; rohlmann-2014-activities]. In ten adults, ' +
+      'rising from a chair, sitting down, and sideways bending or twisting of the trunk while standing gave ' +
+      'device loads 111–120 percent of standing. Forward flexion and extension while standing produced higher ' +
+      'loads, without a figure of their own in the abstract. The bench does not use the 1.11–1.20 range. ' +
+      'VBR activities include peaks strictly above 1200 N; threshold is not an upper bound. ' +
       'Table use: beside.',
     population:
       'rohlmann-2002: Adults with telemetered posterior internal fixators; fractures/degenerative disease, not ' +
@@ -6442,6 +6447,36 @@ export const EVIDENCE_LEDGER = [
           'life with high spinal loads. PLoS One 9(5):e98510.',
         pmid: '24866883',
         doi: '10.1371/journal.pone.0098510',
+      },
+    ] as readonly EvidenceSource[],
+    checked: false,
+    status: 'experimental',
+  },
+  {
+    id: 'place-bench-daily-loads-ventral-flexion',
+    feature: 'Assumed bending-forward multiple from posterior-fixator activity ordering',
+    publishedNumber:
+      'lower: 1.2 ratio [own-inference; project-assumptions]; upper: 1.28 ratio [own-inference; ' +
+      'project-assumptions]; activity group upper: 1.2 ratio [published; rohlmann-2002]; highest measured walking: ' +
+      '1.28 ratio [published; rohlmann-2002]. This project’s reading of the Rohlmann 2002 abstract ' +
+      '(PMID 11784277, ten patients): ' +
+      'forward flexion is above the 111–120 percent activity group, no figure is given, and it is not above the ' +
+      'highest load measured, which was walking at 128 percent. The bench draws uniformly between 1.20 and 1.28; ' +
+      'this is own inference, tagged assumed, not a measured forward-flexion range. The published ratios ' +
+      'describe the whole load on a short posterior fixator. Applying the multiple only to the load standing ' +
+      'adds is this project’s reading because forces locked in by the correction do not grow with posture. ' +
+      'Under the other reading, bending forward would be 20–28 percent above standing. Table use: bench.',
+    population:
+      'project-assumptions: No measured population; explicit project choices and calculations. ' +
+      'Sample: not supplied. [own-inference; secondary]. rohlmann-2002: Adults with telemetered posterior ' +
+      'internal fixators; fractures/degenerative disease, not scoliosis. Sample: 10. [peer-reviewed; abstract].',
+    sources: [
+      {
+        citation:
+          'Rohlmann A, Graichen F, Bergmann G. 2002. Loads on an internal spinal fixation device during physical ' +
+          'therapy. Phys Ther 82(1):44-52.',
+        pmid: '11784277',
+        doi: '10.1093/ptj/82.1.44',
       },
     ] as readonly EvidenceSource[],
     checked: false,

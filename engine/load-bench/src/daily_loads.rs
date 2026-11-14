@@ -1,11 +1,12 @@
-//! One passive gravity shape at three sizes on the locked seated construct.
+//! Compression through the discs, at three sizes on the locked construct.
 //!
 //! Patient x anterior, y left, z up; mm, radians, N and N·mm. Applied loads
-//! act ON body centres; returned head increments act ON rods about each head.
+//! act ON body centres; spatial head increments act ON rods about each head.
 //! Screw rotations stay tied; hooks retain their rotational release. Standing
-//! uses the full seated tissue and loaded-connector tangent once; walking and
+//! uses the seated prestress and stiffened material tangent once; walking and
 //! bending scale that response. No daily displacement changes the drawn shape.
-//! Add locked-in wrenches before taking force norms or stress envelopes.
+//! Anchor forces use the frame turning with the vertebra; rod statics uses
+//! spatial increments and moving points. Neither counts a rigid turn as strain.
 
 use crate::chain::{Chain, ChainError, ChainLinearisation, Ground, Pose, Wrench};
 use crate::evidence::{Evidence, TableKind, Unit};
@@ -17,6 +18,10 @@ use shapes::levels::Level;
 
 /// Standard gravity, a physical unit convention in N/kg.
 pub const GRAVITY_N_PER_KG: f64 = 9.80665;
+/// Limit of the first-order daily method, in radians at any body. This
+/// project bound limits neglected higher-order rotation terms; it is not
+/// a physiological threshold or a fitted material parameter.
+pub const SMALL_ANGLE_LIMIT_RAD: f64 = 0.1;
 /// Project load sites, fixing the interpolation of the trunk slices.
 pub const LOAD_LEVELS: [Level; 17] = [
     Level::T1,
@@ -46,6 +51,8 @@ pub enum DailyError {
     LoadSites,
     #[error("daily-missing-or-wrong-unit-evidence: {0}")]
     Evidence(String),
+    #[error("daily-small-angle-limit")]
+    SmallAngle,
     #[error(transparent)]
     Chain(#[from] ChainError),
     #[error(transparent)]
@@ -58,6 +65,7 @@ pub enum DailyError {
 #[derive(Clone, Copy, Debug)]
 pub struct DailyInputs {
     pub weight_kg: f64,
+    /// Retained input for the unchanged draw contract; unused by compression.
     pub slice_offset_mm: f64,
     pub preload_factor: f64,
     pub walking_multiple: f64,
@@ -75,7 +83,11 @@ pub struct GravityLoads {
 pub struct DailyResponse {
     pub body_loads: Vec<Wrench>,
     pub displacement: DVector<f64>,
+    /// Spatial first variations, for rod equilibrium with moving head points.
     pub head_wrenches_on_rod: Vec<Vec<Wrench>>,
+    /// Increments in each vertebra's turning frame. The locked-in wrench
+    /// must be expressed in that body's seated axes before adding these.
+    pub head_wrenches_in_body_frame: Vec<Vec<Wrench>>,
     /// Linear head movements, for dP × F0 in rod statics.
     pub head_displacements_mm: Vec<Vec<Vector3<f64>>>,
     /// Free material-frame motion about each supplied rod origin.
@@ -98,6 +110,9 @@ impl DailyResponse {
         for rod in &mut result.head_wrenches_on_rod {
             rod.iter_mut().for_each(|w| *w *= multiple);
         }
+        for rod in &mut result.head_wrenches_in_body_frame {
+            rod.iter_mut().for_each(|w| *w *= multiple);
+        }
         for rod in &mut result.head_displacements_mm {
             rod.iter_mut().for_each(|p| *p *= multiple);
         }
@@ -113,6 +128,7 @@ impl DailyResponse {
             .body_loads
             .iter()
             .chain(result.head_wrenches_on_rod.iter().flatten())
+            .chain(result.head_wrenches_in_body_frame.iter().flatten())
             .chain(result.rod_displacements.iter())
             .flat_map(|w| w.iter())
             .chain(result.displacement.iter())
@@ -128,6 +144,7 @@ impl DailyResponse {
         {
             return Err(DailyError::InvalidInput("scaled-response-overflow"));
         }
+        check_small_angles(&result.displacement)?;
         Ok(result)
     }
 }
@@ -142,18 +159,35 @@ pub struct DailyCases {
     pub sources: Vec<String>,
 }
 
-/// Head/neck acts at T1's centre; both arms are shared equally at the
-/// centres of T1–T4. These sites are project choices. Trunk fractions
-/// interpolate by level, with a patient-anterior centroid offset. All 17
-/// sites are required rather than silently discarding absent body mass.
+/// Reference-pose compression with the same published weight fractions.
+/// The offset remains in the input contract but contributes no load.
 pub fn gravity_loads(
     evidence: &Evidence,
     chain: &Chain,
     weight_kg: f64,
     slice_offset_mm: f64,
 ) -> Result<GravityLoads, DailyError> {
-    if !weight_kg.is_finite() || weight_kg < 0.0 || !slice_offset_mm.is_finite() {
+    if !slice_offset_mm.is_finite() {
         return Err(DailyError::InvalidInput("weight-or-slice-offset"));
+    }
+    follower_loads(evidence, chain, &chain.standing(), weight_kg)
+}
+
+/// At disc i the cumulative weight above it acts down the upper body's
+/// cranial axis through its material disc point. Consecutive cut resultants
+/// differ to give the load on a body. Their couples about its centre make
+/// the prefix moment exactly zero about every disc, even in a curved column.
+/// Head/neck is assigned to T1, arms equally to T1–T4, and trunk fractions
+/// interpolate by level. These sites and this balanced load path are project
+/// assumptions; muscle forces and residual gravity moments are absent.
+pub fn follower_loads(
+    evidence: &Evidence,
+    chain: &Chain,
+    poses: &[Pose],
+    weight_kg: f64,
+) -> Result<GravityLoads, DailyError> {
+    if !weight_kg.is_finite() || weight_kg < 0.0 {
+        return Err(DailyError::InvalidInput("weight"));
     }
     if chain.reference.iter().map(|p| p.level).ne(LOAD_LEVELS) {
         return Err(DailyError::LoadSites);
@@ -177,20 +211,52 @@ pub fn gravity_loads(
     let top = read("trunk-slice-endpoints", "t1")?;
     let bottom = read("trunk-slice-endpoints", "l5")?;
     let weight_n = weight_kg * GRAVITY_N_PER_KG;
-    let body_loads: Vec<_> = (0..LOAD_LEVELS.len())
+    let weights: Vec<_> = (0..LOAD_LEVELS.len())
         .map(|i| {
             let slice = top + (bottom - top) * i as f64 / (LOAD_LEVELS.len() - 1) as f64;
-            let fraction =
-                slice + if i == 0 { head } else { 0.0 } + if i < 4 { 2.0 * arm / 4.0 } else { 0.0 };
-            // (+offset,0,0) × (0,0,-slice*BW) gives a positive My.
-            Wrench::new(
-                0.0,
-                0.0,
-                -fraction * weight_n,
-                0.0,
-                slice_offset_mm * slice * weight_n,
-                0.0,
-            )
+            weight_n
+                * (slice
+                    + if i == 0 { head } else { 0.0 }
+                    + if i < 4 { 2.0 * arm / 4.0 } else { 0.0 })
+        })
+        .collect();
+    let body_loads = compression_loads(chain, poses, &weights)?;
+    Ok(GravityLoads {
+        body_loads,
+        sources,
+    })
+}
+
+/// Difference of the prescribed compression resultants at successive cuts.
+/// Kept separate from the population weights for hand-worked short columns.
+pub fn compression_loads(
+    chain: &Chain,
+    poses: &[Pose],
+    body_weights_n: &[f64],
+) -> Result<Vec<Wrench>, DailyError> {
+    if body_weights_n.len() != poses.len()
+        || body_weights_n.iter().any(|w| !w.is_finite() || *w < 0.0)
+    {
+        return Err(DailyError::InvalidInput("body-weights"));
+    }
+    let frames = chain.joint_motion_frames(poses)?;
+    let mut weight_above = 0.0;
+    let mut previous_force = Vector3::zeros();
+    let mut previous_point = Vector3::zeros();
+    let body_loads: Vec<_> = (0..poses.len())
+        .map(|i| {
+            weight_above += body_weights_n[i];
+            let point = frames[i].upper_point_mm;
+            let force = -poses[i].rotation.column(2) * weight_above;
+            let moment = (point - poses[i].centre_mm).cross(&force)
+                - (previous_point - poses[i].centre_mm).cross(&previous_force);
+            let mut load = Wrench::zeros();
+            load.fixed_rows_mut::<3>(0)
+                .copy_from(&(force - previous_force));
+            load.fixed_rows_mut::<3>(3).copy_from(&moment);
+            previous_force = force;
+            previous_point = point;
+            load
         })
         .collect();
     if body_loads
@@ -200,15 +266,13 @@ pub fn gravity_loads(
     {
         return Err(DailyError::InvalidInput("gravity-overflow"));
     }
-    Ok(GravityLoads {
-        body_loads,
-        sources,
-    })
+    Ok(body_loads)
 }
 
-/// Retain the correction chain's scale and ribs. Preload multiplies all
-/// terms; each released level names the joint BELOW that vertebra, including
-/// L5/sacrum. Release changes CC translation and AP/ML/CC moments only.
+/// Retain scale and ribs, with an explicit uniform constitutive multiplier.
+/// Correction calls this with 1; daily preload is instead passed to
+/// `solve_case_with_material_scale` so it cannot rescale seated prestress.
+/// Each release names the joint BELOW a vertebra, including L5/sacrum.
 pub fn loaded_chain(
     evidence: &Evidence,
     chain: &Chain,
@@ -286,19 +350,36 @@ pub fn solve(
     {
         return Err(DailyError::InvalidInput("activity-multiple"));
     }
-    let gravity = gravity_loads(evidence, chain, input.weight_kg, input.slice_offset_mm)?;
-    let daily = loaded_chain(evidence, chain, input.preload_factor, released_levels)?;
-    let before = loaded_chain(evidence, chain, input.preload_factor, &[])?;
-    let standing = solve_case(
+    if !input.slice_offset_mm.is_finite() {
+        return Err(DailyError::InvalidInput("slice-offset"));
+    }
+    let gravity = follower_loads(evidence, chain, &seated.poses, input.weight_kg)?;
+    let daily = loaded_chain(evidence, chain, 1.0, released_levels)?;
+    let standing = solve_case_with_material_scale(
         &daily,
         &seated.poses,
         &seated.corrected_rods,
         &seated.head_wrenches_on_rod,
         &gravity.body_loads,
+        input.preload_factor,
     )?;
-    let without_construct = solve_case(&before, &before.standing(), &[], &[], &gravity.body_loads)?;
+    let reference_loads = follower_loads(evidence, chain, &chain.standing(), input.weight_kg)?;
+    let mut without_construct = solve_case_with_material_scale(
+        chain,
+        &chain.standing(),
+        &[],
+        &[],
+        &reference_loads.body_loads,
+        input.preload_factor,
+    )?;
+    // With no rods, each disc must carry its prescribed cut resultant:
+    // compression and exactly zero intrinsic couple. Preserve that analytic
+    // zero in the reference response rather than retaining numerical noise.
+    without_construct.joint_moments_nmm.fill(Vector3::zeros());
     let walking_peak = standing.scaled(input.walking_multiple)?;
     let bending_forward = standing.scaled(input.bending_multiple)?;
+    without_construct.scaled(input.walking_multiple)?;
+    without_construct.scaled(input.bending_multiple)?;
     let mut sources = gravity.sources;
     for term in ["lower", "upper"] {
         let source = &cell(
@@ -331,9 +412,10 @@ pub fn solve(
     for (row, term, unit) in [
         ("walking", "lower", Unit::Ratio),
         ("walking", "upper", Unit::Ratio),
-        ("bending-forward", "multiple", Unit::Ratio),
-        ("slice-offset", "mean", Unit::Mm),
-        ("slice-offset", "sd", Unit::Mm),
+        ("ventral-flexion", "lower", Unit::Ratio),
+        ("ventral-flexion", "upper", Unit::Ratio),
+        ("ventral-flexion", "activity-group-upper", Unit::Ratio),
+        ("ventral-flexion", "highest-measured-walking", Unit::Ratio),
     ] {
         let source = &cell(evidence, TableKind::DailyLoads, row, term, unit)?.source;
         if !sources.contains(source) {
@@ -351,13 +433,26 @@ pub fn solve(
 
 /// Plain added-load solve for full spines or small hand-worked chains.
 /// Rods and their preload use matching rod/head order at `poses`. Retains
-/// first-order physical head increments, with their exact weight linearity.
+/// first-order spatial and turning-frame head increments.
 pub fn solve_case(
     chain: &Chain,
     poses: &[Pose],
     rods: &[RodLinearisation],
     preload: &[Vec<Wrench>],
     body_loads: &[Wrench],
+) -> Result<DailyResponse, DailyError> {
+    solve_case_with_material_scale(chain, poses, rods, preload, body_loads, 1.0)
+}
+
+/// Added-load solve with stiffened material response and the original seated
+/// joint forces in all geometric terms. No equilibrium load is rescaled.
+pub fn solve_case_with_material_scale(
+    chain: &Chain,
+    poses: &[Pose],
+    rods: &[RodLinearisation],
+    preload: &[Vec<Wrench>],
+    body_loads: &[Wrench],
+    material_scale: f64,
 ) -> Result<DailyResponse, DailyError> {
     if body_loads.len() != poses.len()
         || body_loads
@@ -367,7 +462,7 @@ pub fn solve_case(
     {
         return Err(DailyError::InvalidInput("body-loads"));
     }
-    let linear = chain.linearise(poses)?;
+    let linear = chain.linearise_with_material_scale(poses, material_scale)?;
     let tangent = tangent_matrix(&linear);
     let loads = DVector::from_iterator(
         6 * body_loads.len(),
@@ -381,7 +476,11 @@ pub fn solve_case(
             .iter()
             .map(|v| Wrench::from_column_slice(v))
             .collect();
-        let loads = chain.tangent_load(poses, &motion)?;
+        let loads = if material_scale == 1.0 {
+            chain.tangent_load(poses, &motion)?
+        } else {
+            chain.tangent_load_with_material_scale(poses, &motion, material_scale)?
+        };
         Ok(DVector::from_iterator(
             u.len(),
             loads.iter().flat_map(|w| w.iter().copied()),
@@ -395,7 +494,31 @@ pub fn solve_case(
         preload,
         &tissue_load,
     )?;
-    let moments = junctions::moment_increments(chain, poses, &step.displacement)?;
+    check_small_angles(&step.displacement)?;
+    let moments = junctions::moment_increments_with_material_scale(
+        chain,
+        poses,
+        &step.displacement,
+        material_scale,
+    )?;
+    let head_wrenches_in_body_frame = rods
+        .iter()
+        .zip(&step.linear_head_wrenches_on_rod)
+        .zip(preload)
+        .map(|((rod, increments), initial)| {
+            rod.ties
+                .iter()
+                .zip(increments)
+                .zip(initial)
+                .map(|((tie, delta), p0)| {
+                    let omega = Vector3::from_column_slice(
+                        step.displacement.rows(6 * tie.body + 3, 3).as_slice(),
+                    );
+                    in_turning_frame(&poses[tie.body], &omega, p0, delta)
+                })
+                .collect()
+        })
+        .collect();
     let head_displacements_mm = rods
         .iter()
         .map(|rod| {
@@ -416,12 +539,39 @@ pub fn solve_case(
         body_loads: body_loads.to_vec(),
         displacement: step.displacement,
         head_wrenches_on_rod: step.linear_head_wrenches_on_rod,
+        head_wrenches_in_body_frame,
         head_displacements_mm,
         rod_displacements: step.rod_displacements,
         rod_origins_mm: step.rod_origins_mm,
         joint_moments_nmm: moments,
         relative_residual: step.relative_residual,
     })
+}
+
+/// First variation of R_body^T W: remove transport before expressing the
+/// increment in seated body axes. Under a common rigid turn dW=omega×W0,
+/// this is exactly zero, for both force and couple about the moving head.
+fn in_turning_frame(pose: &Pose, omega: &Vector3<f64>, initial: &Wrench, delta: &Wrench) -> Wrench {
+    let mut result = Wrench::zeros();
+    for start in [0, 3] {
+        let value = pose.rotation.transpose()
+            * (delta.fixed_rows::<3>(start) - omega.cross(&initial.fixed_rows::<3>(start)));
+        result.fixed_rows_mut::<3>(start).copy_from(&value);
+    }
+    result
+}
+
+fn check_small_angles(displacement: &DVector<f64>) -> Result<(), DailyError> {
+    if displacement
+        .as_slice()
+        .as_chunks::<6>()
+        .0
+        .iter()
+        .any(|u| Vector3::new(u[3], u[4], u[5]).norm() > SMALL_ANGLE_LIMIT_RAD)
+    {
+        return Err(DailyError::SmallAngle);
+    }
+    Ok(())
 }
 
 pub(crate) fn tangent_matrix(linear: &ChainLinearisation) -> DMatrix<f64> {

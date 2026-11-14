@@ -158,7 +158,8 @@ pub(super) fn summarise(
                 sources: sources::part(evidence, layout, stop, part, &share_sources),
                 part,
                 share,
-                steady: values.len() == own.len()
+                steady: stop != BenchStop::BendingForward
+                    && values.len() == own.len()
                     && share.p90 - share.p10 <= LOAD_MARGIN_SHARE * share.p50.abs(),
                 versions_past_strength,
             })

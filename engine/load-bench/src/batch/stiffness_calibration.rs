@@ -1,7 +1,7 @@
 //! Recompute the assumed prior from first placements on six made-up spines.
 
 #[path = "../../tests/realistic_cases/mod.rs"]
-mod realistic_cases;
+pub(super) mod realistic_cases;
 
 use super::assembly;
 use crate::evidence::{Basis, Evidence, TableKind, Unit};

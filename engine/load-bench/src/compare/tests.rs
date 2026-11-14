@@ -116,7 +116,6 @@ fn loaded_sources_keep_the_rows_behind_each_number() {
             Measure::HeaviestAnchorDemand,
         ),
         [
-            "gangnet-2003",
             "gardner-morse-2004",
             "lehman-2003",
             "liljenqvist-2001",
@@ -137,7 +136,6 @@ fn loaded_sources_keep_the_rows_behind_each_number() {
             Measure::HeaviestRodSwing,
         ),
         [
-            "gangnet-2003",
             "gardner-morse-2004",
             "mannen-2018",
             "prasad-2017",
@@ -171,7 +169,6 @@ fn loaded_sources_keep_the_rows_behind_each_number() {
     assert_eq!(
         result.layouts[0].stops[2].parts[0].sources,
         [
-            "gangnet-2003",
             "gardner-morse-2004",
             "lehman-2003",
             "mannen-2018",
@@ -180,7 +177,6 @@ fn loaded_sources_keep_the_rows_behind_each_number() {
             "rohlmann-2002",
             "rohlmann-2014-gait",
             "tachi-2021",
-            "wilke-1999",
             "winter-via-keenan-2015",
         ]
     );
@@ -926,4 +922,42 @@ fn batches_must_agree_on_the_fitted_curve_including_its_absence() {
     assert_eq!(compare(&input), Err(refused("main-curves-not-shared")));
     input.batches[1].main_curve = Some(curve);
     assert!(compare(&input).is_ok());
+}
+
+#[test]
+fn bending_remains_assumed_even_when_all_versions_are_identical() {
+    let result = compare(&input(
+        vec![run("first", 0, 20.0, 4.0), run("other", 0, 20.0, 4.0)],
+        1,
+    ))
+    .unwrap();
+    for layout in &result.layouts {
+        let bending = &layout.stops[3];
+        assert_eq!(bending.stop, BenchStop::BendingForward);
+        assert!(!bending.estimates.is_empty());
+        assert!(
+            bending
+                .estimates
+                .iter()
+                .all(|row| row.tag == EstimateTag::Assumed)
+        );
+        assert!(!bending.parts.is_empty());
+        assert!(bending.parts.iter().all(|part| !part.steady));
+        let standing = &layout.stops[2];
+        assert!(standing.parts.iter().all(|part| part.steady));
+    }
+}
+
+#[test]
+fn an_unused_slice_offset_cannot_be_named_as_a_range_driver() {
+    let runs: Vec<_> = (0..3)
+        .map(|version| {
+            let mut value = run("first", version, 20.0, f64::from(version + 1));
+            value.draws.slice_offset_mm = f64::from(version + 1) * 10.0;
+            value
+        })
+        .collect();
+    let by_version = runs.iter().map(|run| (run.version, run)).collect();
+    let samples = vec![(0, 1.0), (1, 2.0), (2, 3.0)];
+    assert_eq!(ranks::driver(&by_version, &samples).0, None);
 }

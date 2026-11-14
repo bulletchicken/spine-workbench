@@ -56,7 +56,7 @@ pub(super) fn driver(
             })
             .collect(),
     ));
-    let scalars: [Scalar; 12] = [
+    let scalars: [Scalar; 11] = [
         (SampledUnknown::StiffnessScale, |run| {
             run.draws.stiffness_scale
         }),
@@ -69,7 +69,6 @@ pub(super) fn driver(
         (SampledUnknown::Walking, |run| run.draws.walking_multiple),
         (SampledUnknown::RodYield, |run| run.draws.rod_yield_mpa),
         (SampledUnknown::Preload, |run| run.draws.preload_factor),
-        (SampledUnknown::SliceOffset, |run| run.draws.slice_offset_mm),
         (SampledUnknown::ContourKnockDown, |run| {
             run.draws.contour_knock_down
         }),

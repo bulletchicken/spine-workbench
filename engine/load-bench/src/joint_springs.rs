@@ -169,6 +169,24 @@ pub(crate) fn rotation_response_tangent(
     (couple, tangent)
 }
 
+/// Change the constitutive stiffness about the current strain, keeping its
+/// existing holding couple. The log's force-dependent curvature is unchanged.
+pub(crate) fn rotation_response_tangent_with_material_scale(
+    rotation: &Vector3<f64>,
+    stiffness: &Stiffness,
+    material_scale: f64,
+) -> (Vector3<f64>, Matrix3<f64>) {
+    let (couple, tangent) = rotation_response_tangent(rotation, stiffness);
+    if material_scale == 1.0 {
+        return (couple, tangent);
+    }
+    let weights = Matrix3::from_diagonal(&stiffness.0.fixed_rows::<3>(3).into_owned());
+    let derivative = log_left_derivative(rotation);
+    let material = derivative.transpose() * weights * derivative;
+    let added = material * (material_scale - 1.0);
+    (couple, tangent + (added + added.transpose()) * 0.5)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

@@ -21,7 +21,7 @@
       "key": "each-arm-hand",
       "usage": "bench",
       "description": "Borrowed each arm+hand mass",
-      "notes": "As printed in Keenan2015 equations4/5,attributed there to Winter DA, Biomechanics and Motor Control of Human Movement,4th ed,John Wiley & Sons,2009. Textbook not opened. Original cadaver population eight males aged61–83. Applying arms overT1–T4 is own inference.",
+      "notes": "As printed in Keenan 2015 equations 4/5, attributed there to Winter DA, Biomechanics and Motor Control of Human Movement, 4th ed, John Wiley & Sons, 2009. Textbook not opened. Original cadaver population eight males aged 61–83.",
       "values": [
         {
           "term": "fraction",
@@ -38,14 +38,14 @@
       "key": "trunk-slice-endpoints",
       "usage": "bench",
       "description": "Endpoints for linear slice prior",
-      "notes": "Own inference from Keenan 0.6/58.2 and 1.5/58.2, rounded. Interpolation is a later modelling choice; no intermediate cells here.",
+      "notes": "Keenan reports T1 and L5 slice masses of 0.6 and 1.5 kg, and mean body mass 58.2 kg; no intermediate slice table is recorded.",
       "values": [
         {
           "term": "t1",
           "value": 0.01,
           "unit": "fraction-of-body-weight",
           "source": "project-assumptions",
-          "section": "own inference: rounded ratios of the Keenan slice masses to mean body mass",
+          "section": "project assumption: rounded ratio of slice mass to mean body mass",
           "basis": "own-inference",
           "approximate": true
         },
@@ -54,7 +54,7 @@
           "value": 0.026,
           "unit": "fraction-of-body-weight",
           "source": "project-assumptions",
-          "section": "own inference: rounded ratios of the Keenan slice masses to mean body mass",
+          "section": "project assumption: rounded ratio of slice mass to mean body mass",
           "basis": "own-inference",
           "approximate": true
         }
@@ -186,9 +186,9 @@
     },
     {
       "key": "slice-offset",
-      "usage": "bench",
-      "description": "Own sagittal offset prior beside raw gravity-line distances",
-      "notes": "Published28mm(SD5.6)is an unsigned3D body-centre/gravity-line distance;7.6mm(SD1.6)is left lateral. Using28/5.6as sagittal anterior offset distribution is own inference. Frontal centroid at body centre ignores the published left lateralization and remains own choice.",
+      "usage": "input",
+      "description": "Retained offset prior beside raw gravity-line distances",
+      "notes": "In 34 healthy upright standing subjects (the abstract gives no ages), 28 mm (SD 5.6) is an unsigned 3D body-centre/gravity-line distance; 7.6 mm (SD 1.6) is the left lateral distance. Neither is a measured anterior coordinate. The offset is still drawn but the daily loads do not use it.",
       "values": [
         {
           "term": "mean",
@@ -250,7 +250,7 @@
       "key": "walking",
       "usage": "bench",
       "description": "Walking/standing endpoints",
-      "notes": "DISAGREE in measured quantity:lower1.28is load on an internal spinal fixation device;upper1.71is resultant force on a vertebral body replacement. Both normalized to their own standing reference. Sampling between these quantities/populations is own inference.",
+      "notes": "The lower ratio is the whole load on a short posterior internal fixator; the upper ratio is the whole resultant force on a vertebral body replacement. Adult populations differ and each is normalised to its own standing reference. Sampling between these quantities is a project assumption. Applying the multiple only to the load standing adds is this project's reading because forces locked in by the correction do not grow with posture. The low point of each walking cycle is assumed to equal standing.",
       "values": [
         {
           "term": "lower",
@@ -300,16 +300,16 @@
     },
     {
       "key": "bending-forward",
-      "usage": "bench",
+      "usage": "beside",
       "description": "Standing-flexed pressure ratio",
-      "notes": "Pressure ratio borrowed as passive standing-load multiplier; one adult; no independent flexed posture or muscle forces.",
+      "notes": "One adult's L4–L5 disc pressures are 1.1 MPa in standing flexed and 0.5 MPa in relaxed standing. Their ratio is 2.2. This is a disc-pressure comparison, not a force multiple measured at posterior implants; the bench does not use it.",
       "values": [
         {
           "term": "multiple",
           "value": 2.2,
           "unit": "ratio",
           "source": "project-assumptions",
-          "section": "worked out from the published standing-flexed and standing pressures (ratio 1.1/0.5)",
+          "section": "project assumption: ratio of the published pressures 1.1/0.5",
           "basis": "own-inference",
           "approximate": false
         },
@@ -1230,8 +1230,8 @@
     {
       "key": "stand-sit-bend-twist",
       "usage": "beside",
-      "description": "Adult telemetry combined activities",
-      "notes": "Fixator ratios 111–120%; VBRactivities include peaks strictly above 1200 N; threshold is not an upper bound.",
+      "description": "Adult fixator loads during standing up, sitting down, lateral bending and axial rotation while standing",
+      "notes": "In ten adults with telemetered posterior internal fixators, rising from a chair, sitting down, and sideways bending or twisting of the trunk while standing gave device loads 111–120% of standing. Forward flexion and extension while standing produced higher loads, without a figure of their own in the abstract. The bench does not use the 1.11–1.20 range. The separate VBR activity threshold is strictly above 1200 N, not an upper bound.",
       "values": [
         {
           "term": "fixator-lower",
@@ -1257,6 +1257,50 @@
           "unit": "N",
           "source": "rohlmann-2014-activities",
           "section": "not recorded",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "ventral-flexion",
+      "usage": "bench",
+      "description": "Assumed bending-forward multiple from posterior-fixator activity ordering",
+      "notes": "This project's reading of the Rohlmann 2002 abstract (PMID 11784277, ten patients): forward flexion is above the 111–120% activity group, no figure is given, and it is not above the highest load measured, which was walking at 128%. The bench draws uniformly between 1.20 and 1.28; this is own inference, tagged assumed, not a measured forward-flexion range. The published ratios describe the whole load on a short posterior fixator. Applying the multiple only to the load standing adds is this project's reading because forces locked in by the correction do not grow with posture. Under the other reading, bending forward would be 20–28% above standing.",
+      "values": [
+        {
+          "term": "lower",
+          "value": 1.2,
+          "unit": "ratio",
+          "source": "project-assumptions",
+          "section": "project assumption: reading of the posterior-fixator abstract",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "upper",
+          "value": 1.28,
+          "unit": "ratio",
+          "source": "project-assumptions",
+          "section": "project assumption: reading of the posterior-fixator abstract",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "activity-group-upper",
+          "value": 1.2,
+          "unit": "ratio",
+          "source": "rohlmann-2002",
+          "section": "abstract",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "highest-measured-walking",
+          "value": 1.28,
+          "unit": "ratio",
+          "source": "rohlmann-2002",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         }

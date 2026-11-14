@@ -15,6 +15,9 @@ use shapes::spine_fit::SpineFit;
 pub struct Draw {
     pub geometry: Version,
     pub values: VersionDraws,
+    /// Assumed bending-forward multiple from adult posterior-fixator activity
+    /// ordering, drawn independently per version.
+    pub bending_multiple: f64,
     pub strength_quantile: f64,
     pub anchor_quantile: f64,
 }
@@ -208,6 +211,14 @@ fn parameters(
     let strength_quantile = u("rod-strength")?;
     Ok(Draw {
         geometry,
+        bending_multiple: span(
+            TableKind::DailyLoads,
+            "ventral-flexion",
+            "lower",
+            "upper",
+            Unit::Ratio,
+            "bending",
+        )?,
         strength_quantile,
         anchor_quantile: u("thoracic-strength")?,
         values: VersionDraws {

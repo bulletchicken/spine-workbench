@@ -133,16 +133,11 @@ fn daily(keys: &mut Keys<'_>, stop: BenchStop) {
         return;
     }
     keys.terms(TableKind::JointSprings, "preload", &["lower", "upper"]);
-    for row in [
-        "head-neck",
-        "each-arm-hand",
-        "trunk-slice-endpoints",
-        "slice-offset",
-    ] {
+    for row in ["head-neck", "each-arm-hand", "trunk-slice-endpoints"] {
         keys.row(TableKind::DailyLoads, row);
     }
     match stop {
-        BenchStop::BendingForward => keys.row(TableKind::DailyLoads, "bending-forward"),
+        BenchStop::BendingForward => keys.row(TableKind::DailyLoads, "ventral-flexion"),
         BenchStop::YearOfWalking => keys.row(TableKind::DailyLoads, "walking"),
         _ => {}
     }

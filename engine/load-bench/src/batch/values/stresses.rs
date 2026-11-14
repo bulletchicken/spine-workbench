@@ -118,11 +118,10 @@ pub(super) fn at_stop(
                 peak = peak.max(stress / yield_mpa);
                 if year {
                     let standing = section(&points, &heads, &current_stations, &standing_delta, s)?;
-                    let increment = SectionLoad {
-                        force_n: standing.force_n - locked.force_n,
-                        moment_nmm: standing.moment_nmm - locked.moment_nmm,
-                        ..locked
-                    };
+                    let turn = daily.standing.rod_displacements[r]
+                        .fixed_rows::<3>(3)
+                        .into_owned();
+                    let increment = increment_in_rod_frame(&locked, &standing, &turn);
                     let locked_stress = rod_statics::surface_stress(&locked, rod.diameter_mm)
                         .map_err(|e| refusal(&e.to_string()))?
                         .von_mises_mpa;
@@ -167,6 +166,22 @@ pub(super) fn at_stop(
     Ok(result)
 }
 
+/// First variation in the solver's free, turning rod frame. Spatial
+/// subtraction alone includes omega cross the locked-in section load,
+/// even for a rigid turn with no rod strain. Keep the reference tangent,
+/// as for the scalar section envelope; no material fibre is followed.
+fn increment_in_rod_frame(
+    locked: &SectionLoad,
+    loaded: &SectionLoad,
+    turn: &Vector3<f64>,
+) -> SectionLoad {
+    SectionLoad {
+        force_n: loaded.force_n - locked.force_n - turn.cross(&locked.force_n),
+        moment_nmm: loaded.moment_nmm - locked.moment_nmm - turn.cross(&locked.moment_nmm),
+        ..*locked
+    }
+}
+
 fn section(
     points: &[Vector3<f64>],
     heads: &[HeadLoad],
@@ -206,4 +221,45 @@ fn interpolate(stations: &[f64], values: &[Vector3<f64>], s: f64) -> Vector3<f64
 fn mapped(old: &[f64], new: &[f64], s: f64) -> f64 {
     let i = interval(old, s);
     new[i] + (s - old[i]) / (old[i + 1] - old[i]) * (new[i + 1] - new[i])
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn a_rigid_rod_turn_adds_no_walking_stress_swing() {
+        let locked = SectionLoad {
+            position_mm: Vector3::zeros(),
+            tangent_unit: Vector3::z(),
+            force_n: Vector3::new(0.0, 0.0, -10.0),
+            moment_nmm: Vector3::new(100.0, 0.0, 0.0),
+        };
+        // Turning .05 rad about z carries 100*x to 100*x+5*y to first
+        // order, with no material change in the rod's 100 Nmm moment.
+        let turned = SectionLoad {
+            moment_nmm: Vector3::new(100.0, 5.0, 0.0),
+            ..locked
+        };
+        let increment = increment_in_rod_frame(&locked, &turned, &Vector3::new(0.0, 0.0, 0.05));
+        let stress = rod_statics::surface_stress(&increment, 2.0)
+            .unwrap()
+            .von_mises_mpa;
+        assert_eq!(stress, 0.0);
+        let cycle = fatigue::walking_cycle(100.0, stress, 1.5, 1000.0).unwrap();
+        assert_eq!(cycle.amplitude_mpa, 0.0);
+        assert_eq!(cycle.equivalent_mpa, Some(0.0));
+
+        // A genuine added 2 Nmm along x remains after the same rigid turn.
+        let loaded = SectionLoad {
+            moment_nmm: Vector3::new(102.0, 5.0, 0.0),
+            ..locked
+        };
+        let increment = increment_in_rod_frame(&locked, &loaded, &Vector3::new(0.0, 0.0, 0.05));
+        let stress = rod_statics::surface_stress(&increment, 2.0)
+            .unwrap()
+            .von_mises_mpa;
+        // d=2, Z=pi*d^3/32=pi/4: stress=2/Z=8/pi MPa.
+        assert!((stress - 8.0 / core::f64::consts::PI).abs() < 1e-12);
+    }
 }

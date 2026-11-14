@@ -64,8 +64,10 @@ A refusal gives an existing engine error code with a short reason. Invalid
 values are `case-invalid-value`; an empty fit is `pass-no-spine-found`; a
 well-formed but unavailable computation is `tool-refused`. A solver cap is not
 a settled physical answer. Read `settled` and `versionsUnsettled` alongside the
-ranges. Unsettled runs keep only their computed before stop; no uncomputed
-loads enter summaries. Their unused springback share is zero and must only be
+ranges. A version counts only when every stop settles. A daily refusal also
+removes that version's rods-in record, even if correction settled. Unsettled
+runs keep only their computed before stop; no uncomputed loads enter summaries.
+Their unused springback share is zero and must only be
 read when `settled` is true. Incomplete estimate ensembles remain assumed,
 and incomplete part ensembles are not called steady.
 
@@ -130,16 +132,75 @@ this version cannot represent permanent flattening of an overbent rod.
 |---|---|---|
 | `before` | standing reference, without hardware load | standing poses |
 | `rods-in` | R plus one elastic springback step, no gravity | corrected poses |
-| `standing` | locked-in wrench plus passive standing increment | null; displayed shape stays at rods-in |
-| `bending-forward` | locked-in wrench plus scaled standing increment | null |
+| `standing` | locked-in wrench plus follower-compression increment | null; displayed shape stays at rods-in |
+| `bending-forward` | locked-in wrench plus 1.20–1.28 times the standing increment, drawn per version | null |
 | `year-of-walking` | standing/walking stress swing, Goodman conversion and annual steps | null |
 
-These stop definitions and the prescribed load sites are project choices.
-Daily loads are first-order solves about the seated state with its full
-tangent, including prestress once. Walking and bending scale the same standing
-response. They do not make a distinct flexion shape. Rod statics retains head
-couples and moving-point terms. The year comparison uses a scalar surface
-stress envelope, rather than following one material fibre. For section statics,
+These stop definitions and load paths are project choices. Standing keeps the
+head, arm and trunk weight fractions in the evidence. At each disc the weight
+above acts as compression along the column through that disc's material point,
+with zero moment about the disc. No lever-arm or slice-offset moment is added.
+No muscles are modelled: this compression through the discs represents their
+balancing of the trunk. The compression is set once at the seated poses along
+each upper body's cranial axis; its total equals the published weight in size
+but follows the lowest body's axis rather than the vertical. The chain without
+the construct is still solved under the same compression prescription at its
+reference poses. Its refusal, including the small-angle checks after scaling
+to walking and bending, also counts the version as unsettled. The contract still
+carries a drawn slice offset, but the daily cases do not use it and it cannot
+be selected as a range's driver.
+
+Daily loads are first-order solves about the seated state. The preload factor
+multiplies material stiffness only; geometric stiffness uses the seated joint
+forces that balance the locked-in head forces. Any daily case with a body turn
+above 0.1 rad is refused and the version is counted as unsettled. This is a
+limit of the small-angle method, not a fitted threshold. The same bound is
+checked after scaling standing to walking or bending.
+
+Compression through the discs gives every disc next to the rods zero couple
+to first order, with or without the construct. The level-above and level-below
+measures cannot be formed by this case and are explicitly absent at every stop.
+The app currently withholds the daily stops. Before showing them, its load
+panel needs to explain this absence and that compression through the discs
+stands in for muscles.
+
+Bending forward scales the standing increment by a multiple drawn uniformly
+from 1.20–1.28 in the `ventral-flexion` evidence row. In ten adults with posterior
+internal fixators, Rohlmann 2002 reports standing up, sitting down, lateral
+bending and axial rotation while standing at 111–120% of standing. It places
+ventral flexion and extension above that group without giving a figure, and
+walking is the highest measured load at 128%. Reading those statements as a
+1.20–1.28 interval is this project's own inference, tagged assumed; it is not
+a published range for forward bending. The 1.11–1.20 row is retained beside
+the calculation and is not used by the bench. Every result at bending forward
+is assumed. The old 2.2 disc-pressure ratio remains beside the calculation as a
+published comparison; it is not used as a posterior-implant force multiple.
+Walking and bending do not make a distinct flexion shape.
+
+The published activity ratios describe whole loads on a short fixator.
+Applying them only to the load standing adds is this project's reading,
+because the forces locked in by correction do not grow with posture in this
+model. Under the other reading, bending forward would be 20–28% above the
+whole standing load. Here the daily stops read within a few percent of rods-in
+because the forces locked in by correction dominate: daily increments of a
+few to tens of newtons sit beside correction forces of hundreds. This is what
+the model gives, not a finding about daily life. Compression through the discs
+supplies no disc moments, and rigid screw ties overstate the rods' compression
+share.
+
+The year comparison keeps one cycle per step, times 365 days. At each rod
+section the scalar stress swings from `locked + standing` to
+`locked + walking_multiple × standing`, where `walking_multiple` is drawn
+from the sourced 1.28–1.71 walking row. Its amplitude is therefore
+`(walking_multiple − 1) × standing / 2`: 0.14–0.355 times the magnitude of
+the corrected standing stress increment. That increment is expressed in the
+solver's turning rod frame: a common rigid turn of the locked-in section
+loads adds no swing. Local section rotations and individual material fibres
+are not followed. The mean includes locked-in stress.
+The Goodman-equivalent amplitude is compared with the contour-adjusted test
+bench level; cycle count does not change that ratio. This uses a scalar surface
+stress envelope, rather than following one material fibre. Rod statics retains
+head couples and moving-point terms. For section statics,
 the elastic contour is linearly interpolated between transported head motions.
 Drawing lines retain every contour knot and any occupied end continuation.
 Their length can differ from the proposal's head-to-head length: head
@@ -163,6 +224,13 @@ Head wrenches inside the solver act **on the rod**. The force on the vertebra
 has the opposite sign. Positive pull-out is force on the vertebra projected
 opposite the screw's inward axis. The outward anchor result is its resultant
 force magnitude, including locked-in and daily components before taking norms.
+The daily head increment is expressed in the frame that turns with its
+vertebra: the first-order transport of the locked-in force is removed before
+adding the increment. A rigid turn adds no reported head force. Spatial
+increments are retained separately for rod statics and balance.
+Demand compares the whole head-force magnitude with the published axial
+pull-out figure. It is a comparison, not a pull-out test of this combined load;
+using the pull-out component alone would read lower.
 
 Runs are placement by placement, then global version order. Stops follow
 `BenchStop`. Anchor arrays follow the placement's anchor order, with zero for
@@ -205,7 +273,8 @@ Tags are computed per estimate using project thresholds:
   published strength. The batch contract does not carry measurement-tier
   provenance: kyphosis and apical twist are therefore always tagged assumed,
   including sagittal versions outside the stiff-rod range. A narrow prior does
-  not turn absolute force into a measured result.
+  not turn absolute force into a measured result. Every bending-forward
+  estimate is assumed and none of its parts is marked steady.
 
 `mostlyFrom` is the sampled unknown with largest absolute Spearman rank
 correlation with that estimate. Ties receive equal average ranks. Dot order
@@ -253,8 +322,8 @@ them.
 | same | Alternative planner/coupon material sets, textbook ranges and computed section comparisons. | Tachi 2021; Little 2013; Jeong 2025; Song 2021; Ohrt-Nissen 2018; Abe 2015 and other source keys retained in that table [peer-reviewed; access in bibliography]. They are distinct sets, not mixed material properties. Section arithmetic is own inference. |
 | `anchor-strength.json` | T1–T8 screw 481–611 N; T9–T12 screw 807 N; hook 321 N; lumbar screw 1056.4 N. | Lehman 2003, 30 paired adult thoracic vertebrae; Liljenqvist 2001, 9 adult spines/90 tests; Soshi 1991, lumbar cadavers [peer-reviewed, abstracts]. T1–T8 assignment and borrowing the hook region are own choices. |
 | same | Bone factor 1 in two thirds; otherwise 0.47–1. Animal, trajectory, depth, density and augmentation comparisons retained. | Bone mixture is own inference; Soshi's grade-I ratio 495.6/1056.4 gives its broad floor. Cheng 2000 and Yip 2016 describe low bone density in AIS [peer-reviewed; access in bibliography]. Animal findings do not establish child pull-out strength. |
-| `daily-loads.json` | Head/neck 0.081 BW, each arm/hand 0.056 BW. Trunk fractions 0.010 at T1 to 0.026 at L5, interpolated. Centroid anterior offset 28±5.6 mm. | Winter attributed through Keenan 2015 [peer-reviewed, full text; textbook unopened]; Pearsall 1996 and Keenan 2014 [peer-reviewed, abstracts]; Gangnet 2003, n=34 [peer-reviewed, abstract]. Interpolation, load sites and reusing an unsigned 3D gravity-line distance as a sagittal offset are own choices. |
-| same | Walking 1.28–1.71×standing; forward bending 2.2×; weight 29–63 kg if absent. Other adult telemetry activities retained. | Rohlmann 2002, n=10 internal-fixator patients and Rohlmann 2014 gait, n=5 vertebral-body-replacement patients [peer-reviewed, abstracts]; Wilke 1999, one adult [peer-reviewed, abstract]; Schmid 2020 [peer-reviewed, full text]. Joining unlike telemetry quantities is an own prior. |
+| `daily-loads.json` | Head/neck 0.081 BW, each arm/hand 0.056 BW. Trunk fractions 0.010 at T1 to 0.026 at L5, interpolated; follower compression has zero disc moment. The 28±5.6 mm offset is drawn but unused. | Winter attributed through Keenan 2015 [peer-reviewed, full text; textbook unopened]; Pearsall 1996 and Keenan 2014 [peer-reviewed, abstracts]; Gangnet 2003, n=34 [peer-reviewed, abstract]. Interpolation and follower load path are project assumptions. Gangnet's unsigned 3D gravity-line distance does not specify an anterior offset. |
+| same | Walking 1.28–1.71×standing increment; forward bending 1.20–1.28×standing increment [own inference]; weight 29–63 kg if absent. The unused 1.11–1.20 activity range and 2.2 pressure ratio are retained beside it. | Rohlmann 2002, n=10 internal-fixator patients and Rohlmann 2014 gait, n=5 vertebral-body-replacement patients [peer-reviewed, abstracts]; Wilke 1999, one adult [peer-reviewed, abstract]; Schmid 2020 [peer-reviewed, full text]. Standing up, sitting down, lateral bending and axial rotation while standing gave 111–120%; ventral flexion and extension were above that group with no figure, and walking was highest at 128%. The inferred bending interval, applying whole-load ratios only to standing's increment, and joining unlike walking telemetry quantities are project assumptions. |
 | same | Adult activity edges 5000/7500/10000/12500 steps/day; finite absent-activity prior 8000–16000; 365 days/year. | Tudor-Locke 2008 [peer-reviewed, abstract] and 2011 [peer-reviewed, full text]. Youth cutoffs are not established. Adult very-low and very-active bands have an open boundary; no finite missing endpoint is invented. The bench refuses either open-ended activity category until a finite prior is supplied. Annual arithmetic and absent-activity prior are own choices. |
 | `fatigue.json` | Ti/CoCr construct run-outs 250/290 N, 5.5 mm rods, 5 million cycles. Historical Goodman-equivalent references 169/191 MPa; contour factor 0.6–0.8. Coupon comparisons retained. | Vieweg 2023 [peer-reviewed, full text]; Slivka 2013 [peer-reviewed, abstract]. The 40 mm fixture arm/equal sharing conversion and extrapolation of contour loss to CoCr and other diameters are own inference. Runtime ultimate strengths are sampled from Prasad, not the historical calibration's 900/1200 MPa. Steel has no construct-fatigue reference. |
 | `sources.json` | Publication identifiers, sample and population qualifications, source access and known omissions. | Bibliographic metadata for the papers above and the retained comparison rows. The project-assumptions key is own inference, not a paper. |
@@ -367,8 +436,16 @@ are in `evidence/sources.json` and `evidence/README.md` where recorded.
 6. Joint stiffness comes from adult cadavers and one published planner's
    table; no child's tissue stiffness is measured here. Strengths come from
    adult bone and young animals.
-7. Daily loads omit muscles and use adult telemetry multiples. Every activity
-   is the same passive standing load made bigger.
+7. Daily loads model no muscles. Compression through the discs represents
+   their balancing of the trunk, with no residual lever-arm moment. Screws
+   are tied rigidly to bone, so the rods carry about four tenths of the
+   compression crossing each instrumented level in the reference cases
+   (roughly 0.37–0.46); that share is overstated.
+   No load has been measured in a child's fused spine; activity multiples
+   come from adults with posterior fixators, and the walking range also
+   includes adult vertebral-body-replacement telemetry. Bending is a scaled
+   compression case, not a flexed posture. Its 1.20–1.28 multiple is an inferred
+   interval from the activity ordering, and all its results are assumed.
 8. A year of walking compares rod swings with levels rods survived on a test
    bench. It gives no lifetime and no date.
 9. Fit noise is drawn independently for each vertebra because the fit exports
@@ -382,6 +459,8 @@ are in `evidence/sources.json` and `evidence/README.md` where recorded.
 
 Further limits apply. Outside the rods, joints keep their standing rest shape;
 spontaneous correction of an unfused curve and body rebalancing are absent.
+The trunk above and below the rods is not rebalanced after correction, so the
+computed standing shape is not the patient's standing shape.
 Shape changes outside instrumented levels carry no spontaneous-correction
 interpretation. Tightened heads never slip; hooks
 are two-way translation ties without one-way contact. Growth, fusion timing,
@@ -412,6 +491,10 @@ The T1–T8 screw strength quantile is drawn, but it is not among the named
 unknowns available to `mostlyFrom` or `sortedBy`. Those fields can describe
 associations only with the unknowns carried into comparison; a null does not
 rule out movement with that strength draw.
+
+The bending multiple is also absent from the unchanged batch draw contract,
+so comparison cannot name it in `mostlyFrom` or `sortedBy`. Its draw remains
+fixed by seed, ensemble size and global version index, shared by placements.
 
 ## Numerical checks
 

@@ -90,7 +90,7 @@ pub fn compare(input: &BenchCompareInput) -> Result<BenchResult, BenchError> {
                     sources: sources::estimate(&evidence, layout, stop, measure),
                     measure,
                     band: range,
-                    tag: if samples.len() == own.len() {
+                    tag: if samples.len() == own.len() && stop != BenchStop::BendingForward {
                         tag(measure, range, sign_consistent, outside > 0)
                     } else {
                         EstimateTag::Assumed
