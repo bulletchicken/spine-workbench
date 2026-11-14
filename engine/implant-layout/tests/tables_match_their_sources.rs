@@ -839,7 +839,7 @@ fn placement_checks_keep_the_unrounded_ppv_and_the_uniform_technique_angles() {
     // fusion-levels, section 3: T1/UIV tilt correlation is 0.708.
     expect_cell(
         Table::PlacementChecks,
-        coordinate("t1-uiv-tilt-correlation", "t1-stand-in"),
+        coordinate("t1-uiv-tilt-correlation", "t1-tilt-proxy"),
         PublishedValue::Scalar { value: 0.708 },
         Unit::Correlation,
         "uiv-tilt-40020691",

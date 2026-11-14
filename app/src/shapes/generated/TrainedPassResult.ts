@@ -3,11 +3,11 @@ import type { FilmMarks } from "./FilmMarks";
 import type { PassWarning } from "./PassWarning";
 
 /**
- * What the trained finder hands back for one front film.
+ * What the trained finder hands back for one front or side film.
  */
 export type TrainedPassResult = { 
 /**
- * The front film's marks, shaped exactly as the auto pass shapes
+ * The film's marks, shaped exactly as the auto pass shapes
  * them, with the names flagged as estimates.
  */
 marks: FilmMarks, warnings: Array<PassWarning>, };

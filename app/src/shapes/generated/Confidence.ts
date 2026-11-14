@@ -9,6 +9,10 @@ import type { EndplateSpread } from "./EndplateSpread";
 export type Confidence = { 
 /**
  * 0 to 1: how likely the outline is on the right bone.
+ * For the trained side finder, 0 is a conservative unavailable-score
+ * sentinel, not a probability estimate. Its band is Low, its reasons
+ * are [LevelUncertain], calibrated is false, and endplateSpreadPx and
+ * margin are null.
  */
 score: number, 
 /**

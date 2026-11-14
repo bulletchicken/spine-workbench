@@ -26,6 +26,7 @@ import { toScene } from '../placing/scene-axes';
 import { type Vec3, add, apply, scale as scaled, sub } from '../placing/vectors';
 import { type BoneMaterials, boneMaterials } from './bone-material';
 import { CAGE, FILL_EDGE, REVEAL_RISE } from './look';
+import { formationDrawing, type FormationDrawing } from './formation-drawing';
 import type { ModelBone, SpineModel } from './spine-model';
 
 /** A film's sheet, as far as pressing a bone onto it needs: which way it faces and where it stands. */
@@ -39,6 +40,8 @@ export interface BoneValues {
   strength: number;
   tint: number;
   cage: number;
+  /** -1 uses the ordinary height fill; 0 to 1 fills from the net inward. */
+  edgeFill: number;
 }
 
 /** What can be set on a whole spine. */
@@ -69,7 +72,7 @@ export interface SpineValues {
 /** The turn each kind of thing is drawn in. Films are -10 and shadows -5. */
 const DRAWN = { depth: 0, colour: 1, lines: 2 } as const;
 
-const BONE_DEFAULTS: BoneValues = { pose: 1, reveal: 1, fill: 1, strength: 1, tint: 0, cage: 0 };
+const BONE_DEFAULTS: BoneValues = { pose: 1, reveal: 1, fill: 1, strength: 1, tint: 0, cage: 0, edgeFill: -1 };
 
 const SPINE_DEFAULTS: SpineValues = {
   depth: 1,
@@ -86,6 +89,8 @@ const SPINE_DEFAULTS: SpineValues = {
 };
 
 export interface DrawnSpine {
+  /** The externally timed points, edges and threads. */
+  readonly formation: FormationDrawing;
   /** The levels drawn, top to bottom. */
   readonly levels: readonly Level[];
   /** Set values on one bone, some bones, or (with no levels) every bone. */
@@ -248,6 +253,7 @@ export function drawSpine(model: SpineModel, host: SpineHost): DrawnSpineInside 
     const strength = values.strength * values.reveal;
     materials.uniforms.strength.value = strength;
     materials.uniforms.fill.value = values.fill;
+    materials.uniforms.edgeFill.value = values.edgeFill;
     // A share along a fill runs from 0 at the end that fills first to 1 at the other.
     const fromTop = spineValues.fillFrom === 'top';
     const [ownLow, ownHigh] = bone.of.ownHeights;
@@ -266,14 +272,16 @@ export function drawSpine(model: SpineModel, host: SpineHost): DrawnSpineInside 
 
   const clamp = (value: number) => Math.min(1, Math.max(0, value));
 
+  const formation = formationDrawing(model, root, () => { host.changed(); });
   const spine: DrawnSpine = {
+    formation,
     levels: bones.map((bone) => bone.of.level),
     set(values, levels) {
       const chosen = levels === undefined ? bones : (typeof levels === 'string' ? [levels] : levels).flatMap((level) => byLevel.get(level) ?? []);
       for (const bone of chosen) {
         const moved = (values.pose !== undefined && values.pose !== bone.values.pose) || (values.reveal !== undefined && values.reveal !== bone.values.reveal);
         for (const [name, value] of Object.entries(values) as [keyof BoneValues, number | undefined][]) {
-          if (value !== undefined) bone.values[name] = clamp(value);
+          if (value !== undefined) bone.values[name] = name === 'edgeFill' && value < 0 ? -1 : clamp(value);
         }
         if (moved) placeBone(bone);
         paintBone(bone);
@@ -341,6 +349,7 @@ export function drawSpine(model: SpineModel, host: SpineHost): DrawnSpineInside 
       return { low: reach, high: top };
     },
     remove() {
+      formation.dispose();
       host.scene.remove(root);
       for (const bone of bones) {
         bone.materials.dispose();

@@ -59,7 +59,7 @@
     {
       "coordinate": {
         "key": "t1-uiv-tilt-correlation",
-        "group": "t1-stand-in"
+        "group": "t1-tilt-proxy"
       },
       "value": {
         "kind": "scalar",

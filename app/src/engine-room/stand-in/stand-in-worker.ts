@@ -71,7 +71,7 @@ export class StandInWorker<Room> implements WorkerLike {
         void this.#after(0).then(() => {
           if (this.#ready) return;
           this.#ready = true;
-          this.#say({ kind: 'ready', info: { engineVersion: 'stand-in', shapesFingerprint: SHAPES_FINGERPRINT, caseFormat: CASE_FORMAT, caseVersion: CASE_VERSION } });
+          this.#say({ kind: 'ready', info: { engineVersion: 'stand-in', shapesFingerprint: SHAPES_FINGERPRINT, caseFormat: CASE_FORMAT, caseVersion: CASE_VERSION, trainedSideFinder: false } });
           void this.#next();
         });
         return;

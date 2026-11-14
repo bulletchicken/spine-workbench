@@ -44,6 +44,7 @@ pub fn run(args: &FramesArgs) -> Outcome {
         },
         first_vertebra_id: 1,
         front_finder: FrontFinder::HandBuilt,
+        side_finder: shapes::SideFinder::HandBuilt,
     };
     let mut frames = Vec::new();
     let mut film_pass = FilmPass::new(Rc::clone(&decoded), film)?;

@@ -59,3 +59,11 @@ export const FILL_EDGE = 0.14;
 
 /** A bone arriving rises this far, mm, as it fades in. */
 export const REVEAL_RISE = 8;
+
+/** The drawing that grows into a bone. Widths are CSS pixels. */
+export const FORMATION = {
+  dot: 2.6, dotAtScale: 1.2, leastDotScale: .7, first: 1.3, node: 1.5, from: 1.7, line: 0.75, lift: 1.5, far: 0.32,
+  ink: '#0d0d0d', dotStrength: 0.78, lightDot: 0.9, lightLine: 0.6,
+  outlineLook: '#f5a524', mark: .9, casing: .45, casingLook: .65,
+  threadStrength: 0.45, lightThread: 0.5, cellSoft: 0.3, fillReach: 1.35, outward: 0.6,
+} as const;

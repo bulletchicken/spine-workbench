@@ -3,6 +3,7 @@ import type { FitFromFilms, SpineFit } from '@/shapes';
 import type { Bone } from '@/spine-3d/bones/read-bones';
 
 export interface AcceptedSpine {
+  movePending?: boolean;
   key: string;
   input: FitFromFilms;
   fit: SpineFit;

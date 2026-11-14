@@ -1,0 +1,6 @@
+.stage > .measurements { max-height: 100%; overflow: auto; }
+.stage > .measurements[data-hidden] { visibility: hidden; opacity: 0; pointer-events: none; }
+.measurements .panel-note p + p, .measurements > .m-about { margin-top: var(--space-8); }
+.measurements .measures { list-style: none; padding: 0; }
+.measurements .measures li:focus-visible { outline: var(--ring-width) solid var(--accent); outline-offset: var(--space-4); border-radius: var(--r-text); }
+.measurements.sheet { z-index: var(--z-popover); }

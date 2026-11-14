@@ -58,6 +58,10 @@ pub enum ErrorCode {
     PassTooLittleUsable,
     /// The spine shown is too short for the vertebra count.
     PassStripTooShort,
+    /// The trained side finder is not included in this build.
+    SideFinderUnavailable,
+    /// The trained side finder needs an explicit, confirmed side facing.
+    PassFacingRequired,
 
     // The adjusting tools
     ToolClickOutsideFilm,

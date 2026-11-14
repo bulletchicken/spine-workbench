@@ -48,12 +48,13 @@ describe('running Find', () => {
     const expected = result(); const called = answer(expected); findRun.start(engine);
     await vi.advanceTimersByTimeAsync(760);
     expect(called.mock.calls[0]?.[0].frontFinder).toBe(from === 'made-up-case' ? 'hand-built' : 'trained');
+    expect(called.mock.calls[0]?.[0].sideFinder).toBe(from === 'made-up-case' ? 'hand-built' : 'trained');
     expect(called.mock.calls[0]?.[1]).not.toHaveProperty('onFrame');
     expect(called.mock.calls[0]?.[0].options).toEqual({ acquisition: 'unknown', population: 'adolescent', template: null });
     expect(findState.getState().phase).toBe('replaying');
     expect(caseStore.getState().case.marks).toEqual(expected.marks);
     expect(caseStore.getState().history.undo).toHaveLength(0);
-    for (const marks of expected.marks) expect(fitSources.getState().films[marks.film]).toEqual({ finder: marks.film === 'front' && from !== 'made-up-case' ? 'trained' : 'hand-built', opening: filmPixels.getState().openings[marks.film] });
+    for (const marks of expected.marks) expect(fitSources.getState().films[marks.film]).toEqual({ finder: (marks.film === 'front' || marks.film === 'side') && from !== 'made-up-case' ? 'trained' : 'hand-built', opening: filmPixels.getState().openings[marks.film] });
   });
   it('lands one edit per film as one action, before the replay, then clears the history', async () => {
     const expected = result(); answer(expected); const apply = vi.spyOn(caseStore.getState(), 'apply'); const fresh = vi.spyOn(caseStore.getState(), 'startAfresh');

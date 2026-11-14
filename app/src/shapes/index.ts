@@ -187,6 +187,7 @@ export type * from './generated/SelectiveCriterion';
 export type * from './generated/SelectiveReading';
 export type * from './generated/Severity';
 export type * from './generated/Shutter';
+export type * from './generated/SideFinder';
 export type * from './generated/SideMarks';
 export type * from './generated/SourceFormat';
 export type * from './generated/SpacingCalibration';

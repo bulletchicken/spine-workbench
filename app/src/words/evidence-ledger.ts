@@ -1667,7 +1667,7 @@ export const EVIDENCE_LEDGER = [
     feature: 'Level selection and curve criteria — liv index',
     publishedNumber:
       'key liv-index-max, group liv-index: 0 levels. Strictly less than 0; a published zero threshold, not a ' +
-      'missing-value stand-in.',
+      'substitute for a missing value.',
     population:
       'chen-2025: Lenke 1–2 with LIV at or below LTV/LSTV; derivation cohort only. Sample: 112 patients in the ' +
       'full cohort; 10 with adding-on; under-15 subgroup n not supplied. [peer-reviewed; full-text].',
@@ -2144,8 +2144,8 @@ export const EVIDENCE_LEDGER = [
     feature: 'Level selection and curve criteria — coronal decompensation',
     publishedNumber:
       'key c7pl-csvl-min, group coronal-decompensation: 20 mm. Strictly greater than 20 mm for C7PL−CSVL. Review ' +
-      'definition; full text read in part. This is an result definition, not a measured CSVL stand-in or a ' +
-      'patient-specific result.',
+      'definition; full text read in part. This is a result definition, not a substitute for a measured ' +
+      'CSVL or a patient-specific result.',
     population:
       'coronal-decompensation-4417731: Selective fusion; coronal decompensation defined in the opened article by ' +
       'C7PL–CSVL >20 mm. Sample: Selective thoracic subgroup 16; selective TL/L subgroup 14; full sample not ' +
@@ -3268,7 +3268,7 @@ export const EVIDENCE_LEDGER = [
     id: 'place-layout-placement-checks-uiv-tilt-40020691-t1-uiv-tilt-correlation',
     feature: 'Published placement checks and entry observations — t1 uiv tilt correlation',
     publishedNumber:
-      'key t1-uiv-tilt-correlation, group t1-stand-in: 0.708 correlation. Correlation coefficient r = 0.708 ' +
+      'key t1-uiv-tilt-correlation, group t1-tilt-proxy: 0.708 correlation. Correlation coefficient r = 0.708 ' +
       'between postoperative UIV tilt and postoperative T1 tilt, not a ratio of angles. n = 151 (107 Lenke 1, 44 ' +
       'Lenke 2).',
     population:

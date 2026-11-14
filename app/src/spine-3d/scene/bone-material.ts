@@ -14,9 +14,10 @@
 //   the bone and not half inside it.
 
 import { Color, MeshBasicMaterial, MeshStandardMaterial, Vector2, Vector4, type WebGLProgramParametersWithUniforms } from 'three';
-import { ACCENT, BONE, BONE_METALNESS, BONE_ROUGHNESS, FILL_EDGE, TINT_SHARE } from './look';
+import { ACCENT, BONE, BONE_METALNESS, BONE_ROUGHNESS, FILL_EDGE, FORMATION, TINT_SHARE } from './look';
 
 export interface BoneUniforms {
+  edgeFill: { value: number };
   /** How strongly the bone is drawn, 0 to 1. */
   strength: { value: number };
   /** How much of the bone is filled, 0 to 1, from the end that fills first. */
@@ -31,6 +32,8 @@ export interface BoneUniforms {
 
 const DECLARATIONS = /* glsl */ `
 uniform float uStrength;
+uniform float uEdgeFill;
+varying float vCell;
 uniform float uFill;
 uniform vec2 uOwnHeights;
 uniform vec4 uSpineFill;
@@ -46,20 +49,22 @@ float spineEdge = uSpineFill.z * (1.0 + uSpineFill.w);
 float shown = uStrength
   * (1.0 - smoothstep(ownEdge - ${FILL_EDGE.toFixed(4)}, ownEdge, ownShare))
   * (1.0 - smoothstep(spineEdge - uSpineFill.w, spineEdge, spineShare));
+if (uEdgeFill >= 0.0) shown = uStrength * (1.0 - smoothstep(uEdgeFill * ${FORMATION.fillReach.toFixed(2)} - ${FORMATION.cellSoft.toFixed(2)}, uEdgeFill * ${FORMATION.fillReach.toFixed(2)}, vCell));
 if (shown < 0.004) discard;
 diffuseColor.a *= shown;
 `;
 
 function withFill(uniforms: BoneUniforms) {
   return (shader: WebGLProgramParametersWithUniforms) => {
+    shader.uniforms.uEdgeFill = uniforms.edgeFill;
     shader.uniforms.uStrength = uniforms.strength;
     shader.uniforms.uFill = uniforms.fill;
     shader.uniforms.uOwnHeights = uniforms.ownHeights;
     shader.uniforms.uPatientUp = uniforms.patientUp;
     shader.uniforms.uSpineFill = uniforms.spineFill;
     shader.vertexShader = shader.vertexShader
-      .replace('#include <common>', `#include <common>\nuniform vec4 uPatientUp;\nvarying float vOwnHeight;\nvarying float vPatientHeight;`)
-      .replace('#include <begin_vertex>', `#include <begin_vertex>\nvOwnHeight = position.z;\nvPatientHeight = dot(uPatientUp.xyz, position) + uPatientUp.w;`);
+      .replace('#include <common>', `#include <common>\nattribute float aCell;\nattribute float aTurn;\nvarying float vCell;\nuniform vec4 uPatientUp;\nvarying float vOwnHeight;\nvarying float vPatientHeight;`)
+      .replace('#include <begin_vertex>', `#include <begin_vertex>\nvCell = aCell * ${(1 - FORMATION.outward).toFixed(2)} + aTurn * ${FORMATION.outward.toFixed(2)};\nvOwnHeight = position.z;\nvPatientHeight = dot(uPatientUp.xyz, position) + uPatientUp.w;`);
     shader.fragmentShader = shader.fragmentShader
       .replace('#include <common>', `#include <common>\n${DECLARATIONS}`)
       .replace('#include <color_fragment>', `#include <color_fragment>\n${SHOWN}`);
@@ -82,6 +87,7 @@ const HIGHLIGHT = new Color(BONE).lerp(new Color(ACCENT), TINT_SHARE);
 
 export function boneMaterials(): BoneMaterials {
   const uniforms: BoneUniforms = {
+    edgeFill: { value: -1 },
     strength: { value: 1 },
     fill: { value: 1 },
     ownHeights: { value: new Vector2(0, 1) },

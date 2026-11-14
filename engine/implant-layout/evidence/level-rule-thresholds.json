@@ -307,7 +307,7 @@
       "unit": "levels",
       "source": "chen-2025",
       "section": "fusion-levels.md §2b and table B",
-      "qualifier": "Strictly less than 0; a published zero threshold, not a missing-value stand-in."
+      "qualifier": "Strictly less than 0; a published zero threshold, not a substitute for a missing value."
     },
     {
       "coordinate": {
@@ -788,7 +788,7 @@
       "unit": "mm",
       "source": "coronal-decompensation-4417731",
       "section": "fusion-levels.md §5 and table B",
-      "qualifier": "Strictly greater than 20 mm for C7PL−CSVL. Review definition; full text read in part. This is an outcome definition, not a measured CSVL stand-in or a patient-specific result."
+      "qualifier": "Strictly greater than 20 mm for C7PL−CSVL. Review definition; full text read in part. This is an outcome definition, not a substitute for a measured CSVL or a patient-specific result."
     },
     {
       "coordinate": {

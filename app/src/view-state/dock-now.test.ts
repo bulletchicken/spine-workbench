@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { createElement } from 'react';
+import { createElement, useLayoutEffect } from 'react';
 import { afterEach, describe, expect, it } from 'vitest';
 import { find, putOnThePage } from '@/building-blocks/test-rig/on-the-page';
 import type { DockSpec } from '@/guide/dock-spec';
@@ -39,4 +39,20 @@ describe('the current dock', () => {
     expect(find('#dock-reading').textContent).toBe('');
     reader.show(null);
   });
+});
+
+
+it('hands the incoming 3D sentence to the dock before the next layout paint', () => {
+  const three: DockSpec = { scene: 'three', sentence: 'The spine in 3D.' };
+  const painted: (DockSpec | null)[] = [];
+  function BeforePaint({ spec }: { spec: DockSpec }) {
+    useLayoutEffect(() => { painted.push(dockNow.getState().spec); }, [spec]);
+    return null;
+  }
+  function Step({ spec }: { spec: DockSpec }) {
+    return createElement('div', null, createElement(Caller, { key: spec.scene, spec }), createElement(BeforePaint, { spec }));
+  }
+  const page = putOnThePage(createElement(Step, { spec: ready }));
+  page.show(createElement(Step, { spec: three }));
+  expect(painted).toEqual([ready, three]);
 });

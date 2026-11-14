@@ -71,6 +71,8 @@ progress number (`motion/easing.ts` has the curve and the helpers), and
 hand glides to a stop, and `Spine3D` travels to a named view over 600 ms
 unless motion is reduced or it is told to jump.
 
+The externally timed `spine.formation` draws all seed points, growing edges and film threads in three batches; `edgeFill` fills the fitted surface from that net inward.
+
 The stage draws only when something changed, on the app's one animation
 loop.
 

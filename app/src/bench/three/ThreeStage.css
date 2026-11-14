@@ -1,10 +1,27 @@
 /* Reserve the rail symmetrically, keeping the spine on the frame's centre line. */
 .three-stage {
   position: absolute;
-  inset: 0 calc(var(--rail-h) / 2 + var(--tile-gap));
+  inset: 0;
   pointer-events: auto;
 }
-/* The rail has no actions until comparison is available. */
-[data-moment="three"] .tiles .tile { pointer-events: none; cursor: default; }
+[data-moment="three"] .tiles .tile { pointer-events: auto; cursor: pointer; }
+[data-moment="three"] .tile > .film { pointer-events: none; }
+.three-stage[data-compared] { inset-inline: 0; }
+.compare-slot { position: absolute; border: none; padding: 0; background: var(--soft-1); border-radius: var(--r-small); pointer-events: auto; cursor: pointer; }
+.tiles[data-sheet] { visibility: hidden; pointer-events: none; }
+@media (max-width: 900px) {
+  .tiles[data-compared] .tile { visibility: hidden; pointer-events: none; }
+  .tiles[data-compared="front"] .tile[data-place="front"], .tiles[data-compared="side"] .tile[data-place="side"], .tiles[data-compared="bend-left"] .tile[data-place="bend-left"], .tiles[data-compared="bend-right"] .tile[data-place="bend-right"] { visibility: visible; pointer-events: auto; }
+}
+
 .frame > .spine { transform: none; }
 [data-moment="three"] .frame > .spine { transform: none; }
+
+[data-moment="three"] .tiles[data-compared="front"] .tile[data-place="front"] .film,
+[data-moment="three"] .tiles[data-compared="side"] .tile[data-place="side"] .film { pointer-events: auto; }
+.tiles[data-compared="front"] .tile[data-place="front"] .marks,
+.tiles[data-compared="side"] .tile[data-place="side"] .marks { opacity: 1; visibility: visible; }
+[data-moment="three"][data-links] .tiles[data-compared="front"] .tile[data-place="front"] .mark,
+[data-moment="three"][data-links] .tiles[data-compared="side"] .tile[data-place="side"] .mark { opacity: 1; }
+[data-moment="three"][data-links] .tiles[data-compared="front"] .tile[data-place="front"] .mark.on.under polygon,
+[data-moment="three"][data-links] .tiles[data-compared="side"] .tile[data-place="side"] .mark.on.under polygon { fill: var(--accent-fill); }

@@ -12,6 +12,7 @@ import { type Placing, placingOf } from '../placing/place-vertebra';
 import { toScene } from '../placing/scene-axes';
 import { shapeBone } from '../placing/shape-bone';
 import { cageLines } from './cage';
+import { formationMesh, type FormationMesh } from './formation-mesh';
 import { hollowShade } from './hollow-shade';
 import { HOLLOW_KEEPS, HOLLOW_TINT } from './look';
 
@@ -25,6 +26,7 @@ export interface ModelBone {
   geometry: BufferGeometry;
   /** The lines of its see-through version. */
   cage: BufferGeometry;
+  formation: FormationMesh;
   /** The lowest and highest of the shaped bone along its own up axis, mm. */
   ownHeights: readonly [number, number];
   /** The fitted body's landmarks in the vertebra's own frame. */
@@ -111,12 +113,17 @@ export function modelSpine(fit: SpineFit, bones: readonly Bone[]): SpineModel {
     const cage = new BufferGeometry();
     cage.setAttribute('position', new BufferAttribute(cageLines(shaped, bone.triangles), 3));
 
+    const formation = formationMesh(shaped, bone.triangles, vertebra.pose.height);
+    geometry.setAttribute('aCell', new BufferAttribute(formation.cell, 1));
+    geometry.setAttribute('aTurn', new BufferAttribute(formation.turn, 1));
+
     made.push({
       level: vertebra.level,
       vertebra,
       placing,
       geometry,
       cage,
+      formation,
       ownHeights,
       landmarks: landmarksOf(vertebra.pose),
     });

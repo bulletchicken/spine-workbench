@@ -6,7 +6,7 @@ import { cameras } from '@/film-viewer/camera/cameras';
 import type { DrawState, FilmPainter } from '@/film-viewer/gpu/film-painter';
 import { filmSpace } from '@/film-viewer/film-space';
 import type { FilmSurface } from '@/film-viewer/gpu/gl-context';
-import { Stage, type StageFilm, type StageProps } from './Stage';
+import { Stage, type FilmDriver, type StageFilm, type StageProps } from './Stage';
 import { FILM_ORDER } from './stage-layout';
 
 const { steps, painters } = vi.hoisted(() => ({
@@ -267,4 +267,46 @@ describe('the stage', () => {
     act(() => { find('.mark:not(.under) polygon').dispatchEvent(new MouseEvent('pointerover', { bubbles: true })); });
     expect(point).not.toHaveBeenCalled();
   });
+});
+
+it('keeps the Find registration for formation and exposes the same rail tiles for comparison', async () => {
+  let driver: FilmDriver | null = null;
+  const onFilmDriver = (next: FilmDriver | null) => { driver = next; };
+  const current = (): FilmDriver => { if (driver === null) throw new Error('no film driver'); return driver; };
+  const front: StageFilm = { ...madeUpFilm(), names: true, outlines: [{ key: 'T1', name: 'T1', spoken: 'T1', look: 'found', shown: true, quad: [[220, 200], [366, 200], [366, 220], [220, 220]] }], size: { width: 586, height: 1300 }, frame: { kind: 'spine', box: { left: 220, right: 366, top: 200, bottom: 1100 }, names: true, most: 1.3 } };
+  await show({ moment: 'find', films: { ...empty, front, side: madeUpFilm() }, onFilmDriver });
+  tick(800);
+  const tile = find('.tile[data-place="front"]');
+  const before = cameras.placementOf('front');
+  if (before === null) throw new Error('no camera');
+  const zoom = before.zoom;
+  const openingBox = ['--x', '--y', '--bw', '--bh', '--s'].map((name) => tile.style.getPropertyValue(name));
+  await show({ moment: 'three', forming: true });
+  expect(['--x', '--y', '--bw', '--bh', '--s'].map((name) => tile.style.getPropertyValue(name))).toEqual(openingBox);
+  expect(cameras.placementOf('front')).toEqual(before);
+  expect(tile.style.opacity).not.toBe('0');
+  expect(find('.tiles').hasAttribute('data-holding')).toBe(true);
+  expect(tile.getAttribute('data-names')).toBe('on');
+  expect(tile.querySelector('.mark.found polygon')).not.toBeNull();
+  expect(find('.tile[data-place="front"]')).toBe(tile);
+  expect(current().opening(DOMRect.fromRect())?.pxPerFilmPx).toBe(zoom);
+  act(() => { current().set({ front: 0, side: 0, 'bend-left': 0, 'bend-right': 0 }); });
+  expect(Number(tile.style.getPropertyValue('--s'))).toBeGreaterThan(1);
+  act(() => { current().finish(); });
+  expect(tile.style.getPropertyValue('--s')).toBe('1');
+  await show({ forming: false, compared: 'front', onPressFilm: vi.fn() });
+  expect(find('.tile[data-place="front"]')).toBe(tile);
+  expect(current().compared).toBe('front');
+  expect(host.querySelector('.compare-slot')).not.toBeNull();
+  expect(current().separation).toBeGreaterThan(0);
+});
+
+
+it('does not render empty-place names during formation or the settled three moment', async () => {
+  await show({ moment: 'find', films: { ...empty, front: madeUpFilm() } });
+  for (const forming of [true, false]) {
+    await show({ moment: 'three', forming });
+    expect([...host.querySelectorAll('.caption')].map((caption) => caption.getAttribute('data-place'))).toEqual(['front']);
+    for (const kind of ['side', 'bend-left', 'bend-right']) expect(host.querySelector(`.caption[data-place="${kind}"]`)).toBeNull();
+  }
 });

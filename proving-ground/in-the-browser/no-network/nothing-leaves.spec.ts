@@ -166,9 +166,10 @@ test('nothing leaves the machine', async ({ baseURL, browserName, context, page 
   }
   await expect(sentence).toHaveText(REVIEWED);
   await expect(dock.getByText('All of them look right.', { exact: true })).toBeVisible();
-  // The next moment has no registered destination yet, so its button is absent.
-  await expect(dock.getByRole('button', { name: 'Build the 3D spine', exact: true })).toHaveCount(0);
-  await expect(steps.getByRole('button', { name: '3D', exact: true })).toBeDisabled();
+  // The fit runs on this machine too: the reviewed search builds the 3D spine and opens it.
+  await dock.getByRole('button', { name: 'Build the 3D spine', exact: true }).click();
+  await expect(sentence).toHaveText('The spine in 3D.', { timeout: 60_000 });
+  await expect(steps.getByRole('button', { name: '3D', exact: true })).toBeEnabled();
 
   await steps.getByRole('button', { name: 'Films', exact: true }).click();
   await expect(sentence).toHaveText('All four films are in.');

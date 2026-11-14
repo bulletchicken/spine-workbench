@@ -48,7 +48,7 @@ export async function buildSpine(engine: Pick<EngineClient, 'fitSpine'>): Promis
     const [fit, bones] = await Promise.all([engine.fitSpine(input), loadBones()]);
     if (!stillCurrent()) return;
     if (!usableFit(fit) || !fit.vertebrae.some((v) => v.level !== 'C7' && TEMPLATE_LEVELS.standard.includes(v.level) && bones.some((b) => b.level === v.level))) throw new Error('fit-has-no-drawable-spine');
-    spineBuild.getState().accept({ key: key ?? '', input, fit, bones });
+    spineBuild.getState().accept({ movePending: true, key: key ?? '', input, fit, bones });
     threeState.getState().clear();
     currentStep.getState().go('three');
   } catch {

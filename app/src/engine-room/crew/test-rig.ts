@@ -36,7 +36,7 @@ import { Crew } from './crew';
 import type { SpawnWorker, WorkerEvents, WorkerLike } from './crew-member';
 import { RealEngine } from './real-engine';
 
-export const ENGINE_INFO: EngineInfo = { engineVersion: '9.9.9', shapesFingerprint: SHAPES_FINGERPRINT, caseFormat: 'spine-case', caseVersion: 1 };
+export const ENGINE_INFO: EngineInfo = { engineVersion: '9.9.9', shapesFingerprint: SHAPES_FINGERPRINT, caseFormat: 'spine-case', caseVersion: 1, trainedSideFinder: false };
 export const PANIC_MESSAGE = 'panicked at a fake job';
 
 /** The smallest valid WebAssembly module, handed to fake workers that never use it. */
@@ -164,6 +164,25 @@ export const FILM_JOBS: Record<string, unknown> = {
           naming: input.chain.naming,
           namedFor: deskName(room),
         }) as unknown as FilmMarks,
+    }),
+  },
+  'trained-side-pass': {
+    default: defineJob('trained-side-pass', {
+      start: (input, room) => {
+        const name = deskName(room);
+        if (name.includes('no spine')) throw new EngineFailure({ code: 'pass-no-spine-found', message: 'no spine', detail: name });
+        const film = input.film.kind;
+        return fakePass(film, 'evidence', fakePassSlices(name, 3), name.includes('mixed'), (): TrainedPassResult => ({
+          marks: {
+            film,
+            vertebrae: [0, 1, 2, 3, 4].map((step) => ({ id: input.firstVertebraId + step })),
+            landmarks: { c7: null, sacrumTop: null, hips: [] },
+            naming: { template: 'standard', chosenBy: 'engine', alternatives: [], fromTop: null, fromBottom: null, flags: ['estimated'], l5ConfirmedOn: null },
+            namedFor: name,
+          } as unknown as FilmMarks,
+          warnings: [{ code: 'low-evidence', film, level: null, region: null }],
+        }));
+      },
     }),
   },
   'trained-pass': {

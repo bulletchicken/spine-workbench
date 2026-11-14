@@ -2,6 +2,7 @@
 import type { ChainOptions } from "./ChainOptions";
 import type { Film } from "./Film";
 import type { FrontFinder } from "./FrontFinder";
+import type { SideFinder } from "./SideFinder";
 
 /**
  * Everything the auto pass needs from the app.
@@ -36,4 +37,10 @@ firstVertebraId: number,
  * pass's own one-call entry (`auto_pass::run::auto_pass`) does not
  * route: it runs the hand-built stages on every film it is given.
  */
-frontFinder: FrontFinder, };
+frontFinder: FrontFinder, 
+/**
+ * Which finder reads the side film. Omission means hand-built;
+ * explicit `null` is refused. The caller routes it, while
+ * `auto_pass::run::auto_pass` stays hand-built on all supplied films.
+ */
+sideFinder?: SideFinder, };

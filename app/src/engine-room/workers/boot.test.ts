@@ -13,7 +13,7 @@ const engine = vi.hoisted(() => ({
 vi.mock('../wasm-build/wasm_bridge', () => engine);
 
 function info(fingerprint: string): EngineInfo {
-  return { engineVersion: '0.1.0', shapesFingerprint: fingerprint, caseFormat: 'spine-case', caseVersion: 1 };
+  return { engineVersion: '0.1.0', shapesFingerprint: fingerprint, caseFormat: 'spine-case', caseVersion: 1, trainedSideFinder: false };
 }
 
 /** A worker scope that records what the worker posts. */

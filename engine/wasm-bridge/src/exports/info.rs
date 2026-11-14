@@ -10,7 +10,9 @@ use wasm_bindgen::prelude::*;
 /// build.
 #[wasm_bindgen]
 pub fn engine_info() -> Result<JsValue, JsValue> {
-    crossing::to_js(&EngineInfo::current(env!("CARGO_PKG_VERSION")))
+    let mut info = EngineInfo::current(env!("CARGO_PKG_VERSION"));
+    info.trained_side_finder = trained_finder::side::available();
+    crossing::to_js(&info)
 }
 
 /// The message of the panic that ended the last call, or `null`. A worker

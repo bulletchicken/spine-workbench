@@ -153,6 +153,9 @@ export function filmJobs(story: StandInStory, scripts: StandInScripts): StandInJ
     // The stand-in knows no network: a trained pass tells the same story as
     // the hand-built stages, the film's frames from every stage (the chain's
     // too) over the whole pass's time, then its marks and warnings.
+    'trained-side-pass': () => {
+      throw new EngineFailure({ code: 'side-finder-unavailable', message: 'the side finder is not in this build', detail: null });
+    },
     'trained-pass': ({ film, firstVertebraId }, room) => {
       const { story: told } = held(room);
       const { frames: all, warnings, marks } = story.pass;
