@@ -17,7 +17,7 @@ import { filmSide, placementLooks, reviewItems } from './placement-view';
 import { placeState } from './place-state';
 import { restingView } from '../three/resting-view';
 import { loadState } from './load-state';
-import { anchorLoad, anchorPoint, loadLabels, pastWords, rangeWords, shownLoadStop, shownStopResult } from './load-view';
+import { anchorLoad, anchorPoint, loadLabels, pastWords, rangeWords, shownLoadStop, shownStopResult,tooFewSettled } from './load-view';
 import { useLoadDrawing } from './load-drawing';
 import { RangeBar, scaleFor } from './LoadEstimates';
 import { PartControls } from './PartControls';
@@ -32,7 +32,7 @@ export function PlaceDrawing({ accepted, handle }: { accepted: AcceptedSpine; ha
   const veiling = useRef(false), drawnRef=useRef<DrawnPlacement|null>(null);
   const load=useStore(loadState);
   const stop=shownLoadStop(load.stop),loaded=load.phase==='loaded',currentLoad=loaded?shownStopResult(load.result,stop):undefined;
-  const loadParts=stop==='before'?[]:currentLoad?.parts??[];
+  const loadParts=stop==='before'||tooFewSettled(load.result)?[]:currentLoad?.parts??[];
   const result = state.result, layout = result?.layouts[0];
   const items = useMemo(() => result === null ? [] : reviewItems(result, accepted.input.front.marks.namedFor), [result, accepted.input.front.marks.namedFor]);
   const itemsRef=useRef(items);useLayoutEffect(()=>{itemsRef.current=items;},[items]);

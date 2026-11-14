@@ -89,3 +89,8 @@ it('cleans each paper population separately and gives an end only its own rules'
  const overlapping={...entry,population:'winter-via-keenan-2015: Adults. Sample: 8 [secondary]. keenan-2015: Girls. Sample: 20 [full-text].',sources:[{key:'winter-via-keenan-2015',citation:'Winter',pmid:null,doi:null},{key:'keenan-2015',citation:'Keenan',pmid:null,doi:null}]};expect(populationWords(overlapping,'winter-via-keenan-2015')).toBe('Adults.');expect(populationWords(overlapping,'keenan-2015')).toBe('Girls.');
  proposals.rules.forEach((rule)=>{rule.sources=[rule.end==='upper'?'upper-only':'lower-only'];});expect(endSourceKeys(proposals,'upper')).toEqual(['upper-only']);expect(endSourceKeys(proposals,'lower')).toEqual(['lower-only']);
 });
+
+it('does not start a comparison for a baseline with too many unsettled versions',async()=>{
+ const {baseline}=setup(),layout=baseline.layouts[0];if(layout===undefined)throw new Error('layout');layout.versionsUnsettled=9;
+ const engine={runLoadBench:vi.fn(),compareLayouts:vi.fn()};await comparePlacements(engine);expect(engine.runLoadBench).not.toHaveBeenCalled();expect(comparisonState.getState().open).toBe(false);
+});

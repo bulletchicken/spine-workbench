@@ -4,6 +4,7 @@ import { EngineFailure,type EngineClient } from '@/engine-room/engine-client';
 import { currentStep } from '@/view-state/current-step';
 import { placeState } from './place-state';
 import { handState } from './hand-state';
+import { tooFewSettled } from './load-view';
 import { loadState } from './load-state';
 import { comparisonLayouts,comparisonMeasures, type ComparisonMeasure } from './comparison-view';
 interface ComparisonState { open:boolean; leaving:boolean; phase:'idle'|'running'|'done'|'failed'; layouts:ImplantLayout[]; finished:ImplantLayout[]; batches:BenchBatch[]; result:BenchResult|null; measure:ComparisonMeasure; page:number;pageSize:1|3; elapsedMs:number|null; retryable:boolean }
@@ -24,6 +25,7 @@ currentStep.subscribe((state)=>{if(state.slug!=='place')closeComparison(true);})
 /** Each completed placement has exactly the baseline's versions, including its zero slice.
  * The Loaded result is never replaced: comparison scales and ink belong to the columns only. */
 export async function comparePlacements(engine:Pick<EngineClient,'runLoadBench'|'compareLayouts'>):Promise<void> {
+  if(loadState.getState().phase!=='loaded'||tooFewSettled(loadState.getState().result))return;
   const cached=comparisonState.getState();
   if(cached.phase==='done'){comparisonState.setState({open:true,leaving:false});return;}
   if(cached.phase==='running')return;

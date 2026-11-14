@@ -9,14 +9,14 @@ import { curveOf } from '@/choreography/timing';
 import type { Spine3DHandle } from '@/spine-3d/view/Spine3D';
 import type { DrawnSpine } from '@/spine-3d/scene/drawn-spine';
 import type { AcceptedSpine } from '@/view-state/spine-build';
-import { ESTIMATE_TAGS,PLACE_COMPARE_WORDS as W } from '@/words/place';
+import { PLACE_LOAD_WORDS as L,ESTIMATE_TAGS,PLACE_COMPARE_WORDS as W } from '@/words/place';
 import { comparisonState,closeComparison } from './comparison-state';
 import { comparisonName,pairedWords,comparisonDifferences,comparisonPageSize,comparisonMeasures } from './comparison-view';
 import { loadState } from './load-state';
 import { handState } from './hand-state';
 import { placeState } from './place-state';
 import { drawPlacement,PLACE_DRAWING as D,type DrawnPlacement } from './draw-placement';
-import { drawingPoses,rodsInDrawing,rangeWords } from './load-view';
+import { drawingPoses,rodsInDrawing,rangeWords,tooFewSettled } from './load-view';
 import { PlacementCaption } from './PlacementCaption';
 import { RangeBar } from './LoadEstimates';
 export const COMPARISON_DRAWING={moveMs:640,gapPx:24,footerPx:164,readingPx:156} as const;
@@ -85,10 +85,10 @@ export function ComparisonDrawing({accepted,handle}:{accepted:AcceptedSpine;hand
     };project();return stage.onDrawn(project);
   },[handle,shown]);
   return <><div className="place-comparison" ref={root}>{shown.map((layout,i)=>{
-    const done=state.finished.some((l)=>l.id===layout.id),result=state.result?.layouts.find((l)=>l.layoutId===layout.id),count=result?.counts.find((c)=>c.measure===measure&&c.stop==='rods-in'),words=pairedWords(count),estimate=result?.stops.find((s)=>s.stop==='rods-in')?.estimates.find((e)=>e.measure===measure);
+    const done=state.finished.some((l)=>l.id===layout.id),result=state.result?.layouts.find((l)=>l.layoutId===layout.id),count=result?.counts.find((c)=>c.measure===measure&&c.stop==='rods-in'),words=pairedWords(count),estimate=result?.stops.find((s)=>s.stop==='rods-in')?.estimates.find((e)=>e.measure===measure),limited=tooFewSettled(state.result,layout.id);
     return <section className="place-column" key={layout.id} data-layout={layout.id} data-finished={done} aria-label={first===undefined?'':comparisonName(layout,first)}>
       <h3><LevelWords>{first===undefined?'':comparisonName(layout,first)}</LevelWords></h3>
-      {i===0?state.phase!=='running'&&estimate!==undefined&&<><p className="num">{rangeWords(measure,estimate.band)}</p><RangeBar band={estimate.band} scale={state.result?.scales.find((s)=>s.measure===measure)}/><small>{ESTIMATE_TAGS[estimate.tag]}</small></>:done?<><div className="comparison-dots" aria-hidden="true">{words.dots.map((outcome,j)=><i key={count?.order[j]??j} data-outcome={outcome}/>)}</div><p>{words.verdict}</p>{words.clear!==''&&<small>{words.clear}</small>}</>:<p>{W.working}</p>}
+      {limited?<p>{L.tooFewColumn}</p>:i===0?state.phase!=='running'&&estimate!==undefined&&<><p className="num">{rangeWords(measure,estimate.band)}</p><RangeBar band={estimate.band} scale={state.result?.scales.find((s)=>s.measure===measure)}/><small>{ESTIMATE_TAGS[estimate.tag]}</small></>:done?<><div className="comparison-dots" aria-hidden="true">{words.dots.map((outcome,j)=><i key={count?.order[j]??j} data-outcome={outcome}/>)}</div><p>{words.verdict}</p>{words.clear!==''&&<small>{words.clear}</small>}</>:<p>{W.working}</p>}
     </section>;
   })}</div><PlacementCaption/></>;
 }

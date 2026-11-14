@@ -1,7 +1,7 @@
 import { EngineProvider } from '@/engine-room/use-engine';
 import type { EngineClient } from '@/engine-room/engine-client';
 import { act, useRef } from 'react';
-import { Group } from 'three';
+import { Group,Mesh,MeshBasicMaterial } from 'three';
 import { afterEach, expect, it, vi } from 'vitest';
 import { putOnThePage, pressKey } from '@/building-blocks/test-rig/on-the-page';
 import { smallStory } from '@/engine-room/stand-in/small-story';
@@ -35,7 +35,7 @@ function mount() {
   const accepted = {key:'test',fit:MADE_UP_CASE.fit,bones:[],input:{front:{marks,geometry:MADE_UP_CASE.front.geometry,size:MADE_UP_CASE.front.size,markSpread:MADE_UP_CASE.front.markSpread,facingAssumed:true},side:null,typical:'built-in',twistReadings:[]}} satisfies AcceptedSpine;
   function Drawing(){const ref=useRef(handle as unknown as Spine3DHandle);return <div tabIndex={0} className="three-stage"><PlaceDrawing accepted={accepted} handle={ref}/></div>;}
   const page=putOnThePage(<Drawing/>);
-  return {page,result,point,listeners,look,accepted};
+  return {page,result,point,listeners,look,accepted,root,spine};
 }
 it('shows source words only for a pedicle with a width and keeps the other sizes to one quiet line',()=>{
   const {page,result}=mount();
@@ -172,4 +172,16 @@ it('gives the daily and beside-rods notes once without expecting missing adjacen
   expect(notes.filter((line)=>line===L.dailyLoads)).toHaveLength(1);expect(notes.filter((line)=>line===L.besideRods)).toHaveLength(1);
   expect(sheet.host.textContent).not.toContain('Starts at T1: there is no level above');expect(sheet.host.textContent).not.toContain('Loads in daily life are not worked out yet.');
   expect([...sheet.host.querySelectorAll('.load-estimate-list li > span')].map((n)=>n.textContent)).not.toContain('Level above');sheet.takeDown();
+});
+
+it('keeps placement ink and engine poses while withholding poor-run sheet, chip, rings and ghosts',()=>{
+ const {page,result,accepted,root,spine}=mount(),anchor=result.layouts[0]?.anchors[0];if(anchor===undefined)throw new Error('anchor');
+ const part:PartResult={part:{kind:'anchor',level:anchor.level,side:anchor.side},share:{p10:.1,p50:.2,p90:.3},demand:{p10:1,p50:2,p90:3},steady:false,versionsPastStrength:4,sources:[]};
+ const answer=bench([part]),layout=answer.layouts[0],stop=layout?.stops[0];if(layout===undefined||stop===undefined)throw new Error('stop');
+ layout.versionsUnsettled=14;stop.middle=accepted.fit.vertebrae.map((v)=>({...v.pose,centre:[v.pose.centre[0]+10,v.pose.centre[1],v.pose.centre[2]]}));stop.ghosts=[stop.middle,stop.middle];stop.estimates=[{measure:'main-cobb',band:{p10:1,p50:5,p90:9},tag:'assumed',mostlyFrom:null,sources:[]}];
+ act(()=>{loadState.setState({phase:'loaded',result:answer,stop:'rods-in'});});act(()=>{for(const frame of [...loop])frame(1000);});
+ expect(page.host.querySelectorAll('[data-range], [data-load-part], .past-strength')).toHaveLength(0);expect(page.host.querySelector('.place-chip')?.textContent).not.toContain('strength allowance');
+ const strengths:number[]=[];root.traverse((object)=>{if(object instanceof Mesh&&object.material instanceof MeshBasicMaterial)strengths.push(object.material.opacity);});expect(strengths.length).toBeGreaterThan(0);expect(strengths.every((value)=>value===.8)).toBe(true);expect(spine.betweenPoses).toHaveBeenCalledWith(expect.anything(),expect.arrayContaining([expect.objectContaining({centre:stop.middle.find((pose)=>pose.level==='T1')?.centre})]),1);
+ page.takeDown();const sheet=putOnThePage(<LoadEstimates accepted={accepted}/>);expect(sheet.host.textContent).toContain('Too few versions settled to give ranges.');expect(sheet.host.textContent).toContain('14 of 32 versions did not settle.');expect(sheet.host.querySelectorAll('.load-estimate-list,.past-strength,.load-range')).toHaveLength(0);expect(sheet.host.querySelector('.panel-note')?.textContent).toContain(L.allowance);
+ act(()=>{layout.versionsUnsettled=8;loadState.setState({result:{...answer}});});expect(sheet.host.querySelector('.load-estimate-list')).not.toBeNull();expect(sheet.host.textContent).toContain('8 of 32 versions did not settle, so every range here is less sure.');sheet.takeDown();
 });

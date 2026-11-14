@@ -31,7 +31,8 @@ it('restores fitted poses and full bone on every exit; paging only fades and ord
  const stage={view:()=>view,namedView:()=>view,setView,inColumns,size:()=>({width:1200,height:800}),columnOf:()=>({left:0,right:300,top:0,bottom:500}),onDrawn:()=>()=>undefined};
  const handle={stage:()=>stage,spine:()=>primary,addSpine:()=>drawSpine(model,host).spine} as unknown as Spine3DHandle;
  function Drawing(){const ref=useRef(handle);return <ComparisonDrawing accepted={{key:'test',fit,bones:[],input:{} as never} satisfies AcceptedSpine} handle={ref}/>;}
- const page=putOnThePage(<Drawing/>);act(()=>{for(const frame of [...frames])frame(0,0);for(const frame of [...frames])frame(100,700);});
+ const answer=comparisonState.getState().result,bad=answer?.layouts[1];if(bad===undefined)throw new Error('comparison');bad.versionsUnsettled=9;
+ const page=putOnThePage(<Drawing/>);expect(page.host.querySelectorAll('.place-column')[1]?.textContent).toContain('Too few versions settled.');expect(page.host.querySelectorAll('.place-column')[1]?.querySelector('.comparison-dots')).toBeNull();act(()=>{for(const frame of [...frames])frame(0,0);for(const frame of [...frames])frame(100,700);});
  expect(primary.valuesOf(level)?.strength).toBe(.55);expect(primary.centre(level)).not.toEqual(centre);
  act(()=>{comparisonState.setState({page:1});});expect(page.host.querySelector('.place-comparison')?.getAttribute('data-motion')).toBe('page');expect(setView).toHaveBeenCalledTimes(1);
  act(()=>{window.innerWidth=1400;window.dispatchEvent(new Event('resize'));});expect(comparisonState.getState().page).toBe(1);

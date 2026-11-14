@@ -6,7 +6,7 @@ import type { DockSpec } from '@/guide/dock-spec';
 import { ESTIMATE_TAGS, LOAD_STOPS, SHOWN_LOAD_STOPS, PLACE_LOAD_WORDS as L, PLACE_WORDS as W, PLACE_EDIT_WORDS as E } from '@/words/place';
 import { placeState, type PlaceState, type PlaceView } from './place-state';
 import { backToPlacement, loadState } from './load-state';
-import { rangeWords, stopResult, shownLoadStop, unsettledCount } from './load-view';
+import { rangeWords, stopResult, shownLoadStop, unsettledCount,tooFewSettled } from './load-view';
 import { handState, type HandChange } from './hand-state';
 import { reviewChoices } from './review-choices';
 import { countWords, reviewItems } from './placement-view';
@@ -43,14 +43,14 @@ export function placeDock(state: PlaceState, actions: PlaceActions, namedFor: Im
       actions:[...(comparison.phase==='failed'?[{label:C.done,press:()=>{closeComparison();}}]:[]),...(comparison.page>0?[{label:C.earlier,press:()=>{comparisonState.setState({page:comparison.page-1});}}]:[]),...((comparison.page+1)*perPage<comparison.layouts.length-1?[{label:C.more,press:()=>{comparisonState.setState({page:comparison.page+1});}}]:[]),...(comparison.phase==='running'?[{label:C.stop,press:stopComparison}]:[])],primary:comparison.phase==='failed'&&comparison.retryable&&actions.compare!==undefined?{label:W.retry,press:actions.compare}:{label:C.done,press:()=>{closeComparison();}}};
   }
   if(load.phase==='loaded'&&load.result!==null){
-    const unsettled=unsettledCount(load.result);
+    const unsettled=unsettledCount(load.result),limited=tooFewSettled(load.result),hideRanges=limited&&load.stop!=='before';
     const stop=stopResult(load.result,load.stop),curve=stop?.estimates.find((e)=>e.measure==='main-cobb'),hasCurve=load.result.mainCurve!==null||result.curves.some((c)=>c.versionsMajor>0),heaviest=stop?.estimates.find((e)=>e.measure==='heaviest-anchor-demand');
-    const showAnchor=load.stop!=='before'&&(load.stop!=='rods-in'||!hasCurve),tag=load.stop==='before'?undefined:showAnchor?heaviest?.tag:hasCurve?curve?.tag:undefined;
-    const helper=[load.stop==='before'?L.noLoad:showAnchor&&heaviest!==undefined?L.anchorHelper(rangeWords(heaviest.measure,heaviest.band)):'',unsettled>0?L.unsettled(unsettled,load.result.versions):''].filter(Boolean).join(' ');
-    return {...base,...(yours&&actions.undo!==undefined?{more:{label:E.undo,press:actions.undo}}:{}),focus:'chosen-stop',sentence:load.stop==='before'?L.before:L.loaded(LOAD_STOPS[load.stop],hasCurve&&curve!==undefined?rangeWords('main-cobb',curve.band):null),
+    const showAnchor=load.stop!=='before'&&(load.stop!=='rods-in'||!hasCurve),tag=load.stop==='before'||hideRanges?undefined:showAnchor?heaviest?.tag:hasCurve?curve?.tag:undefined;
+    const helper=hideRanges?L.didNotSettle(unsettled,load.result.versions):[load.stop==='before'?L.noLoad:showAnchor&&heaviest!==undefined?L.anchorHelper(rangeWords(heaviest.measure,heaviest.band)):'',unsettled>0?L.unsettled(unsettled,load.result.versions):''].filter(Boolean).join(' ');
+    return {...base,...(yours&&actions.undo!==undefined?{more:{label:E.undo,press:actions.undo}}:{}),focus:'chosen-stop',sentence:load.stop==='before'?L.before:hideRanges?L.tooFew:L.loaded(LOAD_STOPS[load.stop],hasCurve&&curve!==undefined?rangeWords('main-cobb',curve.band):null),
       ...(helper===''?{}:{helper:{kind:'words' as const,words:[helper]}}),
       ...(tag===undefined?{}:{small:ESTIMATE_TAGS[tag]}),
-      ...(actions.compare===undefined?{}:{primary:{label:C.enter,press:actions.compare}}),
+      ...(actions.compare===undefined||limited?{}:{primary:{label:C.enter,press:actions.compare}}),
       stops:{chosen:load.stop,choose:(stop)=>{loadState.setState({stop});placeState.setState({pressed:null,hovered:null});}},quiet:{label:L.allEstimates,press:actions.estimates??actions.sheet}};
   }
   return { ...base, ...(state.pressed!==null||state.keyboard?{}:{focus:'primary' as const}), sentence: yours?E.yours(layout.upper,layout.lower):W.placed(layout.upper, layout.lower), helper: { kind: 'words', words: [[!yours&&result.firstIsSketch ? W.sketch : '', countWords(result), load.phase==='stopped'?L.stopped:'', state.ageChanged?A.changed:state.changed ? W.changed : ''].filter(Boolean).join(' ')] },

@@ -3,6 +3,12 @@ import { TEMPLATE_LEVELS } from '@/shapes';
 import { placingOf } from '@/spine-3d/placing/place-vertebra';
 import { Quaternion, Vector3 } from 'three';
 import { PLACE_LOAD_WORDS as W, SHOWN_LOAD_STOPS, DAILY_STOPS_NOT_SHOWN, UNKNOWN_NAMES } from '@/words/place';
+/** More than this share failing leaves a potentially biased settled sample. */
+export const MAX_UNSETTLED_SHARE = .25;
+export function tooFewSettled(result:BenchResult|null,layoutId:string|undefined=result?.firstId):boolean {
+  const layout=result?.layouts.find((candidate)=>candidate.layoutId===layoutId);
+  return result!==null&&layout!==undefined&&layout.versionsUnsettled>result.versions*MAX_UNSETTLED_SHARE;
+}
 export function shownLoadStop(stop: BenchStop, shown: readonly BenchStop[] = SHOWN_LOAD_STOPS): BenchStop { return shown.includes(stop) ? stop : 'rods-in'; }
 export function stopResult(result: BenchResult | null, stop: BenchStop): StopResult | undefined { return result?.layouts.find((l) => l.layoutId === result.firstId)?.stops.find((s) => s.stop === stop); }
 export function unsettledCount(result: BenchResult): number { return result.layouts.find((l) => l.layoutId === result.firstId)?.versionsUnsettled ?? 0; }
@@ -19,7 +25,7 @@ export function curveLevel(result: BenchResult, proposals: LayoutProposals): Lev
 }
 export function typicalKyphosis(layout: ImplantLayout): boolean { return layout.rods.length === 0 || layout.rods.some((r) => r.targetKyphosisStatus === 'typical'); }
 export function estimatesAt(result: BenchResult, proposals: LayoutProposals, fit: SpineFit, stop: BenchStop): Estimate[] {
-  if (stop === 'before') return [];
+  if (stop === 'before'||tooFewSettled(result)) return [];
   const layout = proposals.layouts[0]; if (layout === undefined) return [];
   return (stopResult(result, stop)?.estimates ?? []).filter((e) => e.measure === 'main-cobb' ? curveLevel(result,proposals) !== null : e.measure === 'kyphosis' ? !typicalKyphosis(layout) : e.measure === 'apical-twist' ? fit.sideFilm !== null && !proposals.cannotTell.some((c) => c.code === 'twist-not-measured') : true);
 }
@@ -50,7 +56,7 @@ export function movedPoint(point: readonly [number,number,number], from: Vertebr
 export function anchorLoad(parts: readonly PartResult[], anchor: AnchorProposal): PartResult | undefined { return parts.find((p) => p.part.kind === 'anchor' && p.part.level === anchor.level && p.part.side === anchor.side); }
 export interface LoadLabel { id: string; level: Level; measure: Measure; band: Band; tag: Estimate['tag']; anchor?: number }
 export function loadLabels(result: BenchResult, proposals: LayoutProposals, fit: SpineFit, stop: BenchStop, anchorStop: BenchStop = 'bending-forward'): LoadLabel[] {
-  if (stop === 'before') return [];
+  if (stop === 'before'||tooFewSettled(result)) return [];
   const estimates = estimatesAt(result,proposals,fit,stop), layout = proposals.layouts[0], apex = curveLevel(result,proposals), labels: LoadLabel[] = [];
   if (layout === undefined) return labels;
   const curve = estimates.find((e) => e.measure === 'main-cobb'), kyphosis = estimates.find((e) => e.measure === 'kyphosis');
@@ -64,7 +70,7 @@ export function loadLabels(result: BenchResult, proposals: LayoutProposals, fit:
   return labels;
 }
 export function pastWords(part: PartResult, result: BenchResult): string | null {
-  if (part.versionsPastStrength <= 0 || part.part.kind === 'junction') return null;
+  if (tooFewSettled(result)||part.versionsPastStrength <= 0 || part.part.kind === 'junction') return null;
   return W.past(part.part.kind,W.denominator(part.versionsPastStrength,result.versions,unsettledCount(result)));
 }
 

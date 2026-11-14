@@ -134,6 +134,8 @@ export const PLACE_LOAD_WORDS = {
   partAssumed: "Assumed: strengths from tables, lowered by the model's own allowances.",
   rangeHolds: 'Each range holds the middle eight in ten of the versions.',
   varies: (name: string) => `Varies most with: ${name}.`,
+  tooFew:'Too few versions settled to give ranges.',tooFewColumn:'Too few versions settled.',
+  didNotSettle:(n:number,total:number)=>`${String(n)} of ${String(total)} versions did not settle.`,
   unsettled: (n: number, total: number) => `${String(n)} of ${String(total)} versions did not settle, so every range here is less sure.`,
   outside: (count: string) => `In ${count}, the rods are too soft for this model's method, so the level above and the level below are assumed.`,
   past: (kind: 'anchor' | 'rod-span' | 'rod', count: string) => `${kind === 'anchor' ? 'Past its strength allowance' : kind === 'rod-span' ? "Past the rod’s yield" : 'Past the test-bench level'} in ${count}.`,
