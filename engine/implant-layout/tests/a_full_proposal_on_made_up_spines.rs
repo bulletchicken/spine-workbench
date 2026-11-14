@@ -11,7 +11,7 @@ use shapes::confidence::{Confidence, ConfidenceBand};
 use shapes::film::FilmKind;
 use shapes::implant_layout::{
     AnchorKind, CannotTellCode, ChildFacts, ImplantLayout, LayoutChange, LayoutFilm, LayoutInput,
-    LayoutProposals, NamingDoubt, Readable, ValueStatus,
+    LayoutProposals, LookCode, NamingDoubt, Readable, ValueStatus,
 };
 use shapes::landmarks::{Landmarks, SacrumTop};
 use shapes::levels::Level;
@@ -317,8 +317,11 @@ fn check_layout(input: &LayoutInput, layout: &ImplantLayout) {
         }
         for r in &a.diameters_beside {
             assert!(tables().source(&r.source).is_some());
-            assert!(r.diameter_mm.is_some() || !a.looks.is_empty() || a.kind != AnchorKind::Screw);
         }
+        assert_eq!(
+            a.look_sources.iter().map(|s| s.code).collect::<Vec<_>>(),
+            a.looks
+        );
         if let Some(b) = &a.screw_to_pedicle {
             band(b);
         } else {
@@ -337,6 +340,23 @@ fn check_layout(input: &LayoutInput, layout: &ImplantLayout) {
         }
         assert!(a.pedicle.versions_too_narrow <= input.versions);
         assert!(a.pedicle.versions_inner_under_1_mm <= input.versions);
+        // Only the chosen rule's grid counts and this pedicle's outer
+        // width/channel counts can raise the narrow look. A pattern can
+        // clear the displayed diameter without changing those counts.
+        let no_diameter = !a
+            .wider_than_pedicle
+            .iter()
+            .any(|d| d.versions * 10 <= input.versions);
+        let own_narrow = no_diameter
+            || a.pedicle.versions_too_narrow * 10 > input.versions
+            || a.pedicle.versions_inner_under_1_mm * 10 > input.versions;
+        assert_eq!(
+            a.looks.contains(&LookCode::MayBeTooNarrow),
+            own_narrow,
+            "{:?} {:?}",
+            a.level,
+            a.side
+        );
     }
     assert_eq!(layout.rods.len(), 2);
     let reading = curves::measure(input, &input.fit).unwrap();
@@ -637,6 +657,59 @@ fn two_generated_films_run_through_the_joint_fit() {
     check_proposal(&input, &p);
     assert_eq!(p.tier, FitTier::TwoFilms);
     assert!(!p.layouts.is_empty());
+}
+#[test]
+#[ignore = "fits both film tiers at 32 versions; run explicitly in release"]
+fn the_forty_degree_curve_keeps_its_narrow_looks_on_the_counted_pedicles() {
+    let (mut input, films) = fixture(RecipeName::RightThoracic40);
+    // The command-line recipe supplies no age and uses 32 versions at seed 1.
+    input.child.age_years = None;
+    for front_only in [false, true] {
+        input.fit = joint_fit::fit_from_films(&FitFromFilms {
+            front: films[0].clone(),
+            side: (!front_only).then(|| films[1].clone()),
+            typical: TypicalSource::BuiltIn,
+            twist_readings: Vec::new(),
+        })
+        .unwrap();
+        let p = propose_layouts(&input).unwrap();
+        check_proposal(&input, &p);
+        assert_eq!(
+            p.tier,
+            if front_only {
+                FitTier::FrontFilmOnly
+            } else {
+                FitTier::TwoFilms
+            }
+        );
+        let first = &p.layouts[0];
+        assert_eq!(first.anchors.len(), 14);
+        assert_eq!(
+            (first.upper, first.lower),
+            if front_only {
+                (Level::T6, Level::T12)
+            } else {
+                (Level::T5, Level::T11)
+            }
+        );
+        let mut expected = vec![
+            (Level::T7, BodySide::Left),
+            (Level::T8, BodySide::Left),
+            (Level::T9, BodySide::Left),
+        ];
+        if !front_only {
+            expected.insert(0, (Level::T5, BodySide::Right));
+        }
+        assert_eq!(
+            first
+                .anchors
+                .iter()
+                .filter(|a| a.looks.contains(&LookCode::MayBeTooNarrow))
+                .map(|a| (a.level, a.side))
+                .collect::<Vec<_>>(),
+            expected
+        );
+    }
 }
 #[test]
 fn every_field_family_keeps_its_status_source_or_absence_code() {

@@ -128,6 +128,9 @@ fn apical_aorta_and_direction_boundaries_do_not_grow_beyond_their_rules() {
     assert!(!has(input, LookCode::MayBeTooNarrow));
     input.inner_narrow_share += 1e-6;
     assert!(has(input, LookCode::MayBeTooNarrow));
+    input.inner_narrow_share = 0.0;
+    input.outer_narrow_share += 1e-6;
+    assert!(has(input, LookCode::MayBeTooNarrow));
 }
 
 fn fixture_input() -> LayoutInput {
