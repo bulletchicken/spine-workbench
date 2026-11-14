@@ -20,6 +20,17 @@ the complete ensemble. Give it the fit, placements, child facts, seed, total
 count must be the ones used for the placement proposals. A four-version batch
 is a useful worker scheduling unit; the caller chooses batch size.
 
+Each batch carries `runs`, drawing-only `middle` runs and nullable `mainCurve`.
+`mainCurve` is measured on the fit as given and is identical in every slice.
+Only the slice starting at version 0 carries one `MiddleRun` per placement;
+other slices carry an empty `middle` list. Each middle run has `layoutId`,
+`before` (the fit's own T1 to L5 poses), `rodsIn` and `rods`. It uses the fit
+without fit noise, with every drawn unknown it uses at the middle of its
+range (quantile one half). Pedicle draws are unused and omitted. If any step
+of the drawing run fails or its rods-in solve does not settle, `rodsIn` and
+`rods` are both null; the runs over the versions are still returned. This adds
+one correction run per placement to the first slice only.
+
 ```rust,ignore
 let batch = load_bench::run_load_bench(&shapes::load_bench::BenchInput {
     fit,
@@ -58,13 +69,16 @@ loads enter summaries. Their unused springback share is zero and must only be
 read when `settled` is true. Incomplete estimate ensembles remain assumed,
 and incomplete part ensembles are not called steady.
 
-The result contract includes nullable `mainCurve` (`upper`, `apex`, `lower`)
-and, at each stop, nullable `middle` drawing poses and nullable `rods` drawing
-lines (`side`, `pointsMm`). A middle run is separate from the versions and
-must never enter estimates or counts. The fields are currently null at every
-stop, including `before`: batches do not carry the original fit, a separate
-drawing run, seated rod lines or the selected curve into comparison. They
-cannot be recovered from the sampled versions. Per-part `demand` is an
+The result copies nullable `mainCurve` (`upper`, `apex`, `lower`) and the
+middle drawing data from the supplied batches. At `before`, `middle` is the
+fit's standing poses. At `rods-in`, `middle` is the seated poses and `rods`
+holds the seated centre lines (`side`, `pointsMm`), top to bottom in patient
+millimetres. These fields are null at later stops; seated poses and rods are
+also null if the middle run does not settle. Without a placement's middle
+run its drawing fields stay null, and without the first slice the result's
+`mainCurve` stays null. A fit with no main curve also gives null. Comparison
+refuses batches with different `mainCurve` values. The middle run is never
+one of the versions: no estimate, part, count or ghost reads it. Per-part `demand` is an
 anchor's force over bone-adjusted strength over settled versions, absent for
 empty pedicles and other parts. At `before`, only shape estimates remain;
 there are no load estimates, load paired counts or part shares. Load scales
@@ -127,6 +141,10 @@ response. They do not make a distinct flexion shape. Rod statics retains head
 couples and moving-point terms. The year comparison uses a scalar surface
 stress envelope, rather than following one material fibre. For section statics,
 the elastic contour is linearly interpolated between transported head motions.
+Drawing lines retain every contour knot and any occupied end continuation.
+Their length can differ from the proposal's head-to-head length: head
+translations are interpolated linearly between stations (first order), and
+heads can seat on occupied end continuations.
 Daily statics keeps first-order head and cut movement terms dP cross F0,
 with the cut tangent transported by that interpolated head-motion gradient.
 This stress calculation does not add a daily shape stop.

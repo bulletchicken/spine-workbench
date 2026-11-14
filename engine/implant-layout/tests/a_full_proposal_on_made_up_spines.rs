@@ -845,6 +845,55 @@ fn hand_input(input: &LayoutInput, first: &ImplantLayout) -> shapes::implant_lay
 }
 
 #[test]
+fn rod_pair_choices_are_exactly_the_pairs_that_can_be_rebuilt() {
+    use shapes::errors::{EngineError, ErrorCode};
+    use shapes::implant_layout::RodMaterial;
+    let (mut input, _) = fixture(RecipeName::RightThoracic40);
+    input.versions = 1;
+    let proposals = propose_layouts(&input).unwrap();
+    let mut request = hand_input(&input, &proposals.layouts[0]);
+    assert!(!proposals.choices.rods.is_empty());
+    assert_eq!(proposals.choices.rods.len(), rods::choices().len());
+    for (choice, sourced) in proposals.choices.rods.iter().zip(rods::choices()) {
+        assert_eq!(choice.material, sourced.material);
+        assert_eq!(choice.diameter_mm, sourced.diameter_mm);
+        request.rod_material = choice.material;
+        request.rod_diameter_mm = choice.diameter_mm;
+        let rebuilt = implant_layout::rebuild_layout(&request).unwrap();
+        assert_eq!(rebuilt.rods.len(), 2);
+        for rod in &rebuilt.rods {
+            assert_eq!(rod.material, choice.material);
+            assert_eq!(rod.diameter_mm, choice.diameter_mm);
+        }
+    }
+    for &material in &proposals.choices.rod_materials {
+        for &diameter_mm in &proposals.choices.rod_diameters_mm {
+            if !proposals
+                .choices
+                .rods
+                .iter()
+                .any(|rod| rod.material == material && rod.diameter_mm == diameter_mm)
+            {
+                request.rod_material = material;
+                request.rod_diameter_mm = diameter_mm;
+                let error =
+                    EngineError::from(implant_layout::rebuild_layout(&request).unwrap_err());
+                assert_eq!(error.code, ErrorCode::CaseInvalidValue);
+                assert!(error.message.contains("rod-not-in-choices"));
+            }
+        }
+    }
+    request.rod_material = RodMaterial::StainlessSteel;
+    request.rod_diameter_mm = 5.5;
+    assert!(!proposals.choices.rods.iter().any(|rod| {
+        rod.material == request.rod_material && rod.diameter_mm == request.rod_diameter_mm
+    }));
+    let error = EngineError::from(implant_layout::rebuild_layout(&request).unwrap_err());
+    assert_eq!(error.code, ErrorCode::CaseInvalidValue);
+    assert!(error.message.contains("rod-not-in-choices"));
+}
+
+#[test]
 fn hand_choices_reproduce_the_first_placement_and_its_draws() {
     let (mut input, _) = fixture(RecipeName::RightThoracic40);
     input.versions = 4;

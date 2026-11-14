@@ -179,9 +179,11 @@ fixture on the supplied levels; it calculates no geometry or version bands.
 `kind`, `diameterMm` and `lengthMm`; a null size asks for the size in
 `screwHere`. Unspecified pedicles follow the first placement's pattern over
 the new span. The output contract is a whole placement with id and change
-`changed-by-hand`. The native implementation currently refuses every call
-with `tool-refused` and detail `rebuild-not-built`. The stand-in returns a
-fixed sample placement marked `changed-by-hand`.
+`changed-by-hand`. Refused with `case-invalid-value` when an end is not
+fitted, the span is shorter than two levels, a size is off the grids, the
+rod is not a pair in `LayoutChoices.rods`, or a side keeps fewer than two
+anchors. The stand-in returns a fixed sample placement marked
+`changed-by-hand`.
 
 ### Placement and bench drawing fields
 
@@ -192,19 +194,24 @@ Drawing poses and lines never supply an estimate or a count.
 |---|---|
 | `RodProposal` | `standingPointsMm` follows `pointsMm` in the same order on the standing spine; `pointsMm` remains the target contour. `geometryStatus` covers both lines. Typical geometry must never be printed as measured millimetres. |
 | `LayoutProposals` | `firstIsSketch` identifies a fallback span; `upperEnds` and `lowerEnds` count each end separately, most frequent first, and are empty for a sketch. |
+| `LayoutChoices` | `rods: RodChoice[]` lists the sourced material and diameter pairs, in the proposer's order. `rodMaterials` and `rodDiametersMm` also remain available; their cross-product can include pairs that `rebuildLayout` refuses. |
+| `RodChoice` | `material: RodMaterial`, `diameterMm`. Every advertised pair is accepted by `rebuildLayout`. |
 | `AnchorProposal` | `widerThanPedicle: DiameterCount[]` counts widths below `diameterMm / widthRatio` for each catalogue diameter; empty without a width table. `screwHere` carries the screw size before the pattern, including on hooks and empty pedicles; null without a size. |
 | `DiameterCount` | `diameterMm`, `versions`. |
 | `ScrewHere` | `diameterMm`, `diameterAlsoSeen`, `lengthMm`, `lengthAlsoSeen`, nullable `screwToPedicle` and nullable `medialAngle`. Existing anchor size fields stay null on hooks and empty pedicles. |
 | `PedicleEstimate` | `sources` lists the width's evidence keys. |
 | `AnchorProposal` | `diameterSources`, `lengthSources`, `directionSources` and `lookSources` retain the keys behind each number or look code; `sources` remains their union. Each `LookSources` has `code` and `sources`. |
-| `StopResult` | `middle: VertebraPose[] \| null` is for drawing: standing poses at `before`, one separate middle-input run at `rods-in`, null later or when that run does not settle. `rods: RodLine[] \| null` is present only with the rods-in middle poses; each line has `side` and `pointsMm`. `cyclesSources` currently lists the year-length assumption; the selected step-band keys are not yet carried into comparison. |
-| `BenchResult` | `mainCurve: MainCurve \| null` names the measured curve's `upper`, `apex` and `lower`; null when none exists. |
+| `BenchBatch` | `middle: MiddleRun[]` carries one drawing run per placement only when `versionFrom` is 0; empty in every other slice. `mainCurve: MainCurve \| null` names the curve measured on the fit as given, identical in every slice and null when none exists. |
+| `MiddleRun` | `layoutId`, `before: VertebraPose[]`, nullable `rodsIn: VertebraPose[]` and nullable `rods: RodLine[]`. `before` is the fit's standing poses for T1 to L5. The middle run uses the fit as given, without fit noise, with every drawn unknown it uses at the middle of its range (quantile one half); pedicle draws are unused and omitted. `rodsIn` and `rods` are both null when that run fails or its rods-in solve does not settle. It is for drawing only, never one of the versions. |
+| `StopResult` | `middle: VertebraPose[] \| null` copies a supplied middle run's `before` at `before` and `rodsIn` at `rods-in`; null later or without that placement's middle run, and null at `rods-in` when that run fails or does not settle. `rods: RodLine[] \| null` copies its seated centre lines only at `rods-in`; each line has `side` and `pointsMm`, top to bottom in patient millimetres. The line keeps every contour knot and any occupied end continuation, so its length can differ from the proposal's `lengthMm`. `cyclesSources` currently lists the year-length assumption; the selected step-band keys are not yet carried into comparison. |
+| `BenchResult` | `mainCurve: MainCurve \| null` copies the measured curve's `upper`, `apex` and `lower` from the first slice; null when no first slice is supplied or the fit has no curve. |
 | `PartResult` | `demand: Band \| null` is an anchor's force over bone-adjusted strength over settled versions; null for other parts and at `before`. `sources` covers the load share, its shared denominator and strength or fatigue; the absent-weight prior's source is not yet carried into comparison. |
 | `Estimate` | `mostlyFrom: SampledUnknown \| null` is null when no named unknown has nonzero rank correlation with the estimate. `sources` lists evidence keys, empty for film-only values; the absent-weight prior's source is not yet carried into comparison. |
 | `PairedCount` | `sortedBy: SampledUnknown \| null` is null when no named unknown has nonzero rank correlation with the difference. `outcomes: PairOutcome[]` follows `order`, with `lower`, `higher` or `tie` per dot. `clearAt` is three quarters of the dot count rounded up. |
 
-The bench currently leaves `middle`, `rods` and `mainCurve` null: batches do
-not yet carry the separate middle run and selected curve into comparison.
+Comparison refuses batches whose `mainCurve` values disagree. Drawing data
+never supplies an estimate, part, count or ghost, and the middle run is
+separate from the sampled versions.
 
 The native `spine measure` command accepts either `--recipe NAME --seed N`
 (optionally `--front-only`) or `--film front=PATH` with an optional
@@ -332,7 +339,7 @@ slices.
 | `made_up_spines.rs` | `make_up_spine(recipe) → MadeUpSpine` | `made-up-unsatisfiable` |
 | `joint_fit.rs` | `fit_spine(input) → SpineFit`; `fit_from_films(input) → SpineFit` | `pass-no-spine-found`, `tool-refused`, `case-invalid-value` |
 | `scorekeeper.rs` | `compare_with_answer_key(marks, key) → AnswerKeyComparison` | `case-invalid-value` |
-| `implant_layout.rs` | `propose_layouts(input) → LayoutProposals`; `rebuild_layout(input) → ImplantLayout` | `tool-refused`, `case-invalid-value`, `pass-no-spine-found`; proposal details name the refusal (`implant-layout-…`); rebuilding currently refuses with detail `rebuild-not-built` |
+| `implant_layout.rs` | `propose_layouts(input) → LayoutProposals`; `rebuild_layout(input) → ImplantLayout` | `tool-refused`, `case-invalid-value`, `pass-no-spine-found`; proposal details name the refusal (`implant-layout-…`); rebuild details include `level-not-in-fit`, `at-least-two-levels-in-fit-order-required`, `size-off-grid`, `rod-not-in-choices` and `side-needs-two-occupied-heads` |
 | `load_bench.rs` | `run_load_bench(input) → BenchBatch`; `compare_layouts(input) → BenchResult` | `tool-refused`, `case-invalid-value`, `pass-no-spine-found`; the detail names the refusal (`load-bench-…`) |
 | `spine_readings.rs` | `measure_spine(input) → SpineReadings` | `case-invalid-value`, `pass-no-spine-found` |
 

@@ -55,9 +55,34 @@ pub fn draw(
             .uniform(&format!("versions-bench/{name}"), k)
             .map_err(|error| refusal(&error.to_string()))
     };
-    let span = |table, row, lo, hi, unit, name| -> Result<f64, BenchError> {
-        let lower = cell(e, table, row, lo, unit)?;
-        Ok(lower + u(name)? * (cell(e, table, row, hi, unit)? - lower))
+    parameters(geometry, child, e, u, || {
+        sampler
+            .normal("versions-bench/slice-offset", k)
+            .map_err(|error| refusal(&error.to_string()))
+    })
+}
+
+/// Only the unknowns read while seating rods, before any daily loads.
+pub(crate) struct CorrectionDraw {
+    pub stiffness_scale: f64,
+    pub rib_factors: [f64; 3],
+}
+
+/// Drawing uses the unchanged fit and quantile one half for tissue draws.
+/// Pedicle draws are deliberately absent: seating does not read them.
+/// Weight, activity and the other load/strength draws are not used either.
+pub(crate) fn middle(e: &Evidence) -> Result<CorrectionDraw, BenchError> {
+    correction_parameters(e, &|_| Ok(0.5))
+}
+
+fn correction_parameters(
+    e: &Evidence,
+    u: &impl Fn(&str) -> Result<f64, BenchError>,
+) -> Result<CorrectionDraw, BenchError> {
+    let span = |row, name| -> Result<f64, BenchError> {
+        let lower = cell(e, TableKind::JointSprings, row, "lower", Unit::Ratio)?;
+        Ok(lower
+            + u(name)? * (cell(e, TableKind::JointSprings, row, "upper", Unit::Ratio)? - lower))
     };
     let low = cell(
         e,
@@ -95,23 +120,30 @@ pub fn draw(
     let fe_high = ratio("rib-mannen-t8-t12")?;
     let rib_factors = [
         fe_low + u("rib-flexion")? * (fe_high - fe_low),
-        span(
-            TableKind::JointSprings,
-            "rib-lateral-bending",
-            "lower",
-            "upper",
-            Unit::Ratio,
-            "rib-lateral",
-        )?,
-        span(
-            TableKind::JointSprings,
-            "rib-axial-rotation",
-            "lower",
-            "upper",
-            Unit::Ratio,
-            "rib-axial",
-        )?,
+        span("rib-lateral-bending", "rib-lateral")?,
+        span("rib-axial-rotation", "rib-axial")?,
     ];
+    Ok(CorrectionDraw {
+        stiffness_scale,
+        rib_factors,
+    })
+}
+
+fn parameters(
+    geometry: Version,
+    child: &ChildFacts,
+    e: &Evidence,
+    u: impl Fn(&str) -> Result<f64, BenchError>,
+    normal_offset: impl Fn() -> Result<f64, BenchError>,
+) -> Result<Draw, BenchError> {
+    let span = |table, row, lo, hi, unit, name| -> Result<f64, BenchError> {
+        let lower = cell(e, table, row, lo, unit)?;
+        Ok(lower + u(name)? * (cell(e, table, row, hi, unit)? - lower))
+    };
+    let CorrectionDraw {
+        stiffness_scale,
+        rib_factors,
+    } = correction_parameters(e, &u)?;
     let bone_u = u("bone")?;
     let low_share = cell(
         e,
@@ -211,9 +243,7 @@ pub fn draw(
             )?,
             slice_offset_mm: cell(e, TableKind::DailyLoads, "slice-offset", "mean", Unit::Mm)?
                 + cell(e, TableKind::DailyLoads, "slice-offset", "sd", Unit::Mm)?
-                    * sampler
-                        .normal("versions-bench/slice-offset", k)
-                        .map_err(|error| refusal(&error.to_string()))?,
+                    * normal_offset()?,
             contour_knock_down: span(
                 TableKind::Fatigue,
                 "contour-knock-down",

@@ -14,11 +14,12 @@ use forward_model::{endplates::Endplates, vertebra_params::VertebraParams};
 use nalgebra::Vector3;
 use shapes::implant_layout::ImplantLayout;
 use shapes::levels::Level;
-use shapes::load_bench::{BenchStop, StopValues};
+use shapes::load_bench::{BenchStop, MainCurve, StopValues};
 use shapes::made_up::VertebraPose;
 use shapes::spine_fit::SpineFit;
 
 pub(super) struct Readings {
+    pub(super) main_curve: Option<MainCurve>,
     upper: usize,
     lower: usize,
     apex: usize,
@@ -50,11 +51,17 @@ impl Readings {
         // For an exactly straight spine there is no curve to name.
         Ok(match reading.major.and_then(|i| reading.curves.get(i)) {
             Some(curve) => Self {
+                main_curve: Some(MainCurve {
+                    upper: nominal.vertebrae[curve.upper_index].level,
+                    apex: nominal.vertebrae[curve.apex_index].level,
+                    lower: nominal.vertebrae[curve.lower_index].level,
+                }),
                 upper: curve.upper_index,
                 lower: curve.lower_index,
                 apex: curve.apex_index,
             },
             None => Self {
+                main_curve: None,
                 upper: 0,
                 lower: nominal.vertebrae.len() - 1,
                 apex: 0,

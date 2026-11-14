@@ -46,6 +46,29 @@ pub struct BenchBatch {
     pub version_count: u32,
     /// One per placement and version, placement by placement.
     pub runs: Vec<BenchRun>,
+    /// One drawing run per placement when `versionFrom` is 0; empty in
+    /// every other slice. These are never versions, and no estimate,
+    /// part, count or ghost reads them.
+    pub middle: Vec<MiddleRun>,
+    /// The curve measured as main on the fit as given, the same in every
+    /// slice; `null` when the fitted spine has no curve.
+    pub main_curve: Option<MainCurve>,
+}
+
+/// One placement on the fit as given, without fit noise, with every drawn
+/// unknown it uses at the middle of its range (quantile one half). Pedicle
+/// draws are unused and omitted. For drawing only, never a version.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[cfg_attr(feature = "typescript", derive(ts_rs::TS))]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct MiddleRun {
+    pub layout_id: String,
+    /// The fit's standing poses for the levels the bench carries, top to bottom.
+    pub before: Vec<VertebraPose>,
+    /// The seated poses; `null` when this drawing run fails or does not settle.
+    pub rods_in: Option<Vec<VertebraPose>>,
+    /// The seated rod centre lines; `null` together with `rodsIn`.
+    pub rods: Option<Vec<RodLine>>,
 }
 
 /// One placement on one version.
@@ -178,7 +201,9 @@ pub struct BenchResult {
     pub versions: u32,
     /// The placement the others are compared with.
     pub first_id: String,
-    /// The fitted curve measured as main; `null` when none was found.
+    /// The curve measured as main, copied from the slice whose `versionFrom`
+    /// is 0; `null` when that slice is not among the batches or the fitted
+    /// spine has no curve.
     pub main_curve: Option<MainCurve>,
     pub layouts: Vec<LayoutResult>,
     /// One scale per measure, shared by every placement's ranges.
@@ -224,9 +249,13 @@ pub struct StopResult {
     pub ghosts: Option<Vec<Vec<VertebraPose>>>,
     /// A spine for drawing only: at `before`, the fit's standing poses
     /// for the levels the bench carries; at `rods-in`, one extra run with
-    /// every drawn unknown at the middle of its range. `null` at later
-    /// stops, and at `rods-in` when that run does not settle.
-    /// It is never a version and never enters an estimate, part or count.
+    /// every drawn unknown it uses at the middle of its range (quantile one
+    /// half); pedicle draws are unused and omitted. `null` at later stops,
+    /// at `rods-in` when that run fails or does not settle, and at both
+    /// `before` and `rods-in` when the batches carry no middle run for this
+    /// placement (the slice whose `versionFrom` is 0 was not supplied).
+    /// Copied from that slice's `MiddleRun`. It is never a version and never
+    /// enters an estimate, part or count.
     pub middle: Option<Vec<VertebraPose>>,
     /// The rods seated in that same middle run, present at `rods-in`
     /// when `middle` is; `null` otherwise. For drawing only.
@@ -247,6 +276,8 @@ pub struct RodLine {
     /// The patient's side of the rod.
     pub side: BodySide,
     /// The centre line as seated in the middle run, top to bottom, patient frame, mm.
+    /// Keeps every contour knot and any occupied end continuation, so its
+    /// length can differ from the proposal's `lengthMm`.
     pub points_mm: Vec<[f64; 3]>,
 }
 
@@ -510,6 +541,8 @@ mod tests {
 
     fn batch() -> BenchBatch {
         BenchBatch {
+            middle: Vec::new(),
+            main_curve: None,
             version_from: 4,
             version_count: 1,
             runs: vec![BenchRun {
@@ -697,6 +730,8 @@ mod tests {
     #[test]
     fn a_batch_names_its_units_and_writes_every_stop_value() {
         let value = serde_json::to_value(batch()).expect("the batch serialises");
+        assert_eq!(value["middle"], json!([]));
+        assert_eq!(value["mainCurve"], serde_json::Value::Null);
         let run = &value["runs"][0];
         assert_eq!(run["draws"]["rodYieldMpa"], 900.0);
         assert_eq!(run["draws"]["ribFactors"], json!([1.5, 1.6, 2.0]));
@@ -719,6 +754,62 @@ mod tests {
             serde_json::from_value::<BenchInput>(value).expect("the input reads back"),
             input()
         );
+    }
+
+    #[test]
+    fn a_batch_carries_drawing_runs_with_explicit_absent_seated_values() {
+        let drawing = result_with_drawing();
+        let mut batch = batch();
+        batch.version_from = 0;
+        batch.main_curve = drawing.main_curve;
+        let seated = &drawing.layouts[0].stops[0];
+        batch.middle = vec![
+            MiddleRun {
+                layout_id: "first".into(),
+                before: vec![pose()],
+                rods_in: seated.middle.clone(),
+                rods: seated.rods.clone(),
+            },
+            MiddleRun {
+                layout_id: "unsettled".into(),
+                before: vec![pose()],
+                rods_in: None,
+                rods: None,
+            },
+        ];
+        let value = serde_json::to_value(&batch).expect("the batch serialises");
+        assert_eq!(
+            value["mainCurve"],
+            json!({"upper": "T5", "apex": "T8", "lower": "T12"})
+        );
+        assert_eq!(value["middle"][0]["layoutId"], "first");
+        assert_eq!(value["middle"][0]["before"][0]["level"], "L5");
+        assert_eq!(value["middle"][0]["rodsIn"][0]["level"], "L5");
+        assert_eq!(value["middle"][0]["rods"][0]["side"], "left");
+        assert_eq!(value["middle"][1]["rodsIn"], serde_json::Value::Null);
+        assert_eq!(value["middle"][1]["rods"], serde_json::Value::Null);
+        assert_eq!(
+            serde_json::from_value::<BenchBatch>(value.clone()).unwrap(),
+            batch
+        );
+        for path in [
+            "/mainCurve",
+            "/middle/0",
+            "/middle/0/before/0",
+            "/middle/0/rodsIn/0",
+            "/middle/0/rods/0",
+        ] {
+            let mut changed = value.clone();
+            changed
+                .pointer_mut(path)
+                .and_then(serde_json::Value::as_object_mut)
+                .unwrap()
+                .insert("extra".into(), json!(1));
+            assert!(
+                serde_json::from_value::<BenchBatch>(changed).is_err(),
+                "{path}"
+            );
+        }
     }
 
     #[test]

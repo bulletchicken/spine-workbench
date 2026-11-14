@@ -11,5 +11,7 @@ export type RodLine = {
 side: BodySide, 
 /**
  * The centre line as seated in the middle run, top to bottom, patient frame, mm.
+ * Keeps every contour knot and any occupied end continuation, so its
+ * length can differ from the proposal's `lengthMm`.
  */
 pointsMm: Array<[number, number, number]>, };

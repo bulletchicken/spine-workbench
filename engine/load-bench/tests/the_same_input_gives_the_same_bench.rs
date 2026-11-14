@@ -296,8 +296,30 @@ fn keys(value: &Value, expected: &[&str]) {
 }
 
 fn walk_contract(input: &BenchInput, batch: &BenchBatch) {
+    assert_eq!(batch.middle.len(), 1);
+    let middle = &batch.middle[0];
+    assert_eq!(middle.layout_id, input.layouts[0].id);
+    assert_eq!(
+        middle.before,
+        input
+            .fit
+            .vertebrae
+            .iter()
+            .filter(|v| load_bench::daily_loads::LOAD_LEVELS.contains(&v.level))
+            .map(|v| v.pose)
+            .collect::<Vec<_>>()
+    );
+    assert_eq!(middle.rods_in.is_some(), middle.rods.is_some());
+    let poses = middle
+        .rods_in
+        .as_ref()
+        .expect("the fixture's middle run settles");
+    assert_heads_on_lines(input, poses, middle.rods.as_ref().unwrap());
     let json = serde_json::to_value(batch).unwrap();
-    keys(&json, &["versionFrom", "versionCount", "runs"]);
+    keys(
+        &json,
+        &["versionFrom", "versionCount", "runs", "middle", "mainCurve"],
+    );
     assert_eq!(
         serde_json::from_value::<BenchBatch>(json.clone()).unwrap(),
         *batch
@@ -448,7 +470,10 @@ fn walk_contract(input: &BenchInput, batch: &BenchBatch) {
         &value,
         &["versions", "firstId", "layouts", "scales", "mainCurve"],
     );
-    assert!(value["mainCurve"].is_null());
+    assert_eq!(
+        value["mainCurve"],
+        serde_json::to_value(batch.main_curve).unwrap()
+    );
     for layout in value["layouts"].as_array().unwrap() {
         keys(
             layout,
@@ -549,6 +574,11 @@ fn walk_contract(input: &BenchInput, batch: &BenchBatch) {
 fn thirty_two_versions_keep_their_bits_across_two_and_uneven_splits() {
     let input = resting_input(32);
     let whole = run_load_bench(&input).unwrap();
+    let bytes = serde_json::to_vec(&whole.runs).unwrap();
+    let fingerprint = bytes.iter().fold(0xcbf29ce484222325_u64, |hash, byte| {
+        (hash ^ u64::from(*byte)).wrapping_mul(0x100000001b3)
+    });
+    assert_eq!(fingerprint, 17_181_406_478_243_357_212);
     let split = |cuts: &[u32]| {
         let mut runs = Vec::new();
         for pair in cuts.windows(2) {
@@ -592,6 +622,129 @@ fn two_films_run_from_fit_through_comparison() {
     let input = fitted_input(false);
     let batch = run_load_bench(&input).unwrap();
     walk_contract(&input, &batch);
+    assert_ne!(
+        batch.middle[0].rods_in.as_ref().unwrap(),
+        &batch.middle[0].before
+    );
+}
+
+#[test]
+fn a_corrected_spine_keeps_the_rods_straight_top_continuations() {
+    use nalgebra::Vector3;
+    let mut input = fitted_input(false);
+    input.version_count = 0;
+    for rod in &mut input.layouts[0].rods {
+        let top = Vector3::from(rod.points_mm[0]);
+        let tangent = (top - Vector3::from(rod.points_mm[1])).normalize();
+        rod.points_mm.insert(0, (top + tangent * 5.0).into());
+        rod.points_mm.insert(0, (top + tangent * 10.0).into());
+    }
+    let batch = run_load_bench(&input).unwrap();
+    let middle = &batch.middle[0];
+    let poses = middle
+        .rods_in
+        .as_ref()
+        .expect("the fitted middle run settles");
+    let movement = poses
+        .iter()
+        .zip(&middle.before)
+        .map(|(a, b)| (Vector3::from(a.centre) - Vector3::from(b.centre)).norm())
+        .fold(0.0, f64::max);
+    assert!(movement > 0.1, "the spine must really move: {movement} mm");
+    let rods = middle.rods.as_ref().unwrap();
+    assert_heads_on_lines(&input, poses, rods);
+    for line in rods {
+        let rod = input.layouts[0]
+            .rods
+            .iter()
+            .find(|r| r.side == line.side)
+            .unwrap();
+        let top_anchor = input.layouts[0]
+            .anchors
+            .iter()
+            .filter(|a| a.side == rod.side && a.kind != AnchorKind::None)
+            .min_by_key(|a| a.level)
+            .unwrap();
+        let head = moved_head(&input, poses, rod, top_anchor);
+        let top_head_knot = line
+            .points_mm
+            .iter()
+            .enumerate()
+            .min_by(|(_, a), (_, b)| {
+                (Vector3::from(**a) - head)
+                    .norm_squared()
+                    .total_cmp(&(Vector3::from(**b) - head).norm_squared())
+            })
+            .unwrap()
+            .0;
+        assert!(
+            top_head_knot >= 2,
+            "both extra knots must precede the upper head"
+        );
+        // An affine head-translation field retains the straight top segment's
+        // collinearity, including the extrapolated knots above the upper head.
+        let a = Vector3::from(line.points_mm[0]);
+        let b = Vector3::from(line.points_mm[1]);
+        let c = Vector3::from(line.points_mm[2]);
+        let distance = (a - b).cross(&(c - b)).norm() / (c - b).norm();
+        assert!(distance < 1e-8, "the top continuation bends: {distance} mm");
+    }
+}
+
+#[test]
+fn an_empty_first_slice_does_not_check_unused_load_facts() {
+    let mut input = resting_input(1);
+    input.version_count = 0;
+    let original = run_load_bench(&input).unwrap();
+    assert!(original.middle[0].rods_in.is_some());
+    for (activity, weight) in [
+        (ActivityLevel::VeryLow, 0.0),
+        (ActivityLevel::VeryActive, -1.0),
+    ] {
+        input.child.activity = Some(activity);
+        input.child.weight_kg = Some(weight);
+        assert_eq!(run_load_bench(&input).unwrap(), original);
+    }
+}
+
+#[test]
+fn a_failed_middle_solve_keeps_the_version_runs_and_standing_poses() {
+    let mut input = resting_input(2);
+    // Finite supplied dimensions can still overflow the beam stiffness.
+    // No drawing or version solve can settle such a rod.
+    for rod in &mut input.layouts[0].rods {
+        rod.diameter_mm = f64::MAX;
+    }
+    let batch = run_load_bench(&input).unwrap();
+    assert_eq!(batch.runs.len(), 2);
+    assert_eq!(
+        batch.runs.iter().map(|r| r.version).collect::<Vec<_>>(),
+        vec![0, 1]
+    );
+    assert!(batch.runs.iter().all(|r| !r.settled && r.stops.len() == 1));
+    let middle = &batch.middle[0];
+    assert_eq!(
+        middle.before,
+        batch.runs[0].stops[0].poses.as_ref().unwrap().clone()
+    );
+    assert!(middle.rods_in.is_none() && middle.rods.is_none());
+}
+
+#[test]
+fn a_drawing_preparation_overflow_keeps_the_empty_slice() {
+    let mut input = resting_input(1);
+    input.version_count = 0;
+    // The finite rotation vector overflows while locating the ground at
+    // the lower endplate. Preparing the mechanical chain must fail locally.
+    input.fit.vertebrae.last_mut().unwrap().pose.rotation[0] = f64::MAX;
+    let batch = run_load_bench(&input).unwrap();
+    assert!(batch.runs.is_empty());
+    assert_eq!(batch.middle.len(), 1);
+    assert_eq!(
+        batch.middle[0].before.last().unwrap(),
+        &input.fit.vertebrae.last().unwrap().pose
+    );
+    assert!(batch.middle[0].rods_in.is_none() && batch.middle[0].rods.is_none());
 }
 
 #[test]
@@ -625,4 +778,249 @@ fn open_activity_bands_keep_their_missing_endpoints() {
             ))
         );
     }
+}
+
+fn moved_head(
+    input: &BenchInput,
+    poses: &[VertebraPose],
+    rod: &RodProposal,
+    anchor: &AnchorProposal,
+) -> nalgebra::Vector3<f64> {
+    use load_bench::chain::Pose;
+    use nalgebra::Vector3;
+    let original = Pose::from_vertebra(
+        &input
+            .fit
+            .vertebrae
+            .iter()
+            .find(|v| v.level == anchor.level)
+            .unwrap()
+            .pose,
+    );
+    let moved = Pose::from_vertebra(poses.iter().find(|p| p.level == anchor.level).unwrap());
+    let head = Vector3::from(anchor.entry_mm)
+        - Vector3::from(anchor.direction_unit)
+            * if anchor.kind == AnchorKind::Hook {
+                0.0
+            } else {
+                rod.head_offset_mm
+            };
+    let local = original.rotation.transpose() * (head - original.centre_mm);
+    moved.centre_mm + moved.rotation * local
+}
+
+fn assert_heads_on_lines(
+    input: &BenchInput,
+    poses: &[VertebraPose],
+    lines: &[shapes::load_bench::RodLine],
+) {
+    use nalgebra::Vector3;
+    assert_eq!(lines.len(), input.layouts[0].rods.len());
+    for rod in &input.layouts[0].rods {
+        let line = lines.iter().find(|line| line.side == rod.side).unwrap();
+        assert!(line.points_mm.len() >= rod.points_mm.len());
+        for anchor in input.layouts[0]
+            .anchors
+            .iter()
+            .filter(|a| a.side == rod.side && a.kind != AnchorKind::None)
+        {
+            let current = moved_head(input, poses, rod, anchor);
+            let distance = line
+                .points_mm
+                .windows(2)
+                .map(|pair| {
+                    let a = Vector3::from(pair[0]);
+                    let d = Vector3::from(pair[1]) - a;
+                    let t = ((current - a).dot(&d) / d.norm_squared()).clamp(0.0, 1.0);
+                    (current - a - d * t).norm()
+                })
+                .reduce(f64::min)
+                .unwrap();
+            let tolerance = 3.0_f64.sqrt()
+                * load_bench::rigid_rod::minimise::Options::default().constraint_tolerance
+                * load_bench::rigid_rod::LENGTH_MM
+                + 64.0 * f64::EPSILON * current.norm().max(1.0);
+            assert!(
+                distance <= tolerance,
+                "{:?}/{:?}: {distance} mm, tolerance {tolerance}",
+                anchor.level,
+                anchor.side
+            );
+        }
+    }
+}
+
+#[test]
+fn the_middle_keeps_the_fit_and_the_full_length_of_a_rod_that_fits() {
+    let mut input = resting_input(2);
+    // The contour extends above the upper head; a head-only line loses that end.
+    for rod in &mut input.layouts[0].rods {
+        rod.points_mm[0][2] += 20.0;
+        rod.points_mm[1][2] -= 20.0;
+        rod.length_mm = 120.0;
+    }
+    // Pin the lower head at the physical lower end, as the bench requires.
+    for anchor in &mut input.layouts[0].anchors {
+        if anchor.level == Level::T8 {
+            anchor.entry_mm[2] -= 20.0;
+        }
+    }
+    let first = run_load_bench(&BenchInput {
+        version_count: 1,
+        ..input.clone()
+    })
+    .unwrap();
+    let middle = &first.middle[0];
+    assert_eq!(
+        middle.before.iter().map(|p| p.level).collect::<Vec<_>>(),
+        load_bench::daily_loads::LOAD_LEVELS
+    );
+    let poses = middle
+        .rods_in
+        .as_ref()
+        .expect("the resting drawing settles");
+    assert_heads_on_lines(&input, poses, middle.rods.as_ref().unwrap());
+    for line in middle.rods.as_ref().unwrap() {
+        let length: f64 = line
+            .points_mm
+            .windows(2)
+            .map(|p| {
+                p[0].iter()
+                    .zip(p[1])
+                    .map(|(a, b)| (a - b) * (a - b))
+                    .sum::<f64>()
+                    .sqrt()
+            })
+            .sum();
+        assert!((length - 120.0).abs() < 1e-8, "full rod length: {length}");
+    }
+    let later = run_load_bench(&BenchInput {
+        version_from: 1,
+        version_count: 1,
+        ..input.clone()
+    })
+    .unwrap();
+    assert!(later.middle.is_empty());
+    assert_eq!(first.main_curve, later.main_curve);
+    let without = compare_layouts(&BenchCompareInput {
+        layouts: input.layouts.clone(),
+        batches: vec![later.clone()],
+    })
+    .unwrap();
+    assert!(without.main_curve.is_none());
+    assert!(
+        without.layouts[0]
+            .stops
+            .iter()
+            .all(|s| s.middle.is_none() && s.rods.is_none())
+    );
+    let with = compare_layouts(&BenchCompareInput {
+        layouts: input.layouts,
+        batches: vec![later, first.clone()],
+    })
+    .unwrap();
+    assert_eq!(with.layouts[0].stops[0].middle, Some(middle.before.clone()));
+    assert_eq!(with.layouts[0].stops[1].middle, middle.rods_in);
+    assert_eq!(with.layouts[0].stops[1].rods, middle.rods);
+}
+
+#[test]
+fn the_main_curve_matches_the_right_thoracic_answer_key() {
+    use forward_model::{endplates::Endplates, vertebra_params::VertebraParams};
+    use shapes::load_bench::MainCurve;
+    use shapes::made_up::CurveRegion;
+    let key = made_up_spines::make_up_answer_key(&MadeUpRecipe {
+        name: RecipeName::RightThoracic40,
+        seed: 1,
+        tier: Tier::T0,
+    })
+    .unwrap();
+    assert_eq!(key.angles.frontal_cobb[0].region, CurveRegion::MainThoracic);
+    let fit = realistic_cases::truth_fit(
+        &key.poses
+            .iter()
+            .copied()
+            .filter(|p| load_bench::daily_loads::LOAD_LEVELS.contains(&p.level))
+            .collect::<Vec<_>>(),
+    );
+    let poses: Vec<_> = fit.vertebrae.iter().map(|v| v.pose).collect();
+    let plates: Vec<_> = poses
+        .iter()
+        .map(|p| Endplates::of(&VertebraParams::from(p)))
+        .collect();
+    let tilt = |n: nalgebra::Vector3<f64>| libm::atan2(-n.y, n.z);
+    let mut most = (0.0, 0, 0);
+    for upper in 0..plates.len() {
+        for lower in upper + 1..plates.len() {
+            let cobb = (tilt(plates[upper].top.normal) - tilt(plates[lower].bottom.normal)).abs();
+            if cobb > most.0 {
+                most = (cobb, upper, lower);
+            }
+        }
+    }
+    assert!((most.0.to_degrees() - key.angles.frontal_cobb[0].degrees).abs() < 1e-10);
+    // The answer key carries exact centres: use distance from the end-to-end
+    // coronal chord, rather than rounding the recipe's continuous apex.
+    let a = poses[most.1].centre;
+    let b = poses[most.2].centre;
+    let apex_index = (most.1..=most.2)
+        .max_by(|&i, &j| {
+            let area =
+                |p: [f64; 3]| ((p[1] - a[1]) * (b[2] - a[2]) - (p[2] - a[2]) * (b[1] - a[1])).abs();
+            area(poses[i].centre).total_cmp(&area(poses[j].centre))
+        })
+        .unwrap();
+    let expected = MainCurve {
+        upper: poses[most.1].level,
+        apex: poses[apex_index].level,
+        lower: poses[most.2].level,
+    };
+    let proposals = implant_layout::propose_layouts(&LayoutInput {
+        fit: fit.clone(),
+        front: None,
+        bend_left: None,
+        bend_right: None,
+        child: child(),
+        naming: NamingDoubt::AsRead,
+        versions: 1,
+        seed: 1,
+        pedicle_child_share: None,
+    })
+    .unwrap();
+    let input = BenchInput {
+        fit,
+        layouts: vec![proposals.layouts[0].clone()],
+        child: child(),
+        seed: 1,
+        versions: 1,
+        version_from: 0,
+        version_count: 0,
+    };
+    let batch = run_load_bench(&input).unwrap();
+    assert_eq!(batch.main_curve, Some(expected));
+    let later = run_load_bench(&BenchInput {
+        version_from: 1,
+        ..input
+    })
+    .unwrap();
+    assert_eq!(later.main_curve, Some(expected));
+    assert!(later.middle.is_empty());
+}
+
+#[test]
+fn fit_noise_and_seed_never_move_the_middle_drawing() {
+    let mut input = resting_input(2);
+    input.version_count = 0;
+    let original = run_load_bench(&input).unwrap();
+    for v in &mut input.fit.vertebrae {
+        v.sd.centre_mm = [5.0; 3];
+        v.sd.angles_rad = [0.1; 3];
+    }
+    input.seed = 1234;
+    let changed = run_load_bench(&input).unwrap();
+    assert_eq!(original.middle, changed.middle);
+    assert_eq!(
+        original.middle[0].rods_in.as_ref().unwrap(),
+        &original.middle[0].before
+    );
 }

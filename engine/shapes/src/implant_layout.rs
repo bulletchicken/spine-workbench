@@ -61,9 +61,10 @@ pub struct RebuildInput {
     pub lower: Level,
     /// Only the pedicles the person set.
     pub anchors: Vec<AnchorChoice>,
-    /// One of `LayoutChoices`.
+    /// Together with `rodDiameterMm`, one pair of `LayoutChoices.rods`; any
+    /// other pair is refused.
     pub rod_material: RodMaterial,
-    /// One of `LayoutChoices`.
+    /// Together with `rodMaterial`, one pair of `LayoutChoices.rods`.
     pub rod_diameter_mm: f64,
 }
 
@@ -850,7 +851,18 @@ pub struct LayoutChoices {
     pub screw_lengths_mm: Vec<f64>,
     pub rod_diameters_mm: Vec<f64>,
     pub rod_materials: Vec<RodMaterial>,
+    /// Sourced material and diameter pairs, in the proposer's order.
+    pub rods: Vec<RodChoice>,
     pub sources: Vec<String>,
+}
+
+/// One sourced rod material and diameter that a person may choose.
+#[derive(Clone, Copy, Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[cfg_attr(feature = "typescript", derive(ts_rs::TS))]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct RodChoice {
+    pub material: RodMaterial,
+    pub diameter_mm: f64,
 }
 
 // ---- What needs a look
@@ -1234,6 +1246,10 @@ mod tests {
                 screw_lengths_mm: vec![25.0, 27.5],
                 rod_diameters_mm: vec![5.5, 6.0],
                 rod_materials: vec![RodMaterial::TitaniumAlloy],
+                rods: vec![RodChoice {
+                    material: RodMaterial::TitaniumAlloy,
+                    diameter_mm: 5.5,
+                }],
                 sources: vec!["balikci-2019".to_string()],
             },
             cannot_tell: vec![CannotTell {
@@ -1317,6 +1333,10 @@ mod tests {
         let value = serde_json::to_value(proposals()).expect("the proposals serialise");
         assert_eq!(value["tier"], "two-films");
         assert_eq!(value["firstIsSketch"], false);
+        assert_eq!(
+            value["choices"]["rods"],
+            json!([{ "material": "titanium-alloy", "diameterMm": 5.5 }])
+        );
         assert_eq!(value["upperEnds"], json!([]));
         assert_eq!(value["lowerEnds"], json!([]));
         assert_eq!(value["layouts"][0]["change"], json!({"kind": "first"}));
@@ -1507,6 +1527,7 @@ mod tests {
             "/layouts/0/anchors/0/pedicle",
             "/layouts/0/rods/0",
             "/choices",
+            "/choices/rods/0",
             "/cannotTell/0",
             "/namingScenarios/0",
             "/namingScenarios/0/changes/0",

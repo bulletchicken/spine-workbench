@@ -149,6 +149,10 @@ fn print_table(
         out,
         "placements: {placements}; versions per placement: {versions}; placement-version runs: {runs}; batch: {BATCH_VERSIONS} versions"
     )?;
+    writeln!(
+        out,
+        "drawing runs: {placements}; carried by the first slice"
+    )?;
     writeln!(out, "first placement: {}", result.first_id)?;
     writeln!(out, "level side kind diameter_mm length_mm look_codes")?;
     for anchor in &proposals.layouts[0].anchors {
@@ -166,7 +170,10 @@ fn print_table(
             anchor["looks"],
         )?;
     }
-    writeln!(out, "wall time (seconds; bench includes all stops):")?;
+    writeln!(
+        out,
+        "wall time (seconds; bench includes all stops and drawing runs):"
+    )?;
     writeln!(
         out,
         "placement span versions total_s per_version_s unsettled"

@@ -24,6 +24,6 @@ export function placementFixture(): LayoutProposals {
   });
   return { tier: 'two-films', versions: 32, curves: [], classification: [], selective: [], rules: [], pairs: [{ upper: 'T4', lower: 'L1', versionsHolding: 14, rulesAt: [], rulesNear: [], rulesAgainst: [], stopShort: [], checks: [], freeSegmentsBelow: 4 }],
     layouts: [{ id: 'first', change: { kind: 'first' }, upper: 'T4', lower: 'L1', anchors, rods, releasedLevels: ['T4', 'T5'] }], firstIsSketch: false, upperEnds: [{ level: 'T4', versions: 19 }, { level: 'T3', versions: 13 }], lowerEnds: [{ level: 'L1', versions: 32 }],
-    choices: { screwDiametersMm: [4.5, 5], screwLengthsMm: [30, 35], rodDiametersMm: [5.5], rodMaterials: ['cobalt-chrome'], sources: ['made-up-width'] },
+    choices: { screwDiametersMm: [4.5, 5], screwLengthsMm: [30, 35], rodDiametersMm: [5.5], rodMaterials: ['cobalt-chrome'], rods: [{ material: 'cobalt-chrome', diameterMm: 5.5 }], sources: ['made-up-width'] },
     cannotTell: [{ code: 'ends-unsettled', levels: ['T4'] }, { code: 'names-may-be-one-off', levels: [] }, { code: 'no-bending-films', levels: [] }, { code: 'twist-not-measured', levels: ['T7'] }], namingScenarios: [-1, 1].map((shift) => ({ shift, changes: [{ level: 'T7', side: 'left', renamedAs: shift < 0 ? 'T6' : 'T8', kindFrom: 'screw', kindTo: 'screw', diameterFromMm: 4.5, diameterToMm: 5, lengthFromMm: 30, lengthToMm: 35, looksAdded: ['may-be-too-narrow'], looksRemoved: [] }] })) };
 }

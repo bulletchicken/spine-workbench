@@ -52,6 +52,7 @@ type Runs<'a> = BTreeMap<u32, &'a BenchRun>;
 /// number. Run order and batch boundaries do not affect the answer.
 pub fn compare(input: &BenchCompareInput) -> Result<BenchResult, BenchError> {
     let runs = collect(input)?;
+    let middle = drawing_runs(input)?;
     let evidence =
         crate::evidence::Evidence::read().map_err(|error| refused(&error.to_string()))?;
     let first = &runs[0];
@@ -106,8 +107,16 @@ pub fn compare(input: &BenchCompareInput) -> Result<BenchResult, BenchError> {
                 .filter_map(|run| stop_values(run, stop)?.cycles_per_year)
                 .collect();
             result.stops.push(StopResult {
-                middle: None,
-                rods: None,
+                middle: middle.get(layout.id.as_str()).and_then(|run| match stop {
+                    BenchStop::Before => Some(run.before.clone()),
+                    BenchStop::RodsIn => run.rods_in.clone(),
+                    _ => None,
+                }),
+                rods: middle.get(layout.id.as_str()).and_then(|run| {
+                    (stop == BenchStop::RodsIn)
+                        .then(|| run.rods.clone())
+                        .flatten()
+                }),
                 cycles_sources: if cycles.is_empty() {
                     Vec::new()
                 } else {
@@ -142,7 +151,11 @@ pub fn compare(input: &BenchCompareInput) -> Result<BenchResult, BenchError> {
             .or_insert((estimate.band.p10, estimate.band.p90));
     }
     Ok(BenchResult {
-        main_curve: None,
+        main_curve: input
+            .batches
+            .iter()
+            .find(|batch| batch.version_from == 0)
+            .and_then(|batch| batch.main_curve),
         versions: first.len() as u32,
         first_id: input.layouts[0].id.clone(),
         layouts,
@@ -159,6 +172,36 @@ pub fn compare(input: &BenchCompareInput) -> Result<BenchResult, BenchError> {
 
 fn refused(reason: &str) -> BenchError {
     BenchError::Refused(reason.to_string())
+}
+
+// Drawing data never enters the version maps used by summaries and ghosts.
+fn drawing_runs(input: &BenchCompareInput) -> Result<BTreeMap<&str, &MiddleRun>, BenchError> {
+    let mut middle = BTreeMap::new();
+    let curve = input.batches.first().and_then(|batch| batch.main_curve);
+    for batch in &input.batches {
+        if batch.main_curve != curve {
+            return Err(refused("main-curves-not-shared"));
+        }
+        if batch.version_from != 0 && !batch.middle.is_empty() {
+            return Err(refused("middle-outside-first-slice"));
+        }
+        for run in &batch.middle {
+            if !input
+                .layouts
+                .iter()
+                .any(|layout| layout.id == run.layout_id)
+            {
+                return Err(refused("unknown-middle-layout"));
+            }
+            if run.rods_in.is_some() != run.rods.is_some() {
+                return Err(refused("middle-poses-and-rods-not-paired"));
+            }
+            if middle.insert(run.layout_id.as_str(), run).is_some() {
+                return Err(refused("duplicate-middle-layout"));
+            }
+        }
+    }
+    Ok(middle)
 }
 
 fn collect(input: &BenchCompareInput) -> Result<Vec<Runs<'_>>, BenchError> {
