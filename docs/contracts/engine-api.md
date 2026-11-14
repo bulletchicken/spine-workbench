@@ -197,17 +197,14 @@ Drawing poses and lines never supply an estimate or a count.
 | `ScrewHere` | `diameterMm`, `diameterAlsoSeen`, `lengthMm`, `lengthAlsoSeen`, nullable `screwToPedicle` and nullable `medialAngle`. Existing anchor size fields stay null on hooks and empty pedicles. |
 | `PedicleEstimate` | `sources` lists the width's evidence keys. |
 | `AnchorProposal` | `diameterSources`, `lengthSources`, `directionSources` and `lookSources` retain the keys behind each number or look code; `sources` remains their union. Each `LookSources` has `code` and `sources`. |
-| `StopResult` | `middle: VertebraPose[] \| null` is for drawing: standing poses at `before`, one separate middle-input run at `rods-in`, null later or when that run does not settle. `rods: RodLine[] \| null` is present only with the rods-in middle poses; each line has `side` and `pointsMm`. `cyclesSources` lists annual-step evidence keys. |
+| `StopResult` | `middle: VertebraPose[] \| null` is for drawing: standing poses at `before`, one separate middle-input run at `rods-in`, null later or when that run does not settle. `rods: RodLine[] \| null` is present only with the rods-in middle poses; each line has `side` and `pointsMm`. `cyclesSources` currently lists the year-length assumption; the selected step-band keys are not yet carried into comparison. |
 | `BenchResult` | `mainCurve: MainCurve \| null` names the measured curve's `upper`, `apex` and `lower`; null when none exists. |
-| `PartResult` | `demand: Band \| null` is an anchor's force over bone-adjusted strength over settled versions; null for other parts and at `before`. `sources` lists evidence keys. |
-| `Estimate` | `mostlyFrom: SampledUnknown \| null` is null when no unknown moves with the estimate. `sources` lists evidence keys, empty for film-only values. |
-| `PairedCount` | `sortedBy: SampledUnknown \| null` is null when no unknown moves with the difference. `outcomes: PairOutcome[]` follows `order`, with `lower`, `higher` or `tie` per dot. `clearAt` is three quarters of the dot count rounded up. |
+| `PartResult` | `demand: Band \| null` is an anchor's force over bone-adjusted strength over settled versions; null for other parts and at `before`. `sources` covers the load share, its shared denominator and strength or fatigue; the absent-weight prior's source is not yet carried into comparison. |
+| `Estimate` | `mostlyFrom: SampledUnknown \| null` is null when no named unknown has nonzero rank correlation with the estimate. `sources` lists evidence keys, empty for film-only values; the absent-weight prior's source is not yet carried into comparison. |
+| `PairedCount` | `sortedBy: SampledUnknown \| null` is null when no named unknown has nonzero rank correlation with the difference. `outcomes: PairOutcome[]` follows `order`, with `lower`, `higher` or `tie` per dot. `clearAt` is three quarters of the dot count rounded up. |
 
-The producers currently leave all these added lists empty, nullable fields
-null and `firstIsSketch` false; `clearAt` is computed from `order`. Existing
-association answers remain present in `mostlyFrom` and `sortedBy`. No drawing
-or evidence mapping may be inferred from these unfilled fields. Before-stop
-load estimates and part shares retain their existing representation.
+The bench currently leaves `middle`, `rods` and `mainCurve` null: batches do
+not yet carry the separate middle run and selected curve into comparison.
 
 The native `spine measure` command accepts either `--recipe NAME --seed N`
 (optionally `--front-only`) or `--film front=PATH` with an optional

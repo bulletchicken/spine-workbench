@@ -1,6 +1,7 @@
 use super::*;
 use shapes::implant_layout::{
-    AnchorKind, AnchorProposal, CurveSide, LayoutChange, PedicleEstimate, ValueStatus,
+    AnchorKind, AnchorProposal, CoronalLine, CurveSide, LayoutChange, PedicleEstimate, RodMaterial,
+    RodProposal, ValueStatus,
 };
 use shapes::levels::Level;
 use shapes::spine_readings::{Band, BodySide};
@@ -63,6 +64,124 @@ fn layout(id: &str) -> ImplantLayout {
         rods: vec![],
         released_levels: vec![],
     }
+}
+
+fn sourced_layout() -> ImplantLayout {
+    let mut layout = layout("first");
+    layout.lower = Level::L1;
+    layout.anchors[1].level = Level::L1;
+    layout.anchors[1].side = BodySide::Left;
+    layout.anchors[1].kind = AnchorKind::Hook;
+    layout.rods.push(RodProposal {
+        standing_points_mm: Vec::new(),
+        side: BodySide::Left,
+        curve_side: CurveSide::Outside,
+        material: RodMaterial::CobaltChrome,
+        diameter_mm: 5.5,
+        target_kyphosis_deg: 25.0,
+        target_kyphosis_status: ValueStatus::Typical,
+        coronal_line: CoronalLine::L5Vertical,
+        overbend_deg: 0.0,
+        head_offset_mm: 10.0,
+        length_mm: 0.0,
+        geometry_status: ValueStatus::FromTemplate,
+        points_mm: vec![],
+        sources: vec![],
+    });
+    layout
+}
+
+#[test]
+fn loaded_sources_keep_the_rows_behind_each_number() {
+    let evidence = crate::evidence::Evidence::read().unwrap();
+    let layout = sourced_layout();
+    // The seated angles use springs, ribs and rod modulus. Gravity,
+    // preload and anchor capacity do not enter those angles.
+    assert_eq!(
+        sources::estimate(&evidence, &layout, BenchStop::RodsIn, Measure::MainCobb),
+        [
+            "mannen-2018",
+            "prasad-2017",
+            "project-assumptions",
+            "tachi-2021"
+        ]
+    );
+    // Standing adds preload and gravity; the T8 screw and L1 hook read
+    // distinct capacity rows, both with the bone-factor assumption.
+    assert_eq!(
+        sources::estimate(
+            &evidence,
+            &layout,
+            BenchStop::Standing,
+            Measure::HeaviestAnchorDemand,
+        ),
+        [
+            "gangnet-2003",
+            "gardner-morse-2004",
+            "lehman-2003",
+            "liljenqvist-2001",
+            "mannen-2018",
+            "prasad-2017",
+            "project-assumptions",
+            "tachi-2021",
+            "winter-via-keenan-2015",
+        ]
+    );
+    // The swing adds walking, ultimate strength, contour loss and the
+    // construct run-out; annual step counts do not enter its ratio.
+    assert_eq!(
+        sources::estimate(
+            &evidence,
+            &layout,
+            BenchStop::YearOfWalking,
+            Measure::HeaviestRodSwing,
+        ),
+        [
+            "gangnet-2003",
+            "gardner-morse-2004",
+            "mannen-2018",
+            "prasad-2017",
+            "project-assumptions",
+            "rohlmann-2002",
+            "rohlmann-2014-gait",
+            "slivka-2013",
+            "tachi-2021",
+            "vieweg-2023",
+            "winter-via-keenan-2015",
+        ]
+    );
+
+    let mut run = run("first", 0, 20.0, 4.0);
+    for stop in &mut run.stops {
+        stop.rod_span_use = vec![0.5];
+    }
+    let result = compare(&BenchCompareInput {
+        layouts: vec![layout],
+        batches: vec![BenchBatch {
+            version_from: 0,
+            version_count: 1,
+            runs: vec![run],
+        }],
+    })
+    .unwrap();
+    // The screw's share uses force, so the hook's capacity is absent.
+    // Its denominator also reads bending and walking loads at other stops.
+    assert_eq!(
+        result.layouts[0].stops[2].parts[0].sources,
+        [
+            "gangnet-2003",
+            "gardner-morse-2004",
+            "lehman-2003",
+            "mannen-2018",
+            "prasad-2017",
+            "project-assumptions",
+            "rohlmann-2002",
+            "rohlmann-2014-gait",
+            "tachi-2021",
+            "wilke-1999",
+            "winter-via-keenan-2015",
+        ]
+    );
 }
 
 fn run(id: &str, version: u32, cobb: f64, force: f64) -> BenchRun {
@@ -190,6 +309,66 @@ fn global_shares_have_one_denominator_and_strength_counts_keep_their_units() {
 }
 
 #[test]
+fn part_sources_include_other_settled_placements_only_on_used_versions() {
+    let mut input = input(
+        vec![run("first", 0, 20.0, 4.0), run("other", 0, 20.0, 16.0)],
+        1,
+    );
+    input.layouts[1].released_levels = vec![Level::T8];
+    let has_release_source = |result: &BenchResult| {
+        result.layouts[0].stops[1].parts[0]
+            .sources
+            .iter()
+            .any(|source| source == "wang-2017")
+    };
+    assert!(has_release_source(&compare(&input).unwrap()));
+    input.batches[0].runs[1].settled = false;
+    assert!(!has_release_source(&compare(&input).unwrap()));
+
+    // The other placement's extra settled version cannot contribute a
+    // denominator when this placement has no settled numerator there.
+    input.batches[0].version_count = 2;
+    let mut unsettled = run("first", 1, 20.0, 4.0);
+    unsettled.settled = false;
+    input.batches[0]
+        .runs
+        .extend([unsettled, run("other", 1, 20.0, 16.0)]);
+    assert!(!has_release_source(&compare(&input).unwrap()));
+}
+
+#[test]
+fn a_missing_junction_cannot_borrow_sources_from_its_version() {
+    let mut input = input(
+        vec![
+            run("first", 0, 20.0, 4.0),
+            run("first", 1, 20.0, 4.0),
+            run("other", 0, 20.0, 16.0),
+            run("other", 1, 20.0, 16.0),
+        ],
+        2,
+    );
+    input.layouts[1].released_levels = vec![Level::T8];
+    let runs = &mut input.batches[0].runs;
+    runs[2].settled = false;
+    for (index, run) in runs.iter_mut().enumerate() {
+        run.stops[2].junction_above = (index != 1).then_some(0.5);
+        run.stops[2].junction_below = Some(0.5);
+    }
+    let result = compare(&input).unwrap();
+    let parts = &result.layouts[0].stops[2].parts;
+    for (which, includes_release) in [(JunctionSide::Above, false), (JunctionSide::Below, true)] {
+        let part = parts
+            .iter()
+            .find(|part| part.part == PartRef::Junction { which })
+            .unwrap();
+        assert_eq!(
+            part.sources.iter().any(|source| source == "wang-2017"),
+            includes_release,
+        );
+    }
+}
+
+#[test]
 fn margins_and_tags_follow_their_numeric_thresholds() {
     let narrow = Band {
         p10: 9.0,
@@ -305,6 +484,10 @@ fn dot_order_follows_the_paired_difference_and_ghosts_are_actual_versions() {
     assert_eq!(count.sorted_by, Some(SampledUnknown::StiffnessScale));
     assert_eq!(count.order, vec![1, 0, 2]);
     assert_eq!((count.lower, count.higher, count.ties), (0, 2, 1));
+    assert_eq!(
+        count.outcomes,
+        vec![PairOutcome::Tie, PairOutcome::Higher, PairOutcome::Higher]
+    );
     let mut runs = Vec::new();
     for version in 0..11 {
         let mut value = run("first", version, (10 - version) as f64, 1.0);
@@ -343,7 +526,7 @@ fn an_empty_pedicle_does_not_lower_the_median_occupied_anchor_force() {
     let mut empty = anchor(BodySide::Right);
     empty.kind = AnchorKind::None;
     layout.anchors.push(empty);
-    let mut value = run("first", 0, 20.0, 10.0).stops.remove(0);
+    let mut value = run("first", 0, 20.0, 10.0).stops.remove(1);
     value.anchor_force_n = vec![10.0, 0.0, 0.0];
     // Occupied forces are 10 and 0, whose median is 5; the empty pedicle
     // must not change that median to zero.
@@ -498,4 +681,117 @@ fn missing_solves_cannot_set_a_narrow_estimate_or_a_steady_share() {
             .iter()
             .all(|part| !part.steady)
     );
+}
+
+#[test]
+fn anchor_demand_uses_settled_ratios_and_before_has_only_shape_estimates() {
+    let mut missing = run("first", 2, 20.0, 9990.0);
+    missing.settled = false;
+    let result = compare(&BenchCompareInput {
+        layouts: vec![layout("first")],
+        batches: vec![BenchBatch {
+            version_from: 0,
+            version_count: 3,
+            runs: vec![
+                run("first", 0, 20.0, 10.0),
+                run("first", 1, 20.0, 30.0),
+                missing,
+            ],
+        }],
+    })
+    .unwrap();
+    let stops = &result.layouts[0].stops;
+    assert_eq!(
+        stops[0]
+            .estimates
+            .iter()
+            .map(|e| e.measure)
+            .collect::<Vec<_>>(),
+        vec![Measure::MainCobb, Measure::Kyphosis, Measure::ApicalTwist]
+    );
+    assert!(stops[0].parts.is_empty());
+    let demand = stops[1].parts[0].demand.unwrap();
+    assert_eq!(
+        demand,
+        Band {
+            p10: 1.2,
+            p50: 2.0,
+            p90: 2.8
+        }
+    );
+    assert_eq!(
+        stops[1].parts[1].demand.unwrap(),
+        Band {
+            p10: 0.6,
+            p50: 1.0,
+            p90: 1.4
+        }
+    );
+}
+
+#[test]
+fn constant_and_uncorrelated_values_have_no_drawn_driver() {
+    let mut runs = Vec::new();
+    // Centred force ranks [−1, 1, 1, −1] are orthogonal to
+    // stiffness ranks [−1.5, −0.5, 0.5, 1.5]. Other draws are constant.
+    for (version, force) in [10.0, 20.0, 20.0, 10.0].into_iter().enumerate() {
+        for id in ["first", "other"] {
+            let mut value = run(id, version as u32, 20.0, force);
+            value.draws.stiffness_scale = version as f64 + 1.0;
+            runs.push(value);
+        }
+    }
+    let result = compare(&input(runs, 4)).unwrap();
+    assert!(
+        result
+            .layouts
+            .iter()
+            .flat_map(|l| &l.stops)
+            .flat_map(|s| &s.estimates)
+            .all(|estimate| estimate.mostly_from.is_none())
+    );
+    for count in &result.layouts[1].counts {
+        assert_eq!(count.sorted_by, None);
+        assert_eq!(count.order, vec![0, 1, 2, 3]);
+        assert_eq!(count.outcomes, vec![PairOutcome::Tie; 4]);
+    }
+}
+
+#[test]
+fn outcomes_keep_their_versions_when_dot_order_changes() {
+    let mut runs = Vec::new();
+    for (version, (scale, difference)) in [(3.0, -3.0), (1.0, 2.0), (2.0, 3.0)]
+        .into_iter()
+        .enumerate()
+    {
+        for id in ["first", "other"] {
+            let mut value = run(id, version as u32, 20.0, 1.0);
+            value.draws.stiffness_scale = scale;
+            if id == "other" {
+                value.stops[1].main_cobb_deg += difference;
+            }
+            runs.push(value);
+        }
+    }
+    let result = compare(&input(runs, 3)).unwrap();
+    let count = cobb_count(&result);
+    assert_eq!(count.order, vec![1, 2, 0]);
+    assert_eq!(
+        count.outcomes,
+        vec![PairOutcome::Tie, PairOutcome::Higher, PairOutcome::Lower]
+    );
+    for count in &result.layouts[1].counts {
+        assert_eq!(count.outcomes.len(), count.order.len());
+        for (outcome, total) in [
+            (PairOutcome::Lower, count.lower),
+            (PairOutcome::Higher, count.higher),
+            (PairOutcome::Tie, count.ties),
+        ] {
+            assert_eq!(
+                count.outcomes.iter().filter(|o| **o == outcome).count(),
+                total as usize
+            );
+        }
+        assert_eq!(count.clear_at, 3);
+    }
 }

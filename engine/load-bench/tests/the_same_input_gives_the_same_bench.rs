@@ -403,6 +403,46 @@ fn walk_contract(input: &BenchInput, batch: &BenchBatch) {
         batches: vec![comparison_batch],
     })
     .unwrap();
+    let evidence = load_bench::evidence::Evidence::read().unwrap();
+    for layout in &result.layouts {
+        for stop in &layout.stops {
+            for key in stop
+                .cycles_sources
+                .iter()
+                .chain(stop.estimates.iter().flat_map(|e| &e.sources))
+                .chain(stop.parts.iter().flat_map(|p| &p.sources))
+            {
+                assert!(evidence.source(key).is_some(), "unknown source: {key}");
+            }
+            if stop.stop == BenchStop::Before {
+                assert!(stop.parts.is_empty());
+                assert!(stop.estimates.iter().all(|e| matches!(
+                    e.measure,
+                    shapes::load_bench::Measure::MainCobb
+                        | shapes::load_bench::Measure::Kyphosis
+                        | shapes::load_bench::Measure::ApicalTwist
+                )));
+                assert!(stop.estimates.iter().all(|e| e.sources.is_empty()));
+            }
+            for part in &stop.parts {
+                let occupied = match part.part {
+                    shapes::load_bench::PartRef::Anchor { level, side } => input.layouts[0]
+                        .anchors
+                        .iter()
+                        .any(|a| a.level == level && a.side == side && a.kind != AnchorKind::None),
+                    _ => false,
+                };
+                assert_eq!(part.demand.is_some(), occupied);
+            }
+        }
+        for count in &layout.counts {
+            assert_eq!(count.sorted_by, None);
+            assert_eq!(
+                count.outcomes,
+                vec![shapes::load_bench::PairOutcome::Tie; input.versions as usize]
+            );
+        }
+    }
     let value = serde_json::to_value(&result).unwrap();
     keys(
         &value,
@@ -434,7 +474,6 @@ fn walk_contract(input: &BenchInput, batch: &BenchBatch) {
                     estimate,
                     &["measure", "band", "tag", "mostlyFrom", "sources"],
                 );
-                assert_eq!(estimate["sources"], serde_json::json!([]));
                 keys(&estimate["band"], &["p10", "p50", "p90"]);
             }
             for part in stop["parts"].as_array().unwrap() {
@@ -449,8 +488,6 @@ fn walk_contract(input: &BenchInput, batch: &BenchBatch) {
                         "sources",
                     ],
                 );
-                assert!(part["demand"].is_null());
-                assert_eq!(part["sources"], serde_json::json!([]));
                 keys(&part["share"], &["p10", "p50", "p90"]);
                 let expected: &[&str] = match part["part"]["kind"].as_str().unwrap() {
                     "anchor" => &["kind", "level", "side"],

@@ -5,6 +5,7 @@
 
 mod parts;
 mod ranks;
+mod sources;
 
 use crate::BenchError;
 use shapes::implant_layout::ImplantLayout;
@@ -51,6 +52,8 @@ type Runs<'a> = BTreeMap<u32, &'a BenchRun>;
 /// number. Run order and batch boundaries do not affect the answer.
 pub fn compare(input: &BenchCompareInput) -> Result<BenchResult, BenchError> {
     let runs = collect(input)?;
+    let evidence =
+        crate::evidence::Evidence::read().map_err(|error| refused(&error.to_string()))?;
     let first = &runs[0];
     let mut layouts = Vec::new();
     for (index, layout) in input.layouts.iter().enumerate() {
@@ -83,7 +86,7 @@ pub fn compare(input: &BenchCompareInput) -> Result<BenchResult, BenchError> {
                 let sign_consistent =
                     index > 0 && sign_keeps as f64 >= COMPARISON_SIGN_SHARE * own.len() as f64;
                 estimates.push(Estimate {
-                    sources: Vec::new(),
+                    sources: sources::estimate(&evidence, layout, stop, measure),
                     measure,
                     band: range,
                     tag: if samples.len() == own.len() {
@@ -91,7 +94,7 @@ pub fn compare(input: &BenchCompareInput) -> Result<BenchResult, BenchError> {
                     } else {
                         EstimateTag::Assumed
                     },
-                    mostly_from: Some(ranks::driver(own, &samples).0),
+                    mostly_from: ranks::driver(own, &samples).0,
                 });
                 if index > 0 && !paired.is_empty() {
                     result.counts.push(count(own, stop, measure, &paired));
@@ -105,10 +108,14 @@ pub fn compare(input: &BenchCompareInput) -> Result<BenchResult, BenchError> {
             result.stops.push(StopResult {
                 middle: None,
                 rods: None,
-                cycles_sources: Vec::new(),
+                cycles_sources: if cycles.is_empty() {
+                    Vec::new()
+                } else {
+                    sources::cycles(&evidence, stop)
+                },
                 stop,
                 estimates,
-                parts: parts::summarise(layout, own, &runs, stop),
+                parts: parts::summarise(&evidence, layout, &input.layouts, own, &runs, stop),
                 ghosts: ghosts(own, stop),
                 cycles_per_year: band(&cycles),
                 outside_stiff_rod: if stop == BenchStop::Before {
@@ -315,6 +322,9 @@ fn largest(values: &[f64]) -> Option<f64> {
 }
 
 fn measure(value: &StopValues, layout: &ImplantLayout, which: Measure) -> Option<f64> {
+    if value.stop == BenchStop::Before && !angular(which) {
+        return None;
+    }
     let value = match which {
         Measure::MainCobb => Some(value.main_cobb_deg),
         Measure::Kyphosis => Some(value.kyphosis_deg),
@@ -441,22 +451,32 @@ fn count(
         higher: 0,
         ties: 0,
         order,
-        sorted_by: Some(sorted_by),
+        sorted_by,
     };
-    for (_, own, first) in paired {
+    let mut outcomes = BTreeMap::new();
+    for (version, own, first) in paired {
         let margin = if angular(measure) {
             ANGLE_MARGIN_DEG
         } else {
             LOAD_MARGIN_SHARE * first.abs()
         };
-        if own - first < -margin {
+        let outcome = if own - first < -margin {
             result.lower += 1;
+            PairOutcome::Lower
         } else if own - first > margin {
             result.higher += 1;
+            PairOutcome::Higher
         } else {
             result.ties += 1;
-        }
+            PairOutcome::Tie
+        };
+        outcomes.insert(*version, outcome);
     }
+    result.outcomes = result
+        .order
+        .iter()
+        .map(|version| outcomes[version])
+        .collect();
     result
 }
 
