@@ -39,7 +39,7 @@ const stopped = (code: ErrorCode): DockSpec => ({
   scene: 'failed', sentence: Find.stopped, helper: words(Find.faultHelp(faultWords(code).title)),
   quiet: action(Find.backToFilms), primary: action(Find.tryAgain),
 });
-const unread = (n: number, helper: string, base = add): DockSpec => ({ ...base, sentence: Films.refused(n), helper: words(helper) });
+const unread = (n: number, helper: string, base: DockSpec = add): DockSpec => ({ ...base, sentence: Films.refused(n), helper: words(helper) });
 const sample = (sentence: string, next: string): DockSpec => ({
   scene: 'ready', sentence, helper: words(Films.sampleHelp), quiet: action(next), primary: primary(),
 });

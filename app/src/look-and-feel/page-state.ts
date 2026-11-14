@@ -6,7 +6,7 @@
 import { useLayoutEffect } from 'react';
 
 /** The attributes components.css reads on `<html>`, without their `data-`. */
-export type PageStateName = 'moment' | 'films' | 'ready' | 'drag' | 'leaving';
+export type PageStateName = 'moment' | 'films' | 'ready' | 'drag' | 'leaving' | 'compare' | 'links' | 'sheet' | 'moving';
 
 /**
  * Sets `data-<name>` on `<html>` while the caller is mounted: a string as its
