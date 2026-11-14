@@ -197,11 +197,13 @@ pub fn polyline_at(
         .partition_point(|s| *s <= station_mm)
         .saturating_sub(1);
     index = index.min(polyline.len() - 2);
-    let tangent = (polyline[index + 1] - polyline[index]) / (stations[index + 1] - stations[index]);
-    Ok((
-        polyline[index] + tangent * (station_mm - stations[index]),
-        tangent,
-    ))
+    let leg = polyline[index + 1] - polyline[index];
+    // Subtracting cumulative stations loses relative precision on a short
+    // leg after a long contour. Its geometric norm defines the unit tangent;
+    // the station fraction still interpolates exactly between the knots.
+    let tangent = leg / leg.norm();
+    let fraction = (station_mm - stations[index]) / (stations[index + 1] - stations[index]);
+    Ok((polyline[index] + leg * fraction, tangent))
 }
 
 /// Exact linear shear-flexible two-node circular beam in patient axes.
@@ -659,5 +661,21 @@ mod tests {
             "relative residual {}",
             residue.norm() / balanced.norm()
         );
+    }
+
+    #[test]
+    fn a_short_leg_after_a_long_contour_keeps_its_unit_tangent() {
+        // A 3-4-5 leg has tangent (3/5,4/5,0), independently of the
+        // rounded difference of its two large cumulative stations.
+        let points = [
+            Vector3::zeros(),
+            Vector3::new(0.0, 0.0, 1e8),
+            Vector3::new(3e-5, 4e-5, 1e8),
+        ];
+        let stations = polyline_stations(&points).unwrap();
+        let (point, tangent) = polyline_at(&points, stations[2]).unwrap();
+        assert_eq!(point, points[2]);
+        assert!((tangent - Vector3::new(0.6, 0.8, 0.0)).norm() < 1e-15);
+        assert!((tangent.norm_squared() - 1.0).abs() < 1e-15);
     }
 }

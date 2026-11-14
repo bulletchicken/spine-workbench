@@ -189,6 +189,24 @@ fn joint_springs_keep_the_published_units_and_the_disagreeing_tables() {
         Unit::Degrees,
         &[("t1-t2-lb", 5.9), ("t1-t2-ar", 6.2), ("t11-t12-ar", 3.3)],
     );
+    // The stiffness scale is a calibration of this solver against published
+    // head forces at locking, not a measurement of a child's stiffness.
+    check(
+        &e,
+        TableKind::JointSprings,
+        "stiffness-scale",
+        "project-assumptions",
+        Unit::Ratio,
+        &[("lower", 0.65), ("upper", 5.6)],
+    );
+    for term in ["lower", "upper"] {
+        assert_eq!(
+            e.value(TableKind::JointSprings, "stiffness-scale", term)
+                .unwrap()
+                .basis,
+            Basis::OwnInference
+        );
+    }
     // Fitted factors have another baseline.
     check(
         &e,

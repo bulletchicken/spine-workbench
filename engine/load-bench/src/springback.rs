@@ -40,6 +40,8 @@ use crate::chain::{Chain, ChainError, Pose, Wrench};
 use crate::chain_solver::LinearError;
 use nalgebra::{DMatrix, DVector, Vector3};
 
+pub(crate) use corotational::solve_incremental_with_tissue_load;
+
 pub use corotational::{PrestressedStep, geometric_tangent, solve_incremental, solve_prestressed};
 pub use head_stiffness::prepare_rods;
 pub use linear::{least_energy_loads, solve_linear};

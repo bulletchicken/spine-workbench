@@ -109,8 +109,15 @@ ratio for a Prasad set. No shear modulus is derived or supplied.
 
 ## Retained assumptions and absences
 
-Films do not establish absolute joint stiffness. The global 1–10 log-uniform
-scale joins different Tachi/Petit baselines. Rib axial/lateral multipliers remain
+Films do not establish absolute joint stiffness. The assumed global 0.65–5.6
+log-uniform range calibrates this solver with 5.5 mm cobalt-chrome rods and no
+overbend against the published 192–439 N peak head-force range; it is not a
+measurement of the child. Salmingo et al. (2013), Clin Biomech, n=6,
+PMID 23273729, was read as the full author manuscript.
+Its forces were worked back from deformation of 6 mm titanium-alloy rods.
+The scale endpoints remain own inference; the published forces are the
+calibration target. The older Petit factors use another baseline and remain
+beside this prior. Rib axial/lateral multipliers remain
 own priors; literal flexion endpoints 1.08/2.14 remain absent rather than newly
 inferred. Adult/animal data do not calibrate individual paediatric tissue.
 

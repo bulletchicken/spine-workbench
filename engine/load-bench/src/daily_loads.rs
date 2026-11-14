@@ -373,7 +373,28 @@ pub fn solve_case(
         6 * body_loads.len(),
         body_loads.iter().flat_map(|w| w.iter().copied()),
     );
-    let step = springback::solve_incremental(poses, &tangent, &loads, rods, preload)?;
+    let tissue_load = |u: &DVector<f64>| {
+        let motion: Vec<_> = u
+            .as_slice()
+            .as_chunks::<6>()
+            .0
+            .iter()
+            .map(|v| Wrench::from_column_slice(v))
+            .collect();
+        let loads = chain.tangent_load(poses, &motion)?;
+        Ok(DVector::from_iterator(
+            u.len(),
+            loads.iter().flat_map(|w| w.iter().copied()),
+        ))
+    };
+    let step = springback::solve_incremental_with_tissue_load(
+        poses,
+        &tangent,
+        &loads,
+        rods,
+        preload,
+        &tissue_load,
+    )?;
     let moments = junctions::moment_increments(chain, poses, &step.displacement)?;
     let head_displacements_mm = rods
         .iter()

@@ -277,24 +277,24 @@
     {
       "key": "stiffness-scale",
       "usage": "bench",
-      "description": "Global log-uniform prior",
-      "notes": "Own inference: use Tachi as scale 1; Petit supplies scale 10 endpoint with a different baseline. No identification of absolute stiffness from films.",
+      "description": "Assumed global log-uniform prior calibrated against published head forces",
+      "notes": "Assumed calibration of this solver with 5.5 mm cobalt-chrome rods and no overbend: scales 0.65 to 5.6 match peak head forces at locking of 192 to 439 N. Published force range: Salmingo et al. 2013, Clin Biomech, n = 6, PMID 23273729, author manuscript read in full; forces were worked back from deformation of 6 mm titanium-alloy rods. The range calibrates this solver against published head forces; it is not a measurement of the child. Petit's different-baseline fitted factors remain beside it.",
       "values": [
         {
           "term": "lower",
-          "value": 1,
+          "value": 0.65,
           "unit": "ratio",
           "source": "project-assumptions",
-          "section": "project assumption: global stiffness scale prior",
+          "section": "project assumption: stiffness scale, calibrated against published head forces",
           "basis": "own-inference",
           "approximate": false
         },
         {
           "term": "upper",
-          "value": 10,
+          "value": 5.6,
           "unit": "ratio",
           "source": "project-assumptions",
-          "section": "project assumption: global stiffness scale prior",
+          "section": "project assumption: stiffness scale, calibrated against published head forces",
           "basis": "own-inference",
           "approximate": false
         },
