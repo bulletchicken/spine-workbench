@@ -46,6 +46,7 @@ Each changes only through its own small contract-change pull request.
 - [Stepped passes for the watchable sweep](decisions/stepped-passes-for-the-watchable-sweep.md)
 - [The film goes to the GPU as a half-float texture](decisions/half-float-film-texture.md)
 - [libm for maths that matches everywhere](decisions/libm-for-matching-maths.md)
+- [Placements are compared over versions](decisions/placements-are-compared-over-versions.md)
 
 A new decision gets its own file, named by its topic rather than a
 number, so pull requests written in parallel never collide.

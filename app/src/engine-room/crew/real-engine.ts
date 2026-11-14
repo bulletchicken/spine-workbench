@@ -7,6 +7,10 @@ import type {
   AnswerKeyComparison,
   AutoPassInput,
   AutoPassResult,
+  BenchBatch,
+  BenchCompareInput,
+  BenchInput,
+  BenchResult,
   BoundaryWandInput,
   BoundaryWandOutput,
   CaseFileV1,
@@ -18,20 +22,22 @@ import type {
   FilmPng,
   FitFromFilms,
   GeometryGuess,
+  LayoutInput,
+  LayoutProposals,
   MadeUpRecipe,
   MadeUpSpine,
   OpenedCase,
   PinInput,
   PinOutput,
   Px,
+  ReadingsInput,
   RegionWandInput,
   RegionWandOutput,
   ScaleResult,
   SpineFit,
+  SpineReadings,
   ToolPreview,
   ToolPreviewInput,
-  ReadingsInput,
-  SpineReadings,
 } from '@/shapes';
 import type { EngineClient, RunOptions } from '../engine-client';
 import type { JobInput, JobName, JobOutput, OpenedFilm } from '../job-table';
@@ -121,6 +127,18 @@ export class RealEngine implements EngineClient {
 
   fitSpine(input: FitFromFilms): Promise<SpineFit> {
     return this.#onSpine('fit-spine', input);
+  }
+
+  proposeLayouts(input: LayoutInput): Promise<LayoutProposals> {
+    return this.#onSpine('propose-layouts', input);
+  }
+
+  runLoadBench(input: BenchInput): Promise<BenchBatch> {
+    return this.#onSpine('run-load-bench', input);
+  }
+
+  compareLayouts(input: BenchCompareInput): Promise<BenchResult> {
+    return this.#onSpine('compare-layouts', input);
   }
 
   measureSpine(input: ReadingsInput): Promise<SpineReadings> {

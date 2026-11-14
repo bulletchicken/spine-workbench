@@ -19,6 +19,10 @@
 import type {
   AutoPassInput,
   AutoPassResult,
+  BenchBatch,
+  BenchCompareInput,
+  BenchInput,
+  BenchResult,
   BoundaryWandInput,
   BoundaryWandOutput,
   CaseFileV1,
@@ -30,6 +34,8 @@ import type {
   FilmMarks,
   FitFromFilms,
   GeometryGuess,
+  LayoutInput,
+  LayoutProposals,
   MadeUpRecipe,
   MadeUpSpine,
   AnswerKey,
@@ -38,16 +44,16 @@ import type {
   PinInput,
   PinOutput,
   Px,
+  ReadingsInput,
   RegionWandInput,
   RegionWandOutput,
   ScaleResult,
   SpineFit,
+  SpineReadings,
   Stage,
   ToolPreview,
   ToolPreviewInput,
   WatchFrame,
-  ReadingsInput,
-  SpineReadings,
 } from '@/shapes';
 import type { OpenedFilm } from './job-table';
 
@@ -133,6 +139,27 @@ export interface EngineClient {
   compareWithAnswerKey(marks: FilmMarks[], key: AnswerKey): Promise<AnswerKeyComparison>;
   /** Fit one front film or a front and side pair. The caller drops stale answers. */
   fitSpine(input: FitFromFilms): Promise<SpineFit>;
+
+  /**
+   * Placement proposals on a fitted spine: the rules' votes and level
+   * pairs counted over versions, the first placement and the placements
+   * one step away. A newer call replaces a waiting one; a replaced call
+   * rejects with `pass-cancelled`, which the screen lets go by.
+   */
+  proposeLayouts(input: LayoutInput): Promise<LayoutProposals>;
+  /**
+   * Every placement on one slice of versions (`versionFrom`,
+   * `versionCount`), through every stop. The screen sends a few versions
+   * at a time and stops by not sending the next slice.
+   */
+  runLoadBench(input: BenchInput): Promise<BenchBatch>;
+  /**
+   * Every batch of a comparison turned into ranges, tags and paired counts
+   * against `input.layouts[0]`. A newer call replaces a waiting one; a
+   * replaced call rejects with `pass-cancelled`, which the screen lets go
+   * by.
+   */
+  compareLayouts(input: BenchCompareInput): Promise<BenchResult>;
   /** Measure a fitted spine. A newer call replaces a waiting one; the caller drops stale answers. */
   measureSpine(input: ReadingsInput): Promise<SpineReadings>;
 }

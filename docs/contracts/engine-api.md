@@ -39,6 +39,9 @@ and tests only, never shipped) both implement it.
 | `makeUpSpine(recipe)` | `MadeUpSpine` | `make-up-spine` |
 | `compareWithAnswerKey(marks, key)` | `AnswerKeyComparison` | `compare-with-answer-key` |
 | `fitSpine(input)` | `SpineFit` | `fit-spine` |
+| `proposeLayouts(input)` | `LayoutProposals` | `propose-layouts` |
+| `runLoadBench(input)` | `BenchBatch` | `run-load-bench` |
+| `compareLayouts(input)` | `BenchResult` | `compare-layouts` |
 | `measureSpine(input)` | `SpineReadings` | `measure-spine` |
 
 `openCase` reads and checks the file and opens no film. The screen then
@@ -132,6 +135,9 @@ holds one film, so its jobs never say which.
 | `make-up-spine` | spine | `MadeUpRecipe` | `MadeUpSpine` | | |
 | `compare-with-answer-key` | spine | `{ marks: FilmMarks[], key }` | `AnswerKeyComparison` | | yes |
 | `fit-spine` | spine | `FitFromFilms` | `SpineFit` | | yes |
+| `propose-layouts` | spine | `LayoutInput` | `LayoutProposals` | | yes |
+| `run-load-bench` | spine | `BenchInput` | `BenchBatch` | | |
+| `compare-layouts` | spine | `BenchCompareInput` | `BenchResult` | | yes |
 | `measure-spine` | spine | `ReadingsInput` | `SpineReadings` | | yes |
 
 `OpenedCase` (`{ case, films: FilmPng[] }`) and `MadeUpSpine`
@@ -239,6 +245,14 @@ Notes on inputs:
   radius), and the object's true diameter.
 - The thumbnail is an 8-bit greyscale PNG, at most 256 pixels on its
   longest side.
+- `run-load-bench` runs a slice of versions (`versionFrom`,
+  `versionCount`) of the `versions` a comparison uses, so no call holds
+  the one spine worker for long. Version k is the same spine in every
+  slice and in `propose-layouts` given the same fit, seed and
+  `versions`, so counts over versions mean the same versions everywhere.
+  The screen collects the batches and sends them to `compare-layouts`,
+  whose first placement (`layouts[0]`) the others are compared with.
+- Placements and their results are never saved with the case.
 
 ## Exports
 
@@ -263,6 +277,8 @@ slices.
 | `made_up_spines.rs` | `make_up_spine(recipe) → MadeUpSpine` | `made-up-unsatisfiable` |
 | `joint_fit.rs` | `fit_spine(input) → SpineFit`; `fit_from_films(input) → SpineFit` | `pass-no-spine-found`, `tool-refused`, `case-invalid-value` |
 | `scorekeeper.rs` | `compare_with_answer_key(marks, key) → AnswerKeyComparison` | `case-invalid-value` |
+| `implant_layout.rs` | `propose_layouts(input) → LayoutProposals` | `tool-refused`, `case-invalid-value`, `pass-no-spine-found`; the detail names the refusal (`implant-layout-…`) |
+| `load_bench.rs` | `run_load_bench(input) → BenchBatch`; `compare_layouts(input) → BenchResult` | `tool-refused`, `case-invalid-value`, `pass-no-spine-found`; the detail names the refusal (`load-bench-…`) |
 | `spine_readings.rs` | `measure_spine(input) → SpineReadings` | `case-invalid-value`, `pass-no-spine-found` |
 
 Any export can also fail with `engine-out-of-memory` or end in a panic
