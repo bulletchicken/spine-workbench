@@ -34,7 +34,9 @@ pub fn run(args: &MeasureArgs) -> Outcome {
     Ok(())
 }
 
-fn made_up_input(args: &MeasureArgs) -> Result<ReadingsInput, Box<dyn std::error::Error>> {
+pub(crate) fn made_up_input(
+    args: &MeasureArgs,
+) -> Result<ReadingsInput, Box<dyn std::error::Error>> {
     let recipe = MadeUpRecipe {
         name: name(args.recipe.ok_or("a made-up measurement needs --recipe")?),
         seed: args.seed.ok_or("a made-up measurement needs --seed")?,
@@ -86,7 +88,9 @@ const SIDE_SPREAD: MarkSpread = MarkSpread::Millimetres {
     shared_sd_mm: 0.0,
 };
 
-fn films_input(inputs: &[FilmPath]) -> Result<ReadingsInput, Box<dyn std::error::Error>> {
+pub(crate) fn films_input(
+    inputs: &[FilmPath],
+) -> Result<ReadingsInput, Box<dyn std::error::Error>> {
     validate_film_kinds(inputs)?;
     let mut decoded = Vec::with_capacity(inputs.len());
     let mut films = Vec::with_capacity(inputs.len());
