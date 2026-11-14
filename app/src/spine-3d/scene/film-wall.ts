@@ -29,10 +29,10 @@ import {
   UnsignedByteType,
   Vector2,
 } from 'three';
-import type { FilmCamera } from '../placing/film-camera';
+import type { Px, FilmCamera } from '../placing/film-camera';
 import { type FilmPlane, filmPlane } from '../placing/film-plane';
 import { type Vec3, add, scale, sub } from '../placing/vectors';
-import { FILM_BLACK } from './look';
+import { FILM_BLACK, FORMATION } from './look';
 
 /**
  * A film's picture. Numbers are one value a pixel, row by row from the top:
@@ -68,6 +68,10 @@ export interface FilmWall {
   show(pixels: FilmPixels | null): void;
   /** The sheet as it stands, hinge aside: its direction, its distance and its corners in the patient. */
   plane(): FilmPlane;
+  /** Stand a cropped picture at four patient points, or return to its ordinary sheet. */
+  place(corners: readonly Vec3[] | null, pixels?: readonly Px[]): void;
+  /** Outlines in stored film pixels, with their current white lift. */
+  marks(outlines: readonly { quad: readonly Px[]; lift: number; needsLook: boolean }[]): void;
   /** Takes the film down and frees its picture. */
   remove(): void;
 }
@@ -88,9 +92,12 @@ export interface FilmWallInside {
 }
 
 const VERTEX = /* glsl */ `
+attribute vec2 aSheet;
 varying vec2 vAt;
+varying vec2 vSheet;
 void main() {
   vAt = uv;
+  vSheet = aSheet;
   gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 }
 `;
@@ -105,17 +112,43 @@ uniform vec3 uBlack;
 uniform vec2 uSize;
 uniform float uCorner;
 uniform vec2 uJoined;
+uniform vec2 uMark[68];
+uniform float uLift[17];
+uniform float uLook[17];
+uniform int uMarks;
+uniform vec2 uPixels;
+uniform vec3 uAmber;
 varying vec2 vAt;
+varying vec2 vSheet;
 void main() {
   vec3 colour = uBlack;
   if (uHasPicture) {
     vec4 read = texture2D(uPicture, vAt);
     colour = uGrey ? vec3(read.r) : mix(uBlack, read.rgb, read.a);
   }
+  vec2 pixel = vAt * uPixels - 0.5;
+  for (int i = 0; i < 17; i++) {
+    if (i >= uMarks) break;
+    float inside = 1e6;
+    vec2 a = uMark[i * 4], b = uMark[i * 4 + 1], c = uMark[i * 4 + 2];
+    vec2 ab = b - a, bc = c - b;
+    float turn = sign(ab.x * bc.y - ab.y * bc.x);
+    for (int j = 0; j < 4; j++) {
+      vec2 start = uMark[i * 4 + j], end = uMark[i * 4 + (j + 1) % 4];
+      vec2 edge = end - start, from = pixel - start;
+      inside = min(inside, turn * (edge.x * from.y - edge.y * from.x) / max(length(edge), 1e-5));
+    }
+    float aa = max(fwidth(inside), 1e-4);
+    float line = 1.0 - smoothstep(aa * 0.45, aa * 1.2, abs(inside));
+    float casing = 1.0 - smoothstep(aa * 1.2, aa * 2.0, abs(inside));
+    colour = mix(colour, vec3(0.0), casing * mix(${FORMATION.casing.toFixed(2)}, ${FORMATION.casingLook.toFixed(2)}, uLook[i]));
+    colour = mix(colour, mix(vec3(1.0), uAmber, uLook[i]), line * ${FORMATION.mark.toFixed(2)});
+    colour = mix(colour, vec3(1.0), smoothstep(-aa, aa, inside) * uLift[i]);
+  }
   // Rounded corners: how far inside the rounded outline this place is, in millimetres.
   // An edge that meets another film in a corner is left square: on that side the place is taken as
   // the sheet's middle, which is inside every rounding.
-  vec2 at = vAt - 0.5;
+  vec2 at = vSheet - 0.5;
   if (uJoined.x * at.x > 0.0) at.x = 0.0;
   if (uJoined.y * at.y > 0.0) at.y = 0.0;
   vec2 fromCentre = abs(at) * uSize;
@@ -160,6 +193,7 @@ export function hangFilm(camera: FilmCamera, changed: () => void, removed: (wall
   let standing = filmPlane(camera, 0);
   let drawn: readonly Vec3[] = standing.corners;
   let picture: Texture | null = null;
+  let placed: readonly Vec3[] | null = null;
 
   // The stored picture's own width and height, mm. Its spacings along a row and down a column are
   // the upright pixel's width and height, the other way about when the quarter turns are odd.
@@ -170,6 +204,7 @@ export function hangFilm(camera: FilmCamera, changed: () => void, removed: (wall
   const geometry = new BufferGeometry();
   const positions = new BufferAttribute(new Float32Array(12), 3);
   geometry.setAttribute('position', positions);
+  geometry.setAttribute('aSheet', new BufferAttribute(new Float32Array([0, 0, 1, 0, 1, 1, 0, 1]), 2));
   // The stored picture's top-left, top-right, bottom-right and bottom-left, with its first row at the top.
   geometry.setAttribute('uv', new BufferAttribute(new Float32Array([0, 0, 1, 0, 1, 1, 0, 1]), 2));
   // Wound so that the side its reader sees is the front: from behind, a film is not drawn at all,
@@ -177,6 +212,9 @@ export function hangFilm(camera: FilmCamera, changed: () => void, removed: (wall
   geometry.setIndex([0, 2, 1, 0, 3, 2]);
 
   const uniforms = {
+    uMark: { value: Array.from({ length: 68 }, () => new Vector2()) },
+    uLift: { value: new Float32Array(17) }, uLook: { value: new Float32Array(17) }, uMarks: { value: 0 },
+    uPixels: { value: new Vector2(camera.size[0], camera.size[1]) }, uAmber: { value: new Color(FORMATION.outlineLook).convertLinearToSRGB() },
     uPicture: { value: null as Texture | null },
     uHasPicture: { value: false },
     uGrey: { value: true },
@@ -226,6 +264,24 @@ export function hangFilm(camera: FilmCamera, changed: () => void, removed: (wall
         changed();
       },
       plane: () => standing,
+      place(corners, pixels) {
+        placed = corners;
+        if (pixels !== undefined) {
+          pixels.forEach((point, i) => geometry.getAttribute('uv').setXY(i, (point[0] + .5) / camera.size[0], (point[1] + .5) / camera.size[1]));
+          geometry.getAttribute('uv').needsUpdate = true;
+        } else {
+          [0, 1, 2, 3].forEach((i) => geometry.getAttribute('uv').setXY(i, i === 1 || i === 2 ? 1 : 0, i >= 2 ? 1 : 0)); geometry.getAttribute('uv').needsUpdate = true;
+        }
+        changed();
+      },
+      marks(outlines) {
+        uniforms.uMarks.value = Math.min(17, outlines.length);
+        outlines.slice(0, 17).forEach((outline, i) => {
+          outline.quad.forEach((point, j) => uniforms.uMark.value[i * 4 + j]?.set(...point));
+          uniforms.uLift.value[i] = outline.lift; uniforms.uLook.value[i] = outline.needsLook ? 1 : 0;
+        });
+        changed();
+      },
       remove() {
         picture?.dispose();
         geometry.dispose();
@@ -252,13 +308,18 @@ export function hangFilm(camera: FilmCamera, changed: () => void, removed: (wall
               const swung = add(scale(along, Math.cos(swing)), scale(flatToward, Math.sin(swing)));
               return [hinge.on[0] + swung[0] * reach, hinge.on[1] + swung[1] * reach, corner[2]];
             });
+      if (placed !== null) drawn = placed;
+      if (drawn.length === 4) {
+        const a = drawn[0], b = drawn[1], d = drawn[3];
+        if (a !== undefined && b !== undefined && d !== undefined) uniforms.uSize.value.set(Math.hypot(...sub(b, a)), Math.hypot(...sub(d, a)));
+      }
       drawn.forEach((corner, i) => {
         positions.setXYZ(i, corner[0], corner[1], corner[2]);
       });
       positions.needsUpdate = true;
       // The edge on the hinge: the two corners nearest it, as a side of the stored picture.
       uniforms.uJoined.value.set(0, 0);
-      if (hinge !== null) {
+      if (hinge !== null && placed === null) {
         const near = standing.corners.map((corner) => Math.hypot(corner[0] - hinge.on[0], corner[1] - hinge.on[1]));
         const [topLeft = 0, topRight = 0, bottomRight = 0, bottomLeft = 0] = near;
         const sides = [

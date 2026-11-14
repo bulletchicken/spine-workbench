@@ -14,7 +14,7 @@ export const CAGE_CUBE = 8;
  * other, for each line. `points` holds x, y, z for each point in
  * millimetres, `triangles` three point numbers for each triangle.
  */
-export function cageLines(points: Float32Array, triangles: Uint16Array, cube = CAGE_CUBE): Float32Array {
+export function cageMesh(points: Float32Array, triangles: Uint16Array, cube = CAGE_CUBE) {
   const count = points.length / 3;
   /** The gathered point each point belongs to. */
   const gathered = new Uint32Array(count);
@@ -40,9 +40,11 @@ export function cageLines(points: Float32Array, triangles: Uint16Array, cube = C
 
   const many = sizes.length;
   const sides = new Set<number>();
+  const faces: number[] = [];
   for (let t = 0; t + 2 < triangles.length; t += 3) {
     const [a, b, c] = [gathered[triangles[t] ?? 0] ?? 0, gathered[triangles[t + 1] ?? 0] ?? 0, gathered[triangles[t + 2] ?? 0] ?? 0];
     if (a === b || b === c || c === a) continue;
+    faces.push(a, b, c);
     for (const [from, to] of [[a, b], [b, c], [c, a]] as const) sides.add(Math.min(from, to) * many + Math.max(from, to));
   }
 
@@ -57,5 +59,10 @@ export function cageLines(points: Float32Array, triangles: Uint16Array, cube = C
       at += 3;
     }
   }
-  return lines;
+  return { points: Float32Array.from(sums, (value, i) => value / (sizes[Math.floor(i / 3)] ?? 1)), triangles: new Uint32Array(faces), lines };
+}
+
+/** Every unique edge of the thinned surface, as pairs of positions. */
+export function cageLines(points: Float32Array, triangles: Uint16Array, cube = CAGE_CUBE): Float32Array {
+  return cageMesh(points, triangles, cube).lines;
 }

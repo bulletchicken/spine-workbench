@@ -169,6 +169,8 @@ export function makeStage(canvas: HTMLCanvasElement): Stage {
       shadow.lay(inside.spine.bounds(), view.azimuth, view.elevation, values.visible ? values.shadow : 0);
     }
     camera.look(view, size, reachFrom(view.aim));
+    const visibleWalls = [...walls.values()].filter(({ wall }) => wall.values().strength > .5).map((wall) => wall.corners());
+    for (const { inside } of spines) inside.spine.formation.prepare(view, size, renderer.getPixelRatio(), visibleWalls);
     renderer.render(scene, camera);
     for (const listener of listeners) listener();
   };
