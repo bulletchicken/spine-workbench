@@ -1,49 +1,7 @@
-// The auto pass, conducted from the main thread, since workers never talk
-// to each other:
-// 1. a film pass on every film's worker at once;
-// 2. their small results to the spine worker's chain pass;
-// 3. each film's worker places its points, film by film, new vertebra
-//    ids counting up across the films from `input.firstVertebraId`.
-//
-// When `input.frontFinder` is 'trained' and the front film is among the
-// films, the front film's worker runs the trained finder ('trained-pass')
-// instead, side by side with the other films' film passes. It finds, names
-// and settles its vertebrae on its own, so the chain pass and
-// 'place-points' run for the other films only, and not at all when there
-// are none. `twoFilms` is the chain pass's, which pairs a front film with
-// a side film only when it is given both, so it is null whenever the
-// trained finder reads the front film or the chain pass does not run.
-// Marks come back in the order of `input.films` either way, and the
-// warnings of every pass are joined, each once.
-//
-// Vertebra ids must rise film after film in the order of `input.films`:
-// the case store judges each film's edit against the case the edits
-// before it left, so a film whose ids lay below an earlier film's would
-// hold ids under the case's next free id and be dropped. The trained pass
-// needs its first id when it starts, before any other film has placed its
-// points, so it starts at `input.firstVertebraId` and gives its vertebrae
-// consecutive ids from there. When its turn comes in the order, its ids
-// are all moved up together to start at the next free id, as a placed
-// film's would. With the front film first, as the case keeps its films,
-// nothing moves; with it later, no id is reserved and none is skipped.
-//
-// It is one call over every film it runs: replacing or retiring any of
-// them, a failure in any job, or the signal stops all of it at once, and
-// no frame reaches the screen after that. Frames pass straight through,
-// already thinned by each worker; the passes run side by side, so their
-// frames may interleave.
-//
-// Progress from the passes running side by side is joined into one line,
-// sent at most ten times a second: the stage of the part furthest behind,
-// and the parts' mean through that stage. Each hand-built film is a part
-// (its film pass from evidence to strip, then the chain pass, which stands
-// for all of them, from chain to confidence). The trained pass is a part
-// of its own: evidence while it reads the film, then chain, naming and
-// confidence. It has no centre-line or strip stage, so once it is past
-// evidence it counts as through those, and the line follows the film
-// passes; while it is still reading, the line stays at evidence even if
-// the chain pass has begun. Once it has finished, it counts as through
-// every stage, and the line is the other films' alone.
+// Each selected trained finder runs on its film worker beside the hand-built
+// film passes. Only hand-built films enter the chain and point placement.
+// Results and warnings are joined in input order, with trained ids moved up
+// to the next free id. One scope stops every participating film together.
 
 import type { AutoPassInput, AutoPassResult, ChainAnswer, ChainOptions, Film, FilmKind, FilmMarks, FilmPassResult, PassWarning, Stage, TrainedPassResult, WatchFrame } from '@/shapes';
 import { EngineFailure, type RunOptions } from '../engine-client';
@@ -58,12 +16,15 @@ export function conductAutoPass(crew: Crew, input: AutoPassInput, run: RunOption
     input.films.map((film) => film.kind),
     run.signal,
   );
-  const trained = input.frontFinder === 'trained' ? (input.films.find((film) => film.kind === 'front') ?? null) : null;
-  const handBuilt = input.films.filter((film) => film !== trained);
+  const trained = input.films.filter((film) =>
+    (film.kind === 'front' && input.frontFinder === 'trained') ||
+    (film.kind === 'side' && input.sideFinder === 'trained'));
+  const trainedKinds = new Set(trained.map((film) => film.kind));
+  const handBuilt = input.films.filter((film) => !trainedKinds.has(film.kind));
   const progress = new JoinedProgress(
     input.films.map((film) => film.kind),
     (stage, fraction) => run.onProgress?.({ stage, fraction }),
-    trained?.kind ?? null,
+    trainedKinds,
   );
   scope.onStop(() => {
     progress.stop();
@@ -74,18 +35,20 @@ export function conductAutoPass(crew: Crew, input: AutoPassInput, run: RunOption
 
   return scope.settle(async () => {
     const [found, chained] = await Promise.all([
-      trained === null ? null : trainedPass(crew, trained, input.firstVertebraId, scope, frame, progress),
+      Promise.all(trained.map((film) => trainedPass(crew, film, input.firstVertebraId, scope, frame, progress))),
       handBuilt.length === 0 ? null : handBuiltPasses(crew, handBuilt, input.options, scope, frame, progress),
     ]);
 
+    const trainedResults = new Map(found.map((result) => [result.marks.film, result]));
     const marks: FilmMarks[] = [];
     const passWarnings: PassWarning[] = [];
     let firstVertebraId = input.firstVertebraId;
     for (const film of input.films) {
       let placed: FilmMarks;
-      if (found !== null && film === trained) {
-        placed = movedUp(found.marks, firstVertebraId - input.firstVertebraId);
-        passWarnings.push(...found.warnings);
+      const trainedResult = trainedResults.get(film.kind);
+      if (trainedResult !== undefined) {
+        placed = movedUp(trainedResult.marks, firstVertebraId - input.firstVertebraId);
+        passWarnings.push(...trainedResult.warnings);
       } else {
         const filmChain = chained?.chain.films.find((answer) => answer.film === film.kind);
         if (chained === null || filmChain === undefined) {
@@ -108,7 +71,7 @@ export function conductAutoPass(crew: Crew, input: AutoPassInput, run: RunOption
   });
 }
 
-/** The trained finder on the front film, its ids from `firstVertebraId`. */
+/** The selected trained finder, its ids from `firstVertebraId`. */
 async function trainedPass(
   crew: Crew,
   film: Film,
@@ -118,7 +81,7 @@ async function trainedPass(
   progress: JoinedProgress,
 ): Promise<TrainedPassResult> {
   const found = await crew.run(
-    'trained-pass',
+    film.kind === 'side' ? 'trained-side-pass' : 'trained-pass',
     { film, firstVertebraId },
     {
       scope,
@@ -173,7 +136,7 @@ async function handBuiltPasses(
 }
 
 /**
- * The trained front film's marks with every id moved up by `by`. Moving
+ * A trained film's marks with every id moved up by `by`. Moving
  * them all by the same amount keeps them unique and in order.
  */
 function movedUp(marks: FilmMarks, by: number): FilmMarks {
@@ -196,7 +159,7 @@ function onceEach(warnings: PassWarning[]): PassWarning[] {
  * One progress line from several passes. Each film is a part. The stage
  * is the furthest-behind part's, and the fraction the parts' mean through
  * that stage (a part past it counts as through). The chain pass speaks
- * for every film but the trained one; while no trained pass is still
+ * for the hand-built films; while no trained pass is still
  * running, its own stage and fraction are the line. A trained pass that
  * has finished counts as through every stage. At most one report per
  * `PROGRESS_GAP_MS`, newest kept.
@@ -204,17 +167,17 @@ function onceEach(warnings: PassWarning[]): PassWarning[] {
 export class JoinedProgress {
   readonly #films = new Map<FilmKind, { stage: number; fraction: number }>();
   readonly #send: (stage: Stage, fraction: number) => void;
-  readonly #trained: FilmKind | null;
+  readonly #trained: ReadonlySet<FilmKind>;
   #last = Number.NEGATIVE_INFINITY;
   #held: { stage: Stage; fraction: number } | null = null;
   #timer: ReturnType<typeof setTimeout> | null = null;
   #stopped = false;
 
-  /** `trained` is the film the trained finder reads, if one is among `films`. */
-  constructor(films: FilmKind[], send: (stage: Stage, fraction: number) => void, trained: FilmKind | null = null) {
+  /** `trained` contains the films read by trained finders. */
+  constructor(films: FilmKind[], send: (stage: Stage, fraction: number) => void, trained: ReadonlySet<FilmKind> | FilmKind | null = null) {
     for (const film of films) this.#films.set(film, { stage: 0, fraction: 0 });
     this.#send = send;
-    this.#trained = trained;
+    this.#trained = trained === null ? new Set() : typeof trained === 'string' ? new Set([trained]) : trained;
   }
 
   film(kind: FilmKind, stage: Stage, fraction: number): void {
@@ -224,10 +187,10 @@ export class JoinedProgress {
 
   chain(stage: Stage, fraction: number): void {
     for (const kind of this.#films.keys()) {
-      if (kind !== this.#trained) this.#films.set(kind, { stage: STAGES.indexOf(stage), fraction });
+      if (!this.#trained.has(kind)) this.#films.set(kind, { stage: STAGES.indexOf(stage), fraction });
     }
-    const trained = this.#trained === null ? undefined : this.#films.get(this.#trained);
-    if (trained === undefined || trained.stage === STAGES.length) this.#offer(stage, fraction);
+    const finished = [...this.#trained].every((kind) => this.#films.get(kind)?.stage === STAGES.length);
+    if (finished) this.#offer(stage, fraction);
     else this.#join();
   }
 

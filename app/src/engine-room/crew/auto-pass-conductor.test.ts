@@ -361,3 +361,24 @@ describe('joined progress', () => {
     expect(sent).toEqual([['confidence', 0.5]]);
   });
 });
+
+describe('the trained side route', () => {
+  it.each([
+    [['side'], 'hand-built'],
+    [['front', 'side'], 'trained'],
+    [['side', 'front'], 'trained'],
+    [['front', 'side'], 'hand-built'],
+  ] as const)('joins %s with front finder %s in input order', async (kinds, frontFinder) => {
+    const rig = await twoFilms();
+    const input = { ...passOver([...kinds], 10, frontFinder), sideFinder: 'trained' as const };
+    const result = await rig.engine.runAutoPass(input);
+    expect(result.marks.map((marks) => marks.film)).toEqual(kinds);
+    const ids = result.marks.flatMap((marks) => marks.vertebrae.map((v) => v.id));
+    expect(ids).toEqual(Array.from({ length: ids.length }, (_, i) => 10 + i));
+    expect(result.marks.find((marks) => marks.film === 'side')?.vertebrae).toHaveLength(5);
+    expect(rig.filmWorkers()[1]?.jobsRun()).toEqual(['open-film', 'trained-side-pass']);
+    expect(rig.spine()?.jobsRun()).toEqual(frontFinder === 'hand-built' && (kinds as readonly FilmKind[]).includes('front') ? ['chain-pass'] : []);
+    expect(result.twoFilms).toBeNull();
+    expect(result.warnings.filter((warning) => warning.film === 'side')).toHaveLength(1);
+  });
+});

@@ -83,6 +83,7 @@ async function search(engine: EngineClient, run: Run, only?: readonly FilmKind[]
       options: { acquisition: 'unknown', population: 'adolescent', template: null },
       firstVertebraId: c.nextVertebraId,
       frontFinder,
+      sideFinder: frontFinder,
     }, {
       signal: run.controller.signal,
       onProgress: (progress) => { if (active === run) findState.getState().progress(searchShare(progress, films.length === 1 && films[0]?.kind === 'front')); },
@@ -91,7 +92,7 @@ async function search(engine: EngineClient, run: Run, only?: readonly FilmKind[]
     const report = caseStore.getState().apply(result.marks.map((marks) => ({ kind: 'replace-marks', marks, basedOn: result.caseVersion, cause: { by: 'auto-pass' } })));
     caseStore.getState().startAfresh();
     const kept = result.marks.filter((_, i) => report.outcomes[i]?.kept);
-    for (const marks of kept) fitSources.getState().kept(marks.film, marks.film === 'front' ? frontFinder : 'hand-built', openings[marks.film]);
+    for (const marks of kept) fitSources.getState().kept(marks.film, marks.film === 'front' || marks.film === 'side' ? frontFinder : 'hand-built', openings[marks.film]);
     if (!kept.some((marks) => marks.film === 'front')) return;
     const sizes = Object.fromEntries(caseStore.getState().case.films.map((film) => [film.kind, { width: film.image.width, height: film.image.height }]));
     const plan = revealPlan(kept, sizes, { height: numberOnPage('--light-h'), edge: numberOnPage('--light-edge'), filmHeight: numberOnPage('--film-h') });

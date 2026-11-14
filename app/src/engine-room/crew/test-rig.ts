@@ -166,6 +166,25 @@ export const FILM_JOBS: Record<string, unknown> = {
         }) as unknown as FilmMarks,
     }),
   },
+  'trained-side-pass': {
+    default: defineJob('trained-side-pass', {
+      start: (input, room) => {
+        const name = deskName(room);
+        if (name.includes('no spine')) throw new EngineFailure({ code: 'pass-no-spine-found', message: 'no spine', detail: name });
+        const film = input.film.kind;
+        return fakePass(film, 'evidence', fakePassSlices(name, 3), name.includes('mixed'), (): TrainedPassResult => ({
+          marks: {
+            film,
+            vertebrae: [0, 1, 2, 3, 4].map((step) => ({ id: input.firstVertebraId + step })),
+            landmarks: { c7: null, sacrumTop: null, hips: [] },
+            naming: { template: 'standard', chosenBy: 'engine', alternatives: [], fromTop: null, fromBottom: null, flags: ['estimated'], l5ConfirmedOn: null },
+            namedFor: name,
+          } as unknown as FilmMarks,
+          warnings: [{ code: 'low-evidence', film, level: null, region: null }],
+        }));
+      },
+    }),
+  },
   'trained-pass': {
     default: defineJob('trained-pass', {
       start: (input, room) => {

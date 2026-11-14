@@ -124,6 +124,7 @@ holds one film, so its jobs never say which.
 | `film-pass` | film | `{ film: Film }` | `FilmPassResult` | yes | |
 | `place-points` | film | `{ chain: FilmChain, firstVertebraId }` | `FilmMarks` | | |
 | `trained-pass` | film | `{ film: Film, firstVertebraId }` | `TrainedPassResult` | yes | |
+| `trained-side-pass` | film | `{ film: Film, firstVertebraId }` | `TrainedPassResult` | yes | |
 | `tool-preview` | film | `ToolPreviewInput` | `ToolPreview` | | yes |
 | `region-wand` | film | `RegionWandInput` | `RegionWandOutput` | | |
 | `boundary-wand` | film | `BoundaryWandInput` | `BoundaryWandOutput` | | |
@@ -289,6 +290,7 @@ slices.
 | `film_geometry.rs` | `FilmDesk.sense_geometry() → GeometryGuess`; `.scale_from_ruler(a, b, mm)` and `.scale_from_known_object(near, edge, diameterMm) → ScaleResult` | `geometry-*`, `scale-*` |
 | `auto_pass.rs` | `FilmDesk.start_film_pass(film) → FilmPass`; `FilmPass.advance(workUnits) → Step`; `FilmPass.finish() → FilmPassResult`; `ChainPass.start(results, options)`, `.advance()`, `.finish() → ChainAnswer`; `FilmDesk.place_points(chain, firstVertebraId) → FilmMarks` | `pass-*` |
 | `trained_finder.rs` | `FilmDesk.start_trained_pass(film, firstVertebraId) → TrainedPass`; `TrainedPass.advance(workUnits) → Step`; `TrainedPass.finish() → TrainedPassResult` (consumes the pass) | `pass-no-spine-found`, `pass-cancelled`; `engine-out-of-sync` for a record that is not a front film's, does not match the pixels, or faces anterior or posterior; `case-invalid-value` for a blanked box off the film |
+| `side_finder.rs` | `FilmDesk.start_trained_side_pass(film, firstVertebraId) → SidePass`; `.advance(workUnits) → Step`; `.finish() → TrainedPassResult` (consumes the pass) | `side-finder-unavailable`, `pass-facing-required`, `pass-film-too-small`, `pass-cancelled`, `case-invalid-value`, `engine-out-of-sync` |
 | `toolbox.rs` | `FilmDesk.tool_preview(input)`, `.region_wand(input)`, `.boundary_wand(input)`, `.resolve_pins(input)` | `tool-*` |
 | `case_checks.rs` | `check_case(case) → CheckFinding[]` | `case-invalid-value` |
 | `case_file.rs` | `pack_case(opened) → Uint8Array`; `unpack_case(bytes) → OpenedCase`; `FilmDesk.encode_png(film) → Uint8Array` | `case-*` |
@@ -340,3 +342,7 @@ from the same compiled build. It is independent of the case and facing
 answer. Older info without the field reads as `false`; explicit `null`
 is refused. `EngineInfo::current` starts it at `false`; the bridge sets
 the compiled side capability when available.
+
+The trained side pass proposes L1–L5 only, all needing review, with estimated names.
+It requires an explicit confirmed facing. Real side films select `sideFinder: "trained"`;
+made-up films retain the hand-built selector. No weights means a refusal, never a fallback.

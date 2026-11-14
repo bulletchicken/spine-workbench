@@ -122,6 +122,7 @@ export interface JobTable {
    * after it. New vertebrae take ids from `firstVertebraId` upwards, one
    * each, never more than seventeen.
    */
+  'trained-side-pass': { input: { film: Film; firstVertebraId: number }; output: TrainedPassResult };
   'trained-pass': { input: { film: Film; firstVertebraId: number }; output: TrainedPassResult };
   'tool-preview': { input: ToolPreviewInput; output: ToolPreview };
   'region-wand': { input: RegionWandInput; output: RegionWandOutput };
@@ -183,6 +184,7 @@ export const JOBS: { readonly [J in JobName]: JobRules } = {
   'scale-from-known-object': { worker: 'film', stepped: false, replaceable: false },
   'film-pass': { worker: 'film', stepped: true, replaceable: false },
   'place-points': { worker: 'film', stepped: false, replaceable: false },
+  'trained-side-pass': { worker: 'film', stepped: true, replaceable: false },
   'trained-pass': { worker: 'film', stepped: true, replaceable: false },
   'tool-preview': { worker: 'film', stepped: false, replaceable: true },
   'region-wand': { worker: 'film', stepped: false, replaceable: false },
