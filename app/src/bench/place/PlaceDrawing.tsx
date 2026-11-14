@@ -1,3 +1,5 @@
+import { SourceLinks } from './PlaceSources';
+import { pedicleOrigin,sourceUses,endSourceKeys } from './placement-sources';
 import { useEffect, useLayoutEffect, useMemo, useRef, type RefObject } from 'react';
 import { useStore } from 'zustand';
 import { LevelWords } from '@/building-blocks/LevelWords';
@@ -243,6 +245,7 @@ export function PlaceDrawing({ accepted, handle }: { accepted: AcceptedSpine; ha
   const facing = accepted.input.front.marks.namedFor;
   const title = span!==null&&span[2]!==undefined&&span[3]!==undefined?L.span(span[2] as import('@/shapes').Level,span[3] as import('@/shapes').Level,filmSide(rod?.side??'left',facing)):anchor === undefined ? rod === undefined ? chosenEnd === undefined ? null : W.end(selected === 'upper', chosenEnd) : W.rod(filmSide(rod.side, facing)) : W.part(anchor.level, filmSide(anchor.side, facing), anchor.kind);
   const width = anchor?.pedicle.outerWidthMm;
+  const origin=anchor===undefined?null:pedicleOrigin(anchor,state.ageYears);
   const entered=anchor?.diameterStatus==='entered'||anchor?.lengthStatus==='entered';
   const wider = anchor?.kind === 'screw' ? anchor.widerThanPedicle.find((count) => count.diameterMm === anchor.diameterMm) : undefined;
   return <div className="place-drawing" data-load-stop={loaded?stop:undefined} ref={root} aria-hidden={state.sheet || undefined}>
@@ -257,15 +260,16 @@ export function PlaceDrawing({ accepted, handle }: { accepted: AcceptedSpine; ha
     </svg>}
     {title !== null && !state.arriving && !state.sheet && <div ref={chip} className="place-chip glass" role="status">
       <div><LevelWords>{title}</LevelWords></div>
-      {anchor?.diameterMm != null && anchor.lengthMm !== null && <div className="num">{W.size(anchor.diameterMm, anchor.lengthMm)}</div>}
+      {anchor?.diameterMm != null && anchor.lengthMm !== null && (entered||origin!==null) && <div className="num">{W.size(anchor.diameterMm, anchor.lengthMm)}</div>}
       {rod !== undefined && <div className="num">{W.diameter(rod.diameterMm)}</div>}
-      {!entered&&anchor?.kind === 'screw' && (anchor.diameterAlsoSeen.length > 0 || anchor.lengthAlsoSeen.length > 0) && <p>{W.also(anchor.diameterAlsoSeen, anchor.lengthAlsoSeen)}</p>}
+      {!entered&&anchor?.kind === 'screw' && (anchor.diameterAlsoSeen.length > 0 || anchor.lengthAlsoSeen.length > 0) && <p>{W.also(anchor.diameterAlsoSeen, anchor.lengthAlsoSeen,state.ageYears)}</p>}
       {selectedLoad?.demand!=null&&<p><span className="num">{rangeWords('heaviest-anchor-demand',selectedLoad.demand)}</span> {L.strengthAllowance}</p>}
       {selectedLoad?.demand!=null&&<small>{ESTIMATE_TAGS.assumed}</small>}
       {selectedLoad!==undefined&&load.result!==null&&pastWords(selectedLoad,load.result)!==null&&<><p className="past-strength"><i className="dot" aria-hidden="true"/>{pastWords(selectedLoad,load.result)}</p><small className="load-context">{L.pastContext(selectedLoad.part.kind==='anchor')}</small><p>{L.partAssumed}</p></>}
       {loaded&&stop!=='before'&&rod?.targetKyphosisStatus==='typical'&&<p>{L.typicalRod}</p>}
       {wider !== undefined && wider.versions > 0 && result !== null && <p>{W.wider(wider.versions, result.versions)}</p>}
-      {entered?<p>{importedEditWords.setByHand}</p>:anchor !== undefined && width != null && <p>{W.pedicle(width.p10, width.p90)}{W.origin}</p>}
+      {entered?<p>{importedEditWords.setByHand}</p>:anchor !== undefined && width != null && origin!==null && <p><LevelWords>{W.pedicle(width.p10, width.p90)+origin}</LevelWords></p>}
+      <SourceLinks uses={[...sourceUses([...(anchor?.sources??[]),...(anchor?.pedicle.sources??[]),...(rod?.sources??[]),...(chosenEnd===undefined||result===null?[]:endSourceKeys(result,selected==='upper'?'upper':'lower'))],'layout'),...sourceUses(selectedLoad?.sources??[],'bench')]}/>
       {state.pressed!==null&&layout!==undefined&&result!==null&&state.input!==null&&<PartControls layout={layout} anchor={anchor} rod={rod} choices={result.choices}/>}
     </div>}
   </div>;

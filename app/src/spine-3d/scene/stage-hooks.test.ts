@@ -47,6 +47,8 @@ it('projects and picks per-column parts at 96 by 320 CSS pixels, shares shapes, 
   const layers = [a, b].map((spine) => { const layer = spine.addLayer(); const object = new Mesh(geometry, layer.lit(ACCENT)); layer.onBone(bone.level).add(object); layer.pointable(object, 'anchor'); return layer; });
   stage.setView(() => stage.namedView('front'));
   const ordinary = stage.patientToCanvas(bone.placing.centre, a);
+  stage.inColumns([a,b],{gapPx:16,footPx:28,progress:0});
+  expect(stage.columnOf(a)).toEqual({left:0,right:208,top:0,bottom:348});
   stage.inColumns([a, b], { gapPx: 16, footPx: 28 });
   expect(stage.columnOf(a)).toEqual({ left: 0, right: 96, top: 0, bottom: 320 }); expect(stage.columnOf(ghost)).toBeNull();
   stage.drawNow(); expect(observed.passes.length).toBe(7);

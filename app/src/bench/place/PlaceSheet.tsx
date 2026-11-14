@@ -1,3 +1,7 @@
+import { comparisonState } from './comparison-state';
+import { PlaceAge } from './PlaceAge';
+import { PlaceSources } from './PlaceSources';
+import { sourceRecords,stageSourceUses } from './placement-sources';
 import { handState, startFirstPlacement } from './hand-state';
 import { WhyHere } from './WhyHere';
 import { useEffect, useLayoutEffect, useRef } from 'react';
@@ -15,12 +19,12 @@ import { filmSide, limitsForPlacement, reviewItems } from './placement-view';
 import '../three/measurements.css';
 import './place.css';
 export function PlaceSheet({ accepted }: { accepted: AcceptedSpine }) {
-  const hand=useStore(handState);
+  const hand=useStore(handState),comparison=useStore(comparisonState);
   const loaded=useStore(loadState,(s)=>s.phase==='loaded');
   const { sheet, result } = useStore(placeState), panel = useRef<HTMLElement>(null), heading = useRef<HTMLHeadingElement>(null);
   useKey('sheet', ['Escape'], () => { placeState.setState({ sheet: false }); }, () => sheet);
   useKey('sheet', ['Tab'], (event) => {
-    const stops = panel.current?.querySelectorAll<HTMLElement>('button, summary, [tabindex="0"]');
+    const stops = panel.current?.querySelectorAll<HTMLElement>('button, select, summary, [tabindex="0"]');
     const first = stops?.[0], last = stops?.[stops.length - 1];
     if (event.shiftKey && (document.activeElement === first || document.activeElement === heading.current)) last?.focus();
     else if (!event.shiftKey && document.activeElement === last) first?.focus();
@@ -38,14 +42,17 @@ export function PlaceSheet({ accepted }: { accepted: AcceptedSpine }) {
     if (!sheet) return;
     const origin = document.activeElement;
     heading.current?.focus(); const unstop = stopKeysAt('sheet');
-    return () => { unstop(); if (origin instanceof HTMLElement) origin.focus(); };
+    return () => { unstop(); if (origin instanceof HTMLElement&&origin.isConnected) origin.focus();else document.querySelector<HTMLElement>('.three-stage')?.focus(); };
   }, [sheet]);
   if (!sheet || result === null) return null;
   const empty = result.layouts.length === 0;
   const items = reviewItems(result, accepted.input.front.marks.namedFor);
   const reasons = [...new Set(result.cannotTell.map((r) => r.code))].map((code) => ({ code, levels: [...new Set(result.cannotTell.filter((r) => r.code === code).flatMap((r) => r.levels))] }));
+  const perPage=window.innerWidth<1280?1:3,visible=comparison.open?[comparison.layouts[0],...comparison.layouts.slice(1+comparison.page*perPage,1+(comparison.page+1)*perPage)].filter((l)=>l!==undefined):result.layouts.slice(0,1);
+  const sourceKeys=visible.flatMap((layout)=>stageSourceUses({...result,layouts:[layout]},comparison.open?comparison.result:loaded&&loadState.getState().stop!=='before'?loadState.getState().result:null));
   const diameters = result.layouts[0]?.anchors.flatMap((a) => a.diametersBeside.flatMap((d) => d.diameterMm === null ? [] : [W.otherDiameter(a.level, filmSide(a.side, accepted.input.front.marks.namedFor), d.diameterMm, d.widthRatio)])) ?? [];
   return <aside className="panel glass measurements sheet place-sheet" id="place-sheet" ref={panel} role="dialog" aria-modal="true" aria-labelledby="place-sheet-title">
+    <PlaceAge accepted={accepted}/>
     <h2 ref={heading} tabIndex={-1} id="place-sheet-title">{hand.why!==null?E.why:empty ? W.cannotTell : W.needsLook}</h2>
     <WhyHere/>
     {hand.why!==null&&<h2>{W.needsLook}</h2>}
@@ -57,6 +64,7 @@ export function PlaceSheet({ accepted }: { accepted: AcceptedSpine }) {
     <h2>{W.about}</h2>
     <ul className="place-sheet-list">{limitsForPlacement(loaded,accepted.fit.sideFilm===null,accepted.input.front.geometry.mmPerPx===null).map((words) => <li key={words}><LevelWords>{words}</LevelWords></li>)}</ul>
     <div className="panel-note">{accepted.input.front.facingAssumed && <p>{W.facing}</p>}<p>{W.sizing}</p><p>{W.unsaved}</p></div>
+    <PlaceSources records={sourceRecords(sourceKeys)}/>
     <div className="panel-acts">{hand.past.length>0&&<Button look="text" busy={hand.busy!==null} onPress={startFirstPlacement}>{E.startFirst}</Button>}<Button look="text" onPress={() => { placeState.setState({ sheet: false }); }}>{W.done}</Button></div>
   </aside>;
 }

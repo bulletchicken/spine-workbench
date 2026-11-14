@@ -9,6 +9,8 @@ import { restingView as fittedRestingView } from './resting-view';
 import type { ViewName } from '@/spine-3d/looking/named-views';
 import { useKey } from '@/building-blocks/keyboard/use-key';
 import { usePageState } from '@/look-and-feel/page-state';
+import { comparisonState } from '../place/comparison-state';
+import { ComparisonDrawing } from '../place/ComparisonDrawing';
 import { PlaceDrawing } from '../place/PlaceDrawing';
 import { placeState } from '../place/place-state';
 import { openWhy } from '../place/hand-state';
@@ -27,6 +29,7 @@ class ViewBoundary extends Component<{ children: ReactNode }, { failed: boolean 
   override render() { return this.state.failed ? null : this.props.children; }
 }
 function Drawing({ accepted, filmDriver, placing = false }: { accepted: AcceptedSpine; filmDriver?: FilmDriver | null; placing?: boolean }) {
+  const comparing=useStore(comparisonState,(s)=>s.open);
   const arriving = useStore(placeState, (s) => s.arriving);
   const lastPart = useRef<string | null>(null);
   const placeSheet = useStore(placeState, (s) => s.sheet);
@@ -34,6 +37,7 @@ function Drawing({ accepted, filmDriver, placing = false }: { accepted: Accepted
   const rowLevels = useStore(threeState, (s) => s.rowLevels);
   const highlighted = useMemo(() => rowLevels.length > 0 ? rowLevels : pointed === null ? [] : [pointed], [pointed, rowLevels]);
   usePageState('links', highlighted.length > 0);
+  usePageState('placement-comparison',placing&&comparing);
   const [pointer, setPointer] = useState({ x: 0, y: 0 });
   const root = useRef<HTMLDivElement>(null);
   const move = useRef<Move | null>(null);
@@ -106,8 +110,8 @@ function Drawing({ accepted, filmDriver, placing = false }: { accepted: Accepted
       }
     }} onPointerLeave={() => { threeState.getState().point(null); if (placing) { lastPart.current = null; placeState.setState({ hovered: null }); } }} onPointerDown={() => { if (placing) root.current?.focus(); }}>
     <NameChip level={moving || sheet || placing ? null : pointed} x={pointer.x} y={pointer.y} />
-    <Spine3D ref={handle} fit={drawing} bones={accepted.bones} films={films} view="three-quarter" highlighted={highlighted} onPoint={(level) => { if (!placing) threeState.getState().point(level); }} onPointed={(found) => { if (!placing) return; lastPart.current = found?.kind === 'part' ? found.id : null; if (!placeState.getState().arriving&&!placeState.getState().keyboard) placeState.setState({ hovered: lastPart.current }); }} onChosen={(found) => { if (placing && !placeState.getState().arriving) {const id=found?.kind==='part'?found.id:null;if(id==='upper'||id==='lower')openWhy(id);else placeState.setState({pressed:id});} }} onChoose={(level) => { threeState.getState().point(level); }} turnable={!moving && compared === null && !sheet && (!placing || !placeSheet)} shadow onTurned={() => { if (placing) placeState.setState({ chosen: null }); threeState.getState().choose(null); threeState.getState().point(null); }} />
-    {placing && <PlaceDrawing accepted={accepted} handle={handle} />}
+    <Spine3D ref={handle} fit={drawing} bones={accepted.bones} films={films} view="three-quarter" highlighted={highlighted} onPoint={(level) => { if (!placing) threeState.getState().point(level); }} onPointed={(found) => { if (!placing||comparing) return; lastPart.current = found?.kind === 'part' ? found.id : null; if (!placeState.getState().arriving&&!placeState.getState().keyboard) placeState.setState({ hovered: lastPart.current }); }} onChosen={(found) => { if (placing && !comparing && !placeState.getState().arriving) {const id=found?.kind==='part'?found.id:null;if(id==='upper'||id==='lower')openWhy(id);else placeState.setState({pressed:id});} }} onChoose={(level) => { threeState.getState().point(level); }} turnable={!moving && compared === null && !sheet && (!placing || !placeSheet)} shadow onTurned={() => { if (placing) placeState.setState({ chosen: null }); threeState.getState().choose(null); threeState.getState().point(null); }} />
+    {placing && (comparing?<ComparisonDrawing accepted={accepted} handle={handle}/>:<PlaceDrawing accepted={accepted} handle={handle}/>)}
   </div>;
 }
 

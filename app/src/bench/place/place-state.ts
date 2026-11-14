@@ -10,9 +10,9 @@ import { placementFailure, type PlacementFailure } from './placement-failure';
 export type PlaceView = 'front' | 'side' | 'top' | 'back';
 export interface PlaceState {
   input: LayoutInput | null; key: string | null; fitKey: string | null; phase: 'idle' | 'working' | 'ready' | 'failed'; result: LayoutProposals | null; failure: PlacementFailure | null;
-  keyboard:boolean; hovered: string | null; pressed: string | null; changed: boolean; arriving: boolean; review: number | null; sheet: boolean; chosen: PlaceView | null;
+  ageYears:number|null; ageChanged:boolean; keyboard:boolean; hovered: string | null; pressed: string | null; changed: boolean; arriving: boolean; review: number | null; sheet: boolean; chosen: PlaceView | null;
 }
-const initial: PlaceState = { input: null, key: null, fitKey: null, phase: 'idle', result: null, failure: null, keyboard:false, hovered: null, pressed: null, changed: false, arriving: false, review: null, sheet: false, chosen: 'back' };
+const initial: PlaceState = { ageYears:null,ageChanged:false,input: null, key: null, fitKey: null, phase: 'idle', result: null, failure: null, keyboard:false, hovered: null, pressed: null, changed: false, arriving: false, review: null, sheet: false, chosen: 'back' };
 export const placeState = createStore<PlaceState>()(() => initial);
 let shownFit: string | null = null, request = 0;
 /** Only a placement actually shown can be replaced by a changed spine. */
@@ -25,7 +25,7 @@ export function notePlacementShown(): void {
   }
 }
 currentStep.subscribe((state) => {
-  if (state.slug !== 'place') placeState.setState({ keyboard:false,sheet: false, review: null, hovered: null, pressed: null, changed: false, chosen: 'back' });
+  if (state.slug !== 'place') placeState.setState({ keyboard:false,sheet: false, review: null, hovered: null, pressed: null, changed: false,ageChanged:false, chosen: 'back' });
 });
 caseStore.subscribe((state, before) => {
   // Opening resets the history to this sentinel. Starting the history afresh
@@ -35,15 +35,21 @@ caseStore.subscribe((state, before) => {
   }
 });
 spineBuild.subscribe((state) => {
-  if (state.accepted === null || state.accepted.key !== placeState.getState().fitKey) { request++; placeState.setState(initial, true); }
+  if (state.accepted === null || state.accepted.key !== placeState.getState().fitKey) { request++; placeState.setState({...initial,ageYears:placeState.getState().ageYears}, true); }
 });
+export async function changeAge(engine:Pick<EngineClient,'proposeLayouts'>,accepted:AcceptedSpine,c:CaseFileV1,ageYears:number|null):Promise<void> {
+  if(placeState.getState().ageYears===ageYears)return;
+  placeState.setState({ageYears,ageChanged:true});
+  await requestPlacement(engine,accepted,c);
+}
 export async function requestPlacement(engine: Pick<EngineClient, 'proposeLayouts'>, accepted: AcceptedSpine, c: CaseFileV1, retry = false): Promise<void> {
-  const input = layoutInput(accepted.fit, c);
+  const previous=placeState.getState(),ageYears=previous.ageYears;
+  const input = layoutInput(accepted.fit, c,ageYears);
   const key = JSON.stringify({ fitKey: accepted.key, input });
   if (!retry && placeState.getState().key === key) return;
   const changed = shownFit !== null && shownFit !== accepted.key;
   const mine = ++request;
-  placeState.setState({ ...initial, input, key, fitKey: accepted.key, phase: 'working', changed });
+  placeState.setState({ ...initial, ageYears,ageChanged:previous.ageChanged,input, key, fitKey: accepted.key, phase: 'working', changed });
   try {
     const result = await engine.proposeLayouts(input);
     if (mine !== request) return;

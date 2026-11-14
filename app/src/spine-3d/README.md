@@ -155,8 +155,13 @@ alive until its caller releases it and every drawing has gone. A flat spine
 is unlit, has no shadow or pointer hits, and takes `flatColour` and whole-spine
 `strength` from its caller.
 
-`stage.inColumns(spines, { gapPx, footPx })` fits each listed spine to its
+`handle.addSpine()` adds another lit drawing of the held fitted model, sharing
+its shaped buffers without re-shaping bones. Its caller removes it.
+
+`stage.inColumns(spines, { gapPx, footPx, progress? })` fits each listed spine to its
 own equal cell. One view controls every column's turn, perspective and zoom.
+`progress` (0–1, default 1) externally times the first cell from the full canvas
+to its column and back. The other cells retain their own cameras.
 `columnOf(spine)` returns its CSS-pixel cell or null. Projection and picking
 use the same per-column camera. An empty list returns to ordinary framing.
 Unlisted ghosts draw behind the first column without changing its fit.

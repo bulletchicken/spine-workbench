@@ -1,3 +1,5 @@
+import { EngineProvider } from '@/engine-room/use-engine';
+import type { EngineClient } from '@/engine-room/engine-client';
 import { act, useRef } from 'react';
 import { Group } from 'three';
 import { afterEach, expect, it, vi } from 'vitest';
@@ -111,7 +113,7 @@ it('uses mono only for levels in review labels and past-allowance part names, wi
   const {page,result,accepted}=mount();page.takeDown();
   const a=result.layouts[0]?.anchors[0];if(a===undefined)throw new Error('anchor');
   act(()=>{loadState.setState({phase:'loaded',stop:'rods-in',result:bench([{part:{kind:'anchor',level:a.level,side:a.side},share:{p10:.1,p50:.2,p90:.3},demand:null,steady:false,versionsPastStrength:1,sources:[]}])});placeState.setState({sheet:true});});
-  const sheet=putOnThePage(<PlaceSheet accepted={accepted}/>),labels=[...sheet.host.querySelectorAll('.place-review-label')];
+  const sheet=putOnThePage(<EngineProvider engine={{proposeLayouts:vi.fn()} as unknown as EngineClient}><PlaceSheet accepted={accepted}/></EngineProvider>),labels=[...sheet.host.querySelectorAll('.place-review-label')];
   expect(labels.map((n)=>n.textContent)).toContain('Every pedicle');expect(labels.map((n)=>n.textContent)).toContain('Level names');
   expect(labels.some((n)=>n.textContent==='Upper end · T4'&&n.querySelector('.level-name')?.textContent==='T4')).toBe(true);
   expect(labels.every((n)=>!n.classList.contains('num')&&[...n.querySelectorAll('.level-name')].every((level)=>/^(T\d+|L\d+)$/.test(level.textContent)))).toBe(true);
@@ -154,7 +156,8 @@ it('uses only entered engine sizes for the source marker, restoring table words 
   expect(page.host.querySelector('.place-chip')?.textContent).toContain('from tables for teenagers');expect(page.host.querySelector('.place-chip')?.textContent).toContain('Also ');page.takeDown();
 });
 it('resets Why here through Escape, Done, outside press and M, including reopening with M',()=>{
-  const {page,accepted}=mount();page.takeDown();const sheet=putOnThePage(<PlaceSheet accepted={accepted}/>);
+  const {page,accepted}=mount();page.takeDown();const sheet=putOnThePage(<EngineProvider engine={{proposeLayouts:vi.fn()} as unknown as EngineClient}><PlaceSheet accepted={accepted}/></EngineProvider>);
+  act(()=>{placeState.setState({sheet:true});});expect(sheet.host.querySelector('#place-sheet')?.firstElementChild?.classList.contains('place-age')).toBe(true);pressKey('Escape');
   for(const close of [()=>pressKey('Escape'),()=>{const done=[...sheet.host.querySelectorAll('button')].find((b)=>b.textContent==='Done');act(()=>{done?.click();});},()=>{act(()=>{document.body.dispatchEvent(new MouseEvent('pointerdown',{bubbles:true}));});},()=>pressKey('m')]){
     act(()=>{openWhy('lower');});expect(sheet.host.querySelector('#place-sheet-title')?.textContent).toBe('Why here');close();expect(handState.getState().why).toBeNull();
     pressKey('m');expect(sheet.host.querySelector('#place-sheet-title')?.textContent).toBe('What needs a look');pressKey('Escape');

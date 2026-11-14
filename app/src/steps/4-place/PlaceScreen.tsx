@@ -1,3 +1,4 @@
+import { comparisonState,comparePlacements } from '@/bench/place/comparison-state';
 import { changePlacement, handState, undoPlacement } from '@/bench/place/hand-state';
 import { useEffect } from 'react';
 import { useStore } from 'zustand';
@@ -13,17 +14,18 @@ import { spineBuild } from '@/view-state/spine-build';
 const SPINE_CHANGED_NOTICE_MS = 6000;
 export function PlaceScreen() {
   const c = useCase((s) => s.case), accepted = useStore(spineBuild, (s) => s.accepted), state = useStore(placeState), engine = useEngine();
-  useStore(loadState);useStore(handState);
+  useStore(loadState);useStore(handState);useStore(comparisonState);
   const valid = hasCurrentFit(c);
   useEffect(() => { if (valid && accepted !== null) void requestPlacement(engine, accepted, c); }, [engine, accepted, c, valid]);
   useEffect(() => {
     if (state.phase !== 'ready' || state.arriving || (state.result?.layouts.length ?? 0) === 0) return;
     notePlacementShown();
-    if (!state.changed) return;
-    const timer = setTimeout(() => { placeState.setState({ changed: false }); }, SPINE_CHANGED_NOTICE_MS);
+    if (!state.changed&&!state.ageChanged) return;
+    const timer = setTimeout(() => { placeState.setState({ changed: false,ageChanged:false }); }, SPINE_CHANGED_NOTICE_MS);
     return () => { clearTimeout(timer); };
-  }, [state.changed, state.phase, state.arriving, state.result]);
+  }, [state.ageChanged,state.changed, state.phase, state.arriving, state.result]);
   useShowInDock(placeDock(state, {
+    compare:()=>{void comparePlacements(engine);},
     change: (change) => {void changePlacement(engine,change);},
     undo: undoPlacement,
     load: () => { if(state.input!==null)void loadPlacement(engine,state.input); },

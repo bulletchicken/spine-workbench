@@ -40,6 +40,8 @@ export interface Spine3DHandle {
   spine(): DrawnSpine | null;
   /** An unlit, non-pointable drawing sharing the fitted buffers. Its caller removes it. */
   addFlatSpine(): DrawnSpine | null;
+  /** Another lit drawing of the same fitted model, without shaping bones again. */
+  addSpine(): DrawnSpine | null;
   /** Move the camera to a named view or to any view: over the design's 600 ms, or at once with `animate: false`. */
   lookFrom(view: ViewName | View, options?: { animate?: boolean }): void;
   /** Every bone solid, whole and in its fitted place, at once. */
@@ -259,6 +261,10 @@ export function Spine3D({
     () => ({
       stage: () => stage.current,
       spine: () => spine.current,
+      addSpine: () => {
+        const on=stage.current,model=fittedModel.current,source=spine.current;
+        return on===null||model===null||source===null?null:on.addSpine(model,{shapesFrom:source});
+      },
       addFlatSpine: () => {
         const on=stage.current,model=fittedModel.current,source=spine.current;
         return on===null||model===null||source===null?null:on.addSpine(model,{shapesFrom:source,flat:true});

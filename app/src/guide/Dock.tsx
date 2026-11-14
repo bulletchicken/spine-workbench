@@ -93,6 +93,8 @@ function Scene({ name, spec }: { name: DockScene; spec: DockSpec | null }) {
             { id: 'front', label: THREE_WORDS.frontView }, { id: 'side', label: THREE_WORDS.sideView }, { id: 'top', label: THREE_WORDS.topView }, ...(shown.views.back === true ? [{ id: 'back', label: PLACE_WORDS.back }] : []),
           ]} onChoose={(name) => { if (on && (name === 'front' || name === 'side' || name === 'top' || name === 'back')) shown.views?.choose(name); }} />}
           {shown.stops !== undefined && <Segmented className="load-stops" label={PLACE_LOAD_WORDS.stops} chosen={shown.stops.chosen} options={SHOWN_LOAD_STOPS.map((id)=>({id,label:LOAD_STOPS[id]}))} onChoose={(name)=>{if(on && SHOWN_LOAD_STOPS.some((stop)=>stop===name))shown.stops?.choose(name as keyof typeof LOAD_STOPS);}} />}
+          {shown.control!==undefined&&<Segmented className="comparison-measures" label={shown.control.label} chosen={shown.control.chosen} options={shown.control.options} onChoose={(id)=>{if(on)shown.control?.choose(id);}}/>}
+          {shown.actions?.map((action)=><Button key={action.label} look="text" {...(on?{onPress:action.press}:{})}>{action.label}</Button>)}
           {shown.primary !== undefined && (
             <LitButton label={shown.primary.label} disabled={shown.primary.disabled} asleep={!on} onPress={shown.primary.press} />
           )}

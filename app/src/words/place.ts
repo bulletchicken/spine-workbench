@@ -26,10 +26,10 @@ export const PLACE_WORDS = {
   end: (upper: boolean, level: Level) => `${upper ? 'Upper' : 'Lower'} end · ${level}`,
   size: (diameter: number, length: number) => `${diameter.toFixed(1)} × ${String(Math.round(length * 10) / 10)} mm`,
   diameter: (value: number) => `${value.toFixed(1)} mm`,
-  also: (widths: readonly number[], lengths: readonly number[]) => {
+  also: (widths: readonly number[], lengths: readonly number[],age:number|null=null) => {
     const wide = widths.length === 0 ? '' : `${widths.map((v) => v.toFixed(1)).join(', ')} mm wide`;
     const long = lengths.length === 0 ? '' : `${lengths.map((v) => String(Math.round(v * 10) / 10)).join(', ')} mm long`;
-    return wide === '' && long === '' ? '' : `Also ${[wide, long].filter(Boolean).join(' and ')} in some versions.`;
+    return wide === '' && long === '' ? '' : `Also ${[wide, long].filter(Boolean).join(' and ')} in some versions${lengths.length>0&&age!==null&&age<12?' or by another published share':''}.`;
   },
   wider: (count: number, total: number) => `Wider than the pedicle in ${String(count)} of ${String(total)} versions.`,
   noCurve: 'No side-to-side curve was found.',
@@ -177,3 +177,24 @@ export const LEVEL_RULE_NAMES = {
   'liv-index':'Lower end index', 'deviated-vertebra':'Deviated vertebra', 'upper-end-vertebra':'Upper end vertebra', 'uev-5c':'Upper end in type 5C',
   'lenke-shoulder':'Shoulder level', 'selective-thoracic':'Thoracic curve alone', 'selective-lumbar':'Lumbar curve alone',
 } satisfies Record<import('@/shapes').LevelRule,string>;
+
+export const PLACE_COMPARE_WORDS = {
+  enter:'Compare placements',done:'Done',earlier:'Earlier',more:'More placements',stop:'Stop',
+  measures:'Comparison measure',main:'Main curve',anchor:'Heaviest anchor',
+  names:{first:'The first placement','changed-by-hand':'Yours','fewer-screws':'Fewer screws','stiffer-rods':'Stiffer rods','softer-rods':'Softer rods','hooks-at-top':'Hooks at the top'},
+  startsHigher:'Starts one level higher',startsLower:'Starts one level lower',endsHigher:'Ends one level higher',endsLower:'Ends one level lower',
+  helper:'A difference is clear at three quarters of the versions or more.',yours:'Each name says how that placement differs from the first one.',
+  againstFirst:'Against the first placement.',againstYours:'Against your placement.',
+  sentence:(count:number,versions:number)=>`${['No','One','Two','Three','Four'][count]??String(count)} ${count===1?'placement':'placements'}, on the same ${String(versions)} versions.`,
+  progress:(count:number,total:number)=>`${String(count)} of ${String(total)} placements`,
+  lower:(count:number,total:number)=>`Lower in ${String(count)} of ${String(total)} versions`,
+  higher:(count:number,total:number)=>`Higher in ${String(count)} of ${String(total)} versions`,
+  clear:(count:number)=>`clear at ${String(count)}`,noClear:'No clear difference',notMeasured:'Not measured for this placement.',working:'Working out this placement…',
+  failed:'The comparison did not finish.',
+};
+export const PLACE_AGE_WORDS = {
+  age:'Age',unknown:'Not known',changed:'The age changed, so the placement was worked out again.',
+  teenagers:'from tables for teenagers',published:'from published tables',
+  origin:(population:string)=>`from a table of ${population}`,
+};
+export const PLACE_SOURCE_WORDS = {title:'Sources',full:'Full text on record',abstract:'Abstract on record',secondary:'Secondary source on record',unchecked:'Not yet checked against the paper.',sample:(size:string)=>`Sample: ${size}`,tables:(count:number)=>`${String(count)} ${count===1?'table entry':'table entries'}`,kinds:{'project-assumption':"The project's own assumption",'guideline-page':'A guideline page','summary-of-papers':"The project's summary of several papers"}};

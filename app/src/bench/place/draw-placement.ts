@@ -7,7 +7,7 @@ import { FORMATION } from '@/spine-3d/scene/look';
 
 /** Symbolic heads and hooks; only screw shafts and rods use supplied dimensions. */
 export const PLACE_DRAWING = { bone: .55, reviewBone: .34, ink: .8, headRadius: 3.2, headDepth: 2, hookRadius: 4, hookWidth: .7, emptyWidth: .25, screwSegments: 10, ringRadiusPx: 10, ringWidthPx: 1.5, staggerMs: 60, arrivalMs: 1200, backAzimuth: 146, backElevation: 14, endHandleRadiusPx: 12 } as const;
-export interface DrawnPlacement { layer: SceneLayer; parts: Group[]; reveal(count: number, strength: number): void; fadeParts(ids:readonly string[],progress:number):void; poses(poses: readonly VertebraPose[], loaded: boolean, rods: RodLine[] | null, target?: readonly VertebraPose[], riding?: boolean): void; point(id:string): [number,number,number] | null; loadTo(parts: readonly PartResult[] | null): (p: number) => void; remove(): void }
+export interface DrawnPlacement { layer: SceneLayer; parts: Group[]; reveal(count: number, strength: number): void; fadeParts(ids:readonly string[],progress:number):void; compareInk(changed:readonly string[]):void; poses(poses: readonly VertebraPose[], loaded: boolean, rods: RodLine[] | null, target?: readonly VertebraPose[], riding?: boolean): void; point(id:string): [number,number,number] | null; loadTo(parts: readonly PartResult[] | null): (p: number) => void; remove(): void }
 export function drawPlacement(spine: Pick<DrawnSpine, 'levels' | 'addLayer'>, fit: SpineFit, layout: ImplantLayout, unsettled: readonly string[]): DrawnPlacement {
   const layer = spine.addLayer(), geometries: BufferGeometry[] = [], parts: Group[] = [];
   const own = <T extends BufferGeometry>(geometry: T): T => { geometries.push(geometry); return geometry; };
@@ -110,6 +110,7 @@ export function drawPlacement(spine: Pick<DrawnSpine, 'levels' | 'addLayer'>, fi
       return (p)=>{for(const t of transitions)t.material.opacity=t.from+(t.to-t.from)*p;layer.changed();};
     },
     reveal(count, strength) { parts.forEach((part, i) => { part.visible = i < count; });for(const material of inks.values())material.opacity=PLACE_DRAWING.ink*strength; layer.changed(); },
+    compareInk(changed) { for(const [id,material] of inks)material.opacity=changed.includes(id)||id.startsWith('span:')&&changed.includes(`rod:${id.split(':')[1]??''}`)?1:.4;layer.changed(); },
     fadeParts(ids,progress) {for(const [id,material] of inks)if(ids.includes(id)||id.startsWith('span:')&&ids.includes(`rod:${id.split(':')[1]??''}`))material.opacity=PLACE_DRAWING.ink*progress;layer.changed();},
     remove() { layer.remove(); for (const geometry of [...geometries,...rodGeometry]) geometry.dispose(); }
   };
