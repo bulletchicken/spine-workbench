@@ -11,6 +11,7 @@ import { filmRecordFrom } from '@/open-and-save/film-record';
 import type { AutoPassResult, FilmKind, WatchFrame } from '@/shapes';
 import { currentStep } from '@/view-state/current-step';
 import { filmIntake } from '@/view-state/film-intake';
+import { filmOrigins } from '@/view-state/film-origins';
 import { findState } from '@/view-state/find-state';
 import { fitSources } from '@/view-state/fit-sources';
 import { preferences } from '@/view-state/preferences';
@@ -23,7 +24,9 @@ vi.mock('@/choreography/timing', () => ({
 const story = smallStory();
 const engine = startStandInEngine({ story, scripts: { films: { openMs: 0, displayPixelsMs: 0, makeUpMs: 0 }, find: { ...DEFAULT_SCRIPTS.find, normalMs: 40, placePointsMs: 0 } } });
 function put(kinds: readonly FilmKind[] = ['front', 'side', 'bend-left', 'bend-right']) {
-  caseStore.getState().apply([{ kind: 'open-case', case: { ...emptyCase(), films: kinds.map((kind) => filmRecordFrom(story.films[kind].facts)) } }]);
+  caseStore.getState().apply([{ kind: 'open-case', case: { ...emptyCase(), films: kinds.map((kind) => { const film = filmRecordFrom(story.films[kind].facts); if (kind === 'side') film.geometry = { ...film.geometry, imageRight: 'anterior', confirmed: { ...film.geometry.confirmed, facing: true } }; return film; }) } }]);
+  filmOrigins.getState().clear();
+  for (const kind of kinds) filmOrigins.getState().opened(kind, 'yours', filmPixels.getState().openings[kind]);
 }
 function result(): AutoPassResult {
   const marks = structuredClone(story.pass.marks);
@@ -33,11 +36,14 @@ function result(): AutoPassResult {
 function answer(answer: AutoPassResult = result()) {
   return vi.spyOn(engine, 'runAutoPass').mockResolvedValue(answer);
 }
+const awaitInfo = { engineVersion: 'stand-in', shapesFingerprint: '', caseFormat: '', caseVersion: 1, trainedSideFinder: true };
 beforeEach(() => {
   vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'performance'] });
   vi.stubGlobal('window', { matchMedia: () => ({ matches: false }) });
   preferences.getState().setMotion('system', false);
   currentStep.getState().go('find');
+  const info = awaitInfo;
+  vi.spyOn(engine, 'info').mockResolvedValue(info);
   findRun.stop(); put(); filmIntake.getState().source('yours'); fitSources.getState().clear();
 });
 afterEach(() => { findRun.stop(); vi.restoreAllMocks(); vi.unstubAllGlobals(); vi.useRealTimers(); });
@@ -45,6 +51,7 @@ afterEach(() => { findRun.stop(); vi.restoreAllMocks(); vi.unstubAllGlobals(); v
 describe('running Find', () => {
   it.each(['yours', 'sample-film', 'made-up-case'] as const)('routes %s and asks for no watch frames', async (from) => {
     filmIntake.getState().source(from);
+    for (const film of caseStore.getState().case.films) filmOrigins.getState().opened(film.kind, from, filmPixels.getState().openings[film.kind]);
     const expected = result(); const called = answer(expected); findRun.start(engine);
     await vi.advanceTimersByTimeAsync(760);
     expect(called.mock.calls[0]?.[0].frontFinder).toBe(from === 'made-up-case' ? 'hand-built' : 'trained');
@@ -83,7 +90,7 @@ describe('running Find', () => {
   it('lets a late answer go after leaving Find, and clears a paused replay after its fade', async () => {
     let finish: (value: AutoPassResult) => void = () => undefined;
     const called = vi.spyOn(engine, 'runAutoPass').mockImplementation(() => new Promise((resolve) => { finish = resolve; }));
-    const late = result(); findRun.start(engine);
+    const late = result(); findRun.start(engine); await vi.advanceTimersByTimeAsync(0);
     currentStep.getState().go('films');
     expect(called.mock.calls[0]?.[1]?.signal?.aborted).toBe(true);
     finish(late); await vi.advanceTimersByTimeAsync(140);
@@ -102,7 +109,7 @@ describe('running Find', () => {
     const old = result();
     const newer = result(); const first = newer.marks[0]?.vertebrae[0]; if (first === undefined) throw new Error('no outline'); first.confidence.score = 0.65;
     const called = vi.spyOn(engine, 'runAutoPass').mockImplementationOnce(() => new Promise((resolve) => { finish = resolve; })).mockResolvedValue(newer);
-    findRun.start(engine); const oldRun = called.mock.calls[0]?.[1]; findRun.start(engine);
+    findRun.start(engine); await vi.advanceTimersByTimeAsync(0); const oldRun = called.mock.calls[0]?.[1]; findRun.start(engine);
     expect(oldRun?.signal?.aborted).toBe(true);
     oldRun?.onProgress?.({ stage: 'confidence', fraction: 1 });
     expect(findState.getState().share).toBe(0);
@@ -127,7 +134,7 @@ describe('running Find', () => {
       return Promise.resolve(late);
     });
     findRun.start(engine); await vi.advanceTimersByTimeAsync(1000);
-    expect(findReplay.getState().plan).toBeNull();
+    expect(findReplay.getState().plan?.counted.every((key) => key.startsWith('side:'))).toBe(true);
     expect(caseStore.getState().case.marks.some((film) => film.film === 'front')).toBe(false);
     expect(fitSources.getState().films.front).toBeUndefined();
   });
@@ -135,13 +142,15 @@ describe('running Find', () => {
     let finish: (value: AutoPassResult) => void = () => undefined;
     const expected = result();
     const called = vi.spyOn(engine, 'runAutoPass').mockImplementation(() => new Promise((resolve) => { finish = resolve; }));
-    filmIntake.getState().source('made-up-case'); findRun.start(engine);
+    filmIntake.getState().source('made-up-case');
+    for (const film of caseStore.getState().case.films) filmOrigins.getState().opened(film.kind, 'made-up-case', filmPixels.getState().openings[film.kind]); findRun.start(engine); await vi.advanceTimersByTimeAsync(0);
     filmIntake.getState().source('yours'); finish(expected);
     await vi.advanceTimersByTimeAsync(760);
     expect(called.mock.calls[0]?.[0].frontFinder).toBe('hand-built');
     expect(fitSources.getState().films.front?.finder).toBe('hand-built');
   });
   it('treats an answer containing only C7 on Front as no spine found', async () => {
+    put(['front']);
     const value = result();
     const first = value.marks[0]?.vertebrae[0]; if (first === undefined || value.marks[0] === undefined) throw new Error('no marks');
     value.marks[0].vertebrae = [{ ...first, level: 'C7' }]; answer(value);
@@ -186,6 +195,7 @@ describe('running Find', () => {
   });
   it('runs the dense hand-built sequence on the stand-in', async () => {
     filmIntake.getState().source('made-up-case');
+    for (const film of caseStore.getState().case.films) filmOrigins.getState().opened(film.kind, 'made-up-case', filmPixels.getState().openings[film.kind]);
     for (const film of caseStore.getState().case.films) {
       const opening = engine.openFilm(film.kind, story.films[film.kind].file, null);
       await vi.runAllTimersAsync(); await opening;
@@ -198,4 +208,31 @@ describe('running Find', () => {
     expect(findState.getState().phase).toBe('found');
     engine.stop();
   });
+});
+
+it('finishes Side alone, remembers its route, and excludes a real Side without weights', async () => {
+  put(['side']);
+  const side = structuredClone(story.pass.marks.find((m) => m.film === 'side'));
+  if (side === undefined) throw new Error('no Side marks');
+  const base = side.vertebrae[0];
+  if (base === undefined) throw new Error('no Side outline');
+  side.vertebrae = (['L1', 'L2', 'L3', 'L4', 'L5'] as const).map((level, i) => ({ ...base, id: 100 + i, level, confidence: { ...base.confidence, band: 'low' } }));
+  side.naming.flags = ['estimated'];
+  const called = answer({ ...result(), marks: [side] });
+  findRun.start(engine); await vi.advanceTimersByTimeAsync(760);
+  expect(called.mock.calls[0]?.[0]).toMatchObject({ sideFinder: 'trained', films: [{ kind: 'side' }] });
+  expect(findState.getState().phase).toBe('replaying');
+  expect(findReplay.getState().plan?.counted).toHaveLength(5);
+  findReplay.getState().advance(100000);
+  expect(findState.getState().phase).toBe('found');
+  expect(fitSources.getState().films.side?.finder).toBe('trained');
+  expect(findState.getState().kinds).toEqual(['side']);
+  findRun.stop();
+  vi.spyOn(engine, 'info').mockResolvedValue({ ...awaitInfo, trainedSideFinder: false });
+  called.mockClear();
+  findRun.start(engine); await vi.advanceTimersByTimeAsync(0);
+  expect(called).not.toHaveBeenCalled();
+  expect(caseStore.getState().case.films).toHaveLength(1);
+  expect(caseStore.getState().case.marks).toEqual([]);
+  expect(currentStep.getState().slug).toBe('films');
 });

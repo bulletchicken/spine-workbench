@@ -22,6 +22,7 @@ import type {
   FilmPng,
   FitFromFilms,
   GeometryGuess,
+  ImplantLayout,
   LayoutInput,
   LayoutProposals,
   MadeUpRecipe,
@@ -31,6 +32,7 @@ import type {
   PinOutput,
   Px,
   ReadingsInput,
+  RebuildInput,
   RegionWandInput,
   RegionWandOutput,
   ScaleResult,
@@ -131,6 +133,10 @@ export class RealEngine implements EngineClient {
 
   proposeLayouts(input: LayoutInput): Promise<LayoutProposals> {
     return this.#onSpine('propose-layouts', input);
+  }
+
+  rebuildLayout(input: RebuildInput): Promise<ImplantLayout> {
+    return this.#onSpine('rebuild-layout', input);
   }
 
   runLoadBench(input: BenchInput): Promise<BenchBatch> {

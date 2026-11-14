@@ -38,7 +38,7 @@ describe('the Films dock', () => {
     [['front', 'side'], 'Two films are in.', 'You can find the spine now, or add the others.', false],
     [['front', 'side', 'bend-left'], 'Three films are in.', 'You can find the spine now, or add the others.', false],
     [FILM_KINDS, 'All four films are in.', 'Each one is in its place.', false],
-    [['side'], 'The Front film is still to add.', 'The search starts from the Front film.', true],
+    [['side'], 'The Side film is in.', 'The search starts from the Front film.', true],
   ] as const)('F6 to F9: words and actions for %j', (films, sentence, helper, disabled) => {
     expect(dock(films)).toEqual({ scene: 'ready', sentence, helper: { kind: 'words', words: [helper] }, quiet: { label: 'Start over', press: act.startOver }, primary: { label: 'Find the spine', press: act.find, disabled } });
   });

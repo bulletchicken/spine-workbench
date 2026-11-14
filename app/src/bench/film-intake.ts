@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { clearSpineBuild } from './three/build-spine';
+import { filmOrigins } from '@/view-state/film-origins';
 import { fitSources } from '@/view-state/fit-sources';
 import { caseStore } from '@/case-state/case-store';
 import { filmPixels } from '@/case-state/film-pixels';
@@ -65,11 +66,13 @@ async function takeTold(engine: EngineClient, told: readonly DroppedFile[], onPl
       clearSpineBuild();
       fitSources.getState().forget(kind);
       caseStore.getState().apply([{ kind: 'set-film', film: filmRecordFrom(film.facts) }]);
+      if (from !== null) filmOrigins.getState().opened(kind, from, filmPixels.getState().openings[kind]);
       kept = true;
     } catch (error) {
       const code = failureCode(error);
       if (code !== 'pass-cancelled') {
         if (opening.read) {
+          filmOrigins.getState().forget(kind);
           engine.retireFilm(kind);
           filmPixels.getState().retired(kind);
           caseStore.getState().apply([{ kind: 'remove-film', film: kind }]);

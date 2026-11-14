@@ -48,4 +48,12 @@ geometryStatus: ValueStatus,
  * overbent rod passes through its two end heads there and bows
  * further back between them.
  */
-pointsMm: Array<[number, number, number]>, sources: Array<string>, };
+pointsMm: Array<[number, number, number]>, 
+/**
+ * The centre line through the standing spine's heads, in the same
+ * order and with one point per `pointsMm` point. For drawing before
+ * load only; the bench does not read it. Empty when unavailable.
+ * `geometryStatus` covers both lines: typical geometry must never
+ * be shown as measured millimetres.
+ */
+standingPointsMm: Array<[number, number, number]>, sources: Array<string>, };

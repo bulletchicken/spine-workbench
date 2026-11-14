@@ -5,6 +5,7 @@ import type { FitTier } from "./FitTier";
 import type { ImplantLayout } from "./ImplantLayout";
 import type { LayoutChoices } from "./LayoutChoices";
 import type { LayoutCurve } from "./LayoutCurve";
+import type { LevelCount } from "./LevelCount";
 import type { LevelPair } from "./LevelPair";
 import type { NamingScenario } from "./NamingScenario";
 import type { RuleVote } from "./RuleVote";
@@ -40,6 +41,22 @@ pairs: Array<LevelPair>,
  * `[0]` is the first placement; the rest are one step away from it.
  */
 layouts: Array<ImplantLayout>, 
+/**
+ * True when the first placement is a sketch from the main curve's
+ * ends because no pair came from the rules. A sketch is never shown
+ * as a placement the rules gave.
+ */
+firstIsSketch: boolean, 
+/**
+ * The first placement's upper ends over the versions, most frequent
+ * first. Empty when `firstIsSketch`.
+ */
+upperEnds: Array<LevelCount>, 
+/**
+ * The corresponding lower ends, most frequent first. Empty for a
+ * sketch.
+ */
+lowerEnds: Array<LevelCount>, 
 /**
  * The sizes and materials a person may choose from when changing a
  * placement by hand.

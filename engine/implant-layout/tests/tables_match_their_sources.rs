@@ -30,7 +30,7 @@ fn expect_cell(
 
 #[test]
 fn each_population_column_keeps_its_published_width_and_spread() {
-    // screw-sizing-and-placement, Table 1: these columns are independent cohorts.
+    // These columns are independent cohorts.
     for (group, side, level, mean, sd, source) in [
         (
             "gao-ais",
@@ -89,7 +89,6 @@ fn each_population_column_keeps_its_published_width_and_spread() {
                 curve_side: side,
                 ..coordinate("outer-width", group)
             },
-            // citation-audit-placement-tables.md, A gao-2017 / B4:
             // Gao leaves ± unlabelled; the other papers name SD.
             if source == "gao-2017" {
                 PublishedValue::PlusMinus {
@@ -107,8 +106,7 @@ fn each_population_column_keeps_its_published_width_and_spread() {
 
 #[test]
 fn childrens_widths_keep_the_age_bands_and_sexes_separate() {
-    // citation-audit-placement-tables.md, A zheng-2009 / B3, Table 1:
-    // the paper leaves ± unlabelled; SD is only the project reading.
+    // Zheng Table 1 leaves ± unlabelled; SD is only the project reading.
     for (level, age_band, sex, mean, sd) in [
         (Level::T1, AgeBand::FiveToEight, Sex::Male, 6.06, 0.92),
         (Level::T1, AgeBand::FiveToEight, Sex::Female, 5.73, 0.94),
@@ -143,8 +141,8 @@ fn childrens_widths_keep_the_age_bands_and_sexes_separate() {
 
 #[test]
 fn an_age_band_or_population_without_a_width_has_no_value() {
-    // screw-sizing-and-placement, Tables 1 and 2: Gao has no lumbar rows;
-    // Zheng gives thoracic widths only, with no combined-sex column.
+    // Gao has no lumbar rows; Zheng gives thoracic widths only,
+    // with no combined-sex column.
     for level in [Level::L1, Level::L2, Level::L3, Level::L4, Level::L5] {
         assert!(
             tables()
@@ -191,7 +189,7 @@ fn an_age_band_or_population_without_a_width_has_no_value() {
 
 #[test]
 fn inner_widths_and_cortical_walls_remain_distinct_measurements() {
-    // screw-sizing-and-placement, Table 2, inner transverse width.
+    // Inner transverse width.
     for (sex, value, spread) in [(Sex::Male, 2.25, 0.66), (Sex::Female, 2.06, 0.53)] {
         expect_cell(
             Table::InnerWidths,
@@ -206,8 +204,7 @@ fn inner_widths_and_cortical_walls_remain_distinct_measurements() {
             "zheng-2009",
         );
     }
-    // citation-audit-placement-tables.md, A chiu-2024 / B2:
-    // this is the right-side pair and its ± statistics are not named.
+    // Chiu: this is the right-side pair and its ± statistics are not named.
     for (key, value, spread) in [
         ("medial-wall-thickness", 0.85, 0.28),
         ("lateral-wall-thickness", 0.64, 0.26),
@@ -230,9 +227,8 @@ fn inner_widths_and_cortical_walls_remain_distinct_measurements() {
 }
 
 #[test]
-fn audited_chiu_walls_keep_physical_sides_and_unresolved_curve_sides_separate() {
-    // citation-audit-placement-tables.md, A chiu-2024 / B2, abstract:
-    // the left pair is independent of the previously stored right pair.
+fn published_chiu_walls_keep_physical_sides_and_unresolved_curve_sides_separate() {
+    // Chiu abstract: the left pair is independent of the right pair.
     for (key, value, spread) in [
         ("medial-wall-thickness", 0.86, 0.26),
         ("lateral-wall-thickness", 0.64, 0.26),
@@ -280,9 +276,8 @@ fn audited_chiu_walls_keep_physical_sides_and_unresolved_curve_sides_separate() 
 }
 
 #[test]
-fn audited_sato_neutral_widths_are_kept_as_printed_but_not_used() {
-    // citation-audit-placement-tables.md, A sato-2022 / B1, Table 2:
-    // the repeated right NV block makes the two neutral widths unusable.
+fn published_sato_neutral_widths_are_kept_as_printed_but_not_used() {
+    // Sato Table 2: the repeated right NV block makes the two neutral widths unusable.
     for (side, spread) in [(CurveSide::Convex, 0.9), (CurveSide::Concave, 0.7)] {
         let coord = Coordinate {
             curve_side: Some(side),
@@ -298,15 +293,14 @@ fn audited_sato_neutral_widths_are_kept_as_printed_but_not_used() {
         assert_eq!(cell.value, PublishedValue::PlusMinus { value: 3.6, spread });
         assert_eq!(cell.unit, Unit::Mm);
         assert_eq!(cell.source, "sato-2022");
-        assert!(cell.section.contains("full-tables-from-five-papers.md"));
+        assert_eq!(cell.section, "Table 2");
         assert!(cell.not_for_use_reason().is_some());
     }
 }
 
 #[test]
 fn complete_chords_and_angles_keep_exact_published_statistics() {
-    // full-tables-from-five-papers.md §A Upendra Tables2–3:
-    // the full transcription supersedes the earlier rounded note samples.
+    // Upendra Tables2–3: the complete tables take precedence over rounded samples.
     for (table, key, level, side, mean, sd, unit) in [
         (
             Table::Chords,
@@ -375,8 +369,8 @@ fn complete_chords_and_angles_keep_exact_published_statistics() {
             "upendra-2010",
         );
     }
-    // Same note §A Zheng Tables3–4, 12–14-year columns. The ± is
-    // literal; reading it as SD and its sign as convergence is inferred.
+    // Zheng Tables3–4, 12–14-year columns. The ± is literal;
+    // reading it as SD and its sign as convergence is inferred.
     for (sex, value, spread) in [(Sex::Male, 39.42, 4.12), (Sex::Female, 37.71, 5.65)] {
         expect_cell(
             Table::Chords,
@@ -428,8 +422,8 @@ fn complete_chords_and_angles_keep_exact_published_statistics() {
 
 #[test]
 fn concave_ratios_keep_apical_and_neutral_groups_separate() {
-    // screw-sizing-and-placement, section 1 and P7: only the apex spread
-    // is explicitly called SD. The neutral pair retains bare ± notation.
+    // Only the apex ratio spread is explicitly read as SD.
+    // The neutral pair retains bare ± notation.
     for (group, value) in [
         (
             "apex-one",
@@ -479,7 +473,7 @@ fn concave_ratios_keep_apical_and_neutral_groups_separate() {
 
 #[test]
 fn each_channel_grade_keeps_its_published_failure_percentage() {
-    // screw-sizing-and-placement, section 3 and Table P2, Akazawa 2015.
+    // Akazawa 2015 channel grades.
     for (group, value) in [
         ("grade-1", 0.5),
         ("grade-2", 2.9),
@@ -516,7 +510,7 @@ fn each_channel_grade_keeps_its_published_failure_percentage() {
 
 #[test]
 fn screw_sizes_keep_the_reported_sizes_and_steps() {
-    // screw-sizing-and-placement, section 3, Grabala's five screw sizes.
+    // Grabala's five screw sizes.
     expect_cell(
         Table::ScrewGrids,
         coordinate("diameter", "grabala"),
@@ -526,7 +520,7 @@ fn screw_sizes_keep_the_reported_sizes_and_steps() {
         Unit::Mm,
         "grabala-2023",
     );
-    // Table P5 gives Balikci's 2.5 or 5 mm steps, without a 25–45 mm grid.
+    // Balikci Table 1 gives 2.5 or 5 mm steps, without a 25–45 mm grid.
     expect_cell(
         Table::ScrewGrids,
         coordinate("length-step", "balikci"),
@@ -536,7 +530,7 @@ fn screw_sizes_keep_the_reported_sizes_and_steps() {
         Unit::Mm,
         "balikci-2019",
     );
-    // Table P5: mid-thoracic Jiang cell is a single 5.5 mm size.
+    // The mid-thoracic Jiang cell is a single 5.5 mm size.
     expect_cell(
         Table::ScrewGrids,
         coordinate("diameter", "jiang-t5-t8"),
@@ -548,7 +542,7 @@ fn screw_sizes_keep_the_reported_sizes_and_steps() {
 
 #[test]
 fn diameter_rules_preserve_ratios_and_conflicting_expansion_reports() {
-    // screw-sizing-and-placement, Table P1, the three published rules.
+    // Three published diameter rules.
     for (group, value, source) in [
         ("adult-cadaver", 0.80, "misenhimer-1989"),
         ("expansion-25", 1.25, "sato-2022"),
@@ -571,7 +565,7 @@ fn diameter_rules_preserve_ratios_and_conflicting_expansion_reports() {
         Unit::Ratio,
         "upendra-2010",
     );
-    // Section 3 notes Grabala's 5.0 mm table/text inconsistency explicitly.
+    // Grabala's 5.0 mm value differs between the table and the text.
     for (group, value) in [("grabala-table-5.0", 32.0), ("grabala-text-5.0", 39.0)] {
         expect_cell(
             Table::DiameterRules,
@@ -581,7 +575,7 @@ fn diameter_rules_preserve_ratios_and_conflicting_expansion_reports() {
             "grabala-2023",
         );
     }
-    // Section 3: Katsumi's odds increment was not supplied by the abstract.
+    // Katsumi's odds increment was not supplied by the abstract.
     expect_cell(
         Table::DiameterRules,
         coordinate("deviation-odds", "screw-pedicle-ratio"),
@@ -593,7 +587,7 @@ fn diameter_rules_preserve_ratios_and_conflicting_expansion_reports() {
 
 #[test]
 fn length_rules_keep_percentages_and_the_reported_anterior_threshold() {
-    // screw-sizing-and-placement, section 4 and Table P4.
+    // Length rules and their distinct units.
     for (key, group, lower, upper, unit, source) in [
         (
             "chord-penetration",
@@ -644,7 +638,7 @@ fn length_rules_keep_percentages_and_the_reported_anterior_threshold() {
             source,
         );
     }
-    // Section 4: Sarwahi's anterior-breach threshold is 4 mm or less.
+    // Sarwahi's anterior-breach threshold is 4 mm or less.
     expect_cell(
         Table::LengthRules,
         coordinate("anterior-breach-threshold", "aorta"),
@@ -656,7 +650,7 @@ fn length_rules_keep_percentages_and_the_reported_anterior_threshold() {
 
 #[test]
 fn level_thresholds_keep_structural_and_selective_rules_separate() {
-    // fusion-levels, section 1 and Table B: structural and sagittal modifiers.
+    // Structural and sagittal modifiers.
     for (key, group, value, source) in [
         ("bending-cobb-min", "structural-minor", 25.0, "ao-lenke"),
         ("kyphosis-t2-t5-min", "structural-minor", 20.0, "ao-lenke"),
@@ -682,7 +676,7 @@ fn level_thresholds_keep_structural_and_selective_rules_separate() {
             source,
         );
     }
-    // Section 4 and Table B: the three ratios use distinct thoracic/lumbar cutoffs.
+    // The three ratios use distinct thoracic/lumbar cutoffs.
     for key in [
         "cobb-ratio-min",
         "translation-ratio-min",
@@ -698,7 +692,7 @@ fn level_thresholds_keep_structural_and_selective_rules_separate() {
             );
         }
     }
-    // Section 2d: a published zero-degree target is retained as a value.
+    // A published zero-degree target is retained as a value.
     expect_cell(
         Table::LevelRuleThresholds,
         coordinate("bending-disc-angle", "lev-plus-one-5c"),
@@ -710,7 +704,7 @@ fn level_thresholds_keep_structural_and_selective_rules_separate() {
 
 #[test]
 fn stop_short_odds_match_the_full_text_ladder_and_its_denominators() {
-    // fusion-levels, section 2c, Liu/Lenke 2020 pooled table.
+    // Liu/Lenke 2020 pooled table.
     for (group, proximal, distal, patients) in [
         ("sv-minus-one", 2.60, 0.44, 369.0),
         ("ev-plus-one", 2.43, 0.56, 371.0),
@@ -753,7 +747,7 @@ fn stop_short_odds_match_the_full_text_ladder_and_its_denominators() {
 
 #[test]
 fn rod_evidence_keeps_the_survey_and_borrowed_cantilever_length() {
-    // existing-tools-and-gaps, section 7, Wilke 2024 survey.
+    // Wilke 2024 survey.
     expect_cell(
         Table::RodChoices,
         coordinate("diameter", "surgeon-survey"),
@@ -770,7 +764,7 @@ fn rod_evidence_keeps_the_survey_and_borrowed_cantilever_length() {
             "wilke-2024",
         );
     }
-    // implant-mechanics, section 4 contour-loss table, Cidambi 2012 abstract.
+    // Cidambi 2012 abstract contour-loss values.
     expect_cell(
         Table::RodChoices,
         coordinate("overcontour", "concave"),
@@ -778,7 +772,7 @@ fn rod_evidence_keeps_the_survey_and_borrowed_cantilever_length() {
         Unit::Degrees,
         "cidambi-2012",
     );
-    // fast-physics-methods, section 3: lumbar-model screw cantilever length.
+    // Lumbar-model screw cantilever length.
     expect_cell(
         Table::RodChoices,
         coordinate("screw-cantilever-length", "lumbar"),
@@ -790,7 +784,7 @@ fn rod_evidence_keeps_the_survey_and_borrowed_cantilever_length() {
 
 #[test]
 fn anchor_pattern_evidence_keeps_trial_thresholds_and_hook_associations() {
-    // implant-mechanics, section 6, MIMO trial low-density arm threshold.
+    // MIMO trial low-density arm threshold.
     expect_cell(
         Table::AnchorPatterns,
         coordinate("density", "mimo-low-max"),
@@ -798,7 +792,7 @@ fn anchor_pattern_evidence_keeps_trial_thresholds_and_hook_associations() {
         Unit::ImplantsPerLevel,
         "mimo-2024",
     );
-    // outcomes-over-time, section 1 risk-factor table: table CI wins over text misprint.
+    // The table CI takes precedence over the prose misprint.
     expect_cell(
         Table::AnchorPatterns,
         coordinate("hook-pjk-odds", "hooks-at-uiv"),
@@ -816,7 +810,7 @@ fn anchor_pattern_evidence_keeps_trial_thresholds_and_hook_associations() {
         Unit::Ratio,
         "zhao-2024",
     );
-    // Section 1, mechanical evidence, Cammarata 2014: about 26% reduction.
+    // Cammarata 2014: about 26% reduction.
     expect_cell(
         Table::AnchorPatterns,
         coordinate("junction-index-reduction", "hooks-at-uiv"),
@@ -828,7 +822,7 @@ fn anchor_pattern_evidence_keeps_trial_thresholds_and_hook_associations() {
 
 #[test]
 fn placement_checks_keep_the_unrounded_ppv_and_the_uniform_technique_angles() {
-    // fusion-levels, section 2b: 55.5% in the note, 55% in the synthesis.
+    // Full-cohort PPV is 55.5%; the rounded 55% is not used.
     expect_cell(
         Table::PlacementChecks,
         coordinate("positive-predictive-value", "liv-index"),
@@ -836,7 +830,7 @@ fn placement_checks_keep_the_unrounded_ppv_and_the_uniform_technique_angles() {
         Unit::Percent,
         "chen-2025",
     );
-    // fusion-levels, section 3: T1/UIV tilt correlation is 0.708.
+    // T1/UIV tilt correlation is 0.708.
     expect_cell(
         Table::PlacementChecks,
         coordinate("t1-uiv-tilt-correlation", "t1-tilt-proxy"),
@@ -844,7 +838,7 @@ fn placement_checks_keep_the_unrounded_ppv_and_the_uniform_technique_angles() {
         Unit::Correlation,
         "uiv-tilt-40020691",
     );
-    // screw-sizing-and-placement, section 5 and Table P6, Fennell 2014.
+    // Fennell 2014 entry observations.
     for (group, value) in [("t1-t2", 30.0), ("t3-t12", 20.0)] {
         expect_cell(
             Table::PlacementChecks,
@@ -872,7 +866,7 @@ fn placement_checks_keep_the_unrounded_ppv_and_the_uniform_technique_angles() {
 
 #[test]
 fn concave_apex_percentages_keep_their_different_width_conditions() {
-    // screw-sizing-and-placement, section 1, Sato 2022: these are not a single range.
+    // Sato 2022: these are not a single range.
     expect_cell(
         Table::PlacementChecks,
         coordinate("patients-too-narrow", "apex-one-4mm-expansion"),
@@ -887,7 +881,7 @@ fn concave_apex_percentages_keep_their_different_width_conditions() {
         Unit::Percent,
         "sato-2022",
     );
-    // Section 4, Takeshita 2010: warning levels are for right thoracic curves.
+    // Takeshita 2010: warning levels are for right thoracic curves.
     expect_cell(
         Table::PlacementChecks,
         coordinate("aorta-warning-levels", "right-thoracic-left-upper"),
@@ -906,7 +900,7 @@ fn concave_apex_percentages_keep_their_different_width_conditions() {
             )
             .is_none()
     );
-    // fusion-levels, section 2d: the threshold is the named L1–L2 disc.
+    // The threshold is the named L1–L2 disc.
     expect_cell(
         Table::LevelRuleThresholds,
         coordinate("apex-at-or-above", "lenke-l3"),
@@ -1016,8 +1010,7 @@ fn absent_evidence_cells_have_no_null_stand_ins() {
 
 #[test]
 fn gaos_complete_row_keeps_short_lengths_distinct_from_chords() {
-    // full-tables-from-five-papers.md §A Gao Table3, complete T4 row;
-    // §B defines a short pedicle-only length, not a full chord.
+    // Gao Table3, complete T4 row: the length is pedicle-only, not a full chord.
     for (table, key, group, side, value, spread, printed) in [
         (
             Table::PedicleWidths,
@@ -1124,13 +1117,33 @@ fn gaos_complete_row_keeps_short_lengths_distinct_from_chords() {
 
 #[test]
 fn every_marked_observation_reports_its_reason_and_lookup_status() {
-    // full-tables-from-five-papers.md §C: marks preserve the printed
-    // source problem, while usage distinguishes exclusion from doubt.
+    // Marks preserve the printed source problem,
+    // while usage distinguishes exclusion from doubt.
     for table in Table::ALL {
         for cell in tables().cells(table) {
             if let Some(mark) = &cell.mark {
                 assert!(!mark.reason.trim().is_empty(), "{:?}", cell.coordinate);
-                assert!(cell.section.contains("full-tables-from-five-papers.md"));
+                assert_eq!(
+                    cell.section,
+                    match (
+                        cell.source.as_str(),
+                        table,
+                        cell.coordinate.group.as_deref()
+                    ) {
+                        ("zheng-2009", Table::MedialAngles, _) => "Table 4",
+                        ("zheng-2009", _, _) => "Table 1",
+                        ("sato-2022", Table::ConcaveRatios, _) => "Table 3",
+                        ("sato-2022", _, _) => "Table 2",
+                        ("upendra-2010", Table::PedicleWidths, Some("upendra-table-4")) =>
+                            "Table 4(a) (full text)",
+                        ("upendra-2010", Table::MedialAngles, Some("upendra-table-4")) =>
+                            "Table 4(b) (full text)",
+                        ("upendra-2010", Table::PedicleWidths, _) => "Table 1 (full text)",
+                        ("upendra-2010", Table::MedialAngles, _) => "Table 2 (full text)",
+                        ("upendra-2010", Table::Chords, _) => "Table 3 (full text)",
+                        _ => panic!("unexpected marked cell: {:?}", cell.coordinate),
+                    }
+                );
                 if cell.usage == Usage::PrintedOnly {
                     assert_eq!(cell.not_for_use_reason(), Some(mark.reason.as_str()));
                     assert!(tables().lookup(table, &cell.coordinate).is_none());
@@ -1152,10 +1165,10 @@ fn every_marked_observation_reports_its_reason_and_lookup_status() {
 }
 
 #[test]
-fn the_audited_gao_columns_keep_all_literal_pairs_and_printed_precision() {
-    // citation-audit-placement-tables.md §A gao-2017 / §B4, Table 3.
-    // The three independent columns leave ± unlabelled. Whole-mm precision
-    // is a transcription marker, never an instruction to round another cell.
+fn the_published_gao_columns_keep_all_literal_pairs_and_printed_precision() {
+    // Gao Table 3: the three independent columns leave ± unlabelled.
+    // Whole-mm precision is a transcription marker,
+    // never an instruction to round another cell.
     let levels = [
         Level::T1,
         Level::T2,
@@ -1277,9 +1290,8 @@ fn the_audited_gao_columns_keep_all_literal_pairs_and_printed_precision() {
 
 #[test]
 fn transcribed_zheng_width_statistics_remain_literal() {
-    // full-tables-from-five-papers.md §A Zheng Table1 / §C12:
-    // all numeric pairs leave ± unlabelled; the malformed 072 row is
-    // retained without supplying an inferred decimal point.
+    // Zheng Table1: all numeric pairs leave ± unlabelled; the malformed
+    // 072 row is retained without supplying an inferred decimal point.
     let cells: Vec<_> = tables()
         .cells(Table::PedicleWidths)
         .iter()
@@ -1298,9 +1310,8 @@ fn transcribed_zheng_width_statistics_remain_literal() {
 }
 
 #[test]
-fn audited_lower_end_and_selective_lumbar_coordinates_keep_the_printed_rules() {
-    // citation-audit-placement-tables.md §A Liu 2020 / §B5: Wang's
-    // first cephalad >10-mm vertebra is LIV itself (n=45), not LIV+1.
+fn published_lower_end_and_selective_lumbar_coordinates_keep_the_printed_rules() {
+    // Liu 2020: Wang's first cephalad >10-mm vertebra is LIV itself (n=45), not LIV+1.
     let coord = coordinate("first-cephalad-deviation-min", "deviated-vertebra");
     expect_cell(
         Table::LevelRuleThresholds,
@@ -1330,8 +1341,8 @@ fn audited_lower_end_and_selective_lumbar_coordinates_keep_the_printed_rules() {
             )
             .is_none()
     );
-    // Same audit §A Kim 2021 / §B7: literal Table 2 TL/L wording;
-    // the thoracic interpretation remains a later project rule.
+    // Kim 2021 Table 2 prints TL/L wording;
+    // the thoracic interpretation remains a project rule.
     expect_cell(
         Table::LevelRuleThresholds,
         coordinate("tll-bending-cobb-max", "selective-lumbar"),
@@ -1367,8 +1378,8 @@ fn audited_lower_end_and_selective_lumbar_coordinates_keep_the_printed_rules() {
 }
 
 #[test]
-fn the_audited_liu_comparison_counts_do_not_share_denominators() {
-    // citation-audit-placement-tables.md §A liu-2020 / §B5, Tables 2–3.
+fn the_published_liu_comparison_counts_do_not_share_denominators() {
+    // Liu 2020, Tables 2–3.
     for (group, proximal_studies, proximal_patients, distal_studies, distal_patients) in [
         ("sv-minus-one", 4.0, 369.0, 4.0, 233.0),
         ("ev-plus-one", 4.0, 371.0, 4.0, 250.0),
@@ -1398,8 +1409,8 @@ fn the_audited_liu_comparison_counts_do_not_share_denominators() {
 }
 
 #[test]
-fn akazawas_audited_grade_boundaries_are_assigned() {
-    // citation-audit-placement-tables.md §A akazawa-2015 / §B6, abstract.
+fn akazawas_published_grade_boundaries_are_assigned() {
+    // Akazawa 2015 abstract.
     for (group, key, value, condition) in [
         ("grade-1", "inner-diameter-min", 4.0, "≥4 mm"),
         ("grade-2", "inner-diameter-min", 2.0, "≥2 mm and <4 mm"),
@@ -1429,8 +1440,8 @@ fn akazawas_audited_grade_boundaries_are_assigned() {
 }
 
 #[test]
-fn uniform_technique_cells_keep_the_audited_non_ais_populations() {
-    // citation-audit-placement-tables.md §A Peng 2023 and Fennell 2014.
+fn uniform_technique_cells_keep_the_published_non_ais_populations() {
+    // Peng 2023 and Fennell 2014.
     for (source, groups, patient_count) in [
         ("fennell-2014", ["t1-t2", "t3-t12"], "33"),
         ("peng-2023", ["peng-t1-t2", "peng-t3-t12"], "118"),
@@ -1456,10 +1467,9 @@ fn uniform_technique_cells_keep_the_audited_non_ais_populations() {
 }
 
 #[test]
-fn every_identified_paper_has_its_complete_citation_and_an_audited_identifier() {
-    // The citation audit identifies 39 original papers, the extra records
-    // eleven more, and full-tables-from-five-papers.md §D adds Kuraishi
-    // full paper separately from its meeting abstract.
+fn every_identified_paper_has_its_complete_citation_and_a_recorded_identifier() {
+    // There are 39 publications in the main set, eleven additional papers,
+    // and the Kuraishi full paper separately from its meeting abstract.
     let papers: Vec<_> = tables()
         .sources()
         .values()
@@ -1485,7 +1495,7 @@ fn every_identified_paper_has_its_complete_citation_and_an_audited_identifier() 
             source.key
         );
     }
-    // Same audit §A Chen 2025 key (2026 issue) and Kuraishi 2013.
+    // Chen 2025 key (2026 issue) and Kuraishi 2013.
     let chen = tables().source("chen-2025").unwrap();
     assert_eq!(chen.citation.year, Some(2026));
     assert!(chen.notes.contains("online-first"));
@@ -1494,35 +1504,76 @@ fn every_identified_paper_has_its_complete_citation_and_an_audited_identifier() 
     assert_eq!(kuraishi.doi.as_deref(), Some("10.1186/1748-7161-8-S1-O27"));
     assert!(kuraishi.notes.contains("21959835"));
     assert!(kuraishi.notes.contains("26(1):22"));
-    // citations-placement-extra.json: only bibliography was checked.
-    for (key, read) in [
-        ("boissiere-2023", ReadStatus::Abstract),
-        ("cui-2012", ReadStatus::Abstract),
-        ("etemadifar-2017", ReadStatus::FullText),
-        ("ueno-2025", ReadStatus::Abstract),
-        ("s1-liv-42811138", ReadStatus::Abstract),
-        ("ssv-40103372", ReadStatus::Abstract),
-        ("djk-34096362", ReadStatus::Abstract),
-        ("l3-bending-30739071", ReadStatus::Abstract),
-        ("residual-t1-39658742", ReadStatus::Abstract),
-        ("shoulder-36138576", ReadStatus::Abstract),
-        ("coronal-decompensation-4417731", ReadStatus::FullText),
+    // Bibliographic confirmation does not establish a new numerical reading.
+    for (key, read, notes) in [
+        (
+            "boissiere-2023",
+            ReadStatus::Abstract,
+            "Recorded values are 5.5° spine-to-rod kyphosis disparity and the concave rod less kyphotic than the spine in 84%; no rod diameter, material or spread is recorded.",
+        ),
+        (
+            "cui-2012",
+            ReadStatus::Abstract,
+            "The 8–10 mm danger-depth range is along the probe path, not pedicle width or a cortex margin. Further ± pairs reported for this series have no identified spread statistic.",
+        ),
+        (
+            "etemadifar-2017",
+            ReadStatus::FullText,
+            "The Kim/Lenke entry technique is described through this opened series: about 2 mm lateral to the midpoint of the superior facet, at the superior border of the transverse process for T1–T10. It is not a landmark measured on the fitted template.",
+        ),
+        (
+            "ueno-2025",
+            ReadStatus::Abstract,
+            "The 20.4–22.2% deviation is reported jointly with Akazawa 2023, without allocating the endpoints here. A broader approximate 22–31% hard-floor summary with Akazawa 2015 is kept separately; neither interval is repaired or treated as a pooled estimate.",
+        ),
+        (
+            "s1-liv-42811138",
+            ReadStatus::Abstract,
+            "Exact S1–LIV angle geometry is not given in the abstract; the 9.5° threshold does not establish a computable angle definition.",
+        ),
+        (
+            "ssv-40103372",
+            ReadStatus::Abstract,
+            "Rule is no more proximal than SSV−1 and below preoperative distal junctional kyphosis; other risk factors are also reported. This is distinct from the 122-patient postoperative-kyphosis cohort.",
+        ),
+        (
+            "djk-34096362",
+            ReadStatus::Abstract,
+            "TK T5–T12 ≥25° or TLK T11–L2 ≥10° applies with SSV excluded. The 53.8% result is 7/13, not a full-cohort estimate.",
+        ),
+        (
+            "l3-bending-30739071",
+            ReadStatus::Abstract,
+            "Translation threshold is strictly below 10 mm on the concave bending film, under the greater-than-60° curve condition; no standing-film substitution is implied.",
+        ),
+        (
+            "residual-t1-39658742",
+            ReadStatus::Abstract,
+            "Preoperative PT Cobb >26.5° is the risk-factor threshold; T1 tilt >5° at two years is the distinct outcome definition.",
+        ),
+        (
+            "shoulder-36138576",
+            ReadStatus::Abstract,
+            "Preoperative RSH >−6.5 mm and planned MT correction >76.9% are separate strict thresholds. The source’s imbalance definition is RSH ≥2 cm; no conversion is made in the tables.",
+        ),
+        (
+            "coronal-decompensation-4417731",
+            ReadStatus::FullText,
+            "Full text read in part.",
+        ),
     ] {
         let source = tables().source(key).expect(key);
         assert_eq!(source.read, read, "{key}");
-        assert!(
-            source
-                .notes
-                .contains("bibliographic record confirmed; numbers not audited"),
+        assert_eq!(
+            source.notes,
+            format!("{notes} Bibliographic record confirmed; numbers not independently checked."),
             "{key}"
         );
     }
 }
 
 mod upendra_complete {
-    // Hand-typed from full-tables-from-five-papers.md, A Upendra Tables 1–3.
-    // This fixture is independent of upendra-second-pass-patch.json and its normalizer.
-    // Each row preserves the note's order: convex level/n/mean/range/SD, then concave.
+    // Upendra Tables 1–3. Each row lists convex level/n/mean/range/SD, then concave.
     use implant_layout::evidence::{
         Cell, Coordinate, PublishedValue, ReadStatus, Table, Unit, Usage, tables,
     };
@@ -1589,12 +1640,7 @@ L4|9|46.2|44.5-47.6|2.14|L4|9|47.65|45.1-50.9|2.11
 L5|8|47.0|45.2-50.8|2.08|L5|8|48.2|45.1-50.8|2.89
 "#;
 
-    fn upendra_note_coordinate(
-        key: &str,
-        group: &str,
-        level: Level,
-        side: CurveSide,
-    ) -> Coordinate {
+    fn upendra_coordinate(key: &str, group: &str, level: Level, side: CurveSide) -> Coordinate {
         Coordinate {
             key: key.to_string(),
             group: Some(group.to_string()),
@@ -1613,8 +1659,8 @@ L5|8|47.0|45.2-50.8|2.08|L5|8|48.2|45.1-50.8|2.89
     }
 
     #[test]
-    fn complete_upendra_values_counts_ranges_and_literal_means_match_the_note() {
-        // full-tables-from-five-papers.md, A Upendra Tables 1–3, explicitly labelled mean/range/SD/n.
+    fn complete_upendra_values_counts_ranges_and_literal_means_match_the_paper() {
+        // Upendra Tables 1–3 explicitly label mean/range/SD/n.
         let levels = [
             Level::T1,
             Level::T2,
@@ -1673,7 +1719,7 @@ L5|8|47.0|45.2-50.8|2.08|L5|8|48.2|45.1-50.8|2.89
                     let lower: f64 = lower.parse().unwrap();
                     let upper: f64 = upper.parse().unwrap();
                     let sd: f64 = columns[offset + 4].parse().unwrap();
-                    let coordinate = upendra_note_coordinate(key, "upendra-ais", level, side);
+                    let coordinate = upendra_coordinate(key, "upendra-ais", level, side);
                     let cell = upendra_raw_cell(table, &coordinate);
                     assert_eq!(
                         cell.value,
@@ -1698,7 +1744,15 @@ L5|8|47.0|45.2-50.8|2.08|L5|8|48.2|45.1-50.8|2.89
                     );
                     assert_eq!(cell.unit, unit);
                     assert_eq!(cell.source, "upendra-2010");
-                    assert!(cell.section.contains("full-tables-from-five-papers.md"));
+                    assert_eq!(
+                        cell.section,
+                        match table {
+                            Table::PedicleWidths => "Table 1 (full text)",
+                            Table::MedialAngles => "Table 2 (full text)",
+                            Table::Chords => "Table 3 (full text)",
+                            _ => unreachable!(),
+                        }
+                    );
                     assert!(
                         cell.qualifier
                             .as_deref()
@@ -1728,7 +1782,7 @@ L5|8|47.0|45.2-50.8|2.08|L5|8|48.2|45.1-50.8|2.89
 
     #[test]
     fn upendra_doubtful_figures_are_marked_and_the_impossible_angle_is_not_repaired() {
-        // full-tables-from-five-papers.md, C5 / C8: the note says doubtful, not impossible, for these four.
+        // These four cells are doubtful, rather than impossible.
         for (table, key, level, side) in [
             (
                 Table::PedicleWidths,
@@ -1750,14 +1804,14 @@ L5|8|47.0|45.2-50.8|2.08|L5|8|48.2|45.1-50.8|2.89
             ),
             (Table::Chords, "chord", Level::T10, CurveSide::Convex),
         ] {
-            let coordinate = upendra_note_coordinate(key, "upendra-ais", level, side);
+            let coordinate = upendra_coordinate(key, "upendra-ais", level, side);
             let cell = tables().lookup(table, &coordinate).unwrap();
             let mark = cell.mark.as_ref().expect("doubtful mark");
             assert_eq!(format!("{:?}", mark.kind), "Doubtful");
             assert!(!mark.reason.is_empty());
             assert_eq!(cell.usage, Usage::Usable);
         }
-        let coordinate = upendra_note_coordinate(
+        let coordinate = upendra_coordinate(
             "transverse-angle",
             "upendra-ais",
             Level::L4,
@@ -1785,7 +1839,7 @@ L5|8|47.0|45.2-50.8|2.08|L5|8|48.2|45.1-50.8|2.89
 
     #[test]
     fn all_five_conflicting_upendra_table_four_figures_remain_inspectable_only() {
-        // full-tables-from-five-papers.md, A Upendra Table 4(a)/(b), C6, all five differing cells.
+        // Upendra Table 4(a)/(b): all five differing cells.
         for (table, key, level, side, value, printed) in [
             (
                 Table::PedicleWidths,
@@ -1828,12 +1882,19 @@ L5|8|47.0|45.2-50.8|2.08|L5|8|48.2|45.1-50.8|2.89
                 "16.7",
             ),
         ] {
-            let coordinate = upendra_note_coordinate(key, "upendra-table-4", level, side);
+            let coordinate = upendra_coordinate(key, "upendra-table-4", level, side);
             let cell = upendra_raw_cell(table, &coordinate);
             assert_eq!(cell.value, PublishedValue::Scalar { value });
             assert_eq!(cell.printed.as_deref(), Some(printed));
             assert_eq!(cell.source, "upendra-2010");
-            assert!(cell.section.contains("full-tables-from-five-papers.md"));
+            assert_eq!(
+                cell.section,
+                if table == Table::PedicleWidths {
+                    "Table 4(a) (full text)"
+                } else {
+                    "Table 4(b) (full text)"
+                }
+            );
             assert_eq!(cell.usage, Usage::PrintedOnly);
             assert_eq!(
                 format!("{:?}", cell.mark.as_ref().unwrap().kind),
@@ -1883,8 +1944,8 @@ mod zheng_complete {
             (AgeBand::TwelveToFourteen, Sex::Male),
             (AgeBand::TwelveToFourteen, Sex::Female),
         ];
-        // full-tables-from-five-papers.md §A, Zheng Table 1, T1 first and second rows.
-        // Row-to-inner/outer assignment is the project's stated inference, not a table label.
+        // Zheng Table 1, T1 first and second rows.
+        // Row-to-inner/outer assignment is the project's inference, not a table label.
         let inner = [
             (3.19, 0.63),
             (2.95, 0.53),
@@ -1901,7 +1962,7 @@ mod zheng_complete {
             (7.44, 0.82),
             (6.7, 0.89),
         ];
-        // full-tables-from-five-papers.md §A, Zheng Table 2, complete T1 row.
+        // Zheng Table 2, complete T1 row.
         let sagittal = [
             (3.40, 0.52),
             (3.43, 0.62),
@@ -1910,7 +1971,7 @@ mod zheng_complete {
             (4.14, 0.54),
             (4.12, 0.79),
         ];
-        // full-tables-from-five-papers.md §A, Zheng Table 3, complete T1 row.
+        // Zheng Table 3, complete T1 row.
         let length = [
             (28.57, 2.18),
             (27.28, 1.86),
@@ -1919,7 +1980,7 @@ mod zheng_complete {
             (31.94, 3.10),
             (31.03, 2.61),
         ];
-        // full-tables-from-five-papers.md §A, Zheng Table 4, complete T1 row.
+        // Zheng Table 4, complete T1 row.
         let angle = [
             (30.94, 5.25),
             (29.42, 5.77),
@@ -1950,7 +2011,16 @@ mod zheng_complete {
                 assert_eq!(cell.value, PublishedValue::PlusMinus { value, spread });
                 assert_eq!(cell.unit, unit);
                 assert_eq!(cell.source, "zheng-2009");
-                assert!(cell.section.contains("full-tables-from-five-papers.md"));
+                assert_eq!(
+                    cell.section,
+                    match table {
+                        Table::InnerWidths | Table::PedicleWidths => "Table 1",
+                        Table::PedicleHeights => "Table 2",
+                        Table::Chords => "Table 3",
+                        Table::MedialAngles => "Table 4",
+                        _ => unreachable!(),
+                    }
+                );
                 assert_eq!(cell.n, None);
                 assert_eq!(cell.range, None);
             }
@@ -1969,8 +2039,7 @@ mod zheng_complete {
 
     #[test]
     fn zhengs_three_printing_qualifications_keep_the_literal_numbers() {
-        // full-tables-from-five-papers.md §A Table 1 and §C.12:
-        // this spread token is malformed, so no numerical spread is inferred.
+        // Zheng Table 1: this spread token is malformed, so no numerical spread is inferred.
         let coordinate =
             zheng_coordinate("outer-width", Level::T10, AgeBand::FiveToEight, Sex::Female);
         assert!(tables().lookup(Table::PedicleWidths, &coordinate).is_none());
@@ -1989,7 +2058,7 @@ mod zheng_complete {
         assert!(mark.reason.contains("072 is not parsed or repaired"));
         assert_eq!(printed.not_for_use_reason(), Some(mark.reason.as_str()));
 
-        // full-tables-from-five-papers.md §A Table 1, T1 first row, 9–11 M; §C.12.
+        // Zheng Table 1, T1 first row, 9–11 M.
         let doubtful = zheng_observation(
             Table::InnerWidths,
             "inner-width",
@@ -2016,7 +2085,7 @@ mod zheng_complete {
         );
         assert_eq!(doubtful.not_for_use_reason(), None);
 
-        // full-tables-from-five-papers.md §A Table 4, T10 5–8 F; §C.12, spacing only.
+        // Zheng Table 4, T10 5–8 F: spacing only.
         let spacing = zheng_observation(
             Table::MedialAngles,
             "transverse-angle",
@@ -2049,7 +2118,7 @@ mod zheng_complete {
 
     #[test]
     fn zhengs_negative_angles_and_conflicting_length_definitions_remain_visible() {
-        // full-tables-from-five-papers.md §A Table 4, T11 9–11 F; §B Angle.
+        // Zheng Table 4, T11 9–11 F.
         let negative = zheng_observation(
             Table::MedialAngles,
             "transverse-angle",
@@ -2072,7 +2141,7 @@ mod zheng_complete {
                 .unwrap()
                 .contains("own inference")
         );
-        // full-tables-from-five-papers.md §B Zheng length and §C.3 give both definitions.
+        // Zheng length endpoints disagree between Table 3 and Figure 1.
         let definition = tables()
             .definitions(Table::Chords)
             .iter()
@@ -2089,8 +2158,8 @@ mod zheng_complete {
 
     #[test]
     fn zhengs_five_measurements_cover_all_twelve_levels_and_six_columns() {
-        // full-tables-from-five-papers.md §A: Table 1 has 12 pairs of six-column rows;
-        // Tables 2–4 each have 12 six-column rows. This includes the printed-only cell.
+        // Table 1 has 12 pairs of six-column rows; Tables 2–4 each have
+        // 12 six-column rows. This includes the printed-only cell.
         for (table, key) in [
             (Table::InnerWidths, "inner-width"),
             (Table::PedicleWidths, "outer-width"),
@@ -2115,7 +2184,7 @@ mod zheng_complete {
 }
 
 mod sato_balikci_chiu_kuraishi_complete {
-    //! Independent hand-typed checks from full-tables-from-five-papers.md.
+    //! Independent checks of the printed values.
 
     use implant_layout::evidence::{
         Cell, Coordinate, MarkKind, ObservedRange, PublishedValue, ReadStatus, Table, Unit, Usage,
@@ -2145,7 +2214,14 @@ mod sato_balikci_chiu_kuraishi_complete {
             .iter()
             .find(|cell| cell.coordinate == coordinate)
             .unwrap_or_else(|| panic!("missing printed cell {table:?}: {coordinate:?}"));
-        assert!(cell.section.contains("full-tables-from-five-papers.md"));
+        assert_eq!(
+            cell.section,
+            if table == Table::ConcaveRatios {
+                "Table 3"
+            } else {
+                "Table 2"
+            }
+        );
         cell
     }
 
@@ -2165,13 +2241,28 @@ mod sato_balikci_chiu_kuraishi_complete {
         assert_eq!(cell.source, source);
         assert_eq!(cell.unit, unit);
         assert_eq!(cell.value, value);
-        assert!(cell.section.contains("full-tables-from-five-papers.md"));
+        assert_eq!(
+            cell.section,
+            match (source, table) {
+                ("sato-2022", Table::ConcaveRatios) => "Table 3",
+                ("sato-2022", _) => "Table 2",
+                ("balikci-2019", Table::ScrewGrids) if matches!(key, "length" | "length-step") =>
+                    "Table 1",
+                ("balikci-2019", Table::ScrewGrids) => "not recorded",
+                ("balikci-2019", Table::ScrewUse) if group.starts_with("balikci-table-2-") =>
+                    "Table 2",
+                ("balikci-2019", Table::ScrewUse) => "Table 4",
+                ("chiu-2024", _) => "abstract",
+                ("kuraishi-2013-full-paper", _) => "abstract",
+                _ => panic!("unexpected source: {source}"),
+            }
+        );
         cell
     }
 
     #[test]
     fn sato_table_2_apex_height_row_retains_both_sides_and_ranges() {
-        // full-tables-from-five-papers.md §A Sato Table 2, H row; §B Sato.
+        // Sato Table 2, H row.
         for (side, value, spread, lower, upper, printed) in [
             (
                 CurveSide::Convex,
@@ -2217,7 +2308,7 @@ mod sato_balikci_chiu_kuraishi_complete {
 
     #[test]
     fn sato_table_2_neutral_width_p_values_are_exact_not_bounds() {
-        // full-tables-from-five-papers.md §A Sato Table 2, neutral W and w rows.
+        // Sato Table 2, neutral W and w rows.
         clinical_usable(
             Table::PedicleWidths,
             "p-value",
@@ -2240,7 +2331,7 @@ mod sato_balikci_chiu_kuraishi_complete {
 
     #[test]
     fn sato_table_3_height_ratios_retain_the_print_and_the_probable_misprint() {
-        // full-tables-from-five-papers.md §A Sato Table 3, Lt.H/Rt.H; §C.10.
+        // Sato Table 3, Lt.H/Rt.H.
         let apex = clinical_printed(Table::ConcaveRatios, "outer-height-ratio", "apex-one", None);
         assert_eq!(
             apex.value,
@@ -2284,7 +2375,7 @@ mod sato_balikci_chiu_kuraishi_complete {
                 upper: 1.10
             })
         );
-        // P7 of screw-sizing-and-placement.md explicitly calls 0.13 a ratio SD.
+        // The apex width ratio uses 0.13 as SD.
         clinical_usable(
             Table::ConcaveRatios,
             "concave-convex-ratio",
@@ -2301,8 +2392,8 @@ mod sato_balikci_chiu_kuraishi_complete {
 
     #[test]
     fn every_sato_neutral_block_exclusion_keeps_its_reason_and_value() {
-        // full-tables-from-five-papers.md §A Sato Table 2; §B duplicated block;
-        // §C.1. DECISIONS additionally excludes the left neutral outer width.
+        // Sato Table 2 has a duplicated block. The left neutral outer width
+        // is also excluded under the project rule.
         for (table, key, side, value, spread, lower, upper) in [
             (
                 Table::PedicleHeights,
@@ -2362,7 +2453,7 @@ mod sato_balikci_chiu_kuraishi_complete {
 
     #[test]
     fn balikci_table_1_catalogue_and_diameter_increment_are_transcribed_separately() {
-        // full-tables-from-five-papers.md §A Balikci Table 1; §B available diameters.
+        // Balikci Table 1, available diameters.
         for (group, value) in [("balikci-mid-27.5", 27.5), ("balikci-standard-55", 55.0)] {
             clinical_usable(
                 Table::ScrewGrids,
@@ -2413,7 +2504,7 @@ mod sato_balikci_chiu_kuraishi_complete {
 
     #[test]
     fn balikci_table_2_mid_length_row_retains_region_counts_percentages_ci_and_p() {
-        // Hand-typed from full-tables-from-five-papers.md §A Balikci Table 2.
+        // Balikci Table 2.
         for (group, count, percent) in [
             ("balikci-table-2-mid-length-thoracal", 1007.0, 46.5),
             ("balikci-table-2-mid-length-lumbar", 264.0, 38.7),
@@ -2462,7 +2553,7 @@ mod sato_balikci_chiu_kuraishi_complete {
 
     #[test]
     fn balikci_table_4_mid_length_row_keeps_the_concave_percentage_misprint() {
-        // full-tables-from-five-papers.md §A Balikci Table 4; §C.15.
+        // Balikci Table 4.
         for (side, count, percent) in [
             (CurveSide::Convex, 651.0, 45.7),
             (CurveSide::Concave, 620.0, 43.5),
@@ -2519,7 +2610,7 @@ mod sato_balikci_chiu_kuraishi_complete {
 
     #[test]
     fn chiu_abstract_medial_wall_regions_preserve_each_physical_side() {
-        // Hand-typed from full-tables-from-five-papers.md §D.6, abstract quotes.
+        // Chiu abstract quotations.
         for (group, value, spread) in [
             ("chiu-right-t1-t3", 0.89, 0.28),
             ("chiu-right-t4-t10", 0.75, 0.23),
@@ -2572,7 +2663,7 @@ mod sato_balikci_chiu_kuraishi_complete {
 
     #[test]
     fn kuraishi_full_paper_abstract_retains_the_two_lengths_per_region() {
-        // full-tables-from-five-papers.md §D.7, full-paper record and abstract.
+        // Kuraishi full-paper record and abstract.
         for (group, values) in [
             ("kuraishi-2013-full-paper-t1-t5", vec![25.0, 30.0]),
             ("kuraishi-2013-full-paper-t6-t12", vec![30.0, 35.0]),

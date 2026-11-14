@@ -18,3 +18,12 @@ it('keeps front sizes, signed side curves, fixed ends and unique omissions witho
  expect(JSON.stringify(view)).not.toContain('999');
  front.geometry.imageRight = 'patient-right'; expect(readingsView(a, front).rows[0]?.about).toContain('toward the left');
 });
+it('shows measured lumbar lordosis and the supplied missing-side-coverage reason without a typical number', () => {
+ const result = answer();
+ result.sagittal.kyphosisT5T12 = { kind: 'not-measured', reason: 'not-on-side-film', typicalDeg: 999 };
+ const view = readingsView(result, { geometry: { imageRight: 'patient-left' } } as FilmToFit);
+ expect(view.rows.find((r) => r.key === 'lordosis')?.value).toBe('−20°');
+ expect(view.rows.some((r) => r.key === 'kyphosis')).toBe(false);
+ expect(view.reasons).toContain('The side film does not show these vertebrae.');
+ expect(JSON.stringify(view)).not.toContain('999');
+});

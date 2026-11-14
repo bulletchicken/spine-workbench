@@ -71,7 +71,7 @@ guidelines: orthopaedic and rehabilitation treatment of idiopathic scoliosis
 during growth*, Scoliosis Spinal Disord. 2018;13:3, PMID 29435499,
 DOI [10.1186/s13013-017-0145-8](https://doi.org/10.1186/s13013-017-0145-8),
 PMCID [PMC5795289](https://pmc.ncbi.nlm.nih.gov/articles/PMC5795289/).
-The supplied full-text reading is labelled guideline. Its SRS statement
+The full text was read; the source is labelled guideline. Its SRS statement
 combines the angular threshold with recognisable axial rotation. This
 engine uses only the angular floor for naming output curves; it does not
 turn that threshold into a diagnostic result.

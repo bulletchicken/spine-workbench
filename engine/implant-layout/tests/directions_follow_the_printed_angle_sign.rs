@@ -32,7 +32,7 @@ fn printed_angle(level: Level, sex: Sex) -> f64 {
 #[test]
 fn positive_angles_converge_and_the_negative_zheng_angles_diverge_on_both_sides() {
     for level in [Level::T1, Level::T11, Level::T12] {
-        // SYNTHESIS combines the two sex columns by their arithmetic mean.
+        // Combine the two sex columns by their arithmetic mean.
         let angle = (printed_angle(level, Sex::Male) + printed_angle(level, Sex::Female)) / 2.0;
         assert_eq!(angle > 0.0, level == Level::T1);
         let pose = VertebraParams {

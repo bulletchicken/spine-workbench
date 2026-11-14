@@ -1,3 +1,6 @@
+import { searchFilms, finderCapability } from '@/bench/search-films';
+import { clearSpineBuild } from '@/bench/three/build-spine';
+import { filmOrigins } from '@/view-state/film-origins';
 import { findReplay } from '@/auto-pass/find-replay-clock';
 import { revealPlan } from '@/auto-pass/find-replay';
 import { caseStore } from '@/case-state/case-store';
@@ -8,7 +11,6 @@ import { durationOnPage, numberOnPage } from '@/choreography/timing';
 import { EngineFailure, type EngineClient } from '@/engine-room/engine-client';
 import { compareLevels, type CaseFileV1, type FilmKind } from '@/shapes';
 import { currentStep } from '@/view-state/current-step';
-import { filmIntake } from '@/view-state/film-intake';
 import { findState } from '@/view-state/find-state';
 import { fitSources } from '@/view-state/fit-sources';
 import { preferences } from '@/view-state/preferences';
@@ -22,9 +24,13 @@ export function foundOnFront(c: CaseFileV1): number {
   return marksOf(c, 'front')?.vertebrae.filter((v) => compareLevels(v.level, 'T1') >= 0).length ?? 0;
 }
 
+export function foundOnLead(c: CaseFileV1): number {
+  return foundOnFront(c) || (marksOf(c, 'side')?.vertebrae.length ?? 0);
+}
+
 /** Find with no search running shows what the case holds, and gives way to Films when the Front film has nothing found on it. */
 export function showWhatIsFound(): void {
-  if (foundOnFront(caseStore.getState().case) > 0) findState.getState().found();
+  if (foundOnLead(caseStore.getState().case) > 0) findState.getState().found();
   else { findState.getState().clear(); currentStep.getState().go('films'); }
 }
 let active: Run | null = null;
@@ -69,11 +75,27 @@ function wait(ms: number, signal: AbortSignal): Promise<void> {
 }
 
 async function search(engine: EngineClient, run: Run, only?: readonly FilmKind[]) {
+  const info = await finderCapability(engine);
+  if (active !== run) return;
+  const openings = { ...filmPixels.getState().openings };
+  const selection = searchFilms(caseStore.getState().case, filmOrigins.getState().films, openings, info);
+  const films = FILM_KINDS.filter((kind) => only === undefined || only.includes(kind)).flatMap((kind) => selection.films.filter((film) => film.kind === kind));
+  clearSpineBuild();
+  // A kept but unsearched Side cannot reuse an earlier finding in the fit.
+  if (!films.some((f) => f.kind === 'side')) {
+    const side = caseStore.getState().case.films.find((f) => f.kind === 'side');
+    if (side !== undefined && marksOf(caseStore.getState().case, 'side') !== null) caseStore.getState().apply([{ kind: 'set-film', film: side }]);
+    fitSources.getState().forget('side');
+  }
   const { case: c, version } = caseStore.getState();
-  const openings = filmPixels.getState().openings;
-  const frontFinder = filmIntake.getState().from === 'made-up-case' ? 'hand-built' : 'trained';
-  const films = FILM_KINDS.filter((kind) => only === undefined || only.includes(kind)).flatMap((kind) => c.films.filter((film) => film.kind === kind));
+  const { frontFinder, sideFinder } = selection;
   findState.getState().searching(films.length);
+  findState.getState().searchedKinds(films.map((f) => f.kind));
+  if (!films.some((f) => f.kind === 'front' || f.kind === 'side')) {
+    findState.getState().clear();
+    currentStep.getState().go('films');
+    return;
+  }
   const began = performance.now();
   const reduced = motionMode(window.matchMedia(SYSTEM_ASKS_FOR_REDUCED).matches, preferences.getState().motion === 'reduced') === 'reduced';
   const flight = reduced ? 2 * durationOnPage('--dur-fade') : durationOnPage('--dur-scene') + 3 * durationOnPage('--stagger');
@@ -83,17 +105,20 @@ async function search(engine: EngineClient, run: Run, only?: readonly FilmKind[]
       options: { acquisition: 'unknown', population: 'adolescent', template: null },
       firstVertebraId: c.nextVertebraId,
       frontFinder,
-      sideFinder: frontFinder,
+      sideFinder,
     }, {
       signal: run.controller.signal,
       onProgress: (progress) => { if (active === run) findState.getState().progress(searchShare(progress, films.length === 1 && films[0]?.kind === 'front')); },
     });
     if (active !== run) return;
-    const report = caseStore.getState().apply(result.marks.map((marks) => ({ kind: 'replace-marks', marks, basedOn: result.caseVersion, cause: { by: 'auto-pass' } })));
+    const currentMarks = result.marks.filter((marks) => films.some((film) => film.kind === marks.film) && openings[marks.film] === filmPixels.getState().openings[marks.film]);
+    const report = caseStore.getState().apply(currentMarks.map((marks) => ({ kind: 'replace-marks', marks, basedOn: result.caseVersion, cause: { by: 'auto-pass' } })));
     caseStore.getState().startAfresh();
-    const kept = result.marks.filter((_, i) => report.outcomes[i]?.kept);
-    for (const marks of kept) fitSources.getState().kept(marks.film, marks.film === 'front' || marks.film === 'side' ? frontFinder : 'hand-built', openings[marks.film]);
-    if (!kept.some((marks) => marks.film === 'front')) return;
+    const kept = currentMarks.filter((_, i) => report.outcomes[i]?.kept);
+    for (const marks of kept) fitSources.getState().kept(marks.film, marks.film === 'front' ? frontFinder : marks.film === 'side' ? sideFinder : 'hand-built', openings[marks.film]);
+    if (!kept.some((marks) => (marks.film === 'front' || marks.film === 'side') && marks.vertebrae.length > 0)) { showWhatIsFound(); return; }
+    const sideResult = kept.find((m) => m.film === 'side');
+    if (sideResult !== undefined) findState.getState().sideResult(sideResult);
     const sizes = Object.fromEntries(caseStore.getState().case.films.map((film) => [film.kind, { width: film.image.width, height: film.image.height }]));
     const plan = revealPlan(kept, sizes, { height: numberOnPage('--light-h'), edge: numberOnPage('--light-edge'), filmHeight: numberOnPage('--film-h') });
     if (plan === null) {

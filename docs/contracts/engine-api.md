@@ -40,6 +40,7 @@ and tests only, never shipped) both implement it.
 | `compareWithAnswerKey(marks, key)` | `AnswerKeyComparison` | `compare-with-answer-key` |
 | `fitSpine(input)` | `SpineFit` | `fit-spine` |
 | `proposeLayouts(input)` | `LayoutProposals` | `propose-layouts` |
+| `rebuildLayout(input)` | `ImplantLayout` | `rebuild-layout` |
 | `runLoadBench(input)` | `BenchBatch` | `run-load-bench` |
 | `compareLayouts(input)` | `BenchResult` | `compare-layouts` |
 | `measureSpine(input)` | `SpineReadings` | `measure-spine` |
@@ -137,6 +138,7 @@ holds one film, so its jobs never say which.
 | `compare-with-answer-key` | spine | `{ marks: FilmMarks[], key }` | `AnswerKeyComparison` | | yes |
 | `fit-spine` | spine | `FitFromFilms` | `SpineFit` | | yes |
 | `propose-layouts` | spine | `LayoutInput` | `LayoutProposals` | | yes |
+| `rebuild-layout` | spine | `RebuildInput` | `ImplantLayout` | | yes |
 | `run-load-bench` | spine | `BenchInput` | `BenchBatch` | | |
 | `compare-layouts` | spine | `BenchCompareInput` | `BenchResult` | | yes |
 | `measure-spine` | spine | `ReadingsInput` | `SpineReadings` | | yes |
@@ -170,6 +172,42 @@ still reaches the floor. The per-version Rust geometry used by level rules
 retains smaller curves.
 The caller drops stale answers. The stand-in answers with a straight-spine
 fixture on the supplied levels; it calculates no geometry or version bands.
+
+`rebuildLayout` needs no open film. `RebuildInput` carries the original
+`layout: LayoutInput`, `upper`, `lower`, the person's `anchors`,
+`rodMaterial` and `rodDiameterMm`. Each `AnchorChoice` has `level`, `side`,
+`kind`, `diameterMm` and `lengthMm`; a null size asks for the size in
+`screwHere`. Unspecified pedicles follow the first placement's pattern over
+the new span. The output contract is a whole placement with id and change
+`changed-by-hand`. The native implementation currently refuses every call
+with `tool-refused` and detail `rebuild-not-built`. The stand-in returns a
+fixed sample placement marked `changed-by-hand`.
+
+### Placement and bench drawing fields
+
+These fields cross as generated shapes, with explicit nulls and empty lists.
+Drawing poses and lines never supply an estimate or a count.
+
+| Shape | Fields and meaning |
+|---|---|
+| `RodProposal` | `standingPointsMm` follows `pointsMm` in the same order on the standing spine; `pointsMm` remains the target contour. `geometryStatus` covers both lines. Typical geometry must never be printed as measured millimetres. |
+| `LayoutProposals` | `firstIsSketch` identifies a fallback span; `upperEnds` and `lowerEnds` count each end separately, most frequent first, and are empty for a sketch. |
+| `AnchorProposal` | `widerThanPedicle: DiameterCount[]` counts widths below `diameterMm / widthRatio` for each catalogue diameter; empty without a width table. `screwHere` carries the screw size before the pattern, including on hooks and empty pedicles; null without a size. |
+| `DiameterCount` | `diameterMm`, `versions`. |
+| `ScrewHere` | `diameterMm`, `diameterAlsoSeen`, `lengthMm`, `lengthAlsoSeen`, nullable `screwToPedicle` and nullable `medialAngle`. Existing anchor size fields stay null on hooks and empty pedicles. |
+| `PedicleEstimate` | `sources` lists the width's evidence keys. |
+| `AnchorProposal` | `diameterSources`, `lengthSources`, `directionSources` and `lookSources` retain the keys behind each number or look code; `sources` remains their union. Each `LookSources` has `code` and `sources`. |
+| `StopResult` | `middle: VertebraPose[] \| null` is for drawing: standing poses at `before`, one separate middle-input run at `rods-in`, null later or when that run does not settle. `rods: RodLine[] \| null` is present only with the rods-in middle poses; each line has `side` and `pointsMm`. `cyclesSources` lists annual-step evidence keys. |
+| `BenchResult` | `mainCurve: MainCurve \| null` names the measured curve's `upper`, `apex` and `lower`; null when none exists. |
+| `PartResult` | `demand: Band \| null` is an anchor's force over bone-adjusted strength over settled versions; null for other parts and at `before`. `sources` lists evidence keys. |
+| `Estimate` | `mostlyFrom: SampledUnknown \| null` is null when no unknown moves with the estimate. `sources` lists evidence keys, empty for film-only values. |
+| `PairedCount` | `sortedBy: SampledUnknown \| null` is null when no unknown moves with the difference. `outcomes: PairOutcome[]` follows `order`, with `lower`, `higher` or `tie` per dot. `clearAt` is three quarters of the dot count rounded up. |
+
+The producers currently leave all these added lists empty, nullable fields
+null and `firstIsSketch` false; `clearAt` is computed from `order`. Existing
+association answers remain present in `mostlyFrom` and `sortedBy`. No drawing
+or evidence mapping may be inferred from these unfilled fields. Before-stop
+load estimates and part shares retain their existing representation.
 
 The native `spine measure` command accepts either `--recipe NAME --seed N`
 (optionally `--front-only`) or `--film front=PATH` with an optional
@@ -297,7 +335,7 @@ slices.
 | `made_up_spines.rs` | `make_up_spine(recipe) → MadeUpSpine` | `made-up-unsatisfiable` |
 | `joint_fit.rs` | `fit_spine(input) → SpineFit`; `fit_from_films(input) → SpineFit` | `pass-no-spine-found`, `tool-refused`, `case-invalid-value` |
 | `scorekeeper.rs` | `compare_with_answer_key(marks, key) → AnswerKeyComparison` | `case-invalid-value` |
-| `implant_layout.rs` | `propose_layouts(input) → LayoutProposals` | `tool-refused`, `case-invalid-value`, `pass-no-spine-found`; the detail names the refusal (`implant-layout-…`) |
+| `implant_layout.rs` | `propose_layouts(input) → LayoutProposals`; `rebuild_layout(input) → ImplantLayout` | `tool-refused`, `case-invalid-value`, `pass-no-spine-found`; proposal details name the refusal (`implant-layout-…`); rebuilding currently refuses with detail `rebuild-not-built` |
 | `load_bench.rs` | `run_load_bench(input) → BenchBatch`; `compare_layouts(input) → BenchResult` | `tool-refused`, `case-invalid-value`, `pass-no-spine-found`; the detail names the refusal (`load-bench-…`) |
 | `spine_readings.rs` | `measure_spine(input) → SpineReadings` | `case-invalid-value`, `pass-no-spine-found` |
 

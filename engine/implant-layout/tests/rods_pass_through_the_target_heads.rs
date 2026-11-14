@@ -135,6 +135,12 @@ fn fixture() -> (SpineFit, SpineReading, Vec<AnchorProposal>) {
             [BodySide::Left, BodySide::Right].map(|side| {
                 let y = if side == BodySide::Left { 12.0 } else { -12.0 };
                 AnchorProposal {
+                    wider_than_pedicle: Vec::new(),
+                    screw_here: None,
+                    diameter_sources: Vec::new(),
+                    length_sources: Vec::new(),
+                    direction_sources: Vec::new(),
+                    look_sources: Vec::new(),
                     level: v.level,
                     side,
                     kind: AnchorKind::Screw,
@@ -162,6 +168,7 @@ fn fixture() -> (SpineFit, SpineReading, Vec<AnchorProposal>) {
                     length_status: ValueStatus::FromTables,
                     usual_length_mm: None,
                     pedicle: PedicleEstimate {
+                        sources: Vec::new(),
                         outer_width_mm: None,
                         inner_width_mm: None,
                         versions_too_narrow: 0,

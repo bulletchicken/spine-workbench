@@ -13,7 +13,7 @@
 // - A push back by a hair, so the lines of the see-through version lie on
 //   the bone and not half inside it.
 
-import { Color, MeshBasicMaterial, MeshStandardMaterial, Vector2, Vector4, type WebGLProgramParametersWithUniforms } from 'three';
+import { Color, MeshBasicMaterial, MeshStandardMaterial, Vector2, Vector4, type ColorRepresentation, type WebGLProgramParametersWithUniforms } from 'three';
 import { ACCENT, BONE, BONE_METALNESS, BONE_ROUGHNESS, FILL_EDGE, FORMATION, TINT_SHARE } from './look';
 
 export interface BoneUniforms {
@@ -50,7 +50,7 @@ float shown = uStrength
   * (1.0 - smoothstep(ownEdge - ${FILL_EDGE.toFixed(4)}, ownEdge, ownShare))
   * (1.0 - smoothstep(spineEdge - uSpineFill.w, spineEdge, spineShare));
 if (uEdgeFill >= 0.0) shown = uStrength * (1.0 - smoothstep(uEdgeFill * ${FORMATION.fillReach.toFixed(2)} - ${FORMATION.cellSoft.toFixed(2)}, uEdgeFill * ${FORMATION.fillReach.toFixed(2)}, vCell));
-if (shown < 0.004) discard;
+if (shown <= 0.0) discard;
 diffuseColor.a *= shown;
 `;
 
@@ -73,19 +73,20 @@ function withFill(uniforms: BoneUniforms) {
 
 export interface BoneMaterials {
   /** The bone in colour. */
-  solid: MeshStandardMaterial;
+  solid: MeshStandardMaterial | MeshBasicMaterial;
   /** The same shape drawn to the depth buffer only, for a bone that is faded or part filled. */
   depthOnly: MeshBasicMaterial;
   uniforms: BoneUniforms;
   /** Tint the bone this share of the way to its highlight: 0 is plain bone, 1 the whole highlight. */
   tint(amount: number): void;
+  flatColour(colour: ColorRepresentation): void;
   dispose(): void;
 }
 
 const PLAIN = new Color(BONE);
 const HIGHLIGHT = new Color(BONE).lerp(new Color(ACCENT), TINT_SHARE);
 
-export function boneMaterials(): BoneMaterials {
+export function boneMaterials(flat = false): BoneMaterials {
   const uniforms: BoneUniforms = {
     edgeFill: { value: -1 },
     strength: { value: 1 },
@@ -94,19 +95,10 @@ export function boneMaterials(): BoneMaterials {
     patientUp: { value: new Vector4(0, 0, 1, 0) },
     spineFill: { value: new Vector4(0, 1, 1, FILL_EDGE) },
   };
-  const solid = new MeshStandardMaterial({
-    color: PLAIN.clone(),
-    roughness: BONE_ROUGHNESS,
-    metalness: BONE_METALNESS,
-    vertexColors: true,
-    // Always blended, so its strength can change from frame to frame without building a new program.
-    transparent: true,
-    polygonOffset: true,
-    polygonOffsetFactor: 1,
-    polygonOffsetUnits: 1,
-  });
+  const surface = { color: PLAIN.clone(), vertexColors: !flat, transparent: true, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 };
+  const solid = flat ? new MeshBasicMaterial(surface) : new MeshStandardMaterial({ ...surface, roughness: BONE_ROUGHNESS, metalness: BONE_METALNESS });
   solid.onBeforeCompile = withFill(uniforms);
-  solid.customProgramCacheKey = () => 'spine-3d-bone';
+  solid.customProgramCacheKey = () => flat ? 'spine-3d-flat-bone' : 'spine-3d-bone';
 
   // Drawn among the blended things, in its turn: after the films, which must already be behind a
   // faded bone for it to fade over them, and before any bone's colour.
@@ -118,7 +110,9 @@ export function boneMaterials(): BoneMaterials {
     solid,
     depthOnly,
     uniforms,
+    flatColour(colour) { if (flat) solid.color.set(colour); },
     tint(amount) {
+      if (flat) return;
       solid.color.copy(PLAIN).lerp(HIGHLIGHT, Math.min(1, Math.max(0, amount)));
     },
     dispose() {

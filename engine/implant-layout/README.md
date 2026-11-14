@@ -55,6 +55,30 @@ right, including empty pedicles (`kind: none`). Hooks and empty pedicles
 have no screw diameter or length. Every absent optional field serialises
 as `null`.
 
+The contract also carries `firstIsSketch`, separate `upperEnds` and
+`lowerEnds` counts, each rod's `standingPointsMm`, and per-anchor
+`widerThanPedicle` counts and nullable `screwHere`. `DiameterCount` holds
+`diameterMm` and `versions`. `ScrewHere` holds `diameterMm`,
+`diameterAlsoSeen`, `lengthMm`, `lengthAlsoSeen`, nullable
+`screwToPedicle` and nullable `medialAngle`: the screw size before a
+pattern turns a pedicle into a hook or an empty place. Pedicle `sources`
+and anchor `diameterSources`, `lengthSources`, `directionSources` and
+`lookSources` retain evidence per quantity; each `LookSources` pairs a
+look `code` with its `sources`, beside the anchor's union of keys.
+These added lists are currently empty, `screwHere` is null and
+`firstIsSketch` is false. They do not yet describe the proposal's
+geometry, fallback status or evidence. `geometryStatus` covers both rod
+lines; a typical line must never be shown as measured millimetres.
+
+`rebuild_layout(&RebuildInput) -> Result<ImplantLayout, LayoutError>` is
+the entry for a placement changed by hand. Its input carries the original
+`layout: LayoutInput`, `upper`, `lower`, `anchors`, `rodMaterial` and
+`rodDiameterMm`. Each `AnchorChoice` has `level`, `side`, `kind`, nullable
+`diameterMm` and nullable `lengthMm`; null asks for the size in
+`screwHere`. Unspecified pedicles follow the first placement's pattern
+over the new span. This entry currently returns `tool-refused` with
+detail `rebuild-not-built` for every input.
+
 Errors distinguish invalid input, an empty fit and a refusal with a short
 reason. They cross the bridge as existing engine error codes. The layout
 proposer does not save a placement with the case.

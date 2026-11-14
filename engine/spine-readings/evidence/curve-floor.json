@@ -25,7 +25,7 @@
       "population": "Idiopathic scoliosis during growth.",
       "label": "guideline",
       "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5795289/",
-      "notes": "Full-text transcription supplied with the curve-floor specification. The guideline reports the SRS threshold of Cobb 10 degrees or higher together with recognisable axial rotation. The engine uses only its angular floor to name contract curves; it makes no diagnostic classification from that floor."
+      "notes": "Full text read. The guideline reports the SRS threshold of Cobb 10 degrees or higher together with recognisable axial rotation. The engine uses only its angular floor to name contract curves; it makes no diagnostic classification from that floor."
     }
   ]
 }

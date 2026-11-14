@@ -130,6 +130,9 @@ pub fn assemble(
         None => Vec::new(),
     };
     Ok(LayoutProposals {
+        first_is_sketch: false,
+        upper_ends: Vec::new(),
+        lower_ends: Vec::new(),
         tier: if input.fit.side_film.is_some() {
             FitTier::TwoFilms
         } else {

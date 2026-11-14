@@ -23,7 +23,7 @@ fn expect_observation(
     assert_eq!(cell.unit, unit, "{coordinate:?}");
     assert_eq!(cell.value, value, "{coordinate:?}");
     if matches!(cell.value, PublishedValue::Median { .. }) {
-        assert!(cell.section.contains("citation-audit-placement-tables.md"));
+        assert_eq!(cell.section, "Tables II and III");
     }
     let qualifier = cell.qualifier.as_deref().expect("observation conditions");
     for qualification in qualifications {
@@ -35,8 +35,7 @@ fn expect_observation(
     cell
 }
 
-// The expected values below are copied by hand from implant-mechanics.md
-// section 4, Contour loss after insertion table, rather than recomputed.
+// Expected contour-loss values are retained as printed, without recomputing them.
 #[test]
 fn cidambis_rod_deflection_is_retained() {
     expect_observation(
@@ -115,7 +114,7 @@ fn sias_rod_diameter_is_retained() {
 
 #[test]
 fn sias_reported_p_value_does_not_invent_a_statistical_test() {
-    // implant-mechanics.md section 4, Sia contour-loss row: p = 0.173.
+    // Sia contour-loss comparison: p = 0.173.
     expect_observation(
         Table::RodChoices,
         "contour-loss-p-value",
@@ -129,8 +128,8 @@ fn sias_reported_p_value_does_not_invent_a_statistical_test() {
 
 #[test]
 fn sias_titanium_before_kyphosis_is_retained() {
-    // citation-audit-placement-tables.md §A Sia 2019, Tables II–III; §B.9:
-    // the audit names Median (IQR), but does not transcribe these four IQRs.
+    // Sia 2019, Tables II–III: Median (IQR) is named, but these four IQRs
+    // have not been transcribed.
     expect_observation(
         Table::RodChoices,
         "before-kyphosis",
@@ -147,7 +146,7 @@ fn sias_titanium_before_kyphosis_is_retained() {
 
 #[test]
 fn sias_titanium_after_kyphosis_is_retained() {
-    // citation-audit-placement-tables.md §A Sia 2019, Tables II–III; §B.9.
+    // Sia 2019, Tables II–III.
     expect_observation(
         Table::RodChoices,
         "after-kyphosis",
@@ -164,7 +163,7 @@ fn sias_titanium_after_kyphosis_is_retained() {
 
 #[test]
 fn sias_cobalt_chrome_before_kyphosis_is_retained() {
-    // citation-audit-placement-tables.md §A Sia 2019, Tables II–III; §B.9.
+    // Sia 2019, Tables II–III.
     expect_observation(
         Table::RodChoices,
         "before-kyphosis",
@@ -181,7 +180,7 @@ fn sias_cobalt_chrome_before_kyphosis_is_retained() {
 
 #[test]
 fn sias_cobalt_chrome_after_kyphosis_is_retained() {
-    // citation-audit-placement-tables.md §A Sia 2019, Tables II–III; §B.9.
+    // Sia 2019, Tables II–III.
     expect_observation(
         Table::RodChoices,
         "after-kyphosis",
@@ -227,7 +226,7 @@ fn boissieres_less_kyphotic_rod_share_is_retained() {
 
 #[test]
 fn the_medial_shoulder_imbalance_share_is_retained() {
-    // fusion-levels.md section 3, UIV tilt drives T1 tilt row.
+    // Medial shoulder imbalance share in the UIV-tilt cohort (n = 151).
     expect_observation(
         Table::PlacementChecks,
         "medial-shoulder-imbalance",
@@ -241,7 +240,7 @@ fn the_medial_shoulder_imbalance_share_is_retained() {
 
 #[test]
 fn the_neck_imbalance_share_is_retained() {
-    // Same UIV-tilt row: this is a distinct outcome, not shoulder imbalance.
+    // Same UIV-tilt cohort: this is a distinct outcome, not shoulder imbalance.
     expect_observation(
         Table::PlacementChecks,
         "neck-imbalance",
@@ -255,7 +254,7 @@ fn the_neck_imbalance_share_is_retained() {
 
 #[test]
 fn the_lateral_shoulder_imbalance_share_is_retained() {
-    // Same UIV-tilt row: this is distinct from medial shoulder imbalance.
+    // Same UIV-tilt cohort: this is distinct from medial shoulder imbalance.
     expect_observation(
         Table::PlacementChecks,
         "lateral-shoulder-imbalance",
@@ -269,7 +268,7 @@ fn the_lateral_shoulder_imbalance_share_is_retained() {
 
 #[test]
 fn chens_younger_group_specificity_is_retained() {
-    // fusion-levels.md section 2b, LIV-index row: subgroup n is absent.
+    // LIV-index subgroup n is absent.
     expect_observation(
         Table::PlacementChecks,
         "specificity",
@@ -298,7 +297,7 @@ fn chens_younger_group_specificity_is_retained() {
 
 #[test]
 fn chens_younger_group_positive_value_is_retained() {
-    // Same row, under 15 years PPV; full-cohort PPV remains 55.5%.
+    // Under-15 PPV in the same Chen cohort; full-cohort PPV remains 55.5%.
     expect_observation(
         Table::PlacementChecks,
         "positive-predictive-value",
@@ -327,7 +326,7 @@ fn chens_younger_group_positive_value_is_retained() {
 
 #[test]
 fn chens_younger_group_age_boundary_is_retained() {
-    // Same row: an exclusive upper age bound applies to both observations.
+    // An exclusive upper age bound applies to both under-15 observations.
     expect_observation(
         Table::PlacementChecks,
         "age-upper-bound",
@@ -345,7 +344,7 @@ fn chens_younger_group_age_boundary_is_retained() {
 
 #[test]
 fn the_robot_channel_failure_range_is_retained() {
-    // screw-sizing-and-placement.md P1, Hard floor: a mixed cited summary,
+    // Hard-floor summary of the cited studies, not a separate paper and
     // not the separate Akazawa 31.5% grade-4 observation.
     expect_observation(
         Table::DiameterRules,
@@ -368,8 +367,7 @@ fn the_robot_channel_failure_range_is_retained() {
 
 #[test]
 fn the_anterior_thread_limit_is_retained() {
-    // screw-sizing-and-placement.md section 4 and P4 Rule: thread count
-    // cannot be converted into mm without an unpublished thread pitch.
+    // Thread count cannot be converted into mm without an unpublished thread pitch.
     expect_observation(
         Table::LengthRules,
         "anterior-protrusion-limit",
@@ -387,7 +385,7 @@ fn the_anterior_thread_limit_is_retained() {
 
 #[test]
 fn the_upper_thoracic_measured_chord_range_is_retained() {
-    // screw-sizing-and-placement.md P4, measured chord/trajectory column.
+    // Regional measured chord/trajectory summary.
     expect_observation(
         Table::LengthRules,
         "measured-chord-trajectory",
@@ -404,7 +402,7 @@ fn the_upper_thoracic_measured_chord_range_is_retained() {
 
 #[test]
 fn the_lower_thoracic_measured_chord_range_is_retained() {
-    // Same P4 column: retain the region instead of assigning each level.
+    // Retain the region instead of assigning each level.
     expect_observation(
         Table::LengthRules,
         "measured-chord-trajectory",
@@ -421,7 +419,7 @@ fn the_lower_thoracic_measured_chord_range_is_retained() {
 
 #[test]
 fn the_lumbar_measured_chord_range_is_retained() {
-    // Same P4 range, also stated for Pluemvitayaporn after Table 3.
+    // The regional range is also reported for Pluemvitayaporn.
     expect_observation(
         Table::Chords,
         "trajectory-length",
@@ -438,7 +436,7 @@ fn the_lumbar_measured_chord_range_is_retained() {
 
 #[test]
 fn cuis_medial_wall_danger_depth_is_retained() {
-    // screw-sizing-and-placement.md section 5 and P6: Cui 2012, n=30.
+    // Cui 2012, n=30.
     expect_observation(
         Table::PlacementChecks,
         "medial-wall-danger-depth",
@@ -458,8 +456,8 @@ fn cuis_medial_wall_danger_depth_is_retained() {
 
 #[test]
 fn the_published_upper_thoracic_entry_offset_is_retained() {
-    // screw-sizing-and-placement.md section 5 and P6: Kim technique via
-    // Etemadifar, about 2 mm lateral, with a specific landmark reference.
+    // Kim technique via Etemadifar: about 2 mm lateral,
+    // with a specific landmark reference.
     expect_observation(
         Table::PlacementChecks,
         "entry-lateral-offset",
@@ -483,8 +481,7 @@ fn the_published_upper_thoracic_entry_offset_is_retained() {
 
 #[test]
 fn sias_rod_angles_and_patient_changes_are_medians_with_iqrs() {
-    // Hand-typed from citation-audit-placement-tables.md §A Sia 2019,
-    // Tables II and III; §B.9. Changes are per-patient median reductions.
+    // Sia 2019, Tables II and III: changes are per-patient median reductions.
     for (key, group, value, iqr) in [
         ("before-angle", "sia-titanium", 60.5, 10.4),
         ("after-angle", "sia-titanium", 37.0, 11.6),
@@ -515,8 +512,7 @@ fn sias_rod_angles_and_patient_changes_are_medians_with_iqrs() {
 
 #[test]
 fn balikcis_standard_and_mid_length_catalogues_remain_separate() {
-    // Hand-typed from full-tables-from-five-papers.md §A Balikci Table1.
-    // The two printed lists are not combined or generated.
+    // Balikci Table 1: the two printed lists are not combined or generated.
     for (group, value, category) in [
         ("balikci-standard-25", 25.0, "Standard length screws"),
         ("balikci-standard-30", 30.0, "Standard length screws"),
@@ -541,17 +537,13 @@ fn balikcis_standard_and_mid_length_catalogues_remain_separate() {
             PublishedValue::Scalar { value },
             &[category, "13–54", "AIS 86"],
         );
-        assert!(
-            cell.section.contains("citation-audit-placement-tables.md")
-                || cell.section.contains("full-tables-from-five-papers.md")
-        );
+        assert_eq!(cell.section, "Table 1");
     }
 }
 
 #[test]
 fn balikcis_availability_and_cited_lengths_keep_their_population_and_origin() {
-    // Hand-typed from citation-audit-placement-tables.md §A Balikci 2019,
-    // available screws, cited Krag range and regional lengths; §B.8.
+    // Balikci 2019: available screws, cited Krag range and regional lengths.
     for (table, key, group, unit, value) in [
         (
             Table::ScrewGrids,
@@ -598,9 +590,13 @@ fn balikcis_availability_and_cited_lengths_keep_their_population_and_origin() {
         ),
     ] {
         let cell = expect_observation(table, key, group, "balikci-2019", unit, value, &[]);
-        assert!(
-            cell.section.contains("citation-audit-placement-tables.md")
-                || cell.section.contains("full-tables-from-five-papers.md")
+        assert_eq!(
+            cell.section,
+            if key == "length-step" {
+                "Table 1"
+            } else {
+                "not recorded"
+            }
         );
         // Cohort metadata belongs to the source, with cell-specific conditions
         // retained in the qualifier. Check the facts rather than an old phrase.
@@ -646,17 +642,14 @@ fn balikcis_availability_and_cited_lengths_keep_their_population_and_origin() {
                 "ages 13–54",
             ],
         );
-        assert!(
-            cell.section.contains("citation-audit-placement-tables.md")
-                || cell.section.contains("full-tables-from-five-papers.md")
-        );
+        assert_eq!(cell.section, "not recorded");
     }
 }
 
 #[test]
 fn grabalas_printed_expansions_retain_the_mixed_cohort_and_table_discrepancies() {
-    // Hand-typed from citation-audit-placement-tables.md §A Grabala 2023,
-    // Tables 1, 3 and 6 and discussion; §B.10. Printed figures are not repaired.
+    // Grabala 2023, Tables 1, 3 and 6 and discussion.
+    // Printed figures are not repaired.
     for (key, group, value) in [
         (
             "expansion-by-level",
@@ -738,7 +731,15 @@ fn grabalas_printed_expansions_retain_the_mixed_cohort_and_table_discrepancies()
                 "without repair",
             ],
         );
-        assert!(cell.section.contains("citation-audit-placement-tables.md"));
+        assert_eq!(
+            cell.section,
+            match group {
+                "grabala" => "Table 3",
+                "grabala-text-5.0" => "Discussion",
+                group if group.starts_with("grabala-age-") => "Table 1 and age-group results",
+                _ => "Table 6",
+            }
+        );
     }
     let grid = expect_observation(
         Table::ScrewGrids,
@@ -756,13 +757,12 @@ fn grabalas_printed_expansions_retain_the_mixed_cohort_and_table_discrepancies()
             "syndromic 18",
         ],
     );
-    assert!(grid.section.contains("citation-audit-placement-tables.md"));
+    assert_eq!(grid.section, "not recorded");
 }
 
 #[test]
 fn abe_and_salmingo_are_not_independent_twenty_patient_observations() {
-    // Hand-typed from citation-audit-placement-tables.md §A Abe 2015 and
-    // Salmingo 2014 records; §B.10. The audit calls the overlap very probable.
+    // Abe 2015 and Salmingo 2014 very probably report the same patients.
     for (source, key, group, unit, value) in [
         ("abe-2015", "diameter", "ti6al7nb", Unit::Mm, 6.0),
         (
@@ -846,13 +846,20 @@ fn abe_and_salmingo_are_not_independent_twenty_patient_observations() {
             PublishedValue::Scalar { value },
             &["Very probably", "same 20-patient cohort", "not independent"],
         );
-        assert!(cell.section.contains("citation-audit-placement-tables.md"));
+        assert_eq!(
+            cell.section,
+            if source == "abe-2015" {
+                "not recorded"
+            } else {
+                "abstract"
+            }
+        );
     }
 }
 
 #[test]
 fn rod_simulation_values_keep_their_model_conditions() {
-    // citation-audit-placement-tables.md §A Wang 2016 and Borrelli 2025.
+    // Wang 2016 and Borrelli 2025.
     let wang = expect_observation(
         Table::RodChoices,
         "diameter",
@@ -869,7 +876,7 @@ fn rod_simulation_values_keep_their_model_conditions() {
             "only on the concave side",
         ],
     );
-    assert!(wang.section.contains("citation-audit-placement-tables.md"));
+    assert_eq!(wang.section, "abstract");
     let borrelli = expect_observation(
         Table::RodChoices,
         "screw-cantilever-length",
@@ -885,17 +892,12 @@ fn rod_simulation_values_keep_their_model_conditions() {
             "not a measured adolescent head offset",
         ],
     );
-    assert!(
-        borrelli
-            .section
-            .contains("citation-audit-placement-tables.md")
-    );
+    assert_eq!(borrelli.section, "not recorded");
 }
 
 #[test]
 fn sarwahis_anterior_breach_values_keep_both_populations() {
-    // Hand-typed from citation-audit-placement-tables.md §A Sarwahi 2017,
-    // abstract values and recordDiffers population correction.
+    // Sarwahi 2017 abstract values and the qualified population.
     for (key, value) in [
         (
             "anterior-breach-threshold",
@@ -931,6 +933,6 @@ fn sarwahis_anterior_breach_values_keep_both_populations() {
                 "not an exclusively AIS cohort",
             ],
         );
-        assert!(cell.section.contains("citation-audit-placement-tables.md"));
+        assert_eq!(cell.section, "abstract");
     }
 }

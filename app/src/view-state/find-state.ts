@@ -1,8 +1,14 @@
 import { useStore } from 'zustand';
 import { createStore } from 'zustand/vanilla';
-import type { ErrorCode, Level } from '@/shapes';
+import type { ErrorCode, Level, FilmKind, FilmMarks } from '@/shapes';
 
 export interface FindState {
+  kinds: readonly FilmKind[];
+  sideLooked: string | null;
+  sideBaseline: FilmMarks | null;
+  sideResult(marks: FilmMarks): void;
+  searchedKinds(kinds: readonly FilmKind[]): void;
+  approveSide(revision: string): void;
   phase: 'idle' | 'searching' | 'replaying' | 'found' | 'failed';
   share: number;
   searched: number;
@@ -24,12 +30,15 @@ export interface FindState {
   clear(): void;
 }
 
-const EMPTY = { phase: 'idle', share: 0, searched: 0, failure: null, reviewing: [], review: null, looked: [], holding: false } as const;
+const EMPTY = { kinds: [], sideLooked: null, sideBaseline: null, phase: 'idle', share: 0, searched: 0, failure: null, reviewing: [], review: null, looked: [], holding: false } as const;
 
 /** A look belongs to this visit, and never changes the case's marks. */
 export function createFindState() {
   return createStore<FindState>()((set, get) => ({
     ...EMPTY,
+    sideResult: (sideBaseline) => { set({ sideBaseline, sideLooked: null }); },
+    searchedKinds: (kinds) => { set({ kinds }); },
+    approveSide: (sideLooked) => { set({ sideLooked }); },
     searching: (searched) => { set({ ...EMPTY, phase: 'searching', searched }); },
     progress: (share) => {
       if (get().phase === 'searching' && Number.isFinite(share)) set({ share: Math.max(get().share, Math.min(1, share)) });
@@ -40,7 +49,7 @@ export function createFindState() {
     openReview: (levels) => { set({ reviewing: [...levels], review: levels.length === 0 ? null : 0, holding: false }); },
     lookedAt: (level) => { set({ looked: get().looked.includes(level) ? get().looked : [...get().looked, level], holding: true }); },
     look: (at) => { set({ review: at !== null && get().reviewing[at] !== undefined ? at : null, holding: false }); },
-    rest: () => { set({ ...EMPTY, looked: get().phase === 'found' ? get().looked : [] }); },
+    rest: () => { set({ ...EMPTY, looked: get().phase === 'found' ? get().looked : [], sideLooked: get().phase === 'found' ? get().sideLooked : null, sideBaseline: get().phase === 'found' ? get().sideBaseline : null }); },
     clear: () => { set(EMPTY); },
   }));
 }

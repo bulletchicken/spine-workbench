@@ -19,6 +19,7 @@ import type { View } from '../looking/view';
 import { VIEW_MOVE_MS, settle, viewBetween } from '../motion/easing';
 import { fittedFilmCamera } from '../placing/fitted-film-camera';
 import type { DrawnSpine } from '../scene/drawn-spine';
+import type { Pointed } from '../scene/pointed';
 import type { FilmPixels } from '../scene/film-wall';
 import { type HandTurning, attachHandTurning } from '../scene/hand-turning';
 import { modelSpine } from '../scene/spine-model';
@@ -63,6 +64,10 @@ export interface Spine3DProps {
   onPoint?: (level: Level | null) => void;
   /** A bone was pressed; `null` for a press on nothing. */
   onChoose?: (level: Level | null) => void;
+  /** The complete bone or layer identity under the pointer. */
+  onPointed?: (pointed: Pointed | null) => void;
+  /** The complete identity chosen by a tap. */
+  onChosen?: (pointed: Pointed | null) => void;
   /** The spine was turned or zoomed by hand. */
   onTurned?: () => void;
   /** The stage and the spine are ready to be driven, or (with `null`) are about to go. */
@@ -88,6 +93,8 @@ export function Spine3D({
   label = SPINE_3D_LABEL,
   onPoint,
   onChoose,
+  onPointed,
+  onChosen,
   onTurned,
   onReady,
   ref,
@@ -97,14 +104,14 @@ export function Spine3D({
   const spine = useRef<DrawnSpine | null>(null);
   const hand = useRef<HandTurning | null>(null);
   const moving = useRef<(() => void) | null>(null);
-  const pointed = useRef<Level | null>(null);
+  const pointed = useRef<{ spine: DrawnSpine; level: Level } | null>(null);
   /** False until the stage has been given its opening view. */
   const opened = useRef(false);
 
   // The newest callbacks, whatever functions the caller hands in on each render.
-  const told = useRef({ onPoint, onChoose, onTurned, onReady, highlighted });
+  const told = useRef({ onPoint, onChoose, onPointed, onChosen, onTurned, onReady, highlighted });
   useLayoutEffect(() => {
-    told.current = { onPoint, onChoose, onTurned, onReady, highlighted };
+    told.current = { onPoint, onChoose, onPointed, onChosen, onTurned, onReady, highlighted };
   });
 
   const lookFrom = useRef((to: ViewName | View, options: { animate?: boolean } = {}) => {
@@ -222,13 +229,14 @@ export function Spine3D({
       onPoint: (found) => {
         const level = found?.level ?? null;
         if (told.current.highlighted === undefined) {
-          if (pointed.current !== null) spine.current?.set({ tint: 0 }, pointed.current);
-          if (level !== null) spine.current?.set({ tint: 1 }, level);
+          if (pointed.current !== null) pointed.current.spine.set({ tint: 0 }, pointed.current.level);
+          if (found !== null && level !== null) found.spine.set({ tint: 1 }, level);
         }
-        pointed.current = level;
+        pointed.current = found !== null && level !== null ? { spine: found.spine, level } : null;
         told.current.onPoint?.(level);
+        told.current.onPointed?.(found);
       },
-      onChoose: (found) => told.current.onChoose?.(found?.level ?? null),
+      onChoose: (found) => { told.current.onChoose?.(found?.level ?? null); told.current.onChosen?.(found); },
     });
     hand.current = attached;
     return () => {

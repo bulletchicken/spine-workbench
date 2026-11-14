@@ -1,0 +1,14 @@
+.tile:has(> .side-controls) { display: grid; grid-template-rows: minmax(0, 1fr) auto; background: var(--page); }
+.tile:has(> .side-controls) > .film { position: relative; min-height: 0; }
+.side-controls {
+  position: relative; z-index: var(--z-chip);
+  display: grid; gap: var(--space-8); padding: var(--space-12); margin: 0;
+  border: var(--hairline) solid var(--line); border-radius: var(--r-large);
+  background: var(--page); color: var(--ink); font: var(--type-small);
+  pointer-events: auto;
+}
+.side-controls legend { float: left; width: 100%; font: var(--type-small-medium); }
+.side-controls label { display: flex; align-items: center; gap: var(--space-8); cursor: pointer; }
+.tiles.reviewing .tile[data-place="side"] .mark { opacity: 1; }
+.side-controls input { accent-color: var(--ink); }
+.side-controls :is(.button, button) { height: auto; min-height: var(--quiet-h); white-space: normal; text-align: left; }

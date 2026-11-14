@@ -228,7 +228,7 @@ mod tests {
 
     #[test]
     fn every_published_selective_threshold_keeps_its_strict_boundary() {
-        // The note's words are "greater than" for ratios and "less than"
+        // The published comparisons are "greater than" for ratios and "less than"
         // for residual Cobb, standing Cobb and regional kyphosis. Equality
         // therefore never meets any of these criteria.
         for (group, keys) in [
@@ -381,7 +381,7 @@ mod tests {
             Err(CannotTellCode::TwistNotMeasured)
         );
 
-        // DECISIONS corrects the review's printed TL/L-bend cell to read
+        // The project rule interprets the review's printed TL/L-bend cell as
         // the thoracic bend for selective lumbar fusion. The two curves
         // deliberately straddle the boundary in opposite directions.
         let (limit, _) = threshold("selective-lumbar", "tll-bending-cobb-max").unwrap();

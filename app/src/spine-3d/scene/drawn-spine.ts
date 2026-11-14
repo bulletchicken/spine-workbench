@@ -15,8 +15,8 @@
 // a fill of its own by height, the end both fills start from (the top, T1
 // first, unless told otherwise), a place and a turn of its own, and a shadow.
 
-import { Color, Group, LineBasicMaterial, LineSegments, Matrix4, Mesh } from 'three';
-import type { FittedVertebra, Level } from '@/shapes';
+import { type ColorRepresentation, type Texture, Color, Group, LineBasicMaterial, LineSegments, Matrix4, Mesh } from 'three';
+import type { FittedVertebra, Level, VertebraPose } from '@/shapes';
 import type { Bounds } from '../looking/framing';
 import { viewAxes } from '../looking/view';
 import { type BodyLandmarks, moveLandmarks } from '../placing/body-landmarks';
@@ -25,9 +25,12 @@ import { moved, pressedOnto } from '../placing/flat-on-film';
 import { toScene } from '../placing/scene-axes';
 import { type Vec3, add, apply, scale as scaled, sub } from '../placing/vectors';
 import { type BoneMaterials, boneMaterials } from './bone-material';
-import { CAGE, FILL_EDGE, REVEAL_RISE } from './look';
+import { BONE, CAGE, FILL_EDGE, REVEAL_RISE } from './look';
 import { formationDrawing, type FormationDrawing } from './formation-drawing';
 import type { ModelBone, SpineModel } from './spine-model';
+import { placingOf, type Placing } from '../placing/place-vertebra';
+import { poseBetween, sameShape } from '../placing/pose-between';
+import { sceneLayer, type SceneLayer, type SceneLayerInside } from './scene-layer';
 
 /** A film's sheet, as far as pressing a bone onto it needs: which way it faces and where it stands. */
 export type FilmSheet = Pick<FilmPlane, 'towardReader' | 'out'>;
@@ -46,6 +49,8 @@ export interface BoneValues {
 
 /** What can be set on a whole spine. */
 export interface SpineValues {
+  strength: number;
+  flatColour: ColorRepresentation;
   /** 0 flat against the film … 1 its true depth. Multiplies every bone's pose. */
   depth: number;
   /** How much of the spine is filled, by height in the patient, 0 to 1. */
@@ -75,6 +80,8 @@ const DRAWN = { depth: 0, colour: 1, lines: 2 } as const;
 const BONE_DEFAULTS: BoneValues = { pose: 1, reveal: 1, fill: 1, strength: 1, tint: 0, cage: 0, edgeFill: -1 };
 
 const SPINE_DEFAULTS: SpineValues = {
+  strength: 1,
+  flatColour: BONE,
   depth: 1,
   fill: 1,
   fillEdge: FILL_EDGE / 4,
@@ -89,6 +96,8 @@ const SPINE_DEFAULTS: SpineValues = {
 };
 
 export interface DrawnSpine {
+  addLayer(): SceneLayer;
+  betweenPoses(from: readonly VertebraPose[], to: readonly VertebraPose[], p: number): void;
   /** The externally timed points, edges and threads. */
   readonly formation: FormationDrawing;
   /** The levels drawn, top to bottom. */
@@ -124,6 +133,7 @@ export interface DrawnSpine {
 
 interface DrawnBone {
   of: ModelBone;
+  placing: Placing;
   values: BoneValues;
   holder: Group;
   solid: Mesh;
@@ -147,6 +157,10 @@ export interface SpineHost {
 export interface DrawnSpineInside {
   spine: DrawnSpine;
   root: Group;
+  model: SpineModel;
+  flat: boolean;
+  layers: readonly SceneLayerInside[];
+  pass(which: 'base' | 'opaque-depth' | 'parts' | 'rest', texture?: Texture | null, width?: number, height?: number): void;
   /** The solid meshes that can be pointed at, each tagged with its level. */
   pickable(): Mesh[];
   /** True when the bone of `level` is filled in at this point of its own frame. */
@@ -155,11 +169,15 @@ export interface DrawnSpineInside {
   followFilm(): void;
 }
 
-export function drawSpine(model: SpineModel, host: SpineHost): DrawnSpineInside {
+export function drawSpine(model: SpineModel, host: SpineHost, flat = false): DrawnSpineInside {
+  const releaseModel = model.retain();
+  const layers: SceneLayerInside[] = [];
+  let removed = false, travelled = false;
   const root = new Group();
   root.matrixAutoUpdate = false;
   host.scene.add(root);
 
+  let liveHeights = model.heights;
   let spineValues: SpineValues = { ...SPINE_DEFAULTS };
   /** Where the sheet that "flat" means is now, and the sheet the bones were last pressed onto. */
   let sheetNow: () => FilmSheet | null = () => null;
@@ -173,7 +191,7 @@ export function drawSpine(model: SpineModel, host: SpineHost): DrawnSpineInside 
   const cageOnFilm = new Color(CAGE.onFilm);
 
   const bones: DrawnBone[] = model.bones.map((of) => {
-    const materials = boneMaterials();
+    const materials = boneMaterials(flat);
     // The patient's up axis in the bone's own frame is the bottom row of its rotation.
     const up = of.placing.rotation[2];
     materials.uniforms.patientUp.value.set(up[0], up[1], up[2], of.placing.centre[2]);
@@ -194,7 +212,7 @@ export function drawSpine(model: SpineModel, host: SpineHost): DrawnSpineInside 
     depthOnly.visible = false;
     holder.add(depthOnly, solid, lines);
     root.add(holder);
-    return { of, values: { ...BONE_DEFAULTS }, holder, solid, depthOnly, lines, materials, lineMaterial };
+    return { of, placing: of.placing, values: { ...BONE_DEFAULTS }, holder, solid, depthOnly, lines, materials, lineMaterial };
   });
   const byLevel = new Map(bones.map((bone) => [bone.of.level, bone]));
 
@@ -212,7 +230,7 @@ export function drawSpine(model: SpineModel, host: SpineHost): DrawnSpineInside 
       0, 0, 0, 1,
     );
     root.matrixWorldNeedsUpdate = true;
-    root.visible = spineValues.visible;
+    root.visible = spineValues.visible && spineValues.strength > 0;
   };
 
   /** How much of its distance from the film's sheet a bone keeps. */
@@ -220,7 +238,7 @@ export function drawSpine(model: SpineModel, host: SpineHost): DrawnSpineInside 
 
   /** Where the bone's own frame is put in the patient: stood by the fit, lowered while it is revealed, pressed toward the film. */
   const placingOfBone = (bone: DrawnBone): { linear: readonly [Vec3, Vec3, Vec3]; offset: Vec3 } => {
-    const { rotation, centre } = bone.of.placing;
+    const { rotation, centre } = bone.placing;
     const rising: Vec3 = [centre[0], centre[1], centre[2] - (1 - bone.values.reveal) * spineValues.revealRise];
     const kept = keptBy(bone);
     if (plane === null || kept >= 1) return { linear: rotation, offset: rising };
@@ -250,31 +268,68 @@ export function drawSpine(model: SpineModel, host: SpineHost): DrawnSpineInside 
 
   const paintBone = (bone: DrawnBone) => {
     const { values, materials } = bone;
-    const strength = values.strength * values.reveal;
+    const strength = values.strength * values.reveal * spineValues.strength;
+    const up = bone.placing.rotation[2];
+    materials.uniforms.patientUp.value.set(up[0], up[1], up[2], bone.placing.centre[2]);
     materials.uniforms.strength.value = strength;
     materials.uniforms.fill.value = values.fill;
     materials.uniforms.edgeFill.value = values.edgeFill;
     // A share along a fill runs from 0 at the end that fills first to 1 at the other.
     const fromTop = spineValues.fillFrom === 'top';
     const [ownLow, ownHigh] = bone.of.ownHeights;
-    const [low, high] = model.heights;
+    const [low, high] = liveHeights;
     materials.uniforms.ownHeights.value.set(fromTop ? ownHigh : ownLow, fromTop ? ownLow - ownHigh : ownHigh - ownLow);
     materials.uniforms.spineFill.value.set(fromTop ? high : low, fromTop ? low - high : high - low, spineValues.fill, spineValues.fillEdge);
     materials.tint(values.tint);
+    materials.flatColour(spineValues.flatColour);
     const whole = values.fill >= 1 && spineValues.fill >= 1;
     bone.solid.visible = strength > 0 && values.fill > 0 && spineValues.fill > 0;
     // Drawn to the depth buffer first whenever anything could show through it.
     bone.depthOnly.visible = bone.solid.visible && (strength < 1 || !whole);
     bone.lineMaterial.color.copy(cageOnPage).lerp(cageOnFilm, spineValues.cageOnFilm);
-    bone.lineMaterial.opacity = CAGE.strength * values.cage;
-    bone.lines.visible = values.cage > 0;
+    bone.lineMaterial.opacity = flat ? 0 : CAGE.strength * values.cage * spineValues.strength;
+    bone.lines.visible = !flat && bone.lineMaterial.opacity > 0;
   };
 
   const clamp = (value: number) => Math.min(1, Math.max(0, value));
 
   const formation = formationDrawing(model, root, () => { host.changed(); });
+  const formationGroup = root.children[bones.length];
+  let formationVisible = false, passing = false;
   const spine: DrawnSpine = {
     formation,
+    addLayer() {
+      if (removed) throw new RangeError('The spine has been removed');
+      const made = sceneLayer(root, new Map(bones.map((bone) => [bone.of.level, bone.holder])), () => { host.changed(); }, () => {
+        const at = layers.indexOf(made); if (at >= 0) layers.splice(at, 1);
+      });
+      layers.push(made); host.changed(); return made.layer;
+    },
+    betweenPoses(from, to, p) {
+      const complete = (poses: readonly VertebraPose[]) => poses.length === bones.length && new Set(poses.map((pose) => pose.level)).size === bones.length && bones.every((bone) => {
+        const pose = poses.find((pose) => pose.level === bone.of.level);
+        return pose !== undefined && sameShape(pose, bone.of.vertebra.pose) && [...pose.centre, ...pose.rotation].every(Number.isFinite);
+      });
+      if (!Number.isFinite(p) || !complete(from) || !complete(to)) throw new RangeError('A complete compatible pose set is required');
+      const next = bones.map((bone) => {
+        const a = from.find((pose) => pose.level === bone.of.level), b = to.find((pose) => pose.level === bone.of.level);
+        if (a === undefined || b === undefined) throw new RangeError('Missing pose');
+        return placingOf(poseBetween(a, b, p));
+      });
+      travelled = true;
+      const heights: [number, number] = [Infinity, -Infinity];
+      bones.forEach((bone, i) => {
+        bone.placing = next[i] ?? bone.placing;
+        const points = bone.of.geometry.getAttribute('position');
+        for (let j = 0; j < points.count; j++) {
+          const z = bone.placing.toPatient([points.getX(j), points.getY(j), points.getZ(j)])[2];
+          heights[0] = Math.min(heights[0], z); heights[1] = Math.max(heights[1], z);
+        }
+      });
+      liveHeights = heights;
+      bones.forEach((bone, i) => { bone.placing = next[i] ?? bone.placing; placeBone(bone); paintBone(bone); });
+      host.changed();
+    },
     levels: bones.map((bone) => bone.of.level),
     set(values, levels) {
       const chosen = levels === undefined ? bones : (typeof levels === 'string' ? [levels] : levels).flatMap((level) => byLevel.get(level) ?? []);
@@ -289,12 +344,13 @@ export function drawSpine(model: SpineModel, host: SpineHost): DrawnSpineInside 
       host.changed();
     },
     setSpine(values) {
-      spineValues = { ...spineValues, ...values, depth: clamp(values.depth ?? spineValues.depth), fill: clamp(values.fill ?? spineValues.fill), cageOnFilm: clamp(values.cageOnFilm ?? spineValues.cageOnFilm) };
+      spineValues = { ...spineValues, ...values, strength: clamp(values.strength ?? spineValues.strength), depth: clamp(values.depth ?? spineValues.depth), fill: clamp(values.fill ?? spineValues.fill), cageOnFilm: clamp(values.cageOnFilm ?? spineValues.cageOnFilm) };
       placeRoot();
       for (const bone of bones) {
         placeBone(bone);
         paintBone(bone);
       }
+      for (const layer of layers) layer.prepare(spineValues.strength, null, 1, 1);
       host.changed();
     },
     pressOnto(film) {
@@ -304,7 +360,8 @@ export function drawSpine(model: SpineModel, host: SpineHost): DrawnSpineInside 
       host.changed();
     },
     settle() {
-      for (const bone of bones) bone.values = { ...BONE_DEFAULTS };
+      travelled = false; liveHeights = model.heights;
+      for (const bone of bones) { bone.values = { ...BONE_DEFAULTS }; bone.placing = bone.of.placing; }
       spine.setSpine({ depth: 1, fill: 1 });
     },
     valuesOf: (level) => {
@@ -330,6 +387,17 @@ export function drawSpine(model: SpineModel, host: SpineHost): DrawnSpineInside 
       return add(add(middle, scaled(turned, spineValues.scale)), spineValues.offset);
     },
     bounds() {
+      if (travelled) {
+        const low: [number, number, number] = [Infinity, Infinity, Infinity], high: [number, number, number] = [-Infinity, -Infinity, -Infinity];
+        for (const bone of bones) {
+          const { linear, offset } = placingOfBone(bone), points = bone.of.geometry.getAttribute('position');
+          for (let i = 0; i < points.count; i++) {
+            const point = spine.inScene(add(offset, apply(linear, [points.getX(i), points.getY(i), points.getZ(i)])));
+            for (const axis of [0, 1, 2] as const) { low[axis] = Math.min(low[axis], point[axis]); high[axis] = Math.max(high[axis], point[axis]); }
+          }
+        }
+        return { low, high };
+      }
       const { low, high } = model.bounds;
       const reach: [number, number, number] = [Infinity, Infinity, Infinity];
       const top: [number, number, number] = [-Infinity, -Infinity, -Infinity];
@@ -349,12 +417,15 @@ export function drawSpine(model: SpineModel, host: SpineHost): DrawnSpineInside 
       return { low: reach, high: top };
     },
     remove() {
+      if (removed) return; removed = true;
+      for (const layer of [...layers]) layer.layer.remove();
       formation.dispose();
       host.scene.remove(root);
       for (const bone of bones) {
         bone.materials.dispose();
         bone.lineMaterial.dispose();
       }
+      releaseModel();
       host.removed(spine);
     },
   };
@@ -368,7 +439,27 @@ export function drawSpine(model: SpineModel, host: SpineHost): DrawnSpineInside 
   return {
     spine,
     root,
-    pickable: () => (spineValues.visible ? bones.filter((bone) => bone.solid.visible && bone.materials.uniforms.strength.value > 0.05).map((bone) => bone.solid) : []),
+    model,
+    flat,
+    layers,
+    pass(which, texture = null, width = 1, height = 1) {
+      if (formationGroup !== undefined) {
+        if (which === 'opaque-depth') { formationVisible = formationGroup.visible; passing = true; formationGroup.visible = false; }
+        else if (which === 'parts') formationGroup.visible = false;
+        else if (passing) { formationGroup.visible = formationVisible; if (which === 'rest') passing = false; }
+      }
+      for (const bone of bones) {
+        paintBone(bone);
+        if (which === 'opaque-depth') {
+          bone.depthOnly.visible = !flat && bone.solid.visible && bone.materials.uniforms.strength.value >= 1;
+          bone.solid.visible = false; bone.lines.visible = false;
+        } else if (which === 'parts') {
+          bone.depthOnly.visible = false; bone.solid.visible = false; bone.lines.visible = false;
+        }
+      }
+      for (const layer of layers) { layer.prepare(spineValues.strength, texture, width, height); layer.show(which === 'parts' || which === 'rest'); }
+    },
+    pickable: () => (!flat && !removed && spineValues.visible ? bones.filter((bone) => bone.solid.visible && bone.materials.uniforms.strength.value > 0).map((bone) => bone.solid) : []),
     followFilm() {
       const now = sheetNow();
       const same = now === plane || (now !== null && plane !== null && now.out === plane.out && now.towardReader.every((part, i) => part === plane?.towardReader[i]));
@@ -380,7 +471,7 @@ export function drawSpine(model: SpineModel, host: SpineHost): DrawnSpineInside 
       const bone = byLevel.get(level);
       if (!bone) return false;
       const upOwn = (own[2] - bone.of.ownHeights[0]) / (bone.of.ownHeights[1] - bone.of.ownHeights[0]);
-      const upSpine = (bone.of.placing.toPatient(own)[2] - model.heights[0]) / (model.heights[1] - model.heights[0]);
+      const upSpine = (bone.placing.toPatient(own)[2] - liveHeights[0]) / (liveHeights[1] - liveHeights[0]);
       const fromTop = spineValues.fillFrom === 'top';
       const ownShare = fromTop ? 1 - upOwn : upOwn;
       const spineShare = fromTop ? 1 - upSpine : upSpine;

@@ -143,7 +143,7 @@ mod tests {
 
     #[test]
     fn the_apex_and_convex_disc_components_follow_the_words_but_grade_stays_missing() {
-        // fusion-levels §2d: an L1 apex lies above the L1/2 disc; L2 lies
+        // An L1 apex lies above the L1/2 disc; L2 lies
         // below it. A left-convex disc with signed angle -1 is closed,
         // zero is neutral and +1 is open. These are explicit made-up
         // readings: no Nash–Moe number is inferred from a twist angle.

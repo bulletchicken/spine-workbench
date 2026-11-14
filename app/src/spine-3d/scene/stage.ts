@@ -6,11 +6,11 @@
 // animation loop. It never animates anything itself: the view, every bone
 // and every film are set from outside, each frame if need be.
 
-import { Group, HemisphereLight, Raycaster, SRGBColorSpace, Scene, Vector3, WebGLRenderer } from 'three';
+import { DepthTexture, Vector2, WebGLRenderTarget, Group, HemisphereLight, Raycaster, SRGBColorSpace, Scene, Vector3, WebGLRenderer } from 'three';
 import type { Level } from '@/shapes';
 import { joinLoop } from '@/choreography/one-loop';
 import { type Bounds, type FilmOnPage, centreOf, namedView, viewAlongFilm } from '../looking/framing';
-import { type OnCanvas, toCanvas } from '../looking/lens';
+import { type OnCanvas, eyeDistance, toCanvas } from '../looking/lens';
 import type { ViewName } from '../looking/named-views';
 import { rayThrough } from '../looking/ray';
 import type { CanvasSize, View } from '../looking/view';
@@ -23,6 +23,10 @@ import { type FilmPixels, type FilmWall, type FilmWallInside, hangFilm } from '.
 import { LensCamera } from './lens-camera';
 import { AMBIENT_STRENGTH, GROUND, SKY } from './look';
 import type { SpineModel } from './spine-model';
+import { sameShape } from '../placing/pose-between';
+import { columnCells, columnView, type Column } from './column-layout';
+import { pickParts } from './part-picking';
+import type { Pointed } from './pointed';
 
 /** A view, or a rule that gives the view for the canvas's size (asked again whenever the canvas changes size). */
 export type ViewOrRule = View | ((canvas: CanvasSize) => View);
@@ -38,7 +42,9 @@ const MOST_DEVICE_PIXELS = 2;
 
 export interface Stage {
   /** Stand a spine on the stage. Any number may share one model. */
-  addSpine(model: SpineModel): DrawnSpine;
+  addSpine(model: SpineModel, options?: { shapesFrom?: DrawnSpine; flat?: boolean }): DrawnSpine;
+  inColumns(spines: readonly DrawnSpine[], options: { gapPx: number; footPx: number }): void;
+  columnOf(spine: DrawnSpine): Column | null;
   /** Stand a film in the space of the bones, from its own camera, with its picture if there is one yet. */
   hangFilm(name: FilmName, camera: FilmCamera, pixels?: FilmPixels | null): FilmWall;
   /** The film standing under this name, if any. */
@@ -60,7 +66,7 @@ export interface Stage {
   bounds(): Bounds;
 
   /** The spine and level drawn at a place on the canvas, in CSS pixels from its top-left corner. */
-  pick(x: number, y: number): { spine: DrawnSpine; level: Level } | null;
+  pick(x: number, y: number): Pointed | null;
   /** Where a point of the scene is on the canvas, in CSS pixels. */
   toCanvas(scenePoint: Vec3): OnCanvas;
   /** Where a patient point is on the canvas: of the fitted spine as `spine` is placed, or of the patient frame itself. */
@@ -95,6 +101,9 @@ export function makeStage(canvas: HTMLCanvasElement): Stage {
   scene.add(inScene, inPatient);
 
   const spines: { inside: DrawnSpineInside; shadow: ContactShadow }[] = [];
+  let columns: readonly DrawnSpine[] = [];
+  let columnOptions = { gapPx: 0, footPx: 0 };
+  let depthTarget: WebGLRenderTarget | null = null;
   const walls = new Map<FilmName, FilmWallInside>();
   const listeners = new Set<() => void>();
   let size: CanvasSize = { width: Math.max(1, canvas.clientWidth), height: Math.max(1, canvas.clientHeight) };
@@ -106,7 +115,8 @@ export function makeStage(canvas: HTMLCanvasElement): Stage {
   const bounds = (): Bounds => {
     const low: [number, number, number] = [Infinity, Infinity, Infinity];
     const high: [number, number, number] = [-Infinity, -Infinity, -Infinity];
-    for (const { inside } of spines) {
+    const fitted = spines.filter(({ inside }) => !inside.flat && (columns.length === 0 || columns.includes(inside.spine)));
+    for (const { inside } of fitted) {
       const each = inside.spine.bounds();
       for (const axis of [0, 1, 2] as const) {
         low[axis] = Math.min(low[axis], each.low[axis]);
@@ -114,7 +124,7 @@ export function makeStage(canvas: HTMLCanvasElement): Stage {
       }
     }
     // An empty stage still has somewhere to look.
-    return spines.length === 0 ? { low: [-100, 0, -100], high: [100, 400, 100] } : { low, high };
+    return fitted.length === 0 ? { low: [-100, 0, -100], high: [100, 400, 100] } : { low, high };
   };
 
   const viewNow = (): View => {
@@ -159,19 +169,95 @@ export function makeStage(canvas: HTMLCanvasElement): Stage {
     return reach * 1.05 + 50;
   };
 
-  const draw = () => {
-    if (disposed) return;
-    const view = viewNow();
-    standWalls();
-    for (const { inside, shadow } of spines) {
-      inside.followFilm();
-      const values = inside.spine.spineValues();
-      shadow.lay(inside.spine.bounds(), view.azimuth, view.elevation, values.visible ? values.shadow : 0);
+  const cellOf = (spine: DrawnSpine): Column | null => {
+    const index = columns.indexOf(spine);
+    return index < 0 || !spines.some(({ inside }) => inside.spine === spine) ? null : columnCells(size, columns.length, columnOptions.gapPx, columnOptions.footPx)[index] ?? null;
+  };
+  const viewOf = (inside: DrawnSpineInside): View => {
+    const primary = inside.flat && columns.length > 0 ? spines.find((entry) => entry.inside.spine === columns[0])?.inside : undefined;
+    const fitted = primary ?? inside;
+    const cell = cellOf(fitted.spine);
+    return cell === null ? viewNow() : columnView(fitted.spine.bounds(), cell, size, viewNow(), bounds());
+  };
+
+  const render = (shown: typeof spines, view: View, cell: Column | null) => {
+    const useLayers = shown.some(({ inside }) => inside.layers.length > 0);
+    for (const entry of spines) {
+      const values = entry.inside.spine.spineValues(), on = shown.includes(entry);
+      entry.inside.root.visible = on && values.visible && values.strength > 0;
+      entry.shadow.lay(entry.inside.spine.bounds(), view.azimuth, view.elevation, on && !entry.inside.flat && values.visible ? values.shadow * values.strength : 0);
     }
     camera.look(view, size, reachFrom(view.aim));
     const visibleWalls = [...walls.values()].filter(({ wall }) => wall.values().strength > .5).map((wall) => wall.corners());
-    for (const { inside } of spines) inside.spine.formation.prepare(view, size, renderer.getPixelRatio(), visibleWalls);
-    renderer.render(scene, camera);
+    for (const { inside } of shown) inside.spine.formation.prepare(view, size, renderer.getPixelRatio(), visibleWalls);
+    const wallState = [...walls.values()].map(({ mesh }) => ({ mesh, visible: mesh.visible }));
+    if (useLayers) {
+      const pixels = renderer.getDrawingBufferSize(new Vector2());
+      if (depthTarget === null) {
+        depthTarget = new WebGLRenderTarget(pixels.x, pixels.y);
+        depthTarget.depthTexture = new DepthTexture(pixels.x, pixels.y);
+      } else depthTarget.setSize(pixels.x, pixels.y);
+      depthTarget.scissorTest = cell !== null;
+      if (cell !== null) {
+        const ratio = renderer.getPixelRatio();
+        depthTarget.scissor.set(cell.left * ratio, (size.height - cell.bottom) * ratio, (cell.right - cell.left) * ratio, (cell.bottom - cell.top) * ratio);
+      }
+      for (const { inside, shadow } of shown) { inside.pass('opaque-depth'); shadow.pivot.visible = false; }
+      for (const { mesh } of wallState) mesh.visible = false;
+      renderer.setRenderTarget(depthTarget);
+      renderer.render(scene, camera);
+      renderer.setRenderTarget(null);
+      for (const { mesh, visible } of wallState) mesh.visible = visible;
+    }
+    for (const { inside, shadow } of shown) {
+      inside.pass('base');
+      const values = inside.spine.spineValues();
+      shadow.lay(inside.spine.bounds(), view.azimuth, view.elevation, !inside.flat && values.visible ? values.shadow * values.strength : 0);
+    }
+    const ghosts = shown.filter(({ inside }) => inside.flat), solids = shown.filter(({ inside }) => !inside.flat);
+    if (ghosts.length > 0 && solids.length > 0) {
+      for (const { inside, shadow } of solids) { inside.root.visible = false; shadow.pivot.visible = false; }
+      renderer.render(scene, camera);
+      renderer.autoClear = false; renderer.clearDepth();
+      for (const { inside } of ghosts) inside.root.visible = false;
+      for (const { inside, shadow } of solids) {
+        const values = inside.spine.spineValues(); inside.root.visible = values.visible && values.strength > 0;
+        shadow.lay(inside.spine.bounds(), view.azimuth, view.elevation, values.visible ? values.shadow * values.strength : 0);
+      }
+      for (const { mesh } of wallState) mesh.visible = false;
+      renderer.render(scene, camera);
+      for (const { mesh, visible } of wallState) mesh.visible = visible;
+      renderer.autoClear = true;
+    } else renderer.render(scene, camera);
+    if (useLayers && depthTarget !== null) {
+      renderer.autoClear = false;
+      renderer.clearDepth();
+      for (const { mesh } of wallState) mesh.visible = false;
+      for (const { inside, shadow } of shown) { inside.pass('parts', depthTarget.depthTexture, depthTarget.width, depthTarget.height); shadow.pivot.visible = false; }
+      renderer.render(scene, camera);
+      renderer.autoClear = true;
+      for (const { mesh, visible } of wallState) mesh.visible = visible;
+    }
+    for (const { inside } of shown) inside.pass('rest');
+  };
+
+  const draw = () => {
+    if (disposed) return;
+    standWalls();
+    for (const { inside } of spines) inside.followFilm();
+    if (columns.length === 0) render(spines, viewNow(), null);
+    else {
+      renderer.setScissorTest(false); renderer.clear();
+      for (const [index, spine] of columns.entries()) {
+        const entry = spines.find(({ inside }) => inside.spine === spine), cell = cellOf(spine);
+        if (entry === undefined || cell === null) continue;
+        renderer.setScissor(cell.left, size.height - cell.bottom, Math.max(0, cell.right - cell.left), Math.max(0, cell.bottom - cell.top));
+        renderer.setScissorTest(true);
+        render([entry, ...index === 0 ? spines.filter(({ inside }) => inside.flat && !columns.includes(inside.spine)) : []], viewOf(entry.inside), cell);
+      }
+      renderer.setScissorTest(false);
+    }
+    for (const { inside } of spines) { const values = inside.spine.spineValues(); inside.root.visible = values.visible && values.strength > 0; }
     for (const listener of listeners) listener();
   };
 
@@ -203,7 +289,19 @@ export function makeStage(canvas: HTMLCanvasElement): Stage {
   const raycaster = new Raycaster();
 
   const stage: Stage = {
-    addSpine(model) {
+    addSpine(model, options = {}) {
+      if (options.shapesFrom !== undefined) {
+        const source = spines.find(({ inside }) => inside.spine === options.shapesFrom)?.inside.model;
+        if (source === undefined || model.bones.length !== source.bones.length || !model.bones.every((bone) => {
+          const match = source.bones.find((each) => each.level === bone.level);
+          return match !== undefined && sameShape(bone.vertebra.pose, match.vertebra.pose);
+        })) throw new RangeError('Shared shapes require the same fitted dimensions and levels');
+        model = { ...model, retain: () => source.retain(), bones: model.bones.map((bone) => {
+          const shared = source.bones.find((each) => each.level === bone.level);
+          if (shared === undefined) throw new RangeError('Missing shared bone');
+          return { ...bone, geometry: shared.geometry, cage: shared.cage, formation: shared.formation };
+        }) };
+      }
       const shadow = contactShadow();
       inScene.add(shadow.pivot);
       const inside = drawSpine(model, {
@@ -212,18 +310,25 @@ export function makeStage(canvas: HTMLCanvasElement): Stage {
         removed: (spine) => {
           const at = spines.findIndex((each) => each.inside.spine === spine);
           const [gone] = at < 0 ? [] : spines.splice(at, 1);
+          columns = columns.filter((each) => each !== spine);
           if (gone) {
             inScene.remove(gone.shadow.pivot);
             gone.shadow.dispose();
           }
           changed();
         },
-      });
+      }, options.flat ?? false);
       spines.push({ inside, shadow });
       standWalls();
       changed();
       return inside.spine;
     },
+    inColumns(next, options) {
+      columnCells(size, next.length, options.gapPx, options.footPx);
+      if (new Set(next).size !== next.length || next.some((spine) => !spines.some(({ inside }) => inside.spine === spine))) throw new RangeError('Columns require distinct spines from this stage');
+      columns = [...next]; columnOptions = { ...options }; changed();
+    },
+    columnOf: cellOf,
     hangFilm(name, filmCamera, pixels = null) {
       walls.get(name)?.wall.remove();
       const inside = hangFilm(filmCamera, changed, (wall) => {
@@ -255,26 +360,37 @@ export function makeStage(canvas: HTMLCanvasElement): Stage {
     bounds,
 
     pick(x, y) {
-      const view = viewNow();
-      const ray = rayThrough(view, size, x, y, reachFrom(view.aim));
-      raycaster.ray.origin.set(ray.from[0], ray.from[1], ray.from[2]);
-      raycaster.ray.direction.set(ray.toward[0], ray.toward[1], ray.toward[2]);
-      scene.updateMatrixWorld();
-      const meshes = spines.flatMap(({ inside }) => inside.pickable());
-      const own = new Vector3();
-      for (const hit of raycaster.intersectObjects(meshes, false)) {
-        const found = spines.find(({ inside }) => hit.object.parent?.parent === inside.root);
-        const level = hit.object.userData.level as Level | undefined;
-        if (!found || level === undefined) continue;
-        // A part of a bone that is not filled in yet is not there to be pointed at.
-        own.copy(hit.point);
-        hit.object.worldToLocal(own);
-        if (found.inside.filledAt(level, [own.x, own.y, own.z])) return { spine: found.inside.spine, level };
+      scene.updateMatrixWorld(true);
+      const eligible = spines.filter(({ inside }) => {
+        const values = inside.spine.spineValues(), cell = cellOf(inside.spine);
+        return !inside.flat && values.visible && values.strength > 0 && (columns.length === 0 || (cell !== null && x >= cell.left && x <= cell.right && y >= cell.top && y <= cell.bottom));
+      });
+      let part: { found: NonNullable<ReturnType<typeof pickParts>>; spine: DrawnSpine } | null = null;
+      for (const { inside } of eligible) {
+        const view = viewOf(inside);
+        const found = pickParts(inside.layers.flatMap((layer) => layer.registrations()), (point) => toCanvas(view, size, point), x, y, eyeDistance(view, size));
+        if (found !== null && (part === null || found.distance < part.found.distance - 1e-7 || (Math.abs(found.distance - part.found.distance) <= 1e-7 && (found.nearer > part.found.nearer + 1e-7 || (Math.abs(found.nearer - part.found.nearer) <= 1e-7 && found.registration.order < part.found.registration.order))))) part = { found, spine: inside.spine };
       }
-      return null;
+      if (part !== null) return { kind: 'part', spine: part.spine, layer: part.found.registration.layer, id: part.found.registration.id };
+      const own = new Vector3();
+      let boneHit: { pointed: Pointed; distance: number } | null = null;
+      for (const { inside } of eligible) {
+        const view = viewOf(inside), ray = rayThrough(view, size, x, y, reachFrom(view.aim));
+        raycaster.ray.origin.set(...ray.from); raycaster.ray.direction.set(...ray.toward);
+        for (const hit of raycaster.intersectObjects(inside.pickable(), false)) {
+          const level = hit.object.userData.level as Level | undefined;
+          if (level === undefined) continue;
+          own.copy(hit.point); hit.object.worldToLocal(own);
+          if (inside.filledAt(level, [own.x, own.y, own.z]) && (boneHit === null || hit.distance < boneHit.distance)) boneHit = { pointed: { kind: 'bone', spine: inside.spine, level }, distance: hit.distance };
+        }
+      }
+      return boneHit?.pointed ?? null;
     },
     toCanvas: (scenePoint) => toCanvas(viewNow(), size, scenePoint),
-    patientToCanvas: (patient, spine) => toCanvas(viewNow(), size, spine ? spine.inScene(patient) : toScene(patient)),
+    patientToCanvas: (patient, spine) => {
+      const inside = spines.find((entry) => entry.inside.spine === spine)?.inside;
+      return toCanvas(inside === undefined ? viewNow() : viewOf(inside), size, spine ? spine.inScene(patient) : toScene(patient));
+    },
 
     changed,
     drawNow: draw,
@@ -293,6 +409,7 @@ export function makeStage(canvas: HTMLCanvasElement): Stage {
       for (const { inside } of [...spines]) inside.spine.remove();
       for (const wall of [...walls.values()]) wall.wall.remove();
       listeners.clear();
+      depthTarget?.dispose();
       renderer.dispose();
     },
   };

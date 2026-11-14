@@ -41,8 +41,10 @@ export interface SpineModel {
   bounds: Bounds;
   /** The lowest and highest point of the spine as fitted, along the patient's up axis, mm. */
   heights: readonly [number, number];
-  /** Frees the shapes. Call it once no drawn spine uses the model. */
+  /** Release the caller's shapes. Active drawings keep them alive. Safe to repeat. */
   dispose(): void;
+  /** Keep the shaped buffers alive for one drawing. */
+  retain(): () => void;
 }
 
 /** The shade of a bone's hollows, kept so two models of the same bones work it out once. */
@@ -129,16 +131,22 @@ export function modelSpine(fit: SpineFit, bones: readonly Bone[]): SpineModel {
     });
   }
 
+  let users = 0, released = false, freed = false;
+  const free = () => {
+    if (!released || users > 0 || freed) return;
+    freed = true;
+    for (const bone of made) { bone.geometry.dispose(); bone.cage.dispose(); }
+  };
   return {
     bones: made,
     missing,
     bounds: { low, high },
     heights,
-    dispose() {
-      for (const bone of made) {
-        bone.geometry.dispose();
-        bone.cage.dispose();
-      }
+    retain() {
+      if (freed) throw new RangeError('The model has been freed');
+      users++; let left = false;
+      return () => { if (!left) { left = true; users--; free(); } };
     },
+    dispose() { released = true; free(); },
   };
 }

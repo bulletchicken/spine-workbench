@@ -74,8 +74,7 @@ pub fn straight_forward(pose: &VertebraPose) -> Result<[f64; 3], LayoutError> {
 /// pedicle centre with the body's anterior surface; subtract the chord.
 /// In the right-handed frame a positive medial angle turns the left path
 /// by a negative right-hand rotation and the right path by a positive one.
-/// This corrects the shorthand signs in the synthesis, preserving its
-/// explicit requirement that both paths turn towards the midline.
+/// Both paths therefore turn towards the midline.
 ///
 /// The generic surface is this project's ruled elliptical loft: corresponding
 /// endplate rim vectors and centres vary linearly between the two endplates.

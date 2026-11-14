@@ -20,7 +20,7 @@
 //! | [`alternatives`] | the placements one step away from the first |
 //! | [`proposal`] | the whole answer put together |
 //!
-//! Entry point: [`propose_layouts`].
+//! Entry points: [`propose_layouts`] and [`rebuild_layout`].
 
 #![forbid(unsafe_code)]
 
@@ -37,12 +37,15 @@ pub mod rods;
 pub mod screws;
 
 use shapes::errors::{EngineError, ErrorCode};
-use shapes::implant_layout::{LayoutInput, LayoutProposals};
+use shapes::implant_layout::{ImplantLayout, LayoutInput, LayoutProposals, RebuildInput};
 
 /// Why no proposals came of an input. Each crosses to the app as an
 /// existing error code with this refusal's name in its detail.
 #[derive(Clone, Debug, PartialEq, Eq, thiserror::Error)]
 pub enum LayoutError {
+    /// Changing a placement by hand is not built yet.
+    #[error("rebuild-not-built")]
+    RebuildNotBuilt,
     /// The named entry point is not built yet.
     #[error("implant-layout-not-built: {0}")]
     NotBuilt(&'static str),
@@ -63,7 +66,9 @@ impl From<LayoutError> for EngineError {
         let code = match error {
             LayoutError::NoSpine => ErrorCode::PassNoSpineFound,
             LayoutError::InvalidValue { .. } => ErrorCode::CaseInvalidValue,
-            LayoutError::NotBuilt(_) | LayoutError::Refused(_) => ErrorCode::ToolRefused,
+            LayoutError::RebuildNotBuilt | LayoutError::NotBuilt(_) | LayoutError::Refused(_) => {
+                ErrorCode::ToolRefused
+            }
         };
         Self::new(code, error.to_string()).with_detail(error.to_string())
     }
@@ -88,4 +93,9 @@ impl From<spine_readings::ReadingsError> for LayoutError {
 /// and the placements one step away from it.
 pub fn propose_layouts(input: &LayoutInput) -> Result<LayoutProposals, LayoutError> {
     proposal::propose(input)
+}
+
+/// A placement changed by hand, refused until rebuilding is available.
+pub fn rebuild_layout(_input: &RebuildInput) -> Result<ImplantLayout, LayoutError> {
+    Err(LayoutError::RebuildNotBuilt)
 }

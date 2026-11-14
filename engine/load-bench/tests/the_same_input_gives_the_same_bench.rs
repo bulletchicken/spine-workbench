@@ -67,6 +67,12 @@ fn resting_input(versions: u32) -> BenchInput {
         let pose = poses.iter().find(|p| p.level == level).unwrap();
         for (side, y) in [(BodySide::Left, 9.0), (BodySide::Right, -9.0)] {
             anchors.push(AnchorProposal {
+                wider_than_pedicle: Vec::new(),
+                screw_here: None,
+                diameter_sources: Vec::new(),
+                length_sources: Vec::new(),
+                direction_sources: Vec::new(),
+                look_sources: Vec::new(),
                 level,
                 side,
                 kind: AnchorKind::Screw,
@@ -90,6 +96,7 @@ fn resting_input(versions: u32) -> BenchInput {
                 length_status: ValueStatus::Typical,
                 usual_length_mm: None,
                 pedicle: PedicleEstimate {
+                    sources: Vec::new(),
                     outer_width_mm: None,
                     inner_width_mm: None,
                     versions_too_narrow: 0,
@@ -111,6 +118,7 @@ fn resting_input(versions: u32) -> BenchInput {
                 .map(|a| a.entry_mm)
                 .collect();
             RodProposal {
+                standing_points_mm: Vec::new(),
                 side,
                 curve_side: CurveSide::Outside,
                 material: RodMaterial::CobaltChrome,
@@ -396,7 +404,11 @@ fn walk_contract(input: &BenchInput, batch: &BenchBatch) {
     })
     .unwrap();
     let value = serde_json::to_value(&result).unwrap();
-    keys(&value, &["versions", "firstId", "layouts", "scales"]);
+    keys(
+        &value,
+        &["versions", "firstId", "layouts", "scales", "mainCurve"],
+    );
+    assert!(value["mainCurve"].is_null());
     for layout in value["layouts"].as_array().unwrap() {
         keys(
             layout,
@@ -412,14 +424,33 @@ fn walk_contract(input: &BenchInput, batch: &BenchBatch) {
                     "ghosts",
                     "cyclesPerYear",
                     "outsideStiffRod",
+                    "middle",
+                    "rods",
+                    "cyclesSources",
                 ],
             );
             for estimate in stop["estimates"].as_array().unwrap() {
-                keys(estimate, &["measure", "band", "tag", "mostlyFrom"]);
+                keys(
+                    estimate,
+                    &["measure", "band", "tag", "mostlyFrom", "sources"],
+                );
+                assert_eq!(estimate["sources"], serde_json::json!([]));
                 keys(&estimate["band"], &["p10", "p50", "p90"]);
             }
             for part in stop["parts"].as_array().unwrap() {
-                keys(part, &["part", "share", "steady", "versionsPastStrength"]);
+                keys(
+                    part,
+                    &[
+                        "part",
+                        "share",
+                        "steady",
+                        "versionsPastStrength",
+                        "demand",
+                        "sources",
+                    ],
+                );
+                assert!(part["demand"].is_null());
+                assert_eq!(part["sources"], serde_json::json!([]));
                 keys(&part["share"], &["p10", "p50", "p90"]);
                 let expected: &[&str] = match part["part"]["kind"].as_str().unwrap() {
                     "anchor" => &["kind", "level", "side"],
@@ -455,7 +486,8 @@ fn walk_contract(input: &BenchInput, batch: &BenchBatch) {
             keys(
                 count,
                 &[
-                    "measure", "stop", "lower", "higher", "ties", "order", "sortedBy",
+                    "measure", "stop", "lower", "higher", "ties", "order", "sortedBy", "outcomes",
+                    "clearAt",
                 ],
             );
             assert_eq!(count["lower"], 0);

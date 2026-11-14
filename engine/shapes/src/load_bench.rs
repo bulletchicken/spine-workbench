@@ -178,9 +178,24 @@ pub struct BenchResult {
     pub versions: u32,
     /// The placement the others are compared with.
     pub first_id: String,
+    /// The fitted curve measured as main; `null` when none was found.
+    pub main_curve: Option<MainCurve>,
     pub layouts: Vec<LayoutResult>,
     /// One scale per measure, shared by every placement's ranges.
     pub scales: Vec<MeasureScale>,
+}
+
+/// The fitted curve whose Cobb angle and apical twist the bench reads.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
+#[cfg_attr(feature = "typescript", derive(ts_rs::TS))]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct MainCurve {
+    /// The curve's upper end.
+    pub upper: Level,
+    /// The curve's apex.
+    pub apex: Level,
+    /// The curve's lower end.
+    pub lower: Level,
 }
 
 /// One placement over every version.
@@ -207,26 +222,51 @@ pub struct StopResult {
     /// Two spines: the versions at the 10th and the 90th percentile of the
     /// main curve; `null` at stops where the shape does not move.
     pub ghosts: Option<Vec<Vec<VertebraPose>>>,
+    /// A spine for drawing only: at `before`, the fit's standing poses
+    /// for the levels the bench carries; at `rods-in`, one extra run with
+    /// every drawn unknown at the middle of its range. `null` at later
+    /// stops, and at `rods-in` when that run does not settle.
+    /// It is never a version and never enters an estimate, part or count.
+    pub middle: Option<Vec<VertebraPose>>,
+    /// The rods seated in that same middle run, present at `rods-in`
+    /// when `middle` is; `null` otherwise. For drawing only.
+    pub rods: Option<Vec<RodLine>>,
     /// At a year of walking, the steps in a year; `null` at other stops.
     pub cycles_per_year: Option<Band>,
+    /// Source keys behind the step bands; empty when no source is used.
+    pub cycles_sources: Vec<String>,
     /// Versions where the rods are too soft for the rigid-rod method.
     pub outside_stiff_rod: u32,
 }
 
+/// One seated rod's centre line in the patient frame, for drawing only.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[cfg_attr(feature = "typescript", derive(ts_rs::TS))]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct RodLine {
+    /// The patient's side of the rod.
+    pub side: BodySide,
+    /// The centre line as seated in the middle run, top to bottom, patient frame, mm.
+    pub points_mm: Vec<[f64; 3]>,
+}
+
 /// One estimate over the versions.
-#[derive(Clone, Copy, Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
 #[cfg_attr(feature = "typescript", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct Estimate {
     pub measure: Measure,
     pub band: Band,
     pub tag: EstimateTag,
-    /// The drawn unknown it moves with most, by rank correlation.
-    pub mostly_from: SampledUnknown,
+    /// The drawn unknown it moves with most, by rank correlation;
+    /// `null` when nothing moves with it. This is no causal attribution.
+    pub mostly_from: Option<SampledUnknown>,
+    /// Source keys behind the number; empty when it rests only on films.
+    pub sources: Vec<String>,
 }
 
 /// What a part carries.
-#[derive(Clone, Copy, Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
 #[cfg_attr(feature = "typescript", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct PartResult {
@@ -234,11 +274,17 @@ pub struct PartResult {
     /// Its load over the heaviest load any part of its kind carries, at
     /// any stop, in any placement compared, per version.
     pub share: Band,
+    /// For an anchor, force over strength with the bone factor included,
+    /// across settled versions. `null` for other parts and at `before`.
+    /// An assumed strength must never be shown as a measured demand.
+    pub demand: Option<Band>,
     /// The share holds still across the versions.
     pub steady: bool,
     /// Versions where it goes past its published strength (for a rod at
     /// a year of walking, past the test-bench level).
     pub versions_past_strength: u32,
+    /// Source keys behind strength or fatigue; empty for film-only values.
+    pub sources: Vec<String>,
 }
 
 /// A part of a placement.
@@ -295,8 +341,25 @@ pub struct PairedCount {
     pub ties: u32,
     /// The versions in the order the dots are drawn.
     pub order: Vec<u32>,
-    /// The drawn unknown the order follows.
-    pub sorted_by: SampledUnknown,
+    /// The drawn unknown the order follows; `null` when nothing moves
+    /// with the paired difference.
+    pub sorted_by: Option<SampledUnknown>,
+    /// One result per entry of `order`, in that same dot order.
+    pub outcomes: Vec<PairOutcome>,
+    /// The lower or higher count called clear: three quarters of the
+    /// number of dots, rounded up. This is a comparison threshold.
+    pub clear_at: u32,
+}
+
+/// One version's comparison against the first placement, using the
+/// measure's margin; a tie is within that margin.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
+#[cfg_attr(feature = "typescript", derive(ts_rs::TS))]
+#[serde(rename_all = "kebab-case")]
+pub enum PairOutcome {
+    Lower,
+    Higher,
+    Tie,
 }
 
 /// How far the films settle an estimate.
@@ -515,6 +578,7 @@ mod tests {
         BenchResult {
             versions: 32,
             first_id: "first".to_string(),
+            main_curve: None,
             layouts: vec![LayoutResult {
                 layout_id: "fewer-screws".to_string(),
                 versions_unsettled: 0,
@@ -524,7 +588,8 @@ mod tests {
                         measure: Measure::HeaviestAnchorForce,
                         band: band(200.0),
                         tag: EstimateTag::Assumed,
-                        mostly_from: SampledUnknown::StiffnessScale,
+                        mostly_from: Some(SampledUnknown::StiffnessScale),
+                        sources: Vec::new(),
                     }],
                     parts: vec![
                         PartResult {
@@ -533,8 +598,10 @@ mod tests {
                                 side: BodySide::Left,
                             },
                             share: band(0.8),
+                            demand: None,
                             steady: true,
                             versions_past_strength: 3,
+                            sources: Vec::new(),
                         },
                         PartResult {
                             part: PartRef::RodSpan {
@@ -543,28 +610,37 @@ mod tests {
                                 to: Level::T9,
                             },
                             share: band(0.5),
+                            demand: None,
                             steady: false,
                             versions_past_strength: 0,
+                            sources: Vec::new(),
                         },
                         PartResult {
                             part: PartRef::Junction {
                                 which: JunctionSide::Above,
                             },
                             share: band(0.4),
+                            demand: None,
                             steady: true,
                             versions_past_strength: 0,
+                            sources: Vec::new(),
                         },
                         PartResult {
                             part: PartRef::Rod {
                                 side: BodySide::Left,
                             },
                             share: band(0.6),
+                            demand: None,
                             steady: true,
                             versions_past_strength: 2,
+                            sources: Vec::new(),
                         },
                     ],
                     ghosts: Some(vec![vec![pose()], vec![pose()]]),
+                    middle: None,
+                    rods: None,
                     cycles_per_year: Some(band(3_000_000.0)),
+                    cycles_sources: Vec::new(),
                     outside_stiff_rod: 5,
                 }],
                 counts: vec![PairedCount {
@@ -574,7 +650,9 @@ mod tests {
                     higher: 4,
                     ties: 2,
                     order: (0..32).collect(),
-                    sorted_by: SampledUnknown::StiffnessScale,
+                    sorted_by: Some(SampledUnknown::StiffnessScale),
+                    outcomes: Vec::new(),
+                    clear_at: 0,
                 }],
             }],
             scales: vec![MeasureScale {
@@ -583,6 +661,37 @@ mod tests {
                 highest: 44.0,
             }],
         }
+    }
+
+    fn result_with_drawing() -> BenchResult {
+        let mut result = result();
+        result.main_curve = Some(MainCurve {
+            upper: Level::T5,
+            apex: Level::T8,
+            lower: Level::T12,
+        });
+        let stop = &mut result.layouts[0].stops[0];
+        stop.stop = BenchStop::RodsIn;
+        stop.middle = Some(vec![pose()]);
+        stop.rods = Some(vec![RodLine {
+            side: BodySide::Left,
+            points_mm: vec![[-30.0, 12.0, 250.0], [-30.0, 12.0, 200.0]],
+        }]);
+        stop.cycles_per_year = None;
+        stop.cycles_sources = vec!["tudor-locke-2011".to_string()];
+        stop.estimates[0].mostly_from = None;
+        stop.estimates[0].sources = vec!["tachi-2021".to_string()];
+        stop.parts[0].demand = Some(band(0.8));
+        stop.parts[0].sources = vec!["lehman-2003".to_string()];
+        let count = &mut result.layouts[0].counts[0];
+        count.lower = 1;
+        count.higher = 1;
+        count.ties = 1;
+        count.order = vec![2, 0, 1];
+        count.sorted_by = None;
+        count.outcomes = vec![PairOutcome::Lower, PairOutcome::Higher, PairOutcome::Tie];
+        count.clear_at = 3;
+        result
     }
 
     #[test]
@@ -615,9 +724,16 @@ mod tests {
     #[test]
     fn a_result_tags_parts_and_counts_and_reads_back() {
         let value = serde_json::to_value(result()).expect("the result serialises");
+        assert_eq!(value["mainCurve"], serde_json::Value::Null);
         let stop = &value["layouts"][0]["stops"][0];
+        assert_eq!(stop["middle"], serde_json::Value::Null);
+        assert_eq!(stop["rods"], serde_json::Value::Null);
+        assert_eq!(stop["cyclesSources"], json!([]));
         assert_eq!(stop["estimates"][0]["tag"], "assumed");
         assert_eq!(stop["estimates"][0]["mostlyFrom"], "stiffness-scale");
+        assert_eq!(stop["estimates"][0]["sources"], json!([]));
+        assert_eq!(stop["parts"][0]["demand"], serde_json::Value::Null);
+        assert_eq!(stop["parts"][0]["sources"], json!([]));
         assert_eq!(
             stop["parts"][1]["part"],
             json!({"kind": "rod-span", "side": "right", "from": "T8", "to": "T9"})
@@ -633,6 +749,8 @@ mod tests {
         let count = &value["layouts"][0]["counts"][0];
         assert_eq!(count["measure"], "heaviest-anchor-force");
         assert_eq!(count["sortedBy"], "stiffness-scale");
+        assert_eq!(count["outcomes"], json!([]));
+        assert_eq!(count["clearAt"], 0);
         let compare = BenchCompareInput {
             layouts: vec![layout()],
             batches: vec![batch()],
@@ -650,7 +768,54 @@ mod tests {
     }
 
     #[test]
+    fn drawing_poses_and_paired_dots_read_back_with_absent_drivers() {
+        let result = result_with_drawing();
+        let value = serde_json::to_value(&result).expect("the drawing serialises");
+        assert_eq!(
+            value["mainCurve"],
+            json!({"upper": "T5", "apex": "T8", "lower": "T12"})
+        );
+        let stop = &value["layouts"][0]["stops"][0];
+        assert_eq!(stop["middle"][0]["level"], "L5");
+        assert_eq!(
+            stop["rods"][0],
+            json!({"side": "left", "pointsMm": [[-30.0, 12.0, 250.0], [-30.0, 12.0, 200.0]]})
+        );
+        assert_eq!(stop["estimates"][0]["mostlyFrom"], serde_json::Value::Null);
+        assert_eq!(stop["estimates"][0]["sources"], json!(["tachi-2021"]));
+        assert_eq!(stop["parts"][0]["demand"]["p50"], 0.8);
+        assert_eq!(stop["parts"][0]["sources"], json!(["lehman-2003"]));
+        assert_eq!(stop["cyclesSources"], json!(["tudor-locke-2011"]));
+        let count = &value["layouts"][0]["counts"][0];
+        assert_eq!(count["sortedBy"], serde_json::Value::Null);
+        assert_eq!(count["outcomes"], json!(["lower", "higher", "tie"]));
+        assert_eq!(count["clearAt"], 3);
+        assert_eq!(
+            serde_json::from_value::<BenchResult>(value).expect("the drawing reads back"),
+            result
+        );
+    }
+
+    #[test]
     fn unknown_fields_are_refused_at_each_new_boundary() {
+        let value = serde_json::to_value(result_with_drawing()).expect("the drawing serialises");
+        for path in [
+            "/mainCurve",
+            "/layouts/0/stops/0/rods/0",
+            "/layouts/0/stops/0/parts/0/demand",
+        ] {
+            let mut changed = value.clone();
+            changed
+                .pointer_mut(path)
+                .and_then(serde_json::Value::as_object_mut)
+                .expect("an object")
+                .insert("extra".to_string(), json!(1));
+            assert!(
+                serde_json::from_value::<BenchResult>(changed).is_err(),
+                "{path}"
+            );
+        }
+
         let value = serde_json::to_value(input()).expect("the input serialises");
         for path in ["", "/child", "/layouts/0"] {
             let mut changed = value.clone();

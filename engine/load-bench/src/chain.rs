@@ -339,6 +339,85 @@ impl Chain {
         Ok(evaluation)
     }
 
+    /// Apply the exact chart tangent through relative joint motions. This
+    /// avoids subtracting large body-centre matrix products for a nearly
+    /// rigid column. It is the same Hessian assembled by `linearise`.
+    pub(crate) fn tangent_load(
+        &self,
+        poses: &[Pose],
+        motion: &[Wrench],
+    ) -> Result<Vec<Wrench>, ChainError> {
+        let evaluation = self.evaluate(poses)?;
+        if motion.len() != poses.len()
+            || motion.iter().flat_map(|u| u.iter()).any(|v| !v.is_finite())
+        {
+            return Err(ChainError::Dimensions);
+        }
+        let zero = Wrench::zeros();
+        let mut result = vec![Wrench::zeros(); poses.len()];
+        for (i, joint) in self.joints.iter().enumerate() {
+            let upper = &poses[i];
+            let lower = poses.get(i + 1).unwrap_or(&self.ground);
+            let up = &motion[i];
+            let low = motion.get(i + 1).unwrap_or(&zero);
+            let wu = up.fixed_rows::<3>(3).into_owned();
+            let wl = low.fixed_rows::<3>(3).into_owned();
+            let arm = upper.rotation * joint.upper_attachment_mm;
+            let point_arm = upper.centre_mm + arm - lower.centre_mm;
+            let relative = up.fixed_rows::<3>(0) - low.fixed_rows::<3>(0) + wu.cross(&arm)
+                - wl.cross(&point_arm);
+            let q = &evaluation.deformation[i];
+            let force = lower.rotation
+                * joint
+                    .stiffness
+                    .0
+                    .fixed_rows::<3>(0)
+                    .component_mul(&q.fixed_rows::<3>(0));
+            let force_change = wl.cross(&force)
+                + lower.rotation
+                    * joint
+                        .stiffness
+                        .0
+                        .fixed_rows::<3>(0)
+                        .component_mul(&(lower.rotation.transpose() * relative));
+            let (local_couple, tangent) =
+                rotation_response_tangent(&q.fixed_rows::<3>(3).into_owned(), &joint.stiffness);
+            let couple = lower.rotation * local_couple;
+            let couple_change = wl.cross(&couple)
+                + lower.rotation
+                    * (tangent - local_couple.cross_matrix() * 0.5)
+                    * (lower.rotation.transpose() * (wu - wl));
+            let mut upper_change = Wrench::zeros();
+            upper_change.fixed_rows_mut::<3>(0).copy_from(&force_change);
+            upper_change.fixed_rows_mut::<3>(3).copy_from(
+                &(wu.cross(&arm).cross(&force) + arm.cross(&force_change) + couple_change),
+            );
+            let mut lower_change = Wrench::zeros();
+            lower_change
+                .fixed_rows_mut::<3>(0)
+                .copy_from(&(-force_change));
+            lower_change.fixed_rows_mut::<3>(3).copy_from(
+                &(-(up.fixed_rows::<3>(0) - low.fixed_rows::<3>(0) + wu.cross(&arm)).cross(&force)
+                    - point_arm.cross(&force_change)
+                    - couple_change),
+            );
+            result[i] += upper_change;
+            if i + 1 < result.len() {
+                result[i + 1] += lower_change;
+            }
+        }
+        for (i, load) in result.iter_mut().enumerate() {
+            let correction = evaluation.gradient[i]
+                .fixed_rows::<3>(3)
+                .cross(&motion[i].fixed_rows::<3>(3))
+                * 0.5;
+            for axis in 0..3 {
+                load[axis + 3] += correction[axis];
+            }
+        }
+        Ok(result)
+    }
+
     /// Exact local-retraction energy Hessian, assembled joint by joint.
     /// Translation increments are mm at each body centre; rotation increments
     /// are patient-axis radians composed on the left.
@@ -722,12 +801,19 @@ mod tests {
                 let body = column / 6;
                 let axis = column % 6;
                 let h = if axis < 3 { 1e-4 } else { 2e-6 };
+                let mut motion = vec![Wrench::zeros(); poses.len()];
+                motion[body][axis] = 1.0;
+                let action = chain.tangent_load(&poses, &motion).unwrap();
                 let difference = (chart_gradient(&chain, &poses, body, axis, h)
                     - chart_gradient(&chain, &poses, body, axis, -h))
                     / (2.0 * h);
                 for row in 0..6 * poses.len() {
                     let exact = tangent[(row, column)];
                     let error = (difference[row] - exact).abs();
+                    assert!(
+                        (difference[row] - action[row / 6][row % 6]).abs()
+                            < 2e-5 + 2e-8 * exact.abs()
+                    );
                     assert!(
                         error < 2e-5 + 2e-8 * exact.abs(),
                         "({row},{column}) exact={exact} fd={} error={error}",

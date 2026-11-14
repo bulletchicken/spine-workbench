@@ -7,7 +7,7 @@
 //! nonnegative surface envelopes instead gives the bench's conservative
 //! envelope comparison, rather than following one material fibre.
 //!
-//! The run-out reference includes the research notes' assumed fixture arm
+//! The run-out reference includes an assumed fixture arm
 //! and equal rod sharing. The contouring factor is also extrapolated to
 //! materials and diameters beyond its source; it is supplied per version.
 

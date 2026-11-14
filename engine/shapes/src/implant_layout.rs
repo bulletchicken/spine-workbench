@@ -48,6 +48,40 @@ pub struct LayoutInput {
     pub pedicle_child_share: Option<f64>,
 }
 
+/// The original proposal input and the changes a person made to one
+/// placement. Pedicles not listed follow the first placement's pattern
+/// over the new span.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[cfg_attr(feature = "typescript", derive(ts_rs::TS))]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct RebuildInput {
+    /// The same input the proposals were made from; same seed, same draws.
+    pub layout: LayoutInput,
+    pub upper: Level,
+    pub lower: Level,
+    /// Only the pedicles the person set.
+    pub anchors: Vec<AnchorChoice>,
+    /// One of `LayoutChoices`.
+    pub rod_material: RodMaterial,
+    /// One of `LayoutChoices`.
+    pub rod_diameter_mm: f64,
+}
+
+/// One pedicle set by a person. A `null` screw size takes the size from
+/// `screwHere`; a hook or an empty pedicle has no screw size.
+#[derive(Clone, Copy, Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[cfg_attr(feature = "typescript", derive(ts_rs::TS))]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct AnchorChoice {
+    pub level: Level,
+    pub side: BodySide,
+    pub kind: AnchorKind,
+    /// `null` takes `screwHere`'s size; off the grid of `LayoutChoices` is refused.
+    pub diameter_mm: Option<f64>,
+    /// `null` takes `screwHere`'s size; off the grid of `LayoutChoices` is refused.
+    pub length_mm: Option<f64>,
+}
+
 /// One film's marks with its geometry and its stored size in pixels,
 /// width then height.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
@@ -116,6 +150,16 @@ pub struct LayoutProposals {
     pub pairs: Vec<LevelPair>,
     /// `[0]` is the first placement; the rest are one step away from it.
     pub layouts: Vec<ImplantLayout>,
+    /// True when the first placement is a sketch from the main curve's
+    /// ends because no pair came from the rules. A sketch is never shown
+    /// as a placement the rules gave.
+    pub first_is_sketch: bool,
+    /// The first placement's upper ends over the versions, most frequent
+    /// first. Empty when `firstIsSketch`.
+    pub upper_ends: Vec<LevelCount>,
+    /// The corresponding lower ends, most frequent first. Empty for a
+    /// sketch.
+    pub lower_ends: Vec<LevelCount>,
     /// The sizes and materials a person may choose from when changing a
     /// placement by hand.
     pub choices: LayoutChoices,
@@ -621,7 +665,66 @@ pub struct AnchorProposal {
     /// shown and never imposed.
     pub usual_length_mm: Option<[f64; 2]>,
     pub pedicle: PedicleEstimate,
+    /// For each diameter of `LayoutChoices.screwDiametersMm`, the versions
+    /// in which the drawn outer width is under that diameter divided by
+    /// the width ratio the diameter rule uses (the same test as
+    /// `versionsTooNarrow`), on every anchor whatever its kind. Empty
+    /// without a width table; these are population draws, never measured
+    /// pedicle widths.
+    pub wider_than_pedicle: Vec<DiameterCount>,
+    /// The screw size at this pedicle before the pattern chooses its
+    /// kind, including for a hook or an empty place. `null` when no size
+    /// can be found; a screw repeats its own size here.
+    pub screw_here: Option<ScrewHere>,
     pub looks: Vec<LookCode>,
+    /// Source keys behind the chosen diameter; empty without a source.
+    pub diameter_sources: Vec<String>,
+    /// Source keys behind the chosen length; empty without a source.
+    pub length_sources: Vec<String>,
+    /// Source keys behind the direction; empty without a source.
+    pub direction_sources: Vec<String>,
+    /// One source list per entry of `looks`, in the same order.
+    pub look_sources: Vec<LookSources>,
+    /// The union of this anchor's source keys.
+    pub sources: Vec<String>,
+}
+
+/// One offered screw diameter against the population pedicle draws.
+#[derive(Clone, Copy, Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[cfg_attr(feature = "typescript", derive(ts_rs::TS))]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct DiameterCount {
+    pub diameter_mm: f64,
+    /// Versions in which the drawn outer width is too narrow for this diameter.
+    pub versions: u32,
+}
+
+/// The screw a pedicle could take, whether the pattern places a screw,
+/// a hook or nothing there. Sizes come from tables, never a measurement
+/// of this child's pedicle.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[cfg_attr(feature = "typescript", derive(ts_rs::TS))]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct ScrewHere {
+    pub diameter_mm: f64,
+    /// Every other diameter chosen in at least 1 of 10 versions.
+    pub diameter_also_seen: Vec<f64>,
+    pub length_mm: f64,
+    /// The grid lengths the other published chord shares give.
+    pub length_also_seen: Vec<f64>,
+    /// Screw diameter over outer width; `null` without a width band.
+    pub screw_to_pedicle: Option<Band>,
+    /// The direction's published medial angle; `null` without a table.
+    pub medial_angle: Option<AngleFromTable>,
+}
+
+/// The source keys behind one reason an anchor needs a look.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[cfg_attr(feature = "typescript", derive(ts_rs::TS))]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct LookSources {
+    pub code: LookCode,
+    /// Empty when the reason rests only on the films.
     pub sources: Vec<String>,
 }
 
@@ -647,7 +750,7 @@ pub struct DiameterRule {
 }
 
 /// A pedicle's width from the population tables, over the versions.
-#[derive(Clone, Copy, Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
 #[cfg_attr(feature = "typescript", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct PedicleEstimate {
@@ -660,6 +763,8 @@ pub struct PedicleEstimate {
     pub versions_inner_under_1_mm: u32,
     pub curve_side: CurveSide,
     pub status: ValueStatus,
+    /// Source keys behind the width draws; empty without a width table.
+    pub sources: Vec<String>,
 }
 
 /// Where a pedicle sits against the curve its vertebra belongs to.
@@ -706,6 +811,12 @@ pub struct RodProposal {
     /// overbent rod passes through its two end heads there and bows
     /// further back between them.
     pub points_mm: Vec<[f64; 3]>,
+    /// The centre line through the standing spine's heads, in the same
+    /// order and with one point per `pointsMm` point. For drawing before
+    /// load only; the bench does not read it. Empty when unavailable.
+    /// `geometryStatus` covers both lines: typical geometry must never
+    /// be shown as measured millimetres.
+    pub standing_points_mm: Vec<[f64; 3]>,
     pub sources: Vec<String>,
 }
 
@@ -788,7 +899,10 @@ pub struct CannotTell {
 #[cfg_attr(feature = "typescript", derive(ts_rs::TS))]
 #[serde(rename_all = "kebab-case")]
 pub enum CannotTellCode {
-    /// The first pair holds in fewer than 6 of 10 versions.
+    /// The first pair holds in fewer than 6 of 10 versions. Its `levels`
+    /// names only the ends whose most frequent level is below that share.
+    /// When the pair is unsettled but neither end is on its own, `levels`
+    /// names both ends of the first pair.
     EndsUnsettled,
     /// The level names may be one off.
     NamesMayBeOneOff,
@@ -972,8 +1086,15 @@ mod tests {
                 versions_inner_under_1_mm: 9,
                 curve_side: CurveSide::Concave,
                 status: ValueStatus::FromTables,
+                sources: Vec::new(),
             },
+            wider_than_pedicle: Vec::new(),
+            screw_here: None,
             looks: vec![LookCode::ConcaveApexNeedsCt],
+            diameter_sources: Vec::new(),
+            length_sources: Vec::new(),
+            direction_sources: Vec::new(),
+            look_sources: Vec::new(),
             sources: vec!["gao-2017".to_string()],
         }
     }
@@ -998,6 +1119,7 @@ mod tests {
                 length_mm: 300.0,
                 geometry_status: ValueStatus::FromTemplate,
                 points_mm: vec![[0.0, 0.0, 400.0], [0.0, 0.0, 398.0]],
+                standing_points_mm: Vec::new(),
                 sources: vec!["wilke-2024".to_string()],
             }],
             released_levels: vec![Level::T4],
@@ -1104,6 +1226,9 @@ mod tests {
                 free_segments_below: 4,
             }],
             layouts: vec![first, lower],
+            first_is_sketch: false,
+            upper_ends: Vec::new(),
+            lower_ends: Vec::new(),
             choices: LayoutChoices {
                 screw_diameters_mm: vec![4.0, 4.5],
                 screw_lengths_mm: vec![25.0, 27.5],
@@ -1134,10 +1259,66 @@ mod tests {
         }
     }
 
+    fn rebuild() -> RebuildInput {
+        RebuildInput {
+            layout: input(),
+            upper: Level::T4,
+            lower: Level::L1,
+            anchors: vec![AnchorChoice {
+                level: Level::T8,
+                side: BodySide::Left,
+                kind: AnchorKind::Screw,
+                diameter_mm: None,
+                length_mm: Some(30.0),
+            }],
+            rod_material: RodMaterial::CobaltChrome,
+            rod_diameter_mm: 5.5,
+        }
+    }
+
+    fn proposals_with_pedicle_details() -> LayoutProposals {
+        let mut proposals = proposals();
+        proposals.upper_ends = vec![LevelCount {
+            level: Level::T4,
+            versions: 32,
+        }];
+        proposals.lower_ends = vec![LevelCount {
+            level: Level::L1,
+            versions: 32,
+        }];
+        let anchor = &mut proposals.layouts[0].anchors[0];
+        anchor.wider_than_pedicle = vec![DiameterCount {
+            diameter_mm: 4.5,
+            versions: 5,
+        }];
+        anchor.screw_here = Some(ScrewHere {
+            diameter_mm: 4.5,
+            diameter_also_seen: vec![4.0, 5.0],
+            length_mm: 30.0,
+            length_also_seen: vec![32.5],
+            screw_to_pedicle: Some(band(1.1)),
+            medial_angle: anchor.medial_angle.clone(),
+        });
+        anchor.pedicle.sources = vec!["gao-2017".to_string()];
+        anchor.diameter_sources = vec!["sato-2022".to_string()];
+        anchor.length_sources = vec!["upendra-2010".to_string()];
+        anchor.direction_sources = vec!["upendra-2010".to_string()];
+        anchor.look_sources = vec![LookSources {
+            code: LookCode::ConcaveApexNeedsCt,
+            sources: vec!["gao-2017".to_string()],
+        }];
+        proposals.layouts[0].rods[0].standing_points_mm =
+            vec![[1.0, 2.0, 400.0], [1.0, 2.0, 398.0]];
+        proposals
+    }
+
     #[test]
     fn proposals_spell_codes_and_units_and_read_back() {
         let value = serde_json::to_value(proposals()).expect("the proposals serialise");
         assert_eq!(value["tier"], "two-films");
+        assert_eq!(value["firstIsSketch"], false);
+        assert_eq!(value["upperEnds"], json!([]));
+        assert_eq!(value["lowerEnds"], json!([]));
         assert_eq!(value["layouts"][0]["change"], json!({"kind": "first"}));
         assert_eq!(
             value["layouts"][1]["change"],
@@ -1149,7 +1330,22 @@ mod tests {
         assert_eq!(anchor["pedicle"]["innerWidthMm"], serde_json::Value::Null);
         assert_eq!(anchor["pedicle"]["versionsInnerUnder1Mm"], 9);
         assert_eq!(anchor["looks"], json!(["concave-apex-needs-ct"]));
+        assert_eq!(anchor["widerThanPedicle"], json!([]));
+        assert_eq!(anchor["screwHere"], serde_json::Value::Null);
+        assert_eq!(anchor["pedicle"]["sources"], json!([]));
+        for field in [
+            "diameterSources",
+            "lengthSources",
+            "directionSources",
+            "lookSources",
+        ] {
+            assert_eq!(anchor[field], json!([]));
+        }
         assert_eq!(value["layouts"][0]["rods"][0]["coronalLine"], "l5-vertical");
+        assert_eq!(
+            value["layouts"][0]["rods"][0]["standingPointsMm"],
+            json!([])
+        );
         let rule = &value["rules"][0];
         assert_eq!(rule["rule"], "lev-plus-one-5c");
         assert_eq!(rule["counts"]["unread"][0]["reason"], "not-this-curve-type");
@@ -1192,7 +1388,83 @@ mod tests {
     }
 
     #[test]
+    fn hand_changes_and_pedicle_details_keep_their_wire_names() {
+        let value = serde_json::to_value(rebuild()).expect("the changes serialise");
+        assert_eq!(value["rodMaterial"], "cobalt-chrome");
+        assert_eq!(value["rodDiameterMm"], 5.5);
+        assert_eq!(
+            value["anchors"][0],
+            json!({"level": "T8", "side": "left", "kind": "screw", "diameterMm": null, "lengthMm": 30.0})
+        );
+        assert_eq!(
+            serde_json::from_value::<RebuildInput>(value).expect("the changes read back"),
+            rebuild()
+        );
+
+        let proposals = proposals_with_pedicle_details();
+        let value = serde_json::to_value(&proposals).expect("the details serialise");
+        assert_eq!(value["upperEnds"], json!([{"level": "T4", "versions": 32}]));
+        assert_eq!(value["lowerEnds"], json!([{"level": "L1", "versions": 32}]));
+        let anchor = &value["layouts"][0]["anchors"][0];
+        assert_eq!(
+            anchor["widerThanPedicle"],
+            json!([{"diameterMm": 4.5, "versions": 5}])
+        );
+        assert_eq!(anchor["screwHere"]["diameterMm"], 4.5);
+        assert_eq!(anchor["screwHere"]["lengthAlsoSeen"], json!([32.5]));
+        assert_eq!(anchor["screwHere"]["medialAngle"]["source"], "upendra-2010");
+        assert_eq!(
+            anchor["lookSources"],
+            json!([{"code": "concave-apex-needs-ct", "sources": ["gao-2017"]}])
+        );
+        assert_eq!(
+            value["layouts"][0]["rods"][0]["standingPointsMm"][0],
+            json!([1.0, 2.0, 400.0])
+        );
+        assert_eq!(
+            serde_json::from_value::<LayoutProposals>(value).expect("the details read back"),
+            proposals
+        );
+    }
+
+    #[test]
     fn unknown_fields_are_refused_at_each_new_boundary() {
+        let value = serde_json::to_value(rebuild()).expect("the changes serialise");
+        for path in ["", "/layout", "/anchors/0"] {
+            let mut changed = value.clone();
+            changed
+                .pointer_mut(path)
+                .and_then(serde_json::Value::as_object_mut)
+                .expect("an object")
+                .insert("extra".to_string(), json!(1));
+            assert!(
+                serde_json::from_value::<RebuildInput>(changed).is_err(),
+                "{path}"
+            );
+        }
+
+        let value =
+            serde_json::to_value(proposals_with_pedicle_details()).expect("the details serialise");
+        for path in [
+            "/upperEnds/0",
+            "/lowerEnds/0",
+            "/layouts/0/anchors/0/widerThanPedicle/0",
+            "/layouts/0/anchors/0/screwHere",
+            "/layouts/0/anchors/0/screwHere/medialAngle",
+            "/layouts/0/anchors/0/lookSources/0",
+        ] {
+            let mut changed = value.clone();
+            changed
+                .pointer_mut(path)
+                .and_then(serde_json::Value::as_object_mut)
+                .expect("an object")
+                .insert("extra".to_string(), json!(1));
+            assert!(
+                serde_json::from_value::<LayoutProposals>(changed).is_err(),
+                "{path}"
+            );
+        }
+
         let value = serde_json::to_value(input()).expect("the input serialises");
         for path in ["", "/front", "/child"] {
             let mut changed = value.clone();

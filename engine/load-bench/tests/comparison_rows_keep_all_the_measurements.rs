@@ -33,7 +33,7 @@ fn cells(
 #[test]
 fn lumbar_comparisons_keep_the_translation_means_and_standard_deviations() {
     let e = Evidence::read().unwrap();
-    // published-simulators §2a: Fx/Dx, Fy/Dy, Fz/Dz, mean/SD in kN/mm.
+    // Fx/Dx, Fy/Dy, Fz/Dz, mean/SD in kN/mm.
     // Named axes matter; matching a multiset would allow swapped axes/SDs.
     for (key, v) in [
         ("lumbar-disc-0", [0.06, 0.01, 0.08, 0.01, 0.41, 0.08]),
@@ -62,7 +62,7 @@ fn lumbar_comparisons_keep_the_translation_means_and_standard_deviations() {
 #[test]
 fn the_rib_comparison_keeps_the_reported_uncertainty_beside_the_mean() {
     let e = Evidence::read().unwrap();
-    // published-simulators §2b: AR EZS T4–T8 with ribs 4.51 ± 6.13.
+    // AR EZS T4–T8 with ribs 4.51 ± 6.13.
     cells(
         &e,
         TableKind::JointSprings,
@@ -71,7 +71,7 @@ fn the_rib_comparison_keeps_the_reported_uncertainty_beside_the_mean() {
         "mannen-2018",
         &[("ar-with-ribs", 4.51), ("ar-with-ribs-sd", 6.13)],
     );
-    // Same section's Wilke ROM table, full FE column.
+    // Wilke ROM values, full FE column.
     cells(
         &e,
         TableKind::JointSprings,
@@ -93,7 +93,7 @@ fn the_rib_comparison_keeps_the_reported_uncertainty_beside_the_mean() {
 #[test]
 fn rod_sections_and_the_additional_alloys_keep_their_original_units() {
     let e = Evidence::read().unwrap();
-    // implant-mechanics Table A: copied computed values, NOT recomputed.
+    // Computed section values are retained without recomputing them.
     for (key, v) in [
         (
             "section-at-4.75mm",
@@ -161,7 +161,7 @@ fn rod_sections_and_the_additional_alloys_keep_their_original_units() {
             &[("yield-moment-titanium-at-900MPa", v[6])],
         );
     }
-    // Table A headers: the inputs behind its own inferences.
+    // Reference inputs behind the section-property inferences.
     cells(
         &e,
         TableKind::RodMaterials,
@@ -182,7 +182,7 @@ fn rod_sections_and_the_additional_alloys_keep_their_original_units() {
             ("young-modulus-stainless-steel", 193.0),
         ],
     );
-    // implant-mechanics §4 material table: distinct Ti6Al7Nb and UHSS sets.
+    // Distinct Ti6Al7Nb and UHSS material sets.
     cells(
         &e,
         TableKind::RodMaterials,
@@ -237,7 +237,7 @@ fn rod_sections_and_the_additional_alloys_keep_their_original_units() {
 #[test]
 fn anchor_comparisons_keep_every_reference_multiplier_and_precision() {
     let e = Evidence::read().unwrap();
-    // implant-mechanics Table B and §1 supplying paragraphs.
+    // Pull-out comparisons with their qualifying conditions.
     cells(
         &e,
         TableKind::AnchorStrength,
@@ -302,7 +302,7 @@ fn anchor_comparisons_keep_every_reference_multiplier_and_precision() {
         "tsai-2009",
         &[("diameter", 6.0), ("engaged-length", 30.0)],
     );
-    // implant-mechanics Table C: each effect and its qualifying inputs.
+    // Each pull-out effect retains its qualifying inputs.
     for (key, term, source, value) in [
         (
             "trajectory-multiplier",
@@ -363,14 +363,10 @@ fn anchor_comparisons_keep_every_reference_multiplier_and_precision() {
             ("high-bmd-lower-exclusive", 120.0),
         ],
     );
-    // outcomes §3/Table C supplies the region absent from mechanics §1.
+    // The hook comparison retains the reported region.
     let hook = e.row(TableKind::AnchorStrength, "laminar-hook").unwrap();
     assert!(hook.description.contains("T9–T12"));
-    assert!(
-        hook.values[0]
-            .section
-            .contains("citation-audit-physics-tables.md")
-    );
+    assert_eq!(hook.values[0].section, "abstract");
     cells(
         &e,
         TableKind::AnchorStrength,
@@ -384,7 +380,7 @@ fn anchor_comparisons_keep_every_reference_multiplier_and_precision() {
 #[test]
 fn load_tables_keep_millions_pressure_inputs_and_activity_populations() {
     let e = Evidence::read().unwrap();
-    // growth-and-loads Table E: copied fractions and model tissue density.
+    // Mass fractions and model tissue density.
     cells(
         &e,
         TableKind::DailyLoads,
@@ -412,7 +408,7 @@ fn load_tables_keep_millions_pressure_inputs_and_activity_populations() {
         "keenan-2015",
         &[("density", 1040.0)],
     );
-    // Table F: rounded million cycles/year, not converted back from steps.
+    // Rounded million cycles/year, not converted back from steps.
     for (key, terms) in [
         ("annual-cycles-very-low", vec![("upper-exclusive", 1.8)]),
         ("annual-cycles-low", vec![("lower", 1.8), ("upper", 2.7)]),
@@ -563,7 +559,7 @@ fn load_tables_keep_millions_pressure_inputs_and_activity_populations() {
 #[test]
 fn adult_telemetry_keeps_absolute_loads_distinct_from_multiples() {
     let e = Evidence::read().unwrap();
-    // outcomes-over-time §7 and complete Table D numerical cells.
+    // Telemetry comparisons retain every numerical cell.
     for (key, source, expected) in [
         (
             "vbr-supine",
@@ -678,7 +674,7 @@ fn adult_telemetry_keeps_absolute_loads_distinct_from_multiples() {
 #[test]
 fn coupon_conditions_keep_run_out_inequalities_and_reversal_units() {
     let e = Evidence::read().unwrap();
-    // fast-physics §7 Carrion coupon bullet, all strain conditions.
+    // Carrion coupon data: all strain conditions.
     for (key, strain, ratio) in [
         ("r-minus-one-strain-0.006", 0.006, -1.0),
         ("r-minus-one-strain-0.004", 0.004, -1.0),
@@ -735,9 +731,9 @@ fn coupon_conditions_keep_run_out_inequalities_and_reversal_units() {
 }
 
 #[test]
-fn citation_authors_do_not_gain_detail_absent_from_the_notes() {
+fn citation_authors_do_not_gain_detail_absent_from_the_records() {
     let e = Evidence::read().unwrap();
-    // citation-audit-physics-tables.md §A supplies full author records.
+    // Full author records are retained.
     for (key, authors) in [
         ("stokes-gardner-morse-2016", "Stokes IAF, Gardner-Morse M"),
         (

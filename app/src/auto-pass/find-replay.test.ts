@@ -45,7 +45,8 @@ describe('replaying the returned outlines', () => {
     expect(plan?.at.get('side:2')).toBeCloseTo(2 / 3);
     expect(plan?.last).toBeCloseTo(2 / 3);
     expect(revealPlan([marks('front', ['C7'])], {}, light)).toBeNull();
-    expect(revealPlan([marks('side', ['T1'])], {}, light)).toBeNull();
+    expect(revealPlan([marks('side', ['L1', 'L2', 'L3', 'L4', 'L5'])], {}, light)?.counted).toHaveLength(5);
+    expect(revealPlan([marks('bend-left', ['T1'])], {}, light)).toBeNull();
   });
   it('keeps the light off outside its one journey', () => {
     expect([0, 699, 700, 2900, 5100, 5101].map((time) => lightShareAt(times, time))).toEqual([null, null, 0, 0.5, 1, null]);

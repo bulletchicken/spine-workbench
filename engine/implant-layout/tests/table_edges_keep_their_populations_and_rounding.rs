@@ -81,7 +81,7 @@ fn centre_spread(value: &PublishedValue) -> (f64, f64) {
 
 #[test]
 fn fractional_age_edges_choose_the_stated_populations_and_both_sex_columns() {
-    // SYNTHESIS 2.8 selects Zheng only below 12, Gao at 12 or absent.
+    // Zheng's table is used below 12 years, Gao's from 12 or when age is absent.
     // Whole-year child band labels are interpreted as completed years.
     for (age, band) in [
         (Some(4.9), None),
@@ -142,7 +142,7 @@ fn fractional_age_edges_choose_the_stated_populations_and_both_sex_columns() {
     assert!(chord(Level::L1, CurveSide::Outside, None).is_some());
     // The female 5-8 T10 width is printed-only because its spread is
     // malformed. Both sex columns are required, so the usable male
-    // column cannot supply the whole answer (DECISIONS exclusions).
+    // column cannot supply the whole answer.
     assert!(width_prior(Level::T10, Some(8.9), CurveSide::Convex).is_none());
     assert!(
         medial_angles_beside(Level::T4, Some(18.0))
@@ -153,7 +153,7 @@ fn fractional_age_edges_choose_the_stated_populations_and_both_sex_columns() {
 
 #[test]
 fn only_whole_millimetre_cells_gain_a_centred_band_once_per_version() {
-    // DECISIONS: one uniform(-0.5,+0.5) per cell/version. A complete
+    // One uniform(-0.5,+0.5) per cell/version. A complete
     // 32-stratum uniform draw must have 16 residuals of each sign, span
     // above 30/32 mm, and mean magnitude below half a stratum (1/64 mm).
     // Zero normal draws make those uniform consequences independent of

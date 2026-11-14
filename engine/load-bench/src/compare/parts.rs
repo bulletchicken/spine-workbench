@@ -142,6 +142,8 @@ pub(super) fn summarise(
         .filter_map(|(part, values, versions_past_strength)| {
             let share = band(&values)?;
             Some(PartResult {
+                demand: None,
+                sources: Vec::new(),
                 part,
                 share,
                 steady: values.len() == own.len()

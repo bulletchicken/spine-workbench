@@ -238,6 +238,12 @@ pub fn anchor(
         AnchorKind::None
     };
     Ok(AnchorProposal {
+        wider_than_pedicle: Vec::new(),
+        screw_here: None,
+        diameter_sources: Vec::new(),
+        length_sources: Vec::new(),
+        direction_sources: Vec::new(),
+        look_sources: Vec::new(),
         level,
         side,
         kind,

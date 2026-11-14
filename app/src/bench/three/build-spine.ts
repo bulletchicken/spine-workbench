@@ -36,6 +36,7 @@ export function failSpineView(): void {
 }
 export async function buildSpine(engine: Pick<EngineClient, 'fitSpine'>): Promise<void> {
   if (spineBuild.getState().phase === 'building') return;
+  if (!caseStore.getState().case.films.some((f) => f.kind === 'front')) return;
   const c = caseStore.getState().case;
   if (hasCurrentFit(c)) { threeState.getState().clear(); currentStep.getState().go('three'); return; }
   const mine = ++run;

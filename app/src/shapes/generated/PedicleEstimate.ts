@@ -18,4 +18,8 @@ innerWidthMm: Band | null,
 /**
  * Versions with an outer width under 3.2 mm.
  */
-versionsTooNarrow: number, versionsInnerUnder1Mm: number, curveSide: CurveSide, status: ValueStatus, };
+versionsTooNarrow: number, versionsInnerUnder1Mm: number, curveSide: CurveSide, status: ValueStatus, 
+/**
+ * Source keys behind the width draws; empty without a width table.
+ */
+sources: Array<string>, };

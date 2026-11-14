@@ -1,4 +1,4 @@
-import { Fragment, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
+import { Fragment, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { cameras } from '@/film-viewer/camera/cameras';
 import { fit, lookPoint, zoomOverFit } from '@/film-viewer/camera/camera';
 import { comparisonLayout } from './three/comparison-layout';
@@ -22,6 +22,7 @@ import { CAPTION, captionSpot, FILM_ORDER, stageLayout, type Spot, type StageLay
 
 export type Moment = 'films' | 'find' | 'three';
 export interface StageFilm {
+  view?: import('@/film-viewer/film-space').FilmView;
   size: FilmSize;
   pixels: Uint16Array;
   thumbnail: Uint8Array;
@@ -49,6 +50,7 @@ export interface FilmDriver {
   finish(): void;
 }
 export interface StageProps {
+  sideControls?: ReactNode;
   compared?: FilmKind | null;
   sheetOpen?: boolean;
   onPressFilm?: (kind: FilmKind) => void;
@@ -131,7 +133,7 @@ function captureOpening(part: HTMLElement, drawing: Drawing) {
   })) };
 }
 
-export function Stage({ moment, films, reading, held, leaving, marked, reviewing, replay, onPressPlace, onPoint, forming = false, onFilmDriver, compared = null, sheetOpen = false, onPressFilm }: StageProps) {
+export function Stage({ moment, films, reading, held, leaving, marked, reviewing, replay, onPressPlace, onPoint, forming = false, onFilmDriver, compared = null, sheetOpen = false, onPressFilm, sideControls }: StageProps) {
   const tiles = useRef<HTMLDivElement>(null);
   const display = useRef<HTMLHeadingElement>(null);
   const [measures, setMeasures] = useState<Measures>({ width: 0, height: 0, displayHeight: 0, railHeight: RAIL_HEIGHT, railGap: RAIL_GAP, dx: 0, dy: 0, narrow: false, tileGap: 0, clear: 0, maxHeight: 0, caption: 0 });
@@ -305,7 +307,7 @@ export function Stage({ moment, films, reading, held, leaving, marked, reviewing
           const rail = compared === kind ? stageLayout({ ...measures, present: present.split(',') as FilmKind[], moment: 'three' }).spots[kind] : null;
           return (
             <Fragment key={kind}>
-              {film !== null && <FilmTile kind={kind} index={index} film={moment === 'three' ? { ...film, names: forming ? findOpening?.films[kind]?.names ?? film.names : compared === kind, on: film.on, only: null, frame: forming ? findOpening?.films[kind]?.frame ?? film.frame : { kind: 'whole' }, light: null } : film} spot={spot} {...(moment === 'three' && onPressFilm !== undefined ? { onPress: () => { onPressFilm(kind); }, selected: compared === kind } : {})} glide={moment !== 'three'} replay={replay} target={held.target === kind}
+              {film !== null && <FilmTile controls={kind === 'side' && moment !== 'three' ? sideControls : undefined} kind={kind} index={index} film={moment === 'three' ? { ...film, names: forming ? findOpening?.films[kind]?.names ?? film.names : compared === kind, on: film.on, only: null, frame: forming ? findOpening?.films[kind]?.frame ?? film.frame : { kind: 'whole' }, light: null } : film} spot={spot} {...(moment === 'three' && onPressFilm !== undefined ? { onPress: () => { onPressFilm(kind); }, selected: compared === kind } : {})} glide={moment !== 'three'} replay={replay} target={held.target === kind}
                 {...((moment === 'find' && !reviewing || moment === 'three' && compared === kind) && onPoint !== undefined ? { onPoint: (key: string | null) => { onPoint(kind, key); } } : {})} />}
               {compared === kind && <button type="button" className="compare-slot" aria-label={THREE_WORDS.railSlot} onClick={() => onPressFilm?.(kind)} style={{ left: rail?.x, top: rail?.y, width: rail?.width, height: rail?.height }} />}
               {(moment !== 'three' || film !== null) && <div className="caption" data-place={kind} aria-hidden="true" data-away={moment === 'find' && film === null || undefined}

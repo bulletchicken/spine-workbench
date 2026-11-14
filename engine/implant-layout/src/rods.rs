@@ -528,6 +528,7 @@ pub fn propose_with_overbend(
         sources.sort();
         sources.dedup();
         result.push(RodProposal {
+            standing_points_mm: Vec::new(),
             side,
             curve_side,
             material: choice.material,
@@ -1344,6 +1345,12 @@ mod tests {
                     let centre = Vector3::from(v.pose.centre);
                     let sign = if side == BodySide::Left { 1.0 } else { -1.0 };
                     AnchorProposal {
+                        wider_than_pedicle: Vec::new(),
+                        screw_here: None,
+                        diameter_sources: Vec::new(),
+                        length_sources: Vec::new(),
+                        direction_sources: Vec::new(),
+                        look_sources: Vec::new(),
                         level: v.level,
                         side,
                         kind: AnchorKind::Screw,
@@ -1371,6 +1378,7 @@ mod tests {
                         length_status: ValueStatus::Missing,
                         usual_length_mm: None,
                         pedicle: PedicleEstimate {
+                            sources: Vec::new(),
                             outer_width_mm: None,
                             inner_width_mm: None,
                             versions_too_narrow: 0,

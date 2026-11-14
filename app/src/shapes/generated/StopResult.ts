@@ -3,6 +3,7 @@ import type { Band } from "./Band";
 import type { BenchStop } from "./BenchStop";
 import type { Estimate } from "./Estimate";
 import type { PartResult } from "./PartResult";
+import type { RodLine } from "./RodLine";
 import type { VertebraPose } from "./VertebraPose";
 
 /**
@@ -15,9 +16,26 @@ export type StopResult = { stop: BenchStop, estimates: Array<Estimate>, parts: A
  */
 ghosts: Array<Array<VertebraPose>> | null, 
 /**
+ * A spine for drawing only: at `before`, the fit's standing poses
+ * for the levels the bench carries; at `rods-in`, one extra run with
+ * every drawn unknown at the middle of its range. `null` at later
+ * stops, and at `rods-in` when that run does not settle.
+ * It is never a version and never enters an estimate, part or count.
+ */
+middle: Array<VertebraPose> | null, 
+/**
+ * The rods seated in that same middle run, present at `rods-in`
+ * when `middle` is; `null` otherwise. For drawing only.
+ */
+rods: Array<RodLine> | null, 
+/**
  * At a year of walking, the steps in a year; `null` at other stops.
  */
 cyclesPerYear: Band | null, 
+/**
+ * Source keys behind the step bands; empty when no source is used.
+ */
+cyclesSources: Array<string>, 
 /**
  * Versions where the rods are too soft for the rigid-rod method.
  */

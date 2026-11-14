@@ -12,7 +12,7 @@
       },
       "unit": "implants-per-level",
       "source": "larson-2013",
-      "section": "existing-tools-and-gaps.md §7",
+      "section": "abstract",
       "qualifier": "Published implants per fused level; includes anchor types beyond screws."
     },
     {
@@ -26,7 +26,7 @@
       },
       "unit": "implants-per-level",
       "source": "mimo-2024",
-      "section": "implant-mechanics.md §6",
+      "section": "abstract",
       "qualifier": "Low ≤1.4; high ≥1.8 implants per fused level."
     },
     {
@@ -40,7 +40,7 @@
       },
       "unit": "implants-per-level",
       "source": "mimo-2024",
-      "section": "implant-mechanics.md §6",
+      "section": "abstract",
       "qualifier": "Low ≤1.4; high ≥1.8 implants per fused level."
     },
     {
@@ -54,7 +54,7 @@
       },
       "unit": "percent",
       "source": "mimo-2024",
-      "section": "implant-mechanics.md §6"
+      "section": "abstract"
     },
     {
       "coordinate": {
@@ -67,7 +67,7 @@
       },
       "unit": "percent",
       "source": "mimo-2024",
-      "section": "implant-mechanics.md §6"
+      "section": "abstract"
     },
     {
       "coordinate": {
@@ -80,7 +80,7 @@
       },
       "unit": "ratio",
       "source": "zhao-2024",
-      "section": "outcomes-over-time.md §1",
+      "section": "table row \"UIV hooks versus screw\"; table number not recorded",
       "qualifier": "Association; table confidence interval preferred over misprinted body text."
     },
     {
@@ -95,7 +95,7 @@
       },
       "unit": "ratio",
       "source": "zhao-2024",
-      "section": "outcomes-over-time.md §1"
+      "section": "table row \"UIV hooks versus screw\"; table number not recorded"
     },
     {
       "coordinate": {
@@ -108,7 +108,7 @@
       },
       "unit": "percent",
       "source": "zhao-2024",
-      "section": "outcomes-over-time.md §1"
+      "section": "table row \"UIV hooks versus screw\"; table number not recorded"
     },
     {
       "coordinate": {
@@ -121,7 +121,7 @@
       },
       "unit": "percent",
       "source": "cammarata-2014",
-      "section": "outcomes-over-time.md §1 mechanistic models",
+      "section": "abstract",
       "qualifier": "About26% reduction in proximal angle, force and moment; six adult scoliosis models, not an AIS outcome estimate."
     }
   ]

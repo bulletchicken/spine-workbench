@@ -9,6 +9,11 @@ import type { SampledUnknown } from "./SampledUnknown";
  */
 export type Estimate = { measure: Measure, band: Band, tag: EstimateTag, 
 /**
- * The drawn unknown it moves with most, by rank correlation.
+ * The drawn unknown it moves with most, by rank correlation;
+ * `null` when nothing moves with it. This is no causal attribution.
  */
-mostlyFrom: SampledUnknown, };
+mostlyFrom: SampledUnknown | null, 
+/**
+ * Source keys behind the number; empty when it rests only on films.
+ */
+sources: Array<string>, };

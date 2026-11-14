@@ -58,6 +58,17 @@ loads enter summaries. Their unused springback share is zero and must only be
 read when `settled` is true. Incomplete estimate ensembles remain assumed,
 and incomplete part ensembles are not called steady.
 
+The result contract includes nullable `mainCurve` (`upper`, `apex`, `lower`)
+and, at each stop, nullable `middle` drawing poses and nullable `rods` drawing
+lines (`side`, `pointsMm`). A middle run is separate from the versions and
+must never enter estimates or counts. The fields are currently null at every
+stop, including `before`. Per-part `demand` is also null; its contract is an
+anchor's force over bone-adjusted strength over settled versions, absent at
+`before` and for other parts. `Estimate.sources`, `PartResult.sources` and
+`StopResult.cyclesSources` are currently empty evidence-key lists. Their
+emptiness must not be read as film-only provenance while they are unfilled.
+Before-stop estimates and shares retain their existing representation.
+
 ## What is computed
 
 The chain has one rigid body per vertebra and six springs at each disc. The
@@ -174,9 +185,10 @@ Tags are computed per estimate using project thresholds:
 correlation with that estimate. Ties receive equal average ranks. Dot order
 sorts by the unknown most correlated with the **paired difference**. These
 associations describe the chosen ensemble, not causal attribution. Geometry
-and rib cage use the strongest individual component; constant correlations
-fall back to geometry with version-index dot order because the contract has
-no absent-driver value. Ghosts are
+and rib cage use the strongest individual component. `mostlyFrom` and
+`sortedBy` are nullable when no unknown moves with the result; aggregation
+currently keeps its existing answers present, including the geometry
+fallback with version-index dot order for constant correlations. Ghosts are
 actual version poses nearest the p10 and p90 main-Cobb ranks; a pose is never
 interpolated between spines.
 
@@ -188,6 +200,11 @@ binomial standard error at 32 versions is sqrt(0.25/32), about 0.088. These
 margins, count cutoffs and tag cutoffs are project thresholds, not clinical
 thresholds. A count past published strength is also an assumption; it is not a
 failure probability.
+
+`PairedCount.outcomes` reserves one `lower`, `higher` or `tie` for each dot,
+following `order`; it is currently empty. `clearAt` is the clear-count
+threshold of three quarters of the number of entries in `order`, rounded
+up. The existing `lower`, `higher`, `ties` and dot order are unchanged.
 
 ## Embedded tables and sources
 
@@ -205,7 +222,7 @@ them.
 |---|---|---|
 | `joint-springs.json` | T1/2–L4/5 translation AP/ML/CC 1392/294/341 N/mm; rotation about AP/ML/CC 448/644/738 N·mm/degree. L5/S1 700/190/190 and 222/410/410. | Tachi 2021, n=47; borrowed adult lumbar stiffness, uniformly applied in that planner [peer-reviewed, full text]. |
 | same | Release: axial rotation −17%, flexion −15%, coronal −3.8%, compression −14%. | Wang 2017; cited cadaver calibration targets, not measurements from its ten patients [peer-reviewed, full text]. |
-| same | Preload factor 1.71–2.11. Overall stiffness ×1–10. Thoracic lateral and axial rib factors. Adult disc and thoracic comparisons. | Gardner-Morse and Stokes 2004 [peer-reviewed, abstract]; Petit 2004 [peer-reviewed, abstract]; Watkins 2005 [peer-reviewed, abstract], Mannen 2018, Liebsch 2020, Stokes and Gardner-Morse 2016 and Wilke 2017 [peer-reviewed, full text]. Scale and rib ranges are own priors. Flexion bounds are derived explicitly from Mannen's with/without-rib values 2.29/2.12 and 2.97/1.39; the literal rounded range is not a published table cell. |
+| same | Preload factor 1.71–2.11. Overall stiffness ×0.65–5.6 (assumed solver calibration). Thoracic lateral and axial rib factors. Adult disc and thoracic comparisons. | Gardner-Morse and Stokes 2004 [peer-reviewed, abstract]; Petit 2004 [peer-reviewed, abstract]; Watkins 2005 [peer-reviewed, abstract], Mannen 2018, Liebsch 2020, Stokes and Gardner-Morse 2016 and Wilke 2017 [peer-reviewed, full text]. The scale is calibrated against Salmingo 2013 head forces; rib ranges are own priors. Flexion bounds are derived explicitly from Mannen's with/without-rib values 2.29/2.12 and 2.97/1.39; the literal rounded range is not a published table cell. |
 | `rod-materials.json` | Titanium E=114 GPa, yield 896–1034 and ultimate 965–1103 MPa; CoCr E=240, yield 500–1500, ultimate 900–1540; steel E=193, yield 170–310, ultimate 540–1000. | Prasad 2017 [peer-reviewed, full text]. Titanium strengths use body text because its Table 1 pair contradicts itself. One quantile samples yield and ultimate together, keeping yield below ultimate. Steel condition is not stated. |
 | same | Alternative planner/coupon material sets, textbook ranges and computed section comparisons. | Tachi 2021; Little 2013; Jeong 2025; Song 2021; Ohrt-Nissen 2018; Abe 2015 and other source keys retained in that table [peer-reviewed; access in bibliography]. They are distinct sets, not mixed material properties. Section arithmetic is own inference. |
 | `anchor-strength.json` | T1–T8 screw 481–611 N; T9–T12 screw 807 N; hook 321 N; lumbar screw 1056.4 N. | Lehman 2003, 30 paired adult thoracic vertebrae; Liljenqvist 2001, 9 adult spines/90 tests; Soshi 1991, lumbar cadavers [peer-reviewed, abstracts]. T1–T8 assignment and borrowing the hook region are own choices. |
@@ -216,9 +233,13 @@ them.
 | `fatigue.json` | Ti/CoCr construct run-outs 250/290 N, 5.5 mm rods, 5 million cycles. Historical Goodman-equivalent references 169/191 MPa; contour factor 0.6–0.8. Coupon comparisons retained. | Vieweg 2023 [peer-reviewed, full text]; Slivka 2013 [peer-reviewed, abstract]. The 40 mm fixture arm/equal sharing conversion and extrapolation of contour loss to CoCr and other diameters are own inference. Runtime ultimate strengths are sampled from Prasad, not the historical calibration's 900/1200 MPa. Steel has no construct-fatigue reference. |
 | `sources.json` | Publication identifiers, sample and population qualifications, source access and known omissions. | Bibliographic metadata for the papers above and the retained comparison rows. The project-assumptions key is own inference, not a paper. |
 
-The broad stiffness prior mixes two baselines and has not been set using
-in-theatre forces. A uniform tissue scale leaves order-0 geometry unchanged
-and scales its forces; it also affects springback and daily load sharing. Rod
+The assumed 0.65–5.6 stiffness prior calibrates this solver with 5.5 mm
+cobalt-chrome rods and no overbend against published peak head forces of
+192–439 N (Salmingo 2013, n=6, PMID 23273729; author manuscript read in full).
+It is not a measurement of the child.
+
+A uniform tissue scale leaves order-0 geometry unchanged and scales its
+forces; it also affects springback and daily load sharing. Rod
 beam Poisson ratio 0.3 and shear coefficient 0.9 are explicit project choices,
 not Prasad material claims. Screw capacity is not scaled by catalogue size
 because the requisite reference screw dimensions are missing.
@@ -315,6 +336,11 @@ change which local constrained state is reached; a published-direction probe
 is plausibility, not truth about this child's spine.
 
 ## Numerical checks
+
+Linear correction and daily solves recover rod strains in the moving frame
+before applying stiffness. Up to eight improving refinement steps check the
+same body and free-frame equations at the unchanged 1e-9 relative tolerance;
+a non-positive tangent or residual above tolerance remains unsettled.
 
 The suite includes closed-form spring/beam/statics/Goodman checks, balance and
 mirror checks, stiffness and weight scale laws, no-force fitting rods,

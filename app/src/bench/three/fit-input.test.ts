@@ -122,3 +122,23 @@ describe('standing fit input', () => {
     expect(key()).not.toBe(confirmed);
   });
 });
+
+it('carries a real trained lumbar Side and its explicit facing to the fit', () => {
+  const { store, sources, pixels } = visit();
+  const c = store.getState().case;
+  const film = c.films.find((f) => f.kind === 'side');
+  const marks = c.marks.find((m) => m.film === 'side');
+  const base = marks?.vertebrae[0];
+  if (film === undefined || marks === undefined || base === undefined) throw new Error('no Side');
+  film.geometry.imageRight = 'posterior'; film.geometry.confirmed.facing = true;
+  marks.namedFor = 'posterior';
+  marks.vertebrae = (['L1', 'L2', 'L3', 'L4', 'L5'] as const).map((level, i) => ({ ...base, id: 100 + i, level }));
+  sources.getState().kept('side', 'trained', pixels.getState().openings.side);
+  const input = fitInputFor(c, sources.getState().films, pixels.getState().openings);
+  expect(input.front.marks).toEqual(c.marks.find((m) => m.film === 'front'));
+  expect(input.front.markSpread.kind).toBe('share-of-height');
+  expect(input.side?.facingAssumed).toBe(false);
+  expect(input.side?.geometry.imageRight).toBe('posterior');
+  expect(input.side?.marks.vertebrae.map((v) => v.level)).toEqual(['L1', 'L2', 'L3', 'L4', 'L5']);
+  expect(input.side?.marks.vertebrae.map((v) => v.marks)).toEqual(marks.vertebrae.map((v) => v.marks));
+});

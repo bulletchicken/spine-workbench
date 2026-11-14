@@ -6,8 +6,9 @@
 //! holding couple on the upper side, at its moving material disc point.
 //! Comparing vector norms removes the arbitrary choice of action side.
 
-use crate::chain::{Chain, ChainError, Pose, Wrench};
-use crate::daily_loads::{DailyResponse, tangent_matrix};
+use crate::chain::{Chain, ChainError, Pose};
+use crate::daily_loads::DailyResponse;
+use crate::joint_springs::rotation_response_tangent;
 use nalgebra::{DVector, Vector3};
 use shapes::levels::Level;
 
@@ -62,11 +63,11 @@ pub fn ratios(
     })
 }
 
-/// Differentiate the spatial moment balance of the chain prefix, retaining
-/// moving body centres and the moving disc point. The energy Hessian's
-/// rotational chart term is removed to recover spatial holding-wrench
-/// derivatives. Thus a translational spring lever arm is never counted as
-/// an intrinsic disc couple, even at a prestressed seated pose.
+/// Differentiate each disc's intrinsic log-spring couple directly.
+/// This is the same spatial holding-couple derivative as a chain-prefix
+/// balance, without cancellation between large force-arm and body-chart
+/// terms. Translation spring forces act through the material joint point
+/// and therefore add no intrinsic couple there.
 pub fn moment_increments(
     chain: &Chain,
     poses: &[Pose],
@@ -75,46 +76,26 @@ pub fn moment_increments(
     if displacement.len() != 6 * poses.len() || displacement.iter().any(|v| !v.is_finite()) {
         return Err(ChainError::Dimensions);
     }
-    let linear = chain.linearise(poses)?;
-    let derivative = tangent_matrix(&linear) * displacement;
+    let evaluation = chain.evaluate(poses)?;
+    let stiffness = chain.joint_stiffnesses();
     let frames = chain.joint_motion_frames(poses)?;
-    let motions: Vec<_> = displacement
-        .as_slice()
-        .as_chunks::<6>()
-        .0
-        .iter()
-        .map(|u| Wrench::from_column_slice(u))
-        .collect();
-    let spatial: Vec<_> = linear
-        .evaluation
-        .gradient
+    Ok(frames
         .iter()
         .enumerate()
-        .map(|(i, g)| {
-            let mut dg = Wrench::from_column_slice(derivative.rows(6 * i, 6).as_slice());
-            let correction = g.fixed_rows::<3>(3).cross(&motions[i].fixed_rows::<3>(3)) * 0.5;
-            dg.fixed_rows_mut::<3>(3).add_assign(-correction);
-            dg
+        .map(|(i, frame)| {
+            let upper_turn = Vector3::from_column_slice(displacement.rows(6 * i + 3, 3).as_slice());
+            let lower_turn = if i + 1 < poses.len() {
+                Vector3::from_column_slice(displacement.rows(6 * (i + 1) + 3, 3).as_slice())
+            } else {
+                Vector3::zeros()
+            };
+            let rotation = evaluation.deformation[i].fixed_rows::<3>(3).into_owned();
+            let (couple, tangent) = rotation_response_tangent(&rotation, &stiffness[i]);
+            let relative_turn = frame.lower_rotation.transpose() * (upper_turn - lower_turn);
+            // Remove the exponential chart's +1/2[couple]x to get the
+            // spatial derivative, then transport the lower frame once.
+            let local = (tangent - couple.cross_matrix() * 0.5) * relative_turn;
+            lower_turn.cross(&(frame.lower_rotation * couple)) + frame.lower_rotation * local
         })
-        .collect();
-    let mut moments = Vec::with_capacity(poses.len());
-    for (joint, frame) in frames.iter().enumerate() {
-        let point = frame.upper_point_mm;
-        let point_motion = motions[joint].fixed_rows::<3>(0).into_owned()
-            + motions[joint]
-                .fixed_rows::<3>(3)
-                .cross(&(point - poses[joint].centre_mm));
-        let mut moment = Vector3::zeros();
-        for i in 0..=joint {
-            let gradient = &linear.evaluation.gradient[i];
-            moment += (motions[i].fixed_rows::<3>(0) - point_motion)
-                .cross(&gradient.fixed_rows::<3>(0))
-                + (poses[i].centre_mm - point).cross(&spatial[i].fixed_rows::<3>(0))
-                + spatial[i].fixed_rows::<3>(3);
-        }
-        moments.push(moment);
-    }
-    Ok(moments)
+        .collect())
 }
-
-use core::ops::AddAssign;

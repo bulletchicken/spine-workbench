@@ -393,6 +393,12 @@ fn unknown_age_and_unmeasured_twist_keep_every_covered_thoracic_width() {
 
 fn candidate(level: Level, side: BodySide) -> AnchorProposal {
     AnchorProposal {
+        wider_than_pedicle: Vec::new(),
+        screw_here: None,
+        diameter_sources: Vec::new(),
+        length_sources: Vec::new(),
+        direction_sources: Vec::new(),
+        look_sources: Vec::new(),
         level,
         side,
         kind: AnchorKind::Screw,
@@ -416,6 +422,7 @@ fn candidate(level: Level, side: BodySide) -> AnchorProposal {
         length_status: ValueStatus::FromTables,
         usual_length_mm: None,
         pedicle: PedicleEstimate {
+            sources: Vec::new(),
             outer_width_mm: None,
             inner_width_mm: None,
             versions_too_narrow: 0,

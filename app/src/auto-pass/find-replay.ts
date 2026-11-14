@@ -18,7 +18,7 @@ export function revealPlan(marks: readonly FilmMarks[], sizes: Partial<Record<Fi
     outlines: fromFilmMarks(film, () => ({ look: 'found', spoken: '' }), () => false)
       .map((m) => ({ key: `${film.film}:${m.key}`, name: m.name, y: m.quad.reduce((sum, p) => sum + p[1], 0) / 4 })),
   }));
-  const lead = films.find((film) => film.kind === 'front');
+  const lead = films.find((film) => film.kind === 'front' && film.outlines.length > 0) ?? films.find((film) => film.kind === 'side' && film.outlines.length > 0);
   if (lead === undefined || lead.outlines.length === 0) return null;
   const at = new Map<string, number>();
   const runs: RevealPlan['light'] = {};
@@ -30,7 +30,7 @@ export function revealPlan(marks: readonly FilmMarks[], sizes: Partial<Record<Fi
     const from = Math.min(...ys) - light.edge * scale;
     const to = Math.max(...ys) + light.edge * scale;
     runs[film.kind] = { from, to, height: light.height * scale };
-    if (film.kind === 'front') for (const m of film.outlines) shares.set(m.name, to === from ? 0.5 : (m.y - from) / (to - from));
+    if (film === lead) for (const m of film.outlines) shares.set(m.name, to === from ? 0.5 : (m.y - from) / (to - from));
   }
   for (const film of films) {
     const run = runs[film.kind];

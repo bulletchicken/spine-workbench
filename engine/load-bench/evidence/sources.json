@@ -15,10 +15,10 @@
       "doi": null,
       "read": "secondary",
       "n": null,
-      "population": "No measured population; explicit choices and calculations in the project notes.",
+      "population": "No measured population; explicit project choices and calculations.",
       "label": "own-inference",
       "url": null,
-      "notes": "Not a publication. Each cell cites the local note section and retains its supporting inputs.",
+      "notes": "Not a publication. Each cell states what the assumption or calculation is and retains its supporting inputs.",
       "pmcid": null,
       "recordNote": null
     },
@@ -40,9 +40,9 @@
       "population": "AIS planner comparison against postoperative CT.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/34712654",
-      "notes": "Bibliographic record and read status supplied in citation-audit-physics-tables.md §A.  Joint stiffness borrowed from Argoubi and Shirazi-Adl1996, an adult lumbar source; moment headings AP/ML/CC confirmed.",
+      "notes": "Joint stiffness borrowed from Argoubi and Shirazi-Adl1996, an adult lumbar source; moment headings AP/ML/CC confirmed.",
       "pmcid": "PMC8546212",
-      "recordNote": "citation-audit-physics-tables.md §A, tachi-2021"
+      "recordNote": "bibliographic record and read status"
     },
     {
       "key": "wang-2017",
@@ -62,9 +62,9 @@
       "population": "AIS multibody simulations; release terms borrowed from the simulator.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/28428982",
-      "notes": "Bibliographic record and read status supplied in citation-audit-physics-tables.md §A.  Release percentages are cited cadaver calibration targets, not measurements made by Wang.",
+      "notes": "Release percentages are cited cadaver calibration targets, not measurements made by Wang.",
       "pmcid": "PMC5393020",
-      "recordNote": "citation-audit-physics-tables.md §A, wang-2017"
+      "recordNote": "bibliographic record and read status"
     },
     {
       "key": "gardner-morse-2004",
@@ -84,9 +84,9 @@
       "population": "Intact human lumbar segments with posterior elements; 250 and 500 N preload. Own abstract passage gives no n.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/14706323",
-      "notes": "Bibliographic record and read status supplied in citation-audit-physics-tables.md §A. ",
+      "notes": "Bibliographic record and read status confirmed.",
       "pmcid": null,
-      "recordNote": "citation-audit-physics-tables.md §A, gardner-morse-2004"
+      "recordNote": "bibliographic record and read status"
     },
     {
       "key": "stokes-gardner-morse-2016",
@@ -106,9 +106,9 @@
       "population": "Lumbar discs without posterior elements. Preload series: L2-3/L4-5, four female donors aged17–58. Frequency series: eight segments from seven spines, five male and two female, mean age41;642N column measured at0.01Hz.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/26900035",
-      "notes": "Bibliographic record, Table3 axis footnote and separate specimen sets: citation-audit-physics-tables.md §A/§B5. x: posterior-anterior shear or lateral bending; y: lateral shear or flexion-extension; z: compression-tension or axial rotation.",
+      "notes": "Table3 has an axis footnote; the preload and frequency series are separate specimen sets. x: posterior-anterior shear or lateral bending; y: lateral shear or flexion-extension; z: compression-tension or axial rotation.",
       "pmcid": "PMC4801716",
-      "recordNote": "citation-audit-physics-tables.md §A, stokes-gardner-morse-2016"
+      "recordNote": "bibliographic record and read status"
     },
     {
       "key": "wilke-2017",
@@ -128,9 +128,9 @@
       "population": "Human cadaver thoracic functional units with costovertebral joints kept; ±7.5 Nm.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/28520819",
-      "notes": "Bibliographic record and read status supplied in citation-audit-physics-tables.md §A. ",
+      "notes": "Bibliographic record and read status confirmed.",
       "pmcid": "PMC5433776",
-      "recordNote": "citation-audit-physics-tables.md §A, wilke-2017"
+      "recordNote": "bibliographic record and read status"
     },
     {
       "key": "watkins-2005",
@@ -150,9 +150,9 @@
       "population": "Cadaveric thoracic spines with and without intact rib cage.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/15928553",
-      "notes": "Bibliographic record and read status supplied in citation-audit-physics-tables.md §A. ",
+      "notes": "Bibliographic record and read status confirmed.",
       "pmcid": null,
-      "recordNote": "citation-audit-physics-tables.md §A, watkins-2005"
+      "recordNote": "bibliographic record and read status"
     },
     {
       "key": "mannen-2018",
@@ -172,9 +172,9 @@
       "population": "Whole T1–T12 cadaver spines; 400 N follower load, ±5 Nm dynamic.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/29852313",
-      "notes": "Bibliographic record and read status supplied in citation-audit-physics-tables.md §A. Prior entry difference recorded by the audit: Not a citation error: n is 8, but one specimen's rib-cage-removed EZS data were excluded (it was loaded only to ±2 N·m), so the no-ribs EZS means come from 7 specimens. One no-ribs specimen excluded because loaded only to±2N·m; all reported EZS units remain unstated.",
+      "notes": "n is 8, but one specimen's rib-cage-removed EZS data were excluded (it was loaded only to ±2 N·m), so the no-ribs EZS means come from 7 specimens. One no-ribs specimen excluded because loaded only to±2N·m; all reported EZS units remain unstated.",
       "pmcid": "PMC6016553",
-      "recordNote": "citation-audit-physics-tables.md §A, mannen-2018"
+      "recordNote": "bibliographic record and read status"
     },
     {
       "key": "liebsch-2020",
@@ -194,9 +194,9 @@
       "population": "Intact polysegmental human thoracic specimens; ±5 Nm; anterior ribs then cut.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/32117927",
-      "notes": "Bibliographic record and read status supplied in citation-audit-physics-tables.md §A. ",
+      "notes": "Bibliographic record and read status confirmed.",
       "pmcid": "PMC7018667",
-      "recordNote": "citation-audit-physics-tables.md §A, liebsch-2020"
+      "recordNote": "bibliographic record and read status"
     },
     {
       "key": "petit-2004",
@@ -216,9 +216,9 @@
       "population": "Scoliosis bending-film personalisation of per-segment torsion springs.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/14977223",
-      "notes": "Bibliographic record and read status supplied in citation-audit-physics-tables.md §A. ",
+      "notes": "Bibliographic record and read status confirmed.",
       "pmcid": null,
-      "recordNote": "citation-audit-physics-tables.md §A, petit-2004"
+      "recordNote": "bibliographic record and read status"
     },
     {
       "key": "prasad-2017",
@@ -238,9 +238,9 @@
       "population": "Review of implant alloys; wrought Ti-6Al-4V,CoCrMo and Stainless steel316L;Table1 states no steel condition.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/28773240",
-      "notes": "Bibliographic record and read status supplied in citation-audit-physics-tables.md §A. Prior entry difference recorded by the audit: The stainless-steel row is labelled 'Annealed 316L' in the entry and table, but Prasad's Table 1 says only 'Stainless steel 316L' (no condition).",
+      "notes": "Prasad's Table 1 says only 'Stainless steel 316L' (no condition).",
       "pmcid": "PMC5578250",
-      "recordNote": "citation-audit-physics-tables.md §A, prasad-2017"
+      "recordNote": "bibliographic record and read status"
     },
     {
       "key": "little-2013",
@@ -260,9 +260,9 @@
       "population": "AIS FE comparison with1-week standing Cobb; adult material properties.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/23680391",
-      "notes": "Bibliographic record and read status supplied in citation-audit-physics-tables.md §A. ",
+      "notes": "Bibliographic record and read status confirmed.",
       "pmcid": "PMC3680303",
-      "recordNote": "citation-audit-physics-tables.md §A, little-2013"
+      "recordNote": "bibliographic record and read status"
     },
     {
       "key": "ohrt-nissen-2018",
@@ -282,9 +282,9 @@
       "population": "Review quoting textbook alloy ranges; fatigue cycle count not given.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/29991241",
-      "notes": "Bibliographic record and read status supplied in citation-audit-physics-tables.md §A. ",
+      "notes": "Bibliographic record and read status confirmed.",
       "pmcid": "PMC6104735",
-      "recordNote": "citation-audit-physics-tables.md §A, ohrt-nissen-2018"
+      "recordNote": "bibliographic record and read status"
     },
     {
       "key": "jeong-2025",
@@ -304,9 +304,9 @@
       "population": "FE of ASTM F1717 construct; Ti-6Al-4V ELI; cyclic behaviour not addressed.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/41383715",
-      "notes": "Bibliographic record and read status supplied in citation-audit-physics-tables.md §A. ",
+      "notes": "Bibliographic record and read status confirmed.",
       "pmcid": "PMC12690298",
-      "recordNote": "citation-audit-physics-tables.md §A, jeong-2025"
+      "recordNote": "bibliographic record and read status"
     },
     {
       "key": "song-2021",
@@ -326,9 +326,9 @@
       "population": "L3–S1 FE models; Ti alloy; 300 N preload plus10 Nm moment.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/34155224",
-      "notes": "Bibliographic record and read status supplied in citation-audit-physics-tables.md §A. ",
+      "notes": "Bibliographic record and read status confirmed.",
       "pmcid": "PMC8217271",
-      "recordNote": "citation-audit-physics-tables.md §A, song-2021"
+      "recordNote": "bibliographic record and read status"
     },
     {
       "key": "lehman-2003",
@@ -348,9 +348,9 @@
       "population": "Adult thoracic cadaver vertebrae; straight-forward and anatomic trajectories.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/14501914",
-      "notes": "Bibliographic record and read status supplied in citation-audit-physics-tables.md §A. Prior entry difference recorded by the audit: The abstract does not say 'adult' and gives no vertebral levels; both come from the notes, not this record.",
+      "notes": "The abstract does not say 'adult' and gives no vertebral levels; neither comes from this record.",
       "pmcid": null,
-      "recordNote": "citation-audit-physics-tables.md §A, lehman-2003"
+      "recordNote": "bibliographic record and read status"
     },
     {
       "key": "liljenqvist-2001",
@@ -370,9 +370,9 @@
       "population": "Adult thoracic spines; T4–T8 andT9–T12 screws and hooks.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/11383294",
-      "notes": "Bibliographic record and read status supplied in citation-audit-physics-tables.md §A. Prior entry difference recorded by the audit: The entry lists Liljenqvist U as the only author; the record has four.",
+      "notes": "The record has four authors.",
       "pmcid": null,
-      "recordNote": "citation-audit-physics-tables.md §A, liljenqvist-2001"
+      "recordNote": "bibliographic record and read status"
     },
     {
       "key": "soshi-1991",
@@ -392,9 +392,9 @@
       "population": "Cadaveric lumbar vertebrae, normal and osteoporosis gradesI/II;7.0mm screws. Adulthood not stated in the abstract.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/1750009",
-      "notes": "Bibliographic record and read status supplied in citation-audit-physics-tables.md §A. Prior entry difference recorded by the audit: The abstract says 'cadaveric lumbar vertebrae' and does not say adult. Published forces are1056.4,495.6,269.5N;0.47/0.26 are rounded own ratios, not abstract measurements.",
+      "notes": "The abstract says 'cadaveric lumbar vertebrae' and does not say adult. Published forces are1056.4,495.6,269.5N;0.47/0.26 are rounded own ratios, not abstract measurements.",
       "pmcid": null,
-      "recordNote": "citation-audit-physics-tables.md §A, soshi-1991"
+      "recordNote": "bibliographic record and read status"
     },
     {
       "key": "le-cann-2015",
@@ -414,9 +414,9 @@
       "population": "Immature pigs aged90 and140 days; mono-/bicortical, thoracic/lumbar.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/26451947",
-      "notes": "Bibliographic record and read status supplied in citation-audit-physics-tables.md §A. Prior entry difference recorded by the audit: The entry says read 'abstract', but an open full text exists (PMC4599826).",
+      "notes": "An open full text exists (PMC4599826).",
       "pmcid": "PMC4599826",
-      "recordNote": "citation-audit-physics-tables.md §A, le-cann-2015"
+      "recordNote": "bibliographic record and read status"
     },
     {
       "key": "yilmaz-2009",
@@ -436,9 +436,9 @@
       "population": "Pigs six weeks old at surgery;pull-out tested three months later after killing;L1–L5. Data from two surviving animals.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/19829250",
-      "notes": "Bibliographic record and read status supplied in citation-audit-physics-tables.md §A. Prior entry difference recorded by the audit: Population: the pigs were 6 weeks old at surgery, but pull-out was measured after they were killed 3 months later (about 4.5 months old). Three pigs were used and one was lost, so data come from 2 animals (L1-L5).",
+      "notes": "The pigs were 6 weeks old at surgery, but pull-out was measured after they were killed 3 months later (about 4.5 months old). Three pigs were used and one was lost, so data come from 2 animals (L1-L5).",
       "pmcid": null,
-      "recordNote": "citation-audit-physics-tables.md §A, yilmaz-2009"
+      "recordNote": "bibliographic record and read status"
     },
     {
       "key": "cheng-2000",
@@ -458,9 +458,9 @@
       "population": "AIS girls aged12–14;75AIS and94controls;38%aBMD/36%vBMD below−1SD.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/10934658",
-      "notes": "Bibliographic record and read status supplied in citation-audit-physics-tables.md §A. Prior entry difference recorded by the audit: The entry lists Cheng JC as the only author; the record has seven. The girls were 12-14 years old.",
+      "notes": "The record has seven authors. The girls were 12-14 years old.",
       "pmcid": null,
-      "recordNote": "citation-audit-physics-tables.md §A, cheng-2000"
+      "recordNote": "bibliographic record and read status"
     },
     {
       "key": "yip-2016",
@@ -480,9 +480,9 @@
       "population": "AIS girls, mean age 13.15, follow-up4.6 years; 169/513 osteopenic.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/27991528",
-      "notes": "Bibliographic record and read status supplied in citation-audit-physics-tables.md §A. ",
+      "notes": "Bibliographic record and read status confirmed.",
       "pmcid": "PMC5171643",
-      "recordNote": "citation-audit-physics-tables.md §A, yip-2016"
+      "recordNote": "bibliographic record and read status"
     },
     {
       "key": "winter-via-keenan-2015",
@@ -502,9 +502,9 @@
       "population": "Winter cadavers aged61–83; fractions borrowed in AIS girls with Lenke1 curves>40°.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/26681978",
-      "notes": "Values as printed in Keenan2015 equations4/5, confirmed in citation-audit-physics-tables.md §A/§B7. Keenan attributes them to Winter DA, Biomechanics and Motor Control of Human Movement,4th ed,John Wiley & Sons,2009. Winter textbook itself was not opened; no textbook value inferred from memory.",
+      "notes": "Values as printed in Keenan2015 equations4/5. Keenan attributes them to Winter DA, Biomechanics and Motor Control of Human Movement,4th ed,John Wiley & Sons,2009. Winter textbook itself was not opened.",
       "pmcid": "PMC4682283",
-      "recordNote": "citation-audit-physics-tables.md §A, winter-via-keenan-2015"
+      "recordNote": "bibliographic record and read status"
     },
     {
       "key": "pearsall-1996",
@@ -524,9 +524,9 @@
       "population": "Adults, MeSH middle-aged/aged; CT trunk by vertebral level.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/8678352",
-      "notes": "Bibliographic record and read status supplied in citation-audit-physics-tables.md §A. ",
+      "notes": "Bibliographic record and read status confirmed.",
       "pmcid": null,
-      "recordNote": "citation-audit-physics-tables.md §A, pearsall-1996"
+      "recordNote": "bibliographic record and read status"
     },
     {
       "key": "keenan-2014",
@@ -546,9 +546,9 @@
       "population": "AIS girls, age 15.0±2.7, Cobb52±5.9°, weight58.2±11.6 kg; CT torso slices.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/24973826",
-      "notes": "Bibliographic record and read status supplied in citation-audit-physics-tables.md §A. ",
+      "notes": "Bibliographic record and read status confirmed.",
       "pmcid": null,
-      "recordNote": "citation-audit-physics-tables.md §A, keenan-2014"
+      "recordNote": "bibliographic record and read status"
     },
     {
       "key": "gangnet-2003",
@@ -565,12 +565,12 @@
       "doi": "10.1007/s00276-003-0154-6",
       "read": "abstract",
       "n": "34",
-      "population": "34 healthy upright standing adults as described in the task;the abstract supplies no ages.",
+      "population": "34 healthy upright standing subjects, taken here as adults;the abstract supplies no ages.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/13680185",
-      "notes": "Bibliographic record and read status supplied in citation-audit-physics-tables.md §A. Prior entry difference recorded by the audit: The entry lists Gangnet N as the only author; the record has five. Subjects are '34 healthy upright standing subjects'; no ages are given in the abstract. 28mm(SD5.6) is an unsigned3D distance, not an anterior coordinate;left lateral distance7.6mm(SD1.6). Sagittal reuse is own inference.",
+      "notes": "The record has five authors. Subjects are '34 healthy upright standing subjects'; no ages are given in the abstract. 28mm(SD5.6) is an unsigned3D distance, not an anterior coordinate;left lateral distance7.6mm(SD1.6). Sagittal reuse is own inference.",
       "pmcid": null,
-      "recordNote": "citation-audit-physics-tables.md §A, gangnet-2003"
+      "recordNote": "bibliographic record and read status"
     },
     {
       "key": "rohlmann-2002",
@@ -590,9 +590,9 @@
       "population": "Adults with telemetered posterior internal fixators; fractures/degenerative disease, not scoliosis.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/11784277",
-      "notes": "Bibliographic record and read status supplied in citation-audit-physics-tables.md §A.  Ratio concerns load on an internal spinal fixation device.",
+      "notes": "Ratio concerns load on an internal spinal fixation device.",
       "pmcid": null,
-      "recordNote": "citation-audit-physics-tables.md §A, rohlmann-2002"
+      "recordNote": "bibliographic record and read status"
     },
     {
       "key": "rohlmann-2014-gait",
@@ -612,9 +612,9 @@
       "population": "Adults with instrumented vertebral body replacements; walking/stairs.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/24211089",
-      "notes": "Bibliographic record and read status supplied in citation-audit-physics-tables.md §A.  Ratio concerns resultant force on a vertebral body replacement.",
+      "notes": "Ratio concerns resultant force on a vertebral body replacement.",
       "pmcid": null,
-      "recordNote": "citation-audit-physics-tables.md §A, rohlmann-2014-gait"
+      "recordNote": "bibliographic record and read status"
     },
     {
       "key": "wilke-1999",
@@ -634,9 +634,9 @@
       "population": "Man aged45, 70 kg; intradiscal pressure atL4–L5.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/10222525",
-      "notes": "Bibliographic record and read status supplied in citation-audit-physics-tables.md §A. ",
+      "notes": "Bibliographic record and read status confirmed.",
       "pmcid": null,
-      "recordNote": "citation-audit-physics-tables.md §A, wilke-1999"
+      "recordNote": "bibliographic record and read status"
     },
     {
       "key": "schmid-2020-ais",
@@ -656,9 +656,9 @@
       "population": "AIS aged9–17(mean13.8), 29–63 kg, Cobb13.6–28.3°; musculoskeletal models.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/32195239",
-      "notes": "Bibliographic record and read status supplied in citation-audit-physics-tables.md §A. ",
+      "notes": "Bibliographic record and read status confirmed.",
       "pmcid": "PMC7062648",
-      "recordNote": "citation-audit-physics-tables.md §A, schmid-2020-ais"
+      "recordNote": "bibliographic record and read status"
     },
     {
       "key": "tudor-locke-2008",
@@ -678,9 +678,9 @@
       "population": "Adult step bands; youth cut points not established.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/18562971",
-      "notes": "Bibliographic record and read status supplied in citation-audit-physics-tables.md §A. Prior entry difference recorded by the audit: The entry lists Tudor-Locke C as the only author; the record has four.",
+      "notes": "The record has four authors.",
       "pmcid": null,
-      "recordNote": "citation-audit-physics-tables.md §A, tudor-locke-2008"
+      "recordNote": "bibliographic record and read status"
     },
     {
       "key": "tudor-locke-2011",
@@ -700,9 +700,9 @@
       "population": "Review of children/adolescent steps per day.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/21798014",
-      "notes": "Bibliographic record and read status supplied in citation-audit-physics-tables.md §A. ",
+      "notes": "Bibliographic record and read status confirmed.",
       "pmcid": "PMC3166269",
-      "recordNote": "citation-audit-physics-tables.md §A, tudor-locke-2011"
+      "recordNote": "bibliographic record and read status"
     },
     {
       "key": "vieweg-2023",
@@ -722,9 +722,9 @@
       "population": "F1717-21 vertebrectomy constructs, 76 mm active length, 5.5 mm rods, 4.5×45 mm screws.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/36685708",
-      "notes": "Bibliographic record and read status supplied in citation-audit-physics-tables.md §A. ",
+      "notes": "Bibliographic record and read status confirmed.",
       "pmcid": "PMC9845396",
-      "recordNote": "citation-audit-physics-tables.md §A, vieweg-2023"
+      "recordNote": "bibliographic record and read status"
     },
     {
       "key": "slivka-2013",
@@ -744,9 +744,9 @@
       "population": "Contoured/re-bent4.5 mm Ti, stainless-steel, CoCr rod constructs; CoCrscrews failed first.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/27927364",
-      "notes": "Bibliographic record and read status supplied in citation-audit-physics-tables.md §A. ",
+      "notes": "Bibliographic record and read status confirmed.",
       "pmcid": null,
-      "recordNote": "citation-audit-physics-tables.md §A, slivka-2013"
+      "recordNote": "bibliographic record and read status"
     },
     {
       "key": "carrion-2016",
@@ -766,9 +766,9 @@
       "population": "Annealed polished wroughtTi-6Al-4VELI coupons, strain-controlled.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/26952022",
-      "notes": "Bibliographic record and read status supplied in citation-audit-physics-tables.md §A. ",
+      "notes": "Bibliographic record and read status confirmed.",
       "pmcid": "PMC4761652",
-      "recordNote": "citation-audit-physics-tables.md §A, carrion-2016"
+      "recordNote": "bibliographic record and read status"
     },
     {
       "key": "abe-2015",
@@ -788,9 +788,9 @@
       "population": "AIS patients, mean age14.8; 6 mm Ti6Al7Nb rods, elasto-plastic inverse FE.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/25810754",
-      "notes": " bibliographic record confirmed; numbers not audited. Read status remains that of the research notes.",
+      "notes": "Bibliographic record confirmed; numbers not independently checked. Confirming the record does not change the read status.",
       "pmcid": "PMC4331738",
-      "recordNote": "citations-physics-extra.json, bibliographic record only"
+      "recordNote": "bibliographic record only"
     },
     {
       "key": "cidambi-2012",
@@ -807,12 +807,12 @@
       "doi": "10.1097/brs.0b013e318252ccbe",
       "read": "abstract",
       "n": "27",
-      "population": "Patients with 5.5 mm ultra-high-strength steel rods; disease label not restated in the supplying table.",
+      "population": "Patients with 5.5 mm ultra-high-strength steel rods; disease label not restated here.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/22426445",
-      "notes": " bibliographic record confirmed; numbers not audited. Read status remains that of the research notes.",
+      "notes": "Bibliographic record confirmed; numbers not independently checked. Confirming the record does not change the read status.",
       "pmcid": null,
-      "recordNote": "citations-physics-extra.json, bibliographic record only"
+      "recordNote": "bibliographic record only"
     },
     {
       "key": "karami-2015",
@@ -829,12 +829,12 @@
       "doi": "10.1097/bsd.0000000000000178",
       "read": "abstract",
       "n": "10 spines;100 pedicles",
-      "population": "Osteoporotic lumbar spines; pull-out after cyclic loading. Age not provided in the supplying passage.",
+      "population": "Osteoporotic lumbar spines; pull-out after cyclic loading. Age not recorded.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/25310387",
-      "notes": " bibliographic record confirmed; numbers not audited. Read status remains that of the research notes.",
+      "notes": "Bibliographic record confirmed; numbers not independently checked. Confirming the record does not change the read status.",
       "pmcid": null,
-      "recordNote": "citations-physics-extra.json, bibliographic record only"
+      "recordNote": "bibliographic record only"
     },
     {
       "key": "sairyo-1998",
@@ -854,9 +854,9 @@
       "population": "Immature calf; 6 and7 mm screws.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/9588471",
-      "notes": " bibliographic record confirmed; numbers not audited. Read status remains that of the research notes.",
+      "notes": "Bibliographic record confirmed; numbers not independently checked. Confirming the record does not change the read status.",
       "pmcid": null,
-      "recordNote": "citations-physics-extra.json, bibliographic record only"
+      "recordNote": "bibliographic record only"
     },
     {
       "key": "kang-2014",
@@ -876,9 +876,9 @@
       "population": "Immature calf thoracic vertebrae; hubbed versus non-hubbed.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/24590340",
-      "notes": " bibliographic record confirmed; numbers not audited. Read status remains that of the research notes.",
+      "notes": "Bibliographic record confirmed; numbers not independently checked. Confirming the record does not change the read status.",
       "pmcid": null,
-      "recordNote": "citations-physics-extra.json, bibliographic record only"
+      "recordNote": "bibliographic record only"
     },
     {
       "key": "tsai-2009",
@@ -898,9 +898,9 @@
       "population": "ASTM F1839 polyurethane foam; 30 mm engaged thread.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/19402917",
-      "notes": "Note flags foam shear-strength transcription as erroneous; no shear-strength value supplied here. bibliographic record confirmed; numbers not audited. Read status remains that of the research notes.",
+      "notes": "Foam shear-strength transcription flagged as erroneous; no shear-strength value supplied here. Bibliographic record confirmed; numbers not independently checked. Confirming the record does not change the read status.",
       "pmcid": "PMC2694760",
-      "recordNote": "citations-physics-extra.json, bibliographic record only"
+      "recordNote": "bibliographic record only"
     },
     {
       "key": "kueny-2014",
@@ -917,12 +917,12 @@
       "doi": "10.1007/s00586-014-3476-7",
       "read": "abstract",
       "n": "39 vertebrae",
-      "population": "Osteoporotic lumbar vertebrae; diameter increment comparison. Age not provided in the supplying passage.",
+      "population": "Osteoporotic lumbar vertebrae; diameter increment comparison. Age not recorded.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/25082759",
-      "notes": " bibliographic record confirmed; numbers not audited. Read status remains that of the research notes.",
+      "notes": "Bibliographic record confirmed; numbers not independently checked. Confirming the record does not change the read status.",
       "pmcid": null,
-      "recordNote": "citations-physics-extra.json, bibliographic record only"
+      "recordNote": "bibliographic record only"
     },
     {
       "key": "sariyilmaz-2021",
@@ -942,9 +942,9 @@
       "population": "Adult cadaver thoracic; 5.5 mm polyaxial screws; simulated direct vertebral rotation.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/32453125",
-      "notes": " bibliographic record confirmed; numbers not audited. Read status remains that of the research notes.",
+      "notes": "Bibliographic record confirmed; numbers not independently checked. Confirming the record does not change the read status.",
       "pmcid": null,
-      "recordNote": "citations-physics-extra.json, bibliographic record only"
+      "recordNote": "bibliographic record only"
     },
     {
       "key": "weiser-2017",
@@ -961,12 +961,12 @@
       "doi": "10.1007/s00586-017-5091-x",
       "read": "abstract",
       "n": "21 T12 vertebrae",
-      "population": "QCT bone-density groups; cyclic screw failure. Age not provided in the supplying passage.",
+      "population": "QCT bone-density groups; cyclic screw failure. Age not recorded.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/28391382",
-      "notes": " bibliographic record confirmed; numbers not audited. Read status remains that of the research notes.",
+      "notes": "Bibliographic record confirmed; numbers not independently checked. Confirming the record does not change the read status.",
       "pmcid": null,
-      "recordNote": "citations-physics-extra.json, bibliographic record only"
+      "recordNote": "bibliographic record only"
     },
     {
       "key": "santoni-2009",
@@ -983,12 +983,12 @@
       "doi": "10.1016/j.spinee.2008.07.008",
       "read": "abstract",
       "n": null,
-      "population": "lumbar cortical versus traditional screw trajectory. Age not provided in the supplying passage.",
+      "population": "lumbar cortical versus traditional screw trajectory. Age not recorded.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/18790684",
-      "notes": " bibliographic record confirmed; numbers not audited. Read status remains that of the research notes.",
+      "notes": "Bibliographic record confirmed; numbers not independently checked. Confirming the record does not change the read status.",
       "pmcid": null,
-      "recordNote": "citations-physics-extra.json, bibliographic record only"
+      "recordNote": "bibliographic record only"
     },
     {
       "key": "keenan-2015",
@@ -1008,9 +1008,9 @@
       "population": "AIS Lenke1 curves over40°, mean mass57.5kg; gravity moment model.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/26681978",
-      "notes": "Same identified paper as winter-via-keenan-2015;metadata from citation-audit-physics-tables.md §A. Direct Keenan model density is distinct from its secondary Winter attribution. bibliographic record confirmed; numbers not audited. Read status remains that of the research notes.",
+      "notes": "Same identified paper as winter-via-keenan-2015, with the same metadata. Direct Keenan model density is distinct from its secondary Winter attribution. Bibliographic record confirmed; numbers not independently checked. Confirming the record does not change the read status.",
       "pmcid": "PMC4682283",
-      "recordNote": "citations-physics-extra.json, bibliographic record only"
+      "recordNote": "bibliographic record only"
     },
     {
       "key": "rohlmann-2008-standing",
@@ -1030,9 +1030,9 @@
       "population": "Adults with instrumented vertebral body replacements, one month after surgery.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/18469689",
-      "notes": " bibliographic record confirmed; numbers not audited. Read status remains that of the research notes.",
+      "notes": "Bibliographic record confirmed; numbers not independently checked. Confirming the record does not change the read status.",
       "pmcid": null,
-      "recordNote": "citations-physics-extra.json, bibliographic record only"
+      "recordNote": "bibliographic record only"
     },
     {
       "key": "rohlmann-2013-lifting",
@@ -1052,9 +1052,9 @@
       "population": "Adults with instrumented vertebral body replacements; lifting/setting down0.01–3 kg.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/23141957",
-      "notes": " bibliographic record confirmed; numbers not audited. Read status remains that of the research notes.",
+      "notes": "Bibliographic record confirmed; numbers not independently checked. Confirming the record does not change the read status.",
       "pmcid": null,
-      "recordNote": "citations-physics-extra.json, bibliographic record only"
+      "recordNote": "bibliographic record only"
     },
     {
       "key": "rohlmann-2014-activities",
@@ -1074,9 +1074,9 @@
       "population": "Adults aged62–71, 60–74kg; L1/L3vertebral body replacements, posterior fixator shares load.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/24866883",
-      "notes": " bibliographic record confirmed; numbers not audited. Read status remains that of the research notes.",
+      "notes": "Bibliographic record confirmed; numbers not independently checked. Confirming the record does not change the read status.",
       "pmcid": "PMC4035320",
-      "recordNote": "citations-physics-extra.json, bibliographic record only"
+      "recordNote": "bibliographic record only"
     },
     {
       "key": "rohlmann-2008-month-one",
@@ -1096,9 +1096,9 @@
       "population": "Adults with vertebral body replacements; first postoperative month.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/17983694",
-      "notes": " bibliographic record confirmed; numbers not audited. Read status remains that of the research notes.",
+      "notes": "Bibliographic record confirmed; numbers not independently checked. Confirming the record does not change the read status.",
       "pmcid": null,
-      "recordNote": "citations-physics-extra.json, bibliographic record only"
+      "recordNote": "bibliographic record only"
     },
     {
       "key": "damm-2017",
@@ -1118,9 +1118,9 @@
       "population": "Adults with instrumented vertebral body replacements; mean walking peak.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/27914627",
-      "notes": " bibliographic record confirmed; numbers not audited. Read status remains that of the research notes.",
+      "notes": "Bibliographic record confirmed; numbers not independently checked. Confirming the record does not change the read status.",
       "pmcid": null,
-      "recordNote": "citations-physics-extra.json, bibliographic record only"
+      "recordNote": "bibliographic record only"
     },
     {
       "key": "rohlmann-1997-walker",
@@ -1140,9 +1140,9 @@
       "population": "Adults with telemetered posterior internal fixators; walker use.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/8970923",
-      "notes": " bibliographic record confirmed; numbers not audited. Read status remains that of the research notes.",
+      "notes": "Bibliographic record confirmed; numbers not independently checked. Confirming the record does not change the read status.",
       "pmcid": null,
-      "recordNote": "citations-physics-extra.json, bibliographic record only"
+      "recordNote": "bibliographic record only"
     },
     {
       "key": "rohlmann-2015-flexion",
@@ -1162,9 +1162,9 @@
       "population": "Adult vertebral body replacement; upper-body flexion and return to upright.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/25640900",
-      "notes": "Published-simulators section 8 names Dreischarf for PMID 25640900; outcomes section 7/Table D attributes the same record to Rohlmann 2015. Both attributions retained; no author initials inferred. bibliographic record confirmed; numbers not audited. Read status remains that of the research notes. Source key retained; the confirmed first author is Dreischarf, rather than the Rohlmann name used by the key and outcomes note.",
+      "notes": "Bibliographic record confirmed; numbers not independently checked. Confirming the record does not change the read status. Source key retained; the confirmed first author of PMID 25640900 is Dreischarf, rather than the Rohlmann name used by the key.",
       "pmcid": null,
-      "recordNote": "citations-physics-extra.json, bibliographic record only"
+      "recordNote": "bibliographic record only"
     },
     {
       "key": "rohlmann-2014-carrying",
@@ -1184,9 +1184,9 @@
       "population": "Adult vertebral body replacement; carrying10 kg backpack or weights.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/24559120",
-      "notes": " bibliographic record confirmed; numbers not audited. Read status remains that of the research notes.",
+      "notes": "Bibliographic record confirmed; numbers not independently checked. Confirming the record does not change the read status.",
       "pmcid": null,
-      "recordNote": "citations-physics-extra.json, bibliographic record only"
+      "recordNote": "bibliographic record only"
     },
     {
       "key": "rohlmann-2014-cycling",
@@ -1206,9 +1206,9 @@
       "population": "Adult vertebral body replacement; ergometer cycling.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/24743577",
-      "notes": " bibliographic record confirmed; numbers not audited. Read status remains that of the research notes.",
+      "notes": "Bibliographic record confirmed; numbers not independently checked. Confirming the record does not change the read status.",
       "pmcid": "PMC3990685",
-      "recordNote": "citations-physics-extra.json, bibliographic record only"
+      "recordNote": "bibliographic record only"
     },
     {
       "key": "rohlmann-2014-vibration",
@@ -1228,9 +1228,9 @@
       "population": "Adult vertebral body replacement; whole-body vibration versus same posture.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/24201510",
-      "notes": " bibliographic record confirmed; numbers not audited. Read status remains that of the research notes.",
+      "notes": "Bibliographic record confirmed; numbers not independently checked. Confirming the record does not change the read status.",
       "pmcid": "PMC3940795",
-      "recordNote": "citations-physics-extra.json, bibliographic record only"
+      "recordNote": "bibliographic record only"
     },
     {
       "key": "rohlmann-2013-orthosis",
@@ -1250,9 +1250,9 @@
       "population": "Adult vertebral body replacement; orthosis comparison over26 activities.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/23623494",
-      "notes": " bibliographic record confirmed; numbers not audited. Read status remains that of the research notes.",
+      "notes": "Bibliographic record confirmed; numbers not independently checked. Confirming the record does not change the read status.",
       "pmcid": null,
-      "recordNote": "citations-physics-extra.json, bibliographic record only"
+      "recordNote": "bibliographic record only"
     }
   ]
 }

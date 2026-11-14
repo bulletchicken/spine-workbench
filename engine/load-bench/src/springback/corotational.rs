@@ -24,6 +24,8 @@
 //! `solve_incremental` uses the same tangent for an added body load about a
 //! prestressed configuration; its three head-load arrays contain increments.
 
+mod balance;
+
 use super::head_stiffness::{congruence, diagonal_scales};
 use super::{RodLinearisation, SpringbackError};
 use crate::chain::{Pose, Wrench};
@@ -37,7 +39,7 @@ const FRAME_RANK_TOLERANCE: f64 = 1e-13;
 /// Project relative check for the single linear solve and its KKT balance.
 const RESIDUAL_TOLERANCE: f64 = 1e-9;
 /// Project cap for round-off refinement of the same factored equation.
-const REFINEMENT_STEPS: usize = 3;
+const REFINEMENT_STEPS: usize = 8;
 
 /// One objective elastic expansion. Head order is unchanged from each rod.
 /// `solve_prestressed` returns total head loads after seating;
@@ -84,6 +86,8 @@ enum Expansion {
     Seating,
     Incremental,
 }
+
+type TissueLoad<'a> = dyn Fn(&DVector<f64>) -> Result<DVector<f64>, SpringbackError> + 'a;
 
 fn arm_hessian(r: Vector3<f64>, f: Vector3<f64>) -> Matrix3<f64> {
     (r * f.transpose() + f * r.transpose()) * 0.5 - Matrix3::identity() * r.dot(&f)
@@ -262,6 +266,7 @@ pub fn solve_prestressed(
         rods,
         initial_loads,
         Expansion::Seating,
+        &|u| Ok(tissue_tangent * u),
     )
 }
 
@@ -291,6 +296,27 @@ pub fn solve_incremental(
         rods,
         preload,
         Expansion::Incremental,
+        &|u| Ok(tissue_tangent * u),
+    )
+}
+
+/// The same incremental solve with a structured action of its tissue Hessian.
+pub(crate) fn solve_incremental_with_tissue_load(
+    poses: &[Pose],
+    tissue_tangent: &DMatrix<f64>,
+    body_load_increment: &DVector<f64>,
+    rods: &[RodLinearisation],
+    preload: &[Vec<Wrench>],
+    tissue_load: &TissueLoad<'_>,
+) -> Result<PrestressedStep, SpringbackError> {
+    solve(
+        poses,
+        tissue_tangent,
+        &(-body_load_increment),
+        rods,
+        preload,
+        Expansion::Incremental,
+        tissue_load,
     )
 }
 
@@ -301,6 +327,7 @@ fn solve(
     rods: &[RodLinearisation],
     initial_loads: &[Vec<Wrench>],
     mode: Expansion,
+    tissue_load: &TissueLoad<'_>,
 ) -> Result<PrestressedStep, SpringbackError> {
     let size = 6 * poses.len();
     if size == 0
@@ -348,11 +375,35 @@ fn solve(
     let mut displacement = factor
         .solve(&(-tissue_gradient.component_mul(&scales)))?
         .component_mul(&scales);
+    // Refine the factored equation against its body/frame form. Recovering
+    // tiny elastic strains from a large common motion in the assembled matrix
+    // loses digits. No stiffness, acceptance tolerance or boundary changes.
+    let mut residual = -tissue_gradient
+        - balance::tangent_load(
+            poses,
+            tissue_load(&displacement)?,
+            rods,
+            &geometries,
+            &displacement,
+        );
     for _ in 0..REFINEMENT_STEPS {
-        let residual = -tissue_gradient - &combined * &displacement;
-        displacement += factor
+        let correction = factor
             .solve(&residual.component_mul(&scales))?
             .component_mul(&scales);
+        let candidate = &displacement + correction;
+        let next = -tissue_gradient
+            - balance::tangent_load(
+                poses,
+                tissue_load(&candidate)?,
+                rods,
+                &geometries,
+                &candidate,
+            );
+        if next.norm() >= residual.norm() {
+            break;
+        }
+        displacement = candidate;
+        residual = next;
     }
     let mut result = PrestressedStep {
         displacement,
@@ -367,7 +418,7 @@ fn solve(
         combined_tangent: combined,
         relative_residual: 0.0,
     };
-    let mut body_residual = tissue_gradient + tissue_tangent * &result.displacement;
+    let mut body_residual = tissue_gradient + tissue_load(&result.displacement)?;
     let mut largest_residual = 0.0_f64;
     let denominator = tissue_gradient.norm().max(1.0);
     for ((rod, local), initial) in rods.iter().zip(&geometries).zip(initial_loads) {
@@ -377,7 +428,7 @@ fn solve(
         let body_load = &local.body * &result.displacement + &local.mixed * &frame_motion;
         let rigid_reaction = &local.rigid * &local.gram_inverse * &frame_load;
         let lambda =
-            &rod.effective_stiffness * &rod.kinematics * &result.displacement + rigid_reaction;
+            balance::material_load(poses, rod, local, &result.displacement) + rigid_reaction;
         body_residual += &body_load + rod.kinematics.transpose() * &lambda;
         result.body_geometric_load += body_load;
         let frame_residual = local.rigid.transpose() * &lambda - &frame_load;
@@ -437,7 +488,14 @@ fn solve(
         result.physical_head_wrenches_on_rod.push(physical_loads);
     }
     largest_residual = largest_residual.max(body_residual.norm() / denominator);
-    let residual = tissue_gradient + &result.combined_tangent * &result.displacement;
+    let residual = tissue_gradient
+        + balance::tangent_load(
+            poses,
+            tissue_load(&result.displacement)?,
+            rods,
+            &geometries,
+            &result.displacement,
+        );
     result.relative_residual = largest_residual.max(residual.norm() / denominator);
     if !result.relative_residual.is_finite() || result.relative_residual > RESIDUAL_TOLERANCE {
         return Err(SpringbackError::LinearResidual);

@@ -320,6 +320,8 @@ The folders and import rules in one picture: `app/README.md`.
 | the shared types and the mark and level lists | `app/src/shapes/index.ts`, `app/src/shapes/mark-names.ts` |
 | the engine client screens use | `app/src/engine-room/engine-client.ts` |
 | the job table | `app/src/engine-room/job-table.ts` |
+| rebuilding a placement changed by hand, on the spine worker | `app/src/engine-room/workers/spine-worker/jobs/rebuild-layout.ts`, `app/src/engine-room/workers/spine-worker/jobs/rebuild-layout.test.ts` |
+| the stand-in placement story and its contract check | `app/src/engine-room/stand-in/layout-story.ts`, `app/src/engine-room/stand-in/layout-story.test.ts` |
 | the worker messages | `app/src/engine-room/messages.ts` |
 | the one fetch: loading the engine | `app/src/engine-room/load-engine.ts` |
 | how a worker boots | `app/src/engine-room/workers/boot.ts`, `app/src/engine-room/workers/film-worker/film.worker.ts`, `app/src/engine-room/workers/spine-worker/spine.worker.ts` |

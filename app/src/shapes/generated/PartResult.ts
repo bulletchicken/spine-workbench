@@ -12,6 +12,12 @@ export type PartResult = { part: PartRef,
  */
 share: Band, 
 /**
+ * For an anchor, force over strength with the bone factor included,
+ * across settled versions. `null` for other parts and at `before`.
+ * An assumed strength must never be shown as a measured demand.
+ */
+demand: Band | null, 
+/**
  * The share holds still across the versions.
  */
 steady: boolean, 
@@ -19,4 +25,8 @@ steady: boolean,
  * Versions where it goes past its published strength (for a rod at
  * a year of walking, past the test-bench level).
  */
-versionsPastStrength: number, };
+versionsPastStrength: number, 
+/**
+ * Source keys behind strength or fatigue; empty for film-only values.
+ */
+sources: Array<string>, };

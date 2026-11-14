@@ -39,6 +39,7 @@ import type {
   FilmPassResult,
   FitFromFilms,
   GeometryGuess,
+  ImplantLayout,
   LayoutInput,
   LayoutProposals,
   MadeUpRecipe,
@@ -48,6 +49,7 @@ import type {
   PinOutput,
   Px,
   ReadingsInput,
+  RebuildInput,
   RegionWandInput,
   RegionWandOutput,
   ScaleResult,
@@ -148,6 +150,8 @@ export interface JobTable {
    * versions of it.
    */
   'propose-layouts': { input: LayoutInput; output: LayoutProposals };
+  /** A whole placement after changes to its ends, anchors or rods. */
+  'rebuild-layout': { input: RebuildInput; output: ImplantLayout };
   /**
    * Every placement on one slice of versions, through every stop. Sent a
    * few versions at a time, so no call holds the spine worker for long.
@@ -198,6 +202,7 @@ export const JOBS: { readonly [J in JobName]: JobRules } = {
   'compare-with-answer-key': { worker: 'spine', stepped: false, replaceable: true },
   'fit-spine': { worker: 'spine', stepped: false, replaceable: true },
   'propose-layouts': { worker: 'spine', stepped: false, replaceable: true },
+  'rebuild-layout': { worker: 'spine', stepped: false, replaceable: true },
   'run-load-bench': { worker: 'spine', stepped: false, replaceable: false },
   'compare-layouts': { worker: 'spine', stepped: false, replaceable: true },
   'measure-spine': { worker: 'spine', stepped: false, replaceable: true },
