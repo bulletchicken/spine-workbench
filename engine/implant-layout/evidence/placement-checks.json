@@ -1,0 +1,385 @@
+{
+  "cells": [
+    {
+      "coordinate": {
+        "key": "sensitivity",
+        "group": "liv-index"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 100
+      },
+      "unit": "percent",
+      "source": "chen-2025",
+      "section": "fusion-levels.md §2b",
+      "qualifier": "Derivation cohort only. Section 2b PPV 55.5% retained rather than rounded 55% in summary table/SYNTHESIS."
+    },
+    {
+      "coordinate": {
+        "key": "specificity",
+        "group": "liv-index"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 92
+      },
+      "unit": "percent",
+      "source": "chen-2025",
+      "section": "fusion-levels.md §2b",
+      "qualifier": "Derivation cohort only. Section 2b PPV 55.5% retained rather than rounded 55% in summary table/SYNTHESIS."
+    },
+    {
+      "coordinate": {
+        "key": "positive-predictive-value",
+        "group": "liv-index"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 55.5
+      },
+      "unit": "percent",
+      "source": "chen-2025",
+      "section": "fusion-levels.md §2b",
+      "qualifier": "Derivation cohort only. Section 2b PPV 55.5% retained rather than rounded 55% in summary table/SYNTHESIS."
+    },
+    {
+      "coordinate": {
+        "key": "negative-predictive-value",
+        "group": "liv-index"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 100
+      },
+      "unit": "percent",
+      "source": "chen-2025",
+      "section": "fusion-levels.md §2b",
+      "qualifier": "Derivation cohort only. Section 2b PPV 55.5% retained rather than rounded 55% in summary table/SYNTHESIS."
+    },
+    {
+      "coordinate": {
+        "key": "t1-uiv-tilt-correlation",
+        "group": "t1-stand-in"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 0.708
+      },
+      "unit": "correlation",
+      "source": "uiv-tilt-40020691",
+      "section": "citation-audit-placement-tables.md §A and §B10, Wei Chan 2025 abstract",
+      "qualifier": "Correlation coefficient r = 0.708 between postoperative UIV tilt and postoperative T1 tilt, not a ratio of angles. n = 151 (107 Lenke 1, 44 Lenke 2)."
+    },
+    {
+      "coordinate": {
+        "key": "shoulder-imbalance",
+        "group": "uiv-t2"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 45
+      },
+      "unit": "percent",
+      "source": "brooks-2018",
+      "section": "fusion-levels.md §3",
+      "qualifier": "Shoulder imbalance >1cm; result regardless of preoperative elevated shoulder."
+    },
+    {
+      "coordinate": {
+        "key": "shoulder-imbalance",
+        "group": "uiv-t3"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 48
+      },
+      "unit": "percent",
+      "source": "brooks-2018",
+      "section": "fusion-levels.md §3",
+      "qualifier": "Shoulder imbalance >1cm; result regardless of preoperative elevated shoulder."
+    },
+    {
+      "coordinate": {
+        "key": "shoulder-imbalance",
+        "group": "uiv-t4"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 34
+      },
+      "unit": "percent",
+      "source": "brooks-2018",
+      "section": "fusion-levels.md §3",
+      "qualifier": "Shoulder imbalance >1cm; result regardless of preoperative elevated shoulder."
+    },
+    {
+      "coordinate": {
+        "key": "thoracic-left-pedicle-aorta-angle",
+        "group": "right-thoracic"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 29.7
+      },
+      "unit": "degrees",
+      "source": "takeshita-2010",
+      "section": "screw-sizing-and-placement.md §4",
+      "qualifier": "Thoracic mean, not level-specific; warning levels T4–T5 and T10–T12 remain text in this qualifier."
+    },
+    {
+      "coordinate": {
+        "key": "straight-forward-pull-out-gain",
+        "group": "straight-forward"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 27
+      },
+      "unit": "percent",
+      "source": "lehman-2003",
+      "section": "screw-sizing-and-placement.md §5 and P6",
+      "qualifier": "30 cadaver thoracic vertebrae, compared with anatomic trajectory."
+    },
+    {
+      "coordinate": {
+        "key": "uniform-medial-angle",
+        "group": "t1-t2"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 30
+      },
+      "unit": "degrees",
+      "source": "fennell-2014",
+      "section": "citation-audit-placement-tables.md §A, Fennell 2014 abstract",
+      "qualifier": "Approximately 30 degrees at T1–T2 and 20 degrees at T3–T12 for a uniform medial trajectory. 33 consecutive patients, 219 screws; not an AIS cohort and not tested in severe scoliotic spines."
+    },
+    {
+      "coordinate": {
+        "key": "uniform-medial-angle",
+        "group": "peng-t1-t2"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 30
+      },
+      "unit": "degrees",
+      "source": "peng-2023",
+      "section": "citation-audit-placement-tables.md §A, Peng 2023 full text",
+      "qualifier": "Inward horizontal direction: 30 degrees at T1–T2 and 20 degrees at T3–T12; screws parallel to upper endplate. Mixed thoracic diseases (stenosis, deformity, fractures, infection and others), not an AIS cohort; 118 patients, 1,315 screws. Angles were checked on radiographs only."
+    },
+    {
+      "coordinate": {
+        "key": "uniform-medial-angle",
+        "group": "t3-t12"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 20
+      },
+      "unit": "degrees",
+      "source": "fennell-2014",
+      "section": "citation-audit-placement-tables.md §A, Fennell 2014 abstract",
+      "qualifier": "Approximately 30 degrees at T1–T2 and 20 degrees at T3–T12 for a uniform medial trajectory. 33 consecutive patients, 219 screws; not an AIS cohort and not tested in severe scoliotic spines."
+    },
+    {
+      "coordinate": {
+        "key": "uniform-medial-angle",
+        "group": "peng-t3-t12"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 20
+      },
+      "unit": "degrees",
+      "source": "peng-2023",
+      "section": "citation-audit-placement-tables.md §A, Peng 2023 full text",
+      "qualifier": "Inward horizontal direction: 30 degrees at T1–T2 and 20 degrees at T3–T12; screws parallel to upper endplate. Mixed thoracic diseases (stenosis, deformity, fractures, infection and others), not an AIS cohort; 118 patients, 1,315 screws. Angles were checked on radiographs only."
+    },
+    {
+      "coordinate": {
+        "key": "patients-too-narrow",
+        "group": "apex-one-4mm-expansion"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 26.3
+      },
+      "unit": "percent",
+      "source": "sato-2022",
+      "section": "screw-sizing-and-placement.md §1",
+      "qualifier": "15 patients; concave apical pedicle cannot take a 4 mm screw even with 25% expansion. Distinct condition from outer width below 4 mm."
+    },
+    {
+      "coordinate": {
+        "key": "patients-under-outer-width",
+        "group": "apex-one-under-4mm"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 71.9
+      },
+      "unit": "percent",
+      "source": "sato-2022",
+      "section": "screw-sizing-and-placement.md §1",
+      "qualifier": "Concave outer width under 4 mm; no expansion condition."
+    },
+    {
+      "coordinate": {
+        "key": "aorta-warning-levels",
+        "group": "right-thoracic-left-upper"
+      },
+      "value": {
+        "kind": "level-range",
+        "first": "T4",
+        "last": "T5"
+      },
+      "unit": "levels",
+      "source": "takeshita-2010",
+      "section": "screw-sizing-and-placement.md §4",
+      "qualifier": "Left pedicles in right thoracic curves; no mirrored levels given."
+    },
+    {
+      "coordinate": {
+        "key": "aorta-warning-levels",
+        "group": "right-thoracic-left-lower"
+      },
+      "value": {
+        "kind": "level-range",
+        "first": "T10",
+        "last": "T12"
+      },
+      "unit": "levels",
+      "source": "takeshita-2010",
+      "section": "screw-sizing-and-placement.md §4",
+      "qualifier": "Left pedicles in right thoracic curves; no mirrored levels given."
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-method-visibility-limit",
+        "group": "cerny-pedicle-shadow"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 30
+      },
+      "unit": "degrees",
+      "source": "cerny-2014",
+      "section": "spine-3d-fit/scout/literature.md §1.1 and §1.4",
+      "qualifier": "About 30 degrees, with concave pedicle invisible beyond this rotation. This is not a published threshold on convergence-band width."
+    },
+    {
+      "coordinate": {
+        "key": "specificity",
+        "group": "liv-index-under-15"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 94
+      },
+      "unit": "percent",
+      "source": "chen-2025",
+      "section": "fusion-levels.md §2b, LIV-index row",
+      "qualifier": "Under 15 years: specificity 94%; strictly less than 15 years. Subgroup n not supplied. The full-cohort n = 112 must not be assigned to this subgroup; derivation cohort only, full text."
+    },
+    {
+      "coordinate": {
+        "key": "positive-predictive-value",
+        "group": "liv-index-under-15"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 77
+      },
+      "unit": "percent",
+      "source": "chen-2025",
+      "section": "fusion-levels.md §2b, LIV-index row",
+      "qualifier": "Under 15 years: PPV 77%; strictly less than 15 years. Subgroup n not supplied. The full-cohort n = 112 must not be assigned to this subgroup; derivation cohort only, full text."
+    },
+    {
+      "coordinate": {
+        "key": "age-upper-bound",
+        "group": "liv-index-under-15"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 15
+      },
+      "unit": "years",
+      "source": "chen-2025",
+      "section": "fusion-levels.md §2b, LIV-index row",
+      "qualifier": "Under 15 years means strictly less than 15 years; subgroup boundary for specificity 94% and PPV 77%. Subgroup n not supplied; derivation cohort only, full text."
+    },
+    {
+      "coordinate": {
+        "key": "medial-shoulder-imbalance",
+        "group": "uiv-tilt-cohort"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 27.8
+      },
+      "unit": "percent",
+      "source": "uiv-tilt-40020691",
+      "section": "fusion-levels.md §3, UIV tilt drives T1 tilt row",
+      "qualifier": "Medial shoulder imbalance 27.8%; n = 151, Lenke 1–2, abstract. Distinct from neck and lateral shoulder imbalance."
+    },
+    {
+      "coordinate": {
+        "key": "neck-imbalance",
+        "group": "uiv-tilt-cohort"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 23.2
+      },
+      "unit": "percent",
+      "source": "uiv-tilt-40020691",
+      "section": "fusion-levels.md §3, UIV tilt drives T1 tilt row",
+      "qualifier": "Neck imbalance 23.2%; n = 151, Lenke 1–2, abstract. Distinct from medial and lateral shoulder imbalance."
+    },
+    {
+      "coordinate": {
+        "key": "lateral-shoulder-imbalance",
+        "group": "uiv-tilt-cohort"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 9.9
+      },
+      "unit": "percent",
+      "source": "uiv-tilt-40020691",
+      "section": "fusion-levels.md §3, UIV tilt drives T1 tilt row",
+      "qualifier": "Lateral shoulder imbalance 9.9%; n = 151, Lenke 1–2, abstract. Distinct from neck and medial shoulder imbalance."
+    },
+    {
+      "coordinate": {
+        "key": "medial-wall-danger-depth",
+        "group": "cui-probe"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 8,
+        "upper": 10
+      },
+      "unit": "mm",
+      "source": "cui-2012",
+      "section": "screw-sizing-and-placement.md §5, depth at which medial wall is most at risk; P6 medial-wall danger depth",
+      "qualifier": "Probe-path depth 8–10 mm where medial wall perforation risk rises; 30 AIS CTs, abstract. This is along the probe path, not a patient-frame coordinate or cortex thickness."
+    },
+    {
+      "coordinate": {
+        "key": "entry-lateral-offset",
+        "group": "kim-t1-t10"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 2
+      },
+      "unit": "mm",
+      "source": "etemadifar-2017",
+      "section": "screw-sizing-and-placement.md §5, freehand entry points; P6 Entry T1–T10",
+      "qualifier": "About 2 mm lateral to the midpoint of the superior facet, at the superior border of the transverse process, for T1–T10. Kim/Lenke technique described through Etemadifar 2017, full text; source series 38 AIS patients and 720 screws. This is a landmark technique, not an entry found on a fitted template."
+    }
+  ]
+}

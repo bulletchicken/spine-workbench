@@ -325,7 +325,9 @@ dependencies = [
  "clap",
  "film-geometry",
  "film-reader",
+ "implant-layout",
  "joint-fit",
+ "load-bench",
  "made-up-spines",
  "rayon",
  "scorekeeper",
@@ -855,6 +857,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "implant-layout"
+version = "0.1.0"
+dependencies = [
+ "forward-model",
+ "joint-fit",
+ "libm",
+ "made-up-spines",
+ "nalgebra",
+ "proptest",
+ "serde",
+ "serde_json",
+ "shapes",
+ "spine-readings",
+ "thiserror",
+]
+
+[[package]]
 name = "indexmap"
 version = "2.14.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -946,6 +965,24 @@ name = "linux-raw-sys"
 version = "0.12.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "32a66949e030da00e8c7d4434b251670a91556f4144941d37452769c25d58a53"
+
+[[package]]
+name = "load-bench"
+version = "0.1.0"
+dependencies = [
+ "forward-model",
+ "implant-layout",
+ "joint-fit",
+ "libm",
+ "made-up-spines",
+ "nalgebra",
+ "proptest",
+ "serde",
+ "serde_json",
+ "shapes",
+ "spine-readings",
+ "thiserror",
+]
 
 [[package]]
 name = "log"
@@ -1973,8 +2010,10 @@ dependencies = [
  "case-file",
  "film-geometry",
  "film-reader",
+ "implant-layout",
  "joint-fit",
  "js-sys",
+ "load-bench",
  "made-up-spines",
  "scorekeeper",
  "serde",

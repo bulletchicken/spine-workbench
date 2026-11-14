@@ -1,0 +1,54 @@
+{
+  "what": "One rotational spring, loaded only about its own axis, at three angles about each Cartesian axis.",
+  "units": {"force": "N", "length": "mm", "moment": "N·mm", "angle": "radians", "rotationalStiffness": "N·mm/radian", "rotationMatrix": "dimensionless"},
+  "axes": {"frame": "right-handed Cartesian, synthetic origin", "x": "anterior", "y": "patient-left", "z": "superior", "vectorOrder": ["x", "y", "z"]},
+  "signConvention": "Positive moments and active rotations obey the right-hand rule. Matrices are rows and multiply column vectors from the moving frame into the fixed frame. The rest rotation is identity; the origin and the other two rotational degrees of freedom are fixed. axisUnit is the spring's only free axis.",
+  "tolerance": {"relative": 1e-10, "absolute": 1e-12, "rule": "abs(actual - expected) <= absolute + relative * abs(expected), for each scalar or vector/matrix component in its stated unit", "why": "Closed forms with at least 16 significant digits; no small-angle or discretisation error. The absolute term covers zero matrix and vector components."},
+  "cases": [
+    {
+      "what": "x axis, 0.1 radian",
+      "input": {"axisUnit": [1, 0, 0], "stiffnessNmmPerRad": 10000, "momentNmm": [1000, 0, 0]},
+      "expect": {"angleRad": 0.1, "rotationVectorRad": [0.1, 0, 0], "rotationMatrix": [[1, 0, 0], [0, 0.99500416527802577, -0.099833416646828152], [0, 0.099833416646828152, 0.99500416527802577]]}
+    },
+    {
+      "what": "x axis, 0.8 radian",
+      "input": {"axisUnit": [1, 0, 0], "stiffnessNmmPerRad": 10000, "momentNmm": [8000, 0, 0]},
+      "expect": {"angleRad": 0.8, "rotationVectorRad": [0.8, 0, 0], "rotationMatrix": [[1, 0, 0], [0, 0.69670670934716542, -0.71735609089952276], [0, 0.71735609089952276, 0.69670670934716542]]}
+    },
+    {
+      "what": "x axis, 2.0 radians",
+      "input": {"axisUnit": [1, 0, 0], "stiffnessNmmPerRad": 10000, "momentNmm": [20000, 0, 0]},
+      "expect": {"angleRad": 2, "rotationVectorRad": [2, 0, 0], "rotationMatrix": [[1, 0, 0], [0, -0.41614683654714239, -0.90929742682568170], [0, 0.90929742682568170, -0.41614683654714239]]}
+    },
+    {
+      "what": "y axis, 0.1 radian",
+      "input": {"axisUnit": [0, 1, 0], "stiffnessNmmPerRad": 10000, "momentNmm": [0, 1000, 0]},
+      "expect": {"angleRad": 0.1, "rotationVectorRad": [0, 0.1, 0], "rotationMatrix": [[0.99500416527802577, 0, 0.099833416646828152], [0, 1, 0], [-0.099833416646828152, 0, 0.99500416527802577]]}
+    },
+    {
+      "what": "y axis, 0.8 radian",
+      "input": {"axisUnit": [0, 1, 0], "stiffnessNmmPerRad": 10000, "momentNmm": [0, 8000, 0]},
+      "expect": {"angleRad": 0.8, "rotationVectorRad": [0, 0.8, 0], "rotationMatrix": [[0.69670670934716542, 0, 0.71735609089952276], [0, 1, 0], [-0.71735609089952276, 0, 0.69670670934716542]]}
+    },
+    {
+      "what": "y axis, 2.0 radians",
+      "input": {"axisUnit": [0, 1, 0], "stiffnessNmmPerRad": 10000, "momentNmm": [0, 20000, 0]},
+      "expect": {"angleRad": 2, "rotationVectorRad": [0, 2, 0], "rotationMatrix": [[-0.41614683654714239, 0, 0.90929742682568170], [0, 1, 0], [-0.90929742682568170, 0, -0.41614683654714239]]}
+    },
+    {
+      "what": "z axis, 0.1 radian",
+      "input": {"axisUnit": [0, 0, 1], "stiffnessNmmPerRad": 10000, "momentNmm": [0, 0, 1000]},
+      "expect": {"angleRad": 0.1, "rotationVectorRad": [0, 0, 0.1], "rotationMatrix": [[0.99500416527802577, -0.099833416646828152, 0], [0.099833416646828152, 0.99500416527802577, 0], [0, 0, 1]]}
+    },
+    {
+      "what": "z axis, 0.8 radian",
+      "input": {"axisUnit": [0, 0, 1], "stiffnessNmmPerRad": 10000, "momentNmm": [0, 0, 8000]},
+      "expect": {"angleRad": 0.8, "rotationVectorRad": [0, 0, 0.8], "rotationMatrix": [[0.69670670934716542, -0.71735609089952276, 0], [0.71735609089952276, 0.69670670934716542, 0], [0, 0, 1]]}
+    },
+    {
+      "what": "z axis, 2.0 radians",
+      "input": {"axisUnit": [0, 0, 1], "stiffnessNmmPerRad": 10000, "momentNmm": [0, 0, 20000]},
+      "expect": {"angleRad": 2, "rotationVectorRad": [0, 0, 2], "rotationMatrix": [[-0.41614683654714239, -0.90929742682568170, 0], [0.90929742682568170, -0.41614683654714239, 0], [0, 0, 1]]}
+    }
+  ]
+}

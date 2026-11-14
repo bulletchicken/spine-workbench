@@ -18,6 +18,8 @@ import { filmIntake } from '@/view-state/film-intake';
 import { findState } from '@/view-state/find-state';
 import { passRequest } from '@/view-state/pass-request';
 import { findRun } from './find-run';
+import { clearSpineBuild } from '@/bench/three/build-spine';
+vi.mock('@/spine-3d/bones/load-bones', () => ({ loadBones: () => Promise.resolve([{ level: 'L3' }]) }));
 
 vi.mock('@/sample-films/sample-films', () => ({ sampleFilmFiles: () => [], sampleFilmFilesFor: () => Promise.resolve([]) }));
 vi.mock('@/choreography/timing', () => ({
@@ -49,6 +51,7 @@ beforeEach(() => {
   vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'performance'] });
   vi.stubGlobal('matchMedia', () => ({ matches: false, addEventListener: () => undefined, removeEventListener: () => undefined }));
   engine = startStandInEngine({ story, scripts: { films: { openMs: 0, displayPixelsMs: 0, makeUpMs: 0 }, find: { ...DEFAULT_SCRIPTS.find, normalMs: 40, placePointsMs: 0 } } });
+  clearSpineBuild();
   findRun.stop(); loop.steps.clear(); passRequest.getState().take(); filmIntake.getState().clear();
   caseStore.getState().apply([{ kind: 'open-case', case: emptyCase() }]); currentStep.getState().go('films');
   host = document.createElement('div'); document.body.append(host); root = createRoot(host);
@@ -86,7 +89,7 @@ describe('Find through the frame', () => {
     expect(called).toHaveBeenCalledOnce();
     expect(called.mock.calls[0]?.[0].frontFinder).toBe('hand-built');
     expect(findState.getState().phase).toBe('replaying');
-    expect(host.querySelector('[data-scene="finding"].on .primary')).toBeNull();
+    expect(host.querySelector<HTMLButtonElement>('[data-scene="finding"].on .primary')?.disabled).toBe(true);
     play(); expect(findState.getState().phase).toBe('found');
     expect(loop.steps.size).toBe(0);
     const saved = JSON.stringify(caseStore.getState().case);
@@ -102,6 +105,19 @@ describe('Find through the frame', () => {
     expect(dockNow.getState().spec?.helper).toEqual({ kind: 'words', words: ['All of them look right.'] });
     expect(JSON.stringify(caseStore.getState().case)).toBe(saved);
     expect(findReplay.getState().allShown).toBe(true);
+    const fitting = vi.spyOn(engine, 'fitSpine');
+    press('Build the 3D spine');
+    expect(dockNow.getState().spec?.sentence).toBe('Building the 3D spine…');
+    await tick(1000);
+    expect(currentStep.getState().slug).toBe('three');
+    expect(dockNow.getState().spec?.sentence).toBe('The spine in 3D.');
+    expect([...host.querySelectorAll('.scene.on .views button')].map((b) => b.textContent)).toEqual(['Front', 'Side', 'Top']);
+    act(() => { stepButton('Find').click(); });
+    expect(currentStep.getState().slug).toBe('find');
+    expect(stepButton('3D').disabled).toBe(false);
+    press('Build the 3D spine'); await tick(0);
+    expect(currentStep.getState().slug).toBe('three');
+    expect(fitting).toHaveBeenCalledTimes(1);
   });
   it('leaves a holding review cleanly on Escape or pressing Films, and cancels the next timer', async () => {
     const marks = structuredClone(story.pass.marks);

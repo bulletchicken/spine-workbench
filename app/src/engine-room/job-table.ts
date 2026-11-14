@@ -21,6 +21,10 @@
 import type {
   AnswerKey,
   AnswerKeyComparison,
+  BenchBatch,
+  BenchCompareInput,
+  BenchInput,
+  BenchResult,
   BoundaryWandInput,
   BoundaryWandOutput,
   CaseFileV1,
@@ -35,21 +39,23 @@ import type {
   FilmPassResult,
   FitFromFilms,
   GeometryGuess,
+  LayoutInput,
+  LayoutProposals,
   MadeUpRecipe,
   MadeUpSpine,
   OpenedCase,
   PinInput,
   PinOutput,
   Px,
+  ReadingsInput,
   RegionWandInput,
   RegionWandOutput,
   ScaleResult,
   SpineFit,
+  SpineReadings,
   ToolPreview,
   ToolPreviewInput,
   TrainedPassResult,
-  ReadingsInput,
-  SpineReadings,
 } from '@/shapes';
 import type { WorkerRole } from './messages';
 
@@ -136,6 +142,18 @@ export interface JobTable {
     output: AnswerKeyComparison;
   };
   'fit-spine': { input: FitFromFilms; output: SpineFit };
+  /**
+   * Placement proposals on a fitted spine, counted over `input.versions`
+   * versions of it.
+   */
+  'propose-layouts': { input: LayoutInput; output: LayoutProposals };
+  /**
+   * Every placement on one slice of versions, through every stop. Sent a
+   * few versions at a time, so no call holds the spine worker for long.
+   */
+  'run-load-bench': { input: BenchInput; output: BenchBatch };
+  /** Every batch of a comparison, against the first placement. */
+  'compare-layouts': { input: BenchCompareInput; output: BenchResult };
   'measure-spine': { input: ReadingsInput; output: SpineReadings };
 }
 
@@ -177,5 +195,8 @@ export const JOBS: { readonly [J in JobName]: JobRules } = {
   'make-up-spine': { worker: 'spine', stepped: false, replaceable: false },
   'compare-with-answer-key': { worker: 'spine', stepped: false, replaceable: true },
   'fit-spine': { worker: 'spine', stepped: false, replaceable: true },
+  'propose-layouts': { worker: 'spine', stepped: false, replaceable: true },
+  'run-load-bench': { worker: 'spine', stepped: false, replaceable: false },
+  'compare-layouts': { worker: 'spine', stepped: false, replaceable: true },
   'measure-spine': { worker: 'spine', stepped: false, replaceable: true },
 };

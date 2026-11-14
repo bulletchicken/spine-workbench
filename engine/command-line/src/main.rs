@@ -20,6 +20,7 @@ use std::process::ExitCode;
 mod commands {
     pub mod case;
     pub mod frames;
+    pub mod load_bench;
     pub mod make_up;
     pub mod measure;
     pub mod open;
@@ -60,6 +61,8 @@ enum Command {
     Compare(CompareArgs),
     /// Find, fit and measure films, or measure a made-up spine.
     Measure(MeasureArgs),
+    /// Fit films, propose placements and time the load bench over versions.
+    LoadBench(MeasureArgs),
 }
 
 #[derive(Args)]
@@ -81,7 +84,7 @@ struct MeasureArgs {
     /// Fit the made-up front film alone, with a typical spine for the absent view.
     #[arg(long, requires = "recipe")]
     front_only: bool,
-    /// Print the complete readings contract as JSON.
+    /// Print the complete command result as JSON.
     #[arg(long)]
     json: bool,
 }
@@ -353,6 +356,7 @@ fn main() -> ExitCode {
         Command::Score(args) => commands::score::run(&args),
         Command::Compare(args) => commands::score::compare(&args),
         Command::Measure(args) => commands::measure::run(&args),
+        Command::LoadBench(args) => commands::load_bench::run(&args),
     };
     match outcome {
         Ok(()) => ExitCode::SUCCESS,

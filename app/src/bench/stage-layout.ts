@@ -8,7 +8,7 @@ export interface Spot {
   y: number;
   width: number;
   height: number;
-  radius: 'large' | 'medium';
+  radius: 'large' | 'medium' | 'small';
 }
 
 export interface StageInput {
@@ -17,6 +17,8 @@ export interface StageInput {
   displayHeight: number;
   moment: Moment;
   present: readonly FilmKind[];
+  railHeight?: number;
+  railGap?: number;
 }
 
 export interface StageLayout {
@@ -24,6 +26,8 @@ export interface StageLayout {
   spots: Record<FilmKind, Spot | null>;
 }
 
+export const RAIL_HEIGHT = 132;
+export const RAIL_GAP = 12;
 export const GAP = 24;
 export const CAPTION = 28;
 export const CAPTION_GAP = 10;
@@ -38,8 +42,17 @@ const down2 = (value: number) => Math.max(0, Math.floor(value / 2) * 2);
 const down4 = (value: number) => Math.max(0, Math.floor(value / 4) * 4);
 
 /** The same row in Films; only the films present, centred together, in Find. */
-export function stageLayout({ width, height, displayHeight, moment, present }: StageInput): StageLayout {
+export function stageLayout({ width, height, displayHeight, moment, present, railHeight = RAIL_HEIGHT, railGap = RAIL_GAP }: StageInput): StageLayout {
   const spots: StageLayout['spots'] = { front: null, side: null, 'bend-left': null, 'bend-right': null };
+  if (moment === 'three') {
+    const ordered = FILM_ORDER.filter((kind) => present.includes(kind));
+    const n = ordered.length;
+    if (n === 0) return { displayTop: 0, spots };
+    const h = Math.min(railHeight, Math.max(0, (height - (n - 1) * railGap) / n));
+    const y = (height - n * h - (n - 1) * railGap) / 2;
+    ordered.forEach((kind, index) => { spots[kind] = { x: 0, y: y + index * (h + railGap), width: h / 2, height: h, radius: 'small' }; });
+    return { displayTop: 0, spots };
+  }
   if (moment === 'films') {
     const head = displayHeight + HEAD_GAP;
     const tileHeight = down2(Math.min(height * TILE_SHARE, FILMS_HEIGHT, height - head - CAPTION - 2 * CLEAR, (width - GAP * 3) / 2));

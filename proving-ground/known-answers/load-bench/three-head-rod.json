@@ -1,0 +1,69 @@
+{
+  "what": "Free straight and planar-bent rods with three prescribed balanced head forces; section moments from both sides.",
+  "units": {"force": "N", "length": "mm", "moment": "N·mm", "angle": "radians"},
+  "axes": {"frame": "right-handed Cartesian, synthetic origin", "x": "anterior", "y": "patient-left", "z": "superior", "vectorOrder": ["x", "y", "z"]},
+  "signConvention": "Forces are exerted by heads on the rod. s increases along the listed centre-line points from the first head. prefixMomentNmm sums (head position - section position) cross head force for heads with head s <= section s. suffixMomentNmm uses the remaining heads. momentNmm is prefixMomentNmm, the cut couple exerted by the prefix on the suffix; the opposite cut face has the opposite sign. A force exactly at a section has zero moment arm. All moments are global vectors, not local bending/torsion components.",
+  "tolerance": {"relative": 1e-10, "absolute": 1e-12, "rule": "abs(actual - expected) <= absolute + relative * abs(expected), componentwise in the stated output unit", "why": "Only finite sums and cross products of exact integer or terminating-decimal inputs; no constitutive or discretisation error. The absolute term covers exact balance and zero components."},
+  "cases": [
+    {
+      "what": "straight rod, two transverse force components and a balanced axial component",
+      "input": {
+        "centreLineMm": [[0, 0, 0], [0, 0, 20], [0, 0, 40]],
+        "lengthMm": 40,
+        "heads": [
+          {"sMm": 0, "positionMm": [0, 0, 0], "forceN": [6, -9, 4]},
+          {"sMm": 20, "positionMm": [0, 0, 20], "forceN": [-12, 18, -8]},
+          {"sMm": 40, "positionMm": [0, 0, 40], "forceN": [6, -9, 4]}
+        ],
+        "distributedForceNPerMm": [0, 0, 0],
+        "headCouplesNmm": [[0, 0, 0], [0, 0, 0], [0, 0, 0]],
+        "stationsMm": [0, 5, 10, 15, 20, 25, 30, 35, 40]
+      },
+      "expect": {
+        "netForceN": [0, 0, 0],
+        "netMomentAboutOriginNmm": [0, 0, 0],
+        "stations": [
+          {"sMm": 0, "positionMm": [0, 0, 0], "prefixMomentNmm": [0, 0, 0], "suffixMomentNmm": [0, 0, 0], "momentNmm": [0, 0, 0]},
+          {"sMm": 5, "positionMm": [0, 0, 5], "prefixMomentNmm": [-45, -30, 0], "suffixMomentNmm": [45, 30, 0], "momentNmm": [-45, -30, 0]},
+          {"sMm": 10, "positionMm": [0, 0, 10], "prefixMomentNmm": [-90, -60, 0], "suffixMomentNmm": [90, 60, 0], "momentNmm": [-90, -60, 0]},
+          {"sMm": 15, "positionMm": [0, 0, 15], "prefixMomentNmm": [-135, -90, 0], "suffixMomentNmm": [135, 90, 0], "momentNmm": [-135, -90, 0]},
+          {"sMm": 20, "positionMm": [0, 0, 20], "prefixMomentNmm": [-180, -120, 0], "suffixMomentNmm": [180, 120, 0], "momentNmm": [-180, -120, 0]},
+          {"sMm": 25, "positionMm": [0, 0, 25], "prefixMomentNmm": [-135, -90, 0], "suffixMomentNmm": [135, 90, 0], "momentNmm": [-135, -90, 0]},
+          {"sMm": 30, "positionMm": [0, 0, 30], "prefixMomentNmm": [-90, -60, 0], "suffixMomentNmm": [90, 60, 0], "momentNmm": [-90, -60, 0]},
+          {"sMm": 35, "positionMm": [0, 0, 35], "prefixMomentNmm": [-45, -30, 0], "suffixMomentNmm": [45, 30, 0], "momentNmm": [-45, -30, 0]},
+          {"sMm": 40, "positionMm": [0, 0, 40], "prefixMomentNmm": [0, 0, 0], "suffixMomentNmm": [0, 0, 0], "momentNmm": [0, 0, 0]}
+        ]
+      }
+    },
+    {
+      "what": "rod bent in the x-z plane, two straight 20 mm legs meeting at the middle head",
+      "input": {
+        "centreLineMm": [[0, 0, 0], [12, 0, 16], [0, 0, 32]],
+        "lengthMm": 40,
+        "heads": [
+          {"sMm": 0, "positionMm": [0, 0, 0], "forceN": [6, 0, 4]},
+          {"sMm": 20, "positionMm": [12, 0, 16], "forceN": [-12, 0, 0]},
+          {"sMm": 40, "positionMm": [0, 0, 32], "forceN": [6, 0, -4]}
+        ],
+        "distributedForceNPerMm": [0, 0, 0],
+        "headCouplesNmm": [[0, 0, 0], [0, 0, 0], [0, 0, 0]],
+        "stationsMm": [0, 5, 10, 15, 20, 25, 30, 35, 40]
+      },
+      "expect": {
+        "netForceN": [0, 0, 0],
+        "netMomentAboutOriginNmm": [0, 0, 0],
+        "stations": [
+          {"sMm": 0, "positionMm": [0, 0, 0], "prefixMomentNmm": [0, 0, 0], "suffixMomentNmm": [0, 0, 0], "momentNmm": [0, 0, 0]},
+          {"sMm": 5, "positionMm": [3, 0, 4], "prefixMomentNmm": [0, -12, 0], "suffixMomentNmm": [0, 12, 0], "momentNmm": [0, -12, 0]},
+          {"sMm": 10, "positionMm": [6, 0, 8], "prefixMomentNmm": [0, -24, 0], "suffixMomentNmm": [0, 24, 0], "momentNmm": [0, -24, 0]},
+          {"sMm": 15, "positionMm": [9, 0, 12], "prefixMomentNmm": [0, -36, 0], "suffixMomentNmm": [0, 36, 0], "momentNmm": [0, -36, 0]},
+          {"sMm": 20, "positionMm": [12, 0, 16], "prefixMomentNmm": [0, -48, 0], "suffixMomentNmm": [0, 48, 0], "momentNmm": [0, -48, 0]},
+          {"sMm": 25, "positionMm": [9, 0, 20], "prefixMomentNmm": [0, -36, 0], "suffixMomentNmm": [0, 36, 0], "momentNmm": [0, -36, 0]},
+          {"sMm": 30, "positionMm": [6, 0, 24], "prefixMomentNmm": [0, -24, 0], "suffixMomentNmm": [0, 24, 0], "momentNmm": [0, -24, 0]},
+          {"sMm": 35, "positionMm": [3, 0, 28], "prefixMomentNmm": [0, -12, 0], "suffixMomentNmm": [0, 12, 0], "momentNmm": [0, -12, 0]},
+          {"sMm": 40, "positionMm": [0, 0, 32], "prefixMomentNmm": [0, 0, 0], "suffixMomentNmm": [0, 0, 0], "momentNmm": [0, 0, 0]}
+        ]
+      }
+    }
+  ]
+}

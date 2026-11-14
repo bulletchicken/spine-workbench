@@ -13,11 +13,15 @@ path = "src/main.rs"
 
 [dependencies]
 shapes = { path = "../shapes" }
+spine-readings = { path = "../spine-readings" }
 auto-pass = { path = "../auto-pass" }
 case-checks = { path = "../case-checks" }
 case-file = { path = "../case-file" }
 film-geometry = { path = "../film-geometry" }
 film-reader = { path = "../film-reader", features = ["test-support"] }
+implant-layout = { path = "../implant-layout" }
+joint-fit = { path = "../joint-fit" }
+load-bench = { path = "../load-bench" }
 made-up-spines = { path = "../made-up-spines" }
 scorekeeper = { path = "../scorekeeper" }
 toolbox = { path = "../toolbox" }
@@ -25,5 +29,3 @@ trained-finder = { path = "../trained-finder" }
 clap.workspace = true
 rayon.workspace = true
 serde_json.workspace = true
-joint-fit = { path = "../joint-fit" }
-spine-readings = { path = "../spine-readings" }

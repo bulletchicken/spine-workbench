@@ -1,5 +1,5 @@
 /** The dock keeps these scenes mounted so their words and controls can fade together. */
-export type DockScene = 'add' | 'reading' | 'ready' | 'finding' | 'found' | 'review' | 'failed' | 'engine';
+export type DockScene = 'add' | 'reading' | 'ready' | 'finding' | 'found' | 'review' | 'failed' | 'engine' | 'building' | 'build-failed' | 'three' | 'compare';
 
 export interface DockAction {
   label: string;
@@ -14,10 +14,15 @@ export type DockHelper =
   | { kind: 'meter'; share: number; words: string }
   | { kind: 'count'; count: string; spoken: string; share: number; words?: string };
 
-export interface DockSpec {
+interface DockBase {
   scene: DockScene;
   sentence: string;
   helper?: DockHelper;
-  quiet?: DockAction;
-  primary?: DockAction & { disabled?: boolean };
+  quiet?: DockAction & { expanded?: boolean; controls?: string };
 }
+
+export type DockSpec = DockBase & (
+  | { primary?: DockAction & { disabled?: boolean }; secondary?: never; views?: never }
+  | { primary?: never; secondary: DockAction; views?: never }
+  | { primary?: never; secondary?: never; views: { chosen: 'front' | 'side' | 'top' | null; choose(name: 'front' | 'side' | 'top'): void } }
+);

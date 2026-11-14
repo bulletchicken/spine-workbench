@@ -1,0 +1,186 @@
+{
+  "cells": [
+    {
+      "coordinate": {
+        "key": "failure-rate",
+        "group": "grade-1"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 0.5
+      },
+      "unit": "percent",
+      "source": "akazawa-2015",
+      "section": "citation-audit-placement-tables.md, A akazawa-2015 and B6; Akazawa abstract",
+      "qualifier": "Grade 1: inner diameter ≥4 mm (inclusive minimum)."
+    },
+    {
+      "coordinate": {
+        "key": "inner-diameter-min",
+        "group": "grade-1"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 4
+      },
+      "unit": "mm",
+      "source": "akazawa-2015",
+      "section": "citation-audit-placement-tables.md, A akazawa-2015 and B6; Akazawa abstract",
+      "qualifier": "Grade 1: inner diameter ≥4 mm (inclusive minimum)."
+    },
+    {
+      "coordinate": {
+        "key": "failure-rate",
+        "group": "grade-2"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 2.9
+      },
+      "unit": "percent",
+      "source": "akazawa-2015",
+      "section": "citation-audit-placement-tables.md, A akazawa-2015 and B6; Akazawa abstract",
+      "qualifier": "Grade 2: inner diameter ≥2 mm and <4 mm (inclusive minimum, exclusive maximum)."
+    },
+    {
+      "coordinate": {
+        "key": "inner-diameter-min",
+        "group": "grade-2"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 2
+      },
+      "unit": "mm",
+      "source": "akazawa-2015",
+      "section": "citation-audit-placement-tables.md, A akazawa-2015 and B6; Akazawa abstract",
+      "qualifier": "Grade 2: inner diameter ≥2 mm and <4 mm (inclusive minimum, exclusive maximum)."
+    },
+    {
+      "coordinate": {
+        "key": "inner-diameter-max",
+        "group": "grade-2"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 4
+      },
+      "unit": "mm",
+      "source": "akazawa-2015",
+      "section": "citation-audit-placement-tables.md, A akazawa-2015 and B6; Akazawa abstract",
+      "qualifier": "Grade 2: inner diameter ≥2 mm and <4 mm (inclusive minimum, exclusive maximum)."
+    },
+    {
+      "coordinate": {
+        "key": "failure-rate",
+        "group": "grade-3"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 12.0
+      },
+      "unit": "percent",
+      "source": "akazawa-2015",
+      "section": "citation-audit-placement-tables.md, A akazawa-2015 and B6; Akazawa abstract",
+      "qualifier": "Grade 3: inner diameter ≥1 mm and <2 mm (inclusive minimum, exclusive maximum)."
+    },
+    {
+      "coordinate": {
+        "key": "inner-diameter-min",
+        "group": "grade-3"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 1
+      },
+      "unit": "mm",
+      "source": "akazawa-2015",
+      "section": "citation-audit-placement-tables.md, A akazawa-2015 and B6; Akazawa abstract",
+      "qualifier": "Grade 3: inner diameter ≥1 mm and <2 mm (inclusive minimum, exclusive maximum)."
+    },
+    {
+      "coordinate": {
+        "key": "inner-diameter-max",
+        "group": "grade-3"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 2
+      },
+      "unit": "mm",
+      "source": "akazawa-2015",
+      "section": "citation-audit-placement-tables.md, A akazawa-2015 and B6; Akazawa abstract",
+      "qualifier": "Grade 3: inner diameter ≥1 mm and <2 mm (inclusive minimum, exclusive maximum)."
+    },
+    {
+      "coordinate": {
+        "key": "failure-rate",
+        "group": "grade-4"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 31.5
+      },
+      "unit": "percent",
+      "source": "akazawa-2015",
+      "section": "citation-audit-placement-tables.md, A akazawa-2015 and B6; Akazawa abstract",
+      "qualifier": "Grade 4: inner diameter <1 mm (exclusive maximum), cortical channel."
+    },
+    {
+      "coordinate": {
+        "key": "inner-diameter-max",
+        "group": "grade-4"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 1
+      },
+      "unit": "mm",
+      "source": "akazawa-2015",
+      "section": "citation-audit-placement-tables.md, A akazawa-2015 and B6; Akazawa abstract",
+      "qualifier": "Grade 4: inner diameter <1 mm (exclusive maximum), cortical channel."
+    },
+    {
+      "coordinate": {
+        "key": "failure-rate",
+        "curveSide": "convex",
+        "group": "all-grades"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 5.9
+      },
+      "unit": "percent",
+      "source": "akazawa-2015",
+      "section": "screw-sizing-and-placement.md, section 3, pedicle channel grade"
+    },
+    {
+      "coordinate": {
+        "key": "failure-rate",
+        "curveSide": "concave",
+        "group": "all-grades"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 9.0
+      },
+      "unit": "percent",
+      "source": "akazawa-2015",
+      "section": "screw-sizing-and-placement.md, section 3, pedicle channel grade"
+    },
+    {
+      "coordinate": {
+        "key": "failure-rate",
+        "group": "neutral-vertebra"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 8.0
+      },
+      "unit": "percent",
+      "source": "akazawa-2015",
+      "section": "screw-sizing-and-placement.md, section 3, pedicle channel grade",
+      "qualifier": "Neutral vertebra group; no concave/convex allocation given."
+    }
+  ]
+}

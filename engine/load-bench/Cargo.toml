@@ -1,0 +1,24 @@
+[package]
+name = "load-bench"
+description = "Placements under daily loads on versions of a fitted spine, compared by paired counts."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+spine-readings = { path = "../spine-readings" }
+shapes = { path = "../shapes" }
+forward-model = { path = "../forward-model" }
+made-up-spines = { path = "../made-up-spines" }
+implant-layout = { path = "../implant-layout" }
+libm.workspace = true
+nalgebra.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+joint-fit = { path = "../joint-fit" }
+proptest.workspace = true

@@ -213,6 +213,7 @@ export function Spine3D({
     const surface = canvas.current;
     if (!turnable || on === null || surface === null) return undefined;
     const attached = attachHandTurning(on, surface, {
+      reducedMotion: () => reducedMotionAt(surface),
       onTurned: () => {
         moving.current?.();
         moving.current = null;

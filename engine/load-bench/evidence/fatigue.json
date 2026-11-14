@@ -1,0 +1,680 @@
+{
+  "rows": [
+    {
+      "key": "titanium-alloy",
+      "usage": "bench",
+      "description": "Construct-derived Goodman-equivalent reference",
+      "notes": "Own inference, not material endurance: 40 mm arm unverified; equal load sharing; note interprets printed R = 10 through stress fractions. No recalculation of rounded stress cells. Failure mode: Rod at set screw. Reproduction: moment=F×arm/2; stress=32M/(pi*d^3); Goodman=amplitude/(1-mean/UTS). goodman-uts is the historical assumed UTS used only to reproduce the copied169/191MPa calibration;DECISIONS now uses paired sampled ultimate strength for each version. Use Evidence::bench_strengths for the runtime pair.",
+      "values": [
+        {
+          "term": "run-out-load",
+          "value": 250,
+          "unit": "N",
+          "source": "vieweg-2023",
+          "section": "implant-mechanics.md §4 Construct tests",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "rod-diameter",
+          "value": 5.5,
+          "unit": "mm",
+          "source": "vieweg-2023",
+          "section": "implant-mechanics.md §4 Construct tests",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "active-length",
+          "value": 76,
+          "unit": "mm",
+          "source": "vieweg-2023",
+          "section": "implant-mechanics.md §4 Construct tests",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "screw-diameter",
+          "value": 4.5,
+          "unit": "mm",
+          "source": "vieweg-2023",
+          "section": "implant-mechanics.md §4 Construct tests",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "screw-length",
+          "value": 45,
+          "unit": "mm",
+          "source": "vieweg-2023",
+          "section": "implant-mechanics.md §4 Construct tests",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "run-out-cycles",
+          "value": 5000000,
+          "unit": "cycles",
+          "source": "vieweg-2023",
+          "section": "implant-mechanics.md §4 Construct tests",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "frequency",
+          "value": 5,
+          "unit": "Hz",
+          "source": "vieweg-2023",
+          "section": "implant-mechanics.md §4 Construct tests",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "printed-r",
+          "value": 10,
+          "unit": "ratio",
+          "source": "vieweg-2023",
+          "section": "implant-mechanics.md §4 Construct tests",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "assumed-arm",
+          "value": 40,
+          "unit": "mm",
+          "source": "project-assumptions",
+          "section": "fast-physics-methods.md §7 Derived calibration",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "equally-sharing-rods",
+          "value": 2,
+          "unit": "rods",
+          "source": "project-assumptions",
+          "section": "fast-physics-methods.md §7 Derived calibration",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "per-rod-moment",
+          "value": 5.0,
+          "unit": "N·m",
+          "source": "project-assumptions",
+          "section": "fast-physics-methods.md §7 Derived calibration",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "maximum-stress",
+          "value": 306,
+          "unit": "MPa",
+          "source": "project-assumptions",
+          "section": "fast-physics-methods.md §7 Derived calibration",
+          "basis": "own-inference",
+          "approximate": true
+        },
+        {
+          "term": "amplitude",
+          "value": 138,
+          "unit": "MPa",
+          "source": "project-assumptions",
+          "section": "fast-physics-methods.md §7 Derived calibration",
+          "basis": "own-inference",
+          "approximate": true
+        },
+        {
+          "term": "mean",
+          "value": 168,
+          "unit": "MPa",
+          "source": "project-assumptions",
+          "section": "fast-physics-methods.md §7 Derived calibration",
+          "basis": "own-inference",
+          "approximate": true
+        },
+        {
+          "term": "goodman-equivalent",
+          "value": 169,
+          "unit": "MPa",
+          "source": "project-assumptions",
+          "section": "fast-physics-methods.md §7 Derived calibration",
+          "basis": "own-inference",
+          "approximate": true
+        },
+        {
+          "term": "goodman-uts",
+          "value": 900,
+          "unit": "MPa",
+          "source": "project-assumptions",
+          "section": "fast-physics-methods.md §7 Derived calibration",
+          "basis": "own-inference",
+          "approximate": true
+        }
+      ]
+    },
+    {
+      "key": "cobalt-chrome",
+      "usage": "bench",
+      "description": "Construct-derived Goodman-equivalent reference",
+      "notes": "Own inference, not material endurance: 40 mm arm unverified; equal load sharing; note interprets printed R = 10 through stress fractions. No recalculation of rounded stress cells. Failure mode: Screw at block. Reproduction: moment=F×arm/2; stress=32M/(pi*d^3); Goodman=amplitude/(1-mean/UTS). goodman-uts is the historical assumed UTS used only to reproduce the copied169/191MPa calibration;DECISIONS now uses paired sampled ultimate strength for each version. Use Evidence::bench_strengths for the runtime pair.",
+      "values": [
+        {
+          "term": "run-out-load",
+          "value": 290,
+          "unit": "N",
+          "source": "vieweg-2023",
+          "section": "implant-mechanics.md §4 Construct tests",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "rod-diameter",
+          "value": 5.5,
+          "unit": "mm",
+          "source": "vieweg-2023",
+          "section": "implant-mechanics.md §4 Construct tests",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "active-length",
+          "value": 76,
+          "unit": "mm",
+          "source": "vieweg-2023",
+          "section": "implant-mechanics.md §4 Construct tests",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "screw-diameter",
+          "value": 4.5,
+          "unit": "mm",
+          "source": "vieweg-2023",
+          "section": "implant-mechanics.md §4 Construct tests",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "screw-length",
+          "value": 45,
+          "unit": "mm",
+          "source": "vieweg-2023",
+          "section": "implant-mechanics.md §4 Construct tests",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "run-out-cycles",
+          "value": 5000000,
+          "unit": "cycles",
+          "source": "vieweg-2023",
+          "section": "implant-mechanics.md §4 Construct tests",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "frequency",
+          "value": 5,
+          "unit": "Hz",
+          "source": "vieweg-2023",
+          "section": "implant-mechanics.md §4 Construct tests",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "printed-r",
+          "value": 10,
+          "unit": "ratio",
+          "source": "vieweg-2023",
+          "section": "implant-mechanics.md §4 Construct tests",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "assumed-arm",
+          "value": 40,
+          "unit": "mm",
+          "source": "project-assumptions",
+          "section": "fast-physics-methods.md §7 Derived calibration",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "equally-sharing-rods",
+          "value": 2,
+          "unit": "rods",
+          "source": "project-assumptions",
+          "section": "fast-physics-methods.md §7 Derived calibration",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "per-rod-moment",
+          "value": 5.8,
+          "unit": "N·m",
+          "source": "project-assumptions",
+          "section": "fast-physics-methods.md §7 Derived calibration",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "maximum-stress",
+          "value": 355,
+          "unit": "MPa",
+          "source": "project-assumptions",
+          "section": "fast-physics-methods.md §7 Derived calibration",
+          "basis": "own-inference",
+          "approximate": true
+        },
+        {
+          "term": "amplitude",
+          "value": 160,
+          "unit": "MPa",
+          "source": "project-assumptions",
+          "section": "fast-physics-methods.md §7 Derived calibration",
+          "basis": "own-inference",
+          "approximate": true
+        },
+        {
+          "term": "mean",
+          "value": 195,
+          "unit": "MPa",
+          "source": "project-assumptions",
+          "section": "fast-physics-methods.md §7 Derived calibration",
+          "basis": "own-inference",
+          "approximate": true
+        },
+        {
+          "term": "goodman-equivalent",
+          "value": 191,
+          "unit": "MPa",
+          "source": "project-assumptions",
+          "section": "fast-physics-methods.md §7 Derived calibration",
+          "basis": "own-inference",
+          "approximate": true
+        },
+        {
+          "term": "goodman-uts",
+          "value": 1200,
+          "unit": "MPa",
+          "source": "project-assumptions",
+          "section": "fast-physics-methods.md §7 Derived calibration",
+          "basis": "own-inference",
+          "approximate": true
+        }
+      ]
+    },
+    {
+      "key": "contour-knock-down",
+      "usage": "bench",
+      "description": "Contouring factor",
+      "notes": "Note converts 20–40% to 0.6–0.8; published effect Ti/steel 4.5 mm; uniform sampling and applying to 5.5 mm CoCr are own extrapolations.",
+      "values": [
+        {
+          "term": "lower",
+          "value": 0.6,
+          "unit": "ratio",
+          "source": "project-assumptions",
+          "section": "fast-physics-methods.md §7 and TableB",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "upper",
+          "value": 0.8,
+          "unit": "ratio",
+          "source": "project-assumptions",
+          "section": "fast-physics-methods.md §7 and TableB",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "reduction-lower",
+          "value": 20,
+          "unit": "%",
+          "source": "slivka-2013",
+          "section": "fast-physics-methods.md §7",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "reduction-upper",
+          "value": 40,
+          "unit": "%",
+          "source": "slivka-2013",
+          "section": "fast-physics-methods.md §7",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "cocr-relative-endurance",
+      "usage": "beside",
+      "description": "CoCr endurance comparison",
+      "notes": "Could not fix CoCr endurance because screws failed first; not a construct run-out MPa.",
+      "values": [
+        {
+          "term": "increase-at-least",
+          "value": 25,
+          "unit": "%",
+          "source": "slivka-2013",
+          "section": "fast-physics-methods.md §7",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "textbook-titanium",
+      "usage": "beside",
+      "description": "Textbook fatigue strength via review",
+      "notes": "DISAGREE with coupon/construct values; cycle count absent. Not used as construct level.",
+      "values": [
+        {
+          "term": "lower",
+          "value": 300,
+          "unit": "MPa",
+          "source": "ohrt-nissen-2018",
+          "section": "fast-physics-methods.md §7",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "upper",
+          "value": 389,
+          "unit": "MPa",
+          "source": "ohrt-nissen-2018",
+          "section": "fast-physics-methods.md §7",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "textbook-cocr",
+      "usage": "beside",
+      "description": "Textbook fatigue strength via review",
+      "notes": "DISAGREE with coupon/construct values; cycle count absent. Not used as construct level.",
+      "values": [
+        {
+          "term": "lower",
+          "value": 207,
+          "unit": "MPa",
+          "source": "ohrt-nissen-2018",
+          "section": "fast-physics-methods.md §7",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "upper",
+          "value": 950,
+          "unit": "MPa",
+          "source": "ohrt-nissen-2018",
+          "section": "fast-physics-methods.md §7",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "textbook-stainless",
+      "usage": "beside",
+      "description": "Textbook fatigue strength via review",
+      "notes": "DISAGREE with coupon/construct values; cycle count absent. Not used as construct level.",
+      "values": [
+        {
+          "term": "lower",
+          "value": 241,
+          "unit": "MPa",
+          "source": "ohrt-nissen-2018",
+          "section": "fast-physics-methods.md §7",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "upper",
+          "value": 820,
+          "unit": "MPa",
+          "source": "ohrt-nissen-2018",
+          "section": "fast-physics-methods.md §7",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "smooth-ti-coupon",
+      "usage": "beside",
+      "description": "Smooth polishedTi ELI coupon comparison",
+      "notes": "DISAGREE: coupon strain run-out converted by note to about 550–570 MPa; not contoured construct strength. Reversal count and unit kept as printed; no conversion to cycles.",
+      "values": [
+        {
+          "term": "strain-amplitude",
+          "value": 0.005,
+          "unit": "ratio",
+          "source": "carrion-2016",
+          "section": "fast-physics-methods.md §7",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "strain-ratio",
+          "value": -1,
+          "unit": "ratio",
+          "source": "carrion-2016",
+          "section": "fast-physics-methods.md §7",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "reversals-more-than",
+          "value": 2713156,
+          "unit": "reversals",
+          "source": "carrion-2016",
+          "section": "fast-physics-methods.md §7",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "young-modulus-lower",
+          "value": 110,
+          "unit": "GPa",
+          "source": "project-assumptions",
+          "section": "fast-physics-methods.md §7 own inference",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "young-modulus-upper",
+          "value": 114,
+          "unit": "GPa",
+          "source": "project-assumptions",
+          "section": "fast-physics-methods.md §7 own inference",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "stress-lower",
+          "value": 550,
+          "unit": "MPa",
+          "source": "project-assumptions",
+          "section": "fast-physics-methods.md §7 own inference",
+          "basis": "own-inference",
+          "approximate": true
+        },
+        {
+          "term": "stress-upper",
+          "value": 570,
+          "unit": "MPa",
+          "source": "project-assumptions",
+          "section": "fast-physics-methods.md §7 own inference",
+          "basis": "own-inference",
+          "approximate": true
+        }
+      ]
+    },
+    {
+      "key": "r-minus-one-strain-0.006",
+      "usage": "beside",
+      "description": "Smooth Ti-6Al-4V ELI coupon condition",
+      "notes": "Failure range, fully reversed strain control.",
+      "values": [
+        {
+          "term": "strain-amplitude",
+          "value": 0.006,
+          "unit": "ratio",
+          "source": "carrion-2016",
+          "section": "fast-physics-methods.md §7 coupon conditions",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "strain-ratio",
+          "value": -1,
+          "unit": "ratio",
+          "source": "carrion-2016",
+          "section": "fast-physics-methods.md §7 coupon conditions",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "failure-lower",
+          "value": 124952,
+          "unit": "reversals",
+          "source": "carrion-2016",
+          "section": "fast-physics-methods.md §7 coupon conditions",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "failure-upper",
+          "value": 207610,
+          "unit": "reversals",
+          "source": "carrion-2016",
+          "section": "fast-physics-methods.md §7 coupon conditions",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "r-minus-one-strain-0.004",
+      "usage": "beside",
+      "description": "Smooth Ti-6Al-4V ELI coupon condition",
+      "notes": "Note prints  >2.3–4.4 million reversals; two threshold ends, not measured failures.",
+      "values": [
+        {
+          "term": "strain-amplitude",
+          "value": 0.004,
+          "unit": "ratio",
+          "source": "carrion-2016",
+          "section": "fast-physics-methods.md §7 coupon conditions",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "strain-ratio",
+          "value": -1,
+          "unit": "ratio",
+          "source": "carrion-2016",
+          "section": "fast-physics-methods.md §7 coupon conditions",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "run-out-lower-more-than",
+          "value": 2.3,
+          "unit": "million reversals",
+          "source": "carrion-2016",
+          "section": "fast-physics-methods.md §7 coupon conditions",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "run-out-upper-more-than",
+          "value": 4.4,
+          "unit": "million reversals",
+          "source": "carrion-2016",
+          "section": "fast-physics-methods.md §7 coupon conditions",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "r-zero-strain-0.004",
+      "usage": "beside",
+      "description": "Smooth Ti-6Al-4V ELI coupon condition",
+      "notes": "Run-out  >2506668 reversals at strain ratio 0.",
+      "values": [
+        {
+          "term": "strain-amplitude",
+          "value": 0.004,
+          "unit": "ratio",
+          "source": "carrion-2016",
+          "section": "fast-physics-methods.md §7 coupon conditions",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "strain-ratio",
+          "value": 0,
+          "unit": "ratio",
+          "source": "carrion-2016",
+          "section": "fast-physics-methods.md §7 coupon conditions",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "reversals-more-than",
+          "value": 2506668,
+          "unit": "reversals",
+          "source": "carrion-2016",
+          "section": "fast-physics-methods.md §7 coupon conditions",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "run-out-definition",
+      "usage": "beside",
+      "description": "Coupon run-out definition",
+      "notes": "Strictly more than 10^6 cycles; no conversion from the reversal counts.",
+      "values": [
+        {
+          "term": "cycles-more-than",
+          "value": 1000000,
+          "unit": "cycles",
+          "source": "carrion-2016",
+          "section": "fast-physics-methods.md §7 coupon conditions",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    }
+  ],
+  "missing": [
+    {
+      "key": "stainless-steel.goodman-equivalent",
+      "reason": "No stainless-steel construct run-out stress; textbook material ranges are not substituted."
+    },
+    {
+      "key": "contoured-rod-sn-slope",
+      "reason": "No usable S–N slope; dental-implant exponent explicitly rejected."
+    },
+    {
+      "key": "time-to-fusion",
+      "reason": "No timing law supplied."
+    },
+    {
+      "key": "locked-in-relaxation",
+      "reason": "No relaxation law supplied."
+    },
+    {
+      "key": "verified-f1717-arm",
+      "reason": "40 mm is assumed, not verified from standard."
+    }
+  ]
+}

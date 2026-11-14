@@ -12,9 +12,9 @@ import { FilmPlaces } from './FilmPlaces';
 import { FilmTile } from './FilmTile';
 import { flightFrom, fly, readLayout } from './fly-tiles';
 import { motionIsReduced, useGlidingCameras } from './glide-cameras';
-import { CAPTION, captionSpot, FILM_ORDER, stageLayout, type Spot, type StageLayout } from './stage-layout';
+import { CAPTION, captionSpot, FILM_ORDER, stageLayout, type Spot, type StageLayout, RAIL_HEIGHT, RAIL_GAP } from './stage-layout';
 
-export type Moment = 'films' | 'find';
+export type Moment = 'films' | 'find' | 'three';
 export interface StageFilm {
   size: FilmSize;
   pixels: Uint16Array;
@@ -40,7 +40,7 @@ export interface StageProps {
   onPoint?: (film: FilmKind, key: string | null) => void;
 }
 
-interface Measures { width: number; height: number; displayHeight: number; dx: number; dy: number }
+interface Measures { width: number; height: number; displayHeight: number; railHeight: number; railGap: number; dx: number; dy: number }
 interface Drawing {
   layout: StageLayout;
   places: Record<FilmKind, Spot>;
@@ -97,7 +97,7 @@ function drawCaptions(tiles: HTMLElement, drawing: Drawing): void {
 export function Stage({ moment, films, reading, held, leaving, marked, reviewing, replay, onPressPlace, onPoint }: StageProps) {
   const tiles = useRef<HTMLDivElement>(null);
   const display = useRef<HTMLHeadingElement>(null);
-  const [measures, setMeasures] = useState<Measures>({ width: 0, height: 0, displayHeight: 0, dx: 0, dy: 0 });
+  const [measures, setMeasures] = useState<Measures>({ width: 0, height: 0, displayHeight: 0, railHeight: RAIL_HEIGHT, railGap: RAIL_GAP, dx: 0, dy: 0 });
   const [fontsReady, setFontsReady] = useState(false);
   const previous = useRef<Drawing | null>(null);
   useGlidingCameras(tiles);
@@ -108,7 +108,8 @@ export function Stage({ moment, films, reading, held, leaving, marked, reviewing
     let mounted = true;
     const measure = (width: number, height: number) => {
       const box = stage.getBoundingClientRect();
-      const next = { width, height, displayHeight: display.current?.offsetHeight ?? 0, dx: box.left - Math.floor(box.left), dy: box.top - Math.floor(box.top) };
+      const css = getComputedStyle(stage);
+      const next = { width, height, railHeight: parseFloat(css.getPropertyValue('--rail-h')) || RAIL_HEIGHT, railGap: parseFloat(css.getPropertyValue('--rail-gap')) || RAIL_GAP, displayHeight: display.current?.offsetHeight ?? 0, dx: box.left - Math.floor(box.left), dy: box.top - Math.floor(box.top) };
       setMeasures((was) => Object.keys(next).every((key) => was[key as keyof Measures] === next[key as keyof Measures]) ? was : next);
     };
     measure(stage.clientWidth, stage.clientHeight);
@@ -146,7 +147,7 @@ export function Stage({ moment, films, reading, held, leaving, marked, reviewing
     const changedMoment = was !== null && (was.moment !== drawing.moment || (moment === 'find' && was.present !== drawing.present));
     const resized = was === null || was.measures !== drawing.measures;
     previous.current = drawing;
-    if (changedMoment && !resized && motionIsReduced(part)) {
+    if (changedMoment && !resized && (motionIsReduced(part) || moment === 'three' || was.moment === 'three')) {
       fly(part, new Map(), new Map());
       draw(part, was);
       part.classList.add('fading');
@@ -193,7 +194,7 @@ export function Stage({ moment, films, reading, held, leaving, marked, reviewing
           const caption = captionSpot(spot);
           return (
             <Fragment key={kind}>
-              {film !== null && <FilmTile kind={kind} index={index} film={film} spot={spot} replay={replay} target={held.target === kind}
+              {film !== null && <FilmTile kind={kind} index={index} film={moment === 'three' ? { ...film, names: false, on: null, only: null, frame: { kind: 'whole' }, light: null } : film} spot={spot} glide={moment !== 'three'} replay={replay} target={held.target === kind}
                 {...(moment === 'find' && !reviewing && onPoint !== undefined ? { onPoint: (key: string | null) => { onPoint(kind, key); } } : {})} />}
               <div className="caption" data-place={kind} aria-hidden="true" data-away={moment === 'find' && film === null || undefined}
                 style={{ '--i': index, '--cx': caption.centreX, '--cy': caption.top } as CSSProperties}>{FILM_NAMES[kind]}</div>

@@ -1,5 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { useStore } from 'zustand';
+import { buildSpine, cancelSpineBuild } from '@/bench/three/build-spine';
+import { spineBuild } from '@/view-state/spine-build';
+import { THREE_WORDS } from '@/words/three';
 import { findReplay } from '@/auto-pass/find-replay-clock';
 import { ReplayPlayer } from '@/auto-pass/ReplayPlayer';
 import { useKey } from '@/building-blocks/keyboard/use-key';
@@ -19,6 +22,8 @@ import { findRun, foundOnFront, showWhatIsFound } from './find-run';
 
 export function FindScreen() {
   const engine = useEngine();
+  const build = useStore(spineBuild);
+  useEffect(() => () => { cancelSpineBuild(); }, []);
   const entered = useRef(false);
   const find = useFindState();
   const slowSearch = useStore(filmIntake, (state) => state.from === 'made-up-case');
@@ -63,6 +68,8 @@ export function FindScreen() {
     frontAlone: () => { findRun.start(engine, ['front']); },
   };
   const later = allSteps().find((step) => step.number > 2);
-  useShowInDock(findDock({ find, films, inPlace, replay: { ...findReplay.getState(), plan, revealed }, slowSearch, laterStep: later === undefined ? null : { label: later.title, press: () => { currentStep.getState().go(later.slug); } } }, act));
+  useShowInDock(build.phase === 'building' ? { scene: 'building', sentence: THREE_WORDS.building } : build.phase === 'failed' ? {
+    scene: 'build-failed', sentence: THREE_WORDS.failed, primary: { label: THREE_WORDS.retry, press: () => { void buildSpine(engine); } },
+  } : findDock({ find, films, inPlace, replay: { ...findReplay.getState(), plan, revealed }, slowSearch, laterStep: later === undefined ? null : { label: later.title, press: () => { if (later.slug === 'three') void buildSpine(engine); else currentStep.getState().go(later.slug); } } }, act));
   return <ReplayPlayer clock={findReplay} />;
 }

@@ -1,0 +1,33 @@
+{
+  "what": "Two massless linear springs in series, with translational and coaxial rotational cases of both signs.",
+  "units": {"force": "N", "length": "mm", "moment": "N·mm", "angle": "radians", "translationalStiffness": "N/mm", "rotationalStiffness": "N·mm/radian"},
+  "axes": {"frame": "right-handed Cartesian, synthetic origin at the fixed end", "x": "anterior", "y": "patient-left", "z": "superior", "vectorOrder": ["x", "y", "z"]},
+  "signConvention": "The first spring is fixed at its first end, joins the second at an unloaded massless junction, and the second is loaded at its free end. Rest extensions and rotations are zero. Translation is the signed increment along axisUnit; forceN is its signed scalar load. Rotations and momentNmm are signed scalars about the same axisUnit by the right-hand rule; coaxial rotations add exactly. Other degrees of freedom are fixed. Each spring carries the same signed transmitted force or moment.",
+  "tolerance": {"relative": 1e-10, "absolute": 1e-12, "rule": "abs(actual - expected) <= absolute + relative * abs(expected), for each scalar in its stated unit", "why": "Exact linear compliance addition; only rational arithmetic and final decimal rounding, with no discretisation error."},
+  "cases": [
+    {
+      "what": "unequal translational springs, positive extension",
+      "kind": "translational",
+      "input": {"axisUnit": [1, 0, 0], "stiffness1NPerMm": 120, "stiffness2NPerMm": 300, "forceN": 42},
+      "expect": {"combinedStiffnessNPerMm": 85.714285714285714, "stretch1Mm": 0.35, "stretch2Mm": 0.14, "totalStretchMm": 0.49}
+    },
+    {
+      "what": "unequal translational springs, negative extension",
+      "kind": "translational",
+      "input": {"axisUnit": [0, 1, 0], "stiffness1NPerMm": 100, "stiffness2NPerMm": 400, "forceN": -80},
+      "expect": {"combinedStiffnessNPerMm": 80, "stretch1Mm": -0.8, "stretch2Mm": -0.2, "totalStretchMm": -1}
+    },
+    {
+      "what": "unequal rotational springs about x, positive rotation",
+      "kind": "rotational",
+      "input": {"axisUnit": [1, 0, 0], "stiffness1NmmPerRad": 12000, "stiffness2NmmPerRad": 30000, "momentNmm": 4200},
+      "expect": {"combinedStiffnessNmmPerRad": 8571.4285714285714, "rotation1Rad": 0.35, "rotation2Rad": 0.14, "totalRotationRad": 0.49}
+    },
+    {
+      "what": "unequal rotational springs about z, negative rotation",
+      "kind": "rotational",
+      "input": {"axisUnit": [0, 0, 1], "stiffness1NmmPerRad": 10000, "stiffness2NmmPerRad": 40000, "momentNmm": -8000},
+      "expect": {"combinedStiffnessNmmPerRad": 8000, "rotation1Rad": -0.8, "rotation2Rad": -0.2, "totalRotationRad": -1}
+    }
+  ]
+}

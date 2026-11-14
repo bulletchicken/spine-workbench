@@ -1,0 +1,2499 @@
+{
+  "cells": [
+    {
+      "coordinate": {
+        "key": "transverse-angle-summary",
+        "group": "zheng-p6-t1",
+        "level": "T1"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 31
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "screw-sizing-and-placement.md P6, anatomic transverse angle, children",
+      "qualifier": "Approximately 31° at T1, as printed in the research note’s P6 summary; separate from exact Table 2 sex columns. No specific age-band or sex allocation is supplied."
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle-summary",
+        "group": "zheng-p6-t2",
+        "level": "T2"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 20
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "screw-sizing-and-placement.md P6, anatomic transverse angle, children",
+      "qualifier": "Approximately 20° at T2, as printed in the research note’s P6 summary; separate from exact Table 2 sex columns. No specific age-band or sex allocation is supplied."
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle-summary",
+        "group": "zheng-p6-t3",
+        "level": "T3"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 13
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "screw-sizing-and-placement.md P6, anatomic transverse angle, children",
+      "qualifier": "Approximately 13° at T3, as printed in the research note’s P6 summary; separate from exact Table 2 sex columns. No specific age-band or sex allocation is supplied."
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle-summary",
+        "group": "zheng-p6-t4-t10"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 4,
+        "upper": 8
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "screw-sizing-and-placement.md P6, anatomic transverse angle, children",
+      "qualifier": "Approximately 4–8° across T4–T10, as printed; one regional range with no single-level, age-band or sex allocation."
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle-summary",
+        "group": "zheng-p6-t11-t12"
+      },
+      "value": {
+        "kind": "range",
+        "lower": -6,
+        "upper": -4
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "screw-sizing-and-placement.md P6, anatomic transverse angle, children",
+      "qualifier": "Printed endpoint order: approximately −4 to −6° at T11–T12. Interpreting negative angles as divergent is [own inference]. Lower/upper are ordered interval bounds. One regional range, with no single-level, age-band or sex allocation."
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle-summary",
+        "group": "upendra-p6-ais"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 12,
+        "upper": 26
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "screw-sizing-and-placement.md P6, anatomic transverse angle, AIS",
+      "qualifier": "Published AIS summary 12–26°, concave larger than convex. The summary does not allocate endpoints to a side or individual level; exact Table 3 columns stay separate."
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T1",
+        "curveSide": "convex",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 20.67,
+        "sd": 4.66
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 2; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 2 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 9,
+      "range": {
+        "lower": 16.0,
+        "upper": 28.0
+      },
+      "printed": "20.67",
+      "decimals": 2
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T1",
+        "curveSide": "concave",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 21.33,
+        "sd": 5.63
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 2; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 2 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 9,
+      "range": {
+        "lower": 15.0,
+        "upper": 30.0
+      },
+      "printed": "21.33",
+      "decimals": 2
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T2",
+        "curveSide": "convex",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 17.67,
+        "sd": 4.96
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 2; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 2 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 11,
+      "range": {
+        "lower": 14.0,
+        "upper": 25.0
+      },
+      "printed": "17.67",
+      "decimals": 2
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T2",
+        "curveSide": "concave",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 20.7,
+        "sd": 4.36
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 2; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 2 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 13,
+      "range": {
+        "lower": 16.0,
+        "upper": 27.0
+      },
+      "printed": "20.7",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T3",
+        "curveSide": "convex",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 12.67,
+        "sd": 6.63
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 2; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 2 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 13,
+      "range": {
+        "lower": 7.0,
+        "upper": 21.0
+      },
+      "printed": "12.67",
+      "decimals": 2
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T3",
+        "curveSide": "concave",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 16.0,
+        "sd": 4.23
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 2; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 2 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 11,
+      "range": {
+        "lower": 9.0,
+        "upper": 20.0
+      },
+      "printed": "16",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T4",
+        "curveSide": "convex",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 14.6,
+        "sd": 8.14
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 2; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 2 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 16,
+      "range": {
+        "lower": 0.0,
+        "upper": 20.0
+      },
+      "printed": "14.6",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T4",
+        "curveSide": "concave",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 17.75,
+        "sd": 5.32
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 2; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 2 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 15,
+      "range": {
+        "lower": 5.0,
+        "upper": 25.0
+      },
+      "printed": "17.75",
+      "decimals": 2
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T5",
+        "curveSide": "convex",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 18.25,
+        "sd": 5.1
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 2; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 2 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 9,
+      "range": {
+        "lower": 10.0,
+        "upper": 26.0
+      },
+      "printed": "18.25",
+      "decimals": 2
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T5",
+        "curveSide": "concave",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 19.67,
+        "sd": 8.65
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 2; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 2 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 9,
+      "range": {
+        "lower": 10.0,
+        "upper": 29.0
+      },
+      "printed": "19.67",
+      "decimals": 2
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T6",
+        "curveSide": "convex",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 14.5,
+        "sd": 5.96
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 2; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 2 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 13,
+      "range": {
+        "lower": 4.0,
+        "upper": 24.0
+      },
+      "printed": "14.5",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T6",
+        "curveSide": "concave",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 20.75,
+        "sd": 9.11
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 2; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 2 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 13,
+      "range": {
+        "lower": 13.0,
+        "upper": 34.0
+      },
+      "printed": "20.75",
+      "decimals": 2
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T7",
+        "curveSide": "convex",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 17.0,
+        "sd": 2.33
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 2; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 2 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 11,
+      "range": {
+        "lower": 15.0,
+        "upper": 20.0
+      },
+      "printed": "17",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T7",
+        "curveSide": "concave",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 26.0,
+        "sd": 1.14
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 2; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 2 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 11,
+      "range": {
+        "lower": 20.0,
+        "upper": 31.0
+      },
+      "printed": "26.0",
+      "decimals": 1,
+      "mark": {
+        "kind": "doubtful",
+        "reason": "The note flags the printed SD 1.14° as doubtful next to range 20–31° and n = 11; the figure is retained without repair."
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T8",
+        "curveSide": "convex",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 15.0,
+        "sd": 4.69
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 2; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 2 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 14,
+      "range": {
+        "lower": 5.0,
+        "upper": 26.0
+      },
+      "printed": "15",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T8",
+        "curveSide": "concave",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 15.67,
+        "sd": 9.68
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 2; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 2 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 17,
+      "range": {
+        "lower": 3.0,
+        "upper": 28.0
+      },
+      "printed": "15.67",
+      "decimals": 2
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T9",
+        "curveSide": "convex",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 15.33,
+        "sd": 2.89
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 2; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 2 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 12,
+      "range": {
+        "lower": 10.0,
+        "upper": 18.0
+      },
+      "printed": "15.33",
+      "decimals": 2
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T9",
+        "curveSide": "concave",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 19.5,
+        "sd": 3.34
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 2; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 2 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 12,
+      "range": {
+        "lower": 14.0,
+        "upper": 22.5
+      },
+      "printed": "19.5",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T10",
+        "curveSide": "convex",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 12.4,
+        "sd": 3.66
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 2; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 2 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 15,
+      "range": {
+        "lower": 7.0,
+        "upper": 19.0
+      },
+      "printed": "12.4",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T10",
+        "curveSide": "concave",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 12.8,
+        "sd": 8.24
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 2; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 2 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right. Table 4(b) repeats this cell as 12.0, disagreeing with Table 2’s 12.8; this primary cell follows Table 2.",
+      "n": 15,
+      "range": {
+        "lower": 4.0,
+        "upper": 24.0
+      },
+      "printed": "12.8",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T11",
+        "curveSide": "convex",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 11.0,
+        "sd": 6.93
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 2; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 2 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 16,
+      "range": {
+        "lower": 3.0,
+        "upper": 19.0
+      },
+      "printed": "11",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T11",
+        "curveSide": "concave",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 12.0,
+        "sd": 6.52
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 2; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 2 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 16,
+      "range": {
+        "lower": 4.0,
+        "upper": 18.0
+      },
+      "printed": "12.0",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T12",
+        "curveSide": "convex",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 13.56,
+        "sd": 9.98
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 2; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 2 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 19,
+      "range": {
+        "lower": 0.0,
+        "upper": 30.0
+      },
+      "printed": "13.56",
+      "decimals": 2
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T12",
+        "curveSide": "concave",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 14.8,
+        "sd": 6.59
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 2; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 2 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 16,
+      "range": {
+        "lower": 5.0,
+        "upper": 24.0
+      },
+      "printed": "14.8",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "L1",
+        "curveSide": "convex",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 16.38,
+        "sd": 8.74
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 2; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 2 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 19,
+      "range": {
+        "lower": 0.0,
+        "upper": 26.0
+      },
+      "printed": "16.38",
+      "decimals": 2
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "L1",
+        "curveSide": "concave",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 16.6,
+        "sd": 6.56
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 2; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 2 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right. Table 4(b) repeats this cell as 16.0, disagreeing with Table 2’s 16.6; this primary cell follows Table 2.",
+      "n": 19,
+      "range": {
+        "lower": 4.0,
+        "upper": 26.0
+      },
+      "printed": "16.6",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "L2",
+        "curveSide": "convex",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 16.75,
+        "sd": 9.66
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 2; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 2 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 13,
+      "range": {
+        "lower": 5.0,
+        "upper": 35.0
+      },
+      "printed": "16.75",
+      "decimals": 2
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "L2",
+        "curveSide": "concave",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 17.6,
+        "sd": 5.18
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 2; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 2 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 13,
+      "range": {
+        "lower": 4.0,
+        "upper": 23.0
+      },
+      "printed": "17.6",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "L3",
+        "curveSide": "convex",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 12.8,
+        "sd": 5.73
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 2; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 2 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 11,
+      "range": {
+        "lower": 5.0,
+        "upper": 21.0
+      },
+      "printed": "12.8",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "L3",
+        "curveSide": "concave",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 16.0,
+        "sd": 6.21
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 2; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 2 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 11,
+      "range": {
+        "lower": 8.0,
+        "upper": 23.0
+      },
+      "printed": "16",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "L4",
+        "curveSide": "convex",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 17.8,
+        "sd": 2.66
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 2; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 2 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right. Table 4(b) repeats this cell as 21, disagreeing with Table 2’s 17.8; this primary cell follows Table 2.",
+      "n": 9,
+      "range": {
+        "lower": 18.0,
+        "upper": 24.0
+      },
+      "printed": "17.8",
+      "decimals": 1,
+      "mark": {
+        "kind": "impossible",
+        "reason": "The printed mean 17.8° is below the printed range minimum 18° (range 18–24°), which is impossible; no corrected figure is supplied."
+      },
+      "usage": "printed-only"
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "L4",
+        "curveSide": "concave",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 18.7,
+        "sd": 4.43
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 2; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 2 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right. Table 4(b) repeats this cell as 16.7, disagreeing with Table 2’s 18.7; this primary cell follows Table 2.",
+      "n": 9,
+      "range": {
+        "lower": 12.0,
+        "upper": 24.0
+      },
+      "printed": "18.7",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "L5",
+        "curveSide": "convex",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 18.0,
+        "sd": 2.12
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 2; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 2 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 7,
+      "range": {
+        "lower": 15.0,
+        "upper": 22.0
+      },
+      "printed": "18",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "L5",
+        "curveSide": "concave",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 24.0,
+        "sd": 4.98
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 2; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 2 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 7,
+      "range": {
+        "lower": 19.0,
+        "upper": 28.0
+      },
+      "printed": "24",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T10",
+        "curveSide": "concave",
+        "group": "upendra-table-4"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 12.0
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 4(b); C6 (full text)",
+      "qualifier": "Alternative figure retained only as printed, separate from primary Tables 1–3. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "printed": "12.0",
+      "decimals": 1,
+      "mark": {
+        "kind": "ambiguous-print",
+        "reason": "Table 4(b) prints 12.0; the primary Table 2 prints 12.8. Tables 1–3 are authoritative for the primary dataset; this conflicting Table 4 alternative is retained only for inspection."
+      },
+      "usage": "printed-only"
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "L1",
+        "curveSide": "concave",
+        "group": "upendra-table-4"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 16.0
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 4(b); C6 (full text)",
+      "qualifier": "Alternative figure retained only as printed, separate from primary Tables 1–3. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "printed": "16.0",
+      "decimals": 1,
+      "mark": {
+        "kind": "ambiguous-print",
+        "reason": "Table 4(b) prints 16.0; the primary Table 2 prints 16.6. Tables 1–3 are authoritative for the primary dataset; this conflicting Table 4 alternative is retained only for inspection."
+      },
+      "usage": "printed-only"
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "L4",
+        "curveSide": "convex",
+        "group": "upendra-table-4"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 21.0
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 4(b); C6 (full text)",
+      "qualifier": "Alternative figure retained only as printed, separate from primary Tables 1–3. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "printed": "21",
+      "decimals": 0,
+      "mark": {
+        "kind": "ambiguous-print",
+        "reason": "Table 4(b) prints 21; the primary Table 2 prints 17.8. Tables 1–3 are authoritative for the primary dataset; this conflicting Table 4 alternative is retained only for inspection."
+      },
+      "usage": "printed-only"
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "L4",
+        "curveSide": "concave",
+        "group": "upendra-table-4"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 16.7
+      },
+      "unit": "degrees",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 4(b); C6 (full text)",
+      "qualifier": "Alternative figure retained only as printed, separate from primary Tables 1–3. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "printed": "16.7",
+      "decimals": 1,
+      "mark": {
+        "kind": "ambiguous-print",
+        "reason": "Table 4(b) prints 16.7; the primary Table 2 prints 18.7. Tables 1–3 are authoritative for the primary dataset; this conflicting Table 4 alternative is retained only for inspection."
+      },
+      "usage": "printed-only"
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T1",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "30.94 ± 5.25",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 30.94,
+        "spread": 5.25
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T1",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "29.42 ± 5.77",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 29.42,
+        "spread": 5.77
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T1",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "30.83 ± 4.55",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 30.83,
+        "spread": 4.55
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T1",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "31.16 ± 3.71",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 31.16,
+        "spread": 3.71
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T1",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "30.69 ± 4.59",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 30.69,
+        "spread": 4.59
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T1",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "31.40 ± 3.92",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 31.4,
+        "spread": 3.92
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T2",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "20.14 ± 4.38",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 20.14,
+        "spread": 4.38
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T2",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "20.89 ± 5.79",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 20.89,
+        "spread": 5.79
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T2",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "21.73 ± 5.76",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 21.73,
+        "spread": 5.76
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T2",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "23.17 ± 4.11",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 23.17,
+        "spread": 4.11
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T2",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "20.19 ± 4.02",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 20.19,
+        "spread": 4.02
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T2",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "18.76 ± 6.22",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 18.76,
+        "spread": 6.22
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T3",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "13.56 ± 3.15",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 13.56,
+        "spread": 3.15
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T3",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "13.72 ± 5.73",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 13.72,
+        "spread": 5.73
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T3",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "13.44 ± 5.18",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 13.44,
+        "spread": 5.18
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T3",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "15.45 ± 6.62",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 15.45,
+        "spread": 6.62
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T3",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "13.17 ± 4.30",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 13.17,
+        "spread": 4.3
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T3",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "12.57 ± 4.57",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 12.57,
+        "spread": 4.57
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T4",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "9.55 ± 2.84",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 9.55,
+        "spread": 2.84
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T4",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "11.09 ± 5.17",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 11.09,
+        "spread": 5.17
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T4",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "9.27 ± 3.95",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 9.27,
+        "spread": 3.95
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T4",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "8.23 ± 4.38",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 8.23,
+        "spread": 4.38
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T4",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "7.41 ± 3.45",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 7.41,
+        "spread": 3.45
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T4",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "7.57 ± 3.11",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 7.57,
+        "spread": 3.11
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T5",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "8.23 ± 2.86",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 8.23,
+        "spread": 2.86
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T5",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "8.82 ± 3.81",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 8.82,
+        "spread": 3.81
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T5",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "8.24 ± 3.81",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 8.24,
+        "spread": 3.81
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T5",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "8.24 ± 3.67",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 8.24,
+        "spread": 3.67
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T5",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "6.46 ± 2.99",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 6.46,
+        "spread": 2.99
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T5",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "6.30 ± 3.45",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 6.3,
+        "spread": 3.45
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T6",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "7.68 ± 2.83",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 7.68,
+        "spread": 2.83
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T6",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "8.21 ± 2.31",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 8.21,
+        "spread": 2.31
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T6",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "6.60 ± 4.36",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 6.6,
+        "spread": 4.36
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T6",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "6.01 ± 3.50",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 6.01,
+        "spread": 3.5
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T6",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "5.14 ± 3.32",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 5.14,
+        "spread": 3.32
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T6",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "5.23 ± 1.95",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 5.23,
+        "spread": 1.95
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T7",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "6.68 ± 2.47",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 6.68,
+        "spread": 2.47
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T7",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "7.29 ± 2.71",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 7.29,
+        "spread": 2.71
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T7",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "5.86 ± 2.97",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 5.86,
+        "spread": 2.97
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T7",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "5.71 ± 3.27",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 5.71,
+        "spread": 3.27
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T7",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "4.72 ± 2.38",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 4.72,
+        "spread": 2.38
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T7",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "4.42 ± 2.05",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 4.42,
+        "spread": 2.05
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T8",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "5.90 ± 2.25",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 5.9,
+        "spread": 2.25
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T8",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "7.13 ± 2.89",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 7.13,
+        "spread": 2.89
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T8",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "5.69 ± 2.52",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 5.69,
+        "spread": 2.52
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T8",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "4.21 ± 2.90",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 4.21,
+        "spread": 2.9
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T8",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "4.41 ± 2.91",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 4.41,
+        "spread": 2.91
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T8",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "3.68 ± 1.75",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 3.68,
+        "spread": 1.75
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T9",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "5.93 ± 1.70",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 5.93,
+        "spread": 1.7
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T9",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "6.81 ± 2.25",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 6.81,
+        "spread": 2.25
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T9",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "5.28 ± 2.68",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 5.28,
+        "spread": 2.68
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T9",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "5.23 ± 3.61",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 5.23,
+        "spread": 3.61
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T9",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "4.24 ± 2.91",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 4.24,
+        "spread": 2.91
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T9",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "4.02 ± 2.07",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 4.02,
+        "spread": 2.07
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T10",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "6.10 ± 2.33",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 6.1,
+        "spread": 2.33
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T10",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009; §C.12",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "6.45±3.35",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 6.45,
+        "spread": 3.35
+      },
+      "mark": {
+        "kind": "probable-misprint",
+        "reason": "Spacing only: Table 4 prints “6.45±3.35” without spaces around ±. Both numeric values remain as printed and usable."
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T10",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "5.07 ± 2.72",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 5.07,
+        "spread": 2.72
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T10",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "6.06 ± 4.01",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 6.06,
+        "spread": 4.01
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T10",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "3.94 ± 2.93",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 3.94,
+        "spread": 2.93
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T10",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "4.77 ± 3.09",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 4.77,
+        "spread": 3.09
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T11",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "−5.34 ± 2.93",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": -5.34,
+        "spread": 2.93
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T11",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "−6.37 ± 1.84",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": -6.37,
+        "spread": 1.84
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T11",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "−5.60 ± 4.14",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": -5.6,
+        "spread": 4.14
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T11",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "−3.95 ± 2.49",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": -3.95,
+        "spread": 2.49
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T11",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "−3.80 ± 3.00",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": -3.8,
+        "spread": 3.0
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T11",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "−4.72 ± 2.21",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": -4.72,
+        "spread": 2.21
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T12",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "−5.01 ± 2.78",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": -5.01,
+        "spread": 2.78
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T12",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "−5.54 ± 4.42",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": -5.54,
+        "spread": 4.42
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T12",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "−4.78 ± 3.01",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": -4.78,
+        "spread": 3.01
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T12",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "−4.31 ± 2.98",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": -4.31,
+        "spread": 2.98
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T12",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "−4.48 ± 3.00",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": -4.48,
+        "spread": 3.0
+      }
+    },
+    {
+      "coordinate": {
+        "key": "transverse-angle",
+        "level": "T12",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "degrees",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The paper does not define the angle sign. Reading positive as convergent and negative as divergent is this project's own inference.",
+      "printed": "−4.26 ± 2.93",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": -4.26,
+        "spread": 2.93
+      }
+    }
+  ],
+  "definitions": [
+    {
+      "key": "upendra-transverse-angle",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, B Upendra 2010 (full text)",
+      "text": "The angle between the pedicle axis and a line parallel to the vertebral axis in the transverse plane. The vertebral axis bisects the angle between lines joining the posterior junction of both laminae (a) to a point on each medial cortical wall where the lamina meets the pedicle (b and c). The transverse pedicle angle is between the pedicle axis p1–p2 and a line parallel to the vertebral axis p2–p3 on the concave side (Figure 2)."
+    },
+    {
+      "key": "upendra-population-and-sides",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, B Upendra 2010 (full text)",
+      "text": "Twenty-four AIS patients, curves <100°, 14 female and 10 male; mean age 14.6 years (12.3–18.3), mean Cobb 76° (58–98°); King II 12, King III 7, King IV 5. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right."
+    },
+    {
+      "key": "upendra-statistics-and-table-authority",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Tables 1–4; C5–C9 (full text)",
+      "text": "Tables 1–3 explicitly label means, ranges, SD and number of pedicles separately. The printed field preserves the literal mean column; decimals records its printed decimal places. Table 4 conflicts are kept separately and are not used; Tables 1–3 supply primary figures. Doubtful cells remain usable as printed, while the impossible L4 convex angle is retained only for inspection."
+    },
+    {
+      "key": "zheng-transverse-angle",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 4; §B, Zheng 2009",
+      "text": "Figure 3: “The transverse pedicle angle measured from the midline to the mid-axis of the pedicle”. The paper does not state what a negative sign means; reading positive as convergent and negative as divergent is this project’s own inference. The paper does not define the ± statistic; interpreting it as SD is this project’s own inference. Per-age-band and sex child counts are not stated."
+    },
+    {
+      "key": "upendra-2010-table-2-wording",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md §A, upendra-2010 Table 2",
+      "text": "Transverse pedicle angle; (a) Convex pedicle (b) Concave pedicle; column headers (verbatim, separated by |): (a) Convex pedicle / Level | No. of pedicles | Mean angle (Deg.) | Range (Deg.) | S.D | (b) Concave pedicle / Level | No. of pedicles | Mean angle (Deg.) | Range (Deg.) | S.D"
+    },
+    {
+      "key": "upendra-2010-table-4(b)-wording",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md §A, upendra-2010 Table 4(b)",
+      "text": "(b) Mean transverse pedicle angle (Degrees); column headers (verbatim, separated by |):  | Convex pedicle / Liljenqvist spine 2000 | Convex pedicle / Katsushi Takeshita spine 2009 | Convex pedicle / Present study | Concave pedicle / Liljenqvist spine 2000 | Concave pedicle / Katsushi Takeshita spine 2009 | Concave pedicle / Present study"
+    },
+    {
+      "key": "zheng-2009-table-4-wording",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, zheng-2009 Table 4",
+      "text": "Transverse pedicle angle; column headers (verbatim, separated by |):  | 5–8 years / M | 5–8 years / F | 9–11 years / M | 9–11 years / F | 12–14 years / M | 12–14 years / F"
+    }
+  ]
+}

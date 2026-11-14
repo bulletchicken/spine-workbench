@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { clearSpineBuild } from './three/build-spine';
+import { fitSources } from '@/view-state/fit-sources';
 import { caseStore } from '@/case-state/case-store';
 import { filmPixels } from '@/case-state/film-pixels';
 import { FILM_KINDS } from '@/case-state/selectors';
@@ -25,6 +27,7 @@ function failureCode(error: unknown): ErrorCode {
 }
 
 function backToFilms(): IntakeNotice | null {
+  if (currentStep.getState().slug === 'three') { currentStep.getState().go('films'); return null; }
   if (currentStep.getState().slug !== 'find') return null;
   const phase = findState.getState().phase;
   currentStep.getState().go('films');
@@ -59,6 +62,8 @@ async function takeTold(engine: EngineClient, told: readonly DroppedFile[], onPl
         },
         displayPixels: (place) => engine.displayPixels(place),
       }, kind, bytes, null);
+      clearSpineBuild();
+      fitSources.getState().forget(kind);
       caseStore.getState().apply([{ kind: 'set-film', film: filmRecordFrom(film.facts) }]);
       kept = true;
     } catch (error) {

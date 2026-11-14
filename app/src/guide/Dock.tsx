@@ -1,11 +1,13 @@
 import { useEffect, useState, type CSSProperties } from 'react';
 import { Button } from '@/building-blocks/Button';
+import { Segmented } from '@/building-blocks/Segmented';
+import { THREE_WORDS } from '@/words/three';
 import { SHELL_WORDS } from '@/words/shell';
 import type { DockHelper, DockScene, DockSpec } from './dock-spec';
 import { LitButton } from './LitButton';
 import './Dock.css';
 
-const SCENES: readonly DockScene[] = ['add', 'reading', 'ready', 'finding', 'found', 'review', 'failed', 'engine'];
+const SCENES: readonly DockScene[] = ['add', 'reading', 'ready', 'finding', 'found', 'review', 'failed', 'engine', 'building', 'build-failed', 'three', 'compare'];
 
 /** Counts and progress change silently; the helper's words are spoken with the sentence. */
 function helperWords(helper: DockHelper | undefined): string {
@@ -76,7 +78,11 @@ function Scene({ name, spec }: { name: DockScene; spec: DockSpec | null }) {
             <h2><span key={shown.sentence} data-fresh="">{shown.sentence}</span></h2>
             {shown.helper !== undefined && <p><Helper helper={shown.helper} sentence={shown.sentence} on={on} /></p>}
           </div>
-          {shown.quiet !== undefined && <Button look="text" {...(on ? { onPress: shown.quiet.press } : {})}>{shown.quiet.label}</Button>}
+          {shown.quiet !== undefined && <Button look="text" aria-expanded={shown.quiet.expanded} aria-controls={shown.quiet.controls} {...(on ? { onPress: shown.quiet.press } : {})}>{shown.quiet.label}</Button>}
+          {shown.secondary !== undefined && <Button look="standard" size="large" {...(on ? { onPress: shown.secondary.press } : {})}>{shown.secondary.label}</Button>}
+          {shown.views !== undefined && <Segmented className="views" label={THREE_WORDS.view} chosen={shown.views.chosen} options={[
+            { id: 'front', label: THREE_WORDS.frontView }, { id: 'side', label: THREE_WORDS.sideView }, { id: 'top', label: THREE_WORDS.topView },
+          ]} onChoose={(name) => { if (on && (name === 'front' || name === 'side' || name === 'top')) shown.views.choose(name); }} />}
           {shown.primary !== undefined && (
             <LitButton label={shown.primary.label} disabled={shown.primary.disabled} asleep={!on} onPress={shown.primary.press} />
           )}

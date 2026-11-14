@@ -18,6 +18,7 @@ import type { Stage } from './stage';
 const HAND = 'data-hand';
 
 export interface HandTurningOptions {
+  reducedMotion?(): boolean;
   /** The spine was turned or zoomed by hand. */
   onTurned?(): void;
   /** The level under the pointer changed; `null` when it is over no bone. */
@@ -35,6 +36,7 @@ export interface HandTurning {
 
 export function attachHandTurning(stage: Stage, canvas: HTMLCanvasElement, options: HandTurningOptions = {}): HandTurning {
   const turning = makeTurning({ azimuth: 0, elevation: 0, zoom: 1 });
+  const captured = new Set<number>();
   let gliding: (() => void) | null = null;
   let pointed: { spine: DrawnSpine; level: Level } | null = null;
   /** The view the hand took hold of: its aim is kept, so the spine does not jump to the middle. */
@@ -94,6 +96,7 @@ export function attachHandTurning(stage: Stage, canvas: HTMLCanvasElement, optio
   const onDown = (event: PointerEvent) => {
     if (event.button !== 0 && event.pointerType === 'mouse') return;
     canvas.setPointerCapture(event.pointerId);
+    captured.add(event.pointerId);
     gliding?.();
     gliding = null;
     if (!turning.held()) {
@@ -116,6 +119,8 @@ export function attachHandTurning(stage: Stage, canvas: HTMLCanvasElement, optio
 
   const onUp = (event: PointerEvent) => {
     if (!turning.held()) return;
+    if (canvas.hasPointerCapture(event.pointerId)) canvas.releasePointerCapture(event.pointerId);
+    captured.delete(event.pointerId);
     const { tapped } = turning.release(event.pointerId, event.timeStamp);
     if (turning.held()) return;
     canvas.setAttribute(HAND, pointed === null ? 'free' : 'on-a-bone');
@@ -124,14 +129,23 @@ export function attachHandTurning(stage: Stage, canvas: HTMLCanvasElement, optio
       options.onChoose?.(stage.pick(x, y));
       return;
     }
+    if (options.reducedMotion?.()) { rest(); return; }
     gliding = joinLoop((dt) => {
       // A view set from outside ends the glide: the spine is no longer where the hand threw it.
-      if (stage.viewsSet() === mine && turning.glide(dt)) show();
+      if (!options.reducedMotion?.() && stage.viewsSet() === mine && turning.glide(dt)) show();
       else {
         gliding?.();
         gliding = null;
       }
     });
+  };
+
+  const onCancel = (event: PointerEvent) => {
+    turning.release(event.pointerId, event.timeStamp);
+    if (canvas.hasPointerCapture(event.pointerId)) canvas.releasePointerCapture(event.pointerId);
+    captured.delete(event.pointerId);
+    rest();
+    canvas.setAttribute(HAND, 'free');
   };
 
   const onWheel = (event: WheelEvent) => {
@@ -154,7 +168,7 @@ export function attachHandTurning(stage: Stage, canvas: HTMLCanvasElement, optio
   canvas.addEventListener('pointerdown', onDown);
   canvas.addEventListener('pointermove', onMove);
   canvas.addEventListener('pointerup', onUp);
-  canvas.addEventListener('pointercancel', onUp);
+  canvas.addEventListener('pointercancel', onCancel);
   canvas.addEventListener('pointerleave', onLeave);
   canvas.addEventListener('wheel', onWheel, { passive: false });
 
@@ -162,10 +176,12 @@ export function attachHandTurning(stage: Stage, canvas: HTMLCanvasElement, optio
     rest,
     detach() {
       rest();
+      for (const pointer of captured) if (canvas.hasPointerCapture(pointer)) canvas.releasePointerCapture(pointer);
+      captured.clear();
       canvas.removeEventListener('pointerdown', onDown);
       canvas.removeEventListener('pointermove', onMove);
       canvas.removeEventListener('pointerup', onUp);
-      canvas.removeEventListener('pointercancel', onUp);
+      canvas.removeEventListener('pointercancel', onCancel);
       canvas.removeEventListener('pointerleave', onLeave);
       canvas.removeEventListener('wheel', onWheel);
       canvas.removeAttribute(HAND);

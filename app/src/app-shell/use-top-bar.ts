@@ -1,3 +1,5 @@
+import { useStore } from 'zustand';
+import { spineBuild } from '@/view-state/spine-build';
 import { useCase } from '@/case-state/case-store';
 import { popoverOpen, usePopoverOpen } from '@/on-this-device/popover-open';
 import { useRequestsSent } from '@/on-this-device/requests-sent';
@@ -9,6 +11,7 @@ import type { TopBarProps } from './TopBar';
 
 /** The bar's five props, read from the current visit. */
 export function useTopBar(steps: readonly StepContract[]): TopBarProps {
+  useStore(spineBuild);
   const { slug } = useCurrentStep();
   const c = useCase((store) => store.case);
   const promiseOpen = usePopoverOpen().open;

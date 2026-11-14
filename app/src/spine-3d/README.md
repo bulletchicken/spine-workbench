@@ -4,7 +4,7 @@ The spine in three dimensions: a fitted spine drawn with real bone
 shapes, and the films it was fitted from standing in the same space. It
 takes a fit, the bone shapes and (if wanted) the films' pictures as
 inputs, and draws. It holds none of the case, reaches no engine and
-fetches nothing. No screen mounts it yet.
+fetches nothing. Find builds the current marks into a fit; the 3D step mounts this view.
 
 The bones drawn are one adult's, each shaped to its fitted vertebra: a
 generic bone shaped to the fit, never the patient's own.

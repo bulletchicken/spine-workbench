@@ -85,13 +85,15 @@ The crate map, the dependency rules and the patient frame in one picture:
 | case check findings | `engine/shapes/src/checks.rs` |
 | made-up recipes, answer keys and comparisons | `engine/shapes/src/made_up.rs` |
 | the joint fit's inputs, poses, uncertainty and stopping reason | `engine/shapes/src/spine_fit.rs` |
+| fitted spine readings: angles, curves, fixed-end Cobb, sagittal bends and every pair with version bands | `engine/shapes/src/spine_readings.rs` |
+| placement proposals: what goes in, curves, rule votes, level pairs, anchors, rods, what needs a look | `engine/shapes/src/implant_layout.rs` |
+| the load bench: batches of runs, stops, estimates, tags, shares and paired counts | `engine/shapes/src/load_bench.rs` |
 | engine info | `engine/shapes/src/engine_info.rs` |
 | error codes | `engine/shapes/src/errors.rs` |
 | the saved case record | `engine/shapes/src/case_file_v1.rs` |
 | strict reading and canonical writing of case.json | `engine/shapes/src/reading.rs` |
 | the strict-reading, mark-name, golden-file and side-swap tests | `engine/shapes/tests/strict_reading.rs`, `engine/shapes/tests/mark_names_are_exact.rs`, `engine/shapes/tests/golden_case_files.rs`, `engine/shapes/tests/side_swap.rs` |
 | which watch frames may be thinned | `engine/shapes/tests/which_frames_may_be_thinned.rs` |
-| fitted spine readings: angles, curves, fixed-end Cobb, sagittal bends and every pair with version bands | `engine/shapes/src/spine_readings.rs` |
 
 ### Image filters (`engine/darkroom/`)
 
@@ -150,6 +152,46 @@ The crate map, the dependency rules and the patient frame in one picture:
 | finding the curves on the front film, and the largest one choosing the typical side profile | `engine/joint-fit/src/front_curves.rs` |
 | the typical twist the largest curve gives its vertebrae | `engine/joint-fit/src/curve_twist.rs` |
 | the joint fit's browser export | `engine/wasm-bridge/src/exports/joint_fit.rs` |
+
+### Fitted spine readings (`engine/spine-readings/`)
+
+| I want to change… | Open |
+|---|---|
+| fitted angles, curves and their version bands | `engine/spine-readings/README.md`, `engine/spine-readings/src/lib.rs` |
+| its browser export | `engine/wasm-bridge/src/exports/spine_readings.rs` |
+
+### Placement proposals (`engine/implant-layout/`)
+
+| I want to change… | Open |
+|---|---|
+| the entry point and its refusals | `engine/implant-layout/src/lib.rs` |
+| the published tables it reads | `engine/implant-layout/src/evidence.rs` |
+| placement classification over the shared measurement versions | `engine/implant-layout/src/readings.rs` |
+| Lenke curve type, modifiers and structural tests | `engine/implant-layout/src/curves.rs` |
+| the level rules and checks | `engine/implant-layout/src/level_rules.rs` |
+| level pairs and the first pair | `engine/implant-layout/src/pairs.rs` |
+| pedicle widths | `engine/implant-layout/src/pedicles.rs` |
+| screw entry, direction, diameter and length | `engine/implant-layout/src/screws.rs` |
+| which pedicles get screws or hooks | `engine/implant-layout/src/patterns.rs` |
+| the rods | `engine/implant-layout/src/rods.rs` |
+| the placements one step away | `engine/implant-layout/src/alternatives.rs` |
+| the whole answer put together | `engine/implant-layout/src/proposal.rs` |
+| its browser export | `engine/wasm-bridge/src/exports/implant_layout.rs` |
+
+### The load bench (`engine/load-bench/`)
+
+| I want to change… | Open |
+|---|---|
+| the entry points and their refusals | `engine/load-bench/src/lib.rs` |
+| the published tables it reads | `engine/load-bench/src/evidence.rs` |
+| the chain of vertebrae and its joint springs | `engine/load-bench/src/chain.rs`, `engine/load-bench/src/joint_springs.rs` |
+| the solve | `engine/load-bench/src/chain_solver.rs` |
+| rigid rods, flexible rods and springback | `engine/load-bench/src/rigid_rod.rs`, `engine/load-bench/src/rod_beams.rs`, `engine/load-bench/src/springback.rs` |
+| rod moments and stress | `engine/load-bench/src/rod_statics.rs` |
+| daily loads, anchor demand, junctions | `engine/load-bench/src/daily_loads.rs`, `engine/load-bench/src/anchor_demand.rs`, `engine/load-bench/src/junctions.rs` |
+| a year of walking | `engine/load-bench/src/fatigue.rs` |
+| what each version draws, a batch, the comparison | `engine/load-bench/src/versions.rs`, `engine/load-bench/src/batch.rs`, `engine/load-bench/src/compare.rs` |
+| its browser export | `engine/wasm-bridge/src/exports/load_bench.rs` |
 
 ### Reading films (`engine/film-reader/`)
 
@@ -250,6 +292,7 @@ The crate map, the dependency rules and the patient frame in one picture:
 | I want to change… | Open |
 |---|---|
 | the subcommands and their arguments | `engine/command-line/src/main.rs` |
+| `spine measure`: find, fit and measure front/side films, or measure a made-up spine | `engine/command-line/src/commands/measure.rs` |
 | `spine make-up`, `open`, `pass`, `frames`, `case`, `score` | `engine/command-line/src/commands/make_up.rs`, `engine/command-line/src/commands/open.rs`, `engine/command-line/src/commands/pass.rs`, `engine/command-line/src/commands/frames.rs`, `engine/command-line/src/commands/case.rs`, `engine/command-line/src/commands/score.rs` |
 | which finder reads the front film in `spine pass` and `spine score`, and how the films' answers are joined, as the app's conductor joins them | `engine/command-line/src/commands/pass.rs` |
 | `spine measure`: find, fit and measure front/side films, or measure a made-up spine | `engine/command-line/src/commands/measure.rs` |
@@ -262,14 +305,7 @@ The crate map, the dependency rules and the patient frame in one picture:
 | `FilmDesk` | `engine/wasm-bridge/src/film_desk.rs` |
 | how values cross into JavaScript | `engine/wasm-bridge/src/crossing.rs` |
 | thrown errors and the last panic | `engine/wasm-bridge/src/faults.rs` |
-| the export of one crate (same name as the crate) | `engine/wasm-bridge/src/exports/mod.rs`, `engine/wasm-bridge/src/exports/info.rs`, `engine/wasm-bridge/src/exports/shapes.rs`, `engine/wasm-bridge/src/exports/film_reader.rs`, `engine/wasm-bridge/src/exports/film_geometry.rs`, `engine/wasm-bridge/src/exports/auto_pass.rs`, `engine/wasm-bridge/src/exports/toolbox.rs`, `engine/wasm-bridge/src/exports/case_checks.rs`, `engine/wasm-bridge/src/exports/case_file.rs`, `engine/wasm-bridge/src/exports/made_up_spines.rs`, `engine/wasm-bridge/src/exports/scorekeeper.rs`, `engine/wasm-bridge/src/exports/trained_finder.rs` |
-
-### Fitted spine readings (`engine/spine-readings/`)
-
-| I want to change… | Open |
-|---|---|
-| fitted angles, curves and their version bands | `engine/spine-readings/README.md`, `engine/spine-readings/src/lib.rs` |
-| its browser export | `engine/wasm-bridge/src/exports/spine_readings.rs` |
+| the export of one crate (same name as the crate) | `engine/wasm-bridge/src/exports/mod.rs`, `engine/wasm-bridge/src/exports/info.rs`, `engine/wasm-bridge/src/exports/shapes.rs`, `engine/wasm-bridge/src/exports/film_reader.rs`, `engine/wasm-bridge/src/exports/film_geometry.rs`, `engine/wasm-bridge/src/exports/auto_pass.rs`, `engine/wasm-bridge/src/exports/toolbox.rs`, `engine/wasm-bridge/src/exports/case_checks.rs`, `engine/wasm-bridge/src/exports/case_file.rs`, `engine/wasm-bridge/src/exports/made_up_spines.rs`, `engine/wasm-bridge/src/exports/scorekeeper.rs`, `engine/wasm-bridge/src/exports/trained_finder.rs`, `engine/wasm-bridge/src/exports/implant_layout.rs`, `engine/wasm-bridge/src/exports/load_bench.rs` |
 
 ## The app (`app/`)
 

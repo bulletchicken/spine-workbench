@@ -1,0 +1,1416 @@
+{
+  "rows": [
+    {
+      "key": "t1-2-to-l4-5-intact",
+      "usage": "bench",
+      "description": "Uniform T1/2–L4/5 intact joint",
+      "notes": "Moment-1 = AP (x; lateral bending);moment-2 = ML (y; flexion-extension);moment-3 = CC (z; axial rotation). Force columns AP/ML/CC. Tachi borrows stiffness from Argoubi and Shirazi-Adl1996,an adult lumbar source;uniform T1/2–L4/5 application is the planner choice. Confirmed in citation-audit-physics-tables.md §A/§B8 and DECISIONS Joint moment axes.",
+      "values": [
+        {
+          "term": "ap",
+          "value": 1392,
+          "unit": "N/mm",
+          "source": "tachi-2021",
+          "section": "citation-audit-physics-tables.md §A, tachi-2021 Table1",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "ml",
+          "value": 294,
+          "unit": "N/mm",
+          "source": "tachi-2021",
+          "section": "citation-audit-physics-tables.md §A, tachi-2021 Table1",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "cc",
+          "value": 341,
+          "unit": "N/mm",
+          "source": "tachi-2021",
+          "section": "citation-audit-physics-tables.md §A, tachi-2021 Table1",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "moment-1",
+          "value": 448,
+          "unit": "N·mm/deg",
+          "source": "tachi-2021",
+          "section": "citation-audit-physics-tables.md §A, tachi-2021 Table1",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "moment-2",
+          "value": 644,
+          "unit": "N·mm/deg",
+          "source": "tachi-2021",
+          "section": "citation-audit-physics-tables.md §A, tachi-2021 Table1",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "moment-3",
+          "value": 738,
+          "unit": "N·mm/deg",
+          "source": "tachi-2021",
+          "section": "citation-audit-physics-tables.md §A, tachi-2021 Table1",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "t1-2-to-l4-5-facetectomy",
+      "usage": "beside",
+      "description": "Uniform joint after facetectomy",
+      "notes": "Moment-1 = AP (x; lateral bending);moment-2 = ML (y; flexion-extension);moment-3 = CC (z; axial rotation). Force columns AP/ML/CC. Tachi borrows stiffness from Argoubi and Shirazi-Adl1996,an adult lumbar source;uniform T1/2–L4/5 application is the planner choice. Confirmed in citation-audit-physics-tables.md §A/§B8 and DECISIONS Joint moment axes.",
+      "values": [
+        {
+          "term": "ap",
+          "value": 696,
+          "unit": "N/mm",
+          "source": "tachi-2021",
+          "section": "citation-audit-physics-tables.md §A, tachi-2021 Table1",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "ml",
+          "value": 188,
+          "unit": "N/mm",
+          "source": "tachi-2021",
+          "section": "citation-audit-physics-tables.md §A, tachi-2021 Table1",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "cc",
+          "value": 188,
+          "unit": "N/mm",
+          "source": "tachi-2021",
+          "section": "citation-audit-physics-tables.md §A, tachi-2021 Table1",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "moment-1",
+          "value": 224,
+          "unit": "N·mm/deg",
+          "source": "tachi-2021",
+          "section": "citation-audit-physics-tables.md §A, tachi-2021 Table1",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "moment-2",
+          "value": 406,
+          "unit": "N·mm/deg",
+          "source": "tachi-2021",
+          "section": "citation-audit-physics-tables.md §A, tachi-2021 Table1",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "moment-3",
+          "value": 406,
+          "unit": "N·mm/deg",
+          "source": "tachi-2021",
+          "section": "citation-audit-physics-tables.md §A, tachi-2021 Table1",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "l5-s1",
+      "usage": "bench",
+      "description": "L5/S1 joint",
+      "notes": "Moment-1 = AP (x; lateral bending);moment-2 = ML (y; flexion-extension);moment-3 = CC (z; axial rotation). Force columns AP/ML/CC. Tachi borrows stiffness from Argoubi and Shirazi-Adl1996,an adult lumbar source;uniform T1/2–L4/5 application is the planner choice. Confirmed in citation-audit-physics-tables.md §A/§B8 and DECISIONS Joint moment axes.",
+      "values": [
+        {
+          "term": "ap",
+          "value": 700,
+          "unit": "N/mm",
+          "source": "tachi-2021",
+          "section": "citation-audit-physics-tables.md §A, tachi-2021 Table1",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "ml",
+          "value": 190,
+          "unit": "N/mm",
+          "source": "tachi-2021",
+          "section": "citation-audit-physics-tables.md §A, tachi-2021 Table1",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "cc",
+          "value": 190,
+          "unit": "N/mm",
+          "source": "tachi-2021",
+          "section": "citation-audit-physics-tables.md §A, tachi-2021 Table1",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "moment-1",
+          "value": 222,
+          "unit": "N·mm/deg",
+          "source": "tachi-2021",
+          "section": "citation-audit-physics-tables.md §A, tachi-2021 Table1",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "moment-2",
+          "value": 410,
+          "unit": "N·mm/deg",
+          "source": "tachi-2021",
+          "section": "citation-audit-physics-tables.md §A, tachi-2021 Table1",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "moment-3",
+          "value": 410,
+          "unit": "N·mm/deg",
+          "source": "tachi-2021",
+          "section": "citation-audit-physics-tables.md §A, tachi-2021 Table1",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "release",
+      "usage": "bench",
+      "description": "Facet-capsule/interspinous release",
+      "notes": "Signed percentage calibration targets cited by Wang from cadaver studies;not measurements made by Wang. Applied at instrumented joints by project choice.",
+      "values": [
+        {
+          "term": "axial-rotation",
+          "value": -17,
+          "unit": "%",
+          "source": "wang-2017",
+          "section": "citation-audit-physics-tables.md §A/§B9, wang-2017",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "flexion",
+          "value": -15,
+          "unit": "%",
+          "source": "wang-2017",
+          "section": "citation-audit-physics-tables.md §A/§B9, wang-2017",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "coronal",
+          "value": -3.8,
+          "unit": "%",
+          "source": "wang-2017",
+          "section": "citation-audit-physics-tables.md §A/§B9, wang-2017",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "compression",
+          "value": -14,
+          "unit": "%",
+          "source": "wang-2017",
+          "section": "citation-audit-physics-tables.md §A/§B9, wang-2017",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "preload",
+      "usage": "bench",
+      "description": "Standing preload multiplier",
+      "notes": "Published at two discrete preloads; uniform sampling between them is own inference.",
+      "values": [
+        {
+          "term": "lower",
+          "value": 1.71,
+          "unit": "ratio",
+          "source": "gardner-morse-2004",
+          "section": "published-simulators.md §2a",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "upper",
+          "value": 2.11,
+          "unit": "ratio",
+          "source": "gardner-morse-2004",
+          "section": "published-simulators.md §2a",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "lower-preload",
+          "value": 250,
+          "unit": "N",
+          "source": "gardner-morse-2004",
+          "section": "published-simulators.md §2a",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "upper-preload",
+          "value": 500,
+          "unit": "N",
+          "source": "gardner-morse-2004",
+          "section": "published-simulators.md §2a",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "stiffness-scale",
+      "usage": "bench",
+      "description": "Global log-uniform prior",
+      "notes": "Own inference: use Tachi as scale 1; Petit supplies scale 10 endpoint with a different baseline. No identification of absolute stiffness from films.",
+      "values": [
+        {
+          "term": "lower",
+          "value": 1,
+          "unit": "ratio",
+          "source": "project-assumptions",
+          "section": "SYNTHESIS.md §3.4",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "upper",
+          "value": 10,
+          "unit": "ratio",
+          "source": "project-assumptions",
+          "section": "SYNTHESIS.md §3.4",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "lumbar-fitted-lower",
+          "value": 1.38,
+          "unit": "ratio",
+          "source": "petit-2004",
+          "section": "published-simulators.md §2f; earlier flexibility note §3",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "lumbar-fitted-upper",
+          "value": 10.0,
+          "unit": "ratio",
+          "source": "petit-2004",
+          "section": "published-simulators.md §2f; earlier flexibility note §3",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "right-thoracic-fitted-lower",
+          "value": 1.74,
+          "unit": "ratio",
+          "source": "petit-2004",
+          "section": "published-simulators.md §2f; earlier flexibility note §3",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "right-thoracic-fitted-upper",
+          "value": 5.18,
+          "unit": "ratio",
+          "source": "petit-2004",
+          "section": "published-simulators.md §2f; earlier flexibility note §3",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "rib-watkins",
+      "usage": "beside",
+      "description": "Intact rib-cage stability increases",
+      "notes": "DISAGREE with Mannen/Liebsch; published as stability percentages, kept beside sampled priors.",
+      "values": [
+        {
+          "term": "flexion-extension",
+          "value": 40,
+          "unit": "%",
+          "source": "watkins-2005",
+          "section": "published-simulators.md §2b",
+          "basis": "published",
+          "approximate": true
+        },
+        {
+          "term": "lateral-bending",
+          "value": 35,
+          "unit": "%",
+          "source": "watkins-2005",
+          "section": "published-simulators.md §2b",
+          "basis": "published",
+          "approximate": true
+        },
+        {
+          "term": "axial-rotation",
+          "value": 31,
+          "unit": "%",
+          "source": "watkins-2005",
+          "section": "published-simulators.md §2b",
+          "basis": "published",
+          "approximate": true
+        }
+      ]
+    },
+    {
+      "key": "rib-mannen-t1-t4",
+      "usage": "beside",
+      "description": "Regional elastic-zone stiffness t1-t4",
+      "notes": "Intact means:n8;no-ribs EZS means:n7,one specimen excluded for loading only to±2N·m. Units not printed in paper and remain unstated.",
+      "values": [
+        {
+          "term": "lb-with-ribs",
+          "value": 6.85,
+          "unit": "unstated",
+          "source": "mannen-2018",
+          "section": "citation-audit-physics-tables.md §A/§B9, mannen-2018 Table2",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "lb-without-ribs",
+          "value": 4.7,
+          "unit": "unstated",
+          "source": "mannen-2018",
+          "section": "citation-audit-physics-tables.md §A/§B9, mannen-2018 Table2",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "fe-with-ribs",
+          "value": 2.29,
+          "unit": "unstated",
+          "source": "mannen-2018",
+          "section": "citation-audit-physics-tables.md §A/§B9, mannen-2018 Table2",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "fe-without-ribs",
+          "value": 2.12,
+          "unit": "unstated",
+          "source": "mannen-2018",
+          "section": "citation-audit-physics-tables.md §A/§B9, mannen-2018 Table2",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "ar-with-ribs",
+          "value": 3.28,
+          "unit": "unstated",
+          "source": "mannen-2018",
+          "section": "citation-audit-physics-tables.md §A/§B9, mannen-2018 Table2",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "ar-without-ribs",
+          "value": 1.35,
+          "unit": "unstated",
+          "source": "mannen-2018",
+          "section": "citation-audit-physics-tables.md §A/§B9, mannen-2018 Table2",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "rib-mannen-t4-t8",
+      "usage": "beside",
+      "description": "Regional elastic-zone stiffness t4-t8",
+      "notes": "Intact means:n8;no-ribs EZS means:n7,one specimen excluded for loading only to±2N·m. Units not printed in paper and remain unstated.",
+      "values": [
+        {
+          "term": "lb-with-ribs",
+          "value": 8.3,
+          "unit": "unstated",
+          "source": "mannen-2018",
+          "section": "citation-audit-physics-tables.md §A/§B9, mannen-2018 Table2",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "lb-without-ribs",
+          "value": 4.48,
+          "unit": "unstated",
+          "source": "mannen-2018",
+          "section": "citation-audit-physics-tables.md §A/§B9, mannen-2018 Table2",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "fe-with-ribs",
+          "value": 4.74,
+          "unit": "unstated",
+          "source": "mannen-2018",
+          "section": "citation-audit-physics-tables.md §A/§B9, mannen-2018 Table2",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "fe-without-ribs",
+          "value": 3.36,
+          "unit": "unstated",
+          "source": "mannen-2018",
+          "section": "citation-audit-physics-tables.md §A/§B9, mannen-2018 Table2",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "ar-with-ribs",
+          "value": 4.51,
+          "unit": "unstated",
+          "source": "mannen-2018",
+          "section": "citation-audit-physics-tables.md §A/§B9, mannen-2018 Table2",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "ar-without-ribs",
+          "value": 1.08,
+          "unit": "unstated",
+          "source": "mannen-2018",
+          "section": "citation-audit-physics-tables.md §A/§B9, mannen-2018 Table2",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "ar-with-ribs-sd",
+          "value": 6.13,
+          "unit": "unstated",
+          "source": "mannen-2018",
+          "section": "published-simulators.md §2b regional stiffness uncertainty",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "rib-mannen-t8-t12",
+      "usage": "beside",
+      "description": "Regional elastic-zone stiffness t8-t12",
+      "notes": "Intact means:n8;no-ribs EZS means:n7,one specimen excluded for loading only to±2N·m. Units not printed in paper and remain unstated.",
+      "values": [
+        {
+          "term": "lb-with-ribs",
+          "value": 2.87,
+          "unit": "unstated",
+          "source": "mannen-2018",
+          "section": "citation-audit-physics-tables.md §A/§B9, mannen-2018 Table2",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "lb-without-ribs",
+          "value": 1.5,
+          "unit": "unstated",
+          "source": "mannen-2018",
+          "section": "citation-audit-physics-tables.md §A/§B9, mannen-2018 Table2",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "fe-with-ribs",
+          "value": 2.97,
+          "unit": "unstated",
+          "source": "mannen-2018",
+          "section": "citation-audit-physics-tables.md §A/§B9, mannen-2018 Table2",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "fe-without-ribs",
+          "value": 1.39,
+          "unit": "unstated",
+          "source": "mannen-2018",
+          "section": "citation-audit-physics-tables.md §A/§B9, mannen-2018 Table2",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "ar-with-ribs",
+          "value": 2.31,
+          "unit": "unstated",
+          "source": "mannen-2018",
+          "section": "citation-audit-physics-tables.md §A/§B9, mannen-2018 Table2",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "ar-without-ribs",
+          "value": 1.02,
+          "unit": "unstated",
+          "source": "mannen-2018",
+          "section": "citation-audit-physics-tables.md §A/§B9, mannen-2018 Table2",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "rib-liebsch",
+      "usage": "beside",
+      "description": "ROM increase after cutting anterior ribs",
+      "notes": "ROM increases, not directly transcribed stiffness multipliers.",
+      "values": [
+        {
+          "term": "axial-rotation",
+          "value": 72,
+          "unit": "%",
+          "source": "liebsch-2020",
+          "section": "earlier flexibility_and_biomechanics.md §6,linked from published-simulators.md §2b",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "lateral-bending",
+          "value": 11,
+          "unit": "%",
+          "source": "liebsch-2020",
+          "section": "earlier flexibility_and_biomechanics.md §6,linked from published-simulators.md §2b",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "flexion-extension",
+          "value": 9,
+          "unit": "%",
+          "source": "liebsch-2020",
+          "section": "earlier flexibility_and_biomechanics.md §6,linked from published-simulators.md §2b",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "rib-lateral-bending",
+      "usage": "bench",
+      "description": "Uncertain rib-cage multiplier",
+      "notes": "Own inference copied from note; see Watkins, Mannen, Liebsch rows for disagreeing inputs.",
+      "values": [
+        {
+          "term": "lower",
+          "value": 1.35,
+          "unit": "ratio",
+          "source": "project-assumptions",
+          "section": "published-simulators.md §2b own inference",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "upper",
+          "value": 1.9,
+          "unit": "ratio",
+          "source": "project-assumptions",
+          "section": "published-simulators.md §2b own inference",
+          "basis": "own-inference",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "rib-axial-rotation",
+      "usage": "bench",
+      "description": "Uncertain rib-cage multiplier",
+      "notes": "Own inference copied from note; see Watkins, Mannen, Liebsch rows for disagreeing inputs.",
+      "values": [
+        {
+          "term": "lower",
+          "value": 1.3,
+          "unit": "ratio",
+          "source": "project-assumptions",
+          "section": "published-simulators.md §2b own inference",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "upper",
+          "value": 4,
+          "unit": "ratio",
+          "source": "project-assumptions",
+          "section": "published-simulators.md §2b own inference",
+          "basis": "own-inference",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "lumbar-disc-0",
+      "usage": "beside",
+      "description": "Lumbar disc comparison at 0 N",
+      "notes": "Table3 footnote: x = posterior-anterior shear/lateral bending;y = lateral shear/flexion-extension;z = compression-tension/axial rotation. My/Ry row absent;mapping is defined. Disc specimens lack posterior elements. Preload-series specimen set:L2-3/L4-5,four female donors aged17–58.",
+      "values": [
+        {
+          "term": "mx-rx",
+          "value": 0.92,
+          "unit": "Nm/deg",
+          "source": "stokes-gardner-morse-2016",
+          "section": "citation-audit-physics-tables.md §A/§B5, stokes-gardner-morse-2016 Table3",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "mx-rx-sd",
+          "value": 0.11,
+          "unit": "Nm/deg",
+          "source": "stokes-gardner-morse-2016",
+          "section": "citation-audit-physics-tables.md §A/§B5, stokes-gardner-morse-2016 Table3",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "mz-rz",
+          "value": 0.85,
+          "unit": "Nm/deg",
+          "source": "stokes-gardner-morse-2016",
+          "section": "citation-audit-physics-tables.md §A/§B5, stokes-gardner-morse-2016 Table3",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "mz-rz-sd",
+          "value": 0.14,
+          "unit": "Nm/deg",
+          "source": "stokes-gardner-morse-2016",
+          "section": "citation-audit-physics-tables.md §A/§B5, stokes-gardner-morse-2016 Table3",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "fx-dx",
+          "value": 0.06,
+          "unit": "kN/mm",
+          "source": "stokes-gardner-morse-2016",
+          "section": "published-simulators.md §2a table",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "fx-dx-sd",
+          "value": 0.01,
+          "unit": "kN/mm",
+          "source": "stokes-gardner-morse-2016",
+          "section": "published-simulators.md §2a table",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "fy-dy",
+          "value": 0.08,
+          "unit": "kN/mm",
+          "source": "stokes-gardner-morse-2016",
+          "section": "published-simulators.md §2a table",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "fy-dy-sd",
+          "value": 0.01,
+          "unit": "kN/mm",
+          "source": "stokes-gardner-morse-2016",
+          "section": "published-simulators.md §2a table",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "fz-dz",
+          "value": 0.41,
+          "unit": "kN/mm",
+          "source": "stokes-gardner-morse-2016",
+          "section": "published-simulators.md §2a table",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "fz-dz-sd",
+          "value": 0.08,
+          "unit": "kN/mm",
+          "source": "stokes-gardner-morse-2016",
+          "section": "published-simulators.md §2a table",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "lumbar-disc-250",
+      "usage": "beside",
+      "description": "Lumbar disc comparison at 250 N",
+      "notes": "Table3 footnote: x = posterior-anterior shear/lateral bending;y = lateral shear/flexion-extension;z = compression-tension/axial rotation. My/Ry row absent;mapping is defined. Disc specimens lack posterior elements. Preload-series specimen set:L2-3/L4-5,four female donors aged17–58.",
+      "values": [
+        {
+          "term": "mx-rx",
+          "value": 1.9,
+          "unit": "Nm/deg",
+          "source": "stokes-gardner-morse-2016",
+          "section": "citation-audit-physics-tables.md §A/§B5, stokes-gardner-morse-2016 Table3",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "mx-rx-sd",
+          "value": 0.6,
+          "unit": "Nm/deg",
+          "source": "stokes-gardner-morse-2016",
+          "section": "citation-audit-physics-tables.md §A/§B5, stokes-gardner-morse-2016 Table3",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "mz-rz",
+          "value": 1.7,
+          "unit": "Nm/deg",
+          "source": "stokes-gardner-morse-2016",
+          "section": "citation-audit-physics-tables.md §A/§B5, stokes-gardner-morse-2016 Table3",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "mz-rz-sd",
+          "value": 0.2,
+          "unit": "Nm/deg",
+          "source": "stokes-gardner-morse-2016",
+          "section": "citation-audit-physics-tables.md §A/§B5, stokes-gardner-morse-2016 Table3",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "fx-dx",
+          "value": 0.11,
+          "unit": "kN/mm",
+          "source": "stokes-gardner-morse-2016",
+          "section": "published-simulators.md §2a table",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "fx-dx-sd",
+          "value": 0.01,
+          "unit": "kN/mm",
+          "source": "stokes-gardner-morse-2016",
+          "section": "published-simulators.md §2a table",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "fy-dy",
+          "value": 0.14,
+          "unit": "kN/mm",
+          "source": "stokes-gardner-morse-2016",
+          "section": "published-simulators.md §2a table",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "fy-dy-sd",
+          "value": 0.02,
+          "unit": "kN/mm",
+          "source": "stokes-gardner-morse-2016",
+          "section": "published-simulators.md §2a table",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "fz-dz",
+          "value": 1.7,
+          "unit": "kN/mm",
+          "source": "stokes-gardner-morse-2016",
+          "section": "published-simulators.md §2a table",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "fz-dz-sd",
+          "value": 0.1,
+          "unit": "kN/mm",
+          "source": "stokes-gardner-morse-2016",
+          "section": "published-simulators.md §2a table",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "lumbar-disc-500",
+      "usage": "beside",
+      "description": "Lumbar disc comparison at 500 N",
+      "notes": "Table3 footnote: x = posterior-anterior shear/lateral bending;y = lateral shear/flexion-extension;z = compression-tension/axial rotation. My/Ry row absent;mapping is defined. Disc specimens lack posterior elements. Preload-series specimen set:L2-3/L4-5,four female donors aged17–58.",
+      "values": [
+        {
+          "term": "mx-rx",
+          "value": 2.7,
+          "unit": "Nm/deg",
+          "source": "stokes-gardner-morse-2016",
+          "section": "citation-audit-physics-tables.md §A/§B5, stokes-gardner-morse-2016 Table3",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "mx-rx-sd",
+          "value": 0.8,
+          "unit": "Nm/deg",
+          "source": "stokes-gardner-morse-2016",
+          "section": "citation-audit-physics-tables.md §A/§B5, stokes-gardner-morse-2016 Table3",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "mz-rz",
+          "value": 2.2,
+          "unit": "Nm/deg",
+          "source": "stokes-gardner-morse-2016",
+          "section": "citation-audit-physics-tables.md §A/§B5, stokes-gardner-morse-2016 Table3",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "mz-rz-sd",
+          "value": 0.2,
+          "unit": "Nm/deg",
+          "source": "stokes-gardner-morse-2016",
+          "section": "citation-audit-physics-tables.md §A/§B5, stokes-gardner-morse-2016 Table3",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "fx-dx",
+          "value": 0.15,
+          "unit": "kN/mm",
+          "source": "stokes-gardner-morse-2016",
+          "section": "published-simulators.md §2a table",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "fx-dx-sd",
+          "value": 0.02,
+          "unit": "kN/mm",
+          "source": "stokes-gardner-morse-2016",
+          "section": "published-simulators.md §2a table",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "fy-dy",
+          "value": 0.19,
+          "unit": "kN/mm",
+          "source": "stokes-gardner-morse-2016",
+          "section": "published-simulators.md §2a table",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "fy-dy-sd",
+          "value": 0.02,
+          "unit": "kN/mm",
+          "source": "stokes-gardner-morse-2016",
+          "section": "published-simulators.md §2a table",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "fz-dz",
+          "value": 2.5,
+          "unit": "kN/mm",
+          "source": "stokes-gardner-morse-2016",
+          "section": "published-simulators.md §2a table",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "fz-dz-sd",
+          "value": 0.2,
+          "unit": "kN/mm",
+          "source": "stokes-gardner-morse-2016",
+          "section": "published-simulators.md §2a table",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "lumbar-disc-642",
+      "usage": "beside",
+      "description": "Lumbar disc comparison at 642 N",
+      "notes": "Table3 footnote: x = posterior-anterior shear/lateral bending;y = lateral shear/flexion-extension;z = compression-tension/axial rotation. My/Ry row absent;mapping is defined. Disc specimens lack posterior elements. Different frequency-series specimen set:eight segments from seven spines,five male/two female,mean age41,tested at0.01Hz;mean preload642±132N.",
+      "values": [
+        {
+          "term": "mx-rx",
+          "value": 2.8,
+          "unit": "Nm/deg",
+          "source": "stokes-gardner-morse-2016",
+          "section": "citation-audit-physics-tables.md §A/§B5, stokes-gardner-morse-2016 Table3",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "mx-rx-sd",
+          "value": 2.2,
+          "unit": "Nm/deg",
+          "source": "stokes-gardner-morse-2016",
+          "section": "citation-audit-physics-tables.md §A/§B5, stokes-gardner-morse-2016 Table3",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "mz-rz",
+          "value": 2.4,
+          "unit": "Nm/deg",
+          "source": "stokes-gardner-morse-2016",
+          "section": "citation-audit-physics-tables.md §A/§B5, stokes-gardner-morse-2016 Table3",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "mz-rz-sd",
+          "value": 1.0,
+          "unit": "Nm/deg",
+          "source": "stokes-gardner-morse-2016",
+          "section": "citation-audit-physics-tables.md §A/§B5, stokes-gardner-morse-2016 Table3",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "fx-dx",
+          "value": 0.17,
+          "unit": "kN/mm",
+          "source": "stokes-gardner-morse-2016",
+          "section": "published-simulators.md §2a table",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "fx-dx-sd",
+          "value": 0.07,
+          "unit": "kN/mm",
+          "source": "stokes-gardner-morse-2016",
+          "section": "published-simulators.md §2a table",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "fy-dy",
+          "value": 0.21,
+          "unit": "kN/mm",
+          "source": "stokes-gardner-morse-2016",
+          "section": "published-simulators.md §2a table",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "fy-dy-sd",
+          "value": 0.07,
+          "unit": "kN/mm",
+          "source": "stokes-gardner-morse-2016",
+          "section": "published-simulators.md §2a table",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "fz-dz",
+          "value": 3.3,
+          "unit": "kN/mm",
+          "source": "stokes-gardner-morse-2016",
+          "section": "published-simulators.md §2a table",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "fz-dz-sd",
+          "value": 0.7,
+          "unit": "kN/mm",
+          "source": "stokes-gardner-morse-2016",
+          "section": "published-simulators.md §2a table",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "test-frequency",
+          "value": 0.01,
+          "unit": "Hz",
+          "source": "stokes-gardner-morse-2016",
+          "section": "citation-audit-physics-tables.md §A/§B5",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "preload-sd",
+          "value": 132,
+          "unit": "N",
+          "source": "stokes-gardner-morse-2016",
+          "section": "citation-audit-physics-tables.md §A",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "thoracic-secants",
+      "usage": "beside",
+      "description": "Thoracic secant comparison",
+      "notes": "Own secants=7.5N·m/ROM. Corrected T2–T6 AR endpoints recomputed from5.7/5.2degrees,without decimal rounding. T6-T7 excluded from that range;all other copied note secants unchanged. Inputs in thoracic-rom.",
+      "values": [
+        {
+          "term": "t1-t2-lb",
+          "value": 1.27,
+          "unit": "Nm/deg",
+          "source": "project-assumptions",
+          "section": "published-simulators.md §2b Wilke table,own inference7.5/ROM",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "t1-t2-ar",
+          "value": 1.21,
+          "unit": "Nm/deg",
+          "source": "project-assumptions",
+          "section": "published-simulators.md §2b Wilke table,own inference7.5/ROM",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "t2-t7-lb-lower",
+          "value": 1.34,
+          "unit": "Nm/deg",
+          "source": "project-assumptions",
+          "section": "published-simulators.md §2b Wilke table,own inference7.5/ROM",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "t2-t7-lb-upper",
+          "value": 1.53,
+          "unit": "Nm/deg",
+          "source": "project-assumptions",
+          "section": "published-simulators.md §2b Wilke table,own inference7.5/ROM",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "t2-t6-ar-lower",
+          "value": 1.3157894736842104,
+          "unit": "Nm/deg",
+          "source": "project-assumptions",
+          "section": "citation-audit-physics-tables.md §A/§B2, wilke-2017",
+          "basis": "own-inference",
+          "approximate": true
+        },
+        {
+          "term": "t2-t6-ar-upper",
+          "value": 1.4423076923076923,
+          "unit": "Nm/deg",
+          "source": "project-assumptions",
+          "section": "citation-audit-physics-tables.md §A/§B2, wilke-2017",
+          "basis": "own-inference",
+          "approximate": true
+        },
+        {
+          "term": "t7-t8-lb",
+          "value": 2.03,
+          "unit": "Nm/deg",
+          "source": "project-assumptions",
+          "section": "published-simulators.md §2b Wilke table,own inference7.5/ROM",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "t7-t8-ar",
+          "value": 1.5,
+          "unit": "Nm/deg",
+          "source": "project-assumptions",
+          "section": "published-simulators.md §2b Wilke table,own inference7.5/ROM",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "t8-t12-lb-lower",
+          "value": 1.67,
+          "unit": "Nm/deg",
+          "source": "project-assumptions",
+          "section": "published-simulators.md §2b Wilke table,own inference7.5/ROM",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "t8-t12-lb-upper",
+          "value": 1.97,
+          "unit": "Nm/deg",
+          "source": "project-assumptions",
+          "section": "published-simulators.md §2b Wilke table,own inference7.5/ROM",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "t8-t12-ar-lower",
+          "value": 1.5,
+          "unit": "Nm/deg",
+          "source": "project-assumptions",
+          "section": "published-simulators.md §2b Wilke table,own inference7.5/ROM",
+          "basis": "own-inference",
+          "approximate": false
+        },
+        {
+          "term": "t8-t12-ar-upper",
+          "value": 2.27,
+          "unit": "Nm/deg",
+          "source": "project-assumptions",
+          "section": "published-simulators.md §2b Wilke table,own inference7.5/ROM",
+          "basis": "own-inference",
+          "approximate": false
+        }
+      ]
+    },
+    {
+      "key": "thoracic-rom",
+      "usage": "input",
+      "description": "Wilke ROM inputs for secants",
+      "notes": "At±7.5N·m,the AR range5.2–5.7degrees covers T2-T3 through T5-T6 (T2–T6);T6-T7 separately5.9. LB4.9–5.6covers T2-T3 through T6-T7. Values include neutral zone.",
+      "values": [
+        {
+          "term": "t1-t2-flexion",
+          "value": 7.1,
+          "unit": "deg",
+          "source": "wilke-2017",
+          "section": "published-simulators.md §2b",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "t1-t2-extension",
+          "value": 6.7,
+          "unit": "deg",
+          "source": "wilke-2017",
+          "section": "published-simulators.md §2b",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "t1-t2-lb",
+          "value": 5.9,
+          "unit": "deg",
+          "source": "wilke-2017",
+          "section": "published-simulators.md §2b",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "t1-t2-ar",
+          "value": 6.2,
+          "unit": "deg",
+          "source": "wilke-2017",
+          "section": "published-simulators.md §2b",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "t2-t7-lb-lower",
+          "value": 4.9,
+          "unit": "deg",
+          "source": "wilke-2017",
+          "section": "published-simulators.md §2b",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "t2-t7-lb-upper",
+          "value": 5.6,
+          "unit": "deg",
+          "source": "wilke-2017",
+          "section": "published-simulators.md §2b",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "t2-t6-ar-lower",
+          "value": 5.2,
+          "unit": "deg",
+          "source": "wilke-2017",
+          "section": "citation-audit-physics-tables.md §A/§B2, wilke-2017",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "t2-t6-ar-upper",
+          "value": 5.7,
+          "unit": "deg",
+          "source": "wilke-2017",
+          "section": "citation-audit-physics-tables.md §A/§B2, wilke-2017",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "t6-t7-ar",
+          "value": 5.9,
+          "unit": "deg",
+          "source": "wilke-2017",
+          "section": "published-simulators.md §2b",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "t7-t8-lb",
+          "value": 3.7,
+          "unit": "deg",
+          "source": "wilke-2017",
+          "section": "published-simulators.md §2b",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "t8-t12-lb-lower",
+          "value": 3.8,
+          "unit": "deg",
+          "source": "wilke-2017",
+          "section": "published-simulators.md §2b",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "t8-t12-lb-upper",
+          "value": 4.5,
+          "unit": "deg",
+          "source": "wilke-2017",
+          "section": "published-simulators.md §2b",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "t11-t12-ar",
+          "value": 3.3,
+          "unit": "deg",
+          "source": "wilke-2017",
+          "section": "published-simulators.md §2b",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "t7-t8-ar",
+          "value": 5,
+          "unit": "deg",
+          "source": "wilke-2017",
+          "section": "published-simulators.md §2b",
+          "basis": "published",
+          "approximate": true
+        },
+        {
+          "term": "t8-t12-ar-upper",
+          "value": 5,
+          "unit": "deg",
+          "source": "wilke-2017",
+          "section": "published-simulators.md §2b",
+          "basis": "published",
+          "approximate": true
+        },
+        {
+          "term": "applied-moment",
+          "value": 7.5,
+          "unit": "N·m",
+          "source": "wilke-2017",
+          "section": "published-simulators.md §2b",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "t2-t7-flexion-extension-lower",
+          "value": 3.1,
+          "unit": "deg",
+          "source": "wilke-2017",
+          "section": "published-simulators.md §2b ROM table",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "t2-t7-flexion-extension-upper",
+          "value": 3.8,
+          "unit": "deg",
+          "source": "wilke-2017",
+          "section": "published-simulators.md §2b ROM table",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "t2-t3-flexion-extension",
+          "value": 4.1,
+          "unit": "deg",
+          "source": "wilke-2017",
+          "section": "published-simulators.md §2b ROM table",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "t7-t8-flexion",
+          "value": 2.8,
+          "unit": "deg",
+          "source": "wilke-2017",
+          "section": "published-simulators.md §2b ROM table",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "t7-t8-extension",
+          "value": 2.8,
+          "unit": "deg",
+          "source": "wilke-2017",
+          "section": "published-simulators.md §2b ROM table",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "t8-t12-flexion-extension-lower",
+          "value": 3.1,
+          "unit": "deg",
+          "source": "wilke-2017",
+          "section": "published-simulators.md §2b ROM table",
+          "basis": "published",
+          "approximate": false
+        },
+        {
+          "term": "t8-t12-flexion-extension-upper",
+          "value": 3.8,
+          "unit": "deg",
+          "source": "wilke-2017",
+          "section": "published-simulators.md §2b ROM table",
+          "basis": "published",
+          "approximate": false
+        }
+      ]
+    }
+  ],
+  "missing": [
+    {
+      "key": "rib-flexion-range",
+      "reason": "SYNTHESIS1.08–2.14 are not literal note endpoints; Mannen raw FE pairs retained, no ratios computed."
+    },
+    {
+      "key": "acute-screw-bone-stiffness",
+      "reason": "Borrelli osseointegrated lumbar stiffness does not establish acute interface stiffness."
+    },
+    {
+      "key": "lumbar-disc-my-ry",
+      "reason": "The cadaver comparison table in published-simulators section2a has no My/Ry row."
+    },
+    {
+      "key": "mannen-confirmed-units",
+      "reason": "The note says EZS units are not printed; Nm/deg is presumed, not confirmed."
+    }
+  ]
+}

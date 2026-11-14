@@ -20,6 +20,9 @@ same code compiled to WebAssembly.
 | `case-checks/` | is the spine complete and in order? |
 | `case-file/` | one zip per case, read strictly |
 | `joint-fit/` | fits marks on one film or two to one three-dimensional spine, with a typical spine for what one film cannot show |
+| `spine-readings/` | fitted angles, curves, every endplate pair and their version bands; the sampler shared with placements and loads |
+| `implant-layout/` | placement proposals on a fitted spine: levels, anchors and their sizes, rods, counted over versions |
+| `load-bench/` | placements under daily loads on the same versions of the spine, compared by paired counts |
 | `scorekeeper/` | choosing methods with numbers; never touches the disk |
 | `command-line/` | the `spine` binary: the same engine, natively |
 | `wasm-bridge/` | the only crate that knows about the browser |
@@ -41,18 +44,22 @@ trained-finder  ──▶ darkroom, film-reader
 toolbox         ──▶ darkroom, film-reader, auto-pass
 case-checks     ──▶ shapes
 case-file       ──▶ shapes
+spine-readings  ──▶ forward-model, made-up-spines (its seeded streams)
+implant-layout  ──▶ forward-model, made-up-spines, spine-readings
+load-bench      ──▶ forward-model, made-up-spines, spine-readings, implant-layout
 scorekeeper     ──▶ forward-model, made-up-spines, film-reader, auto-pass, toolbox, case-file
 command-line    ──▶ film-reader, film-geometry, auto-pass, trained-finder, toolbox,
                     case-checks, case-file, made-up-spines, scorekeeper,
-                    joint-fit, spine-readings
+                    joint-fit, spine-readings, implant-layout, load-bench
 wasm-bridge     ──▶ the same crates as command-line, never command-line itself
 spine-readings  ──▶ forward-model, made-up-spines (its seeded streams)
 ```
 
 Tests of `film-geometry`, `auto-pass`, `trained-finder` and `toolbox`
-also use `made-up-spines`; tests of `spine-readings` also use `joint-fit`.
-`cargo chores seams` keeps the rules that matter: only `wasm-bridge` reaches browser crates, no crate reaches a
-network crate, and the bridge never reaches `command-line`, `chores` or
+also use `made-up-spines`; tests of `spine-readings`, `implant-layout` and `load-bench`
+also use `joint-fit`. `cargo chores seams` keeps the rules that matter:
+only `wasm-bridge` reaches browser crates, no crate reaches a network
+crate, and the bridge never reaches `command-line`, `chores` or
 command-line tools.
 
 ## The patient frame in one picture

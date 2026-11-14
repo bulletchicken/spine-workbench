@@ -1,0 +1,800 @@
+{
+  "cells": [
+    {
+      "coordinate": {
+        "key": "count",
+        "group": "balikci-table-2-mid-length-thoracal"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 1007
+      },
+      "unit": "count",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 2; §B Balikci 2019; §C.15",
+      "qualifier": "Printed Mid-length screws distribution, thoracal region. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "1,007 (46.5)",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "percent",
+        "group": "balikci-table-2-mid-length-thoracal"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 46.5
+      },
+      "unit": "percent",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 2; §B Balikci 2019; §C.15",
+      "qualifier": "Printed Mid-length screws distribution, thoracal region. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "1,007 (46.5)",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "count",
+        "group": "balikci-table-2-mid-length-lumbar"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 264
+      },
+      "unit": "count",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 2; §B Balikci 2019; §C.15",
+      "qualifier": "Printed Mid-length screws distribution, lumbar region. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "264 (38.7)",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "percent",
+        "group": "balikci-table-2-mid-length-lumbar"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 38.7
+      },
+      "unit": "percent",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 2; §B Balikci 2019; §C.15",
+      "qualifier": "Printed Mid-length screws distribution, lumbar region. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "264 (38.7)",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "confidence-interval",
+        "group": "balikci-table-2-mid-length"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 0.765,
+        "upper": 0.813
+      },
+      "unit": "ratio",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 2; §B Balikci 2019; §C.15",
+      "qualifier": "95% confidence interval as printed for the whole row; no region, side or effect parameter is inferred. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "0.765–0.813",
+      "decimals": 3
+    },
+    {
+      "coordinate": {
+        "key": "p-value-max",
+        "group": "balikci-table-2-mid-length"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 0.05
+      },
+      "unit": "ratio",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 2; §B Balikci 2019; §C.15",
+      "qualifier": "Row p-value is strictly less than 0.05 as printed. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "<0.05",
+      "decimals": 2
+    },
+    {
+      "coordinate": {
+        "key": "count",
+        "group": "balikci-table-2-standard-length-thoracal"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 1157
+      },
+      "unit": "count",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 2; §B Balikci 2019; §C.15",
+      "qualifier": "Printed Standard length screws distribution, thoracal region. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "1,157 (53.5)",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "percent",
+        "group": "balikci-table-2-standard-length-thoracal"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 53.5
+      },
+      "unit": "percent",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 2; §B Balikci 2019; §C.15",
+      "qualifier": "Printed Standard length screws distribution, thoracal region. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "1,157 (53.5)",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "count",
+        "group": "balikci-table-2-standard-length-lumbar"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 418
+      },
+      "unit": "count",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 2; §B Balikci 2019; §C.15",
+      "qualifier": "Printed Standard length screws distribution, lumbar region. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "418 (61.3)",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "percent",
+        "group": "balikci-table-2-standard-length-lumbar"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 61.3
+      },
+      "unit": "percent",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 2; §B Balikci 2019; §C.15",
+      "qualifier": "Printed Standard length screws distribution, lumbar region. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "418 (61.3)",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "confidence-interval",
+        "group": "balikci-table-2-standard-length"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 0.712,
+        "upper": 0.756
+      },
+      "unit": "ratio",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 2; §B Balikci 2019; §C.15",
+      "qualifier": "95% confidence interval as printed for the whole row; no region, side or effect parameter is inferred. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "0.712–0.756",
+      "decimals": 3
+    },
+    {
+      "coordinate": {
+        "key": "p-value-max",
+        "group": "balikci-table-2-standard-length"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 0.05
+      },
+      "unit": "ratio",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 2; §B Balikci 2019; §C.15",
+      "qualifier": "Row p-value is strictly less than 0.05 as printed. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "<0.05",
+      "decimals": 2
+    },
+    {
+      "coordinate": {
+        "key": "count",
+        "group": "balikci-table-2-total-thoracal"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 2164
+      },
+      "unit": "count",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 2; §B Balikci 2019; §C.15",
+      "qualifier": "Printed Total distribution, thoracal region. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "2,164 (100.0)",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "percent",
+        "group": "balikci-table-2-total-thoracal"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 100.0
+      },
+      "unit": "percent",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 2; §B Balikci 2019; §C.15",
+      "qualifier": "Printed Total distribution, thoracal region. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "2,164 (100.0)",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "count",
+        "group": "balikci-table-2-total-lumbar"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 682
+      },
+      "unit": "count",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 2; §B Balikci 2019; §C.15",
+      "qualifier": "Printed Total distribution, lumbar region. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "682 (100.0)",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "percent",
+        "group": "balikci-table-2-total-lumbar"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 100.0
+      },
+      "unit": "percent",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 2; §B Balikci 2019; §C.15",
+      "qualifier": "Printed Total distribution, lumbar region. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "682 (100.0)",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "confidence-interval",
+        "group": "balikci-table-2-total"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 0.745,
+        "upper": 0.801
+      },
+      "unit": "ratio",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 2; §B Balikci 2019; §C.15",
+      "qualifier": "95% confidence interval as printed for the whole row; no region, side or effect parameter is inferred. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "0.745–0.801",
+      "decimals": 3
+    },
+    {
+      "coordinate": {
+        "key": "p-value-max",
+        "group": "balikci-table-2-total"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 0.05
+      },
+      "unit": "ratio",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 2; §B Balikci 2019; §C.15",
+      "qualifier": "Row p-value is strictly less than 0.05 as printed. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "<0.05",
+      "decimals": 2
+    },
+    {
+      "coordinate": {
+        "key": "count",
+        "group": "balikci-table-4-mid-length",
+        "curveSide": "convex"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 651
+      },
+      "unit": "count",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 4; §B Balikci 2019; §C.15",
+      "qualifier": "Printed Mid-length screws distribution, convex side. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "651 (45.7)",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "percent",
+        "group": "balikci-table-4-mid-length",
+        "curveSide": "convex"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 45.7
+      },
+      "unit": "percent",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 4; §B Balikci 2019; §C.15",
+      "qualifier": "Printed Mid-length screws distribution, convex side. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "651 (45.7)",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "count",
+        "group": "balikci-table-4-mid-length",
+        "curveSide": "concave"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 620
+      },
+      "unit": "count",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 4; §B Balikci 2019; §C.15",
+      "qualifier": "Printed Mid-length screws distribution, concave side. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients. §C.15 notes the printed percentages are slightly off: mid-length 43.5% versus 620/1423, and standard 56.5% versus 803/1423. Printed 43.5 and 56.5 are retained; no percentage is recomputed.",
+      "printed": "620 (43.5)",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "percent",
+        "group": "balikci-table-4-mid-length",
+        "curveSide": "concave"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 43.5
+      },
+      "unit": "percent",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 4; §B Balikci 2019; §C.15",
+      "qualifier": "Printed Mid-length screws distribution, concave side. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients. §C.15 notes the printed percentages are slightly off: mid-length 43.5% versus 620/1423, and standard 56.5% versus 803/1423. Printed 43.5 and 56.5 are retained; no percentage is recomputed.",
+      "printed": "620 (43.5)",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "confidence-interval",
+        "group": "balikci-table-4-mid-length"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 0.474,
+        "upper": 0.681
+      },
+      "unit": "ratio",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 4; §B Balikci 2019; §C.15",
+      "qualifier": "95% confidence interval as printed for the whole row; no region, side or effect parameter is inferred. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "0.474–0.681",
+      "decimals": 3
+    },
+    {
+      "coordinate": {
+        "key": "p-value-max",
+        "group": "balikci-table-4-mid-length"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 0.05
+      },
+      "unit": "ratio",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 4; §B Balikci 2019; §C.15",
+      "qualifier": "Row p-value is strictly less than 0.05 as printed. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "<0.05",
+      "decimals": 2
+    },
+    {
+      "coordinate": {
+        "key": "count",
+        "group": "balikci-table-4-standard-length",
+        "curveSide": "convex"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 772
+      },
+      "unit": "count",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 4; §B Balikci 2019; §C.15",
+      "qualifier": "Printed Standart length screws distribution, convex side. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "772 (54.3)",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "percent",
+        "group": "balikci-table-4-standard-length",
+        "curveSide": "convex"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 54.3
+      },
+      "unit": "percent",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 4; §B Balikci 2019; §C.15",
+      "qualifier": "Printed Standart length screws distribution, convex side. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "772 (54.3)",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "count",
+        "group": "balikci-table-4-standard-length",
+        "curveSide": "concave"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 803
+      },
+      "unit": "count",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 4; §B Balikci 2019; §C.15",
+      "qualifier": "Printed Standart length screws distribution, concave side. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients. §C.15 notes the printed percentages are slightly off: mid-length 43.5% versus 620/1423, and standard 56.5% versus 803/1423. Printed 43.5 and 56.5 are retained; no percentage is recomputed.",
+      "printed": "803 (56.5)",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "percent",
+        "group": "balikci-table-4-standard-length",
+        "curveSide": "concave"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 56.5
+      },
+      "unit": "percent",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 4; §B Balikci 2019; §C.15",
+      "qualifier": "Printed Standart length screws distribution, concave side. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients. §C.15 notes the printed percentages are slightly off: mid-length 43.5% versus 620/1423, and standard 56.5% versus 803/1423. Printed 43.5 and 56.5 are retained; no percentage is recomputed.",
+      "printed": "803 (56.5)",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "confidence-interval",
+        "group": "balikci-table-4-standard-length"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 0.393,
+        "upper": 0.534
+      },
+      "unit": "ratio",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 4; §B Balikci 2019; §C.15",
+      "qualifier": "95% confidence interval as printed for the whole row; no region, side or effect parameter is inferred. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "0.393–0.534",
+      "decimals": 3
+    },
+    {
+      "coordinate": {
+        "key": "p-value-max",
+        "group": "balikci-table-4-standard-length"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 0.05
+      },
+      "unit": "ratio",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 4; §B Balikci 2019; §C.15",
+      "qualifier": "Row p-value is strictly less than 0.05 as printed. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "<0.05",
+      "decimals": 2
+    },
+    {
+      "coordinate": {
+        "key": "count",
+        "group": "balikci-table-4-total",
+        "curveSide": "convex"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 1423
+      },
+      "unit": "count",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 4; §B Balikci 2019; §C.15",
+      "qualifier": "Printed Total distribution, convex side. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "1,423 (100.0)",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "percent",
+        "group": "balikci-table-4-total",
+        "curveSide": "convex"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 100.0
+      },
+      "unit": "percent",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 4; §B Balikci 2019; §C.15",
+      "qualifier": "Printed Total distribution, convex side. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "1,423 (100.0)",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "count",
+        "group": "balikci-table-4-total",
+        "curveSide": "concave"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 1423
+      },
+      "unit": "count",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 4; §B Balikci 2019; §C.15",
+      "qualifier": "Printed Total distribution, concave side. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "1,423 (100.0)",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "percent",
+        "group": "balikci-table-4-total",
+        "curveSide": "concave"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 100.0
+      },
+      "unit": "percent",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 4; §B Balikci 2019; §C.15",
+      "qualifier": "Printed Total distribution, concave side. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "1,423 (100.0)",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "confidence-interval",
+        "group": "balikci-table-4-total"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 0.456,
+        "upper": 0.693
+      },
+      "unit": "ratio",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 4; §B Balikci 2019; §C.15",
+      "qualifier": "95% confidence interval as printed for the whole row; no region, side or effect parameter is inferred. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "0.456–0.693",
+      "decimals": 3
+    },
+    {
+      "coordinate": {
+        "key": "p-value-max",
+        "group": "balikci-table-4-total"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 0.05
+      },
+      "unit": "ratio",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 4; §B Balikci 2019; §C.15",
+      "qualifier": "Row p-value is strictly less than 0.05 as printed. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "<0.05",
+      "decimals": 2
+    },
+    {
+      "coordinate": {
+        "key": "count",
+        "group": "balikci-overall-total"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 2846
+      },
+      "unit": "count",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §B Balikci 2019, lengths used by region",
+      "qualifier": "Count as printed in the quoted text; no subtotal is calculated. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "2846",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "count",
+        "group": "balikci-overall-standard-length"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 1575
+      },
+      "unit": "count",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §B Balikci 2019, lengths used by region",
+      "qualifier": "Count as printed in the quoted text; no subtotal is calculated. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "1575",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "percent",
+        "group": "balikci-overall-standard-length"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 55.4
+      },
+      "unit": "percent",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §B Balikci 2019, lengths used by region",
+      "qualifier": "Percentage as printed in the quoted text; no percentage is calculated. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "55.4",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "count",
+        "group": "balikci-overall-mid-length"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 1271
+      },
+      "unit": "count",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §B Balikci 2019, lengths used by region",
+      "qualifier": "Count as printed in the quoted text; no subtotal is calculated. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "1271",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "percent",
+        "group": "balikci-overall-mid-length"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 44.6
+      },
+      "unit": "percent",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §B Balikci 2019, lengths used by region",
+      "qualifier": "Percentage as printed in the quoted text; no percentage is calculated. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "44.6",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "count",
+        "group": "balikci-apical-total"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 288
+      },
+      "unit": "count",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §B Balikci 2019, lengths used by region",
+      "qualifier": "Count as printed in the quoted text; no subtotal is calculated. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "288",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "count",
+        "group": "balikci-apical-mid-length"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 177
+      },
+      "unit": "count",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §B Balikci 2019, lengths used by region",
+      "qualifier": "Count as printed in the quoted text; no subtotal is calculated. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "177",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "percent",
+        "group": "balikci-apical-mid-length"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 61.5
+      },
+      "unit": "percent",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §B Balikci 2019, lengths used by region",
+      "qualifier": "Percentage as printed in the quoted text; no percentage is calculated. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "61.5",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "count",
+        "group": "balikci-apical-standard-length"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 111
+      },
+      "unit": "count",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §B Balikci 2019, lengths used by region",
+      "qualifier": "Count as printed in the quoted text; no subtotal is calculated. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "111",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "percent",
+        "group": "balikci-apical-standard-length"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 38.5
+      },
+      "unit": "percent",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §B Balikci 2019, lengths used by region",
+      "qualifier": "Percentage as printed in the quoted text; no percentage is calculated. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
+      "printed": "38.5",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "p-value-max",
+        "group": "balikci-apical-mid-vs-standard"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 0.05
+      },
+      "unit": "ratio",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §B Balikci 2019, lengths used by region",
+      "qualifier": "Apical mid-length versus standard comparison: p strictly less than 0.05 as printed.",
+      "printed": "p<0.05",
+      "decimals": 2
+    }
+  ],
+  "definitions": [
+    {
+      "key": "balikci-table-2",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 2; §B Balikci 2019; §C.15",
+      "text": "Distribution of mid-length and standard length screws according to thoracal and lumbar regions; columns: Groups | Thoracal region | Lumbar region | 95% Confidence interval | p-value. Values are presented as number (%) or 95% confidence interval."
+    },
+    {
+      "key": "balikci-table-4",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 4; §B Balikci 2019; §C.15",
+      "text": "Distribution of mid-length and standard length screws according to convex and concave sides; columns: Groups | Convex side | Concave side | 95% Confidence interval | p-value. Values are presented as number (%) or 95% confidence interval."
+    },
+    {
+      "key": "balikci-2019-table-2-wording",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A, balikci-2019 Table 2",
+      "text": "Distribution of mid-length and standard length screws according to thoracal and lumbar regions; column headers (verbatim, separated by |): Groups | Thoracal region | Lumbar region | 95% Confidence interval | p-value. Footnotes: Values are presented as number (%) or 95% confidence interval."
+    },
+    {
+      "key": "balikci-2019-table-4-wording",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §A, balikci-2019 Table 4",
+      "text": "Distribution of mid-length and standard length screws according to convex and concave sides; column headers (verbatim, separated by |): Groups | Convex side | Concave side | 95% Confidence interval | p-value. Footnotes: Values are presented as number (%) or 95% confidence interval."
+    }
+  ]
+}

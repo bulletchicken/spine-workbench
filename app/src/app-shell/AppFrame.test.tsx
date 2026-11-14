@@ -83,7 +83,7 @@ describe('the one stage frame', () => {
     expect(find('main.stage').getAttribute('aria-label')).toBe('The films');
     expect(find('main.stage').children).toHaveLength(0);
     expect(find('footer.dock.glass').getAttribute('aria-label')).toBe('What to do now');
-    expect(document.querySelectorAll('.scene')).toHaveLength(8);
+    expect(document.querySelectorAll('.scene')).toHaveLength(12);
     expect(document.querySelector('.scene.on')).toBeNull();
     expect(frame.querySelector(':scope > p.notice')).not.toBeNull();
     expect(find('.app-frame').getAttribute('data-step')).toBe('');

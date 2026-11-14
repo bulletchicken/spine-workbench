@@ -1,0 +1,256 @@
+{
+  "cells": [
+    {
+      "coordinate": {
+        "key": "outer-width-ratio-max",
+        "group": "adult-cadaver"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 0.8
+      },
+      "unit": "ratio",
+      "source": "misenhimer-1989",
+      "section": "screw-sizing-and-placement.md §3 and P1"
+    },
+    {
+      "coordinate": {
+        "key": "outer-width-ratio-max",
+        "group": "expansion-25"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 1.25
+      },
+      "unit": "ratio",
+      "source": "sato-2022",
+      "section": "screw-sizing-and-placement.md P1",
+      "qualifier": "Cited expansion limit, not a direct estimate from this cohort; Takeshita/Yazici primaries not read in full."
+    },
+    {
+      "coordinate": {
+        "key": "outer-width-ratio",
+        "group": "upendra-cited"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 0.8,
+        "upper": 1.15
+      },
+      "unit": "ratio",
+      "source": "upendra-2010",
+      "section": "screw-sizing-and-placement.md §3 and P1",
+      "qualifier": "Range cited from other work, not newly measured by Upendra."
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-enlargement",
+        "group": "sato-cited"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 15,
+        "upper": 25
+      },
+      "unit": "percent",
+      "source": "sato-2022",
+      "section": "screw-sizing-and-placement.md §3"
+    },
+    {
+      "coordinate": {
+        "key": "screw-diameter",
+        "group": "expansion-25"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 4.0
+      },
+      "unit": "mm",
+      "source": "sato-2022",
+      "section": "screw-sizing-and-placement.md §3"
+    },
+    {
+      "coordinate": {
+        "key": "outer-width-required-above",
+        "group": "expansion-25"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 3.2
+      },
+      "unit": "mm",
+      "source": "sato-2022",
+      "section": "screw-sizing-and-placement.md §3"
+    },
+    {
+      "coordinate": {
+        "key": "expansion-by-level",
+        "group": "grabala"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 47,
+        "upper": 71
+      },
+      "unit": "percent",
+      "source": "grabala-2023",
+      "section": "screw-sizing-and-placement.md P1; citation-audit-placement-tables.md §A Grabala 2023, Table 3; §B.10",
+      "qualifier": "Approximate range as printed in P1; width definition unclear. Not a diameter-ratio conversion. Mixed-cause cohort n = 230: idiopathic 164, congenital 25, neuromuscular 23 and syndromic 18; not AIS only. Table 3 has internal discrepancies: T5 postoperative 6.07 minus preoperative 3.79 is reported in the audit as 2.28 versus printed Mean Expanding 2.55; L3 6.88 minus 5.14 as 1.74 versus 2.89; L5 7.02 minus 5.68 as 1.34 versus 2.68. Preoperative N = 7954 and postoperative N = 5080 are different pedicle sets. The published expansion values are retained without repair."
+    },
+    {
+      "coordinate": {
+        "key": "expansion",
+        "group": "grabala-table-5.0"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 32
+      },
+      "unit": "percent",
+      "source": "grabala-2023",
+      "section": "screw-sizing-and-placement.md §3; citation-audit-placement-tables.md §A Grabala 2023, Table 6; §B.10",
+      "qualifier": "Percentage, not a multiplier; MRI width definition unclear. Mixed-cause cohort n = 230: idiopathic 164, congenital 25, neuromuscular 23 and syndromic 18; not AIS only. Table 3 has internal discrepancies: T5 postoperative 6.07 minus preoperative 3.79 is reported in the audit as 2.28 versus printed Mean Expanding 2.55; L3 6.88 minus 5.14 as 1.74 versus 2.89; L5 7.02 minus 5.68 as 1.34 versus 2.68. Preoperative N = 7954 and postoperative N = 5080 are different pedicle sets. The published expansion values are retained without repair."
+    },
+    {
+      "coordinate": {
+        "key": "expansion",
+        "group": "grabala-table-5.5"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 39
+      },
+      "unit": "percent",
+      "source": "grabala-2023",
+      "section": "screw-sizing-and-placement.md §3; citation-audit-placement-tables.md §A Grabala 2023, Table 6; §B.10",
+      "qualifier": "Percentage, not a multiplier; MRI width definition unclear. Mixed-cause cohort n = 230: idiopathic 164, congenital 25, neuromuscular 23 and syndromic 18; not AIS only. Table 3 has internal discrepancies: T5 postoperative 6.07 minus preoperative 3.79 is reported in the audit as 2.28 versus printed Mean Expanding 2.55; L3 6.88 minus 5.14 as 1.74 versus 2.89; L5 7.02 minus 5.68 as 1.34 versus 2.68. Preoperative N = 7954 and postoperative N = 5080 are different pedicle sets. The published expansion values are retained without repair."
+    },
+    {
+      "coordinate": {
+        "key": "expansion",
+        "group": "grabala-table-6.0"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 49
+      },
+      "unit": "percent",
+      "source": "grabala-2023",
+      "section": "screw-sizing-and-placement.md §3; citation-audit-placement-tables.md §A Grabala 2023, Table 6; §B.10",
+      "qualifier": "Percentage, not a multiplier; MRI width definition unclear. Mixed-cause cohort n = 230: idiopathic 164, congenital 25, neuromuscular 23 and syndromic 18; not AIS only. Table 3 has internal discrepancies: T5 postoperative 6.07 minus preoperative 3.79 is reported in the audit as 2.28 versus printed Mean Expanding 2.55; L3 6.88 minus 5.14 as 1.74 versus 2.89; L5 7.02 minus 5.68 as 1.34 versus 2.68. Preoperative N = 7954 and postoperative N = 5080 are different pedicle sets. The published expansion values are retained without repair."
+    },
+    {
+      "coordinate": {
+        "key": "expansion",
+        "group": "grabala-table-6.5"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 67
+      },
+      "unit": "percent",
+      "source": "grabala-2023",
+      "section": "screw-sizing-and-placement.md §3; citation-audit-placement-tables.md §A Grabala 2023, Table 6; §B.10",
+      "qualifier": "Percentage, not a multiplier; MRI width definition unclear. Mixed-cause cohort n = 230: idiopathic 164, congenital 25, neuromuscular 23 and syndromic 18; not AIS only. Table 3 has internal discrepancies: T5 postoperative 6.07 minus preoperative 3.79 is reported in the audit as 2.28 versus printed Mean Expanding 2.55; L3 6.88 minus 5.14 as 1.74 versus 2.89; L5 7.02 minus 5.68 as 1.34 versus 2.68. Preoperative N = 7954 and postoperative N = 5080 are different pedicle sets. The published expansion values are retained without repair."
+    },
+    {
+      "coordinate": {
+        "key": "expansion",
+        "group": "grabala-table-7.0"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 78
+      },
+      "unit": "percent",
+      "source": "grabala-2023",
+      "section": "screw-sizing-and-placement.md §3; citation-audit-placement-tables.md §A Grabala 2023, Table 6; §B.10",
+      "qualifier": "Percentage, not a multiplier; MRI width definition unclear. Mixed-cause cohort n = 230: idiopathic 164, congenital 25, neuromuscular 23 and syndromic 18; not AIS only. Table 3 has internal discrepancies: T5 postoperative 6.07 minus preoperative 3.79 is reported in the audit as 2.28 versus printed Mean Expanding 2.55; L3 6.88 minus 5.14 as 1.74 versus 2.89; L5 7.02 minus 5.68 as 1.34 versus 2.68. Preoperative N = 7954 and postoperative N = 5080 are different pedicle sets. The published expansion values are retained without repair."
+    },
+    {
+      "coordinate": {
+        "key": "expansion",
+        "group": "grabala-text-5.0"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 39
+      },
+      "unit": "percent",
+      "source": "grabala-2023",
+      "section": "screw-sizing-and-placement.md §3; citation-audit-placement-tables.md §A Grabala 2023, discussion; §B.10",
+      "qualifier": "Internal source conflict: text gives 39%, table gives 32% for 5.0 mm. Mixed-cause cohort n = 230: idiopathic 164, congenital 25, neuromuscular 23 and syndromic 18; not AIS only. Table 3 has internal discrepancies: T5 postoperative 6.07 minus preoperative 3.79 is reported in the audit as 2.28 versus printed Mean Expanding 2.55; L3 6.88 minus 5.14 as 1.74 versus 2.89; L5 7.02 minus 5.68 as 1.34 versus 2.68. Preoperative N = 7954 and postoperative N = 5080 are different pedicle sets. The published expansion values are retained without repair."
+    },
+    {
+      "coordinate": {
+        "key": "expansion",
+        "group": "grabala-age-2-5"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 49
+      },
+      "unit": "percent",
+      "source": "grabala-2023",
+      "section": "screw-sizing-and-placement.md §3; citation-audit-placement-tables.md §A Grabala 2023, Table 1 and age-group results; §B.10",
+      "qualifier": "Mixed-cause cohort n = 230: idiopathic 164, congenital 25, neuromuscular 23 and syndromic 18; not AIS only. Table 3 has internal discrepancies: T5 postoperative 6.07 minus preoperative 3.79 is reported in the audit as 2.28 versus printed Mean Expanding 2.55; L3 6.88 minus 5.14 as 1.74 versus 2.89; L5 7.02 minus 5.68 as 1.34 versus 2.68. Preoperative N = 7954 and postoperative N = 5080 are different pedicle sets. The published expansion values are retained without repair."
+    },
+    {
+      "coordinate": {
+        "key": "expansion",
+        "group": "grabala-age-6-10"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 52
+      },
+      "unit": "percent",
+      "source": "grabala-2023",
+      "section": "screw-sizing-and-placement.md §3; citation-audit-placement-tables.md §A Grabala 2023, Table 1 and age-group results; §B.10",
+      "qualifier": "Mixed-cause cohort n = 230: idiopathic 164, congenital 25, neuromuscular 23 and syndromic 18; not AIS only. Table 3 has internal discrepancies: T5 postoperative 6.07 minus preoperative 3.79 is reported in the audit as 2.28 versus printed Mean Expanding 2.55; L3 6.88 minus 5.14 as 1.74 versus 2.89; L5 7.02 minus 5.68 as 1.34 versus 2.68. Preoperative N = 7954 and postoperative N = 5080 are different pedicle sets. The published expansion values are retained without repair."
+    },
+    {
+      "coordinate": {
+        "key": "expansion",
+        "group": "grabala-age-11-18"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 62
+      },
+      "unit": "percent",
+      "source": "grabala-2023",
+      "section": "screw-sizing-and-placement.md §3; citation-audit-placement-tables.md §A Grabala 2023, Table 1 and age-group results; §B.10",
+      "qualifier": "Mixed-cause cohort n = 230: idiopathic 164, congenital 25, neuromuscular 23 and syndromic 18; not AIS only. Table 3 has internal discrepancies: T5 postoperative 6.07 minus preoperative 3.79 is reported in the audit as 2.28 versus printed Mean Expanding 2.55; L3 6.88 minus 5.14 as 1.74 versus 2.89; L5 7.02 minus 5.68 as 1.34 versus 2.68. Preoperative N = 7954 and postoperative N = 5080 are different pedicle sets. The published expansion values are retained without repair."
+    },
+    {
+      "coordinate": {
+        "key": "deviation-odds",
+        "group": "screw-pedicle-ratio"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 1.607
+      },
+      "unit": "ratio",
+      "source": "katsumi-2025",
+      "section": "screw-sizing-and-placement.md §3",
+      "qualifier": "Increment of the ratio corresponding to the OR is not supplied; cannot be used as a dose-response coefficient."
+    },
+    {
+      "coordinate": {
+        "key": "hard-floor-failure",
+        "group": "p1-inner-under-one"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 22,
+        "upper": 31
+      },
+      "unit": "percent",
+      "source": "screw-p1-hard-floor",
+      "section": "screw-sizing-and-placement.md P1, Hard floor",
+      "qualifier": "Approximate 22–31% failure summary for inner channel < 1 mm, printed as even with robot. P1 cites Akazawa 2015 (810 pedicles) and Ueno 2025 (465 screws), not a pooled cohort. Detailed §3 separately reports Akazawa 2015 grade-4 31.5% and robot/navigation grade-4 20.4–22.2% (Ueno 2025 and Akazawa 2023). These different conditions and precisions are retained, not equated."
+    }
+  ]
+}

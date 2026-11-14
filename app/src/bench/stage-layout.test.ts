@@ -93,3 +93,13 @@ describe('the stage layout', () => {
     }
   });
 });
+
+
+it('packs only present films into the left rail, including a Front-only case', () => {
+  const one = stageLayout({ width: 1280, height: 672, displayHeight: 0, moment: 'three', present: ['front'] });
+  expect(one.spots.front).toEqual({ x: 0, y: 270, width: 66, height: 132, radius: 'small' });
+  expect(one.spots.side).toBeNull();
+  const four = stageLayout({ width: 1004, height: 532, displayHeight: 0, moment: 'three', present: ['bend-right', 'side', 'front', 'bend-left'] });
+  expect(four.spots.front).toMatchObject({ y: 0, width: 62, height: 124 });
+  expect(four.spots['bend-right']).toMatchObject({ y: 408 });
+});

@@ -1,0 +1,44 @@
+{
+  "what": "Goodman equivalent fully reversed stress amplitudes, including zero mean, a mean near ultimate and a non-finite domain boundary.",
+  "units": {"force": "N", "length": "mm", "moment": "N·mm", "angle": "radians", "stress": "N/mm² (MPa)", "denominator": "dimensionless"},
+  "axes": {"frame": "right-handed Cartesian, synthetic origin", "x": "anterior, the rod's longitudinal stress direction", "y": "patient-left", "z": "superior", "vectorOrder": ["x", "y", "z"]},
+  "signConvention": "Scalar longitudinal stress is tensile-positive. amplitudeMpa is the nonnegative half range, meanMpa the signed cycle mean and ultimateMpa a positive tensile ultimate stress. equivalentAmplitudeMpa is the nonnegative fully reversed amplitude. For meanMpa >= ultimateMpa this fixture expects status no-finite-answer and a null amplitude, never a finite, negative, clamped or zero result. Status and null are compared exactly, not by tolerance.",
+  "tolerance": {"relative": 1e-10, "absolute": 1e-12, "rule": "abs(actual - expected) <= absolute + relative * abs(expected), for finite numeric outputs in their stated units", "why": "Closed-form arithmetic with at least 16 significant digits. The 0.001 near-ultimate denominator is far enough from zero for this tight bound; no tolerance crosses the exact domain boundary."},
+  "cases": [
+    {
+      "what": "zero mean leaves the amplitude unchanged",
+      "input": {"amplitudeMpa": 100, "meanMpa": 0, "ultimateMpa": 1000},
+      "expect": {"status": "finite", "denominator": 1, "equivalentAmplitudeMpa": 100}
+    },
+    {
+      "what": "mean at one quarter of ultimate",
+      "input": {"amplitudeMpa": 100, "meanMpa": 250, "ultimateMpa": 1000},
+      "expect": {"status": "finite", "denominator": 0.75, "equivalentAmplitudeMpa": 133.33333333333333}
+    },
+    {
+      "what": "mean at half of ultimate",
+      "input": {"amplitudeMpa": 150, "meanMpa": 500, "ultimateMpa": 1000},
+      "expect": {"status": "finite", "denominator": 0.5, "equivalentAmplitudeMpa": 300}
+    },
+    {
+      "what": "different amplitude and ultimate, mean at three quarters of ultimate",
+      "input": {"amplitudeMpa": 40, "meanMpa": 600, "ultimateMpa": 800},
+      "expect": {"status": "finite", "denominator": 0.25, "equivalentAmplitudeMpa": 160}
+    },
+    {
+      "what": "mean at 99.9 percent of ultimate",
+      "input": {"amplitudeMpa": 25, "meanMpa": 999, "ultimateMpa": 1000},
+      "expect": {"status": "finite", "denominator": 0.001, "equivalentAmplitudeMpa": 25000}
+    },
+    {
+      "what": "mean reaches ultimate; positive amplitude has no finite answer",
+      "input": {"amplitudeMpa": 25, "meanMpa": 1000, "ultimateMpa": 1000},
+      "expect": {"status": "no-finite-answer", "denominator": 0, "equivalentAmplitudeMpa": null}
+    },
+    {
+      "what": "mean exceeds ultimate; the Goodman conversion is outside its finite-amplitude domain",
+      "input": {"amplitudeMpa": 25, "meanMpa": 1100, "ultimateMpa": 1000},
+      "expect": {"status": "no-finite-answer", "denominator": -0.1, "equivalentAmplitudeMpa": null}
+    }
+  ]
+}

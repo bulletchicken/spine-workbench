@@ -1,0 +1,1621 @@
+{
+  "cells": [
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "ageBand": "5-8",
+        "group": "zheng-t4-t6"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 1.55,
+        "upper": 1.81
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "citation-audit-placement-tables.md, A zheng-2009 and B3; Zheng Table 1 (full text)",
+      "qualifier": "Note-supplied pooled T4–T6 range for ages 5–8. The paper gives individual level and sex cells with spreads; the complete Table 1 cells are retained separately. [own inference] The first Table 1 row at each level is read as inner width and the second as outer width; the paper does not label those rows. The unlabelled ± is treated as SD only by project inference."
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T1",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "3.19 ± 0.63",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 3.19,
+        "spread": 0.63
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T1",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "2.95 ± 0.53",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 2.95,
+        "spread": 0.53
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T1",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009; §C.12",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "4.15 ± 0.15",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 4.15,
+        "spread": 0.15
+      },
+      "mark": {
+        "kind": "doubtful",
+        "reason": "Table 1 prints a ± spread of 0.15 at T1, first row, 9–11-year boys, unusually small next to neighbouring values; retained as printed without correction."
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T1",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "3.26 ± 0.52",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 3.26,
+        "spread": 0.52
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T1",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "4.41 ± 0.93",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 4.41,
+        "spread": 0.93
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T1",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "3.76 ± 0.70",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 3.76,
+        "spread": 0.7
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T2",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "2.25 ± 0.57",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 2.25,
+        "spread": 0.57
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T2",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "2.61 ± 0.54",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 2.61,
+        "spread": 0.54
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T2",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "3.27 ± 0.49",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 3.27,
+        "spread": 0.49
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T2",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "2.81 ± 0.51",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 2.81,
+        "spread": 0.51
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T2",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "3.52 ± 0.77",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 3.52,
+        "spread": 0.77
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T2",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "3.09 ± 0.65",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 3.09,
+        "spread": 0.65
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T3",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "2.07 ± 0.38",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 2.07,
+        "spread": 0.38
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T3",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "2.14 ± 0.41",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 2.14,
+        "spread": 0.41
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T3",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "2.70 ± 0.60",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 2.7,
+        "spread": 0.6
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T3",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "2.28 ± 0.36",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 2.28,
+        "spread": 0.36
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T3",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "2.98 ± 0.73",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 2.98,
+        "spread": 0.73
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T3",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "2.50 ± 0.47",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 2.5,
+        "spread": 0.47
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T4",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "1.76 ± 0.42",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 1.76,
+        "spread": 0.42
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T4",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "1.55 ± 0.28",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 1.55,
+        "spread": 0.28
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T4",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "1.97 ± 0.43",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 1.97,
+        "spread": 0.43
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T4",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "1.94 ± 0.35",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 1.94,
+        "spread": 0.35
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T4",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "2.25 ± 0.66",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 2.25,
+        "spread": 0.66
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T4",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "2.06 ± 0.53",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 2.06,
+        "spread": 0.53
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T5",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "1.66 ± 0.42",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 1.66,
+        "spread": 0.42
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T5",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "1.65 ± 0.27",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 1.65,
+        "spread": 0.27
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T5",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "2.20 ± 0.49",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 2.2,
+        "spread": 0.49
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T5",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "1.90 ± 0.31",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 1.9,
+        "spread": 0.31
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T5",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "2.29 ± 0.50",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 2.29,
+        "spread": 0.5
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T5",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "2.13 ± 0.43",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 2.13,
+        "spread": 0.43
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T6",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "1.81 ± 0.37",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 1.81,
+        "spread": 0.37
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T6",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "1.73 ± 0.27",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 1.73,
+        "spread": 0.27
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T6",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "2.24 ± 0.68",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 2.24,
+        "spread": 0.68
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T6",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "1.91 ± 0.39",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 1.91,
+        "spread": 0.39
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T6",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "2.42 ± 0.55",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 2.42,
+        "spread": 0.55
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T6",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "2.26 ± 0.50",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 2.26,
+        "spread": 0.5
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T7",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "1.99 ± 0.43",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 1.99,
+        "spread": 0.43
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T7",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "1.86 ± 0.57",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 1.86,
+        "spread": 0.57
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T7",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "2.45 ± 0.69",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 2.45,
+        "spread": 0.69
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T7",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "1.96 ± 0.35",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 1.96,
+        "spread": 0.35
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T7",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "2.58 ± 0.64",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 2.58,
+        "spread": 0.64
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T7",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "2.39 ± 0.49",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 2.39,
+        "spread": 0.49
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T8",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "2.26 ± 0.54",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 2.26,
+        "spread": 0.54
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T8",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "1.98 ± 0.35",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 1.98,
+        "spread": 0.35
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T8",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "2.71 ± 0.66",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 2.71,
+        "spread": 0.66
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T8",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "2.38 ± 0.53",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 2.38,
+        "spread": 0.53
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T8",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "3.16 ± 1.50",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 3.16,
+        "spread": 1.5
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T8",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "2.64 ± 0.51",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 2.64,
+        "spread": 0.51
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T9",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "2.60 ± 0.56",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 2.6,
+        "spread": 0.56
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T9",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "2.14 ± 0.36",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 2.14,
+        "spread": 0.36
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T9",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "2.93 ± 0.62",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 2.93,
+        "spread": 0.62
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T9",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "2.53 ± 0.62",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 2.53,
+        "spread": 0.62
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T9",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "3.30 ± 0.90",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 3.3,
+        "spread": 0.9
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T9",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "2.84 ± 0.62",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 2.84,
+        "spread": 0.62
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T10",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "2.86 ± 0.71",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 2.86,
+        "spread": 0.71
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T10",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "2.42 ± 0.49",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 2.42,
+        "spread": 0.49
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T10",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "3.31 ± 0.65",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 3.31,
+        "spread": 0.65
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T10",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "2.99 ± 0.64",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 2.99,
+        "spread": 0.64
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T10",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "3.98 ± 0.98",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 3.98,
+        "spread": 0.98
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T10",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "3.39 ± 0.97",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 3.39,
+        "spread": 0.97
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T11",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "3.21 ± 0.65",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 3.21,
+        "spread": 0.65
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T11",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "2.89 ± 0.63",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 2.89,
+        "spread": 0.63
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T11",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "3.81 ± 0.78",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 3.81,
+        "spread": 0.78
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T11",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "3.42 ± 0.80",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 3.42,
+        "spread": 0.8
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T11",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "4.65 ± 1.00",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 4.65,
+        "spread": 1.0
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T11",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "4.13 ± 1.28",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 4.13,
+        "spread": 1.28
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T12",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "3.51 ± 0.69",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 3.51,
+        "spread": 0.69
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T12",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "3.22 ± 0.69",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 3.22,
+        "spread": 0.69
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T12",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "4.31 ± 0.75",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 4.31,
+        "spread": 0.75
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T12",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "3.73 ± 0.85",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 3.73,
+        "spread": 0.85
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T12",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "4.99 ± 1.05",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 4.99,
+        "spread": 1.05
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "level": "T12",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
+      "printed": "4.63 ± 1.32",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 4.63,
+        "spread": 1.32
+      }
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "group": "sato-apex-one",
+        "curveSide": "convex"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 2.6,
+        "spread": 0.7
+      },
+      "unit": "mm",
+      "source": "sato-2022",
+      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 2; §B Sato 2022; §C.1",
+      "qualifier": "Measurements are in a plane perpendicular to the pedicle axis through the isthmus. The table prints ± without defining its statistic. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper states right is always convex and left always concave. Per-cell observation counts are not supplied.",
+      "range": {
+        "lower": 1.2,
+        "upper": 4.0
+      },
+      "printed": "2.6 ± 0.7 (1.2–4.0)",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "group": "sato-apex-one",
+        "curveSide": "concave"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 1.7,
+        "spread": 0.7
+      },
+      "unit": "mm",
+      "source": "sato-2022",
+      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 2; §B Sato 2022; §C.1",
+      "qualifier": "Measurements are in a plane perpendicular to the pedicle axis through the isthmus. The table prints ± without defining its statistic. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper states right is always convex and left always concave. Per-cell observation counts are not supplied.",
+      "range": {
+        "lower": 0.2,
+        "upper": 3.9
+      },
+      "printed": "1.7 ± 0.7 (0.2–3.9)",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "p-value-max",
+        "group": "sato-apex-one-inner-width"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 0.001
+      },
+      "unit": "ratio",
+      "source": "sato-2022",
+      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 2; §B Sato 2022; §C.1",
+      "qualifier": "Right-versus-left comparison for this measurement and region; strictly less than the printed bound. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper states right is always convex and left always concave. Per-cell observation counts are not supplied.",
+      "printed": "< 0.001*",
+      "decimals": 3
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "group": "sato-neutral-one",
+        "curveSide": "convex"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 1.7,
+        "spread": 0.7
+      },
+      "unit": "mm",
+      "source": "sato-2022",
+      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 2; §B Sato 2022; §C.1",
+      "qualifier": "Measurements are in a plane perpendicular to the pedicle axis through the isthmus. The table prints ± without defining its statistic. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper states right is always convex and left always concave. Per-cell observation counts are not supplied.",
+      "range": {
+        "lower": 0.2,
+        "upper": 3.9
+      },
+      "printed": "1.7 ± 0.7 (0.2–3.9)",
+      "decimals": 1,
+      "mark": {
+        "kind": "probable-copy",
+        "reason": "full-tables-from-five-papers.md §B Sato and §C.1: the right-side NV ±1 block repeats the left-side APEX ±1 block in 11 of 12 numbers, a probable copy error. The right-side neutral block is not used; values remain as printed."
+      },
+      "usage": "printed-only"
+    },
+    {
+      "coordinate": {
+        "key": "inner-width",
+        "group": "sato-neutral-one",
+        "curveSide": "concave"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 1.8,
+        "spread": 0.7
+      },
+      "unit": "mm",
+      "source": "sato-2022",
+      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 2; §B Sato 2022; §C.1",
+      "qualifier": "Measurements are in a plane perpendicular to the pedicle axis through the isthmus. The table prints ± without defining its statistic. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper states right is always convex and left always concave. Per-cell observation counts are not supplied.",
+      "range": {
+        "lower": 0.7,
+        "upper": 4.1
+      },
+      "printed": "1.8 ± 0.7 (0.7–4.1)",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "p-value",
+        "group": "sato-neutral-one-inner-width"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 0.903
+      },
+      "unit": "ratio",
+      "source": "sato-2022",
+      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 2; §B Sato 2022; §C.1",
+      "qualifier": "Right-versus-left comparison for this measurement and region; Exact p-value as printed. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper states right is always convex and left always concave. Per-cell observation counts are not supplied.",
+      "printed": "0.903",
+      "decimals": 3
+    }
+  ],
+  "definitions": [
+    {
+      "key": "zheng-transverse-inner-diameter",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §B, Zheng 2009; §C.2",
+      "text": "Figure 1 defines transverse diameter as “the medial-lateral inner and outer cortical width of the pedicle” measured at the isthmus. Three measurements per parameter at the isthmus were averaged. Table 1 does not label which of its two rows is inner or outer: assigning the first row as inner and second as outer is this project’s own inference. The paper does not define the ± statistic; interpreting it as SD is this project’s own inference. The paper states a total of 120 children aged 5–14, selected by stratified random sampling; per-age-band and sex counts are not stated."
+    },
+    {
+      "key": "sato-table-2",
+      "source": "sato-2022",
+      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 2",
+      "text": "Differences in right and left pedicle diameters; columns: Variables |  |  | Rt. Pedicles | Lt. Pedicles | p-values. *Statistically significant. APEX±1, the region of the AV and its two adjacent vertebrae; H, cortical pedicle height; h, cancellous pedicle height; NV ± 1, the region of the NV and its two adjacent vertebrae; W, cortical pedicle width; w, cancellous pedicle width"
+    },
+    {
+      "key": "sato-isthmus-plane",
+      "source": "sato-2022",
+      "section": "full-tables-from-five-papers.md §B Sato 2022",
+      "text": "Measured by \"cutting out pedicles in a plane perpendicular to the pedicle axis through the isthmus\". Fig. 1 names W cortical pedicle width and w cancellous pedicle width; the discussion treats W as the outer diameter. Right pedicle is always convex; left pedicle is always concave. H is cortical pedicle height and h cancellous pedicle height. Per-cell n is not supplied."
+    },
+    {
+      "key": "zheng-2009-table-1-wording",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, zheng-2009 Table 1",
+      "text": "Transverse inner and outer pedicle diameters (mm); column headers (verbatim, separated by |):  | 5–8 years / M | 5–8 years / F | 9–11 years / M | 9–11 years / F | 12–14 years / M | 12–14 years / F"
+    },
+    {
+      "key": "sato-2022-table-2-wording",
+      "source": "sato-2022",
+      "section": "full-tables-from-five-papers.md §A, sato-2022 Table 2",
+      "text": "Differences in right and left pedicle diameters; column headers (verbatim, separated by |): Variables |  |  | Rt. Pedicles | Lt. Pedicles | p-values. Footnotes: *Statistically significant. APEX±1, the region of the AV and its two adjacent vertebrae; H, cortical pedicle height; h, cancellous pedicle height; NV ± 1, the region of the NV and its two adjacent vertebrae; W, cortical pedicle width; w, cancellous pedicle width"
+    }
+  ]
+}
