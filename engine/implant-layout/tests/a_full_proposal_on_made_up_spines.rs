@@ -146,13 +146,17 @@ fn film(answer: &FilmAnswer, template: Template, size: [u32; 2]) -> FilmToFit {
     }
 }
 fn fixture(name: RecipeName) -> (LayoutInput, Vec<FilmToFit>) {
+    fixture_seed(name, 1)
+}
+
+fn fixture_seed(name: RecipeName, seed: u32) -> (LayoutInput, Vec<FilmToFit>) {
     let recipe = MadeUpRecipe {
         name,
-        seed: 1,
+        seed,
         tier: Tier::T0,
     };
-    let patient = make_up_patient(name, 1).expect("the named recipe stacks");
-    let layouts: Vec<_> = film_recipes(&recipe, 1)
+    let patient = make_up_patient(name, seed).expect("the named recipe stacks");
+    let layouts: Vec<_> = film_recipes(&recipe, u64::from(seed))
         .iter()
         .map(|r| FilmLayout::new(r, spine_for(&patient, r.kind)))
         .collect();
@@ -233,7 +237,7 @@ fn fixture(name: RecipeName) -> (LayoutInput, Vec<FilmToFit>) {
             },
             naming: NamingDoubt::AsRead,
             versions: 32,
-            seed: 1,
+            seed,
             pedicle_child_share: None,
         },
         films,
@@ -800,4 +804,354 @@ fn an_absent_width_has_missing_provenance() {
     assert_eq!(estimate.outer_width_mm, None);
     assert_eq!(estimate.inner_width_mm, None);
     assert_eq!(estimate.status, ValueStatus::Missing);
+}
+
+#[test]
+#[ignore = "fits a full front film; run explicitly in release"]
+fn a_front_only_fit_keeps_a_drawable_placement() {
+    let (mut input, films) = fixture_seed(RecipeName::RightThoracic40, 2);
+    input.fit = joint_fit::fit_from_films(&FitFromFilms {
+        front: films[0].clone(),
+        side: None,
+        typical: TypicalSource::BuiltIn,
+        twist_readings: Vec::new(),
+    })
+    .unwrap();
+    input.child.age_years = None;
+    let p = propose_layouts(&input).unwrap();
+    assert!(!p.layouts.is_empty(), "{:?}; {:?}", p.cannot_tell, p.curves);
+}
+
+fn hand_input(input: &LayoutInput, first: &ImplantLayout) -> shapes::implant_layout::RebuildInput {
+    use shapes::implant_layout::{AnchorChoice, RebuildInput};
+    RebuildInput {
+        layout: input.clone(),
+        upper: first.upper,
+        lower: first.lower,
+        anchors: first
+            .anchors
+            .iter()
+            .map(|a| AnchorChoice {
+                level: a.level,
+                side: a.side,
+                kind: a.kind,
+                diameter_mm: a.diameter_mm,
+                length_mm: a.length_mm,
+            })
+            .collect(),
+        rod_material: first.rods[0].material,
+        rod_diameter_mm: first.rods[0].diameter_mm,
+    }
+}
+
+#[test]
+fn hand_choices_reproduce_the_first_placement_and_its_draws() {
+    let (mut input, _) = fixture(RecipeName::RightThoracic40);
+    input.versions = 4;
+    let p = propose_layouts(&input).unwrap();
+    assert!(!p.first_is_sketch);
+    assert!(!p.upper_ends.is_empty() && !p.lower_ends.is_empty());
+    let first = p.layouts.into_iter().next().unwrap();
+    let mut rebuilt = implant_layout::rebuild_layout(&hand_input(&input, &first)).unwrap();
+    assert_eq!(rebuilt.id, "changed-by-hand");
+    assert_eq!(rebuilt.change, LayoutChange::ChangedByHand {});
+    rebuilt.id = first.id.clone();
+    rebuilt.change = first.change;
+    assert_eq!(rebuilt, first);
+}
+
+#[test]
+fn moving_an_end_by_hand_adds_complete_anchor_and_rod_data() {
+    let (mut input, _) = fixture(RecipeName::RightThoracic40);
+    input.versions = 4;
+    let p = propose_layouts(&input).unwrap();
+    let first = &p.layouts[0];
+    let mut request = hand_input(&input, first);
+    request.anchors.clear();
+    let lower = input
+        .fit
+        .vertebrae
+        .iter()
+        .position(|v| v.level == first.lower)
+        .unwrap()
+        + 1;
+    request.lower = input.fit.vertebrae[lower].level;
+    let rebuilt = implant_layout::rebuild_layout(&request).unwrap();
+    for anchor in rebuilt.anchors.iter().filter(|a| a.level == request.lower) {
+        assert_eq!(anchor.kind, AnchorKind::Screw);
+        assert!(anchor.diameter_mm.is_some() && anchor.length_mm.is_some());
+        assert!(anchor.screw_here.is_some());
+        assert!(!anchor.wider_than_pedicle.is_empty());
+        assert_eq!(anchor.look_sources.len(), anchor.looks.len());
+        sources(&anchor.sources);
+        sources(&anchor.pedicle.sources);
+    }
+    assert!(
+        rebuilt
+            .rods
+            .iter()
+            .all(|r| r.points_mm.len() == r.standing_points_mm.len())
+    );
+    assert!(!rebuilt.released_levels.contains(&request.lower));
+}
+
+#[test]
+fn hand_sizes_keep_the_ratio_direction_and_population_counts() {
+    let (mut input, _) = fixture(RecipeName::RightThoracic40);
+    input.versions = 4;
+    let p = propose_layouts(&input).unwrap();
+    let first = &p.layouts[0];
+    let mut request = hand_input(&input, first);
+    for anchor in &mut request.anchors {
+        anchor.diameter_mm = None;
+        anchor.length_mm = None;
+    }
+    let index = first
+        .anchors
+        .iter()
+        .position(|a| a.kind == AnchorKind::Screw)
+        .unwrap();
+    let original = &first.anchors[index];
+    let diameter = *p.choices.screw_diameters_mm.last().unwrap();
+    assert_ne!(Some(diameter), original.diameter_mm);
+    let length = *p
+        .choices
+        .screw_lengths_mm
+        .iter()
+        .find(|&&mm| Some(mm) != original.length_mm)
+        .unwrap();
+    request.anchors[index].diameter_mm = Some(diameter);
+    request.anchors[index].length_mm = Some(length);
+    let empty = first
+        .anchors
+        .iter()
+        .position(|a| {
+            a.screw_here.is_none()
+                && a.pedicle.outer_width_mm.is_some()
+                && a.direction_status == ValueStatus::FromTables
+        })
+        .unwrap();
+    request.anchors[empty].kind = AnchorKind::Screw;
+    request.anchors[empty].diameter_mm = p.choices.screw_diameters_mm.first().copied();
+    request.anchors[empty].length_mm = p.choices.screw_lengths_mm.first().copied();
+    let rebuilt = implant_layout::rebuild_layout(&request).unwrap();
+    let changed = &rebuilt.anchors[index];
+    assert_eq!(changed.diameter_mm, Some(diameter));
+    assert_eq!(changed.length_mm, Some(length));
+    assert_eq!(changed.screw_here, original.screw_here);
+    assert_eq!(changed.diameter_status, ValueStatus::Entered);
+    assert_eq!(changed.length_status, ValueStatus::Entered);
+    assert!(changed.diameter_sources.is_empty() && changed.length_sources.is_empty());
+    assert!(changed.diameter_also_seen.is_empty() && changed.length_also_seen.is_empty());
+    assert_eq!(changed.wider_than_pedicle, original.wider_than_pedicle);
+    assert_eq!(changed.direction_unit, original.direction_unit);
+    let expected =
+        original.screw_to_pedicle.unwrap().p50 * diameter / original.diameter_mm.unwrap();
+    assert!((changed.screw_to_pedicle.unwrap().p50 - expected).abs() < 1e-12);
+    assert!(
+        changed
+            .looks
+            .contains(&shapes::implant_layout::LookCode::MayBeTooNarrow)
+    );
+    assert_eq!(changed.look_sources.len(), changed.looks.len());
+    let filled = &rebuilt.anchors[empty];
+    assert_eq!(filled.kind, AnchorKind::Screw);
+    assert!(filled.medial_angle.is_some() && filled.screw_to_pedicle.is_some());
+    assert!(filled.screw_here.is_none());
+    assert_eq!(filled.diameter_status, ValueStatus::Entered);
+    assert_eq!(filled.length_status, ValueStatus::Entered);
+    assert!(filled.diameter_sources.is_empty() && filled.length_sources.is_empty());
+    assert!(filled.diameter_also_seen.is_empty() && filled.length_also_seen.is_empty());
+}
+
+#[test]
+fn hooks_and_empty_choices_keep_the_table_size_and_its_sources() {
+    let (mut input, _) = fixture(RecipeName::RightThoracic40);
+    input.versions = 4;
+    let first = propose_layouts(&input).unwrap().layouts.remove(0);
+    let mut request = hand_input(&input, &first);
+    let mut screws = first
+        .anchors
+        .iter()
+        .enumerate()
+        .filter(|(_, a)| a.kind == AnchorKind::Screw);
+    let indices = [screws.next().unwrap().0, screws.next().unwrap().0];
+    for (index, kind) in indices
+        .into_iter()
+        .zip([AnchorKind::Hook, AnchorKind::None])
+    {
+        request.anchors[index].kind = kind;
+        request.anchors[index].diameter_mm = None;
+        request.anchors[index].length_mm = None;
+    }
+    let rebuilt = implant_layout::rebuild_layout(&request).unwrap();
+    for index in indices {
+        let original = &first.anchors[index];
+        let changed = &rebuilt.anchors[index];
+        assert_eq!(changed.kind, request.anchors[index].kind);
+        assert!(changed.diameter_mm.is_none() && changed.length_mm.is_none());
+        assert!(changed.screw_here.is_some());
+        assert_eq!(changed.screw_here, original.screw_here);
+        assert_eq!(changed.diameter_sources, original.diameter_sources);
+        assert_eq!(changed.length_sources, original.length_sources);
+        sources(&changed.diameter_sources);
+        sources(&changed.length_sources);
+    }
+}
+
+#[test]
+fn hand_choices_refuse_unfitted_crossed_short_and_off_grid_inputs() {
+    use shapes::errors::{EngineError, ErrorCode};
+    use shapes::implant_layout::RodMaterial;
+    let (mut input, _) = fixture(RecipeName::RightThoracic40);
+    input.versions = 4;
+    let first = propose_layouts(&input).unwrap().layouts.remove(0);
+    let request = hand_input(&input, &first);
+    let mut cases = Vec::new();
+    let mut add = |f: fn(&mut shapes::implant_layout::RebuildInput)| {
+        let mut case = request.clone();
+        f(&mut case);
+        cases.push(case);
+    };
+    add(|r| r.upper = Level::C1);
+    add(|r| r.lower = Level::L7);
+    add(|r| r.lower = r.upper);
+    add(|r| std::mem::swap(&mut r.upper, &mut r.lower));
+    add(|r| r.anchors[0].level = Level::C1);
+    add(|r| r.anchors[0].diameter_mm = Some(4.1));
+    add(|r| r.anchors[0].length_mm = Some(26.0));
+    add(|r| r.anchors[0].diameter_mm = Some(f64::NAN));
+    add(|r| {
+        r.anchors[0].kind = AnchorKind::Hook;
+        r.anchors[0].diameter_mm = Some(4.0);
+        r.anchors[0].length_mm = None;
+    });
+    add(|r| {
+        r.anchors[0].kind = AnchorKind::None;
+        r.anchors[0].diameter_mm = None;
+        r.anchors[0].length_mm = Some(25.0);
+    });
+    add(|r| r.rod_diameter_mm = 5.6);
+    add(|r| r.rod_material = RodMaterial::StainlessSteel);
+    add(|r| r.anchors.push(r.anchors[0]));
+    for side in [BodySide::Left, BodySide::Right] {
+        let mut case = request.clone();
+        let mut occupied = false;
+        for a in case.anchors.iter_mut().filter(|a| a.side == side) {
+            a.kind = if occupied {
+                AnchorKind::None
+            } else {
+                AnchorKind::Hook
+            };
+            a.diameter_mm = None;
+            a.length_mm = None;
+            occupied = true;
+        }
+        cases.push(case);
+    }
+    for case in cases {
+        let error = EngineError::from(implant_layout::rebuild_layout(&case).unwrap_err());
+        assert_eq!(error.code, ErrorCode::CaseInvalidValue, "{}", error.message);
+    }
+}
+
+#[test]
+fn fitted_cervical_extra_lumbar_and_gapped_spans_are_refused() {
+    use shapes::errors::{EngineError, ErrorCode};
+    let (mut input, _) = fixture(RecipeName::SixLumbar);
+    input.versions = 1;
+    let first = propose_layouts(&input).unwrap().layouts.remove(0);
+    let mut request = hand_input(&input, &first);
+    request.anchors.clear();
+    let mut cervical = request.layout.fit.vertebrae[0].clone();
+    cervical.level = Level::C7;
+    cervical.pose.level = Level::C7;
+    cervical.pose.centre[2] += cervical.pose.height;
+    request.layout.fit.vertebrae.insert(0, cervical);
+    assert!(
+        request
+            .layout
+            .fit
+            .vertebrae
+            .iter()
+            .any(|v| v.level == Level::L6)
+    );
+    let mut cases = Vec::new();
+    let mut cervical = request.clone();
+    cervical.upper = Level::C7;
+    cases.push(cervical);
+    let mut extra_lumbar = request.clone();
+    extra_lumbar.lower = Level::L6;
+    cases.push(extra_lumbar);
+    request.upper = Level::T5;
+    request.lower = Level::T8;
+    request
+        .layout
+        .fit
+        .vertebrae
+        .retain(|v| v.level != Level::T6);
+    cases.push(request);
+    for case in cases {
+        assert!(
+            case.layout
+                .fit
+                .vertebrae
+                .iter()
+                .any(|v| v.level == case.upper)
+        );
+        assert!(
+            case.layout
+                .fit
+                .vertebrae
+                .iter()
+                .any(|v| v.level == case.lower)
+        );
+        let error = EngineError::from(implant_layout::rebuild_layout(&case).unwrap_err());
+        assert_eq!(error.code, ErrorCode::CaseInvalidValue);
+        assert!(error.message.contains("instrumented-span-not-fitted"));
+    }
+}
+
+#[test]
+fn a_hand_hook_without_a_table_direction_is_refused() {
+    use shapes::errors::{EngineError, ErrorCode};
+    use shapes::implant_layout::AnchorChoice;
+    let (mut input, _) = fixture(RecipeName::RightThoracic40);
+    input.versions = 1;
+    let first = propose_layouts(&input).unwrap().layouts.remove(0);
+    let mut request = hand_input(&input, &first);
+    request.layout.child.age_years = Some(10.0);
+    request.upper = Level::T5;
+    request.lower = Level::L2;
+    request.anchors = vec![AnchorChoice {
+        level: Level::L1,
+        side: BodySide::Left,
+        kind: AnchorKind::Hook,
+        diameter_mm: None,
+        length_mm: None,
+    }];
+    let error = EngineError::from(implant_layout::rebuild_layout(&request).unwrap_err());
+    assert_eq!(error.code, ErrorCode::CaseInvalidValue);
+    assert!(error.message.contains("hook-direction-missing"));
+}
+
+#[test]
+fn a_sketch_keeps_the_rule_end_counts_empty() {
+    let (mut input, _) = fixture(RecipeName::RightThoracic40);
+    input.versions = 1;
+    let mut readings = implant_layout::proposal::measure(&input).unwrap();
+    readings.regions.clear();
+    let major = readings.nominal.major.unwrap();
+    readings.nominal.curves[major].upper_index = 9;
+    readings.nominal.curves[major].lower_index = 10;
+    let sketch = implant_layout::proposal::assemble(&input, &readings).unwrap();
+    assert!(!sketch.layouts.is_empty());
+    assert!(sketch.first_is_sketch);
+    assert!(sketch.upper_ends.is_empty() && sketch.lower_ends.is_empty());
+    assert!(
+        !sketch
+            .cannot_tell
+            .iter()
+            .any(|c| c.code == CannotTellCode::EndsUnsettled)
+    );
 }

@@ -35,7 +35,7 @@ fn each_refusal_takes_an_existing_code_and_keeps_its_name() {
 }
 
 #[test]
-fn rebuilding_a_layout_refuses_with_its_unbuilt_reason() {
+fn rebuilding_with_unfitted_ends_is_an_invalid_value() {
     use implant_layout::rebuild_layout;
     use shapes::implant_layout::{ChildFacts, LayoutInput, NamingDoubt, RebuildInput, RodMaterial};
     use shapes::levels::Level;
@@ -81,8 +81,8 @@ fn rebuilding_a_layout_refuses_with_its_unbuilt_reason() {
         rod_diameter_mm: 5.5,
     };
     let error = rebuild_layout(&input).unwrap_err();
-    assert_eq!(error, LayoutError::RebuildNotBuilt);
+    assert!(matches!(error, LayoutError::InvalidValue { .. }));
     let crossed = EngineError::from(error);
-    assert_eq!(crossed.code, ErrorCode::ToolRefused);
-    assert_eq!(crossed.detail.as_deref(), Some("rebuild-not-built"));
+    assert_eq!(crossed.code, ErrorCode::CaseInvalidValue);
+    assert_eq!(crossed.detail, Some(crossed.message));
 }

@@ -273,6 +273,10 @@ fn an_explicit_extra_bows_the_concave_rod_while_the_convex_one_keeps_every_head(
     .unwrap();
     for rod in rods {
         let heads = target_heads(&fit, &anchors, rod.side, &levels, rod.head_offset_mm);
+        assert_eq!(rod.standing_points_mm.len(), rod.points_mm.len());
+        for head in &heads {
+            assert!(distance_to_polyline(*head, &rod.standing_points_mm) < 1e-9);
+        }
         for head in [heads[0], heads[heads.len() - 1]] {
             assert!(
                 distance_to_polyline(head, &rod.points_mm) < 1e-9,
@@ -468,6 +472,12 @@ fn reflected_spines_exchange_the_two_contours_without_changing_their_shape() {
             assert!((p[1] + q[1]).abs() < 1e-9);
             assert!((p[2] - q[2]).abs() < 1e-9);
         }
+        assert_eq!(a.standing_points_mm.len(), b.standing_points_mm.len());
+        for (p, q) in a.standing_points_mm.iter().zip(&b.standing_points_mm) {
+            assert!((p[0] - q[0]).abs() < 1e-9);
+            assert!((p[1] + q[1]).abs() < 1e-9);
+            assert!((p[2] - q[2]).abs() < 1e-9);
+        }
     }
 }
 
@@ -492,12 +502,91 @@ fn the_first_rods_have_no_extra_and_pass_through_the_standing_heads_of_an_alread
     .unwrap();
     for rod in rods {
         assert_eq!(rod.overbend_deg, 0.0);
+        assert_eq!(rod.standing_points_mm.len(), rod.points_mm.len());
+        for (standing, target) in rod.standing_points_mm.iter().zip(&rod.points_mm) {
+            assert!((Vector3::from(*standing) - Vector3::from(*target)).norm() < 1e-9);
+        }
         assert!(
             !rod.sources.iter().any(|s| s == "cidambi-2012"),
             "no unapplied overbend is cited"
         );
         for head in target_heads(&fit, &anchors, rod.side, &levels, rod.head_offset_mm) {
             assert!(distance_to_polyline(head, &rod.points_mm) < 1e-9);
+        }
+    }
+}
+
+#[test]
+fn standing_lines_keep_the_occupied_heads_in_the_target_lines_order() {
+    let (mut fit, reading, mut anchors) = fixture();
+    for (i, v) in fit.vertebrae.iter_mut().enumerate() {
+        v.pose.centre[1] = 0.4 * (i * i) as f64;
+        let coronal = (i as f64 - 7.0) * 0.03;
+        v.pose.rotation =
+            rotation_vector_from_matrix(&(rot_x(coronal) * rot_y(v.angles.forward_lean_rad)))
+                .into();
+        v.angles.side_tilt_rad = coronal;
+        for anchor in anchors.iter_mut().filter(|a| a.level == v.level) {
+            anchor.entry_mm[1] += v.pose.centre[1];
+            if i == 0 {
+                anchor.kind = AnchorKind::Hook;
+            } else if i == 3 {
+                anchor.kind = AnchorKind::None;
+            }
+        }
+    }
+    let levels: Vec<_> = fit.vertebrae.iter().map(|v| v.level).collect();
+    let target = target_spine(&fit, &levels, &reading).unwrap();
+    let rods = propose(
+        &fit,
+        &levels,
+        &reading,
+        &anchors,
+        &default_choice().unwrap(),
+    )
+    .unwrap();
+    for rod in rods {
+        assert_eq!(rod.standing_points_mm.len(), rod.points_mm.len());
+        assert!(
+            rod.standing_points_mm
+                .iter()
+                .zip(&rod.points_mm)
+                .any(|(a, b)| { (Vector3::from(*a) - Vector3::from(*b)).norm() > 1.0 })
+        );
+        let mut previous = None;
+        for anchor in anchors
+            .iter()
+            .filter(|a| a.side == rod.side && a.kind != AnchorKind::None)
+        {
+            let standing = Vector3::from(anchor.entry_mm)
+                - Vector3::from(anchor.direction_unit)
+                    * if anchor.kind == AnchorKind::Screw {
+                        rod.head_offset_mm
+                    } else {
+                        0.0
+                    };
+            let index = rod
+                .standing_points_mm
+                .iter()
+                .position(|p| (Vector3::from(*p) - standing).norm() < 1e-9)
+                .expect("each occupied standing head is a drawing knot");
+            assert!(previous.is_none_or(|before| before < index));
+            previous = Some(index);
+            let before = fit
+                .vertebrae
+                .iter()
+                .find(|v| v.level == anchor.level)
+                .unwrap();
+            let after = target
+                .poses
+                .iter()
+                .find(|p| p.level == anchor.level)
+                .unwrap();
+            let expected = Vector3::from(after.centre)
+                + matrix_from_rotation_vector(&after.rotation.into())
+                    * matrix_from_rotation_vector(&before.pose.rotation.into()).transpose()
+                    * (standing - Vector3::from(before.pose.centre));
+            assert!((Vector3::from(rod.points_mm[index]) - expected).norm() < 1e-8);
         }
     }
 }

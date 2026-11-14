@@ -38,6 +38,7 @@ pub(super) fn apply(
             anchor.looks.sort();
             anchor.looks.dedup();
         }
+        crate::screws::refresh_look_sources(anchor);
     }
     Ok(())
 }

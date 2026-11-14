@@ -334,15 +334,30 @@ pub fn estimate(draws: &[Option<WidthDraw>], side: CurveSide) -> PedicleEstimate
     let complete = !draws.is_empty() && draws.iter().all(Option::is_some);
     let outer: Vec<_> = draws.iter().flatten().map(|d| d.outer_mm).collect();
     let inner: Vec<_> = draws.iter().flatten().map(|d| d.inner_mm).collect();
-    let threshold = cell(
+    let threshold_cell = cell(
         Table::DiameterRules,
         "outer-width-required-above",
         "expansion-25",
-    )
-    .and_then(central);
-    let inner_floor = inner_channel_floor();
+    );
+    let inner_floor_cell = cell(Table::ChannelGrades, "inner-diameter-max", "grade-4");
+    let threshold = threshold_cell.and_then(central);
+    let inner_floor = inner_floor_cell.and_then(central);
+    let mut sources: Vec<_> = draws
+        .iter()
+        .flatten()
+        .flat_map(|d| d.sources.iter().cloned())
+        .collect();
+    if !outer.is_empty() {
+        sources.extend(
+            [threshold_cell, inner_floor_cell]
+                .into_iter()
+                .flatten()
+                .filter(|cell| central(cell).is_some())
+                .map(|cell| cell.source.clone()),
+        );
+    }
     PedicleEstimate {
-        sources: Vec::new(),
+        sources: unique(sources),
         outer_width_mm: complete.then(|| band(&outer)).flatten(),
         inner_width_mm: complete.then(|| band(&inner)).flatten(),
         versions_too_narrow: threshold
@@ -457,11 +472,6 @@ pub(crate) fn central(cell: &Cell) -> Option<f64> {
         PublishedValue::MeanSd { mean, .. } => Some(mean),
         _ => None,
     }
-}
-
-pub(crate) fn inner_channel_floor() -> Option<f64> {
-    // The grade's upper bound, not a new literal clinical threshold.
-    cell(Table::ChannelGrades, "inner-diameter-max", "grade-4").and_then(central)
 }
 
 fn normal(cell: &Cell) -> Option<(f64, f64)> {

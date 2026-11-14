@@ -13,7 +13,8 @@ use forward_model::pedicles::pedicle_centres;
 use forward_model::vertebra_params::VertebraParams;
 use shapes::implant_layout::{
     AnchorKind, AnchorProposal, AngleFromTable, CannotTell, CannotTellCode, CurveSide,
-    DiameterRule, LayoutInput, LookCode, NamingDoubt, ValueStatus,
+    DiameterCount, DiameterRule, LayoutInput, LookCode, LookSources, NamingDoubt, ScrewHere,
+    ValueStatus,
 };
 use shapes::levels::Level;
 use shapes::spine_readings::{Band, BodySide};
@@ -21,7 +22,9 @@ use shapes::spine_readings::{Band, BodySide};
 mod looks;
 mod proposal;
 
+pub use looks::refresh_look_sources;
 pub use looks::{ENDS_HOLDING_SHARE, LookInputs, context_looks, look_codes};
+pub(crate) use proposal::ratio_for_diameter;
 pub use proposal::{anchor, anchors, usual_length};
 
 fn required_scalar(table: Table, key: &str, group: &str) -> Result<(f64, String), LayoutError> {
