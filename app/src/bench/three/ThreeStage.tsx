@@ -11,6 +11,7 @@ import { useKey } from '@/building-blocks/keyboard/use-key';
 import { usePageState } from '@/look-and-feel/page-state';
 import { PlaceDrawing } from '../place/PlaceDrawing';
 import { placeState } from '../place/place-state';
+import { openWhy } from '../place/hand-state';
 import { PLACE_WORDS } from '@/words/place';
 import { NameChip } from './NameChip';
 import { compareFilm } from './comparison';
@@ -94,7 +95,8 @@ function Drawing({ accepted, filmDriver, placing = false }: { accepted: Accepted
   }, [accepted, compared, filmDriver, moving, placing]);
   useEffect(() => { if (!placing && chosen !== null) handle.current?.lookFrom(latestRest.current(chosen) ?? chosen); }, [chosen, placing]);
   return <div ref={root} className="three-stage" tabIndex={placing ? 0 : undefined} aria-label={placing ? PLACE_WORDS.stage : undefined} data-place={placing || undefined} data-testid="three-stage" data-state={moving ? 'moving' : 'settled'} data-compared={compared ?? undefined} inert={sheet || placing && placeSheet} onPointerMove={(event) => {
-      if (moving || sheet || placing) return;
+      if(placing){if(placeState.getState().keyboard)placeState.setState({keyboard:false});return;}
+      if (moving || sheet) return;
       setPointer({ x: event.clientX, y: event.clientY });
       if (compared !== null) {
         const canvas = root.current?.querySelector('canvas'), stage = handle.current?.stage();
@@ -104,7 +106,7 @@ function Drawing({ accepted, filmDriver, placing = false }: { accepted: Accepted
       }
     }} onPointerLeave={() => { threeState.getState().point(null); if (placing) { lastPart.current = null; placeState.setState({ hovered: null }); } }} onPointerDown={() => { if (placing) root.current?.focus(); }}>
     <NameChip level={moving || sheet || placing ? null : pointed} x={pointer.x} y={pointer.y} />
-    <Spine3D ref={handle} fit={drawing} bones={accepted.bones} films={films} view="three-quarter" highlighted={highlighted} onPoint={(level) => { if (!placing) threeState.getState().point(level); }} onPointed={(found) => { if (!placing) return; lastPart.current = found?.kind === 'part' ? found.id : null; if (!placeState.getState().arriving) placeState.setState({ hovered: lastPart.current }); }} onChosen={(found) => { if (placing && !placeState.getState().arriving) placeState.setState({ pressed: found?.kind === 'part' ? found.id : null }); }} onChoose={(level) => { threeState.getState().point(level); }} turnable={!moving && compared === null && !sheet && (!placing || !placeSheet)} shadow onTurned={() => { if (placing) placeState.setState({ chosen: null }); threeState.getState().choose(null); threeState.getState().point(null); }} />
+    <Spine3D ref={handle} fit={drawing} bones={accepted.bones} films={films} view="three-quarter" highlighted={highlighted} onPoint={(level) => { if (!placing) threeState.getState().point(level); }} onPointed={(found) => { if (!placing) return; lastPart.current = found?.kind === 'part' ? found.id : null; if (!placeState.getState().arriving&&!placeState.getState().keyboard) placeState.setState({ hovered: lastPart.current }); }} onChosen={(found) => { if (placing && !placeState.getState().arriving) {const id=found?.kind==='part'?found.id:null;if(id==='upper'||id==='lower')openWhy(id);else placeState.setState({pressed:id});} }} onChoose={(level) => { threeState.getState().point(level); }} turnable={!moving && compared === null && !sheet && (!placing || !placeSheet)} shadow onTurned={() => { if (placing) placeState.setState({ chosen: null }); threeState.getState().choose(null); threeState.getState().point(null); }} />
     {placing && <PlaceDrawing accepted={accepted} handle={handle} />}
   </div>;
 }

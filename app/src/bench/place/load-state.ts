@@ -31,7 +31,7 @@ export async function loadPlacement(engine: Pick<EngineClient, 'runLoadBench' | 
   const layout = placeState.getState().result?.layouts[0]; if (layout === undefined) return;
   const mine = ++generation, started = performance.now(), batches: BenchBatch[] = [], versions = input.versions;
   loadState.setState({ ...initial, phase: 'running', total: versions });
-  placeState.setState({ review: null, sheet: false, pressed: null, hovered: null });
+  placeState.setState({ review: null, sheet: false, pressed: null, hovered: null, keyboard:false });
   try {
     for (let from = 0; from < versions; from += 4) {
       const count = Math.min(4, versions - from);

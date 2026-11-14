@@ -1,0 +1,28 @@
+import { act } from 'react';
+import { expect, it, vi } from 'vitest';
+import { putOnThePage, pressKey, send } from '@/building-blocks/test-rig/on-the-page';
+import { EngineProvider } from '@/engine-room/use-engine';
+import type { EngineClient } from '@/engine-room/engine-client';
+import type { Spine3DHandle } from '@/spine-3d/view/Spine3D';
+import { MADE_UP_CASE } from '@/spine-3d/made-up-case/made-up-case';
+import { emptyCase } from '@/case-state/empty-case';
+import { layoutInput } from './layout-input';
+import { placementFixture } from './placement-fixture.scenes';
+import { placeState } from './place-state';
+import { handState } from './hand-state';
+import { EndHandles } from './EndHandles';
+import type { DrawnPlacement } from './draw-placement';
+it('Escape cancels a held end and its later pointer release sends no change',()=>{
+  const result=placementFixture(),layout=result.layouts[0];if(layout===undefined)throw new Error('layout');
+  placeState.setState({key:'cancel-drag',input:layoutInput(MADE_UP_CASE.fit,emptyCase()),result,phase:'ready',arriving:false,sheet:false});
+  const engine={rebuildLayout:vi.fn()},fade=vi.fn();
+  const handle={current:{stage:()=>({onDrawn:()=>()=>undefined}),spine:()=>({landmarks:()=>null})} as unknown as Spine3DHandle};
+  const drawn={current:{fadeParts:fade} as unknown as DrawnPlacement};
+  const page=putOnThePage(<EngineProvider engine={engine as unknown as EngineClient}><svg><EndHandles layout={layout} result={result} handle={handle} drawn={drawn}/></svg></EngineProvider>);
+  const circle=page.host.querySelector<SVGCircleElement>('[data-end-handle="lower"] circle');if(circle===null)throw new Error('handle');
+  circle.setPointerCapture=vi.fn();circle.releasePointerCapture=vi.fn();
+  send(circle,new MouseEvent('pointerdown',{bubbles:true,cancelable:true}));act(()=>{handState.setState({drag:{end:'lower',level:'L2'}});});
+  expect(page.host.querySelector('[data-end-handle="lower"] text')?.textContent).toBe('L2');expect(pressKey('Escape').defaultPrevented).toBe(true);
+  expect(handState.getState().drag).toBeNull();expect(page.host.querySelector('[data-end-handle="lower"] text')?.textContent).toBe('L1');expect(fade).toHaveBeenLastCalledWith(['lower'],1);
+  send(circle,new MouseEvent('pointerup',{bubbles:true,cancelable:true}));expect(engine.rebuildLayout).not.toHaveBeenCalled();expect(placeState.getState().sheet).toBe(false);page.takeDown();
+});

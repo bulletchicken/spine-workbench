@@ -5,12 +5,23 @@
 
 /** A published source, cited by its identifiers. No links: the app never goes online. */
 export interface EvidenceSource {
+  /**
+   * Source key returned beside the engine's numbers, as recorded in its evidence catalogue.
+   * A key is unique only within its crate, which the entry's id prefix gives
+   * (`place-layout-`, `place-bench-`, `place-readings-`).
+   */
+  readonly key?: string;
   /** Authors, year, title and journal, as written in a reference list. */
   readonly citation: string;
   /** PubMed id, digits only. */
   readonly pmid: string | null;
   /** Digital object identifier, such as `10.1148/radiol.11081511`. */
   readonly doi: string | null;
+  /**
+   * How the source was read when the tables were made, not whether its numbers were checked.
+   * The entry's `checked` field records that separate check.
+   */
+  readonly reading?: 'full-text' | 'abstract' | 'secondary';
 }
 
 export interface EvidenceEntry {
@@ -22,6 +33,8 @@ export interface EvidenceEntry {
   readonly publishedNumber: string;
   /** Who the number was measured in. */
   readonly population: string;
+  /** Sample size recorded for the entry's first keyed source, kept as written. */
+  readonly sampleSize?: string;
   readonly sources: readonly EvidenceSource[];
   /** Whether a person read the cited source and checked the number above against it. */
   readonly checked: boolean;
@@ -45,6 +58,20 @@ const FILICE_FRANTZ_2019: EvidenceSource = {
   pmid: '31065828',
   doi: '10.1007/s10278-019-00226-y',
 };
+
+/**
+ * Sources with neither a PMID nor a DOI are not publications the ledger can cite.
+ * A screen shows these by kind and has no entry to open.
+ */
+export const PLACE_SOURCES_WITHOUT_ENTRY = {
+  'ao-lenke': 'guideline-page',
+  'fusion-level-definitions': 'summary-of-papers',
+  'project-assumptions': 'project-assumption',
+  'screw-p1-hard-floor': 'summary-of-papers',
+  'screw-p4-summary': 'summary-of-papers',
+} as const satisfies Readonly<Record<
+  string, 'project-assumption' | 'guideline-page' | 'summary-of-papers'
+>>;
 
 export const EVIDENCE_LEDGER = [
   {
@@ -83,6 +110,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'larson-2013: Anchor-density systematic review; AIS context. Sample: 10 studies; 929 patients. ' +
       '[peer-reviewed; abstract].',
+    sampleSize: '10 studies; 929 patients',
     sources: [
       {
         citation:
@@ -90,6 +118,8 @@ export const EVIDENCE_LEDGER = [
           'in Adolescent Idiopathic Scoliosis. Spine Deform 1(4):237-247.',
         pmid: '27927354',
         doi: '10.1016/j.jspd.2013.05.009',
+        key: 'larson-2013',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -104,11 +134,14 @@ export const EVIDENCE_LEDGER = [
     population:
       'mimo-2024: Single thoracic curves of 45–65°; randomised density comparison; two-year correction. Sample: ' +
       '211 patients: high-density 108; low-density 103. [peer-reviewed; abstract].',
+    sampleSize: '211 patients: high-density 108; low-density 103',
     sources: [
       {
         citation: 'Larson AN et al. 2024. J Bone Joint Surg Am 106(3):180-189.',
         pmid: '37973031',
         doi: '10.2106/jbjs.23.00178',
+        key: 'mimo-2024',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -123,11 +156,14 @@ export const EVIDENCE_LEDGER = [
     population:
       'mimo-2024: Single thoracic curves of 45–65°; randomised density comparison; two-year correction. Sample: ' +
       '211 patients: high-density 108; low-density 103. [peer-reviewed; abstract].',
+    sampleSize: '211 patients: high-density 108; low-density 103',
     sources: [
       {
         citation: 'Larson AN et al. 2024. J Bone Joint Surg Am 106(3):180-189.',
         pmid: '37973031',
         doi: '10.2106/jbjs.23.00178',
+        key: 'mimo-2024',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -142,6 +178,9 @@ export const EVIDENCE_LEDGER = [
     population:
       'zhao-2024: AIS proximal junctional kyphosis meta-analysis. Sample: 24 studies; stated total 4,063; 718 ' +
       'with PJK and 3,885 without; patients per hook comparison not given. [peer-reviewed; full-text].',
+    sampleSize:
+      '24 studies; stated total 4,063; 718 with PJK and 3,885 without; patients per hook comparison not ' +
+      'given',
     sources: [
       {
         citation:
@@ -149,6 +188,8 @@ export const EVIDENCE_LEDGER = [
           'junctional kyphosis in adolescent idiopathic scoliosis. Front Pediatr 12:1387841.',
         pmid: '39205666',
         doi: '10.3389/fped.2024.1387841',
+        key: 'zhao-2024',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -161,6 +202,9 @@ export const EVIDENCE_LEDGER = [
     population:
       'zhao-2024: AIS proximal junctional kyphosis meta-analysis. Sample: 24 studies; stated total 4,063; 718 ' +
       'with PJK and 3,885 without; patients per hook comparison not given. [peer-reviewed; full-text].',
+    sampleSize:
+      '24 studies; stated total 4,063; 718 with PJK and 3,885 without; patients per hook comparison not ' +
+      'given',
     sources: [
       {
         citation:
@@ -168,6 +212,8 @@ export const EVIDENCE_LEDGER = [
           'junctional kyphosis in adolescent idiopathic scoliosis. Front Pediatr 12:1387841.',
         pmid: '39205666',
         doi: '10.3389/fped.2024.1387841',
+        key: 'zhao-2024',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -180,6 +226,9 @@ export const EVIDENCE_LEDGER = [
     population:
       'zhao-2024: AIS proximal junctional kyphosis meta-analysis. Sample: 24 studies; stated total 4,063; 718 ' +
       'with PJK and 3,885 without; patients per hook comparison not given. [peer-reviewed; full-text].',
+    sampleSize:
+      '24 studies; stated total 4,063; 718 with PJK and 3,885 without; patients per hook comparison not ' +
+      'given',
     sources: [
       {
         citation:
@@ -187,6 +236,8 @@ export const EVIDENCE_LEDGER = [
           'junctional kyphosis in adolescent idiopathic scoliosis. Front Pediatr 12:1387841.',
         pmid: '39205666',
         doi: '10.3389/fped.2024.1387841',
+        key: 'zhao-2024',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -201,6 +252,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'cammarata-2014: Adult scoliosis patient-specific multibody models. Sample: 6 patients; 576 simulations. ' +
       '[peer-reviewed; abstract].',
+    sampleSize: '6 patients; 576 simulations',
     sources: [
       {
         citation:
@@ -209,6 +261,8 @@ export const EVIDENCE_LEDGER = [
           '39(8):E500-7.',
         pmid: '24480964',
         doi: '10.1097/brs.0000000000000222',
+        key: 'cammarata-2014',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -223,6 +277,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'akazawa-2015: AIS; inner channel graded on CT. Sample: 55 AIS patients; 810 planned pedicles. ' +
       '[peer-reviewed; abstract].',
+    sampleSize: '55 AIS patients; 810 planned pedicles',
     sources: [
       {
         citation:
@@ -231,6 +286,8 @@ export const EVIDENCE_LEDGER = [
           'pedicles? J Orthop Sci 20(5):818-822.',
         pmid: '26124077',
         doi: '10.1007/s00776-015-0746-0',
+        key: 'akazawa-2015',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -246,6 +303,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'akazawa-2015: AIS; inner channel graded on CT. Sample: 55 AIS patients; 810 planned pedicles. ' +
       '[peer-reviewed; abstract].',
+    sampleSize: '55 AIS patients; 810 planned pedicles',
     sources: [
       {
         citation:
@@ -254,6 +312,8 @@ export const EVIDENCE_LEDGER = [
           'pedicles? J Orthop Sci 20(5):818-822.',
         pmid: '26124077',
         doi: '10.1007/s00776-015-0746-0',
+        key: 'akazawa-2015',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -269,6 +329,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'akazawa-2015: AIS; inner channel graded on CT. Sample: 55 AIS patients; 810 planned pedicles. ' +
       '[peer-reviewed; abstract].',
+    sampleSize: '55 AIS patients; 810 planned pedicles',
     sources: [
       {
         citation:
@@ -277,6 +338,8 @@ export const EVIDENCE_LEDGER = [
           'pedicles? J Orthop Sci 20(5):818-822.',
         pmid: '26124077',
         doi: '10.1007/s00776-015-0746-0',
+        key: 'akazawa-2015',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -291,6 +354,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'akazawa-2015: AIS; inner channel graded on CT. Sample: 55 AIS patients; 810 planned pedicles. ' +
       '[peer-reviewed; abstract].',
+    sampleSize: '55 AIS patients; 810 planned pedicles',
     sources: [
       {
         citation:
@@ -299,6 +363,8 @@ export const EVIDENCE_LEDGER = [
           'pedicles? J Orthop Sci 20(5):818-822.',
         pmid: '26124077',
         doi: '10.1007/s00776-015-0746-0',
+        key: 'akazawa-2015',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -313,6 +379,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'akazawa-2015: AIS; inner channel graded on CT. Sample: 55 AIS patients; 810 planned pedicles. ' +
       '[peer-reviewed; abstract].',
+    sampleSize: '55 AIS patients; 810 planned pedicles',
     sources: [
       {
         citation:
@@ -321,6 +388,8 @@ export const EVIDENCE_LEDGER = [
           'pedicles? J Orthop Sci 20(5):818-822.',
         pmid: '26124077',
         doi: '10.1007/s00776-015-0746-0',
+        key: 'akazawa-2015',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -335,6 +404,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'akazawa-2015: AIS; inner channel graded on CT. Sample: 55 AIS patients; 810 planned pedicles. ' +
       '[peer-reviewed; abstract].',
+    sampleSize: '55 AIS patients; 810 planned pedicles',
     sources: [
       {
         citation:
@@ -343,6 +413,8 @@ export const EVIDENCE_LEDGER = [
           'pedicles? J Orthop Sci 20(5):818-822.',
         pmid: '26124077',
         doi: '10.1007/s00776-015-0746-0',
+        key: 'akazawa-2015',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -467,11 +539,14 @@ export const EVIDENCE_LEDGER = [
       'zheng-2009: Chinese children aged 5–14 from a hospital registry, stratified random sampling with thoracic ' +
       'abnormalities excluded; not scoliosis-specific; 2 mm axial CT. Sample: 120 children aged 5–14; number per ' +
       'age band and sex is not stated. [peer-reviewed; full-text].',
+    sampleSize: '120 children aged 5–14; number per age band and sex is not stated',
     sources: [
       {
         citation: 'Zheng C, Huang Q, Hu Y, Wang X, Chen W. 2009. Int Orthop 33(6):1663-1668.',
         pmid: '18956181',
         doi: '10.1007/s00264-008-0675-z',
+        key: 'zheng-2009',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -489,6 +564,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'pluemvitayaporn-2025: Thai patients with Lenke 5 curves; mean age 14.7 (12–22), mean Cobb 48° (36–84°). ' +
       'Sample: 112 patients; 3,808 pedicles. [peer-reviewed; full-text].',
+    sampleSize: '112 patients; 3,808 pedicles',
     sources: [
       {
         citation:
@@ -497,6 +573,8 @@ export const EVIDENCE_LEDGER = [
           'Lenke Type 5 Idiopathic Scoliosis in Thai Population. Asian J Neurosurg 20(1):132-137.',
         pmid: '40041581',
         doi: '10.1055/s-0044-1800812',
+        key: 'pluemvitayaporn-2025',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -512,6 +590,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'pluemvitayaporn-2025: Thai patients with Lenke 5 curves; mean age 14.7 (12–22), mean Cobb 48° (36–84°). ' +
       'Sample: 112 patients; 3,808 pedicles. [peer-reviewed; full-text].',
+    sampleSize: '112 patients; 3,808 pedicles',
     sources: [
       {
         citation:
@@ -520,6 +599,8 @@ export const EVIDENCE_LEDGER = [
           'Lenke Type 5 Idiopathic Scoliosis in Thai Population. Asian J Neurosurg 20(1):132-137.',
         pmid: '40041581',
         doi: '10.1055/s-0044-1800812',
+        key: 'pluemvitayaporn-2025',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -577,6 +658,9 @@ export const EVIDENCE_LEDGER = [
       'IV 5); ages 12.3–18.3; Cobb 58–98°; 3 mm CT. Sample: 24 patients; width n 213 convex/223 concave; angle n ' +
       '217 convex/216 concave; chord n 213 on each side; per-cell pedicle counts retained. [peer-reviewed; ' +
       'full-text].',
+    sampleSize:
+      '24 patients; width n 213 convex/223 concave; angle n 217 convex/216 concave; chord n 213 on each ' +
+      'side; per-cell pedicle counts retained',
     sources: [
       {
         citation:
@@ -584,6 +668,8 @@ export const EVIDENCE_LEDGER = [
           'with adolescent idiopathic scoliosis. Indian J Orthop 44(2):169-176.',
         pmid: '20419004',
         doi: '10.4103/0019-5413.62084',
+        key: 'upendra-2010',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -605,6 +691,7 @@ export const EVIDENCE_LEDGER = [
       'sato-2022: Japanese AIS, enrolled ages 12–20 (inclusion range 10–20), mean age 16.2; 49 girls and 8 boys; ' +
       'Lenke 1/2 right main thoracic curves; 0.5 mm CT. Right is always convex and left always concave. Sample: ' +
       '57 adolescents; 684 pedicles; 15 patients in the 26.3 percent group. [peer-reviewed; full-text].',
+    sampleSize: '57 adolescents; 684 pedicles; 15 patients in the 26.3% group',
     sources: [
       {
         citation:
@@ -613,6 +700,8 @@ export const EVIDENCE_LEDGER = [
           'radiographic factors in adolescent idiopathic scoliosis. BMC Musculoskelet Disord 23(1):847.',
         pmid: '36068555',
         doi: '10.1186/s12891-022-05799-4',
+        key: 'sato-2022',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -634,6 +723,7 @@ export const EVIDENCE_LEDGER = [
       'sato-2022: Japanese AIS, enrolled ages 12–20 (inclusion range 10–20), mean age 16.2; 49 girls and 8 boys; ' +
       'Lenke 1/2 right main thoracic curves; 0.5 mm CT. Right is always convex and left always concave. Sample: ' +
       '57 adolescents; 684 pedicles; 15 patients in the 26.3 percent group. [peer-reviewed; full-text].',
+    sampleSize: '57 adolescents; 684 pedicles; 15 patients in the 26.3% group',
     sources: [
       {
         citation:
@@ -642,6 +732,8 @@ export const EVIDENCE_LEDGER = [
           'radiographic factors in adolescent idiopathic scoliosis. BMC Musculoskelet Disord 23(1):847.',
         pmid: '36068555',
         doi: '10.1186/s12891-022-05799-4',
+        key: 'sato-2022',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -667,6 +759,7 @@ export const EVIDENCE_LEDGER = [
       'sato-2022: Japanese AIS, enrolled ages 12–20 (inclusion range 10–20), mean age 16.2; 49 girls and 8 boys; ' +
       'Lenke 1/2 right main thoracic curves; 0.5 mm CT. Right is always convex and left always concave. Sample: ' +
       '57 adolescents; 684 pedicles; 15 patients in the 26.3 percent group. [peer-reviewed; full-text].',
+    sampleSize: '57 adolescents; 684 pedicles; 15 patients in the 26.3% group',
     sources: [
       {
         citation:
@@ -675,6 +768,8 @@ export const EVIDENCE_LEDGER = [
           'radiographic factors in adolescent idiopathic scoliosis. BMC Musculoskelet Disord 23(1):847.',
         pmid: '36068555',
         doi: '10.1186/s12891-022-05799-4',
+        key: 'sato-2022',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -695,6 +790,7 @@ export const EVIDENCE_LEDGER = [
       'sato-2022: Japanese AIS, enrolled ages 12–20 (inclusion range 10–20), mean age 16.2; 49 girls and 8 boys; ' +
       'Lenke 1/2 right main thoracic curves; 0.5 mm CT. Right is always convex and left always concave. Sample: ' +
       '57 adolescents; 684 pedicles; 15 patients in the 26.3 percent group. [peer-reviewed; full-text].',
+    sampleSize: '57 adolescents; 684 pedicles; 15 patients in the 26.3% group',
     sources: [
       {
         citation:
@@ -703,6 +799,8 @@ export const EVIDENCE_LEDGER = [
           'radiographic factors in adolescent idiopathic scoliosis. BMC Musculoskelet Disord 23(1):847.',
         pmid: '36068555',
         doi: '10.1186/s12891-022-05799-4',
+        key: 'sato-2022',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -723,6 +821,7 @@ export const EVIDENCE_LEDGER = [
       'sato-2022: Japanese AIS, enrolled ages 12–20 (inclusion range 10–20), mean age 16.2; 49 girls and 8 boys; ' +
       'Lenke 1/2 right main thoracic curves; 0.5 mm CT. Right is always convex and left always concave. Sample: ' +
       '57 adolescents; 684 pedicles; 15 patients in the 26.3 percent group. [peer-reviewed; full-text].',
+    sampleSize: '57 adolescents; 684 pedicles; 15 patients in the 26.3% group',
     sources: [
       {
         citation:
@@ -731,6 +830,8 @@ export const EVIDENCE_LEDGER = [
           'radiographic factors in adolescent idiopathic scoliosis. BMC Musculoskelet Disord 23(1):847.',
         pmid: '36068555',
         doi: '10.1186/s12891-022-05799-4',
+        key: 'sato-2022',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -746,6 +847,7 @@ export const EVIDENCE_LEDGER = [
       'sato-2022: Japanese AIS, enrolled ages 12–20 (inclusion range 10–20), mean age 16.2; 49 girls and 8 boys; ' +
       'Lenke 1/2 right main thoracic curves; 0.5 mm CT. Right is always convex and left always concave. Sample: ' +
       '57 adolescents; 684 pedicles; 15 patients in the 26.3 percent group. [peer-reviewed; full-text].',
+    sampleSize: '57 adolescents; 684 pedicles; 15 patients in the 26.3% group',
     sources: [
       {
         citation:
@@ -754,6 +856,8 @@ export const EVIDENCE_LEDGER = [
           'radiographic factors in adolescent idiopathic scoliosis. BMC Musculoskelet Disord 23(1):847.',
         pmid: '36068555',
         doi: '10.1186/s12891-022-05799-4',
+        key: 'sato-2022',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -765,6 +869,7 @@ export const EVIDENCE_LEDGER = [
     publishedNumber: 'key outer-width-ratio-max, group adult-cadaver: 0.8 ratio.',
     population:
       'misenhimer-1989: Adult cadaver spines. Sample: 6 fresh-frozen adult spines. [peer-reviewed; abstract].',
+    sampleSize: '6 fresh-frozen adult spines',
     sources: [
       {
         citation:
@@ -772,6 +877,8 @@ export const EVIDENCE_LEDGER = [
           'cancellous diameter as related to screw size. Spine (Phila Pa 1976) 14(4):367-372.',
         pmid: '2718038',
         doi: '10.1097/00007632-198904000-00004',
+        key: 'misenhimer-1989',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -787,6 +894,7 @@ export const EVIDENCE_LEDGER = [
       'sato-2022: Japanese AIS, enrolled ages 12–20 (inclusion range 10–20), mean age 16.2; 49 girls and 8 boys; ' +
       'Lenke 1/2 right main thoracic curves; 0.5 mm CT. Right is always convex and left always concave. Sample: ' +
       '57 adolescents; 684 pedicles; 15 patients in the 26.3 percent group. [peer-reviewed; full-text].',
+    sampleSize: '57 adolescents; 684 pedicles; 15 patients in the 26.3% group',
     sources: [
       {
         citation:
@@ -795,6 +903,8 @@ export const EVIDENCE_LEDGER = [
           'radiographic factors in adolescent idiopathic scoliosis. BMC Musculoskelet Disord 23(1):847.',
         pmid: '36068555',
         doi: '10.1186/s12891-022-05799-4',
+        key: 'sato-2022',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -811,6 +921,9 @@ export const EVIDENCE_LEDGER = [
       'IV 5); ages 12.3–18.3; Cobb 58–98°; 3 mm CT. Sample: 24 patients; width n 213 convex/223 concave; angle n ' +
       '217 convex/216 concave; chord n 213 on each side; per-cell pedicle counts retained. [peer-reviewed; ' +
       'full-text].',
+    sampleSize:
+      '24 patients; width n 213 convex/223 concave; angle n 217 convex/216 concave; chord n 213 on each ' +
+      'side; per-cell pedicle counts retained',
     sources: [
       {
         citation:
@@ -818,6 +931,8 @@ export const EVIDENCE_LEDGER = [
           'with adolescent idiopathic scoliosis. Indian J Orthop 44(2):169-176.',
         pmid: '20419004',
         doi: '10.4103/0019-5413.62084',
+        key: 'upendra-2010',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -831,6 +946,7 @@ export const EVIDENCE_LEDGER = [
       'sato-2022: Japanese AIS, enrolled ages 12–20 (inclusion range 10–20), mean age 16.2; 49 girls and 8 boys; ' +
       'Lenke 1/2 right main thoracic curves; 0.5 mm CT. Right is always convex and left always concave. Sample: ' +
       '57 adolescents; 684 pedicles; 15 patients in the 26.3 percent group. [peer-reviewed; full-text].',
+    sampleSize: '57 adolescents; 684 pedicles; 15 patients in the 26.3% group',
     sources: [
       {
         citation:
@@ -839,6 +955,8 @@ export const EVIDENCE_LEDGER = [
           'radiographic factors in adolescent idiopathic scoliosis. BMC Musculoskelet Disord 23(1):847.',
         pmid: '36068555',
         doi: '10.1186/s12891-022-05799-4',
+        key: 'sato-2022',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -852,6 +970,7 @@ export const EVIDENCE_LEDGER = [
       'sato-2022: Japanese AIS, enrolled ages 12–20 (inclusion range 10–20), mean age 16.2; 49 girls and 8 boys; ' +
       'Lenke 1/2 right main thoracic curves; 0.5 mm CT. Right is always convex and left always concave. Sample: ' +
       '57 adolescents; 684 pedicles; 15 patients in the 26.3 percent group. [peer-reviewed; full-text].',
+    sampleSize: '57 adolescents; 684 pedicles; 15 patients in the 26.3% group',
     sources: [
       {
         citation:
@@ -860,6 +979,8 @@ export const EVIDENCE_LEDGER = [
           'radiographic factors in adolescent idiopathic scoliosis. BMC Musculoskelet Disord 23(1):847.',
         pmid: '36068555',
         doi: '10.1186/s12891-022-05799-4',
+        key: 'sato-2022',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -873,6 +994,7 @@ export const EVIDENCE_LEDGER = [
       'sato-2022: Japanese AIS, enrolled ages 12–20 (inclusion range 10–20), mean age 16.2; 49 girls and 8 boys; ' +
       'Lenke 1/2 right main thoracic curves; 0.5 mm CT. Right is always convex and left always concave. Sample: ' +
       '57 adolescents; 684 pedicles; 15 patients in the 26.3 percent group. [peer-reviewed; full-text].',
+    sampleSize: '57 adolescents; 684 pedicles; 15 patients in the 26.3% group',
     sources: [
       {
         citation:
@@ -881,6 +1003,8 @@ export const EVIDENCE_LEDGER = [
           'radiographic factors in adolescent idiopathic scoliosis. BMC Musculoskelet Disord 23(1):847.',
         pmid: '36068555',
         doi: '10.1186/s12891-022-05799-4',
+        key: 'sato-2022',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -902,6 +1026,7 @@ export const EVIDENCE_LEDGER = [
       'syndromic 18; MRI before and CT after surgery; single centre. Not an AIS-only cohort. Sample: 230 ' +
       'patients; 7,954 preoperative pedicles and 5,080 postoperative screws, different sets. [peer-reviewed; ' +
       'full-text].',
+    sampleSize: '230 patients; 7,954 preoperative pedicles and 5,080 postoperative screws, different sets',
     sources: [
       {
         citation:
@@ -910,6 +1035,8 @@ export const EVIDENCE_LEDGER = [
           'Higher Risk of Pedicle and Vertebral Breaches. J Clin Med 12(16):5368.',
         pmid: '37629410',
         doi: '10.3390/jcm12165368',
+        key: 'grabala-2023',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -944,6 +1071,7 @@ export const EVIDENCE_LEDGER = [
       'syndromic 18; MRI before and CT after surgery; single centre. Not an AIS-only cohort. Sample: 230 ' +
       'patients; 7,954 preoperative pedicles and 5,080 postoperative screws, different sets. [peer-reviewed; ' +
       'full-text].',
+    sampleSize: '230 patients; 7,954 preoperative pedicles and 5,080 postoperative screws, different sets',
     sources: [
       {
         citation:
@@ -952,6 +1080,8 @@ export const EVIDENCE_LEDGER = [
           'Higher Risk of Pedicle and Vertebral Breaches. J Clin Med 12(16):5368.',
         pmid: '37629410',
         doi: '10.3390/jcm12165368',
+        key: 'grabala-2023',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -966,11 +1096,14 @@ export const EVIDENCE_LEDGER = [
     population:
       'katsumi-2025: AIS, navigated screws; Lenke 1 and Lenke 5 compared. Sample: 67 AIS patients; 1,082 ' +
       'navigated screws. [peer-reviewed; abstract].',
+    sampleSize: '67 AIS patients; 1,082 navigated screws',
     sources: [
       {
         citation: 'Katsumi S, Shinohara A, Arimura D, Obata S, Wakiya H, Saito M. 2025. Eur Spine J 34(11):5343-5352.',
         pmid: '40856839',
         doi: '10.1007/s00586-025-09210-3',
+        key: 'katsumi-2025',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -988,6 +1121,9 @@ export const EVIDENCE_LEDGER = [
       'chiu-2024: AIS with major thoracic curves; age range not recorded. Sample: 191 patients; ' +
       '6,230 analysed pedicles (right 3,064; left 3,166); 264 fully corticalized pedicles excluded (right 183; ' +
       'left 81). [peer-reviewed; abstract].',
+    sampleSize:
+      '191 patients; 6,230 analysed pedicles (right 3,064; left 3,166); 264 fully corticalized pedicles ' +
+      'excluded (right 183; left 81)',
     sources: [
       {
         citation:
@@ -995,6 +1131,8 @@ export const EVIDENCE_LEDGER = [
           'walls in adolescent idiopathic scoliosis with major thoracic curves. Spine J 24(7):1293-1301.',
         pmid: '38408520',
         doi: '10.1016/j.spinee.2024.02.014',
+        key: 'chiu-2024',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -1049,6 +1187,9 @@ export const EVIDENCE_LEDGER = [
       'chiu-2024: AIS with major thoracic curves; age range not recorded. Sample: 191 patients; ' +
       '6,230 analysed pedicles (right 3,064; left 3,166); 264 fully corticalized pedicles excluded (right 183; ' +
       'left 81). [peer-reviewed; abstract].',
+    sampleSize:
+      '191 patients; 6,230 analysed pedicles (right 3,064; left 3,166); 264 fully corticalized pedicles ' +
+      'excluded (right 183; left 81)',
     sources: [
       {
         citation:
@@ -1056,6 +1197,8 @@ export const EVIDENCE_LEDGER = [
           'walls in adolescent idiopathic scoliosis with major thoracic curves. Spine J 24(7):1293-1301.',
         pmid: '38408520',
         doi: '10.1016/j.spinee.2024.02.014',
+        key: 'chiu-2024',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -1087,6 +1230,9 @@ export const EVIDENCE_LEDGER = [
       'chiu-2024: AIS with major thoracic curves; age range not recorded. Sample: 191 patients; ' +
       '6,230 analysed pedicles (right 3,064; left 3,166); 264 fully corticalized pedicles excluded (right 183; ' +
       'left 81). [peer-reviewed; abstract].',
+    sampleSize:
+      '191 patients; 6,230 analysed pedicles (right 3,064; left 3,166); 264 fully corticalized pedicles ' +
+      'excluded (right 183; left 81)',
     sources: [
       {
         citation:
@@ -1094,6 +1240,8 @@ export const EVIDENCE_LEDGER = [
           'walls in adolescent idiopathic scoliosis with major thoracic curves. Spine J 24(7):1293-1301.',
         pmid: '38408520',
         doi: '10.1016/j.spinee.2024.02.014',
+        key: 'chiu-2024',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -1215,11 +1363,14 @@ export const EVIDENCE_LEDGER = [
       'zheng-2009: Chinese children aged 5–14 from a hospital registry, stratified random sampling with thoracic ' +
       'abnormalities excluded; not scoliosis-specific; 2 mm axial CT. Sample: 120 children aged 5–14; number per ' +
       'age band and sex is not stated. [peer-reviewed; full-text].',
+    sampleSize: '120 children aged 5–14; number per age band and sex is not stated',
     sources: [
       {
         citation: 'Zheng C, Huang Q, Hu Y, Wang X, Chen W. 2009. Int Orthop 33(6):1663-1668.',
         pmid: '18956181',
         doi: '10.1007/s00264-008-0675-z',
+        key: 'zheng-2009',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -1244,6 +1395,7 @@ export const EVIDENCE_LEDGER = [
       'sato-2022: Japanese AIS, enrolled ages 12–20 (inclusion range 10–20), mean age 16.2; 49 girls and 8 boys; ' +
       'Lenke 1/2 right main thoracic curves; 0.5 mm CT. Right is always convex and left always concave. Sample: ' +
       '57 adolescents; 684 pedicles; 15 patients in the 26.3 percent group. [peer-reviewed; full-text].',
+    sampleSize: '57 adolescents; 684 pedicles; 15 patients in the 26.3% group',
     sources: [
       {
         citation:
@@ -1252,6 +1404,8 @@ export const EVIDENCE_LEDGER = [
           'radiographic factors in adolescent idiopathic scoliosis. BMC Musculoskelet Disord 23(1):847.',
         pmid: '36068555',
         doi: '10.1186/s12891-022-05799-4',
+        key: 'sato-2022',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -1270,6 +1424,7 @@ export const EVIDENCE_LEDGER = [
       'sato-2022: Japanese AIS, enrolled ages 12–20 (inclusion range 10–20), mean age 16.2; 49 girls and 8 boys; ' +
       'Lenke 1/2 right main thoracic curves; 0.5 mm CT. Right is always convex and left always concave. Sample: ' +
       '57 adolescents; 684 pedicles; 15 patients in the 26.3 percent group. [peer-reviewed; full-text].',
+    sampleSize: '57 adolescents; 684 pedicles; 15 patients in the 26.3% group',
     sources: [
       {
         citation:
@@ -1278,6 +1433,8 @@ export const EVIDENCE_LEDGER = [
           'radiographic factors in adolescent idiopathic scoliosis. BMC Musculoskelet Disord 23(1):847.',
         pmid: '36068555',
         doi: '10.1186/s12891-022-05799-4',
+        key: 'sato-2022',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -1296,6 +1453,7 @@ export const EVIDENCE_LEDGER = [
       'sato-2022: Japanese AIS, enrolled ages 12–20 (inclusion range 10–20), mean age 16.2; 49 girls and 8 boys; ' +
       'Lenke 1/2 right main thoracic curves; 0.5 mm CT. Right is always convex and left always concave. Sample: ' +
       '57 adolescents; 684 pedicles; 15 patients in the 26.3 percent group. [peer-reviewed; full-text].',
+    sampleSize: '57 adolescents; 684 pedicles; 15 patients in the 26.3% group',
     sources: [
       {
         citation:
@@ -1304,6 +1462,8 @@ export const EVIDENCE_LEDGER = [
           'radiographic factors in adolescent idiopathic scoliosis. BMC Musculoskelet Disord 23(1):847.',
         pmid: '36068555',
         doi: '10.1186/s12891-022-05799-4',
+        key: 'sato-2022',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -1321,6 +1481,7 @@ export const EVIDENCE_LEDGER = [
       'balikci-2019: Mixed scoliosis series: AIS 86, congenital 17, adult 10, neuromuscular 7; ages 13–54, mean ' +
       '19.2. Diameter chosen using insertional torque. Sample: 120 patients, 86 with AIS; 2,846 screws. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '120 patients, 86 with AIS; 2,846 screws',
     sources: [
       {
         citation:
@@ -1328,6 +1489,8 @@ export const EVIDENCE_LEDGER = [
           'Instrumentation of Scoliosis. Asian Spine J 13(5):815-822.',
         pmid: '31079434',
         doi: '10.31616/asj.2018.0177',
+        key: 'balikci-2019',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -1343,11 +1506,14 @@ export const EVIDENCE_LEDGER = [
       'zheng-2009: Chinese children aged 5–14 from a hospital registry, stratified random sampling with thoracic ' +
       'abnormalities excluded; not scoliosis-specific; 2 mm axial CT. Sample: 120 children aged 5–14; number per ' +
       'age band and sex is not stated. [peer-reviewed; full-text].',
+    sampleSize: '120 children aged 5–14; number per age band and sex is not stated',
     sources: [
       {
         citation: 'Zheng C, Huang Q, Hu Y, Wang X, Chen W. 2009. Int Orthop 33(6):1663-1668.',
         pmid: '18956181',
         doi: '10.1007/s00264-008-0675-z',
+        key: 'zheng-2009',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -1366,6 +1532,7 @@ export const EVIDENCE_LEDGER = [
       'balikci-2019: Mixed scoliosis series: AIS 86, congenital 17, adult 10, neuromuscular 7; ages 13–54, mean ' +
       '19.2. Diameter chosen using insertional torque. Sample: 120 patients, 86 with AIS; 2,846 screws. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '120 patients, 86 with AIS; 2,846 screws',
     sources: [
       {
         citation:
@@ -1373,6 +1540,8 @@ export const EVIDENCE_LEDGER = [
           'Instrumentation of Scoliosis. Asian Spine J 13(5):815-822.',
         pmid: '31079434',
         doi: '10.31616/asj.2018.0177',
+        key: 'balikci-2019',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -1386,6 +1555,7 @@ export const EVIDENCE_LEDGER = [
       '30 to 35 mm. key usual-length, group kuraishi-2013-l1-l5: 35 to 40 mm.',
     population:
       'kuraishi-2013: Right thoracic AIS; CT navigation. Sample: 15 patients. [conference-abstract; abstract].',
+    sampleSize: '15 patients',
     sources: [
       {
         citation:
@@ -1393,6 +1563,8 @@ export const EVIDENCE_LEDGER = [
           'morphology using CT-based navigation system in adolescent idiopathic scoliosis Scoliosis 8(Suppl 1):O27.',
         pmid: null,
         doi: '10.1186/1748-7161-8-S1-O27',
+        key: 'kuraishi-2013',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -1409,6 +1581,7 @@ export const EVIDENCE_LEDGER = [
       'sarwahi-2017: Patients with spine deformity plus cadavers, assessed for anterior or anterolateral screw ' +
       'breach and proximity to vital structures. Sample: 165 patients with 2,800 screws; 8 cadavers with 285 ' +
       'screws. [peer-reviewed; abstract].',
+    sampleSize: '165 patients with 2,800 screws; 8 cadavers with 285 screws',
     sources: [
       {
         citation:
@@ -1416,6 +1589,8 @@ export const EVIDENCE_LEDGER = [
           '(Phila Pa 1976) 42(22):E1305-E1310.',
         pmid: '28296814',
         doi: '10.1097/brs.0000000000002153',
+        key: 'sarwahi-2017',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -1432,6 +1607,7 @@ export const EVIDENCE_LEDGER = [
       'sarwahi-2017: Patients with spine deformity plus cadavers, assessed for anterior or anterolateral screw ' +
       'breach and proximity to vital structures. Sample: 165 patients with 2,800 screws; 8 cadavers with 285 ' +
       'screws. [peer-reviewed; abstract].',
+    sampleSize: '165 patients with 2,800 screws; 8 cadavers with 285 screws',
     sources: [
       {
         citation:
@@ -1439,6 +1615,8 @@ export const EVIDENCE_LEDGER = [
           '(Phila Pa 1976) 42(22):E1305-E1310.',
         pmid: '28296814',
         doi: '10.1097/brs.0000000000002153',
+        key: 'sarwahi-2017',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -1455,6 +1633,7 @@ export const EVIDENCE_LEDGER = [
       'sarwahi-2017: Patients with spine deformity plus cadavers, assessed for anterior or anterolateral screw ' +
       'breach and proximity to vital structures. Sample: 165 patients with 2,800 screws; 8 cadavers with 285 ' +
       'screws. [peer-reviewed; abstract].',
+    sampleSize: '165 patients with 2,800 screws; 8 cadavers with 285 screws',
     sources: [
       {
         citation:
@@ -1462,6 +1641,8 @@ export const EVIDENCE_LEDGER = [
           '(Phila Pa 1976) 42(22):E1305-E1310.',
         pmid: '28296814',
         doi: '10.1097/brs.0000000000002153',
+        key: 'sarwahi-2017',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -1479,6 +1660,7 @@ export const EVIDENCE_LEDGER = [
       'balikci-2019: Mixed scoliosis series: AIS 86, congenital 17, adult 10, neuromuscular 7; ages 13–54, mean ' +
       '19.2. Diameter chosen using insertional torque. Sample: 120 patients, 86 with AIS; 2,846 screws. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '120 patients, 86 with AIS; 2,846 screws',
     sources: [
       {
         citation:
@@ -1486,6 +1668,8 @@ export const EVIDENCE_LEDGER = [
           'Instrumentation of Scoliosis. Asian Spine J 13(5):815-822.',
         pmid: '31079434',
         doi: '10.31616/asj.2018.0177',
+        key: 'balikci-2019',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -1504,6 +1688,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'kuraishi-2013-full-paper: Fifteen patients with right-side thoracic adolescent idiopathic scoliosis who ' +
       'underwent pedicle screw fixation. Sample: 15. [peer-reviewed; abstract].',
+    sampleSize: '15',
     sources: [
       {
         citation:
@@ -1512,6 +1697,8 @@ export const EVIDENCE_LEDGER = [
           'Disord Tech 26(1):22-8.',
         pmid: '21959835',
         doi: '10.1097/BSD.0b013e31823162ef',
+        key: 'kuraishi-2013-full-paper',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -1527,6 +1714,7 @@ export const EVIDENCE_LEDGER = [
       'lenke-2001: AIS classification using standing coronal/lateral and supine side-bending films. Sample: ' +
       '27-patient radiographic reliability set; 5 developers and 7 independent surgeons. [peer-reviewed; ' +
       'abstract].',
+    sampleSize: '27-patient radiographic reliability set; 5 developers and 7 independent surgeons',
     sources: [
       {
         citation:
@@ -1535,6 +1723,8 @@ export const EVIDENCE_LEDGER = [
           '83(8):1169-1181.',
         pmid: '11507125',
         doi: null,
+        key: 'lenke-2001',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -1552,6 +1742,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'korean-level-review: AIS selective-fusion review; primary populations differ by criterion. Sample: ' +
       'Review; aggregate n not supplied. [peer-reviewed; full-text].',
+    sampleSize: 'Review; aggregate n not supplied',
     sources: [
       {
         citation:
@@ -1559,6 +1750,8 @@ export const EVIDENCE_LEDGER = [
           'Selective Fusion versus Postoperative Decompensation. J Korean Neurosurg Soc 64(4):473-485.',
         pmid: '34044493',
         doi: '10.3340/jkns.2020.0258',
+        key: 'korean-level-review',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -1581,6 +1774,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'korean-level-review: AIS selective-fusion review; primary populations differ by criterion. Sample: ' +
       'Review; aggregate n not supplied. [peer-reviewed; full-text].',
+    sampleSize: 'Review; aggregate n not supplied',
     sources: [
       {
         citation:
@@ -1588,6 +1782,8 @@ export const EVIDENCE_LEDGER = [
           'Selective Fusion versus Postoperative Decompensation. J Korean Neurosurg Soc 64(4):473-485.',
         pmid: '34044493',
         doi: '10.3340/jkns.2020.0258',
+        key: 'korean-level-review',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -1607,6 +1803,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'korean-level-review: AIS selective-fusion review; primary populations differ by criterion. Sample: ' +
       'Review; aggregate n not supplied. [peer-reviewed; full-text].',
+    sampleSize: 'Review; aggregate n not supplied',
     sources: [
       {
         citation:
@@ -1614,6 +1811,8 @@ export const EVIDENCE_LEDGER = [
           'Selective Fusion versus Postoperative Decompensation. J Korean Neurosurg Soc 64(4):473-485.',
         pmid: '34044493',
         doi: '10.3340/jkns.2020.0258',
+        key: 'korean-level-review',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -1630,6 +1829,8 @@ export const EVIDENCE_LEDGER = [
     population:
       'liu-2020: Lenke 1A/2A thoracic-only fusions. Sample: 6 studies; 732 patients; 150 with adding-on; ' +
       'per-reference denominators retained in the table. [peer-reviewed; full-text].',
+    sampleSize:
+      '6 studies; 732 patients; 150 with adding-on; per-reference denominators retained in the table',
     sources: [
       {
         citation:
@@ -1638,6 +1839,8 @@ export const EVIDENCE_LEDGER = [
           'Idiopathic Scoliosis: A Systematic Review and Meta-analysis. Neurospine 17(4):902-909.',
         pmid: '33401869',
         doi: '10.14245/ns.2040234.117',
+        key: 'liu-2020',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -1652,6 +1855,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'bmc-level-review: AIS level-selection review; primary populations differ by rule. Sample: Review; ' +
       'aggregate n not supplied. [peer-reviewed; full-text].',
+    sampleSize: 'Review; aggregate n not supplied',
     sources: [
       {
         citation:
@@ -1660,6 +1864,8 @@ export const EVIDENCE_LEDGER = [
           'system: a narrative review. BMC Surg 26(1):102.',
         pmid: '41492130',
         doi: '10.1186/s12893-025-03481-9',
+        key: 'bmc-level-review',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -1674,6 +1880,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'chen-2025: Lenke 1–2 with LIV at or below LTV/LSTV; derivation cohort only. Sample: 112 patients in the ' +
       'full cohort; 10 with adding-on; under-15 subgroup n not supplied. [peer-reviewed; full-text].',
+    sampleSize: '112 patients in the full cohort; 10 with adding-on; under-15 subgroup n not supplied',
     sources: [
       {
         citation:
@@ -1682,6 +1889,8 @@ export const EVIDENCE_LEDGER = [
           'the Fusion Level in Main Thoracic Adolescent Idiopathic Scoliosis. Global Spine J 16(2):956-964.',
         pmid: '40820306',
         doi: '10.1177/21925682251366988',
+        key: 'chen-2025',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -1698,6 +1907,8 @@ export const EVIDENCE_LEDGER = [
     population:
       'liu-2020: Lenke 1A/2A thoracic-only fusions. Sample: 6 studies; 732 patients; 150 with adding-on; ' +
       'per-reference denominators retained in the table. [peer-reviewed; full-text].',
+    sampleSize:
+      '6 studies; 732 patients; 150 with adding-on; per-reference denominators retained in the table',
     sources: [
       {
         citation:
@@ -1706,6 +1917,8 @@ export const EVIDENCE_LEDGER = [
           'Idiopathic Scoliosis: A Systematic Review and Meta-analysis. Neurospine 17(4):902-909.',
         pmid: '33401869',
         doi: '10.14245/ns.2040234.117',
+        key: 'liu-2020',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -1721,6 +1934,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'bmc-level-review: AIS level-selection review; primary populations differ by rule. Sample: Review; ' +
       'aggregate n not supplied. [peer-reviewed; full-text].',
+    sampleSize: 'Review; aggregate n not supplied',
     sources: [
       {
         citation:
@@ -1729,6 +1943,8 @@ export const EVIDENCE_LEDGER = [
           'system: a narrative review. BMC Surg 26(1):102.',
         pmid: '41492130',
         doi: '10.1186/s12893-025-03481-9',
+        key: 'bmc-level-review',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -1744,6 +1960,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'bmc-level-review: AIS level-selection review; primary populations differ by rule. Sample: Review; ' +
       'aggregate n not supplied. [peer-reviewed; full-text].',
+    sampleSize: 'Review; aggregate n not supplied',
     sources: [
       {
         citation:
@@ -1752,6 +1969,8 @@ export const EVIDENCE_LEDGER = [
           'system: a narrative review. BMC Surg 26(1):102.',
         pmid: '41492130',
         doi: '10.1186/s12893-025-03481-9',
+        key: 'bmc-level-review',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -1769,6 +1988,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'bmc-level-review: AIS level-selection review; primary populations differ by rule. Sample: Review; ' +
       'aggregate n not supplied. [peer-reviewed; full-text].',
+    sampleSize: 'Review; aggregate n not supplied',
     sources: [
       {
         citation:
@@ -1777,6 +1997,8 @@ export const EVIDENCE_LEDGER = [
           'system: a narrative review. BMC Surg 26(1):102.',
         pmid: '41492130',
         doi: '10.1186/s12893-025-03481-9',
+        key: 'bmc-level-review',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -1791,6 +2013,8 @@ export const EVIDENCE_LEDGER = [
     population:
       'liu-2020: Lenke 1A/2A thoracic-only fusions. Sample: 6 studies; 732 patients; 150 with adding-on; ' +
       'per-reference denominators retained in the table. [peer-reviewed; full-text].',
+    sampleSize:
+      '6 studies; 732 patients; 150 with adding-on; per-reference denominators retained in the table',
     sources: [
       {
         citation:
@@ -1799,6 +2023,8 @@ export const EVIDENCE_LEDGER = [
           'Idiopathic Scoliosis: A Systematic Review and Meta-analysis. Neurospine 17(4):902-909.',
         pmid: '33401869',
         doi: '10.14245/ns.2040234.117',
+        key: 'liu-2020',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -1813,6 +2039,8 @@ export const EVIDENCE_LEDGER = [
     population:
       'liu-2020: Lenke 1A/2A thoracic-only fusions. Sample: 6 studies; 732 patients; 150 with adding-on; ' +
       'per-reference denominators retained in the table. [peer-reviewed; full-text].',
+    sampleSize:
+      '6 studies; 732 patients; 150 with adding-on; per-reference denominators retained in the table',
     sources: [
       {
         citation:
@@ -1821,6 +2049,8 @@ export const EVIDENCE_LEDGER = [
           'Idiopathic Scoliosis: A Systematic Review and Meta-analysis. Neurospine 17(4):902-909.',
         pmid: '33401869',
         doi: '10.14245/ns.2040234.117',
+        key: 'liu-2020',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -1835,6 +2065,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'bmc-level-review: AIS level-selection review; primary populations differ by rule. Sample: Review; ' +
       'aggregate n not supplied. [peer-reviewed; full-text].',
+    sampleSize: 'Review; aggregate n not supplied',
     sources: [
       {
         citation:
@@ -1843,6 +2074,8 @@ export const EVIDENCE_LEDGER = [
           'system: a narrative review. BMC Surg 26(1):102.',
         pmid: '41492130',
         doi: '10.1186/s12893-025-03481-9',
+        key: 'bmc-level-review',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -1860,6 +2093,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'bmc-level-review: AIS level-selection review; primary populations differ by rule. Sample: Review; ' +
       'aggregate n not supplied. [peer-reviewed; full-text].',
+    sampleSize: 'Review; aggregate n not supplied',
     sources: [
       {
         citation:
@@ -1868,6 +2102,8 @@ export const EVIDENCE_LEDGER = [
           'system: a narrative review. BMC Surg 26(1):102.',
         pmid: '41492130',
         doi: '10.1186/s12893-025-03481-9',
+        key: 'bmc-level-review',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -1883,6 +2119,7 @@ export const EVIDENCE_LEDGER = [
     population:
       's1-liv-42811138: Lenke 1–2, lumbar modifiers A/B; adding-on analysis. Sample: Derivation 177 patients; ' +
       'external validation 289 patients. [peer-reviewed; abstract].',
+    sampleSize: 'Derivation 177 patients; external validation 289 patients',
     sources: [
       {
         citation:
@@ -1891,6 +2128,8 @@ export const EVIDENCE_LEDGER = [
           'dual-center machine learning study with external validation. Eur Spine J',
         pmid: '42811138',
         doi: '10.1007/s00586-026-10407-3',
+        key: 's1-liv-42811138',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -1906,6 +2145,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'ssv-40103372: Lenke 1–2 with LIV ≤ L1; DJK and sagittal stable vertebra analysis. Sample: 1,034 patients; ' +
       'multicentre. [peer-reviewed; abstract].',
+    sampleSize: '1,034 patients; multicentre',
     sources: [
       {
         citation:
@@ -1914,6 +2154,8 @@ export const EVIDENCE_LEDGER = [
           'Shah SA. 2025. Spine (Phila Pa 1976)',
         pmid: '40103372',
         doi: '10.1097/brs.0000000000005336',
+        key: 'ssv-40103372',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -1934,6 +2176,7 @@ export const EVIDENCE_LEDGER = [
       'djk-34096362: Lenke 1–2 with LIV ≤ L1; sagittal stable vertebra inclusion and postoperative kyphosis. ' +
       'Sample: 122 patients; SSV excluded 42, SSV included 80; postoperative threshold subgroup 13. ' +
       '[peer-reviewed; abstract].',
+    sampleSize: '122 patients; SSV excluded 42, SSV included 80; postoperative threshold subgroup 13',
     sources: [
       {
         citation:
@@ -1942,6 +2185,8 @@ export const EVIDENCE_LEDGER = [
           'the Sagittal Stable Vertebra Concept. Global Spine J 13(4):1112-1119.',
         pmid: '34096362',
         doi: '10.1177/21925682211019692',
+        key: 'djk-34096362',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -1959,6 +2204,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'l3-bending-30739071: Lumbar curves greater than 60°; preoperative concave side-bending L3 translation. ' +
       'Sample: 84 patients: 24 ending at L3; 60 at L4. [peer-reviewed; abstract].',
+    sampleSize: '84 patients: 24 ending at L3; 60 at L4',
     sources: [
       {
         citation:
@@ -1966,6 +2212,8 @@ export const EVIDENCE_LEDGER = [
           'more than 60°: L3 or L4? Clin Neurol Neurosurg 178:77-81.',
         pmid: '30739071',
         doi: '10.1016/j.clineuro.2019.02.005',
+        key: 'l3-bending-30739071',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -1982,6 +2230,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'bmc-level-review: AIS level-selection review; primary populations differ by rule. Sample: Review; ' +
       'aggregate n not supplied. [peer-reviewed; full-text].',
+    sampleSize: 'Review; aggregate n not supplied',
     sources: [
       {
         citation:
@@ -1990,6 +2239,8 @@ export const EVIDENCE_LEDGER = [
           'system: a narrative review. BMC Surg 26(1):102.',
         pmid: '41492130',
         doi: '10.1186/s12893-025-03481-9',
+        key: 'bmc-level-review',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -2006,6 +2257,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'bmc-level-review: AIS level-selection review; primary populations differ by rule. Sample: Review; ' +
       'aggregate n not supplied. [peer-reviewed; full-text].',
+    sampleSize: 'Review; aggregate n not supplied',
     sources: [
       {
         citation:
@@ -2014,6 +2266,8 @@ export const EVIDENCE_LEDGER = [
           'system: a narrative review. BMC Surg 26(1):102.',
         pmid: '41492130',
         doi: '10.1186/s12893-025-03481-9',
+        key: 'bmc-level-review',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -2030,6 +2284,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'bmc-level-review: AIS level-selection review; primary populations differ by rule. Sample: Review; ' +
       'aggregate n not supplied. [peer-reviewed; full-text].',
+    sampleSize: 'Review; aggregate n not supplied',
     sources: [
       {
         citation:
@@ -2038,6 +2293,8 @@ export const EVIDENCE_LEDGER = [
           'system: a narrative review. BMC Surg 26(1):102.',
         pmid: '41492130',
         doi: '10.1186/s12893-025-03481-9',
+        key: 'bmc-level-review',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -2053,6 +2310,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'bmc-level-review: AIS level-selection review; primary populations differ by rule. Sample: Review; ' +
       'aggregate n not supplied. [peer-reviewed; full-text].',
+    sampleSize: 'Review; aggregate n not supplied',
     sources: [
       {
         citation:
@@ -2061,6 +2319,8 @@ export const EVIDENCE_LEDGER = [
           'system: a narrative review. BMC Surg 26(1):102.',
         pmid: '41492130',
         doi: '10.1186/s12893-025-03481-9',
+        key: 'bmc-level-review',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -2079,6 +2339,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'residual-t1-39658742: Lenke 1; residual T1 tilt and self-image analysis. Sample: 128 patients; 44 with T1 ' +
       'tilt greater than 5° at two years. [peer-reviewed; abstract].',
+    sampleSize: '128 patients; 44 with T1 tilt greater than 5° at two years',
     sources: [
       {
         citation:
@@ -2087,6 +2348,8 @@ export const EVIDENCE_LEDGER = [
           'scoliosis. Spine Deform 13(3):811-819.',
         pmid: '39658742',
         doi: '10.1007/s43390-024-01020-9',
+        key: 'residual-t1-39658742',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -2104,6 +2367,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'shoulder-36138576: Lenke 1; shoulder imbalance and main-thoracic overcorrection. Sample: 104 patients; 21 ' +
       'with imbalance. [peer-reviewed; abstract].',
+    sampleSize: '104 patients; 21 with imbalance',
     sources: [
       {
         citation:
@@ -2113,6 +2377,8 @@ export const EVIDENCE_LEDGER = [
           'Level for Patients with Adolescent Idiopathic Scoliosis Lenke Type 1. Asian Spine J 17(1):166-175.',
         pmid: '36138576',
         doi: '10.31616/asj.2022.0020',
+        key: 'shoulder-36138576',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -2130,6 +2396,9 @@ export const EVIDENCE_LEDGER = [
     population:
       'zhao-2024: AIS proximal junctional kyphosis meta-analysis. Sample: 24 studies; stated total 4,063; 718 ' +
       'with PJK and 3,885 without; patients per hook comparison not given. [peer-reviewed; full-text].',
+    sampleSize:
+      '24 studies; stated total 4,063; 718 with PJK and 3,885 without; patients per hook comparison not ' +
+      'given',
     sources: [
       {
         citation:
@@ -2137,6 +2406,8 @@ export const EVIDENCE_LEDGER = [
           'junctional kyphosis in adolescent idiopathic scoliosis. Front Pediatr 12:1387841.',
         pmid: '39205666',
         doi: '10.3389/fped.2024.1387841',
+        key: 'zhao-2024',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -2153,6 +2424,7 @@ export const EVIDENCE_LEDGER = [
       'coronal-decompensation-4417731: Selective fusion; coronal decompensation defined in the opened article by ' +
       'C7PL–CSVL >20 mm. Sample: Selective thoracic subgroup 16; selective TL/L subgroup 14; full sample not ' +
       'supplied. [peer-reviewed; full-text].',
+    sampleSize: 'Selective thoracic subgroup 16; selective TL/L subgroup 14; full sample not supplied',
     sources: [
       {
         citation:
@@ -2161,6 +2433,8 @@ export const EVIDENCE_LEDGER = [
           '9(2):153-160.',
         pmid: '25845647',
         doi: '10.1007/s11832-015-0653-0',
+        key: 'coronal-decompensation-4417731',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -2178,6 +2452,8 @@ export const EVIDENCE_LEDGER = [
     population:
       'liu-2020: Lenke 1A/2A thoracic-only fusions. Sample: 6 studies; 732 patients; 150 with adding-on; ' +
       'per-reference denominators retained in the table. [peer-reviewed; full-text].',
+    sampleSize:
+      '6 studies; 732 patients; 150 with adding-on; per-reference denominators retained in the table',
     sources: [
       {
         citation:
@@ -2186,6 +2462,8 @@ export const EVIDENCE_LEDGER = [
           'Idiopathic Scoliosis: A Systematic Review and Meta-analysis. Neurospine 17(4):902-909.',
         pmid: '33401869',
         doi: '10.14245/ns.2040234.117',
+        key: 'liu-2020',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -2213,11 +2491,14 @@ export const EVIDENCE_LEDGER = [
       'zheng-2009: Chinese children aged 5–14 from a hospital registry, stratified random sampling with thoracic ' +
       'abnormalities excluded; not scoliosis-specific; 2 mm axial CT. Sample: 120 children aged 5–14; number per ' +
       'age band and sex is not stated. [peer-reviewed; full-text].',
+    sampleSize: '120 children aged 5–14; number per age band and sex is not stated',
     sources: [
       {
         citation: 'Zheng C, Huang Q, Hu Y, Wang X, Chen W. 2009. Int Orthop 33(6):1663-1668.',
         pmid: '18956181',
         doi: '10.1007/s00264-008-0675-z',
+        key: 'zheng-2009',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -2235,6 +2516,9 @@ export const EVIDENCE_LEDGER = [
       'IV 5); ages 12.3–18.3; Cobb 58–98°; 3 mm CT. Sample: 24 patients; width n 213 convex/223 concave; angle n ' +
       '217 convex/216 concave; chord n 213 on each side; per-cell pedicle counts retained. [peer-reviewed; ' +
       'full-text].',
+    sampleSize:
+      '24 patients; width n 213 convex/223 concave; angle n 217 convex/216 concave; chord n 213 on each ' +
+      'side; per-cell pedicle counts retained',
     sources: [
       {
         citation:
@@ -2242,6 +2526,8 @@ export const EVIDENCE_LEDGER = [
           'with adolescent idiopathic scoliosis. Indian J Orthop 44(2):169-176.',
         pmid: '20419004',
         doi: '10.4103/0019-5413.62084',
+        key: 'upendra-2010',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -2328,6 +2614,9 @@ export const EVIDENCE_LEDGER = [
       'IV 5); ages 12.3–18.3; Cobb 58–98°; 3 mm CT. Sample: 24 patients; width n 213 convex/223 concave; angle n ' +
       '217 convex/216 concave; chord n 213 on each side; per-cell pedicle counts retained. [peer-reviewed; ' +
       'full-text].',
+    sampleSize:
+      '24 patients; width n 213 convex/223 concave; angle n 217 convex/216 concave; chord n 213 on each ' +
+      'side; per-cell pedicle counts retained',
     sources: [
       {
         citation:
@@ -2335,6 +2624,8 @@ export const EVIDENCE_LEDGER = [
           'with adolescent idiopathic scoliosis. Indian J Orthop 44(2):169-176.',
         pmid: '20419004',
         doi: '10.4103/0019-5413.62084',
+        key: 'upendra-2010',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -2459,11 +2750,14 @@ export const EVIDENCE_LEDGER = [
       'zheng-2009: Chinese children aged 5–14 from a hospital registry, stratified random sampling with thoracic ' +
       'abnormalities excluded; not scoliosis-specific; 2 mm axial CT. Sample: 120 children aged 5–14; number per ' +
       'age band and sex is not stated. [peer-reviewed; full-text].',
+    sampleSize: '120 children aged 5–14; number per age band and sex is not stated',
     sources: [
       {
         citation: 'Zheng C, Huang Q, Hu Y, Wang X, Chen W. 2009. Int Orthop 33(6):1663-1668.',
         pmid: '18956181',
         doi: '10.1007/s00264-008-0675-z',
+        key: 'zheng-2009',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -2584,11 +2878,14 @@ export const EVIDENCE_LEDGER = [
       'zheng-2009: Chinese children aged 5–14 from a hospital registry, stratified random sampling with thoracic ' +
       'abnormalities excluded; not scoliosis-specific; 2 mm axial CT. Sample: 120 children aged 5–14; number per ' +
       'age band and sex is not stated. [peer-reviewed; full-text].',
+    sampleSize: '120 children aged 5–14; number per age band and sex is not stated',
     sources: [
       {
         citation: 'Zheng C, Huang Q, Hu Y, Wang X, Chen W. 2009. Int Orthop 33(6):1663-1668.',
         pmid: '18956181',
         doi: '10.1007/s00264-008-0675-z',
+        key: 'zheng-2009',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -2613,6 +2910,7 @@ export const EVIDENCE_LEDGER = [
       'sato-2022: Japanese AIS, enrolled ages 12–20 (inclusion range 10–20), mean age 16.2; 49 girls and 8 boys; ' +
       'Lenke 1/2 right main thoracic curves; 0.5 mm CT. Right is always convex and left always concave. Sample: ' +
       '57 adolescents; 684 pedicles; 15 patients in the 26.3 percent group. [peer-reviewed; full-text].',
+    sampleSize: '57 adolescents; 684 pedicles; 15 patients in the 26.3% group',
     sources: [
       {
         citation:
@@ -2621,6 +2919,8 @@ export const EVIDENCE_LEDGER = [
           'radiographic factors in adolescent idiopathic scoliosis. BMC Musculoskelet Disord 23(1):847.',
         pmid: '36068555',
         doi: '10.1186/s12891-022-05799-4',
+        key: 'sato-2022',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -2642,6 +2942,7 @@ export const EVIDENCE_LEDGER = [
       'sato-2022: Japanese AIS, enrolled ages 12–20 (inclusion range 10–20), mean age 16.2; 49 girls and 8 boys; ' +
       'Lenke 1/2 right main thoracic curves; 0.5 mm CT. Right is always convex and left always concave. Sample: ' +
       '57 adolescents; 684 pedicles; 15 patients in the 26.3 percent group. [peer-reviewed; full-text].',
+    sampleSize: '57 adolescents; 684 pedicles; 15 patients in the 26.3% group',
     sources: [
       {
         citation:
@@ -2650,6 +2951,8 @@ export const EVIDENCE_LEDGER = [
           'radiographic factors in adolescent idiopathic scoliosis. BMC Musculoskelet Disord 23(1):847.',
         pmid: '36068555',
         doi: '10.1186/s12891-022-05799-4',
+        key: 'sato-2022',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -2674,6 +2977,7 @@ export const EVIDENCE_LEDGER = [
       'sato-2022: Japanese AIS, enrolled ages 12–20 (inclusion range 10–20), mean age 16.2; 49 girls and 8 boys; ' +
       'Lenke 1/2 right main thoracic curves; 0.5 mm CT. Right is always convex and left always concave. Sample: ' +
       '57 adolescents; 684 pedicles; 15 patients in the 26.3 percent group. [peer-reviewed; full-text].',
+    sampleSize: '57 adolescents; 684 pedicles; 15 patients in the 26.3% group',
     sources: [
       {
         citation:
@@ -2682,6 +2986,8 @@ export const EVIDENCE_LEDGER = [
           'radiographic factors in adolescent idiopathic scoliosis. BMC Musculoskelet Disord 23(1):847.',
         pmid: '36068555',
         doi: '10.1186/s12891-022-05799-4',
+        key: 'sato-2022',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -2755,6 +3061,7 @@ export const EVIDENCE_LEDGER = [
       'gao-2017: Girls with Lenke 1 AIS and female controls matched for age, sex and height; age 15 ± 2.6; ' +
       'height 154 vs 155 cm. Sample: 60 AIS girls; 60 female controls; 1,322 patient pedicles and 1,396 control ' +
       'pedicles. [peer-reviewed; full-text].',
+    sampleSize: '60 AIS girls; 60 female controls; 1,322 patient pedicles and 1,396 control pedicles',
     sources: [
       {
         citation:
@@ -2763,6 +3070,8 @@ export const EVIDENCE_LEDGER = [
           'Subjects? A CT-based Case-control Study. Clin Orthop Relat Res 475(11):2765-2774.',
         pmid: '28766159',
         doi: '10.1007/s11999-017-5448-9',
+        key: 'gao-2017',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -2829,6 +3138,7 @@ export const EVIDENCE_LEDGER = [
       'gao-2017: Girls with Lenke 1 AIS and female controls matched for age, sex and height; age 15 ± 2.6; ' +
       'height 154 vs 155 cm. Sample: 60 AIS girls; 60 female controls; 1,322 patient pedicles and 1,396 control ' +
       'pedicles. [peer-reviewed; full-text].',
+    sampleSize: '60 AIS girls; 60 female controls; 1,322 patient pedicles and 1,396 control pedicles',
     sources: [
       {
         citation:
@@ -2837,6 +3147,8 @@ export const EVIDENCE_LEDGER = [
           'Subjects? A CT-based Case-control Study. Clin Orthop Relat Res 475(11):2765-2774.',
         pmid: '28766159',
         doi: '10.1007/s11999-017-5448-9',
+        key: 'gao-2017',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -2885,6 +3197,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'pluemvitayaporn-2025: Thai patients with Lenke 5 curves; mean age 14.7 (12–22), mean Cobb 48° (36–84°). ' +
       'Sample: 112 patients; 3,808 pedicles. [peer-reviewed; full-text].',
+    sampleSize: '112 patients; 3,808 pedicles',
     sources: [
       {
         citation:
@@ -2893,6 +3206,8 @@ export const EVIDENCE_LEDGER = [
           'Lenke Type 5 Idiopathic Scoliosis in Thai Population. Asian J Neurosurg 20(1):132-137.',
         pmid: '40041581',
         doi: '10.1055/s-0044-1800812',
+        key: 'pluemvitayaporn-2025',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -2960,6 +3275,9 @@ export const EVIDENCE_LEDGER = [
       'IV 5); ages 12.3–18.3; Cobb 58–98°; 3 mm CT. Sample: 24 patients; width n 213 convex/223 concave; angle n ' +
       '217 convex/216 concave; chord n 213 on each side; per-cell pedicle counts retained. [peer-reviewed; ' +
       'full-text].',
+    sampleSize:
+      '24 patients; width n 213 convex/223 concave; angle n 217 convex/216 concave; chord n 213 on each ' +
+      'side; per-cell pedicle counts retained',
     sources: [
       {
         citation:
@@ -2967,6 +3285,8 @@ export const EVIDENCE_LEDGER = [
           'with adolescent idiopathic scoliosis. Indian J Orthop 44(2):169-176.',
         pmid: '20419004',
         doi: '10.4103/0019-5413.62084',
+        key: 'upendra-2010',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3083,11 +3403,14 @@ export const EVIDENCE_LEDGER = [
       'zheng-2009: Chinese children aged 5–14 from a hospital registry, stratified random sampling with thoracic ' +
       'abnormalities excluded; not scoliosis-specific; 2 mm axial CT. Sample: 120 children aged 5–14; number per ' +
       'age band and sex is not stated. [peer-reviewed; full-text].',
+    sampleSize: '120 children aged 5–14; number per age band and sex is not stated',
     sources: [
       {
         citation: 'Zheng C, Huang Q, Hu Y, Wang X, Chen W. 2009. Int Orthop 33(6):1663-1668.',
         pmid: '18956181',
         doi: '10.1007/s00264-008-0675-z',
+        key: 'zheng-2009',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3112,6 +3435,7 @@ export const EVIDENCE_LEDGER = [
       'sato-2022: Japanese AIS, enrolled ages 12–20 (inclusion range 10–20), mean age 16.2; 49 girls and 8 boys; ' +
       'Lenke 1/2 right main thoracic curves; 0.5 mm CT. Right is always convex and left always concave. Sample: ' +
       '57 adolescents; 684 pedicles; 15 patients in the 26.3 percent group. [peer-reviewed; full-text].',
+    sampleSize: '57 adolescents; 684 pedicles; 15 patients in the 26.3% group',
     sources: [
       {
         citation:
@@ -3120,6 +3444,8 @@ export const EVIDENCE_LEDGER = [
           'radiographic factors in adolescent idiopathic scoliosis. BMC Musculoskelet Disord 23(1):847.',
         pmid: '36068555',
         doi: '10.1186/s12891-022-05799-4',
+        key: 'sato-2022',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3138,6 +3464,7 @@ export const EVIDENCE_LEDGER = [
       'sato-2022: Japanese AIS, enrolled ages 12–20 (inclusion range 10–20), mean age 16.2; 49 girls and 8 boys; ' +
       'Lenke 1/2 right main thoracic curves; 0.5 mm CT. Right is always convex and left always concave. Sample: ' +
       '57 adolescents; 684 pedicles; 15 patients in the 26.3 percent group. [peer-reviewed; full-text].',
+    sampleSize: '57 adolescents; 684 pedicles; 15 patients in the 26.3% group',
     sources: [
       {
         citation:
@@ -3146,6 +3473,8 @@ export const EVIDENCE_LEDGER = [
           'radiographic factors in adolescent idiopathic scoliosis. BMC Musculoskelet Disord 23(1):847.',
         pmid: '36068555',
         doi: '10.1186/s12891-022-05799-4',
+        key: 'sato-2022',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3164,6 +3493,7 @@ export const EVIDENCE_LEDGER = [
       'sato-2022: Japanese AIS, enrolled ages 12–20 (inclusion range 10–20), mean age 16.2; 49 girls and 8 boys; ' +
       'Lenke 1/2 right main thoracic curves; 0.5 mm CT. Right is always convex and left always concave. Sample: ' +
       '57 adolescents; 684 pedicles; 15 patients in the 26.3 percent group. [peer-reviewed; full-text].',
+    sampleSize: '57 adolescents; 684 pedicles; 15 patients in the 26.3% group',
     sources: [
       {
         citation:
@@ -3172,6 +3502,8 @@ export const EVIDENCE_LEDGER = [
           'radiographic factors in adolescent idiopathic scoliosis. BMC Musculoskelet Disord 23(1):847.',
         pmid: '36068555',
         doi: '10.1186/s12891-022-05799-4',
+        key: 'sato-2022',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3186,6 +3518,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'chen-2025: Lenke 1–2 with LIV at or below LTV/LSTV; derivation cohort only. Sample: 112 patients in the ' +
       'full cohort; 10 with adding-on; under-15 subgroup n not supplied. [peer-reviewed; full-text].',
+    sampleSize: '112 patients in the full cohort; 10 with adding-on; under-15 subgroup n not supplied',
     sources: [
       {
         citation:
@@ -3194,6 +3527,8 @@ export const EVIDENCE_LEDGER = [
           'the Fusion Level in Main Thoracic Adolescent Idiopathic Scoliosis. Global Spine J 16(2):956-964.',
         pmid: '40820306',
         doi: '10.1177/21925682251366988',
+        key: 'chen-2025',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3211,6 +3546,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'chen-2025: Lenke 1–2 with LIV at or below LTV/LSTV; derivation cohort only. Sample: 112 patients in the ' +
       'full cohort; 10 with adding-on; under-15 subgroup n not supplied. [peer-reviewed; full-text].',
+    sampleSize: '112 patients in the full cohort; 10 with adding-on; under-15 subgroup n not supplied',
     sources: [
       {
         citation:
@@ -3219,6 +3555,8 @@ export const EVIDENCE_LEDGER = [
           'the Fusion Level in Main Thoracic Adolescent Idiopathic Scoliosis. Global Spine J 16(2):956-964.',
         pmid: '40820306',
         doi: '10.1177/21925682251366988',
+        key: 'chen-2025',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3236,6 +3574,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'chen-2025: Lenke 1–2 with LIV at or below LTV/LSTV; derivation cohort only. Sample: 112 patients in the ' +
       'full cohort; 10 with adding-on; under-15 subgroup n not supplied. [peer-reviewed; full-text].',
+    sampleSize: '112 patients in the full cohort; 10 with adding-on; under-15 subgroup n not supplied',
     sources: [
       {
         citation:
@@ -3244,6 +3583,8 @@ export const EVIDENCE_LEDGER = [
           'the Fusion Level in Main Thoracic Adolescent Idiopathic Scoliosis. Global Spine J 16(2):956-964.',
         pmid: '40820306',
         doi: '10.1177/21925682251366988',
+        key: 'chen-2025',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3258,6 +3599,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'chen-2025: Lenke 1–2 with LIV at or below LTV/LSTV; derivation cohort only. Sample: 112 patients in the ' +
       'full cohort; 10 with adding-on; under-15 subgroup n not supplied. [peer-reviewed; full-text].',
+    sampleSize: '112 patients in the full cohort; 10 with adding-on; under-15 subgroup n not supplied',
     sources: [
       {
         citation:
@@ -3266,6 +3608,8 @@ export const EVIDENCE_LEDGER = [
           'the Fusion Level in Main Thoracic Adolescent Idiopathic Scoliosis. Global Spine J 16(2):956-964.',
         pmid: '40820306',
         doi: '10.1177/21925682251366988',
+        key: 'chen-2025',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3281,6 +3625,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'uiv-tilt-40020691: 151 Lenke 1–2 AIS patients, 107 Lenke 1 and 44 Lenke 2; postoperative UIV tilt ' +
       'correlated with T1 tilt. Sample: 151 patients. [peer-reviewed; abstract].',
+    sampleSize: '151 patients',
     sources: [
       {
         citation:
@@ -3290,6 +3635,8 @@ export const EVIDENCE_LEDGER = [
           'Global Spine J 15(8):3601-3611.',
         pmid: '40020691',
         doi: '10.1177/21925682251325171',
+        key: 'uiv-tilt-40020691',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3305,6 +3652,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'brooks-2018: Multicentre main thoracic fusion cohort; shoulder imbalance >1 cm. Sample: 626 main thoracic ' +
       'fusions. [peer-reviewed; abstract].',
+    sampleSize: '626 main thoracic fusions',
     sources: [
       {
         citation:
@@ -3313,6 +3661,8 @@ export const EVIDENCE_LEDGER = [
           'Spine Deform 6(6):707-711.',
         pmid: '30348348',
         doi: '10.1016/j.jspd.2018.03.010',
+        key: 'brooks-2018',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3327,6 +3677,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'takeshita-2010: Right thoracic curves; left pedicle–aorta relation. Sample: 24 patients; 293 vertebrae. ' +
       '[peer-reviewed; abstract].',
+    sampleSize: '24 patients; 293 vertebrae',
     sources: [
       {
         citation:
@@ -3335,6 +3686,8 @@ export const EVIDENCE_LEDGER = [
           'placement. Eur Spine J 19(5):815-820.',
         pmid: '20127493',
         doi: '10.1007/s00586-010-1298-9',
+        key: 'takeshita-2010',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3349,6 +3702,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'lehman-2003: Cadaver thoracic vertebrae; straight-forward compared with anatomic sagittal trajectory. ' +
       'Sample: 30 cadaver thoracic vertebrae. [peer-reviewed; abstract].',
+    sampleSize: '30 cadaver thoracic vertebrae',
     sources: [
       {
         citation:
@@ -3357,6 +3711,8 @@ export const EVIDENCE_LEDGER = [
           '28(18):2058-2065.',
         pmid: '14501914',
         doi: '10.1097/01.brs.0000087743.57439.4f',
+        key: 'lehman-2003',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3373,11 +3729,14 @@ export const EVIDENCE_LEDGER = [
       'fennell-2014: Thoracic screw placement in 33 consecutive patients, not an AIS cohort; the technique was ' +
       'not tested in severe scoliotic spines. Sample: 33 consecutive patients; 219 screws. [peer-reviewed; ' +
       'abstract].',
+    sampleSize: '33 consecutive patients; 219 screws',
     sources: [
       {
         citation: 'Fennell VS, Palejwala S, Skoch J, Stidd DA, Baaj AA. 2014. J Neurosurg Spine 21(5):778-784.',
         pmid: '25147977',
         doi: '10.3171/2014.7.spine1489',
+        key: 'fennell-2014',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3395,6 +3754,7 @@ export const EVIDENCE_LEDGER = [
       'peng-2023: Mixed thoracic diseases including stenosis, deformity, fractures, infection and others; not an ' +
       'AIS cohort. Thoracic screw technique uses the 30°/20° scheme and upper-endplate-parallel aim. Sample: 118 ' +
       'patients; 1,315 screws. [peer-reviewed; full-text].',
+    sampleSize: '118 patients; 1,315 screws',
     sources: [
       {
         citation:
@@ -3403,6 +3763,8 @@ export const EVIDENCE_LEDGER = [
           'screws and upper endplate. Front Surg 10:1219816.',
         pmid: '37609000',
         doi: '10.3389/fsurg.2023.1219816',
+        key: 'peng-2023',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3418,6 +3780,7 @@ export const EVIDENCE_LEDGER = [
       'sato-2022: Japanese AIS, enrolled ages 12–20 (inclusion range 10–20), mean age 16.2; 49 girls and 8 boys; ' +
       'Lenke 1/2 right main thoracic curves; 0.5 mm CT. Right is always convex and left always concave. Sample: ' +
       '57 adolescents; 684 pedicles; 15 patients in the 26.3 percent group. [peer-reviewed; full-text].',
+    sampleSize: '57 adolescents; 684 pedicles; 15 patients in the 26.3% group',
     sources: [
       {
         citation:
@@ -3426,6 +3789,8 @@ export const EVIDENCE_LEDGER = [
           'radiographic factors in adolescent idiopathic scoliosis. BMC Musculoskelet Disord 23(1):847.',
         pmid: '36068555',
         doi: '10.1186/s12891-022-05799-4',
+        key: 'sato-2022',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3441,6 +3806,7 @@ export const EVIDENCE_LEDGER = [
       'sato-2022: Japanese AIS, enrolled ages 12–20 (inclusion range 10–20), mean age 16.2; 49 girls and 8 boys; ' +
       'Lenke 1/2 right main thoracic curves; 0.5 mm CT. Right is always convex and left always concave. Sample: ' +
       '57 adolescents; 684 pedicles; 15 patients in the 26.3 percent group. [peer-reviewed; full-text].',
+    sampleSize: '57 adolescents; 684 pedicles; 15 patients in the 26.3% group',
     sources: [
       {
         citation:
@@ -3449,6 +3815,8 @@ export const EVIDENCE_LEDGER = [
           'radiographic factors in adolescent idiopathic scoliosis. BMC Musculoskelet Disord 23(1):847.',
         pmid: '36068555',
         doi: '10.1186/s12891-022-05799-4',
+        key: 'sato-2022',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3464,6 +3832,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'takeshita-2010: Right thoracic curves; left pedicle–aorta relation. Sample: 24 patients; 293 vertebrae. ' +
       '[peer-reviewed; abstract].',
+    sampleSize: '24 patients; 293 vertebrae',
     sources: [
       {
         citation:
@@ -3472,6 +3841,8 @@ export const EVIDENCE_LEDGER = [
           'placement. Eur Spine J 19(5):815-820.',
         pmid: '20127493',
         doi: '10.1007/s00586-010-1298-9',
+        key: 'takeshita-2010',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3488,6 +3859,7 @@ export const EVIDENCE_LEDGER = [
       'cerny-2014: Front-film pedicle-based rotation measurement method evaluated by the author, 2 experts and ' +
       '10 students. Sample: 5,580 evaluations; author, 2 experts and 10 students; patient/specimen count not ' +
       'recorded. [peer-reviewed; full-text].',
+    sampleSize: '5,580 evaluations; author, 2 experts and 10 students; patient/specimen count not recorded',
     sources: [
       {
         citation:
@@ -3495,6 +3867,8 @@ export const EVIDENCE_LEDGER = [
           'presentation of the new method. Scoliosis 9:11.',
         pmid: '25120581',
         doi: '10.1186/1748-7161-9-11',
+        key: 'cerny-2014',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3510,6 +3884,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'chen-2025: Lenke 1–2 with LIV at or below LTV/LSTV; derivation cohort only. Sample: 112 patients in the ' +
       'full cohort; 10 with adding-on; under-15 subgroup n not supplied. [peer-reviewed; full-text].',
+    sampleSize: '112 patients in the full cohort; 10 with adding-on; under-15 subgroup n not supplied',
     sources: [
       {
         citation:
@@ -3518,6 +3893,8 @@ export const EVIDENCE_LEDGER = [
           'the Fusion Level in Main Thoracic Adolescent Idiopathic Scoliosis. Global Spine J 16(2):956-964.',
         pmid: '40820306',
         doi: '10.1177/21925682251366988',
+        key: 'chen-2025',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3532,6 +3909,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'uiv-tilt-40020691: 151 Lenke 1–2 AIS patients, 107 Lenke 1 and 44 Lenke 2; postoperative UIV tilt ' +
       'correlated with T1 tilt. Sample: 151 patients. [peer-reviewed; abstract].',
+    sampleSize: '151 patients',
     sources: [
       {
         citation:
@@ -3541,6 +3919,8 @@ export const EVIDENCE_LEDGER = [
           'Global Spine J 15(8):3601-3611.',
         pmid: '40020691',
         doi: '10.1177/21925682251325171',
+        key: 'uiv-tilt-40020691',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3555,6 +3935,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'uiv-tilt-40020691: 151 Lenke 1–2 AIS patients, 107 Lenke 1 and 44 Lenke 2; postoperative UIV tilt ' +
       'correlated with T1 tilt. Sample: 151 patients. [peer-reviewed; abstract].',
+    sampleSize: '151 patients',
     sources: [
       {
         citation:
@@ -3564,6 +3945,8 @@ export const EVIDENCE_LEDGER = [
           'Global Spine J 15(8):3601-3611.',
         pmid: '40020691',
         doi: '10.1177/21925682251325171',
+        key: 'uiv-tilt-40020691',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3578,6 +3961,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'uiv-tilt-40020691: 151 Lenke 1–2 AIS patients, 107 Lenke 1 and 44 Lenke 2; postoperative UIV tilt ' +
       'correlated with T1 tilt. Sample: 151 patients. [peer-reviewed; abstract].',
+    sampleSize: '151 patients',
     sources: [
       {
         citation:
@@ -3587,6 +3971,8 @@ export const EVIDENCE_LEDGER = [
           'Global Spine J 15(8):3601-3611.',
         pmid: '40020691',
         doi: '10.1177/21925682251325171',
+        key: 'uiv-tilt-40020691',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3602,6 +3988,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'cui-2012: AIS CT investigation of medial-wall perforation risk along the probe path. Sample: 30 AIS ' +
       'patients; CTs. [peer-reviewed; abstract].',
+    sampleSize: '30 AIS patients; CTs',
     sources: [
       {
         citation:
@@ -3609,6 +3996,8 @@ export const EVIDENCE_LEDGER = [
           '2012. Surg Radiol Anat 34(3):209-216.',
         pmid: '21739245',
         doi: '10.1007/s00276-011-0849-z',
+        key: 'cui-2012',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3625,11 +4014,14 @@ export const EVIDENCE_LEDGER = [
     population:
       'etemadifar-2017: AIS series; screw positions checked by CT. Sample: 38 AIS patients; 720 freehand screws. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '38 AIS patients; 720 freehand screws',
     sources: [
       {
         citation: 'Etemadifar M, Jamalaldini M. 2017. Adv Biomed Res 6:19.',
         pmid: '28349022',
         doi: '10.4103/2277-9175.201331',
+        key: 'etemadifar-2017',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3642,6 +4034,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'wilke-2024: Surgeons choosing AIS classification, fusion levels and implants from standing and bending ' +
       'films. Sample: 32 surgeons; 15 countries; 12 cases. [peer-reviewed; full-text].',
+    sampleSize: '32 surgeons; 15 countries; 12 cases',
     sources: [
       {
         citation:
@@ -3649,6 +4042,8 @@ export const EVIDENCE_LEDGER = [
           'adolescent idiopathic scoliosis: Evaluation of a multi-center survey. JOR Spine 7(2):e1324.',
         pmid: '38633662',
         doi: '10.1002/jsp2.1324',
+        key: 'wilke-2024',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3661,6 +4056,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'wilke-2024: Surgeons choosing AIS classification, fusion levels and implants from standing and bending ' +
       'films. Sample: 32 surgeons; 15 countries; 12 cases. [peer-reviewed; full-text].',
+    sampleSize: '32 surgeons; 15 countries; 12 cases',
     sources: [
       {
         citation:
@@ -3668,6 +4064,8 @@ export const EVIDENCE_LEDGER = [
           'adolescent idiopathic scoliosis: Evaluation of a multi-center survey. JOR Spine 7(2):e1324.',
         pmid: '38633662',
         doi: '10.1002/jsp2.1324',
+        key: 'wilke-2024',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3682,6 +4080,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'wilke-2024: Surgeons choosing AIS classification, fusion levels and implants from standing and bending ' +
       'films. Sample: 32 surgeons; 15 countries; 12 cases. [peer-reviewed; full-text].',
+    sampleSize: '32 surgeons; 15 countries; 12 cases',
     sources: [
       {
         citation:
@@ -3689,6 +4088,8 @@ export const EVIDENCE_LEDGER = [
           'adolescent idiopathic scoliosis: Evaluation of a multi-center survey. JOR Spine 7(2):e1324.',
         pmid: '38633662',
         doi: '10.1002/jsp2.1324',
+        key: 'wilke-2024',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3704,6 +4105,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'wang-2016: Ten AIS patient-specific multibody simulations; cobalt-chrome concave/convex configurations ' +
       '5.5/5.5 mm and 6.0/5.5 mm. Sample: 10 patient-specific models. [peer-reviewed; abstract].',
+    sampleSize: '10 patient-specific models',
     sources: [
       {
         citation:
@@ -3712,6 +4114,8 @@ export const EVIDENCE_LEDGER = [
           'scoliosis instrumentation? Clin Biomech (Bristol) 39:115-121.',
         pmid: '27750078',
         doi: '10.1016/j.clinbiomech.2016.10.002',
+        key: 'wang-2016',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3728,6 +4132,7 @@ export const EVIDENCE_LEDGER = [
       'abe-2015: AIS, one boy and 19 girls, all Lenke 1; mean age 14.8; operations June 2009–June 2011; in vivo ' +
       'rod deformation followed by an elasto-plastic finite element model; 6 mm Ti6Al7Nb rods. Sample: 20 AIS ' +
       'patients. [peer-reviewed; full-text].',
+    sampleSize: '20 AIS patients',
     sources: [
       {
         citation:
@@ -3735,6 +4140,8 @@ export const EVIDENCE_LEDGER = [
           'implanted rod deformation using 3D-FEM analysis. Scoliosis 10(Suppl 2):S2.',
         pmid: '25810754',
         doi: '10.1186/1748-7161-10-S2-S2',
+        key: 'abe-2015',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3747,6 +4154,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'cidambi-2012: 5.5 mm ultra-high-strength steel rod contour-loss series. Sample: 27 patients. ' +
       '[peer-reviewed; abstract].',
+    sampleSize: '27 patients',
     sources: [
       {
         citation:
@@ -3755,6 +4163,8 @@ export const EVIDENCE_LEDGER = [
           '37(18):1566-1572.',
         pmid: '22426445',
         doi: '10.1097/brs.0b013e318252ccbe',
+        key: 'cidambi-2012',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3769,6 +4179,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'cidambi-2012: 5.5 mm ultra-high-strength steel rod contour-loss series. Sample: 27 patients. ' +
       '[peer-reviewed; abstract].',
+    sampleSize: '27 patients',
     sources: [
       {
         citation:
@@ -3777,6 +4188,8 @@ export const EVIDENCE_LEDGER = [
           '37(18):1566-1572.',
         pmid: '22426445',
         doi: '10.1097/brs.0b013e318252ccbe',
+        key: 'cidambi-2012',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3791,6 +4204,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'cidambi-2012: 5.5 mm ultra-high-strength steel rod contour-loss series. Sample: 27 patients. ' +
       '[peer-reviewed; abstract].',
+    sampleSize: '27 patients',
     sources: [
       {
         citation:
@@ -3799,6 +4213,8 @@ export const EVIDENCE_LEDGER = [
           '37(18):1566-1572.',
         pmid: '22426445',
         doi: '10.1097/brs.0b013e318252ccbe',
+        key: 'cidambi-2012',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3811,6 +4227,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'cidambi-2012: 5.5 mm ultra-high-strength steel rod contour-loss series. Sample: 27 patients. ' +
       '[peer-reviewed; abstract].',
+    sampleSize: '27 patients',
     sources: [
       {
         citation:
@@ -3819,6 +4236,8 @@ export const EVIDENCE_LEDGER = [
           '37(18):1566-1572.',
         pmid: '22426445',
         doi: '10.1097/brs.0b013e318252ccbe',
+        key: 'cidambi-2012',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3836,6 +4255,7 @@ export const EVIDENCE_LEDGER = [
       'borrelli-2025: Lumbar multibody model with a 6.5 mm CFR-PEEK screw represented as a 15 mm cantilever; ' +
       'full cortical osseointegration assumed. Sample: Model sample count not supplied. [peer-reviewed; ' +
       'full-text].',
+    sampleSize: 'Model sample count not supplied',
     sources: [
       {
         citation:
@@ -3844,6 +4264,8 @@ export const EVIDENCE_LEDGER = [
           'Stabilization. Ann Biomed Eng 53(5):1257-1269.',
         pmid: '40082329',
         doi: '10.1007/s10439-025-03706-1',
+        key: 'borrelli-2025',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3858,6 +4280,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'cidambi-2012: 5.5 mm ultra-high-strength steel rod contour-loss series. Sample: 27 patients. ' +
       '[peer-reviewed; abstract].',
+    sampleSize: '27 patients',
     sources: [
       {
         citation:
@@ -3866,6 +4289,8 @@ export const EVIDENCE_LEDGER = [
           '37(18):1566-1572.',
         pmid: '22426445',
         doi: '10.1097/brs.0b013e318252ccbe',
+        key: 'cidambi-2012',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3882,6 +4307,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'salmingo-2014: Twenty AIS patients, mean age 14; rod contour-loss series; titanium designation reported ' +
       'secondarily through Abe. Sample: 20 patients. [peer-reviewed; abstract].',
+    sampleSize: '20 patients',
     sources: [
       {
         citation:
@@ -3889,6 +4315,8 @@ export const EVIDENCE_LEDGER = [
           'scoliosis deformity. Spine J 14(8):1432-1439.',
         pmid: '24275616',
         doi: '10.1016/j.spinee.2013.08.042',
+        key: 'salmingo-2014',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3905,6 +4333,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'salmingo-2014: Twenty AIS patients, mean age 14; rod contour-loss series; titanium designation reported ' +
       'secondarily through Abe. Sample: 20 patients. [peer-reviewed; abstract].',
+    sampleSize: '20 patients',
     sources: [
       {
         citation:
@@ -3912,6 +4341,8 @@ export const EVIDENCE_LEDGER = [
           'scoliosis deformity. Spine J 14(8):1432-1439.',
         pmid: '24275616',
         doi: '10.1016/j.spinee.2013.08.042',
+        key: 'salmingo-2014',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3928,6 +4359,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'salmingo-2014: Twenty AIS patients, mean age 14; rod contour-loss series; titanium designation reported ' +
       'secondarily through Abe. Sample: 20 patients. [peer-reviewed; abstract].',
+    sampleSize: '20 patients',
     sources: [
       {
         citation:
@@ -3935,6 +4367,8 @@ export const EVIDENCE_LEDGER = [
           'scoliosis deformity. Spine J 14(8):1432-1439.',
         pmid: '24275616',
         doi: '10.1016/j.spinee.2013.08.042',
+        key: 'salmingo-2014',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3953,6 +4387,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'sia-2019: AIS, median age 16 for titanium and 17 for cobalt-chrome; 5.5 mm rods; concave rods only. ' +
       'Sample: 21 patients: titanium 10; cobalt-chrome 11. [peer-reviewed; full-text].',
+    sampleSize: '21 patients: titanium 10; cobalt-chrome 11',
     sources: [
       {
         citation:
@@ -3960,6 +4395,8 @@ export const EVIDENCE_LEDGER = [
           'in Adolescent Idiopathic Scoliosis. Malays Orthop J 13(1):14-19.',
         pmid: '31001378',
         doi: '10.5704/moj.1903.002',
+        key: 'sia-2019',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -3978,6 +4415,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'sia-2019: AIS, median age 16 for titanium and 17 for cobalt-chrome; 5.5 mm rods; concave rods only. ' +
       'Sample: 21 patients: titanium 10; cobalt-chrome 11. [peer-reviewed; full-text].',
+    sampleSize: '21 patients: titanium 10; cobalt-chrome 11',
     sources: [
       {
         citation:
@@ -3985,6 +4423,8 @@ export const EVIDENCE_LEDGER = [
           'in Adolescent Idiopathic Scoliosis. Malays Orthop J 13(1):14-19.',
         pmid: '31001378',
         doi: '10.5704/moj.1903.002',
+        key: 'sia-2019',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4003,6 +4443,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'sia-2019: AIS, median age 16 for titanium and 17 for cobalt-chrome; 5.5 mm rods; concave rods only. ' +
       'Sample: 21 patients: titanium 10; cobalt-chrome 11. [peer-reviewed; full-text].',
+    sampleSize: '21 patients: titanium 10; cobalt-chrome 11',
     sources: [
       {
         citation:
@@ -4010,6 +4451,8 @@ export const EVIDENCE_LEDGER = [
           'in Adolescent Idiopathic Scoliosis. Malays Orthop J 13(1):14-19.',
         pmid: '31001378',
         doi: '10.5704/moj.1903.002',
+        key: 'sia-2019',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4027,6 +4470,7 @@ export const EVIDENCE_LEDGER = [
       'abe-2015: AIS, one boy and 19 girls, all Lenke 1; mean age 14.8; operations June 2009–June 2011; in vivo ' +
       'rod deformation followed by an elasto-plastic finite element model; 6 mm Ti6Al7Nb rods. Sample: 20 AIS ' +
       'patients. [peer-reviewed; full-text].',
+    sampleSize: '20 AIS patients',
     sources: [
       {
         citation:
@@ -4034,6 +4478,8 @@ export const EVIDENCE_LEDGER = [
           'implanted rod deformation using 3D-FEM analysis. Scoliosis 10(Suppl 2):S2.',
         pmid: '25810754',
         doi: '10.1186/1748-7161-10-S2-S2',
+        key: 'abe-2015',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4051,6 +4497,7 @@ export const EVIDENCE_LEDGER = [
       'abe-2015: AIS, one boy and 19 girls, all Lenke 1; mean age 14.8; operations June 2009–June 2011; in vivo ' +
       'rod deformation followed by an elasto-plastic finite element model; 6 mm Ti6Al7Nb rods. Sample: 20 AIS ' +
       'patients. [peer-reviewed; full-text].',
+    sampleSize: '20 AIS patients',
     sources: [
       {
         citation:
@@ -4058,6 +4505,8 @@ export const EVIDENCE_LEDGER = [
           'implanted rod deformation using 3D-FEM analysis. Scoliosis 10(Suppl 2):S2.',
         pmid: '25810754',
         doi: '10.1186/1748-7161-10-S2-S2',
+        key: 'abe-2015',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4072,6 +4521,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'cidambi-2012: 5.5 mm ultra-high-strength steel rod contour-loss series. Sample: 27 patients. ' +
       '[peer-reviewed; abstract].',
+    sampleSize: '27 patients',
     sources: [
       {
         citation:
@@ -4080,6 +4530,8 @@ export const EVIDENCE_LEDGER = [
           '37(18):1566-1572.',
         pmid: '22426445',
         doi: '10.1097/brs.0b013e318252ccbe',
+        key: 'cidambi-2012',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4095,6 +4547,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'cidambi-2012: 5.5 mm ultra-high-strength steel rod contour-loss series. Sample: 27 patients. ' +
       '[peer-reviewed; abstract].',
+    sampleSize: '27 patients',
     sources: [
       {
         citation:
@@ -4103,6 +4556,8 @@ export const EVIDENCE_LEDGER = [
           '37(18):1566-1572.',
         pmid: '22426445',
         doi: '10.1097/brs.0b013e318252ccbe',
+        key: 'cidambi-2012',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4118,6 +4573,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'cidambi-2012: 5.5 mm ultra-high-strength steel rod contour-loss series. Sample: 27 patients. ' +
       '[peer-reviewed; abstract].',
+    sampleSize: '27 patients',
     sources: [
       {
         citation:
@@ -4126,6 +4582,8 @@ export const EVIDENCE_LEDGER = [
           '37(18):1566-1572.',
         pmid: '22426445',
         doi: '10.1097/brs.0b013e318252ccbe',
+        key: 'cidambi-2012',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4142,6 +4600,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'salmingo-2014: Twenty AIS patients, mean age 14; rod contour-loss series; titanium designation reported ' +
       'secondarily through Abe. Sample: 20 patients. [peer-reviewed; abstract].',
+    sampleSize: '20 patients',
     sources: [
       {
         citation:
@@ -4149,6 +4608,8 @@ export const EVIDENCE_LEDGER = [
           'scoliosis deformity. Spine J 14(8):1432-1439.',
         pmid: '24275616',
         doi: '10.1016/j.spinee.2013.08.042',
+        key: 'salmingo-2014',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4163,6 +4624,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'sia-2019: AIS, median age 16 for titanium and 17 for cobalt-chrome; 5.5 mm rods; concave rods only. ' +
       'Sample: 21 patients: titanium 10; cobalt-chrome 11. [peer-reviewed; full-text].',
+    sampleSize: '21 patients: titanium 10; cobalt-chrome 11',
     sources: [
       {
         citation:
@@ -4170,6 +4632,8 @@ export const EVIDENCE_LEDGER = [
           'in Adolescent Idiopathic Scoliosis. Malays Orthop J 13(1):14-19.',
         pmid: '31001378',
         doi: '10.5704/moj.1903.002',
+        key: 'sia-2019',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4189,6 +4653,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'sia-2019: AIS, median age 16 for titanium and 17 for cobalt-chrome; 5.5 mm rods; concave rods only. ' +
       'Sample: 21 patients: titanium 10; cobalt-chrome 11. [peer-reviewed; full-text].',
+    sampleSize: '21 patients: titanium 10; cobalt-chrome 11',
     sources: [
       {
         citation:
@@ -4196,6 +4661,8 @@ export const EVIDENCE_LEDGER = [
           'in Adolescent Idiopathic Scoliosis. Malays Orthop J 13(1):14-19.',
         pmid: '31001378',
         doi: '10.5704/moj.1903.002',
+        key: 'sia-2019',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4215,6 +4682,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'sia-2019: AIS, median age 16 for titanium and 17 for cobalt-chrome; 5.5 mm rods; concave rods only. ' +
       'Sample: 21 patients: titanium 10; cobalt-chrome 11. [peer-reviewed; full-text].',
+    sampleSize: '21 patients: titanium 10; cobalt-chrome 11',
     sources: [
       {
         citation:
@@ -4222,6 +4690,8 @@ export const EVIDENCE_LEDGER = [
           'in Adolescent Idiopathic Scoliosis. Malays Orthop J 13(1):14-19.',
         pmid: '31001378',
         doi: '10.5704/moj.1903.002',
+        key: 'sia-2019',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4236,6 +4706,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'boissiere-2023: Spine-to-rod kyphosis comparison; age and cohort composition not recorded. ' +
       'Sample: 99; sample unit not recorded. [peer-reviewed; abstract].',
+    sampleSize: '99; sample unit not recorded',
     sources: [
       {
         citation:
@@ -4244,6 +4715,8 @@ export const EVIDENCE_LEDGER = [
           'Scoliosis Posterior Instrumentation. Children (Basel) 11(1):29.',
         pmid: '38255344',
         doi: '10.3390/children11010029',
+        key: 'boissiere-2023',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4258,6 +4731,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'boissiere-2023: Spine-to-rod kyphosis comparison; age and cohort composition not recorded. ' +
       'Sample: 99; sample unit not recorded. [peer-reviewed; abstract].',
+    sampleSize: '99; sample unit not recorded',
     sources: [
       {
         citation:
@@ -4266,6 +4740,8 @@ export const EVIDENCE_LEDGER = [
           'Scoliosis Posterior Instrumentation. Children (Basel) 11(1):29.',
         pmid: '38255344',
         doi: '10.3390/children11010029',
+        key: 'boissiere-2023',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4281,6 +4757,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'sia-2019: AIS, median age 16 for titanium and 17 for cobalt-chrome; 5.5 mm rods; concave rods only. ' +
       'Sample: 21 patients: titanium 10; cobalt-chrome 11. [peer-reviewed; full-text].',
+    sampleSize: '21 patients: titanium 10; cobalt-chrome 11',
     sources: [
       {
         citation:
@@ -4288,6 +4765,8 @@ export const EVIDENCE_LEDGER = [
           'in Adolescent Idiopathic Scoliosis. Malays Orthop J 13(1):14-19.',
         pmid: '31001378',
         doi: '10.5704/moj.1903.002',
+        key: 'sia-2019',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4302,6 +4781,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'ramanathan-2026: AIS screw size selection compared across freehand and navigation. Sample: 137 freehand ' +
       'AIS cases; 137 O-arm-navigated AIS cases; one senior surgeon. [peer-reviewed; full-text].',
+    sampleSize: '137 freehand AIS cases; 137 O-arm-navigated AIS cases; one senior surgeon',
     sources: [
       {
         citation:
@@ -4310,6 +4790,8 @@ export const EVIDENCE_LEDGER = [
           'Turc 60(2):e25525.',
         pmid: '42364200',
         doi: '10.5152/j.aott.2026.25525',
+        key: 'ramanathan-2026',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4324,11 +4806,14 @@ export const EVIDENCE_LEDGER = [
     population:
       'jiang-2022: AIS, 25 girls and 9 boys, mean age 15.0; 30 Lenke 1 and 4 Lenke 2; freehand thoracic screws ' +
       'checked by CT. Sample: 34 patients; 495 screws. [peer-reviewed; full-text].',
+    sampleSize: '34 patients; 495 screws',
     sources: [
       {
         citation: 'Jiang J, Chen X, Qiu Y, Wang B, Zhu ZZ, Yu Y. 2022. BMC Surg 22(1):379.',
         pmid: '36333715',
         doi: '10.1186/s12893-022-01827-1',
+        key: 'jiang-2022',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4341,6 +4826,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'sarwahi-2023: AIS, comparing 6.5 mm screws at all levels with 5.0–5.5 mm screws at all levels. Sample: ' +
       '412 patients. [peer-reviewed; abstract].',
+    sampleSize: '412 patients',
     sources: [
       {
         citation:
@@ -4348,6 +4834,8 @@ export const EVIDENCE_LEDGER = [
           '(Phila Pa 1976) 48(21):1544-1551.',
         pmid: '37134132',
         doi: '10.1097/brs.0000000000004700',
+        key: 'sarwahi-2023',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4365,6 +4853,7 @@ export const EVIDENCE_LEDGER = [
       'syndromic 18; MRI before and CT after surgery; single centre. Not an AIS-only cohort. Sample: 230 ' +
       'patients; 7,954 preoperative pedicles and 5,080 postoperative screws, different sets. [peer-reviewed; ' +
       'full-text].',
+    sampleSize: '230 patients; 7,954 preoperative pedicles and 5,080 postoperative screws, different sets',
     sources: [
       {
         citation:
@@ -4373,6 +4862,8 @@ export const EVIDENCE_LEDGER = [
           'Higher Risk of Pedicle and Vertebral Breaches. J Clin Med 12(16):5368.',
         pmid: '37629410',
         doi: '10.3390/jcm12165368',
+        key: 'grabala-2023',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4391,6 +4882,7 @@ export const EVIDENCE_LEDGER = [
       'balikci-2019: Mixed scoliosis series: AIS 86, congenital 17, adult 10, neuromuscular 7; ages 13–54, mean ' +
       '19.2. Diameter chosen using insertional torque. Sample: 120 patients, 86 with AIS; 2,846 screws. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '120 patients, 86 with AIS; 2,846 screws',
     sources: [
       {
         citation:
@@ -4398,6 +4890,8 @@ export const EVIDENCE_LEDGER = [
           'Instrumentation of Scoliosis. Asian Spine J 13(5):815-822.',
         pmid: '31079434',
         doi: '10.31616/asj.2018.0177',
+        key: 'balikci-2019',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4424,6 +4918,7 @@ export const EVIDENCE_LEDGER = [
       'balikci-2019: Mixed scoliosis series: AIS 86, congenital 17, adult 10, neuromuscular 7; ages 13–54, mean ' +
       '19.2. Diameter chosen using insertional torque. Sample: 120 patients, 86 with AIS; 2,846 screws. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '120 patients, 86 with AIS; 2,846 screws',
     sources: [
       {
         citation:
@@ -4431,6 +4926,8 @@ export const EVIDENCE_LEDGER = [
           'Instrumentation of Scoliosis. Asian Spine J 13(5):815-822.',
         pmid: '31079434',
         doi: '10.31616/asj.2018.0177',
+        key: 'balikci-2019',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4448,6 +4945,7 @@ export const EVIDENCE_LEDGER = [
       'balikci-2019: Mixed scoliosis series: AIS 86, congenital 17, adult 10, neuromuscular 7; ages 13–54, mean ' +
       '19.2. Diameter chosen using insertional torque. Sample: 120 patients, 86 with AIS; 2,846 screws. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '120 patients, 86 with AIS; 2,846 screws',
     sources: [
       {
         citation:
@@ -4455,6 +4953,8 @@ export const EVIDENCE_LEDGER = [
           'Instrumentation of Scoliosis. Asian Spine J 13(5):815-822.',
         pmid: '31079434',
         doi: '10.31616/asj.2018.0177',
+        key: 'balikci-2019',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4472,6 +4972,7 @@ export const EVIDENCE_LEDGER = [
       'balikci-2019: Mixed scoliosis series: AIS 86, congenital 17, adult 10, neuromuscular 7; ages 13–54, mean ' +
       '19.2. Diameter chosen using insertional torque. Sample: 120 patients, 86 with AIS; 2,846 screws. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '120 patients, 86 with AIS; 2,846 screws',
     sources: [
       {
         citation:
@@ -4479,6 +4980,8 @@ export const EVIDENCE_LEDGER = [
           'Instrumentation of Scoliosis. Asian Spine J 13(5):815-822.',
         pmid: '31079434',
         doi: '10.31616/asj.2018.0177',
+        key: 'balikci-2019',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4496,6 +4999,7 @@ export const EVIDENCE_LEDGER = [
       'balikci-2019: Mixed scoliosis series: AIS 86, congenital 17, adult 10, neuromuscular 7; ages 13–54, mean ' +
       '19.2. Diameter chosen using insertional torque. Sample: 120 patients, 86 with AIS; 2,846 screws. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '120 patients, 86 with AIS; 2,846 screws',
     sources: [
       {
         citation:
@@ -4503,6 +5007,8 @@ export const EVIDENCE_LEDGER = [
           'Instrumentation of Scoliosis. Asian Spine J 13(5):815-822.',
         pmid: '31079434',
         doi: '10.31616/asj.2018.0177',
+        key: 'balikci-2019',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4520,6 +5026,7 @@ export const EVIDENCE_LEDGER = [
       'balikci-2019: Mixed scoliosis series: AIS 86, congenital 17, adult 10, neuromuscular 7; ages 13–54, mean ' +
       '19.2. Diameter chosen using insertional torque. Sample: 120 patients, 86 with AIS; 2,846 screws. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '120 patients, 86 with AIS; 2,846 screws',
     sources: [
       {
         citation:
@@ -4527,6 +5034,8 @@ export const EVIDENCE_LEDGER = [
           'Instrumentation of Scoliosis. Asian Spine J 13(5):815-822.',
         pmid: '31079434',
         doi: '10.31616/asj.2018.0177',
+        key: 'balikci-2019',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4547,6 +5056,7 @@ export const EVIDENCE_LEDGER = [
       'balikci-2019: Mixed scoliosis series: AIS 86, congenital 17, adult 10, neuromuscular 7; ages 13–54, mean ' +
       '19.2. Diameter chosen using insertional torque. Sample: 120 patients, 86 with AIS; 2,846 screws. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '120 patients, 86 with AIS; 2,846 screws',
     sources: [
       {
         citation:
@@ -4554,6 +5064,8 @@ export const EVIDENCE_LEDGER = [
           'Instrumentation of Scoliosis. Asian Spine J 13(5):815-822.',
         pmid: '31079434',
         doi: '10.31616/asj.2018.0177',
+        key: 'balikci-2019',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4571,6 +5083,7 @@ export const EVIDENCE_LEDGER = [
       'balikci-2019: Mixed scoliosis series: AIS 86, congenital 17, adult 10, neuromuscular 7; ages 13–54, mean ' +
       '19.2. Diameter chosen using insertional torque. Sample: 120 patients, 86 with AIS; 2,846 screws. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '120 patients, 86 with AIS; 2,846 screws',
     sources: [
       {
         citation:
@@ -4578,6 +5091,8 @@ export const EVIDENCE_LEDGER = [
           'Instrumentation of Scoliosis. Asian Spine J 13(5):815-822.',
         pmid: '31079434',
         doi: '10.31616/asj.2018.0177',
+        key: 'balikci-2019',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4595,6 +5110,7 @@ export const EVIDENCE_LEDGER = [
       'balikci-2019: Mixed scoliosis series: AIS 86, congenital 17, adult 10, neuromuscular 7; ages 13–54, mean ' +
       '19.2. Diameter chosen using insertional torque. Sample: 120 patients, 86 with AIS; 2,846 screws. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '120 patients, 86 with AIS; 2,846 screws',
     sources: [
       {
         citation:
@@ -4602,6 +5118,8 @@ export const EVIDENCE_LEDGER = [
           'Instrumentation of Scoliosis. Asian Spine J 13(5):815-822.',
         pmid: '31079434',
         doi: '10.31616/asj.2018.0177',
+        key: 'balikci-2019',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4622,6 +5140,7 @@ export const EVIDENCE_LEDGER = [
       'balikci-2019: Mixed scoliosis series: AIS 86, congenital 17, adult 10, neuromuscular 7; ages 13–54, mean ' +
       '19.2. Diameter chosen using insertional torque. Sample: 120 patients, 86 with AIS; 2,846 screws. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '120 patients, 86 with AIS; 2,846 screws',
     sources: [
       {
         citation:
@@ -4629,6 +5148,8 @@ export const EVIDENCE_LEDGER = [
           'Instrumentation of Scoliosis. Asian Spine J 13(5):815-822.',
         pmid: '31079434',
         doi: '10.31616/asj.2018.0177',
+        key: 'balikci-2019',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4646,6 +5167,7 @@ export const EVIDENCE_LEDGER = [
       'balikci-2019: Mixed scoliosis series: AIS 86, congenital 17, adult 10, neuromuscular 7; ages 13–54, mean ' +
       '19.2. Diameter chosen using insertional torque. Sample: 120 patients, 86 with AIS; 2,846 screws. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '120 patients, 86 with AIS; 2,846 screws',
     sources: [
       {
         citation:
@@ -4653,6 +5175,8 @@ export const EVIDENCE_LEDGER = [
           'Instrumentation of Scoliosis. Asian Spine J 13(5):815-822.',
         pmid: '31079434',
         doi: '10.31616/asj.2018.0177',
+        key: 'balikci-2019',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4670,6 +5194,7 @@ export const EVIDENCE_LEDGER = [
       'balikci-2019: Mixed scoliosis series: AIS 86, congenital 17, adult 10, neuromuscular 7; ages 13–54, mean ' +
       '19.2. Diameter chosen using insertional torque. Sample: 120 patients, 86 with AIS; 2,846 screws. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '120 patients, 86 with AIS; 2,846 screws',
     sources: [
       {
         citation:
@@ -4677,6 +5202,8 @@ export const EVIDENCE_LEDGER = [
           'Instrumentation of Scoliosis. Asian Spine J 13(5):815-822.',
         pmid: '31079434',
         doi: '10.31616/asj.2018.0177',
+        key: 'balikci-2019',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4697,6 +5224,7 @@ export const EVIDENCE_LEDGER = [
       'balikci-2019: Mixed scoliosis series: AIS 86, congenital 17, adult 10, neuromuscular 7; ages 13–54, mean ' +
       '19.2. Diameter chosen using insertional torque. Sample: 120 patients, 86 with AIS; 2,846 screws. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '120 patients, 86 with AIS; 2,846 screws',
     sources: [
       {
         citation:
@@ -4704,6 +5232,8 @@ export const EVIDENCE_LEDGER = [
           'Instrumentation of Scoliosis. Asian Spine J 13(5):815-822.',
         pmid: '31079434',
         doi: '10.31616/asj.2018.0177',
+        key: 'balikci-2019',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4733,6 +5263,7 @@ export const EVIDENCE_LEDGER = [
       'balikci-2019: Mixed scoliosis series: AIS 86, congenital 17, adult 10, neuromuscular 7; ages 13–54, mean ' +
       '19.2. Diameter chosen using insertional torque. Sample: 120 patients, 86 with AIS; 2,846 screws. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '120 patients, 86 with AIS; 2,846 screws',
     sources: [
       {
         citation:
@@ -4740,6 +5271,8 @@ export const EVIDENCE_LEDGER = [
           'Instrumentation of Scoliosis. Asian Spine J 13(5):815-822.',
         pmid: '31079434',
         doi: '10.31616/asj.2018.0177',
+        key: 'balikci-2019',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4770,6 +5303,7 @@ export const EVIDENCE_LEDGER = [
       'balikci-2019: Mixed scoliosis series: AIS 86, congenital 17, adult 10, neuromuscular 7; ages 13–54, mean ' +
       '19.2. Diameter chosen using insertional torque. Sample: 120 patients, 86 with AIS; 2,846 screws. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '120 patients, 86 with AIS; 2,846 screws',
     sources: [
       {
         citation:
@@ -4777,6 +5311,8 @@ export const EVIDENCE_LEDGER = [
           'Instrumentation of Scoliosis. Asian Spine J 13(5):815-822.',
         pmid: '31079434',
         doi: '10.31616/asj.2018.0177',
+        key: 'balikci-2019',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4804,6 +5340,7 @@ export const EVIDENCE_LEDGER = [
       'balikci-2019: Mixed scoliosis series: AIS 86, congenital 17, adult 10, neuromuscular 7; ages 13–54, mean ' +
       '19.2. Diameter chosen using insertional torque. Sample: 120 patients, 86 with AIS; 2,846 screws. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '120 patients, 86 with AIS; 2,846 screws',
     sources: [
       {
         citation:
@@ -4811,6 +5348,8 @@ export const EVIDENCE_LEDGER = [
           'Instrumentation of Scoliosis. Asian Spine J 13(5):815-822.',
         pmid: '31079434',
         doi: '10.31616/asj.2018.0177',
+        key: 'balikci-2019',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4827,6 +5366,7 @@ export const EVIDENCE_LEDGER = [
       'balikci-2019: Mixed scoliosis series: AIS 86, congenital 17, adult 10, neuromuscular 7; ages 13–54, mean ' +
       '19.2. Diameter chosen using insertional torque. Sample: 120 patients, 86 with AIS; 2,846 screws. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '120 patients, 86 with AIS; 2,846 screws',
     sources: [
       {
         citation:
@@ -4834,6 +5374,8 @@ export const EVIDENCE_LEDGER = [
           'Instrumentation of Scoliosis. Asian Spine J 13(5):815-822.',
         pmid: '31079434',
         doi: '10.31616/asj.2018.0177',
+        key: 'balikci-2019',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4853,6 +5395,7 @@ export const EVIDENCE_LEDGER = [
       'balikci-2019: Mixed scoliosis series: AIS 86, congenital 17, adult 10, neuromuscular 7; ages 13–54, mean ' +
       '19.2. Diameter chosen using insertional torque. Sample: 120 patients, 86 with AIS; 2,846 screws. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '120 patients, 86 with AIS; 2,846 screws',
     sources: [
       {
         citation:
@@ -4860,6 +5403,8 @@ export const EVIDENCE_LEDGER = [
           'Instrumentation of Scoliosis. Asian Spine J 13(5):815-822.',
         pmid: '31079434',
         doi: '10.31616/asj.2018.0177',
+        key: 'balikci-2019',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4879,6 +5424,7 @@ export const EVIDENCE_LEDGER = [
       'balikci-2019: Mixed scoliosis series: AIS 86, congenital 17, adult 10, neuromuscular 7; ages 13–54, mean ' +
       '19.2. Diameter chosen using insertional torque. Sample: 120 patients, 86 with AIS; 2,846 screws. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '120 patients, 86 with AIS; 2,846 screws',
     sources: [
       {
         citation:
@@ -4886,6 +5432,8 @@ export const EVIDENCE_LEDGER = [
           'Instrumentation of Scoliosis. Asian Spine J 13(5):815-822.',
         pmid: '31079434',
         doi: '10.31616/asj.2018.0177',
+        key: 'balikci-2019',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4902,6 +5450,7 @@ export const EVIDENCE_LEDGER = [
       'balikci-2019: Mixed scoliosis series: AIS 86, congenital 17, adult 10, neuromuscular 7; ages 13–54, mean ' +
       '19.2. Diameter chosen using insertional torque. Sample: 120 patients, 86 with AIS; 2,846 screws. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '120 patients, 86 with AIS; 2,846 screws',
     sources: [
       {
         citation:
@@ -4909,6 +5458,8 @@ export const EVIDENCE_LEDGER = [
           'Instrumentation of Scoliosis. Asian Spine J 13(5):815-822.',
         pmid: '31079434',
         doi: '10.31616/asj.2018.0177',
+        key: 'balikci-2019',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4928,6 +5479,7 @@ export const EVIDENCE_LEDGER = [
       'balikci-2019: Mixed scoliosis series: AIS 86, congenital 17, adult 10, neuromuscular 7; ages 13–54, mean ' +
       '19.2. Diameter chosen using insertional torque. Sample: 120 patients, 86 with AIS; 2,846 screws. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '120 patients, 86 with AIS; 2,846 screws',
     sources: [
       {
         citation:
@@ -4935,6 +5487,8 @@ export const EVIDENCE_LEDGER = [
           'Instrumentation of Scoliosis. Asian Spine J 13(5):815-822.',
         pmid: '31079434',
         doi: '10.31616/asj.2018.0177',
+        key: 'balikci-2019',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4954,6 +5508,7 @@ export const EVIDENCE_LEDGER = [
       'balikci-2019: Mixed scoliosis series: AIS 86, congenital 17, adult 10, neuromuscular 7; ages 13–54, mean ' +
       '19.2. Diameter chosen using insertional torque. Sample: 120 patients, 86 with AIS; 2,846 screws. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '120 patients, 86 with AIS; 2,846 screws',
     sources: [
       {
         citation:
@@ -4961,6 +5516,8 @@ export const EVIDENCE_LEDGER = [
           'Instrumentation of Scoliosis. Asian Spine J 13(5):815-822.',
         pmid: '31079434',
         doi: '10.31616/asj.2018.0177',
+        key: 'balikci-2019',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -4976,6 +5533,7 @@ export const EVIDENCE_LEDGER = [
       'balikci-2019: Mixed scoliosis series: AIS 86, congenital 17, adult 10, neuromuscular 7; ages 13–54, mean ' +
       '19.2. Diameter chosen using insertional torque. Sample: 120 patients, 86 with AIS; 2,846 screws. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '120 patients, 86 with AIS; 2,846 screws',
     sources: [
       {
         citation:
@@ -4983,6 +5541,8 @@ export const EVIDENCE_LEDGER = [
           'Instrumentation of Scoliosis. Asian Spine J 13(5):815-822.',
         pmid: '31079434',
         doi: '10.31616/asj.2018.0177',
+        key: 'balikci-2019',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5008,6 +5568,8 @@ export const EVIDENCE_LEDGER = [
     population:
       'liu-2020: Lenke 1A/2A thoracic-only fusions. Sample: 6 studies; 732 patients; 150 with adding-on; ' +
       'per-reference denominators retained in the table. [peer-reviewed; full-text].',
+    sampleSize:
+      '6 studies; 732 patients; 150 with adding-on; per-reference denominators retained in the table',
     sources: [
       {
         citation:
@@ -5016,6 +5578,8 @@ export const EVIDENCE_LEDGER = [
           'Idiopathic Scoliosis: A Systematic Review and Meta-analysis. Neurospine 17(4):902-909.',
         pmid: '33401869',
         doi: '10.14245/ns.2040234.117',
+        key: 'liu-2020',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5041,6 +5605,8 @@ export const EVIDENCE_LEDGER = [
     population:
       'liu-2020: Lenke 1A/2A thoracic-only fusions. Sample: 6 studies; 732 patients; 150 with adding-on; ' +
       'per-reference denominators retained in the table. [peer-reviewed; full-text].',
+    sampleSize:
+      '6 studies; 732 patients; 150 with adding-on; per-reference denominators retained in the table',
     sources: [
       {
         citation:
@@ -5049,6 +5615,8 @@ export const EVIDENCE_LEDGER = [
           'Idiopathic Scoliosis: A Systematic Review and Meta-analysis. Neurospine 17(4):902-909.',
         pmid: '33401869',
         doi: '10.14245/ns.2040234.117',
+        key: 'liu-2020',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5073,6 +5641,8 @@ export const EVIDENCE_LEDGER = [
     population:
       'liu-2020: Lenke 1A/2A thoracic-only fusions. Sample: 6 studies; 732 patients; 150 with adding-on; ' +
       'per-reference denominators retained in the table. [peer-reviewed; full-text].',
+    sampleSize:
+      '6 studies; 732 patients; 150 with adding-on; per-reference denominators retained in the table',
     sources: [
       {
         citation:
@@ -5081,6 +5651,8 @@ export const EVIDENCE_LEDGER = [
           'Idiopathic Scoliosis: A Systematic Review and Meta-analysis. Neurospine 17(4):902-909.',
         pmid: '33401869',
         doi: '10.14245/ns.2040234.117',
+        key: 'liu-2020',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5105,6 +5677,8 @@ export const EVIDENCE_LEDGER = [
     population:
       'liu-2020: Lenke 1A/2A thoracic-only fusions. Sample: 6 studies; 732 patients; 150 with adding-on; ' +
       'per-reference denominators retained in the table. [peer-reviewed; full-text].',
+    sampleSize:
+      '6 studies; 732 patients; 150 with adding-on; per-reference denominators retained in the table',
     sources: [
       {
         citation:
@@ -5113,6 +5687,8 @@ export const EVIDENCE_LEDGER = [
           'Idiopathic Scoliosis: A Systematic Review and Meta-analysis. Neurospine 17(4):902-909.',
         pmid: '33401869',
         doi: '10.14245/ns.2040234.117',
+        key: 'liu-2020',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5140,6 +5716,8 @@ export const EVIDENCE_LEDGER = [
     population:
       'liu-2020: Lenke 1A/2A thoracic-only fusions. Sample: 6 studies; 732 patients; 150 with adding-on; ' +
       'per-reference denominators retained in the table. [peer-reviewed; full-text].',
+    sampleSize:
+      '6 studies; 732 patients; 150 with adding-on; per-reference denominators retained in the table',
     sources: [
       {
         citation:
@@ -5148,6 +5726,8 @@ export const EVIDENCE_LEDGER = [
           'Idiopathic Scoliosis: A Systematic Review and Meta-analysis. Neurospine 17(4):902-909.',
         pmid: '33401869',
         doi: '10.14245/ns.2040234.117',
+        key: 'liu-2020',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5163,6 +5743,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'ueno-2025: Robot or navigation study of grade-4 cortical channels; further cohort details not recorded' +
       '. Sample: 465 screws; patient count not supplied. [peer-reviewed; abstract].',
+    sampleSize: '465 screws; patient count not supplied',
     sources: [
       {
         citation:
@@ -5171,6 +5752,8 @@ export const EVIDENCE_LEDGER = [
           'deviation still occur even with robotics? Eur Spine J 34(7):2714-2722.',
         pmid: '40299013',
         doi: '10.1007/s00586-025-08882-1',
+        key: 'ueno-2025',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5185,6 +5768,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'lehman-2003: Adult thoracic cadaver vertebrae; straight-forward and anatomic trajectories. Sample: 30 ' +
       'vertebrae, paired. [peer-reviewed; abstract].',
+    sampleSize: '30 vertebrae, paired',
     sources: [
       {
         citation:
@@ -5193,6 +5777,8 @@ export const EVIDENCE_LEDGER = [
           '28(18):2058-2065.',
         pmid: '14501914',
         doi: '10.1097/01.brs.0000087743.57439.4f',
+        key: 'lehman-2003',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5207,6 +5793,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'lehman-2003: Adult thoracic cadaver vertebrae; straight-forward and anatomic trajectories. Sample: 30 ' +
       'vertebrae, paired. [peer-reviewed; abstract].',
+    sampleSize: '30 vertebrae, paired',
     sources: [
       {
         citation:
@@ -5215,6 +5802,8 @@ export const EVIDENCE_LEDGER = [
           '28(18):2058-2065.',
         pmid: '14501914',
         doi: '10.1097/01.brs.0000087743.57439.4f',
+        key: 'lehman-2003',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5229,6 +5818,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'lehman-2003: Adult thoracic cadaver vertebrae; straight-forward and anatomic trajectories. Sample: 30 ' +
       'vertebrae, paired. [peer-reviewed; abstract].',
+    sampleSize: '30 vertebrae, paired',
     sources: [
       {
         citation:
@@ -5237,6 +5827,8 @@ export const EVIDENCE_LEDGER = [
           '28(18):2058-2065.',
         pmid: '14501914',
         doi: '10.1097/01.brs.0000087743.57439.4f',
+        key: 'lehman-2003',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5251,6 +5843,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'liljenqvist-2001: Adult thoracic spines; T4–T8 andT9–T12 screws and hooks. Sample: 9 spines;90 tests. ' +
       '[peer-reviewed; abstract].',
+    sampleSize: '9 spines;90 tests',
     sources: [
       {
         citation:
@@ -5258,6 +5851,8 @@ export const EVIDENCE_LEDGER = [
           'laminar hooks in the thoracic spine. Acta Orthop Belg 67(2):157-163.',
         pmid: '11383294',
         doi: null,
+        key: 'liljenqvist-2001',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5272,6 +5867,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'liljenqvist-2001: Adult thoracic spines; T4–T8 andT9–T12 screws and hooks. Sample: 9 spines;90 tests. ' +
       '[peer-reviewed; abstract].',
+    sampleSize: '9 spines;90 tests',
     sources: [
       {
         citation:
@@ -5279,6 +5875,8 @@ export const EVIDENCE_LEDGER = [
           'laminar hooks in the thoracic spine. Acta Orthop Belg 67(2):157-163.',
         pmid: '11383294',
         doi: null,
+        key: 'liljenqvist-2001',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5293,6 +5891,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'liljenqvist-2001: Adult thoracic spines; T4–T8 andT9–T12 screws and hooks. Sample: 9 spines;90 tests. ' +
       '[peer-reviewed; abstract].',
+    sampleSize: '9 spines;90 tests',
     sources: [
       {
         citation:
@@ -5300,6 +5899,8 @@ export const EVIDENCE_LEDGER = [
           'laminar hooks in the thoracic spine. Acta Orthop Belg 67(2):157-163.',
         pmid: '11383294',
         doi: null,
+        key: 'liljenqvist-2001',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5314,6 +5915,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'liljenqvist-2001: Adult thoracic spines; T4–T8 andT9–T12 screws and hooks. Sample: 9 spines;90 tests. ' +
       '[peer-reviewed; abstract].',
+    sampleSize: '9 spines;90 tests',
     sources: [
       {
         citation:
@@ -5321,6 +5923,8 @@ export const EVIDENCE_LEDGER = [
           'laminar hooks in the thoracic spine. Acta Orthop Belg 67(2):157-163.',
         pmid: '11383294',
         doi: null,
+        key: 'liljenqvist-2001',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5344,6 +5948,8 @@ export const EVIDENCE_LEDGER = [
           'relation to osteoporosis of the lumbar spine. Spine (Phila Pa 1976) 16(11):1335-1341.',
         pmid: '1750009',
         doi: '10.1097/00007632-199111000-00015',
+        key: 'soshi-1991',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5370,6 +5976,8 @@ export const EVIDENCE_LEDGER = [
           'relation to osteoporosis of the lumbar spine. Spine (Phila Pa 1976) 16(11):1335-1341.',
         pmid: '1750009',
         doi: '10.1097/00007632-199111000-00015',
+        key: 'soshi-1991',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5387,6 +5995,7 @@ export const EVIDENCE_LEDGER = [
       'cheng-2000: AIS girls aged12–14;75AIS and94controls;38 percentaBMD/36 percentvBMD below−1SD. Sample: 75 ' +
       'AIS;94 controls. [peer-reviewed; abstract]. yip-2016: AIS girls, mean age 13.15, follow-up4.6 years; ' +
       '169/513 osteopenic. Sample: 513;HR-pQCT subgroup90. [peer-reviewed; full-text].',
+    sampleSize: '75 AIS;94 controls',
     sources: [
       {
         citation:
@@ -5394,11 +6003,15 @@ export const EVIDENCE_LEDGER = [
           'bone mineral density in adolescent idiopathic scoliosis. J Bone Miner Res 15(8):1587-1595.',
         pmid: '10934658',
         doi: '10.1359/jbmr.2000.15.8.1587',
+        key: 'cheng-2000',
+        reading: 'abstract',
       },
       {
         citation: 'Yip BHK, Yu FWP, Wang Z, Hung VWY, Lam TP, Ng BKW, Zhu F, Cheng JCY. 2016. Sci Rep 6:39220.',
         pmid: '27991528',
         doi: '10.1038/srep39220',
+        key: 'yip-2016',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5415,6 +6028,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'le-cann-2015: Immature pigs aged90 and140 days; mono-/bicortical, thoracic/lumbar. Sample: 80 vertebrae. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '80 vertebrae',
     sources: [
       {
         citation:
@@ -5423,6 +6037,8 @@ export const EVIDENCE_LEDGER = [
           '10(10):e0127463.',
         pmid: '26451947',
         doi: '10.1371/journal.pone.0127463',
+        key: 'le-cann-2015',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5441,6 +6057,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'yilmaz-2009: Pigs six weeks old at surgery;pull-out tested three months later after killing;L1–L5. Data ' +
       'from two surviving animals. Sample: 2 animals with data;3 operated,1 lost. [peer-reviewed; abstract].',
+    sampleSize: '2 animals with data;3 operated,1 lost',
     sources: [
       {
         citation:
@@ -5449,6 +6066,8 @@ export const EVIDENCE_LEDGER = [
           '1976) 34(22):2378-2383.',
         pmid: '19829250',
         doi: '10.1097/brs.0b013e3181b0bb9b',
+        key: 'yilmaz-2009',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5466,6 +6085,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'karami-2015: Osteoporotic lumbar spines; pull-out after cyclic loading. Age not recorded' +
       '. Sample: 10 spines;100 pedicles. [peer-reviewed; abstract].',
+    sampleSize: '10 spines;100 pedicles',
     sources: [
       {
         citation:
@@ -5474,6 +6094,8 @@ export const EVIDENCE_LEDGER = [
           'subsequent pullout. J Spinal Disord Tech 28(3):E133-9.',
         pmid: '25310387',
         doi: '10.1097/bsd.0000000000000178',
+        key: 'karami-2015',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5488,6 +6110,7 @@ export const EVIDENCE_LEDGER = [
       '7 mm [published; sairyo-1998]. DISAGREE in rounding: table853 versus body852.5; preserve both, never ' +
       'round or substitute. Table use: beside.',
     population: 'sairyo-1998: Immature calf; 6 and7 mm screws. Sample: 10 vertebrae. [peer-reviewed; abstract].',
+    sampleSize: '10 vertebrae',
     sources: [
       {
         citation:
@@ -5495,6 +6118,8 @@ export const EVIDENCE_LEDGER = [
           'immature spines associated with pedicle screw type fixation devices. J Spinal Disord 11(2):142-145.',
         pmid: '9588471',
         doi: '10.1097/00002517-199804000-00009',
+        key: 'sairyo-1998',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5510,6 +6135,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'kang-2014: Immature calf thoracic vertebrae; hubbed versus non-hubbed. Sample: 22 specimens. ' +
       '[peer-reviewed; abstract].',
+    sampleSize: '22 specimens',
     sources: [
       {
         citation:
@@ -5518,6 +6144,8 @@ export const EVIDENCE_LEDGER = [
           'Pediatr Orthop 34(7):703-709.',
         pmid: '24590340',
         doi: '10.1097/bpo.0000000000000166',
+        key: 'kang-2014',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5533,11 +6161,14 @@ export const EVIDENCE_LEDGER = [
     population:
       'tsai-2009: ASTM F1839 polyurethane foam; 30 mm engaged thread. Sample: 6 commercial screws;6 trials each. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '6 commercial screws;6 trials each',
     sources: [
       {
         citation: 'Tsai WC, Chen PQ, Lu TW, Wu SS, Shih KS, Lin SC. 2009. BMC Musculoskelet Disord 10:44.',
         pmid: '19402917',
         doi: '10.1186/1471-2474-10-44',
+        key: 'tsai-2009',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5552,6 +6183,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'lehman-2003: Adult thoracic cadaver vertebrae; straight-forward and anatomic trajectories. Sample: 30 ' +
       'vertebrae, paired. [peer-reviewed; abstract].',
+    sampleSize: '30 vertebrae, paired',
     sources: [
       {
         citation:
@@ -5560,6 +6192,8 @@ export const EVIDENCE_LEDGER = [
           '28(18):2058-2065.',
         pmid: '14501914',
         doi: '10.1097/01.brs.0000087743.57439.4f',
+        key: 'lehman-2003',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5574,6 +6208,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'karami-2015: Osteoporotic lumbar spines; pull-out after cyclic loading. Age not recorded' +
       '. Sample: 10 spines;100 pedicles. [peer-reviewed; abstract].',
+    sampleSize: '10 spines;100 pedicles',
     sources: [
       {
         citation:
@@ -5582,6 +6217,8 @@ export const EVIDENCE_LEDGER = [
           'subsequent pullout. J Spinal Disord Tech 28(3):E133-9.',
         pmid: '25310387',
         doi: '10.1097/bsd.0000000000000178',
+        key: 'karami-2015',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5596,6 +6233,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'kang-2014: Immature calf thoracic vertebrae; hubbed versus non-hubbed. Sample: 22 specimens. ' +
       '[peer-reviewed; abstract].',
+    sampleSize: '22 specimens',
     sources: [
       {
         citation:
@@ -5604,6 +6242,8 @@ export const EVIDENCE_LEDGER = [
           'Pediatr Orthop 34(7):703-709.',
         pmid: '24590340',
         doi: '10.1097/bpo.0000000000000166',
+        key: 'kang-2014',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5618,6 +6258,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'sariyilmaz-2021: Adult cadaver thoracic; 5.5 mm polyaxial screws; simulated direct vertebral rotation. ' +
       'Sample: 30 pedicles. [peer-reviewed; abstract].',
+    sampleSize: '30 pedicles',
     sources: [
       {
         citation:
@@ -5626,6 +6267,8 @@ export const EVIDENCE_LEDGER = [
           'biomechanical study in adult cadavers. J Pediatr Orthop B 30(3):230-234.',
         pmid: '32453125',
         doi: '10.1097/bpb.0000000000000751',
+        key: 'sariyilmaz-2021',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5642,6 +6285,7 @@ export const EVIDENCE_LEDGER = [
       'sairyo-1998: Immature calf; 6 and7 mm screws. Sample: 10 vertebrae. [peer-reviewed; abstract]. ' +
       'kueny-2014: Osteoporotic lumbar vertebrae; diameter increment comparison. Age not recorded' +
       '. Sample: 39 vertebrae. [peer-reviewed; abstract].',
+    sampleSize: '10 vertebrae',
     sources: [
       {
         citation:
@@ -5649,6 +6293,8 @@ export const EVIDENCE_LEDGER = [
           'immature spines associated with pedicle screw type fixation devices. J Spinal Disord 11(2):142-145.',
         pmid: '9588471',
         doi: '10.1097/00002517-199804000-00009',
+        key: 'sairyo-1998',
+        reading: 'abstract',
       },
       {
         citation:
@@ -5657,6 +6303,8 @@ export const EVIDENCE_LEDGER = [
           'fatigue testing. Eur Spine J 23(10):2196-2202.',
         pmid: '25082759',
         doi: '10.1007/s00586-014-3476-7',
+        key: 'kueny-2014',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5672,6 +6320,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'weiser-2017: QCT bone-density groups; cyclic screw failure. Age not recorded. ' +
       'Sample: 21 T12 vertebrae. [peer-reviewed; abstract].',
+    sampleSize: '21 T12 vertebrae',
     sources: [
       {
         citation:
@@ -5680,6 +6329,8 @@ export const EVIDENCE_LEDGER = [
           'and pedicle screw fixation strength. Eur Spine J 26(11):2891-2897.',
         pmid: '28391382',
         doi: '10.1007/s00586-017-5091-x',
+        key: 'weiser-2017',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5701,6 +6352,8 @@ export const EVIDENCE_LEDGER = [
           '2009. Cortical bone trajectory for lumbar pedicle screws. Spine J 9(5):366-373.',
         pmid: '18790684',
         doi: '10.1016/j.spinee.2008.07.008',
+        key: 'santoni-2009',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5717,6 +6370,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'winter-via-keenan-2015: Winter cadavers aged61–83; fractions borrowed in AIS girls with Lenke1 ' +
       'curves>40°. Sample: 8 male cadavers (Winter);20 girls (Keenan). [peer-reviewed; full-text].',
+    sampleSize: '8 male cadavers (Winter);20 girls (Keenan)',
     sources: [
       {
         citation:
@@ -5724,6 +6378,8 @@ export const EVIDENCE_LEDGER = [
           'plane joint moments in adolescent idiopathic scoliosis. Scoliosis 10:35.',
         pmid: '26681978',
         doi: '10.1186/s13013-015-0060-9',
+        key: 'winter-via-keenan-2015',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5740,6 +6396,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'winter-via-keenan-2015: Winter cadavers aged61–83; fractions borrowed in AIS girls with Lenke1 ' +
       'curves>40°. Sample: 8 male cadavers (Winter);20 girls (Keenan). [peer-reviewed; full-text].',
+    sampleSize: '8 male cadavers (Winter);20 girls (Keenan)',
     sources: [
       {
         citation:
@@ -5747,6 +6404,8 @@ export const EVIDENCE_LEDGER = [
           'plane joint moments in adolescent idiopathic scoliosis. Scoliosis 10:35.',
         pmid: '26681978',
         doi: '10.1186/s13013-015-0060-9',
+        key: 'winter-via-keenan-2015',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5764,6 +6423,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'pearsall-1996: Adults, MeSH middle-aged/aged; CT trunk by vertebral level. Sample: 4. [peer-reviewed; ' +
       'abstract].',
+    sampleSize: '4',
     sources: [
       {
         citation:
@@ -5771,6 +6431,8 @@ export const EVIDENCE_LEDGER = [
           'from computed tomography. Ann Biomed Eng 24(2):198-210.',
         pmid: '8678352',
         doi: '10.1007/bf02667349',
+        key: 'pearsall-1996',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5787,6 +6449,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'keenan-2014: AIS girls, age 15.0±2.7, Cobb52±5.9°, weight58.2±11.6 kg; CT torso slices. Sample: 20. ' +
       '[peer-reviewed; abstract].',
+    sampleSize: '20',
     sources: [
       {
         citation:
@@ -5794,6 +6457,8 @@ export const EVIDENCE_LEDGER = [
           'adolescent idiopathic scoliosis. Clin Biomech (Bristol) 29(7):773-779.',
         pmid: '24973826',
         doi: '10.1016/j.clinbiomech.2014.06.002',
+        key: 'keenan-2014',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5813,6 +6478,7 @@ export const EVIDENCE_LEDGER = [
       'project-assumptions: No measured population; explicit project choices and calculations. ' +
       'Sample: not supplied. [own-inference; secondary]. gangnet-2003: 34 healthy upright standing ' +
       'subjects; the abstract supplies no ages. Sample: 34. [peer-reviewed; abstract].',
+    sampleSize: '34',
     sources: [
       {
         citation:
@@ -5821,6 +6487,8 @@ export const EVIDENCE_LEDGER = [
           'Radiol Anat 25(5-6):424-433.',
         pmid: '13680185',
         doi: '10.1007/s00276-003-0154-6',
+        key: 'gangnet-2003',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5840,6 +6508,7 @@ export const EVIDENCE_LEDGER = [
       'rohlmann-2002: Adults with telemetered posterior internal fixators; fractures/degenerative disease, not ' +
       'scoliosis. Sample: 10. [peer-reviewed; abstract]. rohlmann-2014-gait: Adults with instrumented vertebral ' +
       'body replacements; walking/stairs. Sample: 5. [peer-reviewed; abstract].',
+    sampleSize: '10',
     sources: [
       {
         citation:
@@ -5847,6 +6516,8 @@ export const EVIDENCE_LEDGER = [
           'therapy. Phys Ther 82(1):44-52.',
         pmid: '11784277',
         doi: '10.1093/ptj/82.1.44',
+        key: 'rohlmann-2002',
+        reading: 'abstract',
       },
       {
         citation:
@@ -5854,6 +6525,8 @@ export const EVIDENCE_LEDGER = [
           'during locomotion measured in vivo. Gait Posture 39(2):750-755.',
         pmid: '24211089',
         doi: '10.1016/j.gaitpost.2013.10.010',
+        key: 'rohlmann-2014-gait',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5870,6 +6543,7 @@ export const EVIDENCE_LEDGER = [
       'rohlmann-2002: Adults with telemetered posterior internal fixators; fractures/degenerative disease, not ' +
       'scoliosis. Sample: 10. [peer-reviewed; abstract]. rohlmann-2014-gait: Adults with instrumented vertebral ' +
       'body replacements; walking/stairs. Sample: 5. [peer-reviewed; abstract].',
+    sampleSize: '10',
     sources: [
       {
         citation:
@@ -5877,6 +6551,8 @@ export const EVIDENCE_LEDGER = [
           'therapy. Phys Ther 82(1):44-52.',
         pmid: '11784277',
         doi: '10.1093/ptj/82.1.44',
+        key: 'rohlmann-2002',
+        reading: 'abstract',
       },
       {
         citation:
@@ -5884,6 +6560,8 @@ export const EVIDENCE_LEDGER = [
           'during locomotion measured in vivo. Gait Posture 39(2):750-755.',
         pmid: '24211089',
         doi: '10.1016/j.gaitpost.2013.10.010',
+        key: 'rohlmann-2014-gait',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5901,6 +6579,7 @@ export const EVIDENCE_LEDGER = [
       'project-assumptions: No measured population; explicit project choices and calculations. ' +
       'Sample: not supplied. [own-inference; secondary]. wilke-1999: Man aged45, 70 kg; intradiscal pressure ' +
       'atL4–L5. Sample: 1. [peer-reviewed; abstract].',
+    sampleSize: '1',
     sources: [
       {
         citation:
@@ -5908,6 +6587,8 @@ export const EVIDENCE_LEDGER = [
           'intervertebral disc in daily life. Spine (Phila Pa 1976) 24(8):755-762.',
         pmid: '10222525',
         doi: '10.1097/00007632-199904150-00005',
+        key: 'wilke-1999',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5922,6 +6603,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'schmid-2020-ais: AIS aged9–17(mean13.8), 29–63 kg, Cobb13.6–28.3°; musculoskeletal models. Sample: 24. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '24',
     sources: [
       {
         citation:
@@ -5930,6 +6612,8 @@ export const EVIDENCE_LEDGER = [
           'Modeling Study. Front Bioeng Biotechnol 8:159.',
         pmid: '32195239',
         doi: '10.3389/fbioe.2020.00159',
+        key: 'schmid-2020-ais',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5951,6 +6635,8 @@ export const EVIDENCE_LEDGER = [
           'Sports Exerc 40(7 Suppl):S537-43.',
         pmid: '18562971',
         doi: '10.1249/mss.0b013e31817c7133',
+        key: 'tudor-locke-2008',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5973,6 +6659,8 @@ export const EVIDENCE_LEDGER = [
           'Sports Exerc 40(7 Suppl):S537-43.',
         pmid: '18562971',
         doi: '10.1249/mss.0b013e31817c7133',
+        key: 'tudor-locke-2008',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -5995,6 +6683,8 @@ export const EVIDENCE_LEDGER = [
           'Sports Exerc 40(7 Suppl):S537-43.',
         pmid: '18562971',
         doi: '10.1249/mss.0b013e31817c7133',
+        key: 'tudor-locke-2008',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6017,6 +6707,8 @@ export const EVIDENCE_LEDGER = [
           'Sports Exerc 40(7 Suppl):S537-43.',
         pmid: '18562971',
         doi: '10.1249/mss.0b013e31817c7133',
+        key: 'tudor-locke-2008',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6038,6 +6730,8 @@ export const EVIDENCE_LEDGER = [
           'Sports Exerc 40(7 Suppl):S537-43.',
         pmid: '18562971',
         doi: '10.1249/mss.0b013e31817c7133',
+        key: 'tudor-locke-2008',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6063,6 +6757,8 @@ export const EVIDENCE_LEDGER = [
           'adolescents. Int J Behav Nutr Phys Act 8:78.',
         pmid: '21798014',
         doi: '10.1186/1479-5868-8-78',
+        key: 'tudor-locke-2011',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6077,6 +6773,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'keenan-2015: AIS Lenke1 curves over40°, mean mass57.5kg; gravity moment model. Sample: 20 girls. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '20 girls',
     sources: [
       {
         citation:
@@ -6084,6 +6781,8 @@ export const EVIDENCE_LEDGER = [
           'plane joint moments in adolescent idiopathic scoliosis. Scoliosis 10:35.',
         pmid: '26681978',
         doi: '10.1186/s13013-015-0060-9',
+        key: 'keenan-2015',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6103,6 +6802,7 @@ export const EVIDENCE_LEDGER = [
       'choices and ' +
       'calculations. Sample: not supplied. [own-inference; secondary]. wilke-1999: Man ' +
       'aged45, 70 kg; intradiscal pressure atL4–L5. Sample: 1. [peer-reviewed; abstract].',
+    sampleSize: '2',
     sources: [
       {
         citation:
@@ -6110,6 +6810,8 @@ export const EVIDENCE_LEDGER = [
           'replacement measured in two patients. Spine (Phila Pa 1976) 33(11):1170-1179.',
         pmid: '18469689',
         doi: '10.1097/brs.0b013e3181722d52',
+        key: 'rohlmann-2008-standing',
+        reading: 'abstract',
       },
       {
         citation:
@@ -6117,6 +6819,8 @@ export const EVIDENCE_LEDGER = [
           'intervertebral disc in daily life. Spine (Phila Pa 1976) 24(8):755-762.',
         pmid: '10222525',
         doi: '10.1097/00007632-199904150-00005',
+        key: 'wilke-1999',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6133,6 +6837,7 @@ export const EVIDENCE_LEDGER = [
       'project-assumptions: No measured population; explicit project choices and calculations. ' +
       'Sample: not supplied. [own-inference; secondary]. wilke-1999: Man aged45, 70 kg; intradiscal pressure ' +
       'atL4–L5. Sample: 1. [peer-reviewed; abstract].',
+    sampleSize: '1',
     sources: [
       {
         citation:
@@ -6140,6 +6845,8 @@ export const EVIDENCE_LEDGER = [
           'intervertebral disc in daily life. Spine (Phila Pa 1976) 24(8):755-762.',
         pmid: '10222525',
         doi: '10.1097/00007632-199904150-00005',
+        key: 'wilke-1999',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6154,6 +6861,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'rohlmann-2014-gait: Adults with instrumented vertebral body replacements; walking/stairs. Sample: 5. ' +
       '[peer-reviewed; abstract].',
+    sampleSize: '5',
     sources: [
       {
         citation:
@@ -6161,6 +6869,8 @@ export const EVIDENCE_LEDGER = [
           'during locomotion measured in vivo. Gait Posture 39(2):750-755.',
         pmid: '24211089',
         doi: '10.1016/j.gaitpost.2013.10.010',
+        key: 'rohlmann-2014-gait',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6177,6 +6887,7 @@ export const EVIDENCE_LEDGER = [
       'project-assumptions: No measured population; explicit project choices and calculations. ' +
       'Sample: not supplied. [own-inference; secondary]. wilke-1999: Man aged45, 70 kg; intradiscal pressure ' +
       'atL4–L5. Sample: 1. [peer-reviewed; abstract].',
+    sampleSize: '1',
     sources: [
       {
         citation:
@@ -6184,6 +6895,8 @@ export const EVIDENCE_LEDGER = [
           'intervertebral disc in daily life. Spine (Phila Pa 1976) 24(8):755-762.',
         pmid: '10222525',
         doi: '10.1097/00007632-199904150-00005',
+        key: 'wilke-1999',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6205,6 +6918,8 @@ export const EVIDENCE_LEDGER = [
           'spinal loads. J Biomech 46(3):511-514.',
         pmid: '23141957',
         doi: '10.1016/j.jbiomech.2012.10.022',
+        key: 'rohlmann-2013-lifting',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6220,6 +6935,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'schmid-2020-ais: AIS aged9–17(mean13.8), 29–63 kg, Cobb13.6–28.3°; musculoskeletal models. Sample: 24. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '24',
     sources: [
       {
         citation:
@@ -6228,6 +6944,8 @@ export const EVIDENCE_LEDGER = [
           'Modeling Study. Front Bioeng Biotechnol 8:159.',
         pmid: '32195239',
         doi: '10.3389/fbioe.2020.00159',
+        key: 'schmid-2020-ais',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6243,6 +6961,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'schmid-2020-ais: AIS aged9–17(mean13.8), 29–63 kg, Cobb13.6–28.3°; musculoskeletal models. Sample: 24. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '24',
     sources: [
       {
         citation:
@@ -6251,6 +6970,8 @@ export const EVIDENCE_LEDGER = [
           'Modeling Study. Front Bioeng Biotechnol 8:159.',
         pmid: '32195239',
         doi: '10.3389/fbioe.2020.00159',
+        key: 'schmid-2020-ais',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6266,6 +6987,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'schmid-2020-ais: AIS aged9–17(mean13.8), 29–63 kg, Cobb13.6–28.3°; musculoskeletal models. Sample: 24. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '24',
     sources: [
       {
         citation:
@@ -6274,6 +6996,8 @@ export const EVIDENCE_LEDGER = [
           'Modeling Study. Front Bioeng Biotechnol 8:159.',
         pmid: '32195239',
         doi: '10.3389/fbioe.2020.00159',
+        key: 'schmid-2020-ais',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6289,6 +7013,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'schmid-2020-ais: AIS aged9–17(mean13.8), 29–63 kg, Cobb13.6–28.3°; musculoskeletal models. Sample: 24. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '24',
     sources: [
       {
         citation:
@@ -6297,6 +7022,8 @@ export const EVIDENCE_LEDGER = [
           'Modeling Study. Front Bioeng Biotechnol 8:159.',
         pmid: '32195239',
         doi: '10.3389/fbioe.2020.00159',
+        key: 'schmid-2020-ais',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6320,6 +7047,8 @@ export const EVIDENCE_LEDGER = [
           'adolescents. Int J Behav Nutr Phys Act 8:78.',
         pmid: '21798014',
         doi: '10.1186/1479-5868-8-78',
+        key: 'tudor-locke-2011',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6334,6 +7063,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'rohlmann-2014-activities: Adults aged62–71, 60–74kg; L1/L3vertebral body replacements, posterior fixator ' +
       'shares load. Sample: 5. [peer-reviewed; full-text].',
+    sampleSize: '5',
     sources: [
       {
         citation:
@@ -6341,6 +7071,8 @@ export const EVIDENCE_LEDGER = [
           'life with high spinal loads. PLoS One 9(5):e98510.',
         pmid: '24866883',
         doi: '10.1371/journal.pone.0098510',
+        key: 'rohlmann-2014-activities',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6355,6 +7087,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'rohlmann-2008-month-one: Adults with vertebral body replacements; first postoperative month. Sample: 3. ' +
       '[peer-reviewed; abstract].',
+    sampleSize: '3',
     sources: [
       {
         citation:
@@ -6363,6 +7096,8 @@ export const EVIDENCE_LEDGER = [
           '23(2):147-158.',
         pmid: '17983694',
         doi: '10.1016/j.clinbiomech.2007.09.011',
+        key: 'rohlmann-2008-month-one',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6377,6 +7112,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'damm-2017: Adults with instrumented vertebral body replacements; mean walking peak. Sample: 5 VBR ' +
       'patients. [peer-reviewed; abstract].',
+    sampleSize: '5 VBR patients',
     sources: [
       {
         citation:
@@ -6384,6 +7120,8 @@ export const EVIDENCE_LEDGER = [
           'hip and spinal implants during level walking. J Biomech 51:128-132.',
         pmid: '27914627',
         doi: '10.1016/j.jbiomech.2016.11.060',
+        key: 'damm-2017',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6399,6 +7137,7 @@ export const EVIDENCE_LEDGER = [
       'rohlmann-2014-gait: Adults with instrumented vertebral body replacements; walking/stairs. Sample: 5. ' +
       '[peer-reviewed; abstract]. rohlmann-1997-walker: Adults with telemetered posterior internal fixators; ' +
       'walker use. Sample: 2. [peer-reviewed; abstract].',
+    sampleSize: '5',
     sources: [
       {
         citation:
@@ -6406,6 +7145,8 @@ export const EVIDENCE_LEDGER = [
           'during locomotion measured in vivo. Gait Posture 39(2):750-755.',
         pmid: '24211089',
         doi: '10.1016/j.gaitpost.2013.10.010',
+        key: 'rohlmann-2014-gait',
+        reading: 'abstract',
       },
       {
         citation:
@@ -6413,6 +7154,8 @@ export const EVIDENCE_LEDGER = [
           'Biomech 30(1):41-47.',
         pmid: '8970923',
         doi: '10.1016/s0021-9290(96)00103-0',
+        key: 'rohlmann-1997-walker',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6433,6 +7176,7 @@ export const EVIDENCE_LEDGER = [
       'rohlmann-2002: Adults with telemetered posterior internal fixators; fractures/degenerative disease, not ' +
       'scoliosis. Sample: 10. [peer-reviewed; abstract]. rohlmann-2014-activities: Adults aged62–71, 60–74kg; ' +
       'L1/L3vertebral body replacements, posterior fixator shares load. Sample: 5. [peer-reviewed; full-text].',
+    sampleSize: '10',
     sources: [
       {
         citation:
@@ -6440,6 +7184,8 @@ export const EVIDENCE_LEDGER = [
           'therapy. Phys Ther 82(1):44-52.',
         pmid: '11784277',
         doi: '10.1093/ptj/82.1.44',
+        key: 'rohlmann-2002',
+        reading: 'abstract',
       },
       {
         citation:
@@ -6447,6 +7193,8 @@ export const EVIDENCE_LEDGER = [
           'life with high spinal loads. PLoS One 9(5):e98510.',
         pmid: '24866883',
         doi: '10.1371/journal.pone.0098510',
+        key: 'rohlmann-2014-activities',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6470,6 +7218,7 @@ export const EVIDENCE_LEDGER = [
       'project-assumptions: No measured population; explicit project choices and calculations. ' +
       'Sample: not supplied. [own-inference; secondary]. rohlmann-2002: Adults with telemetered posterior ' +
       'internal fixators; fractures/degenerative disease, not scoliosis. Sample: 10. [peer-reviewed; abstract].',
+    sampleSize: '10',
     sources: [
       {
         citation:
@@ -6477,6 +7226,8 @@ export const EVIDENCE_LEDGER = [
           'therapy. Phys Ther 82(1):44-52.',
         pmid: '11784277',
         doi: '10.1093/ptj/82.1.44',
+        key: 'rohlmann-2002',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6499,6 +7250,8 @@ export const EVIDENCE_LEDGER = [
           'implant forces acting on a vertebral body replacement during upper body flexion. J Biomech 48(4):560-565.',
         pmid: '25640900',
         doi: '10.1016/j.jbiomech.2015.01.007',
+        key: 'rohlmann-2015-flexion',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6514,6 +7267,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'rohlmann-2014-activities: Adults aged62–71, 60–74kg; L1/L3vertebral body replacements, posterior fixator ' +
       'shares load. Sample: 5. [peer-reviewed; full-text].',
+    sampleSize: '5',
     sources: [
       {
         citation:
@@ -6521,6 +7275,8 @@ export const EVIDENCE_LEDGER = [
           'life with high spinal loads. PLoS One 9(5):e98510.',
         pmid: '24866883',
         doi: '10.1371/journal.pone.0098510',
+        key: 'rohlmann-2014-activities',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6542,6 +7298,8 @@ export const EVIDENCE_LEDGER = [
           'affect spinal loads? Ergonomics 57(2):262-270.',
         pmid: '24559120',
         doi: '10.1080/00140139.2014.887789',
+        key: 'rohlmann-2014-carrying',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6565,6 +7323,8 @@ export const EVIDENCE_LEDGER = [
           'ergometer. PLoS One 9(4):e95497.',
         pmid: '24743577',
         doi: '10.1371/journal.pone.0095497',
+        key: 'rohlmann-2014-cycling',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6586,6 +7346,8 @@ export const EVIDENCE_LEDGER = [
           'whole body vibration on spinal loads. Eur Spine J 23(3):666-672.',
         pmid: '24201510',
         doi: '10.1007/s00586-013-3087-8',
+        key: 'rohlmann-2014-vibration',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6607,6 +7369,8 @@ export const EVIDENCE_LEDGER = [
           'vertebral body replacement. Clin Biomech (Bristol) 28(5):490-494.',
         pmid: '23623494',
         doi: '10.1016/j.clinbiomech.2013.03.010',
+        key: 'rohlmann-2013-orthosis',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6637,6 +7401,7 @@ export const EVIDENCE_LEDGER = [
       'Sample: 6 per dynamic compression-bending group. [peer-reviewed; full-text]. project-assumptions: No ' +
       'measured population; explicit project choices and calculations. Sample: not supplied. ' +
       '[own-inference; secondary].',
+    sampleSize: '6 per dynamic compression-bending group',
     sources: [
       {
         citation:
@@ -6645,6 +7410,8 @@ export const EVIDENCE_LEDGER = [
           'system. Brain Spine 3:101708.',
         pmid: '36685708',
         doi: '10.1016/j.bas.2022.101708',
+        key: 'vieweg-2023',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6675,6 +7442,7 @@ export const EVIDENCE_LEDGER = [
       'Sample: 6 per dynamic compression-bending group. [peer-reviewed; full-text]. project-assumptions: No ' +
       'measured population; explicit project choices and calculations. Sample: not supplied. ' +
       '[own-inference; secondary].',
+    sampleSize: '6 per dynamic compression-bending group',
     sources: [
       {
         citation:
@@ -6683,6 +7451,8 @@ export const EVIDENCE_LEDGER = [
           'system. Brain Spine 3:101708.',
         pmid: '36685708',
         doi: '10.1016/j.bas.2022.101708',
+        key: 'vieweg-2023',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6706,6 +7476,8 @@ export const EVIDENCE_LEDGER = [
         citation: 'Slivka MA, Fan YK, Eck JC. 2013. Spine Deform 1(6):395-400.',
         pmid: '27927364',
         doi: '10.1016/j.jspd.2013.08.004',
+        key: 'slivka-2013',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6725,6 +7497,8 @@ export const EVIDENCE_LEDGER = [
         citation: 'Slivka MA, Fan YK, Eck JC. 2013. Spine Deform 1(6):395-400.',
         pmid: '27927364',
         doi: '10.1016/j.jspd.2013.08.004',
+        key: 'slivka-2013',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6744,6 +7518,8 @@ export const EVIDENCE_LEDGER = [
         citation: 'Ohrt-Nissen S, Dahl B, Gehrchen M. 2018. Neurospine 15(2):123-130.',
         pmid: '29991241',
         doi: '10.14245/ns.1836050.025',
+        key: 'ohrt-nissen-2018',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6763,6 +7539,8 @@ export const EVIDENCE_LEDGER = [
         citation: 'Ohrt-Nissen S, Dahl B, Gehrchen M. 2018. Neurospine 15(2):123-130.',
         pmid: '29991241',
         doi: '10.14245/ns.1836050.025',
+        key: 'ohrt-nissen-2018',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6782,6 +7560,8 @@ export const EVIDENCE_LEDGER = [
         citation: 'Ohrt-Nissen S, Dahl B, Gehrchen M. 2018. Neurospine 15(2):123-130.',
         pmid: '29991241',
         doi: '10.14245/ns.1836050.025',
+        key: 'ohrt-nissen-2018',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6803,6 +7583,7 @@ export const EVIDENCE_LEDGER = [
       'carrion-2016: Annealed polished wroughtTi-6Al-4VELI coupons, strain-controlled. Sample: 38 specimens. ' +
       '[peer-reviewed; full-text]. project-assumptions: No measured population; explicit project choices and ' +
       'calculations. Sample: not supplied. [own-inference; secondary].',
+    sampleSize: '38 specimens',
     sources: [
       {
         citation:
@@ -6810,6 +7591,8 @@ export const EVIDENCE_LEDGER = [
           'strain loads. Data Brief 7:12-15.',
         pmid: '26952022',
         doi: '10.1016/j.dib.2016.02.014',
+        key: 'carrion-2016',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6825,6 +7608,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'carrion-2016: Annealed polished wroughtTi-6Al-4VELI coupons, strain-controlled. Sample: 38 specimens. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '38 specimens',
     sources: [
       {
         citation:
@@ -6832,6 +7616,8 @@ export const EVIDENCE_LEDGER = [
           'strain loads. Data Brief 7:12-15.',
         pmid: '26952022',
         doi: '10.1016/j.dib.2016.02.014',
+        key: 'carrion-2016',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6848,6 +7634,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'carrion-2016: Annealed polished wroughtTi-6Al-4VELI coupons, strain-controlled. Sample: 38 specimens. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '38 specimens',
     sources: [
       {
         citation:
@@ -6855,6 +7642,8 @@ export const EVIDENCE_LEDGER = [
           'strain loads. Data Brief 7:12-15.',
         pmid: '26952022',
         doi: '10.1016/j.dib.2016.02.014',
+        key: 'carrion-2016',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6870,6 +7659,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'carrion-2016: Annealed polished wroughtTi-6Al-4VELI coupons, strain-controlled. Sample: 38 specimens. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '38 specimens',
     sources: [
       {
         citation:
@@ -6877,6 +7667,8 @@ export const EVIDENCE_LEDGER = [
           'strain loads. Data Brief 7:12-15.',
         pmid: '26952022',
         doi: '10.1016/j.dib.2016.02.014',
+        key: 'carrion-2016',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6891,6 +7683,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'carrion-2016: Annealed polished wroughtTi-6Al-4VELI coupons, strain-controlled. Sample: 38 specimens. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '38 specimens',
     sources: [
       {
         citation:
@@ -6898,6 +7691,8 @@ export const EVIDENCE_LEDGER = [
           'strain loads. Data Brief 7:12-15.',
         pmid: '26952022',
         doi: '10.1016/j.dib.2016.02.014',
+        key: 'carrion-2016',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6916,12 +7711,15 @@ export const EVIDENCE_LEDGER = [
       'Table use: bench.',
     population:
       'tachi-2021: AIS planner comparison against postoperative CT. Sample: 47. [peer-reviewed; full-text].',
+    sampleSize: '47',
     sources: [
       {
         citation:
           'Tachi H, Kato K, Abe Y, Kokabu T, Yamada K, Iwasaki N, Sudo H. 2021. Front Bioeng Biotechnol 9:746902.',
         pmid: '34712654',
         doi: '10.3389/fbioe.2021.746902',
+        key: 'tachi-2021',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6940,12 +7738,15 @@ export const EVIDENCE_LEDGER = [
       'Table use: beside.',
     population:
       'tachi-2021: AIS planner comparison against postoperative CT. Sample: 47. [peer-reviewed; full-text].',
+    sampleSize: '47',
     sources: [
       {
         citation:
           'Tachi H, Kato K, Abe Y, Kokabu T, Yamada K, Iwasaki N, Sudo H. 2021. Front Bioeng Biotechnol 9:746902.',
         pmid: '34712654',
         doi: '10.3389/fbioe.2021.746902',
+        key: 'tachi-2021',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6964,12 +7765,15 @@ export const EVIDENCE_LEDGER = [
       'Table use: bench.',
     population:
       'tachi-2021: AIS planner comparison against postoperative CT. Sample: 47. [peer-reviewed; full-text].',
+    sampleSize: '47',
     sources: [
       {
         citation:
           'Tachi H, Kato K, Abe Y, Kokabu T, Yamada K, Iwasaki N, Sudo H. 2021. Front Bioeng Biotechnol 9:746902.',
         pmid: '34712654',
         doi: '10.3389/fbioe.2021.746902',
+        key: 'tachi-2021',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -6986,6 +7790,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'wang-2017: AIS multibody simulations; release terms borrowed from the simulator. Sample: 10 patients; 50 ' +
       'simulations. [peer-reviewed; full-text].',
+    sampleSize: '10 patients; 50 simulations',
     sources: [
       {
         citation:
@@ -6994,6 +7799,8 @@ export const EVIDENCE_LEDGER = [
           'modeling and simulation. Scoliosis Spinal Disord 12:13.',
         pmid: '28428982',
         doi: '10.1186/s13013-017-0120-4',
+        key: 'wang-2017',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -7017,6 +7824,8 @@ export const EVIDENCE_LEDGER = [
           '37(2):205-212.',
         pmid: '14706323',
         doi: '10.1016/j.jbiomech.2003.10.003',
+        key: 'gardner-morse-2004',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -7054,6 +7863,7 @@ export const EVIDENCE_LEDGER = [
       'patients; the rod from the earlier report is assumed for these six. Sample: 6. [peer-reviewed; ' +
       'full-text]. salmingo-2012: The same group\'s earlier report, with 6 mm titanium-alloy rods. Sample: 3. ' +
       '[peer-reviewed; secondary].',
+    sampleSize: '10',
     sources: [
       {
         citation:
@@ -7061,16 +7871,22 @@ export const EVIDENCE_LEDGER = [
           'of the scoliotic spine. Med Biol Eng Comput 42(1):55-60.',
         pmid: '14977223',
         doi: '10.1007/bf02351011',
+        key: 'petit-2004',
+        reading: 'abstract',
       },
       {
         citation: 'Salmingo RA et al. 2013. Clin Biomech 28:122.',
         pmid: '23273729',
         doi: null,
+        key: 'salmingo-2013',
+        reading: 'full-text',
       },
       {
         citation: 'Salmingo RA et al. 2012.',
         pmid: '22321374',
         doi: null,
+        key: 'salmingo-2012',
+        reading: 'secondary',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -7086,6 +7902,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'watkins-2005: Cadaveric thoracic spines with and without intact rib cage. Sample: 10. [peer-reviewed; ' +
       'abstract].',
+    sampleSize: '10',
     sources: [
       {
         citation:
@@ -7094,6 +7911,8 @@ export const EVIDENCE_LEDGER = [
           '30(11):1283-1286.',
         pmid: '15928553',
         doi: '10.1097/01.brs.0000164257.69354.bb',
+        key: 'watkins-2005',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -7111,6 +7930,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'mannen-2018: Whole T1–T12 cadaver spines; 400 N follower load, ±5 Nm dynamic. Sample: 8 intact;7 no-ribs ' +
       'EZS specimens. [peer-reviewed; full-text].',
+    sampleSize: '8 intact;7 no-ribs EZS specimens',
     sources: [
       {
         citation:
@@ -7119,6 +7939,8 @@ export const EVIDENCE_LEDGER = [
           '84:258-264.',
         pmid: '29852313',
         doi: '10.1016/j.jmbbm.2018.05.019',
+        key: 'mannen-2018',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -7137,6 +7959,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'mannen-2018: Whole T1–T12 cadaver spines; 400 N follower load, ±5 Nm dynamic. Sample: 8 intact;7 no-ribs ' +
       'EZS specimens. [peer-reviewed; full-text].',
+    sampleSize: '8 intact;7 no-ribs EZS specimens',
     sources: [
       {
         citation:
@@ -7145,6 +7968,8 @@ export const EVIDENCE_LEDGER = [
           '84:258-264.',
         pmid: '29852313',
         doi: '10.1016/j.jmbbm.2018.05.019',
+        key: 'mannen-2018',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -7162,6 +7987,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'mannen-2018: Whole T1–T12 cadaver spines; 400 N follower load, ±5 Nm dynamic. Sample: 8 intact;7 no-ribs ' +
       'EZS specimens. [peer-reviewed; full-text].',
+    sampleSize: '8 intact;7 no-ribs EZS specimens',
     sources: [
       {
         citation:
@@ -7170,6 +7996,8 @@ export const EVIDENCE_LEDGER = [
           '84:258-264.',
         pmid: '29852313',
         doi: '10.1016/j.jmbbm.2018.05.019',
+        key: 'mannen-2018',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -7185,6 +8013,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'liebsch-2020: Intact polysegmental human thoracic specimens; ±5 Nm; anterior ribs then cut. Sample: 8. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '8',
     sources: [
       {
         citation:
@@ -7192,6 +8021,8 @@ export const EVIDENCE_LEDGER = [
           'Stability of the Human Thoracic Spine: An in vitro Study. Front Bioeng Biotechnol 8:46.',
         pmid: '32117927',
         doi: '10.3389/fbioe.2020.00046',
+        key: 'liebsch-2020',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -7215,6 +8046,7 @@ export const EVIDENCE_LEDGER = [
       'stokes-gardner-morse-2016: Lumbar discs without posterior elements. Preload series: L2-3/L4-5, four ' +
       'female donors aged17–58. Frequency series: eight segments from seven spines, five male and two female, ' +
       'mean age41;642N column measured at0.01Hz. Sample: 8 per series. [peer-reviewed; full-text].',
+    sampleSize: '8 per series',
     sources: [
       {
         citation:
@@ -7222,6 +8054,8 @@ export const EVIDENCE_LEDGER = [
           'spinal analytical models. J Biomech 49(5):780-785.',
         pmid: '26900035',
         doi: '10.1016/j.jbiomech.2016.01.035',
+        key: 'stokes-gardner-morse-2016',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -7244,6 +8078,7 @@ export const EVIDENCE_LEDGER = [
       'stokes-gardner-morse-2016: Lumbar discs without posterior elements. Preload series: L2-3/L4-5, four ' +
       'female donors aged17–58. Frequency series: eight segments from seven spines, five male and two female, ' +
       'mean age41;642N column measured at0.01Hz. Sample: 8 per series. [peer-reviewed; full-text].',
+    sampleSize: '8 per series',
     sources: [
       {
         citation:
@@ -7251,6 +8086,8 @@ export const EVIDENCE_LEDGER = [
           'spinal analytical models. J Biomech 49(5):780-785.',
         pmid: '26900035',
         doi: '10.1016/j.jbiomech.2016.01.035',
+        key: 'stokes-gardner-morse-2016',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -7273,6 +8110,7 @@ export const EVIDENCE_LEDGER = [
       'stokes-gardner-morse-2016: Lumbar discs without posterior elements. Preload series: L2-3/L4-5, four ' +
       'female donors aged17–58. Frequency series: eight segments from seven spines, five male and two female, ' +
       'mean age41;642N column measured at0.01Hz. Sample: 8 per series. [peer-reviewed; full-text].',
+    sampleSize: '8 per series',
     sources: [
       {
         citation:
@@ -7280,6 +8118,8 @@ export const EVIDENCE_LEDGER = [
           'spinal analytical models. J Biomech 49(5):780-785.',
         pmid: '26900035',
         doi: '10.1016/j.jbiomech.2016.01.035',
+        key: 'stokes-gardner-morse-2016',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -7304,6 +8144,7 @@ export const EVIDENCE_LEDGER = [
       'stokes-gardner-morse-2016: Lumbar discs without posterior elements. Preload series: L2-3/L4-5, four ' +
       'female donors aged17–58. Frequency series: eight segments from seven spines, five male and two female, ' +
       'mean age41;642N column measured at0.01Hz. Sample: 8 per series. [peer-reviewed; full-text].',
+    sampleSize: '8 per series',
     sources: [
       {
         citation:
@@ -7311,6 +8152,8 @@ export const EVIDENCE_LEDGER = [
           'spinal analytical models. J Biomech 49(5):780-785.',
         pmid: '26900035',
         doi: '10.1016/j.jbiomech.2016.01.035',
+        key: 'stokes-gardner-morse-2016',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -7337,6 +8180,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'wilke-2017: Human cadaver thoracic functional units with costovertebral joints kept; ±7.5 Nm. Sample: 68 ' +
       'functional units from29 donors;6–7 per level. [peer-reviewed; full-text].',
+    sampleSize: '68 functional units from29 donors;6–7 per level',
     sources: [
       {
         citation:
@@ -7344,6 +8188,8 @@ export const EVIDENCE_LEDGER = [
           'thoracic spine. PLoS One 12(5):e0177823.',
         pmid: '28520819',
         doi: '10.1371/journal.pone.0177823',
+        key: 'wilke-2017',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -7369,6 +8215,8 @@ export const EVIDENCE_LEDGER = [
           '(Basel) 10(8):E884.',
         pmid: '28773240',
         doi: '10.3390/ma10080884',
+        key: 'prasad-2017',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -7394,6 +8242,8 @@ export const EVIDENCE_LEDGER = [
           '(Basel) 10(8):E884.',
         pmid: '28773240',
         doi: '10.3390/ma10080884',
+        key: 'prasad-2017',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -7419,6 +8269,8 @@ export const EVIDENCE_LEDGER = [
           '(Basel) 10(8):E884.',
         pmid: '28773240',
         doi: '10.3390/ma10080884',
+        key: 'prasad-2017',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -7446,6 +8298,8 @@ export const EVIDENCE_LEDGER = [
           '(Basel) 10(8):E884.',
         pmid: '28773240',
         doi: '10.3390/ma10080884',
+        key: 'prasad-2017',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -7460,12 +8314,15 @@ export const EVIDENCE_LEDGER = [
       'ratio0.3 is printed for this separate material set,not for Prasad. Table use: beside.',
     population:
       'tachi-2021: AIS planner comparison against postoperative CT. Sample: 47. [peer-reviewed; full-text].',
+    sampleSize: '47',
     sources: [
       {
         citation:
           'Tachi H, Kato K, Abe Y, Kokabu T, Yamada K, Iwasaki N, Sudo H. 2021. Front Bioeng Biotechnol 9:746902.',
         pmid: '34712654',
         doi: '10.3389/fbioe.2021.746902',
+        key: 'tachi-2021',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -7481,6 +8338,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'little-2013: AIS FE comparison with1-week standing Cobb; adult material properties. Sample: 8. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '8',
     sources: [
       {
         citation:
@@ -7488,6 +8346,8 @@ export const EVIDENCE_LEDGER = [
           'corrective forces applied to correct scoliosis deformity. Scoliosis 8(1):9.',
         pmid: '23680391',
         doi: '10.1186/1748-7161-8-9',
+        key: 'little-2013',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -7510,6 +8370,8 @@ export const EVIDENCE_LEDGER = [
           'Front Bioeng Biotechnol 13:1673061.',
         pmid: '41383715',
         doi: '10.3389/fbioe.2025.1673061',
+        key: 'jeong-2025',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -7532,6 +8394,8 @@ export const EVIDENCE_LEDGER = [
           'biomechanical test. Sci Rep 11(1):12968.',
         pmid: '34155224',
         doi: '10.1038/s41598-021-90686-6',
+        key: 'song-2021',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -7552,6 +8416,8 @@ export const EVIDENCE_LEDGER = [
         citation: 'Ohrt-Nissen S, Dahl B, Gehrchen M. 2018. Neurospine 15(2):123-130.',
         pmid: '29991241',
         doi: '10.14245/ns.1836050.025',
+        key: 'ohrt-nissen-2018',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -7572,6 +8438,8 @@ export const EVIDENCE_LEDGER = [
         citation: 'Ohrt-Nissen S, Dahl B, Gehrchen M. 2018. Neurospine 15(2):123-130.',
         pmid: '29991241',
         doi: '10.14245/ns.1836050.025',
+        key: 'ohrt-nissen-2018',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -7591,6 +8459,8 @@ export const EVIDENCE_LEDGER = [
         citation: 'Ohrt-Nissen S, Dahl B, Gehrchen M. 2018. Neurospine 15(2):123-130.',
         pmid: '29991241',
         doi: '10.14245/ns.1836050.025',
+        key: 'ohrt-nissen-2018',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -7606,6 +8476,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'abe-2015: AIS patients, mean age14.8; 6 mm Ti6Al7Nb rods, elasto-plastic inverse FE. Sample: 20. ' +
       '[peer-reviewed; full-text].',
+    sampleSize: '20',
     sources: [
       {
         citation:
@@ -7613,6 +8484,8 @@ export const EVIDENCE_LEDGER = [
           'implanted rod deformation using 3D-FEM analysis. Scoliosis 10(Suppl 2):S2.',
         pmid: '25810754',
         doi: '10.1186/1748-7161-10-s2-s2',
+        key: 'abe-2015',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -7630,6 +8503,7 @@ export const EVIDENCE_LEDGER = [
       'cidambi-2012: Patients with 5.5 mm ultra-high-strength steel rods; disease label not restated. ' +
       'Sample: 27. [peer-reviewed; abstract]. project-assumptions: No measured population; ' +
       'explicit project choices and calculations. Sample: not supplied. [own-inference; secondary].',
+    sampleSize: '27',
     sources: [
       {
         citation:
@@ -7638,6 +8512,8 @@ export const EVIDENCE_LEDGER = [
           '37(18):1566-1572.',
         pmid: '22426445',
         doi: '10.1097/brs.0b013e318252ccbe',
+        key: 'cidambi-2012',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -7664,6 +8540,8 @@ export const EVIDENCE_LEDGER = [
           '(Basel) 10(8):E884.',
         pmid: '28773240',
         doi: '10.3390/ma10080884',
+        key: 'prasad-2017',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -7688,6 +8566,8 @@ export const EVIDENCE_LEDGER = [
           '(Basel) 10(8):E884.',
         pmid: '28773240',
         doi: '10.3390/ma10080884',
+        key: 'prasad-2017',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -7708,6 +8588,8 @@ export const EVIDENCE_LEDGER = [
           'Kotwicki T, et al. 2018. Scoliosis Spinal Disord. 13:3.',
         pmid: '29435499',
         doi: '10.1186/s13013-017-0145-8',
+        key: 'sosort-2016',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -7720,6 +8602,8 @@ export const EVIDENCE_LEDGER = [
     population:
       'liu-2020: Lenke 1A/2A thoracic-only fusions. Sample: 6 studies; 732 patients; 150 with adding-on; ' +
       'per-reference denominators retained in the table. [peer-reviewed; full-text].',
+    sampleSize:
+      '6 studies; 732 patients; 150 with adding-on; per-reference denominators retained in the table',
     sources: [
       {
         citation:
@@ -7728,6 +8612,8 @@ export const EVIDENCE_LEDGER = [
           'Idiopathic Scoliosis: A Systematic Review and Meta-analysis. Neurospine 17(4):902-909.',
         pmid: '33401869',
         doi: '10.14245/ns.2040234.117',
+        key: 'liu-2020',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -7743,6 +8629,8 @@ export const EVIDENCE_LEDGER = [
     population:
       'liu-2020: Lenke 1A/2A thoracic-only fusions. Sample: 6 studies; 732 patients; 150 with adding-on; ' +
       'per-reference denominators retained in the table. [peer-reviewed; full-text].',
+    sampleSize:
+      '6 studies; 732 patients; 150 with adding-on; per-reference denominators retained in the table',
     sources: [
       {
         citation:
@@ -7751,6 +8639,8 @@ export const EVIDENCE_LEDGER = [
           'Idiopathic Scoliosis: A Systematic Review and Meta-analysis. Neurospine 17(4):902-909.',
         pmid: '33401869',
         doi: '10.14245/ns.2040234.117',
+        key: 'liu-2020',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -7766,6 +8656,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'bmc-level-review: AIS level-selection review; primary populations differ by rule. Sample: Review; ' +
       'aggregate n not supplied. [peer-reviewed; full-text].',
+    sampleSize: 'Review; aggregate n not supplied',
     sources: [
       {
         citation:
@@ -7774,6 +8665,8 @@ export const EVIDENCE_LEDGER = [
           'system: a narrative review. BMC Surg 26(1):102.',
         pmid: '41492130',
         doi: '10.1186/s12893-025-03481-9',
+        key: 'bmc-level-review',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -7789,6 +8682,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'bmc-level-review: AIS level-selection review; primary populations differ by rule. Sample: Review; ' +
       'aggregate n not supplied. [peer-reviewed; full-text].',
+    sampleSize: 'Review; aggregate n not supplied',
     sources: [
       {
         citation:
@@ -7797,6 +8691,8 @@ export const EVIDENCE_LEDGER = [
           'system: a narrative review. BMC Surg 26(1):102.',
         pmid: '41492130',
         doi: '10.1186/s12893-025-03481-9',
+        key: 'bmc-level-review',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -7811,6 +8707,8 @@ export const EVIDENCE_LEDGER = [
     population:
       'liu-2020: Lenke 1A/2A thoracic-only fusions. Sample: 6 studies; 732 patients; 150 with adding-on; ' +
       'per-reference denominators retained in the table. [peer-reviewed; full-text].',
+    sampleSize:
+      '6 studies; 732 patients; 150 with adding-on; per-reference denominators retained in the table',
     sources: [
       {
         citation:
@@ -7819,6 +8717,8 @@ export const EVIDENCE_LEDGER = [
           'Idiopathic Scoliosis: A Systematic Review and Meta-analysis. Neurospine 17(4):902-909.',
         pmid: '33401869',
         doi: '10.14245/ns.2040234.117',
+        key: 'liu-2020',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -7833,6 +8733,8 @@ export const EVIDENCE_LEDGER = [
     population:
       'liu-2020: Lenke 1A/2A thoracic-only fusions. Sample: 6 studies; 732 patients; 150 with adding-on; ' +
       'per-reference denominators retained in the table. [peer-reviewed; full-text].',
+    sampleSize:
+      '6 studies; 732 patients; 150 with adding-on; per-reference denominators retained in the table',
     sources: [
       {
         citation:
@@ -7841,6 +8743,8 @@ export const EVIDENCE_LEDGER = [
           'Idiopathic Scoliosis: A Systematic Review and Meta-analysis. Neurospine 17(4):902-909.',
         pmid: '33401869',
         doi: '10.14245/ns.2040234.117',
+        key: 'liu-2020',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -7856,6 +8760,7 @@ export const EVIDENCE_LEDGER = [
       'lenke-2001: AIS classification using standing coronal/lateral and supine side-bending films. Sample: ' +
       '27-patient radiographic reliability set; 5 developers and 7 independent surgeons. [peer-reviewed; ' +
       'abstract].',
+    sampleSize: '27-patient radiographic reliability set; 5 developers and 7 independent surgeons',
     sources: [
       {
         citation:
@@ -7864,6 +8769,8 @@ export const EVIDENCE_LEDGER = [
           '83(8):1169-1181.',
         pmid: '11507125',
         doi: null,
+        key: 'lenke-2001',
+        reading: 'abstract',
       },
     ] as readonly EvidenceSource[],
     checked: false,
@@ -7878,6 +8785,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'bmc-level-review: AIS level-selection review; primary populations differ by rule. Sample: Review; ' +
       'aggregate n not supplied. [peer-reviewed; full-text].',
+    sampleSize: 'Review; aggregate n not supplied',
     sources: [
       {
         citation:
@@ -7886,6 +8794,8 @@ export const EVIDENCE_LEDGER = [
           'system: a narrative review. BMC Surg 26(1):102.',
         pmid: '41492130',
         doi: '10.1186/s12893-025-03481-9',
+        key: 'bmc-level-review',
+        reading: 'full-text',
       },
     ] as readonly EvidenceSource[],
     checked: false,

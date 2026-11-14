@@ -5,7 +5,7 @@
 - This is the one document that says how Spine Workbench looks, moves and speaks, and why.
 - Two files go with it: [`app/src/look-and-feel/tokens.css`](app/src/look-and-feel/tokens.css) (shared values, by name) and [`app/src/look-and-feel/components.css`](app/src/look-and-feel/components.css) (shared parts, as plain classes). From here on they are called `tokens.css` and `components.css`.
 - To design a new screen: read the principles, build it from the parts in section 6, and use only the names in `tokens.css`.
-- At the time of writing, 14 November 2026, Films, Find, 3D, Place through its load calculation, and saving and reopening a case are built in the app. The values here describe those moments. Further changes follow section 11.
+- At the time of writing, 14 November 2026, Films, Find, 3D, Place through hand changes and its load calculation, and saving and reopening a case are built in the app. The values here describe those moments. Further changes follow section 11.
 
 | To find | Look in |
 |---|---|
@@ -36,9 +36,9 @@ Spine Workbench is a browser app that runs entirely on the user's own computer. 
 | **1 Films** | The four films are added. Each lands in its own place. | "Add the four films." then "All four films are in." | Find the spine |
 | **2 Find** | The app finds the spine while the user watches. Outlines appear on the films, vertebra by vertebra, each with its name. | "Finding the spine…" then "17 vertebrae found. 2 need a look." | Build the 3D spine |
 | **3 3D** | The films move to a rail at the side. The spine can be turned, seen from three sides, and read as a short list of measurements. | "The spine in 3D." | Place screws and rods |
-| **4 Place** | The same spine carries a first placement, its looks and limits, then a load calculation with Before and Rods in stops. | "Working out a first placement…" then "A first placement: T4 to L1." | Put it under load; Stop during the run; Next while reviewing; Try again after a temporary fault. After loading, the stop control and All estimates |
+| **4 Place** | The same spine carries a first placement, its looks and limits, hand changes with undo, then a load calculation with Before and Rods in stops. | "Working out a first placement…" then "A first placement: T4 to L1." | Put it under load; Stop during the run; Next while reviewing; Try again after a temporary fault. After loading, the stop control and All estimates |
 
-Settled: Films, Find, 3D and Place follow one another, with fewer than four films allowed. Place opens after a current 3D fit has finished arriving. Its placement is not saved with the case.
+Settled: Films, Find, 3D and Place follow one another, with fewer than four films allowed. Place opens after a current 3D fit has finished arriving. Its placement and hand changes are not saved with the case.
 
 - The Front film alone is enough to find and build the spine. The other films can be left out.
 - A Side film can be searched alone after its facing is chosen and its finder is available. Building a 3D spine still needs Front.
@@ -1039,7 +1039,7 @@ Shared parts are in `components.css`; the tables name the files that add behavio
 |---|---|
 | For | Showing the drawn upper and lower ends on their fitted endplates |
 | Look | A line across the upper endplate of the upper level and lower endplate of the lower level. An unsettled end has eight dashes. Its level name in the mono face sits 8 beyond the projected outer rim |
-| States | Arrives before the anchors. Settled or unsettled. Pointed or kept open. End looks are left out for a sketch. The mark is not draggable |
+| States | Arrives before the anchors. Settled or unsettled. Pointing names it. Pressing opens Why here. Dragging snaps to fitted levels from T1 to L5 in the input front film’s naming template, keeping the ends apart and at least two occupied heads per side; release sends one change. A transparent 24-wide target follows the mark. While held, its candidate level is named and counts sit toward the rail. End looks are left out for a sketch and after a hand change |
 | Classes and files | `upper` and `lower` scene-layer identities in `app/src/bench/place/draw-placement.ts`; end text and rings in `.place-labels` in `app/src/bench/place/PlaceDrawing.tsx`. Their look lives in `app/src/bench/place/place.css` |
 
 #### Look ring
@@ -1059,17 +1059,30 @@ Shared parts are in `components.css`; the tables name the files that add behavio
 | Look | Thin glass, corner 10, padding 12 by 16, Small type, no wider than the panel. It is clamped inside the canvas, 14 right and 16 below the projected part |
 | Lines | Title: level, side of the front film and kind, rod, rod span or end. Level names use the mono face. One mono line gives the supplied diameter and length. Other sizes share a small proportional paragraph. A screw adds the wider-than-pedicle sentence only when its drawn diameter has a positive supplied count. A pedicle interval and its source need a width band |
 | After loading | A supplied demand range is followed by its strength-allowance words and Assumed, even without a past-allowance count. A positive count adds the sentence in ink, with a small look-coloured dot before it, the small explanation and the assumptions line. The typical-kyphosis sentence follows the pointed rod’s own target, only at Rods in and not Before. A rod or rod span’s chip attaches halfway along its drawn arc |
-| States | Pointing opens it; pressing or Enter keeps it open. Hidden during arrival and while the sheet is open. Escape or an outside press clears a kept selection. There are no editing controls |
+| States | Pointing opens it; pressing or Enter keeps it open. Hidden during arrival and while the sheet is open. Escape or an outside press clears a kept selection. A kept pedicle adds Screw, Hook and None, plus diameter and length steppers for a screw. A kept rod or span adds only the sourced material/diameter pairs, applied to both rods. Controls use this same surface, with a hairline above and no nested glass. Set by hand replaces the table source and omits the other-size paragraph only when the engine marks the diameter or length as entered. Returning both to table status restores the source and other sizes |
 | Read aloud | The chip has `role="status"` and exposes its title and shown lines |
 | Classes and files | `.place-chip.glass`, `.num`, `.past-strength`, `.dot`, `.load-context`. `app/src/bench/place/place.css` sets the look; `app/src/bench/place/PlaceDrawing.tsx` supplies and positions it |
+
+#### Changing a placement by hand. Settled
+
+| | |
+|---|---|
+| For | Keeping the person’s choices distinct from the first placement |
+| Controls | A pedicle’s kind uses a three-way control, 36 tall. Diameter and length each have a quiet decrement, supplied value in mono and quiet increment. Only the engine’s grids are reachable. A hook or empty place takes its screw size from screwHere; no screw choice when absent. No hook or screw without a direction. An empty choice cannot leave a side with fewer than two screws or hooks. The reason remains under a dimmed choice |
+| Rods | Both rods take one listed material and diameter pair. The current pair is marked; there is no cross-product of independent choices |
+| Rebuild | One rebuild-layout call carries the original input, ends, only the pedicles set by the person and the rod pair. While pending the control stays focused and busy, and every placement change is blocked. A refused change leaves the answer untouched and says That change could not be made. Nothing was changed. The three temporary engine faults offer Try again. Done dismisses a change failure without altering the placement or a retained load |
+| Yours | The returned answer replaces the placement. The dock says Your placement with its ends and counts; More, views, Undo and Put it under load are live. A previous load is dropped. End review items leave because their counts concern the first placement. Review remains reachable from the sheet |
+| Undo | Each step restores its kept answer and input choices. Undoing the last change restores A first placement. The sheet’s Start again from the first placement restores that answer in one action. Only the explicit choices actually sent within the new span are kept; a choice trimmed by an end change does not return on a later expansion. Choices and undo stay with the same fitted input and disappear on a new fit or reopened case; they are not saved |
+| Motion | Only changed parts fade in over 280, comparing anchors by level and side; unchanged parts retain their place and ink. The camera does not reopen the arrival on a hand change |
+| Files | `hand-state.ts`, `PartControls.tsx`, `EndHandles.tsx`, `end-rules.ts`, `WhyHere.tsx` and `review-choices.ts` under `app/src/bench/place/`; `.place-part-controls`, `.part-kinds`, `.place-stepper`, `.place-rod-choices`, `.place-end-handles`, `.place-why` and `.place-review-choices` in place.css |
 
 #### Review card in Place
 
 | | |
 |---|---|
-| For | Walking the looks the first placement returned, without changing the placement |
-| Content | Count, item label and all its look sentences. A pedicle counts once even with several looks. Only the five shared looks named under Look ring can become one Every pedicle item; the two level-specific looks never do. End and names items appear only when their codes arrived. The names card has native expandable lists for the two supplied naming scenarios |
-| States | Review opens at the first item, or at an item chosen in the sheet. Next moves on while another item exists. Done leaves at any point. The review does not approve, edit or remove parts |
+| For | Walking the placement’s looks and changing the part when wanted |
+| Content | Count, item label and all its look sentences. A pedicle counts once even with several looks. Only the five shared looks named under Look ring can become one Every pedicle item; the two level-specific looks never do. End and names items appear only when their codes arrived. The first placement’s names card has native expandable lists for the two supplied naming scenarios. A rebuilt answer has no new scenarios, so the names item remains its note without those earlier change lists |
+| States | Review opens at the first item, or at an item chosen in the sheet. Next moves on while another item exists. Done leaves at any point. A pedicle offers Keep the screw, Use a hook and Leave it empty, marking the current kind. An end offers the drawn level and the first other supplied level. Forbidden choices are dimmed with their reason. Names and Every pedicle remain notes. A chosen change uses the same rebuild as the chip and leaves review |
 | Look | Part of the dock’s own glass surface, with a hairline above it, padding 16 at the top and margin 12 above. No glass layer or separate corner. It scrolls above its capped height. The dock grows upwards, with corner 28 and padding 16 top and bottom |
 | Turn | An individual pedicle sets the camera azimuth from its supplied direction. End and shared cards use Back. Shared cards keep bone strength 55%; individual cards use 34% |
 | Classes and files | `.place-review`, `.num`, `.level-name`, `details`, `summary` in `app/src/bench/place/place.css` and `app/src/guide/Dock.tsx`. `app/src/bench/place/placement-view.ts` builds the review items |
@@ -1079,9 +1092,9 @@ Shared parts are in `components.css`; the tables name the files that add behavio
 | | |
 |---|---|
 | For | Reading all looks, missing information and limits at every window width |
-| Content | What needs a look, with proportional review labels and only the vertebra name in mono. After loading, All estimates for the chosen stop. What these films cannot tell, one line per returned code. Other published diameters when supplied, to one decimal. About these numbers: table, population, bone, fit and naming limits with the placement; mechanical limits only after a completed load. Front-only and no-scale limits are conditional. The comparison limit stays out because comparing placements is not built. Daily-load limits stay out while those stops are withheld. The assumed-facing note is conditional; sizing and not-saved lines stay in the note |
+| Content | What needs a look, with proportional review labels and only the vertebra name in mono. After loading, All estimates for the chosen stop. What these films cannot tell, one line per returned code. Other published diameters when supplied, to one decimal. About these numbers: table, population, bone, fit and naming limits with the placement; mechanical limits only after a completed load. Front-only and no-scale limits are conditional. The comparison limit stays out because comparing placements is not built. Daily-load limits stay out because daily stops are not shown as stops. The assumed-facing note is conditional; sizing and not-saved lines stay in the note |
 | Empty answer | The heading is What these films cannot tell. No reason line is invented when the engine supplied none |
-| States | More opens it; M opens it when a placement has arrived. Its heading takes focus, Tab stays inside and the stage is inert. Done, Escape or an outside press closes it. Focus returns to the opening element when it remains present. Choosing a look closes the sheet and opens that review item |
+| States | More opens it; M opens it when a placement has arrived. Pressing an end or Enter on it opens Why here at the top: each readable rule for that end, its most frequent level and its count out of all versions; unread rules are named as unread. Ties lengthen the span. When a selective test holds in at least a fifth of versions, only the first pair’s rule names show and drag counts are withheld. Start again from the first placement appears after a hand change. Its heading takes focus, Tab stays inside and the stage is inert. Done, Escape, M or an outside press closes it and clears Why here, so the next opening starts in its ordinary section. Focus returns to the opening element when it remains present. Choosing a look closes the sheet and opens that review item |
 | Look | The dense existing panel sheet, with internal scrolling. Its own visible rule leaves 24 below it and caps it at the stage height less that gap. It does not borrow the 3D-only measurements visibility rule |
 | Classes and files | `.panel.glass.measurements.sheet.place-sheet`, `.place-sheet-list`, `.place-review-label`, `.panel-note`, `.panel-acts` in `app/src/bench/place/place.css`. `app/src/bench/place/PlaceSheet.tsx` mounts the dialog and manages keys and focus |
 
@@ -1113,7 +1126,7 @@ Shared parts are in `components.css`; the tables name the files that add behavio
 | For | Choosing Before or Rods in on the current placement |
 | Look | The existing segmented control and thumb. Wide cells are 112 by 40. Below 900 their base width is 84; at 900 and below the control fills its own dock row with equal cells |
 | States | Rods in is chosen on completion. Before removes load numbers and ghosts and restores ordinary part ink. A chosen stop has `aria-current="true"`. Choosing clears a pointed or kept chip. No primary remains after loading |
-| Withheld | Three more stops remain behind one list in code, withheld while the engine’s model of daily loads is rebuilt |
+| Presentation | Before and Rods in stay as the two choices. Standing, bending forward and walking give nearly the same load readings, so the control does not present them as separate analyses |
 | Classes and files | `.seg.load-stops` in `app/src/bench/place/place.css`; `app/src/building-blocks/Segmented.tsx` mounts its buttons, `app/src/guide/Dock.tsx` reads the shown list in `app/src/words/place.ts` |
 
 #### Loaded spine and ghosts. Settled
@@ -1123,7 +1136,7 @@ Shared parts are in `components.css`; the tables name the files that add behavio
 | For | Showing a returned Rods in drawing without changing the fit or its measurements |
 | Drawing | Use the supplied middle poses and seated rods when present. Otherwise use the settled version whose Rods in main curve is nearest the supplied middle, ties by version order. With no main-curve value to be nearest to, use the first settled version instead. Its rods follow the riding heads. Only when none settled, keep the fitted spine. The sheet distinguishes nearest-middle, first-settled and fitted fallbacks |
 | Ghosts | Up to two returned Rods in pose sets, in flat ink at 12%, with no shadow or pointer hits. They reuse the fitted bone shapes. Hidden at Before; they appear after the pose move |
-| Load ink | At Rods in, each anchor or rod span uses its supplied share’s middle divided by the largest middle of its own kind there, clamped from zero to one. Strength is 25% plus 75% of that ratio. This scaling is used while daily stops are withheld; it changes no estimate. Empty places retain 80% ink |
+| Load ink | Each anchor or rod span uses its supplied share’s middle directly, clamped from zero to one. Strength is 25% plus 75% of that share; there is no scaling within a stop. Empty places retain 80% ink |
 | Classes and files | No separate DOM class. `app/src/bench/place/load-drawing.ts` moves drawing poses and adds flat spines; `app/src/bench/place/draw-placement.ts` draws rods and changes ink. `app/src/spine-3d/README.md` records the shared flat-spine contract |
 
 #### Load range label and bar. Settled
@@ -1142,13 +1155,13 @@ Shared parts are in `components.css`; the tables name the files that add behavio
 |---|---|
 | For | Reading the shown stop’s supplied estimates and limits without crowding the stage |
 | Content | Estimate name, outward-rounded range, bar, tag and the main source of variation when supplied. Unsettled-version and stiff-rod counts when positive. Parts past their allowance, each named proportionally with only vertebra names in mono, and its ink sentence, look-coloured dot, explanation and assumptions. No load numbers at Before. No main curve, typical kyphosis or unmeasured twist is replaced by a number |
-| Notes | The middle-eight-in-ten line, model-curve definition and fallback when needed. Missing kyphosis and twist are said as words. The strength allowance is explained. The daily-load and trunk-balance sentences state what is absent |
+| Notes | The middle-eight-in-ten line, model-curve definition and fallback when needed. Missing kyphosis and twist are said as words. The strength allowance is explained. The daily-load sentence explains why no separate daily stops are shown. The trunk-balance sentence and adjacent-level sentence state what the model does not work out |
 | States | All estimates opens the Place sheet, scrolls its estimate heading into view and focuses it. Other sheet controls, dismissal and the Tab boundary stay the same |
 | Classes and files | `.load-estimates`, `.load-estimate-list`, `.load-context`, `.panel-note`, `.num` in `app/src/bench/place/LoadEstimates.tsx` and `app/src/bench/place/place.css` |
 
 #### Later Place work. Decided, being built
 
-Changing a placement by hand, comparing placements, questions about age, weight and steps, and the return of the daily stops are not built.
+Comparing placements and questions about age, weight and steps are not built.
 
 ## 7. Motion, scene by scene
 
@@ -1290,6 +1303,15 @@ The way in is "Place screws and rods" after the 3D arrival has ended. The same s
 | A review ends or the view changes | The selected Front, Side, Top or Back view is used at the current scale; a hand turn clears that choice. With no named choice, leaving review keeps the current view. Reduced motion makes named turns jump |
 | A changed fit is shown | The changed-spine helper stays for 6000 after arrival. Leaving consumes it |
 | Place is left | Its parts are removed, full bone strength and the prior view return. The fitted spine itself stays mounted |
+
+### A hand change. Settled
+
+| When | What happens |
+|---|---|
+| A control is pressed | It stays focused and busy until the rebuild answers; another placement change waits |
+| The answer arrives | Changed anchors, rods and end marks fade in over 280, without stagger. Unchanged parts stay still. Reduced motion uses the same fade. The prior load is removed |
+| An end is held | Its handle snaps to a fitted candidate and shows its name; readable-rule counts appear toward the rail unless the selective condition withholds them. Release sends one rebuild. A press without a move opens Why here |
+| Undo or Start again | The retained answer returns with the same short fade for its changed parts |
 
 ### The placement under load. Settled
 
@@ -1599,7 +1621,7 @@ The tables cover Films, Find, 3D, the first placement and its load calculation. 
 | Chip source, following a pedicle interval | from tables for teenagers: no age was given |
 | Empty answer helper when returned curves are empty | No side-to-side curve was found. |
 | Sheet heading | Other published diameters |
-| Stage accessible name | Placement preview. Up and Down walk the parts; Left and Right cross sides; Enter keeps a part open; Escape closes it. |
+| Stage accessible name | Placement preview. Up and Down walk the parts; Left and Right cross sides; Enter opens part controls or Why here; Shift with Up or Down moves an end; Escape cancels a held end or closes it. |
 | Gallery name | Place |
 | Gallery state | A made-up first placement |
 
@@ -1715,6 +1737,62 @@ The tables cover Films, Find, 3D, the first placement and its load calculation. 
 | frontOnly | With a front film only, forward lean, depth, side wedge and inferred twist come from a typical spine. A load calculation does not make them measurements of this spine. |
 | noScale | With no film scale, distances and the load’s lever arms belong to a typical-sized spine. |
 
+**Place: hand changes**
+
+| Where | String |
+|---|---|
+| Yours, example | Your placement: T4 to L2. |
+| Quiet action | Undo |
+| Sheet action | Start again from the first placement |
+| Size source | Set by hand |
+| Kind choice | Screw |
+| Kind choice | Hook |
+| Kind choice | None |
+| Kind control name | Part |
+| Stepper label | Diameter |
+| Stepper label | Length |
+| Stepper decrement | − |
+| Stepper increment | + |
+| Diameter decrement name | Smaller diameter |
+| Diameter increment name | Larger diameter |
+| Length decrement name | Shorter screw |
+| Length increment name | Longer screw |
+| Length value, example | 25 mm |
+| No screw size | The tables give no screw size here. |
+| No direction | The films give no direction for this part. |
+| Too few heads | A side keeps at least two screws or hooks. |
+| Ends limit | The ends stay at least one level apart. |
+| Fitted span | The span uses fitted levels from T1 to L5. |
+| Change failed or refused | That change could not be made. Nothing was changed. |
+| Sheet heading | Why here |
+| End heading | Upper end |
+| End heading | Lower end |
+| Drag count, example | 5 of 7 rules |
+| Rule count, example | End vertebra plus one: L1 in 19 of 32 versions. |
+| Unread rule, example | Shoulder level: could not be read. |
+| Review choice | Keep the screw |
+| Review choice | Use a hook |
+| Review choice | Leave it empty |
+| Rod control label | Both rods |
+| Material | Cobalt chrome |
+| Material | Titanium alloy |
+| Material | Stainless steel |
+| Rod pair, example | Cobalt chrome · 5.5 mm |
+| Rule name | End vertebra plus one |
+| Rule name | Neutral vertebra |
+| Rule name | Last touched vertebra |
+| Rule name | Stable vertebra minus one |
+| Rule name | Substantially touched vertebra |
+| Rule name | L3 or L4 |
+| Rule name | Lower end vertebra plus one in type 5C |
+| Rule name | Lower end index |
+| Rule name | Deviated vertebra |
+| Rule name | Upper end vertebra |
+| Rule name | Upper end in type 5C |
+| Rule name | Shoulder level |
+| Rule name | Thoracic curve alone |
+| Rule name | Lumbar curve alone |
+
 **Place under load: words and actions**
 
 | Where | String |
@@ -1739,13 +1817,13 @@ The tables cover Films, Find, 3D, the first placement and its load calculation. 
 | Sheet, no measured twist | Twist at the apex needs twist measured on the films. |
 | Sheet, no measured kyphosis | Kyphosis needs a side film that shows the vertebrae it is read between. |
 | Loaded rod chip | Its contour aims for a typical upper back: no side film measured this one's. |
-| Sheet, withheld daily loads | Loads in daily life are not worked out yet. |
+| Sheet, daily loads | In this model standing, bending forward and walking add little to the forces locked in when the rods go in. The model has no muscles, and its figures for these loads come from adults; none measured in a child's fused spine was found. |
+| Sheet, adjacent levels | This model does not work out the load on the levels beside the rods. |
 | Sheet, absent rebalancing | The model does not rebalance the trunk above and below the rods. |
 | Chip, after demand range | of its strength allowance. |
 | Sheet, allowance definition | An anchor's strength allowance is its published strength, lowered for weaker bone in some versions. |
 | Chip and sheet, after past-allowance count | Assumed: strengths from tables, lowered by the model's own allowances. |
 | Sheet, range definition | Each range holds the middle eight in ten of the versions. |
-| Sheet, placement starts at T1 | Starts at T1: there is no level above to compare. |
 | Shown stop | Before |
 | Shown stop | Rods in |
 | Estimate tag | Set by the films |
@@ -1798,8 +1876,6 @@ The tables cover Films, Find, 3D, the first placement and its load calculation. 
 | heaviest-anchor-demand | Heaviest anchor’s share of its strength allowance |
 | heaviest-anchor-over-median | Heaviest anchor against the middle of the anchor forces |
 | heaviest-rod-use | Heaviest rod span’s share of its yield |
-| junction-above | Level above |
-| junction-below | Level below |
 
 ### Names
 
@@ -1840,7 +1916,7 @@ While any film's facing is assumed, no screen names the patient's left or right.
 | Sizes | Diameter to one decimal. Length to tenths without a trailing .0. A screw has one mono diameter-by-length line; a rod has its diameter. Other sizes share one proportional paragraph, without invented counts |
 | Pedicle interval | Lower end down and upper end up to tenths of a millimetre. Add the source only with a supplied width band. A may-be-too-narrow look with no width becomes the no-table sentence |
 | What cannot be told | Print each of the fourteen reason codes once when it arrives. Only ends-unsettled and twist-not-measured append their supplied levels. A missing reason is not supplied by the screen |
-| Limits | Table, population, bone, fit and naming limits appear with the placement. Mechanical limits need a completed load. Front-only and no-scale limits are conditional. The comparison limit stays out because comparing placements is not built. Daily-load limits stay out while those stops are withheld |
+| Limits | Table, population, bone, fit and naming limits appear with the placement. Mechanical limits need a completed load. Front-only and no-scale limits are conditional. The comparison limit stays out because comparing placements is not built. Daily-load limits stay out because daily stops are not shown as stops |
 
 ### How Place writes a load estimate
 
@@ -1853,8 +1929,6 @@ While any film's facing is assumed, no screen names the patient's left or right.
 | Heaviest anchor’s share of its strength allowance | % | When supplied |
 | Heaviest anchor against the middle of the anchor forces | × | When supplied |
 | Heaviest rod span’s share of its yield | % | When supplied |
-| Level above | × | When supplied; a placement starting at T1 has the no-level-above sentence instead |
-| Level below | × | When supplied |
 
 | Thing | Rule |
 |---|---|
@@ -1863,7 +1937,7 @@ While any film's facing is assumed, no screen names the patient's left or right.
 | Writing | Repeat the unit at both ends: “18° to 27°”, “41% to 67%”, “12 N to 25 N”, “0.8× to 1.2×”. Equal rounded ends become “about 18°”. The bar uses the unrounded band and supplied measure scale |
 | Tags | Keep the supplied tag beside the range. For comparing placements only remains in the engine’s tag vocabulary, but cannot appear while one placement is loaded alone. An anchor’s chip and stage label say Assumed independently of whether any version went past its allowance |
 | Missing readings | A typical kyphosis or unmeasured twist has its explanatory sentence and no number. With no main curve there is no main-curve number or definition. A load calculation does not make assumed geometry into a film measurement |
-| Sources of variation | The sheet adds the named source only when supplied. While daily stops are withheld, it leaves out the four daily-load sources, even when returned. It does not rank sources or supply a missing one |
+| Sources of variation | The sheet adds the named source only when supplied. Because daily stops are not shown as stops, it leaves out the four daily-load sources, even when returned. It does not rank sources or supply a missing one |
 | Counts | Placement counts and the count that did not settle are out of all versions. Past-allowance and stiff-rod run counts are out of those that settled; use the two forms in the words table |
 
 ## 9. Accessibility
@@ -1883,10 +1957,10 @@ While any film's facing is assumed, no screen names the patient's left or right.
 | Reduced motion | Fades only | The find keeps its reveal clock, without travelling light or drawing strokes. Formation uses two 160 fades and the resting spine. Named views jump and a hand release never glides. A waiting meter uses a still wash and the busy Save ring stands still. The earlier toast transition shortens to 1 while its 4600 stay remains. Place’s arrival is one fade; a changed load drawing fades out, changes at the middle and fades back in. System and app preferences get the same answers |
 | 3D keyboard | The built controls work without a pointer | Rail films answer Enter and Space. Measurements rows take focus and tint their levels; Front, Side and Top are buttons. Escape closes comparison and the narrow sheet. The canvas itself has no keyboard turning, zooming or bone selection |
 | 3D sheet focus | The heading takes focus on open | The spine is inert and the rail hidden behind it. Escape and an outside press close it. Focus returns to Measurements if it was still in the sheet. Tab is not trapped |
-| Place stage | One focused stage walks the returned parts | Its blue focus outline has a 4 inward offset. Up and Down walk parts, keeping the same side between anchors; Left and Right cross to the other anchor at that level or the other rod. Enter keeps the selected part open, or the upper end when none is selected. Escape clears a chip first, then selection and review when the stage owns the key |
-| Place sheet | M, More or All estimates opens the details | M is available after a placement arrives; All estimates follows a completed load. The dialog heading takes focus, or the estimate heading after All estimates; Tab cycles inside, Escape closes and focus returns to the opening element when present. An outside press closes without being consumed |
+| Place stage | One focused stage walks the returned parts | Its blue focus outline has a 4 inward offset. Up and Down walk parts, keeping the same side between anchors; Left and Right cross to the other anchor at that level or the other rod. Enter keeps a pedicle or rod open with its controls; on an end it opens Why here. Shift with Up or Down moves a selected end by one fitted level. With no selection Enter opens the upper end’s Why here. Keyboard selection stays until actual pointer movement. Escape while an end is held cancels its preview and sends no rebuild on release. Otherwise Escape clears a chip first, then selection and review when the stage owns the key |
+| Place sheet | M, More or All estimates opens the details | M is available after a placement arrives; All estimates follows a completed load. The dialog heading takes focus, or the estimate heading after All estimates; Tab cycles inside, Escape or M closes and clears Why here, and focus returns to the opening element when present. An outside press closes without being consumed |
 | Place load focus | Follow the current action | Placed focuses Put it under load; running focuses Stop; completion focuses the chosen stop. A temporary fault focuses Try again; a refusal focuses Back to the placement. Returning to Placed focuses its primary. The same dock scene stays mounted |
-| Place spoken text | Names and numbers remain words, not colour alone | The stage's accessible name gives its key instructions. A part chip is a status message. The dock speaks its sentence and helper; review labels, counts, sentences and expandable lists remain readable content. Projected rings, end labels and load range labels are hidden from a screen reader. All estimates holds the same load readings as text |
+| Place spoken text | Names and numbers remain words, not colour alone | The stage's accessible name gives its key instructions. A part chip is a status message. Its kept controls are native buttons and a named kind control; reasons accompany forbidden choices. Escape closes a kept chip and returns focus to the stage. A busy control retains focus and ignores other changes. The dock announces the new Yours sentence after a successful change. The dock speaks its sentence and helper; review labels, counts, sentences and expandable lists remain readable content. Projected rings, end labels and load range labels are hidden from a screen reader. All estimates holds the same load readings as text |
 | Reduced transparency | Glass becomes solid | `--glass-solid`, no blur |
 | More contrast | Glass becomes white with a clear edge | White, no blur, edge `--line-strong` |
 | Smallest text | 12 in the interface, 11 on film | Vertebra names on film are 11 |
@@ -1970,6 +2044,22 @@ grep -nE '#[0-9a-fA-F]{3,8}\b|rgba?\(|[0-9.]+(px|ms|em|rem|vw|vh)\b' app/src/loo
 
 ## 12. Decisions log
 
+- **14 November 2026 — End choices use the film’s level order.** T1 to L5 bounds apply to the declared naming template, including missing T12 and an extra T13. Dragging, keyboard moves, review choices and rebuild filtering share this order and their refusal reasons.
+- **14 November 2026 — Undo keeps what was sent.** Shortening a span drops its outside hand choices; expansion follows the engine’s pattern, while undo restores the earlier explicit choices.
+- **14 November 2026 — The engine marks the source of a size.** Set by hand follows entered size status alone. A table-sized answer shows its supplied table source and alternatives again.
+- **14 November 2026 — Closing details clears their context.** Why here leaves with the sheet. A rebuild reads the current pressed and pointed parts after its answer, and Escape cancels a held end without a later change on release.
+- **14 November 2026 — Daily loads are a note, not more stops.** The rebuilt daily cases would show four nearly equal sets of numbers, so Before and Rods in stay. The sheet states the model’s limits, names the absent adjacent-level calculation, and ink reads each supplied share without scaling within Rods in.
+
+
+- **14 November 2026 — Hand choices belong to the fitted input.** Rebuild uses the original input and only explicit pedicle choices; undo keeps earlier answers, and a changed fit drops this history.
+- **14 November 2026 — Sizes and rod pairs stay on sourced grids.** Kind and size controls cannot invent a screw size or material/diameter pair; forbidden choices remain explained.
+- **14 November 2026 — Ends snap and rebuild on release.** A 24-wide handle keeps the ends apart and occupied sides intact; Shift with Up or Down gives the same move by keyboard, and a press opens Why here.
+- **14 November 2026 — Rule counts follow the returned votes.** One landing per readable rule, ties lengthen the span. A selective share of at least a fifth withholds counts and uses the first pair’s names.
+- **14 November 2026 — Hand changes keep the object still.** Changed parts fade over 280 on the existing surface; unchanged parts do not travel, and prior load results leave.
+- **14 November 2026 — Review can make the same changes as a chip.** Pedicle and end choices share their rebuild and refusal rules; names remain a note.
+- **14 November 2026 — Yours is reversible and not saved.** Undo and Start again return kept answers; the dock names ownership without judging the change, and the sheet keeps its not-saved line.
+
+
 Newest first. Each line gives what was decided and why.
 
 - **14 November 2026 — The Place dock may be wider than the bar.** Four views or the stops, two quiet actions and a primary do not fit the bar’s width in one row; stacking them made the dock three rows tall over the spine.
@@ -1983,11 +2073,11 @@ Newest first. Each line gives what was decided and why.
 - **14 November 2026 — Put it under load is the placed primary.** The load calculation now exists, so the next action can follow the first placement without a second primary.
 - **14 November 2026 — Stop discards partial work.** A stopped run must not look complete, so late replies are ignored and the unchanged placement remains.
 - **14 November 2026 — Load faults return to the placement.** The geometry is still available, so failure and refusal offer Back to the placement without removing it.
-- **14 November 2026 — Only Before and Rods in are offered.** The daily stops are withheld because the engine’s model of daily loads is being rebuilt.
+- **14 November 2026 — Only Before and Rods in are offered.** The initial temporary restriction is superseded by the daily-load presentation decision recorded in this log.
 - **14 November 2026 — A completed load opens at Rods in.** The changed spine should be visible immediately; Before remains the fitted spine without load numbers or ghosts.
 - **14 November 2026 — The loaded drawing keeps its source visible.** Fallbacks to a nearest-middle version, a first settled version or the fit are named in the sheet so a drawing cannot be mistaken for another estimate.
 - **14 November 2026 — Ghosts reuse the fitted bones.** Returned pose sets show shape variation without creating another bone shape or pointer target.
-- **14 November 2026 — Load ink is scaled within Rods in for now.** With the daily stops withheld, the largest supplied middle of each part kind sets its ink range without changing a number.
+- **14 November 2026 — Load ink returns to the supplied share.** The temporary scaling within Rods in is removed after daily-load recalibration; ink reads the share across stops directly.
 - **14 November 2026 — Load ranges round outwards.** Whole degrees, percentages and newtons, or tenths for ratios, keep the printed interval from shrinking; equal rounded ends use about.
 - **14 November 2026 — Missing load readings stay as words.** Typical kyphosis and unmeasured twist must not become numbers merely because the placement was loaded.
 - **14 November 2026 — Loaded poses travel or fade on the same drawing.** The scene curve keeps the spine continuous; reduced motion changes poses between two fade halves.
@@ -1995,7 +2085,7 @@ Newest first. Each line gives what was decided and why.
 - **14 November 2026 — A past-allowance count includes its explanation.** The count describes versions of what is unknown, so the same chip and sheet row say what the allowance means.
 - **14 November 2026 — Load counts use the settled denominator.** A version that did not settle cannot count towards a run’s allowance result; placement and unsettled counts still use all versions.
 - **14 November 2026 — All estimates opens one sheet.** The same details remain available at every width without adding a permanent panel.
-- **14 November 2026 — Limits follow what is shown.** Placement limits precede loading, mechanical limits follow it, the comparison limit stays out because comparing placements is not built, and daily-load limits stay out while those stops are withheld.
+- **14 November 2026 — Limits follow what is shown.** Placement limits precede loading, mechanical limits follow it, the comparison limit stays out because comparing placements is not built, and daily-load limits stay out because daily stops are not shown as stops.
 - **14 November 2026 — Narrow Place docks have fixed rows.** Words, full-width controls and left/right actions keep the primary from competing with the helper; the spine fits above the actual dock and caption.
 - **14 November 2026 — Focus follows the live load action.** Stop, the chosen stop and the returned primary take focus as controls change so keyboard use keeps its place.
 - **14 November 2026 — Place review uses one glass surface.** A hairline separates its content inside the dock without putting glass on glass.

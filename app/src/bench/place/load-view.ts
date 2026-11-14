@@ -2,7 +2,7 @@ import type { AnchorProposal, Band, BenchBatch, BenchResult, BenchStop, Estimate
 import { TEMPLATE_LEVELS } from '@/shapes';
 import { placingOf } from '@/spine-3d/placing/place-vertebra';
 import { Quaternion, Vector3 } from 'three';
-import { PLACE_LOAD_WORDS as W, SHOWN_LOAD_STOPS, DAILY_LOADS_WITHHELD, UNKNOWN_NAMES } from '@/words/place';
+import { PLACE_LOAD_WORDS as W, SHOWN_LOAD_STOPS, DAILY_STOPS_NOT_SHOWN, UNKNOWN_NAMES } from '@/words/place';
 export function shownLoadStop(stop: BenchStop, shown: readonly BenchStop[] = SHOWN_LOAD_STOPS): BenchStop { return shown.includes(stop) ? stop : 'rods-in'; }
 export function stopResult(result: BenchResult | null, stop: BenchStop): StopResult | undefined { return result?.layouts.find((l) => l.layoutId === result.firstId)?.stops.find((s) => s.stop === stop); }
 export function unsettledCount(result: BenchResult): number { return result.layouts.find((l) => l.layoutId === result.firstId)?.versionsUnsettled ?? 0; }
@@ -70,10 +70,10 @@ export function pastWords(part: PartResult, result: BenchResult): string | null 
 
 export function shownStopResult(result: BenchResult | null, stop: BenchStop): StopResult | undefined {
   const at=stopResult(result,shownLoadStop(stop));
-  return at===undefined||!DAILY_LOADS_WITHHELD?at:{...at,parts:at.parts.filter((p)=>p.part.kind!=='rod'),estimates:at.estimates.filter((e)=>e.measure!=='heaviest-rod-swing'),cyclesPerYear:null};
+  return at===undefined||!DAILY_STOPS_NOT_SHOWN?at:{...at,parts:at.parts.filter((p)=>p.part.kind!=='rod'),estimates:at.estimates.filter((e)=>e.measure!=='heaviest-rod-swing'),cyclesPerYear:null};
 }
 
-export function variationWords(unknown: SampledUnknown | null, dailyWithheld = DAILY_LOADS_WITHHELD): string | null {
-  if(unknown===null||dailyWithheld&&['weight','steps','walking','contour-knock-down'].includes(unknown))return null;
+export function variationWords(unknown: SampledUnknown | null, dailyStopsNotShown = DAILY_STOPS_NOT_SHOWN): string | null {
+  if(unknown===null||dailyStopsNotShown&&['weight','steps','walking','contour-knock-down'].includes(unknown))return null;
   return W.varies(UNKNOWN_NAMES[unknown]);
 }
