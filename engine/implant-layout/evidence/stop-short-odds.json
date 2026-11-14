@@ -1,0 +1,812 @@
+{
+  "cells": [
+    {
+      "coordinate": {
+        "key": "studies",
+        "group": "sv-minus-one"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 4
+      },
+      "unit": "count",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 4 studies/369 patients; distal comparison: 4 studies/233 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "patients",
+        "group": "sv-minus-one"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 369
+      },
+      "unit": "count",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 4 studies/369 patients; distal comparison: 4 studies/233 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "proximal-odds",
+        "group": "sv-minus-one"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 2.6
+      },
+      "unit": "ratio",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Pooled Lenke 1A/2A thoracic-only fusions; proximal-to-reference comparison, not a patient-specific probability. Proximal comparison: 4 studies/369 patients; distal comparison: 4 studies/233 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "distal-odds",
+        "group": "sv-minus-one"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 0.44
+      },
+      "unit": "ratio",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 4 studies/369 patients; distal comparison: 4 studies/233 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "reference-adding-on",
+        "group": "sv-minus-one"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 13.4
+      },
+      "unit": "percent",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 4 studies/369 patients; distal comparison: 4 studies/233 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "reference-adding-on-count",
+        "group": "sv-minus-one"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 18
+      },
+      "unit": "count",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 4 studies/369 patients; distal comparison: 4 studies/233 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "reference-total",
+        "group": "sv-minus-one"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 134
+      },
+      "unit": "count",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 4 studies/369 patients; distal comparison: 4 studies/233 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "proximal-confidence-interval",
+        "group": "sv-minus-one"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 1.44,
+        "upper": 4.69
+      },
+      "unit": "ratio",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 4 studies/369 patients; distal comparison: 4 studies/233 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "distal-confidence-interval",
+        "group": "sv-minus-one"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 0.17,
+        "upper": 1.13
+      },
+      "unit": "ratio",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 4 studies/369 patients; distal comparison: 4 studies/233 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "studies",
+        "group": "ev-plus-one"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 4
+      },
+      "unit": "count",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 4 studies/371 patients; distal comparison: 4 studies/250 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "patients",
+        "group": "ev-plus-one"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 371
+      },
+      "unit": "count",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 4 studies/371 patients; distal comparison: 4 studies/250 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "proximal-odds",
+        "group": "ev-plus-one"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 2.43
+      },
+      "unit": "ratio",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Pooled Lenke 1A/2A thoracic-only fusions; proximal-to-reference comparison, not a patient-specific probability. Proximal comparison: 4 studies/371 patients; distal comparison: 4 studies/250 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "distal-odds",
+        "group": "ev-plus-one"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 0.56
+      },
+      "unit": "ratio",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 4 studies/371 patients; distal comparison: 4 studies/250 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "reference-adding-on",
+        "group": "ev-plus-one"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 13.0
+      },
+      "unit": "percent",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 4 studies/371 patients; distal comparison: 4 studies/250 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "reference-adding-on-count",
+        "group": "ev-plus-one"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 20
+      },
+      "unit": "count",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 4 studies/371 patients; distal comparison: 4 studies/250 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "reference-total",
+        "group": "ev-plus-one"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 153
+      },
+      "unit": "count",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 4 studies/371 patients; distal comparison: 4 studies/250 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "proximal-confidence-interval",
+        "group": "ev-plus-one"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 1.36,
+        "upper": 4.34
+      },
+      "unit": "ratio",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 4 studies/371 patients; distal comparison: 4 studies/250 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "distal-confidence-interval",
+        "group": "ev-plus-one"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 0.23,
+        "upper": 1.34
+      },
+      "unit": "ratio",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 4 studies/371 patients; distal comparison: 4 studies/250 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "studies",
+        "group": "nv"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 5
+      },
+      "unit": "count",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 5 studies/472 patients; distal comparison: 5 studies/286 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "patients",
+        "group": "nv"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 472
+      },
+      "unit": "count",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 5 studies/472 patients; distal comparison: 5 studies/286 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "proximal-odds",
+        "group": "nv"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 3.05
+      },
+      "unit": "ratio",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Pooled Lenke 1A/2A thoracic-only fusions; proximal-to-reference comparison, not a patient-specific probability. Proximal comparison: 5 studies/472 patients; distal comparison: 5 studies/286 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "distal-odds",
+        "group": "nv"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 0.69
+      },
+      "unit": "ratio",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 5 studies/472 patients; distal comparison: 5 studies/286 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "reference-adding-on",
+        "group": "nv"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 13.1
+      },
+      "unit": "percent",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 5 studies/472 patients; distal comparison: 5 studies/286 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "reference-adding-on-count",
+        "group": "nv"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 18
+      },
+      "unit": "count",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 5 studies/472 patients; distal comparison: 5 studies/286 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "reference-total",
+        "group": "nv"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 137
+      },
+      "unit": "count",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 5 studies/472 patients; distal comparison: 5 studies/286 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "proximal-confidence-interval",
+        "group": "nv"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 1.68,
+        "upper": 5.54
+      },
+      "unit": "ratio",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 5 studies/472 patients; distal comparison: 5 studies/286 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "distal-confidence-interval",
+        "group": "nv"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 0.29,
+        "upper": 1.65
+      },
+      "unit": "ratio",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 5 studies/472 patients; distal comparison: 5 studies/286 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "studies",
+        "group": "ltv"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 4
+      },
+      "unit": "count",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 4 studies/398 patients; distal comparison: 4 studies/441 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "patients",
+        "group": "ltv"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 398
+      },
+      "unit": "count",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 4 studies/398 patients; distal comparison: 4 studies/441 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "proximal-odds",
+        "group": "ltv"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 3.4
+      },
+      "unit": "ratio",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Pooled Lenke 1A/2A thoracic-only fusions; proximal-to-reference comparison, not a patient-specific probability. Proximal comparison: 4 studies/398 patients; distal comparison: 4 studies/441 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "distal-odds",
+        "group": "ltv"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 0.66
+      },
+      "unit": "ratio",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 4 studies/398 patients; distal comparison: 4 studies/441 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "reference-adding-on",
+        "group": "ltv"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 14.6
+      },
+      "unit": "percent",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 4 studies/398 patients; distal comparison: 4 studies/441 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "reference-adding-on-count",
+        "group": "ltv"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 38
+      },
+      "unit": "count",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 4 studies/398 patients; distal comparison: 4 studies/441 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "reference-total",
+        "group": "ltv"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 259
+      },
+      "unit": "count",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 4 studies/398 patients; distal comparison: 4 studies/441 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "proximal-confidence-interval",
+        "group": "ltv"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 1.32,
+        "upper": 8.73
+      },
+      "unit": "ratio",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 4 studies/398 patients; distal comparison: 4 studies/441 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "distal-confidence-interval",
+        "group": "ltv"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 0.36,
+        "upper": 1.21
+      },
+      "unit": "ratio",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 4 studies/398 patients; distal comparison: 4 studies/441 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "studies",
+        "group": "stv-or-nstv-plus-one"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 3
+      },
+      "unit": "count",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 3 studies/426 patients; distal comparison: 2 studies/158 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "patients",
+        "group": "stv-or-nstv-plus-one"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 426
+      },
+      "unit": "count",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 3 studies/426 patients; distal comparison: 2 studies/158 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "proximal-odds",
+        "group": "stv-or-nstv-plus-one"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 4.52
+      },
+      "unit": "ratio",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Pooled Lenke 1A/2A thoracic-only fusions; proximal-to-reference comparison, not a patient-specific probability. Proximal comparison: 3 studies/426 patients; distal comparison: 2 studies/158 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "distal-odds",
+        "group": "stv-or-nstv-plus-one"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 0.5
+      },
+      "unit": "ratio",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 3 studies/426 patients; distal comparison: 2 studies/158 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "reference-adding-on",
+        "group": "stv-or-nstv-plus-one"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 11.3
+      },
+      "unit": "percent",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 3 studies/426 patients; distal comparison: 2 studies/158 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "reference-adding-on-count",
+        "group": "stv-or-nstv-plus-one"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 24
+      },
+      "unit": "count",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 3 studies/426 patients; distal comparison: 2 studies/158 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "reference-total",
+        "group": "stv-or-nstv-plus-one"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 211
+      },
+      "unit": "count",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 3 studies/426 patients; distal comparison: 2 studies/158 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "proximal-confidence-interval",
+        "group": "stv-or-nstv-plus-one"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 1.25,
+        "upper": 16.28
+      },
+      "unit": "ratio",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 3 studies/426 patients; distal comparison: 2 studies/158 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "distal-confidence-interval",
+        "group": "stv-or-nstv-plus-one"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 0.09,
+        "upper": 2.92
+      },
+      "unit": "ratio",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 3 studies/426 patients; distal comparison: 2 studies/158 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "i-squared",
+        "group": "ltv"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 66
+      },
+      "unit": "percent",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 4 studies/398 patients; distal comparison: 4 studies/441 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "i-squared",
+        "group": "stv-or-nstv-plus-one"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 80
+      },
+      "unit": "percent",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Tables 2 and 3; fusion-levels.md §2c",
+      "qualifier": "Proximal comparison: 3 studies/426 patients; distal comparison: 2 studies/158 patients. The existing studies/patients keys describe the proximal comparison only; reference-count cells have their own denominators."
+    },
+    {
+      "coordinate": {
+        "key": "distal-studies",
+        "group": "sv-minus-one"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 4
+      },
+      "unit": "count",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Table 3",
+      "qualifier": "Distal comparison count only; do not inherit the proximal-comparison study/patient counts or reference-group denominators."
+    },
+    {
+      "coordinate": {
+        "key": "distal-patients",
+        "group": "sv-minus-one"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 233
+      },
+      "unit": "count",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Table 3",
+      "qualifier": "Distal comparison count only; do not inherit the proximal-comparison study/patient counts or reference-group denominators."
+    },
+    {
+      "coordinate": {
+        "key": "distal-studies",
+        "group": "ev-plus-one"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 4
+      },
+      "unit": "count",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Table 3",
+      "qualifier": "Distal comparison count only; do not inherit the proximal-comparison study/patient counts or reference-group denominators."
+    },
+    {
+      "coordinate": {
+        "key": "distal-patients",
+        "group": "ev-plus-one"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 250
+      },
+      "unit": "count",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Table 3",
+      "qualifier": "Distal comparison count only; do not inherit the proximal-comparison study/patient counts or reference-group denominators."
+    },
+    {
+      "coordinate": {
+        "key": "distal-studies",
+        "group": "nv"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 5
+      },
+      "unit": "count",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Table 3",
+      "qualifier": "Distal comparison count only; do not inherit the proximal-comparison study/patient counts or reference-group denominators."
+    },
+    {
+      "coordinate": {
+        "key": "distal-patients",
+        "group": "nv"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 286
+      },
+      "unit": "count",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Table 3",
+      "qualifier": "Distal comparison count only; do not inherit the proximal-comparison study/patient counts or reference-group denominators."
+    },
+    {
+      "coordinate": {
+        "key": "distal-studies",
+        "group": "ltv"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 4
+      },
+      "unit": "count",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Table 3",
+      "qualifier": "Distal comparison count only; do not inherit the proximal-comparison study/patient counts or reference-group denominators."
+    },
+    {
+      "coordinate": {
+        "key": "distal-patients",
+        "group": "ltv"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 441
+      },
+      "unit": "count",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Table 3",
+      "qualifier": "Distal comparison count only; do not inherit the proximal-comparison study/patient counts or reference-group denominators."
+    },
+    {
+      "coordinate": {
+        "key": "distal-studies",
+        "group": "stv-or-nstv-plus-one"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 2
+      },
+      "unit": "count",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Table 3",
+      "qualifier": "Distal comparison count only; do not inherit the proximal-comparison study/patient counts or reference-group denominators."
+    },
+    {
+      "coordinate": {
+        "key": "distal-patients",
+        "group": "stv-or-nstv-plus-one"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 158
+      },
+      "unit": "count",
+      "source": "liu-2020",
+      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Table 3",
+      "qualifier": "Distal comparison count only; do not inherit the proximal-comparison study/patient counts or reference-group denominators."
+    }
+  ]
+}

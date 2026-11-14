@@ -1,0 +1,584 @@
+{
+  "cells": [
+    {
+      "coordinate": {
+        "key": "diameter",
+        "group": "surgeon-survey"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 5.5
+      },
+      "unit": "mm",
+      "source": "wilke-2024",
+      "section": "existing-tools-and-gaps.md §7"
+    },
+    {
+      "coordinate": {
+        "key": "diameter-choice-share",
+        "group": "surgeon-survey"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 56
+      },
+      "unit": "percent",
+      "source": "wilke-2024",
+      "section": "existing-tools-and-gaps.md §7"
+    },
+    {
+      "coordinate": {
+        "key": "material-choice-share",
+        "group": "cobalt-chrome"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 53
+      },
+      "unit": "percent",
+      "source": "wilke-2024",
+      "section": "existing-tools-and-gaps.md §7"
+    },
+    {
+      "coordinate": {
+        "key": "material-choice-share",
+        "group": "titanium-alloy"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 28
+      },
+      "unit": "percent",
+      "source": "wilke-2024",
+      "section": "existing-tools-and-gaps.md §7"
+    },
+    {
+      "coordinate": {
+        "key": "diameter",
+        "group": "cobalt-chrome"
+      },
+      "value": {
+        "kind": "grid",
+        "values": [
+          5.5,
+          6.0
+        ]
+      },
+      "unit": "mm",
+      "source": "wang-2016",
+      "section": "implant-mechanics.md §3; citation-audit-placement-tables.md §A Wang 2016, tested concave/convex configurations",
+      "qualifier": "Concave/convex rod configurations were 5.5/5.5 and 6.0/5.5 mm cobalt-chrome in 10 AIS models. The 6.0 mm rod was tested only on the concave side; no inferred stiffness increment is stored."
+    },
+    {
+      "coordinate": {
+        "key": "diameter",
+        "group": "ti6al7nb"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 6
+      },
+      "unit": "mm",
+      "source": "abe-2015",
+      "section": "implant-mechanics.md §3; citation-audit-placement-tables.md §A Abe 2015, cohort and rod observations; §B.10",
+      "qualifier": "20 AIS patients (1 boy, 19 girls), all Lenke 1, operated June 2009–June 2011. Very probably the same 20-patient cohort as Salmingo 2014 (same authors and identical concave angles); these sources are not independent."
+    },
+    {
+      "coordinate": {
+        "key": "diameter",
+        "group": "uhss-steel"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 5.5
+      },
+      "unit": "mm",
+      "source": "cidambi-2012",
+      "section": "implant-mechanics.md §4 contour-loss table"
+    },
+    {
+      "coordinate": {
+        "key": "overcontour",
+        "group": "concave"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 20
+      },
+      "unit": "degrees",
+      "source": "cidambi-2012",
+      "section": "implant-mechanics.md §4 contour-loss table",
+      "qualifier": "About 20 degrees as reported; applying it to another material or patient is a later rule."
+    },
+    {
+      "coordinate": {
+        "key": "concave-change",
+        "group": "uhss-steel"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": -21
+      },
+      "unit": "degrees",
+      "source": "cidambi-2012",
+      "section": "implant-mechanics.md §4 contour-loss table",
+      "qualifier": "Minus 21 degrees as printed in the contour-loss table; no final-angle arithmetic or pooled 16–22 degree interval is inferred."
+    },
+    {
+      "coordinate": {
+        "key": "convex-change",
+        "group": "uhss-steel"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 2
+      },
+      "unit": "degrees",
+      "source": "cidambi-2012",
+      "section": "implant-mechanics.md §4 contour-loss table",
+      "qualifier": "Plus 2 degrees, not a symmetric ±2 distribution."
+    },
+    {
+      "coordinate": {
+        "key": "screw-cantilever-length",
+        "group": "lumbar"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 15
+      },
+      "unit": "mm",
+      "source": "borrelli-2025",
+      "section": "fast-physics-methods.md §3; citation-audit-placement-tables.md §A Borrelli 2025, screw bushing and rod offset model",
+      "qualifier": "Published lumbar screw bushing cantilever free length of 15 mm under complete osseointegration, modelled with CFR-PEEK screws of 6.5 mm diameter. The rods were modelled an average 15 mm from the posterior pedicles; this is a model offset, not a measured adolescent head offset. Borrowing it as head offset is a project choice."
+    },
+    {
+      "coordinate": {
+        "key": "before-angle",
+        "group": "cidambi-concave"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 45.6
+      },
+      "unit": "degrees",
+      "source": "cidambi-2012",
+      "section": "implant-mechanics.md §4 contour-loss table",
+      "qualifier": "As printed; no subtraction recomputes a loss or repairs internal inconsistencies."
+    },
+    {
+      "coordinate": {
+        "key": "before-angle",
+        "group": "cidambi-convex"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 31.4
+      },
+      "unit": "degrees",
+      "source": "cidambi-2012",
+      "section": "implant-mechanics.md §4 contour-loss table",
+      "qualifier": "As printed; no subtraction recomputes a loss or repairs internal inconsistencies."
+    },
+    {
+      "coordinate": {
+        "key": "before-angle",
+        "group": "salmingo-concave"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 33.6
+      },
+      "unit": "degrees",
+      "source": "salmingo-2014",
+      "section": "implant-mechanics.md §4 contour-loss table; citation-audit-placement-tables.md §A Salmingo 2014, cohort and rod observations; §B.10",
+      "qualifier": "As printed; no subtraction recomputes a loss or repairs internal inconsistencies. Very probably the same 20-patient cohort as Abe 2015 (same authors and identical concave angles); these sources are not independent."
+    },
+    {
+      "coordinate": {
+        "key": "after-angle",
+        "group": "salmingo-concave"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 17.8
+      },
+      "unit": "degrees",
+      "source": "salmingo-2014",
+      "section": "implant-mechanics.md §4 contour-loss table; citation-audit-placement-tables.md §A Salmingo 2014, cohort and rod observations; §B.10",
+      "qualifier": "As printed; no subtraction recomputes a loss or repairs internal inconsistencies. Very probably the same 20-patient cohort as Abe 2015 (same authors and identical concave angles); these sources are not independent."
+    },
+    {
+      "coordinate": {
+        "key": "contour-loss",
+        "group": "salmingo-concave"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 15.8
+      },
+      "unit": "degrees",
+      "source": "salmingo-2014",
+      "section": "implant-mechanics.md §4 contour-loss table; citation-audit-placement-tables.md §A Salmingo 2014, cohort and rod observations; §B.10",
+      "qualifier": "As printed; no subtraction recomputes a loss or repairs internal inconsistencies. Very probably the same 20-patient cohort as Abe 2015 (same authors and identical concave angles); these sources are not independent."
+    },
+    {
+      "coordinate": {
+        "key": "before-angle",
+        "group": "salmingo-convex"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 25.5
+      },
+      "unit": "degrees",
+      "source": "salmingo-2014",
+      "section": "implant-mechanics.md §4 contour-loss table; citation-audit-placement-tables.md §A Salmingo 2014, cohort and rod observations; §B.10",
+      "qualifier": "As printed; no subtraction recomputes a loss or repairs internal inconsistencies. Very probably the same 20-patient cohort as Abe 2015 (same authors and identical concave angles); these sources are not independent."
+    },
+    {
+      "coordinate": {
+        "key": "after-angle",
+        "group": "salmingo-convex"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 23.9
+      },
+      "unit": "degrees",
+      "source": "salmingo-2014",
+      "section": "implant-mechanics.md §4 contour-loss table; citation-audit-placement-tables.md §A Salmingo 2014, cohort and rod observations; §B.10",
+      "qualifier": "As printed; no subtraction recomputes a loss or repairs internal inconsistencies. Very probably the same 20-patient cohort as Abe 2015 (same authors and identical concave angles); these sources are not independent."
+    },
+    {
+      "coordinate": {
+        "key": "contour-loss",
+        "group": "salmingo-convex"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 1.6
+      },
+      "unit": "degrees",
+      "source": "salmingo-2014",
+      "section": "implant-mechanics.md §4 contour-loss table; citation-audit-placement-tables.md §A Salmingo 2014, cohort and rod observations; §B.10",
+      "qualifier": "As printed; no subtraction recomputes a loss or repairs internal inconsistencies. Very probably the same 20-patient cohort as Abe 2015 (same authors and identical concave angles); these sources are not independent."
+    },
+    {
+      "coordinate": {
+        "key": "before-angle",
+        "group": "sia-titanium"
+      },
+      "value": {
+        "kind": "median",
+        "value": 60.5,
+        "iqr": 10.4
+      },
+      "unit": "degrees",
+      "source": "sia-2019",
+      "section": "implant-mechanics.md §4 contour-loss table; citation-audit-placement-tables.md §A Sia 2019, Tables II and III; §B.9",
+      "qualifier": "Titanium concave rod, subgroup n = 10; Median (IQR) as printed in Tables II and III. Reductions are medians of per-patient changes and need not equal differences of group medians; no reduction is recomputed."
+    },
+    {
+      "coordinate": {
+        "key": "after-angle",
+        "group": "sia-titanium"
+      },
+      "value": {
+        "kind": "median",
+        "value": 37,
+        "iqr": 11.6
+      },
+      "unit": "degrees",
+      "source": "sia-2019",
+      "section": "implant-mechanics.md §4 contour-loss table; citation-audit-placement-tables.md §A Sia 2019, Tables II and III; §B.9",
+      "qualifier": "Titanium concave rod, subgroup n = 10; Median (IQR) as printed in Tables II and III. Reductions are medians of per-patient changes and need not equal differences of group medians; no reduction is recomputed."
+    },
+    {
+      "coordinate": {
+        "key": "contour-loss",
+        "group": "sia-titanium"
+      },
+      "value": {
+        "kind": "median",
+        "value": 22.5,
+        "iqr": 9.9
+      },
+      "unit": "degrees",
+      "source": "sia-2019",
+      "section": "implant-mechanics.md §4 contour-loss table; citation-audit-placement-tables.md §A Sia 2019, Tables II and III; §B.9",
+      "qualifier": "Titanium concave rod, subgroup n = 10; Median (IQR) as printed in Tables II and III. Reductions are medians of per-patient changes and need not equal differences of group medians; no reduction is recomputed."
+    },
+    {
+      "coordinate": {
+        "key": "before-angle",
+        "group": "sia-cobalt-chrome"
+      },
+      "value": {
+        "kind": "median",
+        "value": 51,
+        "iqr": 26
+      },
+      "unit": "degrees",
+      "source": "sia-2019",
+      "section": "implant-mechanics.md §4 contour-loss table; citation-audit-placement-tables.md §A Sia 2019, Tables II and III; §B.9",
+      "qualifier": "Cobalt-chrome concave rod, subgroup n = 11; Median (IQR) as printed in Tables II and III. Reductions are medians of per-patient changes and need not equal differences of group medians; no reduction is recomputed."
+    },
+    {
+      "coordinate": {
+        "key": "after-angle",
+        "group": "sia-cobalt-chrome"
+      },
+      "value": {
+        "kind": "median",
+        "value": 28,
+        "iqr": 22
+      },
+      "unit": "degrees",
+      "source": "sia-2019",
+      "section": "implant-mechanics.md §4 contour-loss table; citation-audit-placement-tables.md §A Sia 2019, Tables II and III; §B.9",
+      "qualifier": "Cobalt-chrome concave rod, subgroup n = 11; Median (IQR) as printed in Tables II and III. Reductions are medians of per-patient changes and need not equal differences of group medians; no reduction is recomputed."
+    },
+    {
+      "coordinate": {
+        "key": "contour-loss",
+        "group": "sia-cobalt-chrome"
+      },
+      "value": {
+        "kind": "median",
+        "value": 17,
+        "iqr": 7.7
+      },
+      "unit": "degrees",
+      "source": "sia-2019",
+      "section": "implant-mechanics.md §4 contour-loss table; citation-audit-placement-tables.md §A Sia 2019, Tables II and III; §B.9",
+      "qualifier": "Cobalt-chrome concave rod, subgroup n = 11; Median (IQR) as printed in Tables II and III. Reductions are medians of per-patient changes and need not equal differences of group medians; no reduction is recomputed."
+    },
+    {
+      "coordinate": {
+        "key": "before-angle",
+        "group": "abe-concave"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 33.6
+      },
+      "unit": "degrees",
+      "source": "abe-2015",
+      "section": "implant-mechanics.md §3; citation-audit-placement-tables.md §A Abe 2015, cohort and rod observations; §B.10",
+      "qualifier": "As printed; no subtraction recomputes a loss or repairs internal inconsistencies. 20 AIS patients (1 boy, 19 girls), all Lenke 1, operated June 2009–June 2011. Very probably the same 20-patient cohort as Salmingo 2014 (same authors and identical concave angles); these sources are not independent."
+    },
+    {
+      "coordinate": {
+        "key": "after-angle",
+        "group": "abe-concave"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 17.8
+      },
+      "unit": "degrees",
+      "source": "abe-2015",
+      "section": "implant-mechanics.md §3; citation-audit-placement-tables.md §A Abe 2015, cohort and rod observations; §B.10",
+      "qualifier": "As printed; no subtraction recomputes a loss or repairs internal inconsistencies. 20 AIS patients (1 boy, 19 girls), all Lenke 1, operated June 2009–June 2011. Very probably the same 20-patient cohort as Salmingo 2014 (same authors and identical concave angles); these sources are not independent."
+    },
+    {
+      "coordinate": {
+        "key": "before-angle",
+        "group": "abe-convex"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 25.9
+      },
+      "unit": "degrees",
+      "source": "abe-2015",
+      "section": "implant-mechanics.md §3; citation-audit-placement-tables.md §A Abe 2015, cohort and rod observations; §B.10",
+      "qualifier": "As printed; no subtraction recomputes a loss or repairs internal inconsistencies. 20 AIS patients (1 boy, 19 girls), all Lenke 1, operated June 2009–June 2011. Very probably the same 20-patient cohort as Salmingo 2014 (same authors and identical concave angles); these sources are not independent."
+    },
+    {
+      "coordinate": {
+        "key": "after-angle",
+        "group": "abe-convex"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 23.8
+      },
+      "unit": "degrees",
+      "source": "abe-2015",
+      "section": "implant-mechanics.md §3; citation-audit-placement-tables.md §A Abe 2015, cohort and rod observations; §B.10",
+      "qualifier": "As printed; no subtraction recomputes a loss or repairs internal inconsistencies. 20 AIS patients (1 boy, 19 girls), all Lenke 1, operated June 2009–June 2011. Very probably the same 20-patient cohort as Salmingo 2014 (same authors and identical concave angles); these sources are not independent."
+    },
+    {
+      "coordinate": {
+        "key": "deflection",
+        "group": "cidambi-concave"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": -13
+      },
+      "unit": "mm",
+      "source": "cidambi-2012",
+      "section": "implant-mechanics.md §4, Contour loss after insertion table",
+      "qualifier": "Concave UHSS steel rod deflection −13 mm, retaining the reported sign; n = 27, abstract."
+    },
+    {
+      "coordinate": {
+        "key": "before-kyphosis",
+        "group": "cidambi-t5-t12"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 19,
+        "spread": 14
+      },
+      "unit": "degrees",
+      "source": "cidambi-2012",
+      "section": "implant-mechanics.md §4, Contour loss after insertion table",
+      "qualifier": "Before: T5–T12 kyphosis 19 ± 14 degrees; the note names neither statistic. Paired cohort n = 27; abstract. Change reported as not significant."
+    },
+    {
+      "coordinate": {
+        "key": "after-kyphosis",
+        "group": "cidambi-t5-t12"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 22,
+        "spread": 6
+      },
+      "unit": "degrees",
+      "source": "cidambi-2012",
+      "section": "implant-mechanics.md §4, Contour loss after insertion table",
+      "qualifier": "After: T5–T12 kyphosis 22 ± 6 degrees; the note names neither statistic. Paired cohort n = 27; abstract. Change reported as not significant."
+    },
+    {
+      "coordinate": {
+        "key": "curvature-correction-correlation",
+        "group": "salmingo-sagittal"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 0.6
+      },
+      "unit": "correlation",
+      "source": "salmingo-2014",
+      "section": "implant-mechanics.md §4, Contour loss after insertion table; citation-audit-placement-tables.md §A Salmingo 2014, cohort and rod observations; §B.10",
+      "qualifier": "Correlation r = 0.60 between rod curvature and sagittal correction; n = 20, abstract. This is not a correction multiplier. Very probably the same 20-patient cohort as Abe 2015 (same authors and identical concave angles); these sources are not independent."
+    },
+    {
+      "coordinate": {
+        "key": "diameter",
+        "group": "sia-all"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 5.5
+      },
+      "unit": "mm",
+      "source": "sia-2019",
+      "section": "implant-mechanics.md §4, Contour loss after insertion table",
+      "qualifier": "Published rod diameter 5.5 mm in the n = 21 cohort: titanium n = 10 and cobalt-chrome n = 11; full text."
+    },
+    {
+      "coordinate": {
+        "key": "before-kyphosis",
+        "group": "sia-titanium"
+      },
+      "value": {
+        "kind": "median",
+        "value": 20
+      },
+      "unit": "degrees",
+      "source": "sia-2019",
+      "section": "implant-mechanics.md §4, Contour loss after insertion table; citation-audit-placement-tables.md §A Sia 2019, Tables II and III; §B.9",
+      "qualifier": "Titanium before kyphosis median 20 degrees; titanium subgroup n = 10, full text. Tables II and III label values Median (IQR), but this audit does not transcribe this kyphosis IQR; it remains absent pending transcription. Concave rods only."
+    },
+    {
+      "coordinate": {
+        "key": "after-kyphosis",
+        "group": "sia-titanium"
+      },
+      "value": {
+        "kind": "median",
+        "value": 26
+      },
+      "unit": "degrees",
+      "source": "sia-2019",
+      "section": "implant-mechanics.md §4, Contour loss after insertion table; citation-audit-placement-tables.md §A Sia 2019, Tables II and III; §B.9",
+      "qualifier": "Titanium after kyphosis median 26 degrees; titanium subgroup n = 10, full text. Tables II and III label values Median (IQR), but this audit does not transcribe this kyphosis IQR; it remains absent pending transcription. Concave rods only."
+    },
+    {
+      "coordinate": {
+        "key": "before-kyphosis",
+        "group": "sia-cobalt-chrome"
+      },
+      "value": {
+        "kind": "median",
+        "value": 25
+      },
+      "unit": "degrees",
+      "source": "sia-2019",
+      "section": "implant-mechanics.md §4, Contour loss after insertion table; citation-audit-placement-tables.md §A Sia 2019, Tables II and III; §B.9",
+      "qualifier": "Cobalt-chrome before kyphosis median 25 degrees; cobalt-chrome subgroup n = 11, full text. Tables II and III label values Median (IQR), but this audit does not transcribe this kyphosis IQR; it remains absent pending transcription. Concave rods only."
+    },
+    {
+      "coordinate": {
+        "key": "after-kyphosis",
+        "group": "sia-cobalt-chrome"
+      },
+      "value": {
+        "kind": "median",
+        "value": 23
+      },
+      "unit": "degrees",
+      "source": "sia-2019",
+      "section": "implant-mechanics.md §4, Contour loss after insertion table; citation-audit-placement-tables.md §A Sia 2019, Tables II and III; §B.9",
+      "qualifier": "Cobalt-chrome after kyphosis median 23 degrees; cobalt-chrome subgroup n = 11, full text. Tables II and III label values Median (IQR), but this audit does not transcribe this kyphosis IQR; it remains absent pending transcription. Concave rods only."
+    },
+    {
+      "coordinate": {
+        "key": "spine-rod-kyphosis-disparity",
+        "group": "boissiere-concave"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 5.5
+      },
+      "unit": "degrees",
+      "source": "boissiere-2023",
+      "section": "implant-mechanics.md §4, Contour loss after insertion table",
+      "qualifier": "Spine-to-rod kyphosis disparity 5.5 degrees; n = 99, abstract. The note supplies no rod diameter for this cohort."
+    },
+    {
+      "coordinate": {
+        "key": "rod-less-kyphotic-share",
+        "group": "boissiere-concave"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 84
+      },
+      "unit": "percent",
+      "source": "boissiere-2023",
+      "section": "implant-mechanics.md §4, Contour loss after insertion table",
+      "qualifier": "Concave rod less kyphotic than the spine in 84% of the n = 99 cohort; abstract. This is not the percentage of rod flattening."
+    },
+    {
+      "coordinate": {
+        "key": "contour-loss-p-value",
+        "group": "sia-material-comparison"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 0.173
+      },
+      "unit": "ratio",
+      "source": "sia-2019",
+      "section": "implant-mechanics.md §4, contour-loss table, Sia row",
+      "qualifier": "Reported p = 0.173 alongside the titanium/cobalt-chrome contour observations, n = 21 (Ti 10, CoCr 11). The research note does not name the statistical test; no test or significance conclusion is inferred."
+    }
+  ]
+}

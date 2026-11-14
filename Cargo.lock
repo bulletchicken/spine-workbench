@@ -855,6 +855,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "implant-layout"
+version = "0.1.0"
+dependencies = [
+ "forward-model",
+ "joint-fit",
+ "libm",
+ "made-up-spines",
+ "nalgebra",
+ "proptest",
+ "serde",
+ "serde_json",
+ "shapes",
+ "spine-readings",
+ "thiserror",
+]
+
+[[package]]
 name = "indexmap"
 version = "2.14.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"

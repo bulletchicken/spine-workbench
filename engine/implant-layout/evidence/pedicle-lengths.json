@@ -1,0 +1,732 @@
+{
+  "cells": [
+    {
+      "coordinate": {
+        "key": "pedicle-only-length",
+        "level": "T1",
+        "group": "gao-ais",
+        "curveSide": "concave"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 11.0,
+        "spread": 2.34
+      },
+      "unit": "mm",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. Short pedicle-only length between the paper's guideline and lamina-axis intersections, not a posterior-entry-to-anterior-cortex chord. Do not substitute it for a chord.",
+      "wholeMm": true,
+      "printed": "11 ± 2.34",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-only-length",
+        "level": "T1",
+        "group": "gao-ais",
+        "curveSide": "convex"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 11.0,
+        "spread": 2.17
+      },
+      "unit": "mm",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. Short pedicle-only length between the paper's guideline and lamina-axis intersections, not a posterior-entry-to-anterior-cortex chord. Do not substitute it for a chord.",
+      "wholeMm": true,
+      "printed": "11 ± 2.17",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-only-length",
+        "level": "T1",
+        "group": "gao-controls"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 11.0,
+        "spread": 1.57
+      },
+      "unit": "mm",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. Short pedicle-only length between the paper's guideline and lamina-axis intersections, not a posterior-entry-to-anterior-cortex chord. Do not substitute it for a chord.",
+      "wholeMm": true,
+      "printed": "11 ± 1.57",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-only-length",
+        "level": "T2",
+        "group": "gao-ais",
+        "curveSide": "concave"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 13.0,
+        "spread": 1.92
+      },
+      "unit": "mm",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. Short pedicle-only length between the paper's guideline and lamina-axis intersections, not a posterior-entry-to-anterior-cortex chord. Do not substitute it for a chord.",
+      "wholeMm": true,
+      "printed": "13 ± 1.92",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-only-length",
+        "level": "T2",
+        "group": "gao-ais",
+        "curveSide": "convex"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 13.0,
+        "spread": 1.75
+      },
+      "unit": "mm",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. Short pedicle-only length between the paper's guideline and lamina-axis intersections, not a posterior-entry-to-anterior-cortex chord. Do not substitute it for a chord.",
+      "wholeMm": true,
+      "printed": "13 ± 1.75",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-only-length",
+        "level": "T2",
+        "group": "gao-controls"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 13.0,
+        "spread": 1.71
+      },
+      "unit": "mm",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. Short pedicle-only length between the paper's guideline and lamina-axis intersections, not a posterior-entry-to-anterior-cortex chord. Do not substitute it for a chord.",
+      "wholeMm": true,
+      "printed": "13 ± 1.71",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-only-length",
+        "level": "T3",
+        "group": "gao-ais",
+        "curveSide": "concave"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 14.0,
+        "spread": 2.25
+      },
+      "unit": "mm",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. Short pedicle-only length between the paper's guideline and lamina-axis intersections, not a posterior-entry-to-anterior-cortex chord. Do not substitute it for a chord.",
+      "wholeMm": true,
+      "printed": "14 ± 2.25",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-only-length",
+        "level": "T3",
+        "group": "gao-ais",
+        "curveSide": "convex"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 14.0,
+        "spread": 1.87
+      },
+      "unit": "mm",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. Short pedicle-only length between the paper's guideline and lamina-axis intersections, not a posterior-entry-to-anterior-cortex chord. Do not substitute it for a chord.",
+      "wholeMm": true,
+      "printed": "14 ± 1.87",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-only-length",
+        "level": "T3",
+        "group": "gao-controls"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 14.0,
+        "spread": 1.73
+      },
+      "unit": "mm",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. Short pedicle-only length between the paper's guideline and lamina-axis intersections, not a posterior-entry-to-anterior-cortex chord. Do not substitute it for a chord.",
+      "wholeMm": true,
+      "printed": "14 ± 1.73",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-only-length",
+        "level": "T4",
+        "group": "gao-ais",
+        "curveSide": "concave"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 15.0,
+        "spread": 2.43
+      },
+      "unit": "mm",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. Short pedicle-only length between the paper's guideline and lamina-axis intersections, not a posterior-entry-to-anterior-cortex chord. Do not substitute it for a chord.",
+      "wholeMm": true,
+      "printed": "15 ± 2.43",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-only-length",
+        "level": "T4",
+        "group": "gao-ais",
+        "curveSide": "convex"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 14.0,
+        "spread": 2.18
+      },
+      "unit": "mm",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. Short pedicle-only length between the paper's guideline and lamina-axis intersections, not a posterior-entry-to-anterior-cortex chord. Do not substitute it for a chord.",
+      "wholeMm": true,
+      "printed": "14 ± 2.18",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-only-length",
+        "level": "T4",
+        "group": "gao-controls"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 14.0,
+        "spread": 1.38
+      },
+      "unit": "mm",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. Short pedicle-only length between the paper's guideline and lamina-axis intersections, not a posterior-entry-to-anterior-cortex chord. Do not substitute it for a chord.",
+      "wholeMm": true,
+      "printed": "14 ± 1.38",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-only-length",
+        "level": "T5",
+        "group": "gao-ais",
+        "curveSide": "concave"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 15.0,
+        "spread": 1.9
+      },
+      "unit": "mm",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. Short pedicle-only length between the paper's guideline and lamina-axis intersections, not a posterior-entry-to-anterior-cortex chord. Do not substitute it for a chord.",
+      "wholeMm": true,
+      "printed": "15 ± 1.90",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-only-length",
+        "level": "T5",
+        "group": "gao-ais",
+        "curveSide": "convex"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 14.0,
+        "spread": 1.98
+      },
+      "unit": "mm",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. Short pedicle-only length between the paper's guideline and lamina-axis intersections, not a posterior-entry-to-anterior-cortex chord. Do not substitute it for a chord.",
+      "wholeMm": true,
+      "printed": "14 ± 1.98",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-only-length",
+        "level": "T5",
+        "group": "gao-controls"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 14.0,
+        "spread": 1.4
+      },
+      "unit": "mm",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. Short pedicle-only length between the paper's guideline and lamina-axis intersections, not a posterior-entry-to-anterior-cortex chord. Do not substitute it for a chord.",
+      "wholeMm": true,
+      "printed": "14 ± 1.40",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-only-length",
+        "level": "T6",
+        "group": "gao-ais",
+        "curveSide": "concave"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 15.0,
+        "spread": 2.46
+      },
+      "unit": "mm",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. Short pedicle-only length between the paper's guideline and lamina-axis intersections, not a posterior-entry-to-anterior-cortex chord. Do not substitute it for a chord. Printed * and † compare this column with control and convex values at p <0.05.",
+      "wholeMm": true,
+      "printed": "15 ± 2.46*,†",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-only-length",
+        "level": "T6",
+        "group": "gao-ais",
+        "curveSide": "convex"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 14.0,
+        "spread": 1.9
+      },
+      "unit": "mm",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. Short pedicle-only length between the paper's guideline and lamina-axis intersections, not a posterior-entry-to-anterior-cortex chord. Do not substitute it for a chord.",
+      "wholeMm": true,
+      "printed": "14 ± 1.90",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-only-length",
+        "level": "T6",
+        "group": "gao-controls"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 14.0,
+        "spread": 1.47
+      },
+      "unit": "mm",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. Short pedicle-only length between the paper's guideline and lamina-axis intersections, not a posterior-entry-to-anterior-cortex chord. Do not substitute it for a chord.",
+      "wholeMm": true,
+      "printed": "14 ± 1.47",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-only-length",
+        "level": "T7",
+        "group": "gao-ais",
+        "curveSide": "concave"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 15.0,
+        "spread": 2.32
+      },
+      "unit": "mm",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. Short pedicle-only length between the paper's guideline and lamina-axis intersections, not a posterior-entry-to-anterior-cortex chord. Do not substitute it for a chord. Printed * and † compare this column with control and convex values at p <0.05.",
+      "wholeMm": true,
+      "printed": "15 ± 2.32*,†",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-only-length",
+        "level": "T7",
+        "group": "gao-ais",
+        "curveSide": "convex"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 14.0,
+        "spread": 1.62
+      },
+      "unit": "mm",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. Short pedicle-only length between the paper's guideline and lamina-axis intersections, not a posterior-entry-to-anterior-cortex chord. Do not substitute it for a chord.",
+      "wholeMm": true,
+      "printed": "14 ± 1.62",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-only-length",
+        "level": "T7",
+        "group": "gao-controls"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 14.0,
+        "spread": 1.36
+      },
+      "unit": "mm",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. Short pedicle-only length between the paper's guideline and lamina-axis intersections, not a posterior-entry-to-anterior-cortex chord. Do not substitute it for a chord.",
+      "wholeMm": true,
+      "printed": "14 ± 1.36",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-only-length",
+        "level": "T8",
+        "group": "gao-ais",
+        "curveSide": "concave"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 14.0,
+        "spread": 2.17
+      },
+      "unit": "mm",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. Short pedicle-only length between the paper's guideline and lamina-axis intersections, not a posterior-entry-to-anterior-cortex chord. Do not substitute it for a chord.",
+      "wholeMm": true,
+      "printed": "14 ± 2.17",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-only-length",
+        "level": "T8",
+        "group": "gao-ais",
+        "curveSide": "convex"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 14.0,
+        "spread": 1.92
+      },
+      "unit": "mm",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. Short pedicle-only length between the paper's guideline and lamina-axis intersections, not a posterior-entry-to-anterior-cortex chord. Do not substitute it for a chord.",
+      "wholeMm": true,
+      "printed": "14 ± 1.92",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-only-length",
+        "level": "T8",
+        "group": "gao-controls"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 14.0,
+        "spread": 1.49
+      },
+      "unit": "mm",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. Short pedicle-only length between the paper's guideline and lamina-axis intersections, not a posterior-entry-to-anterior-cortex chord. Do not substitute it for a chord.",
+      "wholeMm": true,
+      "printed": "14 ± 1.49",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-only-length",
+        "level": "T9",
+        "group": "gao-ais",
+        "curveSide": "concave"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 14.0,
+        "spread": 2.34
+      },
+      "unit": "mm",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. Short pedicle-only length between the paper's guideline and lamina-axis intersections, not a posterior-entry-to-anterior-cortex chord. Do not substitute it for a chord.",
+      "wholeMm": true,
+      "printed": "14 ± 2.34",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-only-length",
+        "level": "T9",
+        "group": "gao-ais",
+        "curveSide": "convex"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 14.0,
+        "spread": 2.15
+      },
+      "unit": "mm",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. Short pedicle-only length between the paper's guideline and lamina-axis intersections, not a posterior-entry-to-anterior-cortex chord. Do not substitute it for a chord.",
+      "wholeMm": true,
+      "printed": "14 ± 2.15",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-only-length",
+        "level": "T9",
+        "group": "gao-controls"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 14.0,
+        "spread": 1.7
+      },
+      "unit": "mm",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. Short pedicle-only length between the paper's guideline and lamina-axis intersections, not a posterior-entry-to-anterior-cortex chord. Do not substitute it for a chord.",
+      "wholeMm": true,
+      "printed": "14 ± 1.70",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-only-length",
+        "level": "T10",
+        "group": "gao-ais",
+        "curveSide": "concave"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 14.0,
+        "spread": 2.24
+      },
+      "unit": "mm",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. Short pedicle-only length between the paper's guideline and lamina-axis intersections, not a posterior-entry-to-anterior-cortex chord. Do not substitute it for a chord.",
+      "wholeMm": true,
+      "printed": "14 ± 2.24",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-only-length",
+        "level": "T10",
+        "group": "gao-ais",
+        "curveSide": "convex"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 14.0,
+        "spread": 2.44
+      },
+      "unit": "mm",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. Short pedicle-only length between the paper's guideline and lamina-axis intersections, not a posterior-entry-to-anterior-cortex chord. Do not substitute it for a chord.",
+      "wholeMm": true,
+      "printed": "14 ± 2.44",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-only-length",
+        "level": "T10",
+        "group": "gao-controls"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 14.0,
+        "spread": 1.67
+      },
+      "unit": "mm",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. Short pedicle-only length between the paper's guideline and lamina-axis intersections, not a posterior-entry-to-anterior-cortex chord. Do not substitute it for a chord.",
+      "wholeMm": true,
+      "printed": "14 ± 1.67",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-only-length",
+        "level": "T11",
+        "group": "gao-ais",
+        "curveSide": "concave"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 15.0,
+        "spread": 2.42
+      },
+      "unit": "mm",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. Short pedicle-only length between the paper's guideline and lamina-axis intersections, not a posterior-entry-to-anterior-cortex chord. Do not substitute it for a chord.",
+      "wholeMm": true,
+      "printed": "15 ± 2.42",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-only-length",
+        "level": "T11",
+        "group": "gao-ais",
+        "curveSide": "convex"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 15.0,
+        "spread": 3.14
+      },
+      "unit": "mm",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. Short pedicle-only length between the paper's guideline and lamina-axis intersections, not a posterior-entry-to-anterior-cortex chord. Do not substitute it for a chord.",
+      "wholeMm": true,
+      "printed": "15± 3.14",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-only-length",
+        "level": "T11",
+        "group": "gao-controls"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 15.0,
+        "spread": 1.74
+      },
+      "unit": "mm",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. Short pedicle-only length between the paper's guideline and lamina-axis intersections, not a posterior-entry-to-anterior-cortex chord. Do not substitute it for a chord.",
+      "wholeMm": true,
+      "printed": "15 ± 1.74",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-only-length",
+        "level": "T12",
+        "group": "gao-ais",
+        "curveSide": "concave"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 17.0,
+        "spread": 2.56
+      },
+      "unit": "mm",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. Short pedicle-only length between the paper's guideline and lamina-axis intersections, not a posterior-entry-to-anterior-cortex chord. Do not substitute it for a chord.",
+      "wholeMm": true,
+      "printed": "17± 2.56",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-only-length",
+        "level": "T12",
+        "group": "gao-ais",
+        "curveSide": "convex"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 16.0,
+        "spread": 2.55
+      },
+      "unit": "mm",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. Short pedicle-only length between the paper's guideline and lamina-axis intersections, not a posterior-entry-to-anterior-cortex chord. Do not substitute it for a chord.",
+      "wholeMm": true,
+      "printed": "16 ± 2.55",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-only-length",
+        "level": "T12",
+        "group": "gao-controls"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 17.0,
+        "spread": 1.83
+      },
+      "unit": "mm",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. Short pedicle-only length between the paper's guideline and lamina-axis intersections, not a posterior-entry-to-anterior-cortex chord. Do not substitute it for a chord.",
+      "wholeMm": true,
+      "printed": "17 ± 1.83",
+      "decimals": 0
+    }
+  ],
+  "definitions": [
+    {
+      "key": "gao-pedicle-only-length",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §B Gao 2017; Table 3",
+      "text": "Pedicle length was defined as the distance along the line through the axis of the pedicle from its intersection with the guideline to its intersection with the line through the axis of the lamina. The guideline is the straight-line perpendicular to the axis of the vertebra that passed through the anterior tip of the vertebral canal. This is a short pedicle-only length, not a chord length."
+    },
+    {
+      "key": "gao-table-3-heading",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §B Gao 2017; Table 3",
+      "text": "Pedicle parameters in patients and controls; columns: Level | PWc (mm) | PWv (mm) | PWn (mm) | PLc (mm) | PLv (mm) | PLn (mm). PWc = pedicle width on the concave side; PWv = pedicle width on the convex side; PWn = pedicle width in controls; PLc = pedicle length on the concave side; PLv = pedicle length on the convex side; PLn = pedicle length in controls; *p < 0.05 versus PWn (PLn) group; †p < 0.05 versus PWv (PLv) group."
+    },
+    {
+      "key": "gao-2017-table-3-wording",
+      "source": "gao-2017",
+      "section": "full-tables-from-five-papers.md §A, gao-2017 Table 3",
+      "text": "Pedicle parameters in patients and controls; column headers (verbatim, separated by |): Level | PWc (mm) | PWv (mm) | PWn (mm) | PLc (mm) | PLv (mm) | PLn (mm). Footnotes: PWc = pedicle width on the concave side; PWv = pedicle width on the convex side; PWn = pedicle width in controls; PLc = pedicle length on the concave side; PLv = pedicle length on the convex side; PLn = pedicle length in controls; *p < 0.05 versus PWn (PLn) group; †p < 0.05 versus PWv (PLv) group."
+    }
+  ]
+}

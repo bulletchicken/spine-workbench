@@ -1,0 +1,128 @@
+{
+  "cells": [
+    {
+      "coordinate": {
+        "key": "density",
+        "group": "practice"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 1.06,
+        "upper": 2.0
+      },
+      "unit": "implants-per-level",
+      "source": "larson-2013",
+      "section": "existing-tools-and-gaps.md §7",
+      "qualifier": "Published implants per fused level; includes anchor types beyond screws."
+    },
+    {
+      "coordinate": {
+        "key": "density",
+        "group": "mimo-low-max"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 1.4
+      },
+      "unit": "implants-per-level",
+      "source": "mimo-2024",
+      "section": "implant-mechanics.md §6",
+      "qualifier": "Low ≤1.4; high ≥1.8 implants per fused level."
+    },
+    {
+      "coordinate": {
+        "key": "density",
+        "group": "mimo-high-min"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 1.8
+      },
+      "unit": "implants-per-level",
+      "source": "mimo-2024",
+      "section": "implant-mechanics.md §6",
+      "qualifier": "Low ≤1.4; high ≥1.8 implants per fused level."
+    },
+    {
+      "coordinate": {
+        "key": "two-year-correction-itt",
+        "group": "mimo-high"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 67.6
+      },
+      "unit": "percent",
+      "source": "mimo-2024",
+      "section": "implant-mechanics.md §6"
+    },
+    {
+      "coordinate": {
+        "key": "two-year-correction-itt",
+        "group": "mimo-low"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 65.7
+      },
+      "unit": "percent",
+      "source": "mimo-2024",
+      "section": "implant-mechanics.md §6"
+    },
+    {
+      "coordinate": {
+        "key": "hook-pjk-odds",
+        "group": "hooks-at-uiv"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 0.48
+      },
+      "unit": "ratio",
+      "source": "zhao-2024",
+      "section": "outcomes-over-time.md §1",
+      "qualifier": "Association; table confidence interval preferred over misprinted body text."
+    },
+    {
+      "coordinate": {
+        "key": "hook-pjk-confidence-interval",
+        "group": "hooks-at-uiv"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 0.31,
+        "upper": 0.74
+      },
+      "unit": "ratio",
+      "source": "zhao-2024",
+      "section": "outcomes-over-time.md §1"
+    },
+    {
+      "coordinate": {
+        "key": "hook-pjk-i-squared",
+        "group": "hooks-at-uiv"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 47
+      },
+      "unit": "percent",
+      "source": "zhao-2024",
+      "section": "outcomes-over-time.md §1"
+    },
+    {
+      "coordinate": {
+        "key": "junction-index-reduction",
+        "group": "hooks-at-uiv"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 26
+      },
+      "unit": "percent",
+      "source": "cammarata-2014",
+      "section": "outcomes-over-time.md §1 mechanistic models",
+      "qualifier": "About26% reduction in proximal angle, force and moment; six adult scoliosis models, not an AIS outcome estimate."
+    }
+  ]
+}

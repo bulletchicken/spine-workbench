@@ -1,0 +1,280 @@
+{
+  "cells": [
+    {
+      "coordinate": {
+        "key": "chord-penetration",
+        "group": "krag-cited"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 80,
+        "upper": 100
+      },
+      "unit": "percent",
+      "source": "balikci-2019",
+      "section": "screw-sizing-and-placement.md §4 and P4; citation-audit-placement-tables.md §A Balikci 2019, cited length rules and cohort",
+      "qualifier": "Krag primary not opened; the note reports a cited range. Choosing 0.8 is a later rule. Series n = 120, ages 13–54 (mean 19.2): AIS 86, congenital 17, adult 10 and neuromuscular 7; not an exclusively AIS cohort."
+    },
+    {
+      "coordinate": {
+        "key": "ap-penetration",
+        "group": "children"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 50,
+        "upper": 80
+      },
+      "unit": "percent",
+      "source": "zheng-2009",
+      "section": "screw-sizing-and-placement.md §4 and P4",
+      "qualifier": "Published range only; 0.65 is a project choice and is absent here."
+    },
+    {
+      "coordinate": {
+        "key": "usual-length",
+        "group": "balikci-2019-t1-t5"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 25,
+        "upper": 30
+      },
+      "unit": "mm",
+      "source": "balikci-2019",
+      "section": "screw-sizing-and-placement.md §4 and P4; citation-audit-placement-tables.md §A Balikci 2019, regional usual lengths; §B.8",
+      "qualifier": "Secondary: Balikci cites Kuraishi, J Spinal Disord Tech 2013, reference 25. These regional usual lengths duplicate the kuraishi-2013 rows and are not an independent observation. Series n = 120, ages 13–54 (mean 19.2): AIS 86, congenital 17, adult 10 and neuromuscular 7; not an exclusively AIS cohort."
+    },
+    {
+      "coordinate": {
+        "key": "usual-length",
+        "group": "kuraishi-2013-t1-t5"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 25,
+        "upper": 30
+      },
+      "unit": "mm",
+      "source": "kuraishi-2013",
+      "section": "screw-sizing-and-placement.md §4 and P4"
+    },
+    {
+      "coordinate": {
+        "key": "usual-length",
+        "group": "balikci-2019-t6-t12"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 30,
+        "upper": 35
+      },
+      "unit": "mm",
+      "source": "balikci-2019",
+      "section": "screw-sizing-and-placement.md §4 and P4; citation-audit-placement-tables.md §A Balikci 2019, regional usual lengths; §B.8",
+      "qualifier": "Secondary: Balikci cites Kuraishi, J Spinal Disord Tech 2013, reference 25. These regional usual lengths duplicate the kuraishi-2013 rows and are not an independent observation. Series n = 120, ages 13–54 (mean 19.2): AIS 86, congenital 17, adult 10 and neuromuscular 7; not an exclusively AIS cohort."
+    },
+    {
+      "coordinate": {
+        "key": "usual-length",
+        "group": "kuraishi-2013-t6-t12"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 30,
+        "upper": 35
+      },
+      "unit": "mm",
+      "source": "kuraishi-2013",
+      "section": "screw-sizing-and-placement.md §4 and P4"
+    },
+    {
+      "coordinate": {
+        "key": "usual-length",
+        "group": "balikci-2019-l1-l5"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 35,
+        "upper": 40
+      },
+      "unit": "mm",
+      "source": "balikci-2019",
+      "section": "screw-sizing-and-placement.md §4 and P4; citation-audit-placement-tables.md §A Balikci 2019, regional usual lengths; §B.8",
+      "qualifier": "Secondary: Balikci cites Kuraishi, J Spinal Disord Tech 2013, reference 25. These regional usual lengths duplicate the kuraishi-2013 rows and are not an independent observation. Series n = 120, ages 13–54 (mean 19.2): AIS 86, congenital 17, adult 10 and neuromuscular 7; not an exclusively AIS cohort."
+    },
+    {
+      "coordinate": {
+        "key": "usual-length",
+        "group": "kuraishi-2013-l1-l5"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 35,
+        "upper": 40
+      },
+      "unit": "mm",
+      "source": "kuraishi-2013",
+      "section": "screw-sizing-and-placement.md §4 and P4"
+    },
+    {
+      "coordinate": {
+        "key": "anterior-breach-threshold",
+        "group": "aorta"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 4
+      },
+      "unit": "mm",
+      "source": "sarwahi-2017",
+      "section": "screw-sizing-and-placement.md §4; citation-audit-placement-tables.md §A Sarwahi 2017, abstract and population",
+      "qualifier": "Source threshold is breach depth of 4 mm or less; reusing it as a pre-cortex margin is a later project rule. Abstract population: 165 spine-deformity patients (2800 screws) plus 8 cadavers (285 screws); not an exclusively AIS cohort."
+    },
+    {
+      "coordinate": {
+        "key": "aorta-contact-depth",
+        "group": "aorta"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 5.7,
+        "spread": 0.6
+      },
+      "unit": "mm",
+      "source": "sarwahi-2017",
+      "section": "screw-sizing-and-placement.md §4; citation-audit-placement-tables.md §A Sarwahi 2017, abstract and population",
+      "qualifier": "The note prints ± without naming either statistic; the spread is not labelled SD or SE. Abstract population: 165 spine-deformity patients (2800 screws) plus 8 cadavers (285 screws); not an exclusively AIS cohort."
+    },
+    {
+      "coordinate": {
+        "key": "non-contact-depth",
+        "group": "aorta"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 3.9,
+        "spread": 0.2
+      },
+      "unit": "mm",
+      "source": "sarwahi-2017",
+      "section": "screw-sizing-and-placement.md §4; citation-audit-placement-tables.md §A Sarwahi 2017, abstract and population",
+      "qualifier": "The note prints ± without naming either statistic; the spread is not labelled SD or SE. Abstract population: 165 spine-deformity patients (2800 screws) plus 8 cadavers (285 screws); not an exclusively AIS cohort."
+    },
+    {
+      "coordinate": {
+        "key": "measured-chord-trajectory",
+        "group": "p4-t1-t5"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 28,
+        "upper": 37
+      },
+      "unit": "mm",
+      "source": "screw-p4-summary",
+      "section": "screw-sizing-and-placement.md P4, T1–T5 measured chord/trajectory column",
+      "qualifier": "T1–T5 regional AIS summary citing Balikci 2019, Kuraishi 2013, Upendra and Pluemvitayaporn. Mixed cited series with no pooled n, individual-level values or side allocation supplied."
+    },
+    {
+      "coordinate": {
+        "key": "measured-chord-trajectory",
+        "group": "p4-t6-t12"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 37,
+        "upper": 46
+      },
+      "unit": "mm",
+      "source": "screw-p4-summary",
+      "section": "screw-sizing-and-placement.md P4, T6–T12 measured chord/trajectory column",
+      "qualifier": "T6–T12 regional AIS summary citing Balikci 2019, Kuraishi 2013, Upendra and Pluemvitayaporn. Mixed cited series with no pooled n, individual-level values or side allocation supplied."
+    },
+    {
+      "coordinate": {
+        "key": "anterior-protrusion-limit",
+        "group": "balikci-cortex"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 1
+      },
+      "unit": "count",
+      "source": "balikci-2019",
+      "section": "screw-sizing-and-placement.md §4, rules cited in Balikci 2019; P4 Rule; citation-audit-placement-tables.md §A Balikci 2019, cited length rules and cohort",
+      "qualifier": "No more than about 1 thread past the anterior cortical surface, as printed in P4; §4 says not >1 thread. Count is threads, not millimetres; pitch is not supplied and no length conversion is made. Series n = 120, ages 13–54 (mean 19.2): AIS 86, congenital 17, adult 10 and neuromuscular 7; not an exclusively AIS cohort."
+    },
+    {
+      "coordinate": {
+        "key": "usual-length",
+        "group": "kuraishi-2013-full-paper-t1-t5"
+      },
+      "value": {
+        "kind": "grid",
+        "values": [
+          25,
+          30
+        ]
+      },
+      "unit": "mm",
+      "source": "kuraishi-2013-full-paper",
+      "section": "full-tables-from-five-papers.md §D.7 Kuraishi 2013 full-paper abstract",
+      "qualifier": "Two published feasible lengths, stated as \"or\"; no intervening length or per-level assignment is inferred. Fifteen right-side thoracic AIS patients. The full paper and kuraishi-2013 meeting abstract are records of the same work and are not independent.",
+      "printed": "25 or 30 mm",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "usual-length",
+        "group": "kuraishi-2013-full-paper-t6-t12"
+      },
+      "value": {
+        "kind": "grid",
+        "values": [
+          30,
+          35
+        ]
+      },
+      "unit": "mm",
+      "source": "kuraishi-2013-full-paper",
+      "section": "full-tables-from-five-papers.md §D.7 Kuraishi 2013 full-paper abstract",
+      "qualifier": "Two published feasible lengths, stated as \"or\"; no intervening length or per-level assignment is inferred. Fifteen right-side thoracic AIS patients. The full paper and kuraishi-2013 meeting abstract are records of the same work and are not independent.",
+      "printed": "30 or 35 mm",
+      "decimals": 0
+    },
+    {
+      "coordinate": {
+        "key": "usual-length",
+        "group": "kuraishi-2013-full-paper-l1-l5"
+      },
+      "value": {
+        "kind": "grid",
+        "values": [
+          35,
+          40
+        ]
+      },
+      "unit": "mm",
+      "source": "kuraishi-2013-full-paper",
+      "section": "full-tables-from-five-papers.md §D.7 Kuraishi 2013 full-paper abstract",
+      "qualifier": "Two published feasible lengths, stated as \"or\"; no intervening length or per-level assignment is inferred. Fifteen right-side thoracic AIS patients. The full paper and kuraishi-2013 meeting abstract are records of the same work and are not independent.",
+      "printed": "35 or 40 mm",
+      "decimals": 0
+    }
+  ],
+  "definitions": [
+    {
+      "key": "balikci-length-choice-method",
+      "source": "balikci-2019",
+      "section": "full-tables-from-five-papers.md §B Balikci 2019",
+      "text": "\"the screw length was determined from the starting hole to the point where the probe touched but not perforated the anterior cortex. The nearest screw length to the measured length was chosen\". No screw lengths by individual vertebral level are supplied; the regional usual lengths cite Kuraishi and are not independent observations."
+    },
+    {
+      "key": "kuraishi-full-paper-chord",
+      "source": "kuraishi-2013-full-paper",
+      "section": "full-tables-from-five-papers.md §D.7 Kuraishi 2013 full-paper abstract",
+      "text": "\"...measured as the distance between the posterior cortical entry point of the pedicle screw and the anterior vertebral cortex in line with the axis of the pedicle between T1 and L5.\" \"The mean length of the longest screw that could be fixed was longer on the right side, except for T8 and T9.\" Fifteen right-side thoracic AIS patients. The abstract gives no per-level chord values."
+    }
+  ]
+}

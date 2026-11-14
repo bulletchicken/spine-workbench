@@ -1,0 +1,1726 @@
+{
+  "cells": [
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T1",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "3.40 ± 0.52",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 3.4,
+        "spread": 0.52
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T1",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "3.43 ± 0.62",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 3.43,
+        "spread": 0.62
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T1",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "3.84 ± 0.44",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 3.84,
+        "spread": 0.44
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T1",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "4.04 ± 0.41",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 4.04,
+        "spread": 0.41
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T1",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "4.14 ± 0.54",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 4.14,
+        "spread": 0.54
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T1",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "4.12 ± 0.79",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 4.12,
+        "spread": 0.79
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T2",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "3.56 ± 0.58",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 3.56,
+        "spread": 0.58
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T2",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "3.64 ± 0.76",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 3.64,
+        "spread": 0.76
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T2",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "4.14 ± 0.38",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 4.14,
+        "spread": 0.38
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T2",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "4.32 ± 0.44",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 4.32,
+        "spread": 0.44
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T2",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "4.43 ± 0.58",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 4.43,
+        "spread": 0.58
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T2",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "4.45 ± 0.86",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 4.45,
+        "spread": 0.86
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T3",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "3.97 ± 0.74",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 3.97,
+        "spread": 0.74
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T3",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "4.07 ± 0.83",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 4.07,
+        "spread": 0.83
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T3",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "4.49 ± 0.63",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 4.49,
+        "spread": 0.63
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T3",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "4.52 ± 0.61",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 4.52,
+        "spread": 0.61
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T3",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "4.79 ± 0.71",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 4.79,
+        "spread": 0.71
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T3",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "4.93 ± 0.88",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 4.93,
+        "spread": 0.88
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T4",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "4.23 ± 0.63",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 4.23,
+        "spread": 0.63
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T4",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "4.38 ± 0.80",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 4.38,
+        "spread": 0.8
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T4",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "5.14 ± 0.89",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 5.14,
+        "spread": 0.89
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T4",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "4.75 ± 0.55",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 4.75,
+        "spread": 0.55
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T4",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "5.27 ± 0.87",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 5.27,
+        "spread": 0.87
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T4",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "5.34 ± 0.78",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 5.34,
+        "spread": 0.78
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T5",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "4.66 ± 0.70",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 4.66,
+        "spread": 0.7
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T5",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "4.64 ± 0.89",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 4.64,
+        "spread": 0.89
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T5",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "5.66 ± 1.00",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 5.66,
+        "spread": 1.0
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T5",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "5.23 ± 0.83",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 5.23,
+        "spread": 0.83
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T5",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "5.82 ± 0.82",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 5.82,
+        "spread": 0.82
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T5",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "5.73 ± 1.08",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 5.73,
+        "spread": 1.08
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T6",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "4.93 ± 0.81",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 4.93,
+        "spread": 0.81
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T6",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "5.16 ± 0.91",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 5.16,
+        "spread": 0.91
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T6",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "6.04 ± 0.94",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 6.04,
+        "spread": 0.94
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T6",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "5.72 ± 0.79",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 5.72,
+        "spread": 0.79
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T6",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "6.43 ± 1.02",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 6.43,
+        "spread": 1.02
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T6",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "6.43 ± 1.00",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 6.43,
+        "spread": 1.0
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T7",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "5.66 ± 0.93",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 5.66,
+        "spread": 0.93
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T7",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "5.67 ± 1.02",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 5.67,
+        "spread": 1.02
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T7",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "7.03 ± 0.86",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 7.03,
+        "spread": 0.86
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T7",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "6.49 ± 0.98",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 6.49,
+        "spread": 0.98
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T7",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "6.92 ± 1.01",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 6.92,
+        "spread": 1.01
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T7",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "7.21 ± 1.16",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 7.21,
+        "spread": 1.16
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T8",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "6.13 ± 1.00",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 6.13,
+        "spread": 1.0
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T8",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "6.36 ± 0.87",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 6.36,
+        "spread": 0.87
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T8",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "7.43 ± 1.07",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 7.43,
+        "spread": 1.07
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T8",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "7.10 ± 0.67",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 7.1,
+        "spread": 0.67
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T8",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "7.91 ± 1.10",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 7.91,
+        "spread": 1.1
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T8",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "7.71 ± 0.96",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 7.71,
+        "spread": 0.96
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T9",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "6.91 ± 1.03",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 6.91,
+        "spread": 1.03
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T9",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "7.11 ± 0.84",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 7.11,
+        "spread": 0.84
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T9",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "7.98 ± 1.10",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 7.98,
+        "spread": 1.1
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T9",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "7.58 ± 0.87",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 7.58,
+        "spread": 0.87
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T9",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "8.77 ± 1.25",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 8.77,
+        "spread": 1.25
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T9",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "8.53 ± 1.28",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 8.53,
+        "spread": 1.28
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T10",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "7.64 ± 1.03",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 7.64,
+        "spread": 1.03
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T10",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "7.90 ± 0.86",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 7.9,
+        "spread": 0.86
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T10",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "8.76 ± 0.96",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 8.76,
+        "spread": 0.96
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T10",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "8.46 ± 0.97",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 8.46,
+        "spread": 0.97
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T10",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "10.02 ± 1.13",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 10.02,
+        "spread": 1.13
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T10",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "9.43 ± 1.55",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 9.43,
+        "spread": 1.55
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T11",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "8.34 ± 1.00",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 8.34,
+        "spread": 1.0
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T11",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "8.63 ± 1.06",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 8.63,
+        "spread": 1.06
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T11",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "9.73 ± 1.09",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 9.73,
+        "spread": 1.09
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T11",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "9.47 ± 1.10",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 9.47,
+        "spread": 1.1
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T11",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "11.21 ± 1.04",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 11.21,
+        "spread": 1.04
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T11",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "10.59 ± 1.79",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 10.59,
+        "spread": 1.79
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T12",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "9.39 ± 1.36",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 9.39,
+        "spread": 1.36
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T12",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "9.46 ± 1.32",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 9.46,
+        "spread": 1.32
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T12",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "10.51 ± 1.18",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 10.51,
+        "spread": 1.18
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T12",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "10.36 ± 1.12",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 10.36,
+        "spread": 1.12
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T12",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "12.35 ± 1.28",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 12.35,
+        "spread": 1.28
+      }
+    },
+    {
+      "coordinate": {
+        "key": "sagittal-diameter",
+        "level": "T12",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "11.67 ± 1.67",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 11.67,
+        "spread": 1.67
+      }
+    },
+    {
+      "coordinate": {
+        "key": "outer-height",
+        "group": "sato-apex-one",
+        "curveSide": "convex"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 12.4,
+        "spread": 1.5
+      },
+      "unit": "mm",
+      "source": "sato-2022",
+      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 2; §B Sato 2022; §C.1",
+      "qualifier": "Measurements are in a plane perpendicular to the pedicle axis through the isthmus. The table prints ± without defining its statistic. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper states right is always convex and left always concave. Per-cell observation counts are not supplied.",
+      "range": {
+        "lower": 9.1,
+        "upper": 16.3
+      },
+      "printed": "12.4 ± 1.5 (9.1–16.3)",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "outer-height",
+        "group": "sato-apex-one",
+        "curveSide": "concave"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 10.8,
+        "spread": 1.5
+      },
+      "unit": "mm",
+      "source": "sato-2022",
+      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 2; §B Sato 2022; §C.1",
+      "qualifier": "Measurements are in a plane perpendicular to the pedicle axis through the isthmus. The table prints ± without defining its statistic. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper states right is always convex and left always concave. Per-cell observation counts are not supplied.",
+      "range": {
+        "lower": 7.3,
+        "upper": 15.6
+      },
+      "printed": "10.8 ± 1.5 (7.3–15.6)",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "p-value-max",
+        "group": "sato-apex-one-outer-height"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 0.001
+      },
+      "unit": "ratio",
+      "source": "sato-2022",
+      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 2; §B Sato 2022; §C.1",
+      "qualifier": "Right-versus-left comparison for this measurement and region; strictly less than the printed bound. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper states right is always convex and left always concave. Per-cell observation counts are not supplied.",
+      "printed": "< 0.001*",
+      "decimals": 3
+    },
+    {
+      "coordinate": {
+        "key": "inner-height",
+        "group": "sato-apex-one",
+        "curveSide": "convex"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 7.5,
+        "spread": 1.4
+      },
+      "unit": "mm",
+      "source": "sato-2022",
+      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 2; §B Sato 2022; §C.1",
+      "qualifier": "Measurements are in a plane perpendicular to the pedicle axis through the isthmus. The table prints ± without defining its statistic. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper states right is always convex and left always concave. Per-cell observation counts are not supplied.",
+      "range": {
+        "lower": 4.9,
+        "upper": 11.4
+      },
+      "printed": "7.5 ± 1.4 (4.9–11.4)",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "inner-height",
+        "group": "sato-apex-one",
+        "curveSide": "concave"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 5.9,
+        "spread": 1.5
+      },
+      "unit": "mm",
+      "source": "sato-2022",
+      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 2; §B Sato 2022; §C.1",
+      "qualifier": "Measurements are in a plane perpendicular to the pedicle axis through the isthmus. The table prints ± without defining its statistic. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper states right is always convex and left always concave. Per-cell observation counts are not supplied.",
+      "range": {
+        "lower": 1.9,
+        "upper": 10.1
+      },
+      "printed": "5.9 ± 1.5 (1.9–10.1)",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "p-value-max",
+        "group": "sato-apex-one-inner-height"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 0.001
+      },
+      "unit": "ratio",
+      "source": "sato-2022",
+      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 2; §B Sato 2022; §C.1",
+      "qualifier": "Right-versus-left comparison for this measurement and region; strictly less than the printed bound. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper states right is always convex and left always concave. Per-cell observation counts are not supplied.",
+      "printed": "< 0.001*",
+      "decimals": 3
+    },
+    {
+      "coordinate": {
+        "key": "outer-height",
+        "group": "sato-neutral-one",
+        "curveSide": "convex"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 10.8,
+        "spread": 1.5
+      },
+      "unit": "mm",
+      "source": "sato-2022",
+      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 2; §B Sato 2022; §C.1",
+      "qualifier": "Measurements are in a plane perpendicular to the pedicle axis through the isthmus. The table prints ± without defining its statistic. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper states right is always convex and left always concave. Per-cell observation counts are not supplied.",
+      "range": {
+        "lower": 7.3,
+        "upper": 15.6
+      },
+      "printed": "10.8 ± 1.5 (7.3–15.6)",
+      "decimals": 1,
+      "mark": {
+        "kind": "probable-copy",
+        "reason": "full-tables-from-five-papers.md §B Sato and §C.1: the right-side NV ±1 block repeats the left-side APEX ±1 block in 11 of 12 numbers, a probable copy error. The right-side neutral block is not used; values remain as printed."
+      },
+      "usage": "printed-only"
+    },
+    {
+      "coordinate": {
+        "key": "outer-height",
+        "group": "sato-neutral-one",
+        "curveSide": "concave"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 9.1,
+        "spread": 1.0
+      },
+      "unit": "mm",
+      "source": "sato-2022",
+      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 2; §B Sato 2022; §C.1",
+      "qualifier": "Measurements are in a plane perpendicular to the pedicle axis through the isthmus. The table prints ± without defining its statistic. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper states right is always convex and left always concave. Per-cell observation counts are not supplied.",
+      "range": {
+        "lower": 6.9,
+        "upper": 11.8
+      },
+      "printed": "9.1 ± 1.0 (6.9–11.8)",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "p-value-max",
+        "group": "sato-neutral-one-outer-height"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 0.001
+      },
+      "unit": "ratio",
+      "source": "sato-2022",
+      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 2; §B Sato 2022; §C.1",
+      "qualifier": "Right-versus-left comparison for this measurement and region; strictly less than the printed bound. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper states right is always convex and left always concave. Per-cell observation counts are not supplied.",
+      "printed": "< 0.001*",
+      "decimals": 3
+    },
+    {
+      "coordinate": {
+        "key": "inner-height",
+        "group": "sato-neutral-one",
+        "curveSide": "convex"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 5.9,
+        "spread": 1.5
+      },
+      "unit": "mm",
+      "source": "sato-2022",
+      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 2; §B Sato 2022; §C.1",
+      "qualifier": "Measurements are in a plane perpendicular to the pedicle axis through the isthmus. The table prints ± without defining its statistic. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper states right is always convex and left always concave. Per-cell observation counts are not supplied.",
+      "range": {
+        "lower": 1.9,
+        "upper": 10.1
+      },
+      "printed": "5.9 ± 1.5 (1.9–10.1)",
+      "decimals": 1,
+      "mark": {
+        "kind": "probable-copy",
+        "reason": "full-tables-from-five-papers.md §B Sato and §C.1: the right-side NV ±1 block repeats the left-side APEX ±1 block in 11 of 12 numbers, a probable copy error. The right-side neutral block is not used; values remain as printed."
+      },
+      "usage": "printed-only"
+    },
+    {
+      "coordinate": {
+        "key": "inner-height",
+        "group": "sato-neutral-one",
+        "curveSide": "concave"
+      },
+      "value": {
+        "kind": "plus-minus",
+        "value": 4.9,
+        "spread": 1.2
+      },
+      "unit": "mm",
+      "source": "sato-2022",
+      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 2; §B Sato 2022; §C.1",
+      "qualifier": "Measurements are in a plane perpendicular to the pedicle axis through the isthmus. The table prints ± without defining its statistic. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper states right is always convex and left always concave. Per-cell observation counts are not supplied.",
+      "range": {
+        "lower": 2.4,
+        "upper": 8.1
+      },
+      "printed": "4.9 ± 1.2 (2.4–8.1)",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "p-value-max",
+        "group": "sato-neutral-one-inner-height"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 0.001
+      },
+      "unit": "ratio",
+      "source": "sato-2022",
+      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 2; §B Sato 2022; §C.1",
+      "qualifier": "Right-versus-left comparison for this measurement and region; strictly less than the printed bound. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper states right is always convex and left always concave. Per-cell observation counts are not supplied.",
+      "printed": "< 0.001*",
+      "decimals": 3
+    }
+  ],
+  "definitions": [
+    {
+      "key": "zheng-sagittal-diameter",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 2; §B, Zheng 2009",
+      "text": "Figure 2: “The sagittal pedicle diameter (the superior-inferior cortical height)measured at the isthmus”. Table 2 gives three age bands and male/female columns. The paper does not define the ± statistic; interpreting it as SD is this project’s own inference. Per-age-band and sex child counts are not stated."
+    },
+    {
+      "key": "sato-table-2",
+      "source": "sato-2022",
+      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 2",
+      "text": "Differences in right and left pedicle diameters; columns: Variables |  |  | Rt. Pedicles | Lt. Pedicles | p-values. *Statistically significant. APEX±1, the region of the AV and its two adjacent vertebrae; H, cortical pedicle height; h, cancellous pedicle height; NV ± 1, the region of the NV and its two adjacent vertebrae; W, cortical pedicle width; w, cancellous pedicle width"
+    },
+    {
+      "key": "sato-isthmus-plane",
+      "source": "sato-2022",
+      "section": "full-tables-from-five-papers.md §B Sato 2022",
+      "text": "Measured by \"cutting out pedicles in a plane perpendicular to the pedicle axis through the isthmus\". Fig. 1 names W cortical pedicle width and w cancellous pedicle width; the discussion treats W as the outer diameter. Right pedicle is always convex; left pedicle is always concave. H is cortical pedicle height and h cancellous pedicle height. Per-cell n is not supplied."
+    },
+    {
+      "key": "zheng-2009-table-2-wording",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, zheng-2009 Table 2",
+      "text": "Sagittal diameter (mm); column headers (verbatim, separated by |):  | 5–8 years / M | 5–8 years / F | 9–11 years / M | 9–11 years / F | 12–14 years / M | 12–14 years / F"
+    },
+    {
+      "key": "sato-2022-table-2-wording",
+      "source": "sato-2022",
+      "section": "full-tables-from-five-papers.md §A, sato-2022 Table 2",
+      "text": "Differences in right and left pedicle diameters; column headers (verbatim, separated by |): Variables |  |  | Rt. Pedicles | Lt. Pedicles | p-values. Footnotes: *Statistically significant. APEX±1, the region of the AV and its two adjacent vertebrae; H, cortical pedicle height; h, cancellous pedicle height; NV ± 1, the region of the NV and its two adjacent vertebrae; W, cortical pedicle width; w, cancellous pedicle width"
+    }
+  ]
+}

@@ -1,0 +1,2397 @@
+{
+  "cells": [
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "ageBand": "5-8",
+        "group": "zheng-children",
+        "sex": "male"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 28.11,
+        "upper": 32.26
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "citation-audit-placement-tables.md, A zheng-2009 and B3; Zheng length prose (full text)",
+      "qualifier": "Printed pooled length range for ages 5–8, with sex retained; no individual level is assigned. The complete Table 3 cells are retained separately; the prose interval is not a substitute for their minima and maxima. Table 3 defines length from posterior cortex to anterior cortex of the vertebra; Figure 1 instead says posterior cortex of the pedicle to posterior longitudinal ligament along the pedicle axis."
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "ageBand": "5-8",
+        "group": "zheng-children",
+        "sex": "female"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 27.28,
+        "upper": 32.29
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "citation-audit-placement-tables.md, A zheng-2009 and B3; Zheng length prose (full text)",
+      "qualifier": "Printed pooled length range for ages 5–8, with sex retained; no individual level is assigned. The complete Table 3 cells are retained separately; the prose interval is not a substitute for their minima and maxima. Table 3 defines length from posterior cortex to anterior cortex of the vertebra; Figure 1 instead says posterior cortex of the pedicle to posterior longitudinal ligament along the pedicle axis."
+    },
+    {
+      "coordinate": {
+        "key": "trajectory-length",
+        "group": "pluemvitayaporn-t1",
+        "level": "T1"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 28.4,
+        "upper": 28.6
+      },
+      "unit": "mm",
+      "source": "pluemvitayaporn-2025",
+      "section": "screw-sizing-and-placement.md §1, paragraph after Table 3",
+      "qualifier": "T1 range as printed; side allocation and sex not supplied. Lenke 5 series, n = 112."
+    },
+    {
+      "coordinate": {
+        "key": "trajectory-length",
+        "group": "pluemvitayaporn-t12",
+        "level": "T12"
+      },
+      "value": {
+        "kind": "scalar",
+        "value": 45.5
+      },
+      "unit": "mm",
+      "source": "pluemvitayaporn-2025",
+      "section": "screw-sizing-and-placement.md §1, paragraph after Table 3",
+      "qualifier": "About 45.5 mm at T12; approximate, with side allocation and sex not supplied. Lenke 5 series, n = 112."
+    },
+    {
+      "coordinate": {
+        "key": "trajectory-length",
+        "group": "pluemvitayaporn-l1-l5"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 46,
+        "upper": 51
+      },
+      "unit": "mm",
+      "source": "pluemvitayaporn-2025",
+      "section": "screw-sizing-and-placement.md §1, paragraph after Table 3; P4, L1–L5 measured chord/trajectory column",
+      "qualifier": "One pooled L1–L5 range, not individual-level or side-specific cells; Lenke 5 series, n = 112. P4 repeats the same range in a mixed-series summary citing Balikci, Kuraishi, Upendra and Pluemvitayaporn."
+    },
+    {
+      "coordinate": {
+        "key": "trajectory-side-difference",
+        "group": "pluemvitayaporn-l2-l4"
+      },
+      "value": {
+        "kind": "range",
+        "lower": 2.1,
+        "upper": 3.2
+      },
+      "unit": "mm",
+      "source": "pluemvitayaporn-2025",
+      "section": "screw-sizing-and-placement.md §1, paragraph after Table 3",
+      "qualifier": "Concave trajectories are longer than convex trajectories by 2.1–3.2 mm at L2–L4. Regional concave-minus-convex difference, not an absolute trajectory; n = 112."
+    },
+    {
+      "coordinate": {
+        "key": "chord",
+        "level": "T1",
+        "curveSide": "convex",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 29.75,
+        "sd": 2.31
+      },
+      "unit": "mm",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 3; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 3 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 12,
+      "range": {
+        "lower": 25.1,
+        "upper": 32.3
+      },
+      "printed": "29.75",
+      "decimals": 2
+    },
+    {
+      "coordinate": {
+        "key": "chord",
+        "level": "T1",
+        "curveSide": "concave",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 27.67,
+        "sd": 2.89
+      },
+      "unit": "mm",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 3; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 3 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 12,
+      "range": {
+        "lower": 25.1,
+        "upper": 32.6
+      },
+      "printed": "27.67",
+      "decimals": 2
+    },
+    {
+      "coordinate": {
+        "key": "chord",
+        "level": "T2",
+        "curveSide": "convex",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 30.5,
+        "sd": 2.38
+      },
+      "unit": "mm",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 3; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 3 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 10,
+      "range": {
+        "lower": 27.2,
+        "upper": 32.3
+      },
+      "printed": "30.5",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "chord",
+        "level": "T2",
+        "curveSide": "concave",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 32.83,
+        "sd": 3.55
+      },
+      "unit": "mm",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 3; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 3 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 10,
+      "range": {
+        "lower": 28.1,
+        "upper": 37.3
+      },
+      "printed": "32.83",
+      "decimals": 2
+    },
+    {
+      "coordinate": {
+        "key": "chord",
+        "level": "T3",
+        "curveSide": "convex",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 32.8,
+        "sd": 6.59
+      },
+      "unit": "mm",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 3; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 3 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 13,
+      "range": {
+        "lower": 18.1,
+        "upper": 41.3
+      },
+      "printed": "32.8",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "chord",
+        "level": "T3",
+        "curveSide": "concave",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 37.33,
+        "sd": 3.89
+      },
+      "unit": "mm",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 3; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 3 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 13,
+      "range": {
+        "lower": 32.1,
+        "upper": 40.5
+      },
+      "printed": "37.33",
+      "decimals": 2
+    },
+    {
+      "coordinate": {
+        "key": "chord",
+        "level": "T4",
+        "curveSide": "convex",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 34.83,
+        "sd": 2.11
+      },
+      "unit": "mm",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 3; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 3 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 14,
+      "range": {
+        "lower": 30.1,
+        "upper": 37.5
+      },
+      "printed": "34.83",
+      "decimals": 2
+    },
+    {
+      "coordinate": {
+        "key": "chord",
+        "level": "T4",
+        "curveSide": "concave",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 35.75,
+        "sd": 4.12
+      },
+      "unit": "mm",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 3; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 3 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 14,
+      "range": {
+        "lower": 30.4,
+        "upper": 40.5
+      },
+      "printed": "35.75",
+      "decimals": 2
+    },
+    {
+      "coordinate": {
+        "key": "chord",
+        "level": "T5",
+        "curveSide": "convex",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 35.33,
+        "sd": 1.96
+      },
+      "unit": "mm",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 3; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 3 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 9,
+      "range": {
+        "lower": 32.2,
+        "upper": 38.6
+      },
+      "printed": "35.33",
+      "decimals": 2
+    },
+    {
+      "coordinate": {
+        "key": "chord",
+        "level": "T5",
+        "curveSide": "concave",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 37.0,
+        "sd": 4.22
+      },
+      "unit": "mm",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 3; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 3 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 9,
+      "range": {
+        "lower": 32.1,
+        "upper": 43.1
+      },
+      "printed": "37.0",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "chord",
+        "level": "T6",
+        "curveSide": "convex",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 38.5,
+        "sd": 4.66
+      },
+      "unit": "mm",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 3; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 3 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 11,
+      "range": {
+        "lower": 30.8,
+        "upper": 43.2
+      },
+      "printed": "38.5",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "chord",
+        "level": "T6",
+        "curveSide": "concave",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 39.1,
+        "sd": 3.11
+      },
+      "unit": "mm",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 3; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 3 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 11,
+      "range": {
+        "lower": 37.1,
+        "upper": 43.2
+      },
+      "printed": "39.1",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "chord",
+        "level": "T7",
+        "curveSide": "convex",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 41.5,
+        "sd": 1.95
+      },
+      "unit": "mm",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 3; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 3 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 9,
+      "range": {
+        "lower": 38.2,
+        "upper": 43.1
+      },
+      "printed": "41.5",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "chord",
+        "level": "T7",
+        "curveSide": "concave",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 41.8,
+        "sd": 2.12
+      },
+      "unit": "mm",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 3; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 3 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 9,
+      "range": {
+        "lower": 39.2,
+        "upper": 43.8
+      },
+      "printed": "41.8",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "chord",
+        "level": "T8",
+        "curveSide": "convex",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 40.2,
+        "sd": 1.86
+      },
+      "unit": "mm",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 3; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 3 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 14,
+      "range": {
+        "lower": 38.5,
+        "upper": 41.6
+      },
+      "printed": "40.2",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "chord",
+        "level": "T8",
+        "curveSide": "concave",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 42.1,
+        "sd": 1.68
+      },
+      "unit": "mm",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 3; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 3 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 14,
+      "range": {
+        "lower": 40.0,
+        "upper": 44.8
+      },
+      "printed": "42.1",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "chord",
+        "level": "T9",
+        "curveSide": "convex",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 43.5,
+        "sd": 4.96
+      },
+      "unit": "mm",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 3; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 3 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 12,
+      "range": {
+        "lower": 37.1,
+        "upper": 53.2
+      },
+      "printed": "43.5",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "chord",
+        "level": "T9",
+        "curveSide": "concave",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 44.2,
+        "sd": 4.97
+      },
+      "unit": "mm",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 3; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 3 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 12,
+      "range": {
+        "lower": 35.4,
+        "upper": 46.5
+      },
+      "printed": "44.2",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "chord",
+        "level": "T10",
+        "curveSide": "convex",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 33.35,
+        "sd": 4.22
+      },
+      "unit": "mm",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 3; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 3 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 15,
+      "range": {
+        "lower": 28.4,
+        "upper": 41.2
+      },
+      "printed": "33.35",
+      "decimals": 2,
+      "mark": {
+        "kind": "doubtful",
+        "reason": "The note flags the printed mean 33.35 mm as doubtful because it falls from 43.5 mm at T9 and precedes 37.5 mm at T11; it is possible and remains usable without repair."
+      }
+    },
+    {
+      "coordinate": {
+        "key": "chord",
+        "level": "T10",
+        "curveSide": "concave",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 41.5,
+        "sd": 3.12
+      },
+      "unit": "mm",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 3; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 3 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 15,
+      "range": {
+        "lower": 38.1,
+        "upper": 46.8
+      },
+      "printed": "41.5",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "chord",
+        "level": "T11",
+        "curveSide": "convex",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 37.5,
+        "sd": 1.69
+      },
+      "unit": "mm",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 3; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 3 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 16,
+      "range": {
+        "lower": 35.1,
+        "upper": 42.6
+      },
+      "printed": "37.5",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "chord",
+        "level": "T11",
+        "curveSide": "concave",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 39.5,
+        "sd": 4.2
+      },
+      "unit": "mm",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 3; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 3 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 16,
+      "range": {
+        "lower": 35.1,
+        "upper": 46.1
+      },
+      "printed": "39.5",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "chord",
+        "level": "T12",
+        "curveSide": "convex",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 40.27,
+        "sd": 5.86
+      },
+      "unit": "mm",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 3; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 3 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 19,
+      "range": {
+        "lower": 32.5,
+        "upper": 47.1
+      },
+      "printed": "40.27",
+      "decimals": 2
+    },
+    {
+      "coordinate": {
+        "key": "chord",
+        "level": "T12",
+        "curveSide": "concave",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 42.2,
+        "sd": 5.66
+      },
+      "unit": "mm",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 3; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 3 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 19,
+      "range": {
+        "lower": 28.9,
+        "upper": 50.4
+      },
+      "printed": "42.2",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "chord",
+        "level": "L1",
+        "curveSide": "convex",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 41.46,
+        "sd": 4.39
+      },
+      "unit": "mm",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 3; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 3 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 18,
+      "range": {
+        "lower": 35.4,
+        "upper": 52.6
+      },
+      "printed": "41.46",
+      "decimals": 2
+    },
+    {
+      "coordinate": {
+        "key": "chord",
+        "level": "L1",
+        "curveSide": "concave",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 46.8,
+        "sd": 5.76
+      },
+      "unit": "mm",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 3; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 3 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 18,
+      "range": {
+        "lower": 36.1,
+        "upper": 55.7
+      },
+      "printed": "46.8",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "chord",
+        "level": "L2",
+        "curveSide": "convex",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 47.37,
+        "sd": 4.96
+      },
+      "unit": "mm",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 3; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 3 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 13,
+      "range": {
+        "lower": 32.1,
+        "upper": 54.8
+      },
+      "printed": "47.37",
+      "decimals": 2
+    },
+    {
+      "coordinate": {
+        "key": "chord",
+        "level": "L2",
+        "curveSide": "concave",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 49.86,
+        "sd": 4.11
+      },
+      "unit": "mm",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 3; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 3 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 13,
+      "range": {
+        "lower": 43.2,
+        "upper": 54.8
+      },
+      "printed": "49.86",
+      "decimals": 2
+    },
+    {
+      "coordinate": {
+        "key": "chord",
+        "level": "L3",
+        "curveSide": "convex",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 48.56,
+        "sd": 3.64
+      },
+      "unit": "mm",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 3; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 3 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 11,
+      "range": {
+        "lower": 42.5,
+        "upper": 52.9
+      },
+      "printed": "48.56",
+      "decimals": 2
+    },
+    {
+      "coordinate": {
+        "key": "chord",
+        "level": "L3",
+        "curveSide": "concave",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 51.2,
+        "sd": 3.21
+      },
+      "unit": "mm",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 3; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 3 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 11,
+      "range": {
+        "lower": 45.1,
+        "upper": 55.4
+      },
+      "printed": "51.2",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "chord",
+        "level": "L4",
+        "curveSide": "convex",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 46.2,
+        "sd": 2.14
+      },
+      "unit": "mm",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 3; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 3 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 9,
+      "range": {
+        "lower": 44.5,
+        "upper": 47.6
+      },
+      "printed": "46.2",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "chord",
+        "level": "L4",
+        "curveSide": "concave",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 47.65,
+        "sd": 2.11
+      },
+      "unit": "mm",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 3; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 3 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 9,
+      "range": {
+        "lower": 45.1,
+        "upper": 50.9
+      },
+      "printed": "47.65",
+      "decimals": 2
+    },
+    {
+      "coordinate": {
+        "key": "chord",
+        "level": "L5",
+        "curveSide": "convex",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 47.0,
+        "sd": 2.08
+      },
+      "unit": "mm",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 3; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 3 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 8,
+      "range": {
+        "lower": 45.2,
+        "upper": 50.8
+      },
+      "printed": "47.0",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "chord",
+        "level": "L5",
+        "curveSide": "concave",
+        "group": "upendra-ais"
+      },
+      "value": {
+        "kind": "mean-sd",
+        "mean": 48.2,
+        "sd": 2.89
+      },
+      "unit": "mm",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Table 3; B Upendra 2010 (full text)",
+      "qualifier": "Printed Table 3 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
+      "n": 8,
+      "range": {
+        "lower": 45.1,
+        "upper": 50.8
+      },
+      "printed": "48.2",
+      "decimals": 1
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T1",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "28.57 ± 2.18",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 28.57,
+        "spread": 2.18
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T1",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "27.28 ± 1.86",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 27.28,
+        "spread": 1.86
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T1",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "29.99 ± 3.71",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 29.99,
+        "spread": 3.71
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T1",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "29.06 ± 1.43",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 29.06,
+        "spread": 1.43
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T1",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "31.94 ± 3.10",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 31.94,
+        "spread": 3.1
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T1",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "31.03 ± 2.61",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 31.03,
+        "spread": 2.61
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T2",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "28.11 ± 2.46",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 28.11,
+        "spread": 2.46
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T2",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "27.79 ± 2.49",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 27.79,
+        "spread": 2.49
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T2",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "30.33 ± 2.44",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 30.33,
+        "spread": 2.44
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T2",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "29.20 ± 1.63",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 29.2,
+        "spread": 1.63
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T2",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "32.46 ± 3.70",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 32.46,
+        "spread": 3.7
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T2",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "30.89 ± 2.43",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 30.89,
+        "spread": 2.43
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T3",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "28.43 ± 2.46",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 28.43,
+        "spread": 2.46
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T3",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "28.95 ± 2.45",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 28.95,
+        "spread": 2.45
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T3",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "31.81 ± 4.32",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 31.81,
+        "spread": 4.32
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T3",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "29.31 ± 2.31",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 29.31,
+        "spread": 2.31
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T3",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "33.17 ± 3.06",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 33.17,
+        "spread": 3.06
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T3",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "31.79 ± 2.93",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 31.79,
+        "spread": 2.93
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T4",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "29.75 ± 2.90",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 29.75,
+        "spread": 2.9
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T4",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "29.04 ± 2.05",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 29.04,
+        "spread": 2.05
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T4",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "32.28 ± 3.53",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 32.28,
+        "spread": 3.53
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T4",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "30.17 ± 1.63",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 30.17,
+        "spread": 1.63
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T4",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "34.10 ± 2.94",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 34.1,
+        "spread": 2.94
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T4",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "31.97 ± 2.15",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 31.97,
+        "spread": 2.15
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T5",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "28.91 ± 1.98",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 28.91,
+        "spread": 1.98
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T5",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "29.41 ± 2.25",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 29.41,
+        "spread": 2.25
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T5",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "31.53 ± 3.81",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 31.53,
+        "spread": 3.81
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T5",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "30.86 ± 2.60",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 30.86,
+        "spread": 2.6
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T5",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "34.64 ± 2.61",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 34.64,
+        "spread": 2.61
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T5",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "32.37 ± 2.98",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 32.37,
+        "spread": 2.98
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T6",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "29.75 ± 2.38",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 29.75,
+        "spread": 2.38
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T6",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "29.34 ± 1.69",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 29.34,
+        "spread": 1.69
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T6",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "32.83 ± 3.18",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 32.83,
+        "spread": 3.18
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T6",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "31.86 ± 3.19",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 31.86,
+        "spread": 3.19
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T6",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "34.61 ± 2.96",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 34.61,
+        "spread": 2.96
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T6",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "33.35 ± 3.53",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 33.35,
+        "spread": 3.53
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T7",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "30.15 ± 3.15",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 30.15,
+        "spread": 3.15
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T7",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "30.17 ± 2.39",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 30.17,
+        "spread": 2.39
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T7",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "33.64 ± 3.51",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 33.64,
+        "spread": 3.51
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T7",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "32.40 ± 2.99",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 32.4,
+        "spread": 2.99
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T7",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "35.79 ± 3.78",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 35.79,
+        "spread": 3.78
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T7",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "33.99 ± 3.32",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 33.99,
+        "spread": 3.32
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T8",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "30.15 ± 2.82",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 30.15,
+        "spread": 2.82
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T8",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "30.81 ± 2.53",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 30.81,
+        "spread": 2.53
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T8",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "34.21 ± 3.49",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 34.21,
+        "spread": 3.49
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T8",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "31.98 ± 2.55",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 31.98,
+        "spread": 2.55
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T8",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "37.86 ± 3.58",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 37.86,
+        "spread": 3.58
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T8",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "34.55 ± 3.66",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 34.55,
+        "spread": 3.66
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T9",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "31.37 ± 3.08",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 31.37,
+        "spread": 3.08
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T9",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "31.36 ± 2.49",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 31.36,
+        "spread": 2.49
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T9",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "35.02 ± 3.64",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 35.02,
+        "spread": 3.64
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T9",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "33.54 ± 3.15",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 33.54,
+        "spread": 3.15
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T9",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "37.97 ± 4.40",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 37.97,
+        "spread": 4.4
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T9",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "35.36 ± 3.07",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 35.36,
+        "spread": 3.07
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T10",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "32.37 ± 3.13",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 32.37,
+        "spread": 3.13
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T10",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "31.83 ± 2.80",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 31.83,
+        "spread": 2.8
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T10",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "35.44 ± 3.53",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 35.44,
+        "spread": 3.53
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T10",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "33.69 ± 2.49",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 33.69,
+        "spread": 2.49
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T10",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "39.22 ± 4.04",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 39.22,
+        "spread": 4.04
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T10",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "34.70 ± 4.71",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 34.7,
+        "spread": 4.71
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T11",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "32.07 ± 2.80",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 32.07,
+        "spread": 2.8
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T11",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "31.78 ± 3.20",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 31.78,
+        "spread": 3.2
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T11",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "34.95 ± 4.87",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 34.95,
+        "spread": 4.87
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T11",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "33.24 ± 3.20",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 33.24,
+        "spread": 3.2
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T11",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "38.08 ± 3.55",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 38.08,
+        "spread": 3.55
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T11",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "36.22 ± 4.75",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 36.22,
+        "spread": 4.75
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T12",
+        "ageBand": "5-8",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "32.26 ± 2.89",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 32.26,
+        "spread": 2.89
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T12",
+        "ageBand": "5-8",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "32.29 ± 3.62",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 32.29,
+        "spread": 3.62
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T12",
+        "ageBand": "9-11",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "34.91 ± 5.27",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 34.91,
+        "spread": 5.27
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T12",
+        "ageBand": "9-11",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "34.01 ± 3.58",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 34.01,
+        "spread": 3.58
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T12",
+        "ageBand": "12-14",
+        "sex": "male",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "39.42 ± 4.12",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 39.42,
+        "spread": 4.12
+      }
+    },
+    {
+      "coordinate": {
+        "key": "pedicle-length",
+        "level": "T12",
+        "ageBand": "12-14",
+        "sex": "female",
+        "group": "zheng-children"
+      },
+      "unit": "mm",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009",
+      "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated.",
+      "printed": "37.71 ± 5.65",
+      "decimals": 2,
+      "value": {
+        "kind": "plus-minus",
+        "value": 37.71,
+        "spread": 5.65
+      }
+    }
+  ],
+  "definitions": [
+    {
+      "key": "upendra-chord",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, B Upendra 2010 (full text)",
+      "text": "Depth to anterior cortex / chord length: the distance along the transverse pedicle axis from the most posterior point on the transverse process to the anterior cortex of the vertebra (Figure 3)."
+    },
+    {
+      "key": "upendra-population-and-sides",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, B Upendra 2010 (full text)",
+      "text": "Twenty-four AIS patients, curves <100°, 14 female and 10 male; mean age 14.6 years (12.3–18.3), mean Cobb 76° (58–98°); King II 12, King III 7, King IV 5. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right."
+    },
+    {
+      "key": "upendra-statistics-and-table-authority",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md, A Upendra Tables 1–4; C5–C9 (full text)",
+      "text": "Tables 1–3 explicitly label means, ranges, SD and number of pedicles separately. The printed field preserves the literal mean column; decimals records its printed decimal places. Table 4 conflicts are kept separately and are not used; Tables 1–3 supply primary figures. Doubtful cells remain usable as printed, while the impossible L4 convex angle is retained only for inspection."
+    },
+    {
+      "key": "zheng-length-endpoints",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 3; §B, Zheng 2009; §C.3",
+      "text": "The Table 3 title, results subheading and abstract describe “The length of the pedicle from the posterior cortex to the anterior cortex of the vertebra (mm)”. Figure 1 instead says “The pedicle length from the posterior cortex of the pedicle to the posterior longitudinal ligament along the axis of the pedicle”. Both descriptions are retained; the endpoint contradiction is unresolved. The paper does not define the ± statistic; interpreting it as SD is this project’s own inference. Per-age-band and sex child counts are not stated."
+    },
+    {
+      "key": "upendra-2010-table-3-wording",
+      "source": "upendra-2010",
+      "section": "full-tables-from-five-papers.md §A, upendra-2010 Table 3",
+      "text": "Depth to anterior cortex along pedicle axis or chord length (a) Convex pedicle (b) Concave pedicle; column headers (verbatim, separated by |): (a) Convex pedicle / Level | No. of pedicles | Mean depth (mm) | Range (mm) | S.D | (b) Concave pedicle / Level | No. of pedicles | Mean depth (mm) | Range (mm) | S.D"
+    },
+    {
+      "key": "zheng-2009-table-3-wording",
+      "source": "zheng-2009",
+      "section": "full-tables-from-five-papers.md §A, zheng-2009 Table 3",
+      "text": "The length of the pedicle from the posterior cortex to the anterior cortex of the vertebra (mm); column headers (verbatim, separated by |):  | 5–8 years / M | 5–8 years / F | 9–11 years / M | 9–11 years / F | 12–14 years / M | 12–14 years / F"
+    }
+  ]
+}
