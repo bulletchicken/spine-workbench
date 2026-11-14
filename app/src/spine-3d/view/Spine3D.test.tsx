@@ -217,7 +217,7 @@ describe('Spine3D', () => {
       handle.current?.settle();
     });
     expect(named('spine.settle').length).toBe(1);
-    act(()=>{handle.current?.addFlatSpine();handle.current?.addFlatSpine();});
+    act(()=>{handle.current?.addFlatSpine();handle.current?.addSpine();});
     expect(heard.models).toHaveLength(3);
     expect(heard.models[1]).toBe(heard.models[0]);expect(heard.models[2]).toBe(heard.models[0]);
   });

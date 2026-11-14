@@ -1,15 +1,18 @@
+import { comparisonState,closeComparison,stopComparison } from './comparison-state';
+import { PLACE_COMPARE_WORDS as C,PLACE_AGE_WORDS as A } from '@/words/place';
+import { comparisonMeasures,comparisonPageSize,type ComparisonMeasure } from './comparison-view';
 import type { BenchStop, ImageRight } from '@/shapes';
 import type { DockSpec } from '@/guide/dock-spec';
 import { ESTIMATE_TAGS, LOAD_STOPS, SHOWN_LOAD_STOPS, PLACE_LOAD_WORDS as L, PLACE_WORDS as W, PLACE_EDIT_WORDS as E } from '@/words/place';
 import { placeState, type PlaceState, type PlaceView } from './place-state';
 import { backToPlacement, loadState } from './load-state';
-import { rangeWords, stopResult, shownLoadStop, unsettledCount } from './load-view';
+import { rangeWords, stopResult, shownLoadStop, unsettledCount,tooFewSettled } from './load-view';
 import { handState, type HandChange } from './hand-state';
 import { reviewChoices } from './review-choices';
 import { countWords, reviewItems } from './placement-view';
-export interface PlaceActions { back: () => void; retry: () => void; review: (at: number | null) => void; sheet: () => void; view: (name: PlaceView) => void; load?: () => void; stop?: () => void; estimates?: () => void; standardNames?: boolean; change?:(change:HandChange)=>void;undo?:()=>void }
+export interface PlaceActions { compare?:()=>void; back: () => void; retry: () => void; review: (at: number | null) => void; sheet: () => void; view: (name: PlaceView) => void; load?: () => void; stop?: () => void; estimates?: () => void; standardNames?: boolean; change?:(change:HandChange)=>void;undo?:()=>void }
 export function placeDock(state: PlaceState, actions: PlaceActions, namedFor: ImageRight = 'patient-left', shownStops: readonly BenchStop[] = SHOWN_LOAD_STOPS): DockSpec {
-  const hand=handState.getState(),yours=hand.past.length>0;
+  const hand=handState.getState(),yours=hand.past.length>0,comparison=comparisonState.getState();
   const base = { scene: 'place' as const };
   if (state.phase === 'idle' || state.phase === 'working' || state.arriving) return { ...base, sentence: W.working };
   if (state.phase === 'failed') {
@@ -31,17 +34,26 @@ export function placeDock(state: PlaceState, actions: PlaceActions, namedFor: Im
     review: { ...(actions.change===undefined?{}:{choices:reviewChoices(result,item,actions.change,hand.busy!==null)}),label: item.label, sentences: item.sentences, count: W.progress(state.review + 1, items.length), ...(item.details === undefined ? {} : { details: item.details }) },
     ...(state.review < items.length - 1 ? { primary: { label: W.next, press: () => { actions.review((state.review ?? 0) + 1); } } } : {}),
     quiet: { label: W.done, press: () => { actions.review(null); } } };
+  if(comparison.open){
+    const measures=comparisonMeasures(load.result),measure=measures.includes(comparison.measure)?comparison.measure:measures[0]??'heaviest-anchor-demand';
+    const perPage=comparisonPageSize(typeof window==='undefined'?1280:window.innerWidth),shown=Math.min(perPage,Math.max(0,comparison.layouts.length-1-comparison.page*perPage))+1;
+    return {...base,sentence:C.sentence(shown,comparison.result?.versions??result.versions),helper:comparison.phase==='running'?{kind:'count',count:C.progress(comparison.finished.length,comparison.layouts.length),spoken:C.progress(comparison.finished.length,comparison.layouts.length),share:comparison.finished.length/comparison.layouts.length,words:C.helper}:{kind:'words',words:[C.helper,yours?` ${C.yours}`:'',comparison.phase==='failed'?` ${C.failed}`:'']},
+      small:yours?C.againstYours:C.againstFirst,
+      control:{label:C.measures,chosen:measure,options:measures.map((id)=>({id,label:id==='main-cobb'?C.main:C.anchor})),choose:(id)=>{comparisonState.setState({measure:id as ComparisonMeasure});}},
+      actions:[...(comparison.phase==='failed'?[{label:C.done,press:()=>{closeComparison();}}]:[]),...(comparison.page>0?[{label:C.earlier,press:()=>{comparisonState.setState({page:comparison.page-1});}}]:[]),...((comparison.page+1)*perPage<comparison.layouts.length-1?[{label:C.more,press:()=>{comparisonState.setState({page:comparison.page+1});}}]:[]),...(comparison.phase==='running'?[{label:C.stop,press:stopComparison}]:[])],primary:comparison.phase==='failed'&&comparison.retryable&&actions.compare!==undefined?{label:W.retry,press:actions.compare}:{label:C.done,press:()=>{closeComparison();}}};
+  }
   if(load.phase==='loaded'&&load.result!==null){
-    const unsettled=unsettledCount(load.result);
+    const unsettled=unsettledCount(load.result),limited=tooFewSettled(load.result),hideRanges=limited&&load.stop!=='before';
     const stop=stopResult(load.result,load.stop),curve=stop?.estimates.find((e)=>e.measure==='main-cobb'),hasCurve=load.result.mainCurve!==null||result.curves.some((c)=>c.versionsMajor>0),heaviest=stop?.estimates.find((e)=>e.measure==='heaviest-anchor-demand');
-    const showAnchor=load.stop!=='before'&&(load.stop!=='rods-in'||!hasCurve),tag=load.stop==='before'?undefined:showAnchor?heaviest?.tag:hasCurve?curve?.tag:undefined;
-    const helper=[load.stop==='before'?L.noLoad:showAnchor&&heaviest!==undefined?L.anchorHelper(rangeWords(heaviest.measure,heaviest.band)):'',unsettled>0?L.unsettled(unsettled,load.result.versions):''].filter(Boolean).join(' ');
-    return {...base,...(yours&&actions.undo!==undefined?{more:{label:E.undo,press:actions.undo}}:{}),focus:'chosen-stop',sentence:load.stop==='before'?L.before:L.loaded(LOAD_STOPS[load.stop],hasCurve&&curve!==undefined?rangeWords('main-cobb',curve.band):null),
+    const showAnchor=load.stop!=='before'&&(load.stop!=='rods-in'||!hasCurve),tag=load.stop==='before'||hideRanges?undefined:showAnchor?heaviest?.tag:hasCurve?curve?.tag:undefined;
+    const helper=hideRanges?L.didNotSettle(unsettled,load.result.versions):[load.stop==='before'?L.noLoad:showAnchor&&heaviest!==undefined?L.anchorHelper(rangeWords(heaviest.measure,heaviest.band)):'',unsettled>0?L.unsettled(unsettled,load.result.versions):''].filter(Boolean).join(' ');
+    return {...base,...(yours&&actions.undo!==undefined?{more:{label:E.undo,press:actions.undo}}:{}),focus:'chosen-stop',sentence:load.stop==='before'?L.before:hideRanges?L.tooFew:L.loaded(LOAD_STOPS[load.stop],hasCurve&&curve!==undefined?rangeWords('main-cobb',curve.band):null),
       ...(helper===''?{}:{helper:{kind:'words' as const,words:[helper]}}),
       ...(tag===undefined?{}:{small:ESTIMATE_TAGS[tag]}),
+      ...(actions.compare===undefined||limited?{}:{primary:{label:C.enter,press:actions.compare}}),
       stops:{chosen:load.stop,choose:(stop)=>{loadState.setState({stop});placeState.setState({pressed:null,hovered:null});}},quiet:{label:L.allEstimates,press:actions.estimates??actions.sheet}};
   }
-  return { ...base, ...(state.pressed!==null||state.keyboard?{}:{focus:'primary' as const}), sentence: yours?E.yours(layout.upper,layout.lower):W.placed(layout.upper, layout.lower), helper: { kind: 'words', words: [[!yours&&result.firstIsSketch ? W.sketch : '', countWords(result), load.phase==='stopped'?L.stopped:'', state.changed ? W.changed : ''].filter(Boolean).join(' ')] },
+  return { ...base, ...(state.pressed!==null||state.keyboard?{}:{focus:'primary' as const}), sentence: yours?E.yours(layout.upper,layout.lower):W.placed(layout.upper, layout.lower), helper: { kind: 'words', words: [[!yours&&result.firstIsSketch ? W.sketch : '', countWords(result), load.phase==='stopped'?L.stopped:'', state.ageChanged?A.changed:state.changed ? W.changed : ''].filter(Boolean).join(' ')] },
     ...(actions.load===undefined?{}:{primary:{label:L.load,press:actions.load,disabled:hand.busy!==null}}),
     more, views: { chosen: state.chosen, choose: actions.view, back: true },
     ...(yours&&actions.undo!==undefined?{quiet:{label:E.undo,press:actions.undo}}:items.length > 0 ? { quiet: { label: W.review(items.length), press: () => { actions.review(0); } } } : {}) };

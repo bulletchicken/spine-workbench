@@ -106,3 +106,30 @@
 .place-end-handles [data-rule-level] text { visibility: visible; }
 
 .place-end-handles .end-preview { stroke: var(--ink); stroke-width: var(--hairline); pointer-events: none; }
+
+.place-comparison { position: absolute; inset: 0; pointer-events: none; }
+.place-column { position: absolute; text-align: center; padding-inline: var(--space-8); font: var(--type-small); color: var(--ink-2); }
+.place-column h3 { font: var(--type-body-medium); color: var(--ink); margin-bottom: var(--space-8); }
+.place-column .load-range { margin-inline: auto; }
+.place-column small { display: block; font: var(--type-small); margin-top: var(--space-4); }
+.comparison-dots { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-2); max-width: 100%; margin: var(--space-8) auto; }
+.comparison-dots i { display: block; width: var(--space-4); height: var(--space-4); border-radius: 50%; border: var(--hairline) solid var(--ink); }
+.comparison-dots [data-outcome="lower"] { background: var(--ink); }
+.comparison-dots [data-outcome="tie"] { border: 0; border-radius: 0; background: linear-gradient(transparent calc(50% - var(--hairline) / 2), var(--ink) calc(50% - var(--hairline) / 2), var(--ink) calc(50% + var(--hairline) / 2), transparent calc(50% + var(--hairline) / 2)); }
+.seg.comparison-measures { --w: calc(var(--view-w) + var(--space-40)); --h: var(--space-40); flex-shrink: 0; }
+.dock:has(.scene.on .comparison-measures) { width: min(calc(100% - 2 * var(--space-16)), calc(var(--col-max) + var(--panel-w) + 2 * var(--space-40))); height: auto; min-height: var(--dock-h); padding-block: var(--space-12); }
+.dock:has(.scene.on .comparison-measures) .say { min-width: 0; }
+.place-age { border-bottom: var(--hairline) solid var(--line); padding-bottom: var(--space-16); display: flex; align-items: center; justify-content: space-between; gap: var(--space-12); margin-top: 0; margin-bottom: var(--space-16); font: var(--type-small); color: var(--ink-2); }
+.place-age select { font: var(--type-small); color: var(--ink); background: var(--track); padding: var(--space-8); border: var(--hairline) solid var(--line); border-radius: var(--r-small); }
+.place-source-links { display: flex; flex-wrap: wrap; gap: var(--space-4) var(--space-8); font: var(--type-small); color: var(--ink-2); margin-top: var(--space-8); }
+.place-source-links .link { font: inherit; display: block; text-align: start; margin-top: var(--space-4); }
+.place-source-links .button { padding: 0; height: auto; }
+.place-sources p { margin-top: var(--space-8); }
+@media (width <= 900px) {
+  .dock [data-scene="place"] > .comparison-measures { --w: calc((100% - 2 * var(--space-2)) / var(--options)); grid-template-columns: repeat(var(--options),minmax(0,1fr)); }
+  .dock [data-scene="place"].scene.on:has(.comparison-measures) { grid-template-columns: max-content max-content max-content 1fr max-content; }
+  .dock [data-scene="place"]:has(.comparison-measures) > .primary { grid-column: 5; }
+}
+
+/* Columns use the whole frame. The films return with the single placement. */
+[data-placement-comparison] .tiles, [data-placement-comparison] .tiles .tile, [data-placement-comparison] .tiles .tile * { visibility: hidden; pointer-events: none; }

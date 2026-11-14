@@ -8,7 +8,7 @@ import { MARK_WORDS } from './marks';
 import { ON_THIS_DEVICE_WORDS } from './on-this-device';
 import { PREVIEW_NOTICE } from './preview-notice';
 import { SHELL_WORDS } from './shell';
-import { PLACE_EDIT_WORDS, LEVEL_RULE_NAMES, PLACE_WORDS } from './place';
+import { PLACE_LOAD_WORDS, PLACE_COMPARE_WORDS, PLACE_AGE_WORDS, PLACE_SOURCE_WORDS, PLACE_EDIT_WORDS, LEVEL_RULE_NAMES, PLACE_WORDS } from './place';
 import { STAGE_WORDS } from './stage';
 
 const design = readFileSync(new URL('../../../DESIGN.md', import.meta.url), 'utf8');
@@ -57,6 +57,14 @@ describe('the system’s words', () => {
     const forms=[PLACE_EDIT_WORDS.yours('T4','L2'),PLACE_EDIT_WORDS.rules(5,7),PLACE_EDIT_WORDS.ruleAt('End vertebra plus one','L1',19,32),PLACE_EDIT_WORDS.ruleUnread('Shoulder level'),PLACE_EDIT_WORDS.rodOption('Cobalt chrome',5.5),PLACE_EDIT_WORDS.lengthSize(25),PLACE_WORDS.stage];
     for(const text of [...fixed,...Object.values(LEVEL_RULE_NAMES),...forms])expect(words,text).toContain(text);
   });
+
+  it('holds comparison, age and source words to section 8',()=>{
+    const fixed=[...Object.values(PLACE_COMPARE_WORDS),...Object.values(PLACE_AGE_WORDS),...Object.values(PLACE_SOURCE_WORDS)].flatMap((value)=>typeof value==='string'?[value]:typeof value==='object'?Object.values(value):[]);
+    const forms=[PLACE_COMPARE_WORDS.sentence(4,32),PLACE_COMPARE_WORDS.sentence(2,32),PLACE_COMPARE_WORDS.progress(3,8),PLACE_COMPARE_WORDS.lower(22,29),PLACE_COMPARE_WORDS.higher(22,29),PLACE_COMPARE_WORDS.clear(22),PLACE_AGE_WORDS.origin('girls of about 15 with scoliosis and matched controls'),PLACE_SOURCE_WORDS.sample('30 girls'),PLACE_SOURCE_WORDS.tables(1),PLACE_SOURCE_WORDS.tables(2),PLACE_COMPARE_WORDS.sentence(1,32)];
+    for(const text of [...fixed,...forms])expect(words,text).toContain(text);
+  });
+
+  it('holds the too-few-settled words to section 8',()=>{for(const text of [PLACE_LOAD_WORDS.tooFew,PLACE_LOAD_WORDS.tooFewColumn,PLACE_LOAD_WORDS.didNotSettle(14,32)])expect(words,text).toContain(text);});
 
   it('lists as waiting only words the document really lacks', () => {
     for (const text of NOT_IN_THE_DOCUMENT_YET) expect(words, text).not.toContain(text);

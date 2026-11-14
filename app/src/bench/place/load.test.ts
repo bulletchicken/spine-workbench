@@ -14,7 +14,7 @@ import { placementFixture } from './placement-fixture.scenes';
 import { limitsForPlacement } from './placement-view';
 import { placeState } from './place-state';
 import { loadFailure, loadPlacement, loadState, stopLoading } from './load-state';
-import { anchorPoint, drawingPoses, estimatesAt, loadLabels, rangeWords, rodsInDrawing, shownLoadStop, shownStopResult, variationWords } from './load-view';
+import { anchorPoint, drawingPoses, estimatesAt, loadLabels, rangeWords, rodsInDrawing, shownLoadStop, shownStopResult, variationWords,tooFewSettled,pastWords } from './load-view';
 let key=0;
 const band=(p50:number)=>({p10:p50-.1,p50,p90:p50+.1});
 function result(): BenchResult {
@@ -157,4 +157,16 @@ it('keeps daily stops and their parts off screen while preserving the full model
 it('retains daily variation words for the full model but omits them through the screen switch',()=>{
   for(const unknown of ['weight','steps','walking','contour-knock-down'] as const){expect(variationWords(unknown)).toBeNull();expect(variationWords(unknown,false)).toMatch(/^Varies most with:/);}
   expect(variationWords('geometry')).toBe('Varies most with: the fit.');expect(variationWords(null)).toBeNull();
+});
+
+it('withholds ranges strictly above a quarter, retaining the engine drawing and Before',()=>{
+ const answer=result(),layout=answer.layouts[0];if(layout===undefined)throw new Error('layout');
+ layout.versionsUnsettled=8;expect(tooFewSettled(answer)).toBe(false);expect(estimatesAt(answer,placementFixture(),MADE_UP_CASE.fit,'rods-in')).not.toHaveLength(0);
+ loadState.setState({phase:'loaded',result:answer,stop:'rods-in'});const actions={back:vi.fn(),retry:vi.fn(),review:vi.fn(),sheet:vi.fn(),view:vi.fn(),compare:vi.fn()};
+ expect(placeDock(placeState.getState(),actions).primary?.label).toBe('Compare placements');
+ layout.versionsUnsettled=9;expect(tooFewSettled(answer)).toBe(true);expect(estimatesAt(answer,placementFixture(),MADE_UP_CASE.fit,'rods-in')).toEqual([]);expect(loadLabels(answer,placementFixture(),MADE_UP_CASE.fit,'rods-in')).toEqual([]);
+ const part=layout.stops.find((s)=>s.stop==='rods-in')?.parts[0];if(part===undefined)throw new Error('part');expect(pastWords(part,answer)).toBeNull();
+ layout.versionsUnsettled=14;const dock=placeDock(placeState.getState(),actions);expect(dock).toMatchObject({sentence:'Too few versions settled to give ranges.',helper:{kind:'words',words:['14 of 32 versions did not settle.']}});expect(dock.primary).toBeUndefined();expect(dock.small).toBeUndefined();
+ const rodsIn=layout.stops.find((s)=>s.stop==='rods-in');if(rodsIn===undefined)throw new Error('stop');rodsIn.middle=answer.layouts[0]?.stops[0]?.middle??MADE_UP_CASE.fit.vertebrae.map((v)=>v.pose);rodsIn.rods=[{side:'left',pointsMm:[[0,0,10],[0,0,20]]}];expect(rodsInDrawing(answer,[],MADE_UP_CASE.fit)).toMatchObject({source:'middle',rods:rodsIn.rods});
+ loadState.setState({stop:'before'});expect(placeDock(placeState.getState(),actions).sentence).toBe(W.before);expect(placeDock(placeState.getState(),actions).primary).toBeUndefined();
 });

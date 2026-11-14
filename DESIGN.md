@@ -1059,7 +1059,7 @@ Shared parts are in `components.css`; the tables name the files that add behavio
 | Look | Thin glass, corner 10, padding 12 by 16, Small type, no wider than the panel. It is clamped inside the canvas, 14 right and 16 below the projected part |
 | Lines | Title: level, side of the front film and kind, rod, rod span or end. Level names use the mono face. One mono line gives the supplied diameter and length. Other sizes share a small proportional paragraph. A screw adds the wider-than-pedicle sentence only when its drawn diameter has a positive supplied count. A pedicle interval and its source need a width band |
 | After loading | A supplied demand range is followed by its strength-allowance words and Assumed, even without a past-allowance count. A positive count adds the sentence in ink, with a small look-coloured dot before it, the small explanation and the assumptions line. The typical-kyphosis sentence follows the pointed rod’s own target, only at Rods in and not Before. A rod or rod span’s chip attaches halfway along its drawn arc |
-| States | Pointing opens it; pressing or Enter keeps it open. Hidden during arrival and while the sheet is open. Escape or an outside press clears a kept selection. A kept pedicle adds Screw, Hook and None, plus diameter and length steppers for a screw. A kept rod or span adds only the sourced material/diameter pairs, applied to both rods. Controls use this same surface, with a hairline above and no nested glass. Set by hand replaces the table source and omits the other-size paragraph only when the engine marks the diameter or length as entered. Returning both to table status restores the source and other sizes |
+| States | Pointing opens it; pressing or Enter keeps it open. Hidden during arrival and while the sheet is open. Escape or an outside press clears a kept selection. A kept pedicle adds Screw, Hook and None, plus diameter and length steppers for a screw. An end chip cites only the rules for its own end. A kept rod or span adds only the sourced material/diameter pairs, applied to both rods. Controls use this same surface, with a hairline above and no nested glass. Set by hand replaces the table source and omits the other-size paragraph only when the engine marks the diameter or length as entered. Returning both to table status restores the source and other sizes |
 | Read aloud | The chip has `role="status"` and exposes its title and shown lines |
 | Classes and files | `.place-chip.glass`, `.num`, `.past-strength`, `.dot`, `.load-context`. `app/src/bench/place/place.css` sets the look; `app/src/bench/place/PlaceDrawing.tsx` supplies and positions it |
 
@@ -1092,7 +1092,7 @@ Shared parts are in `components.css`; the tables name the files that add behavio
 | | |
 |---|---|
 | For | Reading all looks, missing information and limits at every window width |
-| Content | What needs a look, with proportional review labels and only the vertebra name in mono. After loading, All estimates for the chosen stop. What these films cannot tell, one line per returned code. Other published diameters when supplied, to one decimal. About these numbers: table, population, bone, fit and naming limits with the placement; mechanical limits only after a completed load. Front-only and no-scale limits are conditional. The comparison limit stays out because comparing placements is not built. Daily-load limits stay out because daily stops are not shown as stops. The assumed-facing note is conditional; sizing and not-saved lines stay in the note |
+| Content | What needs a look, with proportional review labels and only the vertebra name in mono. After loading, All estimates for the chosen stop. What these films cannot tell, one line per returned code. Other published diameters when supplied, to one decimal. About these numbers: table, population, bone, fit and naming limits with the placement; mechanical limits only after a completed load. Front-only and no-scale limits are conditional. The comparison limit stays out of the single-placement sheet. Comparison columns carry their own paired reading. Daily-load limits stay out because daily stops are not shown as stops. The assumed-facing note is conditional; sizing and not-saved lines stay in the note |
 | Empty answer | The heading is What these films cannot tell. No reason line is invented when the engine supplied none |
 | States | More opens it; M opens it when a placement has arrived. Pressing an end or Enter on it opens Why here at the top: each readable rule for that end, its most frequent level and its count out of all versions; unread rules are named as unread. Ties lengthen the span. When a selective test holds in at least a fifth of versions, only the first pair’s rule names show and drag counts are withheld. Start again from the first placement appears after a hand change. Its heading takes focus, Tab stays inside and the stage is inert. Done, Escape, M or an outside press closes it and clears Why here, so the next opening starts in its ordinary section. Focus returns to the opening element when it remains present. Choosing a look closes the sheet and opens that review item |
 | Look | The dense existing panel sheet, with internal scrolling. Its own visible rule leaves 24 below it and caps it at the stage height less that gap. It does not borrow the 3D-only measurements visibility rule |
@@ -1104,7 +1104,7 @@ Shared parts are in `components.css`; the tables name the files that add behavio
 |---|---|
 | For | Keeping the sizing limit visible without crowding the dock's helper |
 | Look | "Sized from published tables, not from this spine's bone." Centred Small type in `--ink-2`, one line, 12 above the real dock |
-| States | Shown once a placement has arrived, including review. Hidden during placement work, no-placement, placement refusal and failure. Loading, a load fault and Loaded keep it. It follows dock height and window changes |
+| States | Shown once a placement has arrived, including review and comparison. Hidden during placement work, no-placement, placement refusal and failure. Loading, a load fault and Loaded keep it. It follows dock height and window changes |
 | Classes and files | `.place-caption` in `app/src/bench/place/place.css`; `app/src/bench/place/PlacementCaption.tsx` measures its place |
 
 #### Placement under load. Settled
@@ -1116,6 +1116,7 @@ Shared parts are in `components.css`; the tables name the files that add behavio
 | Stop | Drops every partial batch, ignores a late reply and returns to Placed. The helper adds "Stopped. Nothing was kept." Leaving Place turns a running load into Stopped too; its stopped helper remains on return |
 | Failure | Temporary faults say "It did not finish. Nothing was changed." with Try again and Back to the placement. A refusal has Back to the placement without a retry. A fit missing any T1 to L5 gets the specific refusal; only standard names add the add-film helper. The placement remains. Leaving Place clears a load fault or refusal, so returning shows Placed without that failure |
 | Complete | Opens Rods in. The returned result and chosen stop remain with the unchanged placement, including leaving and returning to Place. A changed placement clears them. Review counts still describe the placement, not the run |
+| Settling threshold | One rule, MAX_UNSETTLED_SHARE = 0.25: when a placement's LayoutResult.versionsUnsettled is strictly greater than a quarter of BenchResult.versions, its load ranges are withheld. At 8 of 32 the ordinary ranges and less-sure line remain; at 9 of 32 they are withheld. The Rods in dock says Too few versions settled to give ranges. and the plain count, with no estimate tag. No range labels, load ink, ghosts or past-allowance rings/counts are shown. Parts keep their placement ink. The engine's Rods in spine and seated rods still draw; Before is unchanged. Compare placements is absent for this baseline |
 | Dock | Leads with the stop and main-curve range when there is a main curve; otherwise the stop alone. Before says the spine is as fitted and no load is present. Rods in uses the curve’s tag, or the heaviest-anchor range and tag when no main curve exists. An unsettled-version count follows when present |
 | Classes and files | `.scene[data-scene="place"]`, `.say`, `.meter`, `.num`, `.dock-small` in `app/src/guide/Dock.tsx` and `app/src/bench/place/place.css`; `app/src/bench/place/load-state.ts` manages the run, `app/src/bench/place/place-dock.ts` writes its states |
 
@@ -1135,8 +1136,8 @@ Shared parts are in `components.css`; the tables name the files that add behavio
 |---|---|
 | For | Showing a returned Rods in drawing without changing the fit or its measurements |
 | Drawing | Use the supplied middle poses and seated rods when present. Otherwise use the settled version whose Rods in main curve is nearest the supplied middle, ties by version order. With no main-curve value to be nearest to, use the first settled version instead. Its rods follow the riding heads. Only when none settled, keep the fitted spine. The sheet distinguishes nearest-middle, first-settled and fitted fallbacks |
-| Ghosts | Up to two returned Rods in pose sets, in flat ink at 12%, with no shadow or pointer hits. They reuse the fitted bone shapes. Hidden at Before; they appear after the pose move |
-| Load ink | Each anchor or rod span uses its supplied share’s middle directly, clamped from zero to one. Strength is 25% plus 75% of that share; there is no scaling within a stop. Empty places retain 80% ink |
+| Ghosts | Only while ranges may be shown. Up to two returned Rods in pose sets, in flat ink at 12%, with no shadow or pointer hits. They reuse the fitted bone shapes. Hidden at Before; they appear after the pose move |
+| Load ink | Only while ranges may be shown. Each anchor or rod span uses its supplied share’s middle directly, clamped from zero to one. Strength is 25% plus 75% of that share; there is no scaling within a stop. Empty places retain 80% ink |
 | Classes and files | No separate DOM class. `app/src/bench/place/load-drawing.ts` moves drawing poses and adds flat spines; `app/src/bench/place/draw-placement.ts` draws rods and changes ink. `app/src/spine-3d/README.md` records the shared flat-spine contract |
 
 #### Load range label and bar. Settled
@@ -1146,7 +1147,7 @@ Shared parts are in `components.css`; the tables name the files that add behavio
 | For | Keeping a supplied range beside the place it describes |
 | Which | Main curve at the model’s apex, or the most frequent apex of the placement’s most frequent main curve when the model names none. Kyphosis at T5 only when it is measured and T5 is drawn. The anchor with the largest own demand middle at Rods in; ties keep placement order. Its range is distinct from the ensemble-wide heaviest-anchor estimate in the sheet |
 | Look | Small type and second ink, mono range, a 64 by 12 bar and a tag. The bar uses the engine’s measure scale, the middle eight in ten as its heavy line, and the middle as a tick. No scale means no bar. Label boxes are 208 by 104, aiming for 24 clearance from the bone bounds and clamped at the canvas edge; the main curve goes left, kyphosis and anchor go right, separated vertically |
-| States | Hidden at Before and below 900. Opening the sheet hides the projected labels. A chip that overlaps a label hides its whole box and leader until clear or closed |
+| States | Hidden at Before and below 900. Opening the sheet hides the projected labels. A result above the settling threshold has no projected range labels. A chip that overlaps a label hides its whole box and leader until clear or closed |
 | Classes and files | `.load-label-group`, `.load-label`, `.load-leader`, `.load-range`, `.scale`, `.band`, `.middle` in `app/src/bench/place/place.css`; `app/src/bench/place/PlaceDrawing.tsx` places labels, `app/src/bench/place/LoadEstimates.tsx` draws the bar, `app/src/bench/place/load-view.ts` selects supplied readings |
 
 #### All estimates. Settled
@@ -1154,14 +1155,35 @@ Shared parts are in `components.css`; the tables name the files that add behavio
 | | |
 |---|---|
 | For | Reading the shown stop’s supplied estimates and limits without crowding the stage |
-| Content | Estimate name, outward-rounded range, bar, tag and the main source of variation when supplied. Unsettled-version and stiff-rod counts when positive. Parts past their allowance, each named proportionally with only vertebra names in mono, and its ink sentence, look-coloured dot, explanation and assumptions. No load numbers at Before. No main curve, typical kyphosis or unmeasured twist is replaced by a number |
+| Content | Estimate name, outward-rounded range, bar, tag and the main source of variation when supplied. Unsettled-version and stiff-rod counts when positive. Parts past their allowance, each named proportionally with only vertebra names in mono, and its ink sentence, look-coloured dot, explanation and assumptions. Above the settling threshold the list is replaced by Too few versions settled to give ranges. and the plain failed-version count; allowance counts are omitted and notes stay. No load numbers at Before. No main curve, typical kyphosis or unmeasured twist is replaced by a number |
 | Notes | The middle-eight-in-ten line, model-curve definition and fallback when needed. Missing kyphosis and twist are said as words. The strength allowance is explained. The daily-load sentence explains why no separate daily stops are shown. The trunk-balance sentence and adjacent-level sentence state what the model does not work out |
 | States | All estimates opens the Place sheet, scrolls its estimate heading into view and focuses it. Other sheet controls, dismissal and the Tab boundary stay the same |
 | Classes and files | `.load-estimates`, `.load-estimate-list`, `.load-context`, `.panel-note`, `.num` in `app/src/bench/place/LoadEstimates.tsx` and `app/src/bench/place/place.css` |
 
-#### Later Place work. Decided, being built
+#### Comparing placements. Settled
 
-Comparing placements and questions about age, weight and steps are not built.
+| | |
+|---|---|
+| For | Reading paired differences against the placement that stood on the stage when Compare placements was pressed |
+| Baseline | The first column is The first placement or Yours. Its placement and single-placement load result remain untouched. Leaving Comparing by any path restores full bone strength and the fitted poses before the next screen takes over. Other columns use the engine's one-step changes from the original proposals. Identical hardware is omitted, ignoring ids, evidence metadata and the standing line used only for drawing. Rod identity includes the contoured points, overbend, head offset and coronal line read by the bench |
+| Runs | Every other placement is loaded alone, in covering slices from version zero, with the baseline's fit, child facts, seed and versions. compare-layouts receives the baseline first and only fully finished placements with all their batches. Its separate result supplies comparison scales. Stop keeps completed placements and discards an incomplete one. Done or leaving while running discards the comparison; only a completed or explicitly stopped result is cached for the same fit, age and stage placement. The three temporary engine faults offer Try again; other refusals are dropped |
+| Columns | Four including the baseline at 1280 and wider; two below 1280, with Earlier and More placements paging the others. Shared bone buffers are drawn through addSpine, inColumns and columnOf. All columns start in Back and turn together. The film rail hides, linked highlights clear, and the columns use the whole frame with the baseline first; Done restores the rail. Bone strength is 55%; hardware changed from the baseline is full ink and shared hardware is 40%, matching anchors by level and side |
+| Reading | Names come from the engine's LayoutChange. Main curve and Heaviest anchor both read Rods in; without a main curve only Heaviest anchor is offered. The baseline's range and bar arrive after all retained placements finish. Each other column reads PairedCount outcomes in its order, one dot per paired settled measured version: 4-pixel dots with 2-pixel gaps: filled lower, hollow higher, dash tie. Its denominator is order.length. Lower or Higher needs the supplied clearAt, otherwise No clear difference; the clear line repeats clearAt. A finished column above the settling threshold keeps its spine and name but replaces dots, verdict and clear line with Too few versions settled. Missing counts say Not measured for this placement |
+| Dock | The count is the columns on show and versions is supplied by the engine. The threshold helper accompanies the meter during work and the finished comparison. Yours adds the explanation that the names describe changes from the first. Done returns to Loaded unchanged; no placement can be adopted |
+| Space | Columns reserve 156 below their cells for names, dots and verdicts, above the real dock. The minimum footer reserve is 164. Cells have a 24 gap. Labels use Small type, proportional words and mono digits. They share the stage without cards or extra glass |
+| Files | comparison-state.ts, comparison-view.ts, ComparisonDrawing.tsx and place.css under app/src/bench/place; Dock's comparison-measures control |
+
+#### Age and sources. Settled
+
+| | |
+|---|---|
+| Age | A quiet native Age select is the sheet’s first row, above its first heading and separated by a hairline beneath: Not known, then 5 through 18. A change re-proposes with that age and clears all hand choices, undo, load and comparison results. A six-second notice after arrival says that age changed the placement. A reopened or new case starts at Not known. Weight and steps remain not given, with no questions |
+| Pedicle origin | A width-bearing pedicle uses the population of a ledger entry whose source key the engine names for its pedicle, choosing the first matching outer-width table entry in the ledger rather than a different kind of table fed by that key. With no named table the fallback is from tables for teenagers: no age was given, from tables for teenagers at 12 or more, and only from published tables under 12. No population is claimed for a missing ledger entry. No population or number is invented for a missing width. The screen never calculates a size from age |
+| Sources | The last part of the sheet lists each source key once per engine family, behind onstage pedicle tables, directions, strengths, estimates and rules. Layout and rebuild numbers match place-layout- or place-rule- entries; load-bench numbers match place-bench- entries. An expandable table-entry list retains every matching record, including differing recorded sample sizes. One population helper isolates the current key’s own segment and removes keys, bracketed tags and embedded Sample suffixes in both sheet and chip. Uncitable kinds are capitalised, appear after the papers and offer no action. Each holds the ledger citation, population and reading only when supplied; sampleSize belongs to the entry’s first keyed source and is shown only for that source. Reading says Full text, Abstract or Secondary source on record; any unchecked cited entry is marked Not yet checked against the paper. The five keys without an entry are shown by their recorded kind—project assumption, guideline page or summary of papers—with no control to open. There is no inferred key match from a title |
+| Links | Part chips and All estimates rows name their own sources in Small type, using the cited first author and year where present. Pressing opens the same sheet at Sources; the full citation remains there. There is no second glass surface |
+| Files | PlaceAge.tsx, PlaceSources.tsx and placement-sources.ts under app/src/bench/place; exact matching is isolated from ledger storage |
+
+Adopting a compared placement is not built. Weight and steps questions are deliberately absent because nothing shown depends on them.
 
 ## 7. Motion, scene by scene
 
@@ -1334,6 +1356,16 @@ The way in is "Place screws and rods" after the 3D arrival has ended. The same s
 | The trust note opens | It drops 6 and grows from 0.985 over 280, from its top right corner. It closes over 140 |
 | Save case is busy | Its ring turns once per 1100 until saving ends; reduced motion leaves it still |
 | A toast shows or hides | Fades and moves 16 over 240; reduced motion makes the transition 1. It stays for 4600, paused under the pointer or focus |
+
+### Comparing placements
+
+| When | What happens |
+|---|---|
+| Compare placements | The baseline shrinks into its first cell as the other columns fade up over 640. A single stage view turns every column together |
+| Done or Escape | The other columns fade away as the baseline returns over 640, then its original Loaded drawing and view resume |
+| Paging | Only the new columns fade over 640; the baseline and shared turn stay put |
+| Resize | Cells refit without replaying the opening move. The page resets only when columns per page changes |
+| Reduced motion | Column positions jump; only opacity changes |
 
 ## 8. Words
 
@@ -1839,6 +1871,9 @@ The tables cover Films, Find, 3D, the first placement and its load calculation. 
 | Loaded sentence, main curve | Rods in: the main curve is 18° to 27°. |
 | Loaded sentence, no main curve | Rods in. |
 | Loaded helper without a main curve | Heaviest anchor: 41% to 67% of its strength allowance. |
+| Too few, dock and sheet | Too few versions settled to give ranges. |
+| Too few, comparison column | Too few versions settled. |
+| Too few, failed-version count | 14 of 32 versions did not settle. |
 | Unsettled versions, out of all | 3 of 32 versions did not settle, so every range here is less sure. |
 | Run count, all settled | 5 of 32 versions |
 | Run count, some unsettled | 5 of the 29 versions that settled |
@@ -1916,7 +1951,7 @@ While any film's facing is assumed, no screen names the patient's left or right.
 | Sizes | Diameter to one decimal. Length to tenths without a trailing .0. A screw has one mono diameter-by-length line; a rod has its diameter. Other sizes share one proportional paragraph, without invented counts |
 | Pedicle interval | Lower end down and upper end up to tenths of a millimetre. Add the source only with a supplied width band. A may-be-too-narrow look with no width becomes the no-table sentence |
 | What cannot be told | Print each of the fourteen reason codes once when it arrives. Only ends-unsettled and twist-not-measured append their supplied levels. A missing reason is not supplied by the screen |
-| Limits | Table, population, bone, fit and naming limits appear with the placement. Mechanical limits need a completed load. Front-only and no-scale limits are conditional. The comparison limit stays out because comparing placements is not built. Daily-load limits stay out because daily stops are not shown as stops |
+| Limits | Table, population, bone, fit and naming limits appear with the placement. Mechanical limits need a completed load. Front-only and no-scale limits are conditional. The comparison limit stays out of the single-placement sheet. Comparison columns carry their own paired reading. Daily-load limits stay out because daily stops are not shown as stops |
 
 ### How Place writes a load estimate
 
@@ -1940,13 +1975,71 @@ While any film's facing is assumed, no screen names the patient's left or right.
 | Sources of variation | The sheet adds the named source only when supplied. Because daily stops are not shown as stops, it leaves out the four daily-load sources, even when returned. It does not rank sources or supply a missing one |
 | Counts | Placement counts and the count that did not settle are out of all versions. Past-allowance and stiff-rod run counts are out of those that settled; use the two forms in the words table |
 
+### Comparing placements, age and sources
+
+The examples below use engine-supplied counts, population and sample text.
+
+| Words and forms |
+|---|
+| Compare placements |
+| Done |
+| Earlier |
+| More placements |
+| Stop |
+| Comparison measure |
+| Main curve |
+| Heaviest anchor |
+| The first placement |
+| Yours |
+| Fewer screws |
+| Stiffer rods |
+| Softer rods |
+| Hooks at the top |
+| Starts one level higher |
+| Starts one level lower |
+| Ends one level higher |
+| Ends one level lower |
+| A difference is clear at three quarters of the versions or more. |
+| Each name says how that placement differs from the first one. |
+| Against the first placement. |
+| Against your placement. |
+| No clear difference |
+| Not measured for this placement. |
+| Working out this placement… |
+| The comparison did not finish. |
+| Age |
+| Not known |
+| The age changed, so the placement was worked out again. |
+| from tables for teenagers |
+| from published tables |
+| Sources |
+| Full text on record |
+| Abstract on record |
+| Secondary source on record |
+| Not yet checked against the paper. |
+| Also 5.0 mm wide and 35 mm long in some versions or by another published share. |
+| Four placements, on the same 32 versions. |
+| Two placements, on the same 32 versions. |
+| 3 of 8 placements |
+| Lower in 22 of 29 versions |
+| Higher in 22 of 29 versions |
+| clear at 22 |
+| from a table of girls of about 15 with scoliosis and matched controls |
+| Sample: 30 girls |
+| 1 table entry |
+| 2 table entries |
+| One placement, on the same 32 versions. |
+| The project's own assumption |
+| A guideline page |
+| The project's summary of several papers |
+
 ## 9. Accessibility
 
 | Subject | Rule | Where it stands |
 |---|---|---|
 | Contrast | Reading text is 4.5 to 1 or more. Rings, lines and marks that carry meaning are 3 to 1 or more | Text on the page and on glass passes: the weakest is `--ink-2` on the view control's track with the glow behind the dock, 5.7. The focus ring is 3.9 on white and 3.4 on the glow. Without a casing, names and outlines on film fail on the sample films. With their built casings, they pass on the measured sample films: see Marks on film, below |
 | Colour alone | A state is never shown by colour alone | Needs a look: amber, and the dock names the vertebrae. Each such outline also says "needs a look" when read aloud. Pointed at: blue, with its name beside it on the large films and in the chip on the spine. Current step: the thumb, the darker word, and `aria-current`. Disabled: faint, and the `disabled` attribute |
-| Keyboard order | Follow the mounted parts | Steps that can be pressed, Save case when shown, trust badge, then the stage and dock. Films has four place buttons in film order. Side radios and review buttons take native focus. In 3D the measurement rows and Start over precede rail-film buttons and dock views; that stage takes no focus. In Place the stage takes focus before the dock; rail films are pictures. An open Place sheet keeps Tab inside |
+| Keyboard order | Follow the mounted parts | Steps that can be pressed, Save case when shown, trust badge, then the stage and dock. Films has four place buttons in film order. Side radios and review buttons take native focus. In 3D the measurement rows and Start over precede rail-film buttons and dock views; that stage takes no focus. In Place the stage takes focus before the dock; rail films are pictures and hide during placement comparison. An open Place sheet keeps Tab inside |
 | Saving focus | Keep the button while its press is carried out | Busy uses `aria-busy` and `aria-disabled`, without native `disabled`, so Save case keeps its focus and size and ignores further presses. Its ring stands still under reduced motion |
 | Toast announcements | Say what changed without taking focus | A separate status line speaks the current toast. Save and reopen confirmations have no focusable action |
 | Enter | Presses the dock's primary button | From anywhere that is not itself a control |
@@ -1994,6 +2087,8 @@ While any film's facing is assumed, no screen names the patient's left or right.
 | Keyboard and the outlines | An outline on film can be pointed at, but not reached by keyboard |
 | Leaving a review by pointer | Escape leaves a review. A pointer can only finish it or go back to Films. See Review card in section 6 |
 | Touch | Targets under 44 have not been tried on a touch screen |
+
+Comparison uses the same single stage stop and native dock measure control. Column dots are decorative; their verdict and clear line give the paired reading as text. Escape returns to Loaded. Age is a labelled native select inside the sheet's Tab boundary; source links focus the Sources heading. On return the chosen load stop takes focus.
 
 ## 10. What would make it look cheap
 
@@ -2043,6 +2138,15 @@ grep -nE '#[0-9a-fA-F]{3,8}\b|rgba?\(|[0-9.]+(px|ms|em|rem|vw|vh)\b' app/src/loo
 - Open the app as well. Go through the four moments at 1440 by 900, 1100 by 760, 700 by 900 and 640 by 800, the four window sizes section 5 gives sizes for, with this document open beside it.
 
 ## 12. Decisions log
+
+- **14 November 2026 — Withhold load ranges when more than a quarter did not settle.** Almost half the versions can otherwise be discarded while a narrow range remains on screen. The versions that fail may not form a fair sample, so the result keeps its engine drawing and plain count but gives no ranges, load ink, ghosts or allowance counts. A quarter or fewer keeps the existing display.
+
+
+- **14 November 2026 — Comparing has no film rail; Age has its own row.** The columns need the whole frame rather than crowding the baseline against films they do not use. Age sits above the first sheet heading with a hairline beneath, because it is not one of the looks.
+- **14 November 2026 — Compare against what stands on the stage.** The first or hand-changed placement stays the baseline, with a separate comparison result so returning preserves its original scales and ink. A compared placement cannot be moved onto the stage.
+- **14 November 2026 — Paired dots keep the engine's order and threshold.** Only paired settled measured versions enter each denominator; a tie and a missing count remain distinct.
+- **14 November 2026 — Age picks tables; sources name their evidence.** Age starts unknown and re-proposes rather than keeping edits from an old input. Source keys and engine-family prefixes match the ledger explicitly, without manufacturing population, sample or reading metadata. Weight and steps stay unknown because neither changes Before or Rods in.
+
 
 - **14 November 2026 — End choices use the film’s level order.** T1 to L5 bounds apply to the declared naming template, including missing T12 and an extra T13. Dragging, keyboard moves, review choices and rebuild filtering share this order and their refusal reasons.
 - **14 November 2026 — Undo keeps what was sent.** Shortening a span drops its outside hand choices; expansion follows the engine’s pattern, while undo restores the earlier explicit choices.

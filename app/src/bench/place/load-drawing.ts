@@ -10,14 +10,14 @@ import { FORMATION } from '@/spine-3d/scene/look';
 import type { DrawnSpine } from '@/spine-3d/scene/drawn-spine';
 import type { DrawnPlacement } from './draw-placement';
 import { loadState } from './load-state';
-import { drawingPoses, rodsInDrawing, stopResult, shownLoadStop, shownStopResult } from './load-view';
+import { drawingPoses, rodsInDrawing, stopResult, shownLoadStop, shownStopResult,tooFewSettled } from './load-view';
 export const LOAD_DRAWING = { moveMs: 600, ghostStrength: .12, labelGapPx: 24, rangeWidthPx: 64 } as const;
 /** Drives only drawing poses. It never changes the fit or any estimate. */
 export function useLoadDrawing(accepted: AcceptedSpine, handle: RefObject<Spine3DHandle|null>, drawn: RefObject<DrawnPlacement|null>, surface: RefObject<HTMLElement|null>) {
   const load=useStore(loadState), poses=useRef(drawingPoses(accepted.fit,null)), ghosts=useRef<DrawnSpine[]>([]), moving=useRef(false);
   useLayoutEffect(()=>{
     const stage=handle.current?.stage(),spine=handle.current?.spine();
-    if(stage==null||spine==null||load.result===null)return;
+    if(stage==null||spine==null||load.result===null||tooFewSettled(load.result))return;
     ghosts.current=(stopResult(load.result,'rods-in')?.ghosts??[]).slice(0,2).flatMap((at)=>{
       const ghost=handle.current?.addFlatSpine();if(ghost==null)return[];ghost.setSpine({flatColour:FORMATION.ink,strength:0,shadow:0});ghost.betweenPoses(drawingPoses(accepted.fit,null),drawingPoses(accepted.fit,at),1);return [ghost];
     });
@@ -32,7 +32,7 @@ export function useLoadDrawing(accepted: AcceptedSpine, handle: RefObject<Spine3
     const shapeChange=from.some((p,i)=>JSON.stringify(p.centre)!==JSON.stringify(target[i]?.centre)||JSON.stringify(p.rotation)!==JSON.stringify(target[i]?.rotation));
     const reduced=window.matchMedia(SYSTEM_ASKS_FOR_REDUCED).matches||part.closest('[data-motion="reduced"]')!==null;
     const fade=durationOf(part,'--dur-appear'),travel=reduced?0:shapeChange?LOAD_DRAWING.moveMs:0,curve=curveOf(part,'--ease-settle');
-    const parts=loaded&&!before?shownStopResult(load.result,load.stop)?.parts??[]:null;
+    const parts=loaded&&!before&&!tooFewSettled(load.result)?shownStopResult(load.result,load.stop)?.parts??[]:null;
     // Create seated spans before taking their current ink strengths.
     hardware.poses(from,loaded&&!before&&drawing?.source!=='fit',drawing?.rods??null,drawing?.poses,before&&shapeChange);
     const ink=hardware.loadTo(parts),ghostFrom=ghosts.current.map((g)=>g.spineValues().strength);

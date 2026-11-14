@@ -43,7 +43,7 @@ const MOST_DEVICE_PIXELS = 2;
 export interface Stage {
   /** Stand a spine on the stage. Any number may share one model. */
   addSpine(model: SpineModel, options?: { shapesFrom?: DrawnSpine; flat?: boolean }): DrawnSpine;
-  inColumns(spines: readonly DrawnSpine[], options: { gapPx: number; footPx: number }): void;
+  inColumns(spines: readonly DrawnSpine[], options: { gapPx: number; footPx: number; progress?:number }): void;
   columnOf(spine: DrawnSpine): Column | null;
   /** Stand a film in the space of the bones, from its own camera, with its picture if there is one yet. */
   hangFilm(name: FilmName, camera: FilmCamera, pixels?: FilmPixels | null): FilmWall;
@@ -102,7 +102,7 @@ export function makeStage(canvas: HTMLCanvasElement): Stage {
 
   const spines: { inside: DrawnSpineInside; shadow: ContactShadow }[] = [];
   let columns: readonly DrawnSpine[] = [];
-  let columnOptions = { gapPx: 0, footPx: 0 };
+  let columnOptions: {gapPx:number;footPx:number;progress?:number} = { gapPx: 0, footPx: 0 };
   let depthTarget: WebGLRenderTarget | null = null;
   const walls = new Map<FilmName, FilmWallInside>();
   const listeners = new Set<() => void>();
@@ -171,7 +171,10 @@ export function makeStage(canvas: HTMLCanvasElement): Stage {
 
   const cellOf = (spine: DrawnSpine): Column | null => {
     const index = columns.indexOf(spine);
-    return index < 0 || !spines.some(({ inside }) => inside.spine === spine) ? null : columnCells(size, columns.length, columnOptions.gapPx, columnOptions.footPx)[index] ?? null;
+    const cell=index < 0 || !spines.some(({ inside }) => inside.spine === spine) ? null : columnCells(size, columns.length, columnOptions.gapPx, columnOptions.footPx)[index] ?? null;
+    if(cell===null||index!==0)return cell;
+    const p=columnOptions.progress??1;
+    return {left:cell.left*p,right:size.width+(cell.right-size.width)*p,top:cell.top*p,bottom:size.height+(cell.bottom-size.height)*p};
   };
   const viewOf = (inside: DrawnSpineInside): View => {
     const primary = inside.flat && columns.length > 0 ? spines.find((entry) => entry.inside.spine === columns[0])?.inside : undefined;
