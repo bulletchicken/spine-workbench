@@ -19,7 +19,7 @@ const words = design.split('## 8. Words')[1]?.split('## 9.')[0] ?? '';
  * document takes it at its next copy, and then it must come off this list:
  * the last test here fails when the document has caught up.
  */
-const NOT_IN_THE_DOCUMENT_YET: readonly string[] = [FIND_WORDS.aboutFifteenSeconds];
+const NOT_IN_THE_DOCUMENT_YET: readonly string[] = [];
 
 describe('the system’s words', () => {
   it('holds the Films, Find, reading, failed and engine scenes to section 8, to the letter', () => {

@@ -1128,13 +1128,13 @@ The tables cover Films, Find and 3D as built. Each String cell is a whole string
 | Trust badge and note name | On this device only |
 | Trust note | Your films never leave this computer. |
 | Trust note, under the first line | A saved case holds your films. It stays on this device unless you move it. |
-| Trust note, followed by the live count | Requests sent: |
+| Trust note, with the live count; shown here at zero | Requests sent: 0 |
 | Trust note credit | Bone shapes: BodyParts3D, © The Database Center for Life Science licensed under CC Attribution 4.0 International. |
 | Trust note, one blocked attempt | The browser blocked 1 attempt to reach outside the app. Nothing was sent. |
 | Trust note, several blocked attempts | The browser blocked 2 attempts to reach outside the app. Nothing was sent. |
 | Notice at every moment | A preview with error bands, not a prediction. Not a medical device. |
 | Engine failed, helper | Reload the page to try again. |
-| Engine failed title, one example; dock adds a full stop | The engine could not start |
+| Engine failed, in the dock: the failing fault's title with a full stop; one example | The engine could not start. |
 | Bar, quiet action | Save case |
 | Toast, completed native write | Case saved. |
 | Toast, download handoff | Case sent to your downloads. |
