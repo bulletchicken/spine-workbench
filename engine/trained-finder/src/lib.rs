@@ -40,6 +40,7 @@ pub mod outline;
 pub mod overlap;
 pub mod reading;
 pub mod run;
+pub mod side;
 pub mod spine_net;
 pub mod to_marks;
 pub mod watch;

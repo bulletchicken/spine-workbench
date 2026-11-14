@@ -19,6 +19,9 @@ use crate::grid::Grid;
 use shapes::errors::{EngineError, ErrorCode};
 use std::ops::Range;
 
+mod packing;
+pub use packing::ConvPacking;
+
 /// Output channels are worked out this many at a time; every convolution
 /// in both networks has a multiple of it.
 pub const BLOCK: usize = 8;

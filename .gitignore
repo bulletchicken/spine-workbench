@@ -2,6 +2,7 @@
 local-only/
 app/src/sample-films/on-this-machine/
 app/films-on-this-machine/
+/engine/trained-finder/weights/on-this-machine/
 
 # Installed packages and build output
 node_modules/

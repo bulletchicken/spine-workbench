@@ -138,7 +138,7 @@ pub fn thumbnail(film: &DecodedFilm, max_side: u32) -> Result<Vec<u8>, EngineErr
 /// film turned back so bone stays bright. The user's own flip is left to
 /// the caller. The thumbnail and [`crate::eight_bit`] both read a film
 /// through this, so the slot preview and the finder see the same levels.
-pub(crate) fn opening_view(film: &DecodedFilm) -> impl Fn(f64) -> f64 + '_ {
+pub fn opening_view(film: &DecodedFilm) -> impl Fn(f64) -> f64 + '_ {
     let window = if matches!(
         &film.facts.default_window,
         DisplayWindow::CentreWidth {
