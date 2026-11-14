@@ -84,7 +84,7 @@ pub fn diameter_grid() -> Vec<GridSize> {
 }
 
 /// This project's length grid inference: retain the catalogue entries in
-/// SYNTHESIS's chosen span, including the intermediate lengths. These
+/// the chosen span, including the intermediate lengths. These
 /// selected coordinates read their sizes from the source, never from the
 /// coordinate spelling. Longer catalogue entries remain evidence only.
 pub fn length_grid() -> Vec<GridSize> {

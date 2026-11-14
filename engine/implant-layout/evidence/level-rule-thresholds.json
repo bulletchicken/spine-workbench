@@ -11,7 +11,7 @@
       },
       "unit": "degrees",
       "source": "ao-lenke",
-      "section": "fusion-levels.md §1 and table B",
+      "section": "not recorded",
       "qualifier": "Greater than or equal to; guideline secondary statement, original JBJS table not opened."
     },
     {
@@ -25,7 +25,7 @@
       },
       "unit": "degrees",
       "source": "ao-lenke",
-      "section": "fusion-levels.md §1 and table B",
+      "section": "not recorded",
       "qualifier": "Greater than or equal to; guideline secondary statement, original JBJS table not opened."
     },
     {
@@ -39,7 +39,7 @@
       },
       "unit": "degrees",
       "source": "ao-lenke",
-      "section": "fusion-levels.md §1 and table B",
+      "section": "not recorded",
       "qualifier": "Greater than or equal to; guideline secondary statement, original JBJS table not opened."
     },
     {
@@ -53,7 +53,7 @@
       },
       "unit": "degrees",
       "source": "lenke-2001",
-      "section": "fusion-levels.md §1 and table B",
+      "section": "abstract",
       "qualifier": "T5–T12 normal band includes endpoints."
     },
     {
@@ -67,7 +67,7 @@
       },
       "unit": "degrees",
       "source": "lenke-2001",
-      "section": "fusion-levels.md §1 and table B",
+      "section": "abstract",
       "qualifier": "T5–T12 normal band includes endpoints."
     },
     {
@@ -81,7 +81,7 @@
       },
       "unit": "ratio",
       "source": "korean-level-review",
-      "section": "fusion-levels.md §4 and table B",
+      "section": "Table 1 for the selective thoracic criteria, Table 2 for the selective lumbar criteria; ratio thresholds in the review text",
       "qualifier": "Strictly greater than; review citing Lenke 2003, ratio absent from primary abstract."
     },
     {
@@ -95,7 +95,7 @@
       },
       "unit": "ratio",
       "source": "korean-level-review",
-      "section": "fusion-levels.md §4 and table B",
+      "section": "Table 1 for the selective thoracic criteria, Table 2 for the selective lumbar criteria; ratio thresholds in the review text",
       "qualifier": "Strictly greater than; review citing Lenke 2003, ratio absent from primary abstract."
     },
     {
@@ -109,7 +109,7 @@
       },
       "unit": "ratio",
       "source": "korean-level-review",
-      "section": "fusion-levels.md §4 and table B",
+      "section": "Table 1 for the selective thoracic criteria, Table 2 for the selective lumbar criteria; ratio thresholds in the review text",
       "qualifier": "Strictly greater than; review citing Lenke 2003, ratio absent from primary abstract."
     },
     {
@@ -123,7 +123,7 @@
       },
       "unit": "degrees",
       "source": "korean-level-review",
-      "section": "fusion-levels.md §4 and table B",
+      "section": "Table 1 for the selective thoracic criteria, Table 2 for the selective lumbar criteria; ratio thresholds in the review text",
       "qualifier": "Strictly less than."
     },
     {
@@ -137,7 +137,7 @@
       },
       "unit": "degrees",
       "source": "korean-level-review",
-      "section": "fusion-levels.md §4 and table B",
+      "section": "Table 1 for the selective thoracic criteria, Table 2 for the selective lumbar criteria; ratio thresholds in the review text",
       "qualifier": "Strictly less than."
     },
     {
@@ -151,7 +151,7 @@
       },
       "unit": "degrees",
       "source": "korean-level-review",
-      "section": "fusion-levels.md §4 and table B",
+      "section": "Table 1 for the selective thoracic criteria, Table 2 for the selective lumbar criteria; ratio thresholds in the review text",
       "qualifier": "Strictly less than."
     },
     {
@@ -165,7 +165,7 @@
       },
       "unit": "ratio",
       "source": "korean-level-review",
-      "section": "fusion-levels.md §4 and table B",
+      "section": "Table 1 for the selective thoracic criteria, Table 2 for the selective lumbar criteria; ratio thresholds in the review text",
       "qualifier": "Strictly greater than."
     },
     {
@@ -179,7 +179,7 @@
       },
       "unit": "ratio",
       "source": "korean-level-review",
-      "section": "fusion-levels.md §4 and table B",
+      "section": "Table 1 for the selective thoracic criteria, Table 2 for the selective lumbar criteria; ratio thresholds in the review text",
       "qualifier": "Strictly greater than."
     },
     {
@@ -193,7 +193,7 @@
       },
       "unit": "ratio",
       "source": "korean-level-review",
-      "section": "fusion-levels.md §4 and table B",
+      "section": "Table 1 for the selective thoracic criteria, Table 2 for the selective lumbar criteria; ratio thresholds in the review text",
       "qualifier": "Strictly greater than."
     },
     {
@@ -207,8 +207,8 @@
       },
       "unit": "degrees",
       "source": "korean-level-review",
-      "section": "fusion-levels.md §4 and table B",
-      "qualifier": "Strictly less than; kyphosis condition applies if UIV is between T10 and L2. Exceptions and maturity conditions in note are not encoded as rules here."
+      "section": "Table 1 for the selective thoracic criteria, Table 2 for the selective lumbar criteria; ratio thresholds in the review text",
+      "qualifier": "Strictly less than; kyphosis condition applies if UIV is between T10 and L2. The review's exceptions and maturity conditions are not encoded as rules here."
     },
     {
       "coordinate": {
@@ -221,8 +221,8 @@
       },
       "unit": "degrees",
       "source": "korean-level-review",
-      "section": "citation-audit-placement-tables.md §A and §B7, Kim 2021 Table 2",
-      "qualifier": "Strictly less than 25 degrees. The selective-lumbar table prints TL/L side bending <25 degrees; the old notes read it as thoracic bending. The project rule uses the thoracic curve bending criterion as its own inference under DECISIONS, not as a statement printed in this review. The table also allows >25 degrees if more criteria are met."
+      "section": "Table 2",
+      "qualifier": "Strictly less than 25 degrees. The selective-lumbar table prints TL/L side bending <25 degrees. The project rule uses the thoracic curve bending criterion as its own inference, not as a statement printed in this review. The table also allows >25 degrees if more criteria are met."
     },
     {
       "coordinate": {
@@ -235,8 +235,8 @@
       },
       "unit": "degrees",
       "source": "korean-level-review",
-      "section": "fusion-levels.md §4 and table B",
-      "qualifier": "Strictly less than; kyphosis condition applies if UIV is between T10 and L2. Exceptions and maturity conditions in note are not encoded as rules here."
+      "section": "Table 1 for the selective thoracic criteria, Table 2 for the selective lumbar criteria; ratio thresholds in the review text",
+      "qualifier": "Strictly less than; kyphosis condition applies if UIV is between T10 and L2. The review's exceptions and maturity conditions are not encoded as rules here."
     },
     {
       "coordinate": {
@@ -249,7 +249,7 @@
       },
       "unit": "degrees",
       "source": "korean-level-review",
-      "section": "citation-audit-placement-tables.md §A and §B7, Kim 2021 Sanders passage",
+      "section": "Sanders passage",
       "qualifier": "Thoracic curve bends to 20 degrees or less (inclusive); Sanders criterion read through Kim 2021. Paired with TL/L-to-thoracic Cobb ratio 1.25 or greater (inclusive) and closed triradiate cartilage. This differs from the review text recommending ratios >1.25."
     },
     {
@@ -263,7 +263,7 @@
       },
       "unit": "levels",
       "source": "liu-2020",
-      "section": "fusion-levels.md §2b and table B",
+      "section": "not recorded",
       "qualifier": "NV ≤ EV+1 gives LIV=NV. Primarily Suk 2003, n=42, read through Liu."
     },
     {
@@ -277,7 +277,7 @@
       },
       "unit": "levels",
       "source": "liu-2020",
-      "section": "fusion-levels.md §2b and table B",
+      "section": "not recorded",
       "qualifier": "NV ≥ EV+2 gives LIV=NV−1. Primarily Suk 2003, n=42, read through Liu."
     },
     {
@@ -292,8 +292,8 @@
       },
       "unit": "levels",
       "source": "bmc-level-review",
-      "section": "fusion-levels.md §2b",
-      "qualifier": "Published SV−1 or SV−2. SYNTHESIS chooses SV−1; that choice is not made here."
+      "section": "not recorded",
+      "qualifier": "Published SV−1 or SV−2. The level rule takes SV−1; that choice is not made in this table."
     },
     {
       "coordinate": {
@@ -306,7 +306,7 @@
       },
       "unit": "levels",
       "source": "chen-2025",
-      "section": "fusion-levels.md §2b and table B",
+      "section": "not recorded",
       "qualifier": "Strictly less than 0; a published zero threshold, not a substitute for a missing value."
     },
     {
@@ -320,7 +320,7 @@
       },
       "unit": "mm",
       "source": "liu-2020",
-      "section": "citation-audit-placement-tables.md §A and §B5, Liu 2020 Table 1 reporting Wang 2011",
+      "section": "Table 1 reporting Wang 2011",
       "qualifier": "Strictly greater than 10 mm from the CSVL. Choose as LIV the first vertebra encountered in the cephalad direction from the sacrum with that deviation, n = 45. This is the deviated-vertebra lower-end rule; the threshold belongs to the proposed LIV itself, not LIV+1, and is not a check on a candidate pair."
     },
     {
@@ -334,7 +334,7 @@
       },
       "unit": "nash-moe-grade",
       "source": "bmc-level-review",
-      "section": "fusion-levels.md §2d and table B",
+      "section": "not recorded",
       "qualifier": "Nash–Moe grade ≤1.5, not radians or degrees. Grade mapping absent."
     },
     {
@@ -348,7 +348,7 @@
       },
       "unit": "nash-moe-grade",
       "source": "bmc-level-review",
-      "section": "fusion-levels.md §2d and table B",
+      "section": "not recorded",
       "qualifier": "Nash–Moe grade ≥I, not radians or degrees. Grade mapping absent."
     },
     {
@@ -362,7 +362,7 @@
       },
       "unit": "degrees",
       "source": "bmc-level-review",
-      "section": "fusion-levels.md §2d and table B",
+      "section": "not recorded",
       "qualifier": "Strictly greater than."
     },
     {
@@ -376,7 +376,7 @@
       },
       "unit": "degrees",
       "source": "bmc-level-review",
-      "section": "fusion-levels.md §2d and table B",
+      "section": "not recorded",
       "qualifier": "Disc cannot reach 0 degrees on bending; not an angular tolerance."
     },
     {
@@ -390,7 +390,7 @@
       },
       "unit": "nash-moe-grade",
       "source": "bmc-level-review",
-      "section": "fusion-levels.md §2d and table B",
+      "section": "not recorded",
       "qualifier": "Li criterion: strictly greater than Nash–Moe grade 2; primary not opened."
     },
     {
@@ -405,7 +405,7 @@
       },
       "unit": "levels",
       "source": "bmc-level-review",
-      "section": "fusion-levels.md §2d and table B",
+      "section": "not recorded",
       "qualifier": "At L1–2disc or cephalad; other disc/rotation criteria are required."
     },
     {
@@ -420,7 +420,7 @@
       },
       "unit": "levels",
       "source": "bmc-level-review",
-      "section": "fusion-levels.md §2d and table B",
+      "section": "not recorded",
       "qualifier": "At L2 or caudad; point level expressed without a numerical level-index conversion."
     },
     {
@@ -434,7 +434,7 @@
       },
       "unit": "levels",
       "source": "liu-2020",
-      "section": "fusion-levels.md §2b–§3",
+      "section": "not recorded",
       "qualifier": "EV+1 reference landmark; no candidate or preference chosen."
     },
     {
@@ -448,7 +448,7 @@
       },
       "unit": "levels",
       "source": "liu-2020",
-      "section": "fusion-levels.md §2b–§3",
+      "section": "not recorded",
       "qualifier": "NV−1 when NV ≥ EV+2; Suk 2003 reported through Liu."
     },
     {
@@ -462,7 +462,7 @@
       },
       "unit": "levels",
       "source": "liu-2020",
-      "section": "fusion-levels.md §2b–§3",
+      "section": "not recorded",
       "qualifier": "nSTV+1; Qin 2016 reported through Liu, n = 104."
     },
     {
@@ -476,7 +476,7 @@
       },
       "unit": "levels",
       "source": "bmc-level-review",
-      "section": "fusion-levels.md §2b–§3",
+      "section": "not recorded",
       "qualifier": "LEV+1 when published criteria hold; Yang/Li primaries not opened."
     },
     {
@@ -490,7 +490,7 @@
       },
       "unit": "levels",
       "source": "bmc-level-review",
-      "section": "fusion-levels.md §2b–§3",
+      "section": "not recorded",
       "qualifier": "Posterior approach allows UEV or one above; no preference selected."
     },
     {
@@ -504,7 +504,7 @@
       },
       "unit": "percent",
       "source": "bmc-level-review",
-      "section": "fusion-levels.md §4 and table B",
+      "section": "not recorded",
       "qualifier": "Strictly greater than 70%; lumbar bending flexibility. Read through the BMC review; Kaya 2022 primary was not opened, and primary sample size is not supplied."
     },
     {
@@ -518,7 +518,7 @@
       },
       "unit": "nash-moe-grade",
       "source": "bmc-level-review",
-      "section": "fusion-levels.md §4 and table B",
+      "section": "not recorded",
       "qualifier": "Less than or equal to Nash–Moe grade 2; lumbar AVR. Paired with lumbar bending flexibility >70%. Kaya 2022 primary was not opened; no degree-to-grade mapping is inferred."
     },
     {
@@ -532,7 +532,7 @@
       },
       "unit": "degrees",
       "source": "s1-liv-42811138",
-      "section": "fusion-levels.md §2b and table B",
+      "section": "abstract",
       "qualifier": "Strictly greater than 9.5 degrees; Lenke 1–2, A/B modifiers. Derivation n=177, external n=289. The abstract does not supply the angle geometry; this record cannot define a measurement algorithm."
     },
     {
@@ -546,7 +546,7 @@
       },
       "unit": "levels",
       "source": "ssv-40103372",
-      "section": "fusion-levels.md §2b and table B",
+      "section": "abstract",
       "qualifier": "LIV no more proximal than SSV−1: at most one level above SSV, and below preoperative distal junctional kyphosis. Lenke 1–2, LIV≤L1; n=1034. Offset direction is proximal, not a rule implementation."
     },
     {
@@ -560,8 +560,8 @@
       },
       "unit": "degrees",
       "source": "djk-34096362",
-      "section": "fusion-levels.md §2b and table B",
-      "qualifier": "Greater than or equal to 25 degrees, postoperative T5–T12, with SSV excluded. The published test joins the two regional criteria with OR. Lenke 1–2, LIV≤L1; whole cohort n=122, subgroup n=13 in the note; no patient-specific rate is inferred."
+      "section": "abstract",
+      "qualifier": "Greater than or equal to 25 degrees, postoperative T5–T12, with SSV excluded. The published test joins the two regional criteria with OR. Lenke 1–2, LIV≤L1; whole cohort n=122, subgroup n=13; no patient-specific rate is inferred."
     },
     {
       "coordinate": {
@@ -574,8 +574,8 @@
       },
       "unit": "degrees",
       "source": "djk-34096362",
-      "section": "fusion-levels.md §2b and table B",
-      "qualifier": "Greater than or equal to 10 degrees, postoperative T11–L2, with SSV excluded. The published test joins the two regional criteria with OR. Lenke 1–2, LIV≤L1; whole cohort n=122, subgroup n=13 in the note; no patient-specific rate is inferred."
+      "section": "abstract",
+      "qualifier": "Greater than or equal to 10 degrees, postoperative T11–L2, with SSV excluded. The published test joins the two regional criteria with OR. Lenke 1–2, LIV≤L1; whole cohort n=122, subgroup n=13; no patient-specific rate is inferred."
     },
     {
       "coordinate": {
@@ -588,7 +588,7 @@
       },
       "unit": "mm",
       "source": "l3-bending-30739071",
-      "section": "fusion-levels.md §2d and table B",
+      "section": "abstract",
       "qualifier": "Strictly less than 10 mm on the preoperative concave side-bending film, for lumbar curves >60 degrees. n=84 (24 L3, 60 L4); this is a published criterion, not a choice made by the reader."
     },
     {
@@ -602,7 +602,7 @@
       },
       "unit": "degrees",
       "source": "l3-bending-30739071",
-      "section": "fusion-levels.md §2d and table B",
+      "section": "abstract",
       "qualifier": "Strictly greater than 60 degrees; eligibility condition for the L3 concave-bending translation criterion, not the separate LEV+1 rule."
     },
     {
@@ -617,7 +617,7 @@
       },
       "unit": "levels",
       "source": "bmc-level-review",
-      "section": "fusion-levels.md §3 and table B",
+      "section": "not recorded",
       "qualifier": "Preoperative left shoulder high, Lenke type 1. Preserve the published named option(s), without choosing one. Secondary rule citing Lenke 2007 / Rose & Lenke 2007; primaries not opened. Contested by Brooks 2018. Shoulders are outside this spine model; storing the rule does not make it readable here."
     },
     {
@@ -632,7 +632,7 @@
       },
       "unit": "levels",
       "source": "bmc-level-review",
-      "section": "fusion-levels.md §3 and table B",
+      "section": "not recorded",
       "qualifier": "Preoperative shoulders level, Lenke type 1. Preserve the published named option(s), without choosing one. Secondary rule citing Lenke 2007 / Rose & Lenke 2007; primaries not opened. Contested by Brooks 2018. Shoulders are outside this spine model; storing the rule does not make it readable here."
     },
     {
@@ -647,7 +647,7 @@
       },
       "unit": "levels",
       "source": "bmc-level-review",
-      "section": "fusion-levels.md §3 and table B",
+      "section": "not recorded",
       "qualifier": "Preoperative right shoulder high, Lenke type 1. Preserve the published named option(s), without choosing one. Secondary rule citing Lenke 2007 / Rose & Lenke 2007; primaries not opened. Contested by Brooks 2018. Shoulders are outside this spine model; storing the rule does not make it readable here."
     },
     {
@@ -661,7 +661,7 @@
       },
       "unit": "degrees",
       "source": "bmc-level-review",
-      "section": "fusion-levels.md §3 and table B",
+      "section": "not recorded",
       "qualifier": "Greater than or equal to 15 degrees on cervical supine side-bending, behaving like a structural PT curve. Review citing Chan 2016, primary not opened; this is distinct from the 25-degree classification criterion."
     },
     {
@@ -675,7 +675,7 @@
       },
       "unit": "degrees",
       "source": "residual-t1-39658742",
-      "section": "fusion-levels.md §3 and table B",
+      "section": "abstract",
       "qualifier": "Strictly greater than 26.5 degrees; preoperative PT Cobb is associated with T1 tilt >5 degrees at two years in Lenke 1, n=128."
     },
     {
@@ -689,7 +689,7 @@
       },
       "unit": "degrees",
       "source": "residual-t1-39658742",
-      "section": "fusion-levels.md §3 and table B",
+      "section": "abstract",
       "qualifier": "Strictly greater than 5 degrees at two years; residual T1 tilt outcome, not a preoperative PT Cobb threshold. Lenke 1, n=128."
     },
     {
@@ -703,7 +703,7 @@
       },
       "unit": "years",
       "source": "residual-t1-39658742",
-      "section": "fusion-levels.md §3 and table B",
+      "section": "abstract",
       "qualifier": "Two-year follow-up for the residual T1 tilt >5-degree observation; no interpolation over time."
     },
     {
@@ -717,7 +717,7 @@
       },
       "unit": "mm",
       "source": "shoulder-36138576",
-      "section": "fusion-levels.md §3 and table B",
+      "section": "abstract",
       "qualifier": "Strictly greater than −6.5 mm preoperative RSH, meaning less right-shoulder elevation. Negative sign preserved; n=104, Lenke 1."
     },
     {
@@ -731,7 +731,7 @@
       },
       "unit": "percent",
       "source": "shoulder-36138576",
-      "section": "fusion-levels.md §3 and table B",
+      "section": "abstract",
       "qualifier": "Strictly greater than 76.9% planned main-thoracic correction; n=104, Lenke 1. Outcome association only, not a requested correction target."
     },
     {
@@ -745,7 +745,7 @@
       },
       "unit": "degrees",
       "source": "zhao-2024",
-      "section": "fusion-levels.md §5 and table B; outcomes-over-time.md §1 definitions",
+      "section": "not recorded",
       "qualifier": "Greater than or equal to 10 degrees for absolute PJA from the lower endplate of UIV to the upper endplate of UIV+2. This AND the distinct increase-from-preoperative criterion define PJK in the cited meta-analysis."
     },
     {
@@ -759,7 +759,7 @@
       },
       "unit": "degrees",
       "source": "zhao-2024",
-      "section": "fusion-levels.md §5 and table B; outcomes-over-time.md §1 definitions",
+      "section": "not recorded",
       "qualifier": "Greater than or equal to 10 degrees increase over preoperative PJA. This AND the distinct absolute-angle criterion define PJK; an increase is not an absolute PJA."
     },
     {
@@ -773,8 +773,8 @@
       },
       "unit": "degrees",
       "source": "fusion-level-definitions",
-      "section": "fusion-levels.md §5 and table B",
-      "qualifier": "Greater than or equal to 10 degrees, DJA from LIV to LIV+1. Definition reported by the research-note summary; the note does not uniquely attribute this threshold to one primary study. No primary or pooled sample size is inferred."
+      "section": "secondary definition with no unique primary attribution",
+      "qualifier": "Greater than or equal to 10 degrees, DJA from LIV to LIV+1. A secondary definition; this record does not uniquely attribute this threshold to one primary study. No primary or pooled sample size is inferred."
     },
     {
       "coordinate": {
@@ -787,7 +787,7 @@
       },
       "unit": "mm",
       "source": "coronal-decompensation-4417731",
-      "section": "fusion-levels.md §5 and table B",
+      "section": "not recorded",
       "qualifier": "Strictly greater than 20 mm for C7PL−CSVL. Review definition; full text read in part. This is an outcome definition, not a substitute for a measured CSVL or a patient-specific result."
     },
     {
@@ -802,8 +802,8 @@
       },
       "unit": "levels",
       "source": "liu-2020",
-      "section": "fusion-levels.md table B; detailed rule §2b",
-      "qualifier": "Table B prints 0–1 levels for the first branch (same level or one below). The detailed rule and SYNTHESIS say NV≤EV+1 and provide no separate lower bound; this summary interval must not exclude a more proximal NV from that detailed branch. Suk 2003 n=42, secondary within Liu."
+      "section": "not recorded",
+      "qualifier": "The interval of 0–1 levels summarises the first branch (same level or one below). The level rule applies NV≤EV+1 with no separate lower bound; this summary interval must not exclude a more proximal NV from that branch. Suk 2003 n=42, secondary within Liu."
     },
     {
       "coordinate": {
@@ -816,7 +816,7 @@
       },
       "unit": "ratio",
       "source": "korean-level-review",
-      "section": "citation-audit-placement-tables.md §A and §B7, Kim 2021 Sanders passage",
+      "section": "Sanders passage",
       "qualifier": "TL/L-to-thoracic Cobb ratio 1.25 or greater (inclusive), paired with thoracic bending 20 degrees or less and closed triradiate cartilage. Sanders is quoted through Kim 2021, not a separately opened primary; the review text separately recommends >1.25."
     }
   ]

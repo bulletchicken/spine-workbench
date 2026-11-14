@@ -11,7 +11,7 @@
           "value": 114,
           "unit": "GPa",
           "source": "prasad-2017",
-          "section": "citation-audit-physics-tables.md §A, prasad-2017 Table1",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -20,7 +20,7 @@
           "value": 827,
           "unit": "MPa",
           "source": "prasad-2017",
-          "section": "citation-audit-physics-tables.md §A, prasad-2017 Table1",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -29,7 +29,7 @@
           "value": 1103,
           "unit": "MPa",
           "source": "prasad-2017",
-          "section": "citation-audit-physics-tables.md §A, prasad-2017 Table1",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -38,7 +38,7 @@
           "value": 860,
           "unit": "MPa",
           "source": "prasad-2017",
-          "section": "citation-audit-physics-tables.md §A, prasad-2017 Table1",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -47,7 +47,7 @@
           "value": 965,
           "unit": "MPa",
           "source": "prasad-2017",
-          "section": "citation-audit-physics-tables.md §A, prasad-2017 Table1",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         }
@@ -57,14 +57,14 @@
       "key": "cobalt-chrome",
       "usage": "bench",
       "description": "CoCrMo",
-      "notes": "Prasad Table1 set. Bench uses this Table1 yield/ultimate pair at one common quantile,as DECISIONS Rod strengths states. No Poisson ratio/shear modulus supplied for this Prasad set.",
+      "notes": "Prasad Table1 set. Bench uses this Table1 yield/ultimate pair at one common quantile. No Poisson ratio/shear modulus supplied for this Prasad set.",
       "values": [
         {
           "term": "young-modulus",
           "value": 240,
           "unit": "GPa",
           "source": "prasad-2017",
-          "section": "citation-audit-physics-tables.md §A, prasad-2017 Table1",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -73,7 +73,7 @@
           "value": 500,
           "unit": "MPa",
           "source": "prasad-2017",
-          "section": "citation-audit-physics-tables.md §A, prasad-2017 Table1",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -82,7 +82,7 @@
           "value": 1500,
           "unit": "MPa",
           "source": "prasad-2017",
-          "section": "citation-audit-physics-tables.md §A, prasad-2017 Table1",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -91,7 +91,7 @@
           "value": 900,
           "unit": "MPa",
           "source": "prasad-2017",
-          "section": "citation-audit-physics-tables.md §A, prasad-2017 Table1",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -100,7 +100,7 @@
           "value": 1540,
           "unit": "MPa",
           "source": "prasad-2017",
-          "section": "citation-audit-physics-tables.md §A, prasad-2017 Table1",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         }
@@ -110,14 +110,14 @@
       "key": "stainless-steel",
       "usage": "bench",
       "description": "Stainless steel316L (Table1;condition unspecified)",
-      "notes": "Prasad Table1 set. Bench uses this Table1 yield/ultimate pair at one common quantile,as DECISIONS Rod strengths states. No Poisson ratio/shear modulus supplied for this Prasad set.",
+      "notes": "Prasad Table1 set. Bench uses this Table1 yield/ultimate pair at one common quantile. No Poisson ratio/shear modulus supplied for this Prasad set.",
       "values": [
         {
           "term": "young-modulus",
           "value": 193,
           "unit": "GPa",
           "source": "prasad-2017",
-          "section": "citation-audit-physics-tables.md §A, prasad-2017 Table1",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -126,7 +126,7 @@
           "value": 170,
           "unit": "MPa",
           "source": "prasad-2017",
-          "section": "citation-audit-physics-tables.md §A, prasad-2017 Table1",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -135,7 +135,7 @@
           "value": 310,
           "unit": "MPa",
           "source": "prasad-2017",
-          "section": "citation-audit-physics-tables.md §A, prasad-2017 Table1",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -144,7 +144,7 @@
           "value": 540,
           "unit": "MPa",
           "source": "prasad-2017",
-          "section": "citation-audit-physics-tables.md §A, prasad-2017 Table1",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -153,7 +153,7 @@
           "value": 1000,
           "unit": "MPa",
           "source": "prasad-2017",
-          "section": "citation-audit-physics-tables.md §A, prasad-2017 Table1",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         }
@@ -170,7 +170,7 @@
           "value": 115,
           "unit": "GPa",
           "source": "prasad-2017",
-          "section": "implant-mechanics.md §4 Material properties",
+          "section": "body text",
           "basis": "published",
           "approximate": false
         },
@@ -179,7 +179,7 @@
           "value": 448,
           "unit": "MPa",
           "source": "prasad-2017",
-          "section": "implant-mechanics.md §4 Material properties",
+          "section": "body text",
           "basis": "published",
           "approximate": false
         },
@@ -188,7 +188,7 @@
           "value": 1606,
           "unit": "MPa",
           "source": "prasad-2017",
-          "section": "implant-mechanics.md §4 Material properties",
+          "section": "body text",
           "basis": "published",
           "approximate": false
         },
@@ -197,7 +197,7 @@
           "value": 896,
           "unit": "MPa",
           "source": "prasad-2017",
-          "section": "citation-audit-physics-tables.md §A/§B1, Prasad body text",
+          "section": "body text",
           "basis": "published",
           "approximate": false
         },
@@ -206,7 +206,7 @@
           "value": 1034,
           "unit": "MPa",
           "source": "prasad-2017",
-          "section": "citation-audit-physics-tables.md §A/§B1, Prasad body text",
+          "section": "body text",
           "basis": "published",
           "approximate": false
         },
@@ -215,7 +215,7 @@
           "value": 965,
           "unit": "MPa",
           "source": "prasad-2017",
-          "section": "citation-audit-physics-tables.md §A/§B1, Prasad body text",
+          "section": "body text",
           "basis": "published",
           "approximate": false
         },
@@ -224,7 +224,7 @@
           "value": 1103,
           "unit": "MPa",
           "source": "prasad-2017",
-          "section": "citation-audit-physics-tables.md §A/§B1, Prasad body text",
+          "section": "body text",
           "basis": "published",
           "approximate": false
         },
@@ -233,7 +233,7 @@
           "value": 655,
           "unit": "MPa",
           "source": "prasad-2017",
-          "section": "citation-audit-physics-tables.md §A/§B1, Prasad body text",
+          "section": "body text",
           "basis": "published",
           "approximate": false
         },
@@ -242,7 +242,7 @@
           "value": 1896,
           "unit": "MPa",
           "source": "prasad-2017",
-          "section": "citation-audit-physics-tables.md §A/§B1, Prasad body text",
+          "section": "body text",
           "basis": "published",
           "approximate": false
         }
@@ -252,14 +252,14 @@
       "key": "tachi-cocr",
       "usage": "beside",
       "description": "CoCr modulus printed in planner",
-      "notes": "DISAGREE; probable error or deliberate stiffening; bench uses Prasad 240 GPa. Audit confirms Poisson ratio0.3 for this separate material set,not for Prasad.",
+      "notes": "DISAGREE; probable error or deliberate stiffening; bench uses Prasad 240 GPa. Poisson ratio0.3 is printed for this separate material set,not for Prasad.",
       "values": [
         {
           "term": "young-modulus",
           "value": 420,
           "unit": "GPa",
           "source": "tachi-2021",
-          "section": "published-simulators.md §1 Japanese planner",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -268,7 +268,7 @@
           "value": 0.3,
           "unit": "ratio",
           "source": "tachi-2021",
-          "section": "citation-audit-physics-tables.md §A, tachi-2021",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         }
@@ -278,14 +278,14 @@
       "key": "little-ti",
       "usage": "beside",
       "description": "Ti material set in FE planner",
-      "notes": "DISAGREE; as printed; bench uses Prasad set. Audit confirms Poisson ratio0.3 for this separate material set,not for Prasad.",
+      "notes": "DISAGREE; as printed; bench uses Prasad set. Poisson ratio0.3 is printed for this separate material set,not for Prasad.",
       "values": [
         {
           "term": "young-modulus",
           "value": 108,
           "unit": "GPa",
           "source": "little-2013",
-          "section": "published-simulators.md §2d",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -294,7 +294,7 @@
           "value": 390,
           "unit": "MPa",
           "source": "little-2013",
-          "section": "published-simulators.md §2d",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -303,7 +303,7 @@
           "value": 0.3,
           "unit": "ratio",
           "source": "little-2013",
-          "section": "citation-audit-physics-tables.md §A, little-2013",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         }
@@ -320,7 +320,7 @@
           "value": 108,
           "unit": "GPa",
           "source": "jeong-2025",
-          "section": "fast-physics-methods.md TableB",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -329,7 +329,7 @@
           "value": 0.342,
           "unit": "ratio",
           "source": "jeong-2025",
-          "section": "fast-physics-methods.md TableB",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -338,7 +338,7 @@
           "value": 864,
           "unit": "MPa",
           "source": "jeong-2025",
-          "section": "fast-physics-methods.md TableB",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         }
@@ -355,7 +355,7 @@
           "value": 113,
           "unit": "GPa",
           "source": "song-2021",
-          "section": "fast-physics-methods.md §6 and TableB",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -364,7 +364,7 @@
           "value": 0.3,
           "unit": "ratio",
           "source": "song-2021",
-          "section": "fast-physics-methods.md TableB",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         }
@@ -381,7 +381,7 @@
           "value": 200,
           "unit": "GPa",
           "source": "ohrt-nissen-2018",
-          "section": "fast-physics-methods.md §7",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -390,7 +390,7 @@
           "value": 300,
           "unit": "GPa",
           "source": "ohrt-nissen-2018",
-          "section": "fast-physics-methods.md §7",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         }
@@ -407,7 +407,7 @@
           "value": 110,
           "unit": "GPa",
           "source": "ohrt-nissen-2018",
-          "section": "fast-physics-methods.md §7",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -416,7 +416,7 @@
           "value": 116,
           "unit": "GPa",
           "source": "ohrt-nissen-2018",
-          "section": "fast-physics-methods.md §7",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         }
@@ -433,7 +433,7 @@
           "value": 190,
           "unit": "GPa",
           "source": "ohrt-nissen-2018",
-          "section": "fast-physics-methods.md §7",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         }
@@ -450,7 +450,7 @@
           "value": 105,
           "unit": "GPa",
           "source": "abe-2015",
-          "section": "implant-mechanics.md §4 Material properties",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -459,7 +459,7 @@
           "value": 2.41,
           "unit": "GPa",
           "source": "abe-2015",
-          "section": "implant-mechanics.md §4 Material properties",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -468,7 +468,7 @@
           "value": 900,
           "unit": "MPa",
           "source": "abe-2015",
-          "section": "implant-mechanics.md §4 Material properties",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -477,7 +477,7 @@
           "value": 0.00857,
           "unit": "ratio",
           "source": "abe-2015",
-          "section": "implant-mechanics.md §4 Material properties",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         }
@@ -487,14 +487,14 @@
       "key": "ultra-high-strength-steel",
       "usage": "beside",
       "description": "Ultra-high-strength steel comparison",
-      "notes": "Copy both the published ksi and the note’s approximate MPa; reader does not convert them.",
+      "notes": "Both the published ksi and the own approximate MPa are held; the reader does not convert them.",
       "values": [
         {
           "term": "uts",
           "value": 200,
           "unit": "ksi",
           "source": "cidambi-2012",
-          "section": "implant-mechanics.md §4 Material properties",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -503,7 +503,7 @@
           "value": 1380,
           "unit": "MPa",
           "source": "project-assumptions",
-          "section": "implant-mechanics.md §4 Material properties, approximate conversion in note",
+          "section": "own approximate conversion of the published ksi value",
           "basis": "own-inference",
           "approximate": true
         }
@@ -512,7 +512,7 @@
     {
       "key": "section-table-reference",
       "usage": "input",
-      "description": "Reference inputs for computed section Table A",
+      "description": "Reference inputs for the computed rod section table",
       "notes": "Inputs beside copied own-inference outputs; I=pi*d^4/64; Z=pi*d^3/32; EI=E*I; My=yield*Z. No new calculation.",
       "values": [
         {
@@ -520,7 +520,7 @@
           "value": 900,
           "unit": "MPa",
           "source": "project-assumptions",
-          "section": "implant-mechanics.md TableA header",
+          "section": "project assumption: titanium yield used for the yield moments of the rod section table",
           "basis": "own-inference",
           "approximate": false
         },
@@ -529,7 +529,7 @@
           "value": 114,
           "unit": "GPa",
           "source": "prasad-2017",
-          "section": "implant-mechanics.md §4 and TableA header",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -538,7 +538,7 @@
           "value": 240,
           "unit": "GPa",
           "source": "prasad-2017",
-          "section": "implant-mechanics.md §4 and TableA header",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -547,7 +547,7 @@
           "value": 193,
           "unit": "GPa",
           "source": "prasad-2017",
-          "section": "implant-mechanics.md §4 and TableA header",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         }
@@ -557,14 +557,14 @@
       "key": "section-at-4.75mm",
       "usage": "input",
       "description": "Copied rod section table at 4.75mm",
-      "notes": "All entries copied at note precision, not recomputed. Reference moduli/yield in section-table-reference.",
+      "notes": "All entries kept at their original precision, not recomputed. Reference moduli/yield in section-table-reference.",
       "values": [
         {
           "term": "rod-diameter",
           "value": 4.75,
           "unit": "mm",
           "source": "project-assumptions",
-          "section": "implant-mechanics.md TableA",
+          "section": "own inference: rod section properties computed from beam theory",
           "basis": "own-inference",
           "approximate": false
         },
@@ -573,7 +573,7 @@
           "value": 25.0,
           "unit": "mm⁴",
           "source": "project-assumptions",
-          "section": "implant-mechanics.md TableA",
+          "section": "own inference: rod section properties computed from beam theory",
           "basis": "own-inference",
           "approximate": false
         },
@@ -582,7 +582,7 @@
           "value": 10.5,
           "unit": "mm³",
           "source": "project-assumptions",
-          "section": "implant-mechanics.md TableA",
+          "section": "own inference: rod section properties computed from beam theory",
           "basis": "own-inference",
           "approximate": false
         },
@@ -591,7 +591,7 @@
           "value": 2.85,
           "unit": "N·m²",
           "source": "project-assumptions",
-          "section": "implant-mechanics.md TableA",
+          "section": "own inference: rod section properties computed from beam theory",
           "basis": "own-inference",
           "approximate": false
         },
@@ -600,7 +600,7 @@
           "value": 6.0,
           "unit": "N·m²",
           "source": "project-assumptions",
-          "section": "implant-mechanics.md TableA",
+          "section": "own inference: rod section properties computed from beam theory",
           "basis": "own-inference",
           "approximate": false
         },
@@ -609,7 +609,7 @@
           "value": 4.82,
           "unit": "N·m²",
           "source": "project-assumptions",
-          "section": "implant-mechanics.md TableA",
+          "section": "own inference: rod section properties computed from beam theory",
           "basis": "own-inference",
           "approximate": false
         },
@@ -618,7 +618,7 @@
           "value": 9.5,
           "unit": "N·m",
           "source": "project-assumptions",
-          "section": "implant-mechanics.md TableA",
+          "section": "own inference: rod section properties computed from beam theory",
           "basis": "own-inference",
           "approximate": false
         }
@@ -628,14 +628,14 @@
       "key": "section-at-5.0mm",
       "usage": "input",
       "description": "Copied rod section table at 5.0mm",
-      "notes": "All entries copied at note precision, not recomputed. Reference moduli/yield in section-table-reference.",
+      "notes": "All entries kept at their original precision, not recomputed. Reference moduli/yield in section-table-reference.",
       "values": [
         {
           "term": "rod-diameter",
           "value": 5.0,
           "unit": "mm",
           "source": "project-assumptions",
-          "section": "implant-mechanics.md TableA",
+          "section": "own inference: rod section properties computed from beam theory",
           "basis": "own-inference",
           "approximate": false
         },
@@ -644,7 +644,7 @@
           "value": 30.7,
           "unit": "mm⁴",
           "source": "project-assumptions",
-          "section": "implant-mechanics.md TableA",
+          "section": "own inference: rod section properties computed from beam theory",
           "basis": "own-inference",
           "approximate": false
         },
@@ -653,7 +653,7 @@
           "value": 12.3,
           "unit": "mm³",
           "source": "project-assumptions",
-          "section": "implant-mechanics.md TableA",
+          "section": "own inference: rod section properties computed from beam theory",
           "basis": "own-inference",
           "approximate": false
         },
@@ -662,7 +662,7 @@
           "value": 3.5,
           "unit": "N·m²",
           "source": "project-assumptions",
-          "section": "implant-mechanics.md TableA",
+          "section": "own inference: rod section properties computed from beam theory",
           "basis": "own-inference",
           "approximate": false
         },
@@ -671,7 +671,7 @@
           "value": 7.36,
           "unit": "N·m²",
           "source": "project-assumptions",
-          "section": "implant-mechanics.md TableA",
+          "section": "own inference: rod section properties computed from beam theory",
           "basis": "own-inference",
           "approximate": false
         },
@@ -680,7 +680,7 @@
           "value": 5.92,
           "unit": "N·m²",
           "source": "project-assumptions",
-          "section": "implant-mechanics.md TableA",
+          "section": "own inference: rod section properties computed from beam theory",
           "basis": "own-inference",
           "approximate": false
         },
@@ -689,7 +689,7 @@
           "value": 11.0,
           "unit": "N·m",
           "source": "project-assumptions",
-          "section": "implant-mechanics.md TableA",
+          "section": "own inference: rod section properties computed from beam theory",
           "basis": "own-inference",
           "approximate": false
         }
@@ -699,14 +699,14 @@
       "key": "section-at-5.5mm",
       "usage": "input",
       "description": "Copied rod section table at 5.5 mm",
-      "notes": "All entries copied at note precision, not recomputed. Reference moduli/yield in section-table-reference.",
+      "notes": "All entries kept at their original precision, not recomputed. Reference moduli/yield in section-table-reference.",
       "values": [
         {
           "term": "rod-diameter",
           "value": 5.5,
           "unit": "mm",
           "source": "project-assumptions",
-          "section": "implant-mechanics.md TableA",
+          "section": "own inference: rod section properties computed from beam theory",
           "basis": "own-inference",
           "approximate": false
         },
@@ -715,7 +715,7 @@
           "value": 44.9,
           "unit": "mm⁴",
           "source": "project-assumptions",
-          "section": "implant-mechanics.md TableA",
+          "section": "own inference: rod section properties computed from beam theory",
           "basis": "own-inference",
           "approximate": false
         },
@@ -724,7 +724,7 @@
           "value": 16.3,
           "unit": "mm³",
           "source": "project-assumptions",
-          "section": "implant-mechanics.md TableA",
+          "section": "own inference: rod section properties computed from beam theory",
           "basis": "own-inference",
           "approximate": false
         },
@@ -733,7 +733,7 @@
           "value": 5.12,
           "unit": "N·m²",
           "source": "project-assumptions",
-          "section": "implant-mechanics.md TableA",
+          "section": "own inference: rod section properties computed from beam theory",
           "basis": "own-inference",
           "approximate": false
         },
@@ -742,7 +742,7 @@
           "value": 10.78,
           "unit": "N·m²",
           "source": "project-assumptions",
-          "section": "implant-mechanics.md TableA",
+          "section": "own inference: rod section properties computed from beam theory",
           "basis": "own-inference",
           "approximate": false
         },
@@ -751,7 +751,7 @@
           "value": 8.67,
           "unit": "N·m²",
           "source": "project-assumptions",
-          "section": "implant-mechanics.md TableA",
+          "section": "own inference: rod section properties computed from beam theory",
           "basis": "own-inference",
           "approximate": false
         },
@@ -760,7 +760,7 @@
           "value": 14.7,
           "unit": "N·m",
           "source": "project-assumptions",
-          "section": "implant-mechanics.md TableA",
+          "section": "own inference: rod section properties computed from beam theory",
           "basis": "own-inference",
           "approximate": false
         }
@@ -770,14 +770,14 @@
       "key": "section-at-6.0mm",
       "usage": "input",
       "description": "Copied rod section table at 6.0mm",
-      "notes": "All entries copied at note precision, not recomputed. Reference moduli/yield in section-table-reference.",
+      "notes": "All entries kept at their original precision, not recomputed. Reference moduli/yield in section-table-reference.",
       "values": [
         {
           "term": "rod-diameter",
           "value": 6.0,
           "unit": "mm",
           "source": "project-assumptions",
-          "section": "implant-mechanics.md TableA",
+          "section": "own inference: rod section properties computed from beam theory",
           "basis": "own-inference",
           "approximate": false
         },
@@ -786,7 +786,7 @@
           "value": 63.6,
           "unit": "mm⁴",
           "source": "project-assumptions",
-          "section": "implant-mechanics.md TableA",
+          "section": "own inference: rod section properties computed from beam theory",
           "basis": "own-inference",
           "approximate": false
         },
@@ -795,7 +795,7 @@
           "value": 21.2,
           "unit": "mm³",
           "source": "project-assumptions",
-          "section": "implant-mechanics.md TableA",
+          "section": "own inference: rod section properties computed from beam theory",
           "basis": "own-inference",
           "approximate": false
         },
@@ -804,7 +804,7 @@
           "value": 7.25,
           "unit": "N·m²",
           "source": "project-assumptions",
-          "section": "implant-mechanics.md TableA",
+          "section": "own inference: rod section properties computed from beam theory",
           "basis": "own-inference",
           "approximate": false
         },
@@ -813,7 +813,7 @@
           "value": 15.27,
           "unit": "N·m²",
           "source": "project-assumptions",
-          "section": "implant-mechanics.md TableA",
+          "section": "own inference: rod section properties computed from beam theory",
           "basis": "own-inference",
           "approximate": false
         },
@@ -822,7 +822,7 @@
           "value": 12.28,
           "unit": "N·m²",
           "source": "project-assumptions",
-          "section": "implant-mechanics.md TableA",
+          "section": "own inference: rod section properties computed from beam theory",
           "basis": "own-inference",
           "approximate": false
         },
@@ -831,7 +831,7 @@
           "value": 19.1,
           "unit": "N·m",
           "source": "project-assumptions",
-          "section": "implant-mechanics.md TableA",
+          "section": "own inference: rod section properties computed from beam theory",
           "basis": "own-inference",
           "approximate": false
         }
@@ -841,14 +841,14 @@
       "key": "section-at-6.35mm",
       "usage": "input",
       "description": "Copied rod section table at 6.35mm",
-      "notes": "All entries copied at note precision, not recomputed. Reference moduli/yield in section-table-reference.",
+      "notes": "All entries kept at their original precision, not recomputed. Reference moduli/yield in section-table-reference.",
       "values": [
         {
           "term": "rod-diameter",
           "value": 6.35,
           "unit": "mm",
           "source": "project-assumptions",
-          "section": "implant-mechanics.md TableA",
+          "section": "own inference: rod section properties computed from beam theory",
           "basis": "own-inference",
           "approximate": false
         },
@@ -857,7 +857,7 @@
           "value": 79.8,
           "unit": "mm⁴",
           "source": "project-assumptions",
-          "section": "implant-mechanics.md TableA",
+          "section": "own inference: rod section properties computed from beam theory",
           "basis": "own-inference",
           "approximate": false
         },
@@ -866,7 +866,7 @@
           "value": 25.1,
           "unit": "mm³",
           "source": "project-assumptions",
-          "section": "implant-mechanics.md TableA",
+          "section": "own inference: rod section properties computed from beam theory",
           "basis": "own-inference",
           "approximate": false
         },
@@ -875,7 +875,7 @@
           "value": 9.1,
           "unit": "N·m²",
           "source": "project-assumptions",
-          "section": "implant-mechanics.md TableA",
+          "section": "own inference: rod section properties computed from beam theory",
           "basis": "own-inference",
           "approximate": false
         },
@@ -884,7 +884,7 @@
           "value": 19.15,
           "unit": "N·m²",
           "source": "project-assumptions",
-          "section": "implant-mechanics.md TableA",
+          "section": "own inference: rod section properties computed from beam theory",
           "basis": "own-inference",
           "approximate": false
         },
@@ -893,7 +893,7 @@
           "value": 15.4,
           "unit": "N·m²",
           "source": "project-assumptions",
-          "section": "implant-mechanics.md TableA",
+          "section": "own inference: rod section properties computed from beam theory",
           "basis": "own-inference",
           "approximate": false
         },
@@ -902,7 +902,7 @@
           "value": 22.6,
           "unit": "N·m",
           "source": "project-assumptions",
-          "section": "implant-mechanics.md TableA",
+          "section": "own inference: rod section properties computed from beam theory",
           "basis": "own-inference",
           "approximate": false
         }
@@ -912,14 +912,14 @@
       "key": "titanium-alloy-body-text",
       "usage": "bench",
       "description": "Chosen titanium yield/ultimate pair from Prasad body text",
-      "notes": "DECISIONS Rod strengths:use one common quantile for yield896–1034MPa and ultimate965–1103MPa. Young modulus remains114GPa from Table1;do not replace it by body-text115GPa implicitly.",
+      "notes": "The bench uses one common quantile for yield896–1034MPa and ultimate965–1103MPa. Young modulus remains114GPa from Table1;do not replace it by body-text115GPa implicitly.",
       "values": [
         {
           "term": "yield-lower",
           "value": 896,
           "unit": "MPa",
           "source": "prasad-2017",
-          "section": "citation-audit-physics-tables.md §A/§B1, Prasad body text",
+          "section": "body text",
           "basis": "published",
           "approximate": false
         },
@@ -928,7 +928,7 @@
           "value": 1034,
           "unit": "MPa",
           "source": "prasad-2017",
-          "section": "citation-audit-physics-tables.md §A/§B1, Prasad body text",
+          "section": "body text",
           "basis": "published",
           "approximate": false
         },
@@ -937,7 +937,7 @@
           "value": 965,
           "unit": "MPa",
           "source": "prasad-2017",
-          "section": "citation-audit-physics-tables.md §A/§B1, Prasad body text",
+          "section": "body text",
           "basis": "published",
           "approximate": false
         },
@@ -946,7 +946,7 @@
           "value": 1103,
           "unit": "MPa",
           "source": "prasad-2017",
-          "section": "citation-audit-physics-tables.md §A/§B1, Prasad body text",
+          "section": "body text",
           "basis": "published",
           "approximate": false
         }
@@ -956,7 +956,7 @@
   "missing": [
     {
       "key": "titanium-alloy.shear-modulus",
-      "reason": "No published shear modulus in named notes; no E/2(1+nu) inferred."
+      "reason": "No published shear modulus recorded; no E/2(1+nu) inferred."
     },
     {
       "key": "titanium-alloy.poisson-ratio",
@@ -964,7 +964,7 @@
     },
     {
       "key": "cobalt-chrome.shear-modulus",
-      "reason": "No published shear modulus in named notes; no E/2(1+nu) inferred."
+      "reason": "No published shear modulus recorded; no E/2(1+nu) inferred."
     },
     {
       "key": "cobalt-chrome.poisson-ratio",
@@ -972,7 +972,7 @@
     },
     {
       "key": "stainless-steel.shear-modulus",
-      "reason": "No published shear modulus in named notes; no E/2(1+nu) inferred."
+      "reason": "No published shear modulus recorded; no E/2(1+nu) inferred."
     },
     {
       "key": "stainless-steel.poisson-ratio",

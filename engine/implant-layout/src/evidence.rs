@@ -3,8 +3,8 @@
 //! combines sexes, converts units, interpolates, or applies a placement rule.
 //!
 //! Start with [`tables`], then [`Evidence::lookup`]. Each cell retains its
-//! published unit, source key, note section and qualifications. Read status
-//! records what the research note read, rather than a new primary-source check.
+//! published unit, source key, publication locator and qualifications. Read status
+//! records how much of the publication was read.
 
 use std::collections::BTreeMap;
 use std::sync::OnceLock;
@@ -150,7 +150,7 @@ pub enum Unit {
     Years,
 }
 
-/// The form supplied by the note, with no unreported spread added.
+/// The form printed in the publication, with no unreported spread added.
 #[derive(Clone, Debug, PartialEq, Deserialize)]
 #[serde(tag = "kind", rename_all = "kebab-case", deny_unknown_fields)]
 pub enum PublishedValue {
@@ -168,7 +168,7 @@ pub enum PublishedValue {
         sd: f64,
     },
     /// Median and, when transcribed, its interquartile range. An omitted
-    /// IQR means the supplied audit did not give that number.
+    /// IQR means that number has not been recorded.
     Median {
         value: f64,
         #[serde(default, deserialize_with = "present")]
@@ -187,7 +187,7 @@ pub enum PublishedValue {
         first: Level,
         last: Level,
     },
-    /// An anatomical disc is retained as the two levels the note names.
+    /// An anatomical disc is retained as its two named levels.
     Disc {
         upper: Level,
         lower: Level,
@@ -212,7 +212,7 @@ pub struct ObservedRange {
     pub upper: f64,
 }
 
-/// The transcription note's qualification, without repairing its numbers.
+/// A qualification of the printed value, without repairing its numbers.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub enum MarkKind {
@@ -290,7 +290,7 @@ pub struct Definition {
     pub text: String,
 }
 
-/// How much of the source the research note reports reading.
+/// How much of the source was read.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub enum ReadStatus {
@@ -299,7 +299,7 @@ pub enum ReadStatus {
     Secondary,
 }
 
-/// Bibliographic fields as supplied by the citation audit. Null issue,
+/// Bibliographic fields recorded for the publication. Null issue,
 /// volume or pages remain absent; they are never filled from another source.
 #[derive(Clone, Debug, PartialEq, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -320,8 +320,8 @@ pub struct Citation {
     pub pages: Option<String>,
 }
 
-/// Common source-record form shared with the load bench. Read status for
-/// bibliographic-only lookups does not imply the numbers were audited.
+/// Common source-record form shared with the load bench. Confirming a
+/// bibliographic record does not change its read status.
 #[derive(Clone, Debug, PartialEq, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct Source {
@@ -340,7 +340,7 @@ pub struct Source {
     pub label: String,
     #[serde(deserialize_with = "nullable")]
     pub url: Option<String>,
-    /// The former section and qualifier text, plus audit provenance.
+    /// Qualifications of the source and the recorded values.
     pub notes: String,
 }
 
@@ -529,7 +529,7 @@ impl Evidence {
                 "peer-reviewed",
                 "conference-abstract",
                 "guideline",
-                "research-note-summary",
+                "secondary-summary",
             ]
             .contains(&source.label.as_str())
             {
@@ -660,7 +660,7 @@ mod tests {
             "coordinate":{"key":"width"}, "value":{"kind":"mean-sd","mean":3,"sd":1},
             "unit":"mm", "source":"paper", "section":"table 1",
             "n":12,"range":{"lower":1,"upper":5},"printed":"3","decimals":0,
-            "mark":{"kind":"doubtful","reason":"the note questions this spread"}
+            "mark":{"kind":"doubtful","reason":"the paper prints this spread without naming it"}
         });
         assert!(serde_json::from_value::<Cell>(observation.clone()).is_ok());
         for path in ["/range", "/mark"] {

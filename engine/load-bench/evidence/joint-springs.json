@@ -4,14 +4,14 @@
       "key": "t1-2-to-l4-5-intact",
       "usage": "bench",
       "description": "Uniform T1/2–L4/5 intact joint",
-      "notes": "Moment-1 = AP (x; lateral bending);moment-2 = ML (y; flexion-extension);moment-3 = CC (z; axial rotation). Force columns AP/ML/CC. Tachi borrows stiffness from Argoubi and Shirazi-Adl1996,an adult lumbar source;uniform T1/2–L4/5 application is the planner choice. Confirmed in citation-audit-physics-tables.md §A/§B8 and DECISIONS Joint moment axes.",
+      "notes": "Moment-1 = AP (x; lateral bending);moment-2 = ML (y; flexion-extension);moment-3 = CC (z; axial rotation). Force columns AP/ML/CC. Tachi borrows stiffness from Argoubi and Shirazi-Adl1996,an adult lumbar source;uniform T1/2–L4/5 application is the planner choice.",
       "values": [
         {
           "term": "ap",
           "value": 1392,
           "unit": "N/mm",
           "source": "tachi-2021",
-          "section": "citation-audit-physics-tables.md §A, tachi-2021 Table1",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -20,7 +20,7 @@
           "value": 294,
           "unit": "N/mm",
           "source": "tachi-2021",
-          "section": "citation-audit-physics-tables.md §A, tachi-2021 Table1",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -29,7 +29,7 @@
           "value": 341,
           "unit": "N/mm",
           "source": "tachi-2021",
-          "section": "citation-audit-physics-tables.md §A, tachi-2021 Table1",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -38,7 +38,7 @@
           "value": 448,
           "unit": "N·mm/deg",
           "source": "tachi-2021",
-          "section": "citation-audit-physics-tables.md §A, tachi-2021 Table1",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -47,7 +47,7 @@
           "value": 644,
           "unit": "N·mm/deg",
           "source": "tachi-2021",
-          "section": "citation-audit-physics-tables.md §A, tachi-2021 Table1",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -56,7 +56,7 @@
           "value": 738,
           "unit": "N·mm/deg",
           "source": "tachi-2021",
-          "section": "citation-audit-physics-tables.md §A, tachi-2021 Table1",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         }
@@ -66,14 +66,14 @@
       "key": "t1-2-to-l4-5-facetectomy",
       "usage": "beside",
       "description": "Uniform joint after facetectomy",
-      "notes": "Moment-1 = AP (x; lateral bending);moment-2 = ML (y; flexion-extension);moment-3 = CC (z; axial rotation). Force columns AP/ML/CC. Tachi borrows stiffness from Argoubi and Shirazi-Adl1996,an adult lumbar source;uniform T1/2–L4/5 application is the planner choice. Confirmed in citation-audit-physics-tables.md §A/§B8 and DECISIONS Joint moment axes.",
+      "notes": "Moment-1 = AP (x; lateral bending);moment-2 = ML (y; flexion-extension);moment-3 = CC (z; axial rotation). Force columns AP/ML/CC. Tachi borrows stiffness from Argoubi and Shirazi-Adl1996,an adult lumbar source;uniform T1/2–L4/5 application is the planner choice.",
       "values": [
         {
           "term": "ap",
           "value": 696,
           "unit": "N/mm",
           "source": "tachi-2021",
-          "section": "citation-audit-physics-tables.md §A, tachi-2021 Table1",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -82,7 +82,7 @@
           "value": 188,
           "unit": "N/mm",
           "source": "tachi-2021",
-          "section": "citation-audit-physics-tables.md §A, tachi-2021 Table1",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -91,7 +91,7 @@
           "value": 188,
           "unit": "N/mm",
           "source": "tachi-2021",
-          "section": "citation-audit-physics-tables.md §A, tachi-2021 Table1",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -100,7 +100,7 @@
           "value": 224,
           "unit": "N·mm/deg",
           "source": "tachi-2021",
-          "section": "citation-audit-physics-tables.md §A, tachi-2021 Table1",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -109,7 +109,7 @@
           "value": 406,
           "unit": "N·mm/deg",
           "source": "tachi-2021",
-          "section": "citation-audit-physics-tables.md §A, tachi-2021 Table1",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -118,7 +118,7 @@
           "value": 406,
           "unit": "N·mm/deg",
           "source": "tachi-2021",
-          "section": "citation-audit-physics-tables.md §A, tachi-2021 Table1",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         }
@@ -128,14 +128,14 @@
       "key": "l5-s1",
       "usage": "bench",
       "description": "L5/S1 joint",
-      "notes": "Moment-1 = AP (x; lateral bending);moment-2 = ML (y; flexion-extension);moment-3 = CC (z; axial rotation). Force columns AP/ML/CC. Tachi borrows stiffness from Argoubi and Shirazi-Adl1996,an adult lumbar source;uniform T1/2–L4/5 application is the planner choice. Confirmed in citation-audit-physics-tables.md §A/§B8 and DECISIONS Joint moment axes.",
+      "notes": "Moment-1 = AP (x; lateral bending);moment-2 = ML (y; flexion-extension);moment-3 = CC (z; axial rotation). Force columns AP/ML/CC. Tachi borrows stiffness from Argoubi and Shirazi-Adl1996,an adult lumbar source;uniform T1/2–L4/5 application is the planner choice.",
       "values": [
         {
           "term": "ap",
           "value": 700,
           "unit": "N/mm",
           "source": "tachi-2021",
-          "section": "citation-audit-physics-tables.md §A, tachi-2021 Table1",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -144,7 +144,7 @@
           "value": 190,
           "unit": "N/mm",
           "source": "tachi-2021",
-          "section": "citation-audit-physics-tables.md §A, tachi-2021 Table1",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -153,7 +153,7 @@
           "value": 190,
           "unit": "N/mm",
           "source": "tachi-2021",
-          "section": "citation-audit-physics-tables.md §A, tachi-2021 Table1",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -162,7 +162,7 @@
           "value": 222,
           "unit": "N·mm/deg",
           "source": "tachi-2021",
-          "section": "citation-audit-physics-tables.md §A, tachi-2021 Table1",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -171,7 +171,7 @@
           "value": 410,
           "unit": "N·mm/deg",
           "source": "tachi-2021",
-          "section": "citation-audit-physics-tables.md §A, tachi-2021 Table1",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -180,7 +180,7 @@
           "value": 410,
           "unit": "N·mm/deg",
           "source": "tachi-2021",
-          "section": "citation-audit-physics-tables.md §A, tachi-2021 Table1",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         }
@@ -197,7 +197,7 @@
           "value": -17,
           "unit": "%",
           "source": "wang-2017",
-          "section": "citation-audit-physics-tables.md §A/§B9, wang-2017",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -206,7 +206,7 @@
           "value": -15,
           "unit": "%",
           "source": "wang-2017",
-          "section": "citation-audit-physics-tables.md §A/§B9, wang-2017",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -215,7 +215,7 @@
           "value": -3.8,
           "unit": "%",
           "source": "wang-2017",
-          "section": "citation-audit-physics-tables.md §A/§B9, wang-2017",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -224,7 +224,7 @@
           "value": -14,
           "unit": "%",
           "source": "wang-2017",
-          "section": "citation-audit-physics-tables.md §A/§B9, wang-2017",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         }
@@ -241,7 +241,7 @@
           "value": 1.71,
           "unit": "ratio",
           "source": "gardner-morse-2004",
-          "section": "published-simulators.md §2a",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -250,7 +250,7 @@
           "value": 2.11,
           "unit": "ratio",
           "source": "gardner-morse-2004",
-          "section": "published-simulators.md §2a",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -259,7 +259,7 @@
           "value": 250,
           "unit": "N",
           "source": "gardner-morse-2004",
-          "section": "published-simulators.md §2a",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -268,7 +268,7 @@
           "value": 500,
           "unit": "N",
           "source": "gardner-morse-2004",
-          "section": "published-simulators.md §2a",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         }
@@ -285,7 +285,7 @@
           "value": 1,
           "unit": "ratio",
           "source": "project-assumptions",
-          "section": "SYNTHESIS.md §3.4",
+          "section": "project assumption: global stiffness scale prior",
           "basis": "own-inference",
           "approximate": false
         },
@@ -294,7 +294,7 @@
           "value": 10,
           "unit": "ratio",
           "source": "project-assumptions",
-          "section": "SYNTHESIS.md §3.4",
+          "section": "project assumption: global stiffness scale prior",
           "basis": "own-inference",
           "approximate": false
         },
@@ -303,7 +303,7 @@
           "value": 1.38,
           "unit": "ratio",
           "source": "petit-2004",
-          "section": "published-simulators.md §2f; earlier flexibility note §3",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -312,7 +312,7 @@
           "value": 10.0,
           "unit": "ratio",
           "source": "petit-2004",
-          "section": "published-simulators.md §2f; earlier flexibility note §3",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -321,7 +321,7 @@
           "value": 1.74,
           "unit": "ratio",
           "source": "petit-2004",
-          "section": "published-simulators.md §2f; earlier flexibility note §3",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -330,7 +330,7 @@
           "value": 5.18,
           "unit": "ratio",
           "source": "petit-2004",
-          "section": "published-simulators.md §2f; earlier flexibility note §3",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         }
@@ -347,7 +347,7 @@
           "value": 40,
           "unit": "%",
           "source": "watkins-2005",
-          "section": "published-simulators.md §2b",
+          "section": "abstract",
           "basis": "published",
           "approximate": true
         },
@@ -356,7 +356,7 @@
           "value": 35,
           "unit": "%",
           "source": "watkins-2005",
-          "section": "published-simulators.md §2b",
+          "section": "abstract",
           "basis": "published",
           "approximate": true
         },
@@ -365,7 +365,7 @@
           "value": 31,
           "unit": "%",
           "source": "watkins-2005",
-          "section": "published-simulators.md §2b",
+          "section": "abstract",
           "basis": "published",
           "approximate": true
         }
@@ -382,7 +382,7 @@
           "value": 6.85,
           "unit": "unstated",
           "source": "mannen-2018",
-          "section": "citation-audit-physics-tables.md §A/§B9, mannen-2018 Table2",
+          "section": "Table 2",
           "basis": "published",
           "approximate": false
         },
@@ -391,7 +391,7 @@
           "value": 4.7,
           "unit": "unstated",
           "source": "mannen-2018",
-          "section": "citation-audit-physics-tables.md §A/§B9, mannen-2018 Table2",
+          "section": "Table 2",
           "basis": "published",
           "approximate": false
         },
@@ -400,7 +400,7 @@
           "value": 2.29,
           "unit": "unstated",
           "source": "mannen-2018",
-          "section": "citation-audit-physics-tables.md §A/§B9, mannen-2018 Table2",
+          "section": "Table 2",
           "basis": "published",
           "approximate": false
         },
@@ -409,7 +409,7 @@
           "value": 2.12,
           "unit": "unstated",
           "source": "mannen-2018",
-          "section": "citation-audit-physics-tables.md §A/§B9, mannen-2018 Table2",
+          "section": "Table 2",
           "basis": "published",
           "approximate": false
         },
@@ -418,7 +418,7 @@
           "value": 3.28,
           "unit": "unstated",
           "source": "mannen-2018",
-          "section": "citation-audit-physics-tables.md §A/§B9, mannen-2018 Table2",
+          "section": "Table 2",
           "basis": "published",
           "approximate": false
         },
@@ -427,7 +427,7 @@
           "value": 1.35,
           "unit": "unstated",
           "source": "mannen-2018",
-          "section": "citation-audit-physics-tables.md §A/§B9, mannen-2018 Table2",
+          "section": "Table 2",
           "basis": "published",
           "approximate": false
         }
@@ -444,7 +444,7 @@
           "value": 8.3,
           "unit": "unstated",
           "source": "mannen-2018",
-          "section": "citation-audit-physics-tables.md §A/§B9, mannen-2018 Table2",
+          "section": "Table 2",
           "basis": "published",
           "approximate": false
         },
@@ -453,7 +453,7 @@
           "value": 4.48,
           "unit": "unstated",
           "source": "mannen-2018",
-          "section": "citation-audit-physics-tables.md §A/§B9, mannen-2018 Table2",
+          "section": "Table 2",
           "basis": "published",
           "approximate": false
         },
@@ -462,7 +462,7 @@
           "value": 4.74,
           "unit": "unstated",
           "source": "mannen-2018",
-          "section": "citation-audit-physics-tables.md §A/§B9, mannen-2018 Table2",
+          "section": "Table 2",
           "basis": "published",
           "approximate": false
         },
@@ -471,7 +471,7 @@
           "value": 3.36,
           "unit": "unstated",
           "source": "mannen-2018",
-          "section": "citation-audit-physics-tables.md §A/§B9, mannen-2018 Table2",
+          "section": "Table 2",
           "basis": "published",
           "approximate": false
         },
@@ -480,7 +480,7 @@
           "value": 4.51,
           "unit": "unstated",
           "source": "mannen-2018",
-          "section": "citation-audit-physics-tables.md §A/§B9, mannen-2018 Table2",
+          "section": "Table 2",
           "basis": "published",
           "approximate": false
         },
@@ -489,7 +489,7 @@
           "value": 1.08,
           "unit": "unstated",
           "source": "mannen-2018",
-          "section": "citation-audit-physics-tables.md §A/§B9, mannen-2018 Table2",
+          "section": "Table 2",
           "basis": "published",
           "approximate": false
         },
@@ -498,7 +498,7 @@
           "value": 6.13,
           "unit": "unstated",
           "source": "mannen-2018",
-          "section": "published-simulators.md §2b regional stiffness uncertainty",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         }
@@ -515,7 +515,7 @@
           "value": 2.87,
           "unit": "unstated",
           "source": "mannen-2018",
-          "section": "citation-audit-physics-tables.md §A/§B9, mannen-2018 Table2",
+          "section": "Table 2",
           "basis": "published",
           "approximate": false
         },
@@ -524,7 +524,7 @@
           "value": 1.5,
           "unit": "unstated",
           "source": "mannen-2018",
-          "section": "citation-audit-physics-tables.md §A/§B9, mannen-2018 Table2",
+          "section": "Table 2",
           "basis": "published",
           "approximate": false
         },
@@ -533,7 +533,7 @@
           "value": 2.97,
           "unit": "unstated",
           "source": "mannen-2018",
-          "section": "citation-audit-physics-tables.md §A/§B9, mannen-2018 Table2",
+          "section": "Table 2",
           "basis": "published",
           "approximate": false
         },
@@ -542,7 +542,7 @@
           "value": 1.39,
           "unit": "unstated",
           "source": "mannen-2018",
-          "section": "citation-audit-physics-tables.md §A/§B9, mannen-2018 Table2",
+          "section": "Table 2",
           "basis": "published",
           "approximate": false
         },
@@ -551,7 +551,7 @@
           "value": 2.31,
           "unit": "unstated",
           "source": "mannen-2018",
-          "section": "citation-audit-physics-tables.md §A/§B9, mannen-2018 Table2",
+          "section": "Table 2",
           "basis": "published",
           "approximate": false
         },
@@ -560,7 +560,7 @@
           "value": 1.02,
           "unit": "unstated",
           "source": "mannen-2018",
-          "section": "citation-audit-physics-tables.md §A/§B9, mannen-2018 Table2",
+          "section": "Table 2",
           "basis": "published",
           "approximate": false
         }
@@ -577,7 +577,7 @@
           "value": 72,
           "unit": "%",
           "source": "liebsch-2020",
-          "section": "earlier flexibility_and_biomechanics.md §6,linked from published-simulators.md §2b",
+          "section": "Table 2",
           "basis": "published",
           "approximate": false
         },
@@ -586,7 +586,7 @@
           "value": 11,
           "unit": "%",
           "source": "liebsch-2020",
-          "section": "earlier flexibility_and_biomechanics.md §6,linked from published-simulators.md §2b",
+          "section": "Table 2",
           "basis": "published",
           "approximate": false
         },
@@ -595,7 +595,7 @@
           "value": 9,
           "unit": "%",
           "source": "liebsch-2020",
-          "section": "earlier flexibility_and_biomechanics.md §6,linked from published-simulators.md §2b",
+          "section": "Table 2",
           "basis": "published",
           "approximate": false
         }
@@ -605,14 +605,14 @@
       "key": "rib-lateral-bending",
       "usage": "bench",
       "description": "Uncertain rib-cage multiplier",
-      "notes": "Own inference copied from note; see Watkins, Mannen, Liebsch rows for disagreeing inputs.",
+      "notes": "Own inference; see Watkins, Mannen, Liebsch rows for disagreeing inputs.",
       "values": [
         {
           "term": "lower",
           "value": 1.35,
           "unit": "ratio",
           "source": "project-assumptions",
-          "section": "published-simulators.md §2b own inference",
+          "section": "own inference: uncertain rib-cage multiplier range",
           "basis": "own-inference",
           "approximate": false
         },
@@ -621,7 +621,7 @@
           "value": 1.9,
           "unit": "ratio",
           "source": "project-assumptions",
-          "section": "published-simulators.md §2b own inference",
+          "section": "own inference: uncertain rib-cage multiplier range",
           "basis": "own-inference",
           "approximate": false
         }
@@ -631,14 +631,14 @@
       "key": "rib-axial-rotation",
       "usage": "bench",
       "description": "Uncertain rib-cage multiplier",
-      "notes": "Own inference copied from note; see Watkins, Mannen, Liebsch rows for disagreeing inputs.",
+      "notes": "Own inference; see Watkins, Mannen, Liebsch rows for disagreeing inputs.",
       "values": [
         {
           "term": "lower",
           "value": 1.3,
           "unit": "ratio",
           "source": "project-assumptions",
-          "section": "published-simulators.md §2b own inference",
+          "section": "own inference: uncertain rib-cage multiplier range",
           "basis": "own-inference",
           "approximate": false
         },
@@ -647,7 +647,7 @@
           "value": 4,
           "unit": "ratio",
           "source": "project-assumptions",
-          "section": "published-simulators.md §2b own inference",
+          "section": "own inference: uncertain rib-cage multiplier range",
           "basis": "own-inference",
           "approximate": false
         }
@@ -664,7 +664,7 @@
           "value": 0.92,
           "unit": "Nm/deg",
           "source": "stokes-gardner-morse-2016",
-          "section": "citation-audit-physics-tables.md §A/§B5, stokes-gardner-morse-2016 Table3",
+          "section": "Table 3",
           "basis": "published",
           "approximate": false
         },
@@ -673,7 +673,7 @@
           "value": 0.11,
           "unit": "Nm/deg",
           "source": "stokes-gardner-morse-2016",
-          "section": "citation-audit-physics-tables.md §A/§B5, stokes-gardner-morse-2016 Table3",
+          "section": "Table 3",
           "basis": "published",
           "approximate": false
         },
@@ -682,7 +682,7 @@
           "value": 0.85,
           "unit": "Nm/deg",
           "source": "stokes-gardner-morse-2016",
-          "section": "citation-audit-physics-tables.md §A/§B5, stokes-gardner-morse-2016 Table3",
+          "section": "Table 3",
           "basis": "published",
           "approximate": false
         },
@@ -691,7 +691,7 @@
           "value": 0.14,
           "unit": "Nm/deg",
           "source": "stokes-gardner-morse-2016",
-          "section": "citation-audit-physics-tables.md §A/§B5, stokes-gardner-morse-2016 Table3",
+          "section": "Table 3",
           "basis": "published",
           "approximate": false
         },
@@ -700,7 +700,7 @@
           "value": 0.06,
           "unit": "kN/mm",
           "source": "stokes-gardner-morse-2016",
-          "section": "published-simulators.md §2a table",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -709,7 +709,7 @@
           "value": 0.01,
           "unit": "kN/mm",
           "source": "stokes-gardner-morse-2016",
-          "section": "published-simulators.md §2a table",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -718,7 +718,7 @@
           "value": 0.08,
           "unit": "kN/mm",
           "source": "stokes-gardner-morse-2016",
-          "section": "published-simulators.md §2a table",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -727,7 +727,7 @@
           "value": 0.01,
           "unit": "kN/mm",
           "source": "stokes-gardner-morse-2016",
-          "section": "published-simulators.md §2a table",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -736,7 +736,7 @@
           "value": 0.41,
           "unit": "kN/mm",
           "source": "stokes-gardner-morse-2016",
-          "section": "published-simulators.md §2a table",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -745,7 +745,7 @@
           "value": 0.08,
           "unit": "kN/mm",
           "source": "stokes-gardner-morse-2016",
-          "section": "published-simulators.md §2a table",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         }
@@ -762,7 +762,7 @@
           "value": 1.9,
           "unit": "Nm/deg",
           "source": "stokes-gardner-morse-2016",
-          "section": "citation-audit-physics-tables.md §A/§B5, stokes-gardner-morse-2016 Table3",
+          "section": "Table 3",
           "basis": "published",
           "approximate": false
         },
@@ -771,7 +771,7 @@
           "value": 0.6,
           "unit": "Nm/deg",
           "source": "stokes-gardner-morse-2016",
-          "section": "citation-audit-physics-tables.md §A/§B5, stokes-gardner-morse-2016 Table3",
+          "section": "Table 3",
           "basis": "published",
           "approximate": false
         },
@@ -780,7 +780,7 @@
           "value": 1.7,
           "unit": "Nm/deg",
           "source": "stokes-gardner-morse-2016",
-          "section": "citation-audit-physics-tables.md §A/§B5, stokes-gardner-morse-2016 Table3",
+          "section": "Table 3",
           "basis": "published",
           "approximate": false
         },
@@ -789,7 +789,7 @@
           "value": 0.2,
           "unit": "Nm/deg",
           "source": "stokes-gardner-morse-2016",
-          "section": "citation-audit-physics-tables.md §A/§B5, stokes-gardner-morse-2016 Table3",
+          "section": "Table 3",
           "basis": "published",
           "approximate": false
         },
@@ -798,7 +798,7 @@
           "value": 0.11,
           "unit": "kN/mm",
           "source": "stokes-gardner-morse-2016",
-          "section": "published-simulators.md §2a table",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -807,7 +807,7 @@
           "value": 0.01,
           "unit": "kN/mm",
           "source": "stokes-gardner-morse-2016",
-          "section": "published-simulators.md §2a table",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -816,7 +816,7 @@
           "value": 0.14,
           "unit": "kN/mm",
           "source": "stokes-gardner-morse-2016",
-          "section": "published-simulators.md §2a table",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -825,7 +825,7 @@
           "value": 0.02,
           "unit": "kN/mm",
           "source": "stokes-gardner-morse-2016",
-          "section": "published-simulators.md §2a table",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -834,7 +834,7 @@
           "value": 1.7,
           "unit": "kN/mm",
           "source": "stokes-gardner-morse-2016",
-          "section": "published-simulators.md §2a table",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -843,7 +843,7 @@
           "value": 0.1,
           "unit": "kN/mm",
           "source": "stokes-gardner-morse-2016",
-          "section": "published-simulators.md §2a table",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         }
@@ -860,7 +860,7 @@
           "value": 2.7,
           "unit": "Nm/deg",
           "source": "stokes-gardner-morse-2016",
-          "section": "citation-audit-physics-tables.md §A/§B5, stokes-gardner-morse-2016 Table3",
+          "section": "Table 3",
           "basis": "published",
           "approximate": false
         },
@@ -869,7 +869,7 @@
           "value": 0.8,
           "unit": "Nm/deg",
           "source": "stokes-gardner-morse-2016",
-          "section": "citation-audit-physics-tables.md §A/§B5, stokes-gardner-morse-2016 Table3",
+          "section": "Table 3",
           "basis": "published",
           "approximate": false
         },
@@ -878,7 +878,7 @@
           "value": 2.2,
           "unit": "Nm/deg",
           "source": "stokes-gardner-morse-2016",
-          "section": "citation-audit-physics-tables.md §A/§B5, stokes-gardner-morse-2016 Table3",
+          "section": "Table 3",
           "basis": "published",
           "approximate": false
         },
@@ -887,7 +887,7 @@
           "value": 0.2,
           "unit": "Nm/deg",
           "source": "stokes-gardner-morse-2016",
-          "section": "citation-audit-physics-tables.md §A/§B5, stokes-gardner-morse-2016 Table3",
+          "section": "Table 3",
           "basis": "published",
           "approximate": false
         },
@@ -896,7 +896,7 @@
           "value": 0.15,
           "unit": "kN/mm",
           "source": "stokes-gardner-morse-2016",
-          "section": "published-simulators.md §2a table",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -905,7 +905,7 @@
           "value": 0.02,
           "unit": "kN/mm",
           "source": "stokes-gardner-morse-2016",
-          "section": "published-simulators.md §2a table",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -914,7 +914,7 @@
           "value": 0.19,
           "unit": "kN/mm",
           "source": "stokes-gardner-morse-2016",
-          "section": "published-simulators.md §2a table",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -923,7 +923,7 @@
           "value": 0.02,
           "unit": "kN/mm",
           "source": "stokes-gardner-morse-2016",
-          "section": "published-simulators.md §2a table",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -932,7 +932,7 @@
           "value": 2.5,
           "unit": "kN/mm",
           "source": "stokes-gardner-morse-2016",
-          "section": "published-simulators.md §2a table",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -941,7 +941,7 @@
           "value": 0.2,
           "unit": "kN/mm",
           "source": "stokes-gardner-morse-2016",
-          "section": "published-simulators.md §2a table",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         }
@@ -958,7 +958,7 @@
           "value": 2.8,
           "unit": "Nm/deg",
           "source": "stokes-gardner-morse-2016",
-          "section": "citation-audit-physics-tables.md §A/§B5, stokes-gardner-morse-2016 Table3",
+          "section": "Table 3",
           "basis": "published",
           "approximate": false
         },
@@ -967,7 +967,7 @@
           "value": 2.2,
           "unit": "Nm/deg",
           "source": "stokes-gardner-morse-2016",
-          "section": "citation-audit-physics-tables.md §A/§B5, stokes-gardner-morse-2016 Table3",
+          "section": "Table 3",
           "basis": "published",
           "approximate": false
         },
@@ -976,7 +976,7 @@
           "value": 2.4,
           "unit": "Nm/deg",
           "source": "stokes-gardner-morse-2016",
-          "section": "citation-audit-physics-tables.md §A/§B5, stokes-gardner-morse-2016 Table3",
+          "section": "Table 3",
           "basis": "published",
           "approximate": false
         },
@@ -985,7 +985,7 @@
           "value": 1.0,
           "unit": "Nm/deg",
           "source": "stokes-gardner-morse-2016",
-          "section": "citation-audit-physics-tables.md §A/§B5, stokes-gardner-morse-2016 Table3",
+          "section": "Table 3",
           "basis": "published",
           "approximate": false
         },
@@ -994,7 +994,7 @@
           "value": 0.17,
           "unit": "kN/mm",
           "source": "stokes-gardner-morse-2016",
-          "section": "published-simulators.md §2a table",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -1003,7 +1003,7 @@
           "value": 0.07,
           "unit": "kN/mm",
           "source": "stokes-gardner-morse-2016",
-          "section": "published-simulators.md §2a table",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -1012,7 +1012,7 @@
           "value": 0.21,
           "unit": "kN/mm",
           "source": "stokes-gardner-morse-2016",
-          "section": "published-simulators.md §2a table",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -1021,7 +1021,7 @@
           "value": 0.07,
           "unit": "kN/mm",
           "source": "stokes-gardner-morse-2016",
-          "section": "published-simulators.md §2a table",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -1030,7 +1030,7 @@
           "value": 3.3,
           "unit": "kN/mm",
           "source": "stokes-gardner-morse-2016",
-          "section": "published-simulators.md §2a table",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -1039,7 +1039,7 @@
           "value": 0.7,
           "unit": "kN/mm",
           "source": "stokes-gardner-morse-2016",
-          "section": "published-simulators.md §2a table",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -1048,7 +1048,7 @@
           "value": 0.01,
           "unit": "Hz",
           "source": "stokes-gardner-morse-2016",
-          "section": "citation-audit-physics-tables.md §A/§B5",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -1057,7 +1057,7 @@
           "value": 132,
           "unit": "N",
           "source": "stokes-gardner-morse-2016",
-          "section": "citation-audit-physics-tables.md §A",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         }
@@ -1067,14 +1067,14 @@
       "key": "thoracic-secants",
       "usage": "beside",
       "description": "Thoracic secant comparison",
-      "notes": "Own secants=7.5N·m/ROM. Corrected T2–T6 AR endpoints recomputed from5.7/5.2degrees,without decimal rounding. T6-T7 excluded from that range;all other copied note secants unchanged. Inputs in thoracic-rom.",
+      "notes": "Own secants=7.5N·m/ROM. Corrected T2–T6 AR endpoints recomputed from5.7/5.2degrees,without decimal rounding. T6-T7 excluded from that range;all other secants unchanged. Inputs in thoracic-rom.",
       "values": [
         {
           "term": "t1-t2-lb",
           "value": 1.27,
           "unit": "Nm/deg",
           "source": "project-assumptions",
-          "section": "published-simulators.md §2b Wilke table,own inference7.5/ROM",
+          "section": "worked out from the Wilke ROM values (own inference 7.5/ROM)",
           "basis": "own-inference",
           "approximate": false
         },
@@ -1083,7 +1083,7 @@
           "value": 1.21,
           "unit": "Nm/deg",
           "source": "project-assumptions",
-          "section": "published-simulators.md §2b Wilke table,own inference7.5/ROM",
+          "section": "worked out from the Wilke ROM values (own inference 7.5/ROM)",
           "basis": "own-inference",
           "approximate": false
         },
@@ -1092,7 +1092,7 @@
           "value": 1.34,
           "unit": "Nm/deg",
           "source": "project-assumptions",
-          "section": "published-simulators.md §2b Wilke table,own inference7.5/ROM",
+          "section": "worked out from the Wilke ROM values (own inference 7.5/ROM)",
           "basis": "own-inference",
           "approximate": false
         },
@@ -1101,7 +1101,7 @@
           "value": 1.53,
           "unit": "Nm/deg",
           "source": "project-assumptions",
-          "section": "published-simulators.md §2b Wilke table,own inference7.5/ROM",
+          "section": "worked out from the Wilke ROM values (own inference 7.5/ROM)",
           "basis": "own-inference",
           "approximate": false
         },
@@ -1110,7 +1110,7 @@
           "value": 1.3157894736842104,
           "unit": "Nm/deg",
           "source": "project-assumptions",
-          "section": "citation-audit-physics-tables.md §A/§B2, wilke-2017",
+          "section": "worked out from the Wilke ROM endpoints (own inference: applied moment over ROM)",
           "basis": "own-inference",
           "approximate": true
         },
@@ -1119,7 +1119,7 @@
           "value": 1.4423076923076923,
           "unit": "Nm/deg",
           "source": "project-assumptions",
-          "section": "citation-audit-physics-tables.md §A/§B2, wilke-2017",
+          "section": "worked out from the Wilke ROM endpoints (own inference: applied moment over ROM)",
           "basis": "own-inference",
           "approximate": true
         },
@@ -1128,7 +1128,7 @@
           "value": 2.03,
           "unit": "Nm/deg",
           "source": "project-assumptions",
-          "section": "published-simulators.md §2b Wilke table,own inference7.5/ROM",
+          "section": "worked out from the Wilke ROM values (own inference 7.5/ROM)",
           "basis": "own-inference",
           "approximate": false
         },
@@ -1137,7 +1137,7 @@
           "value": 1.5,
           "unit": "Nm/deg",
           "source": "project-assumptions",
-          "section": "published-simulators.md §2b Wilke table,own inference7.5/ROM",
+          "section": "worked out from the Wilke ROM values (own inference 7.5/ROM)",
           "basis": "own-inference",
           "approximate": false
         },
@@ -1146,7 +1146,7 @@
           "value": 1.67,
           "unit": "Nm/deg",
           "source": "project-assumptions",
-          "section": "published-simulators.md §2b Wilke table,own inference7.5/ROM",
+          "section": "worked out from the Wilke ROM values (own inference 7.5/ROM)",
           "basis": "own-inference",
           "approximate": false
         },
@@ -1155,7 +1155,7 @@
           "value": 1.97,
           "unit": "Nm/deg",
           "source": "project-assumptions",
-          "section": "published-simulators.md §2b Wilke table,own inference7.5/ROM",
+          "section": "worked out from the Wilke ROM values (own inference 7.5/ROM)",
           "basis": "own-inference",
           "approximate": false
         },
@@ -1164,7 +1164,7 @@
           "value": 1.5,
           "unit": "Nm/deg",
           "source": "project-assumptions",
-          "section": "published-simulators.md §2b Wilke table,own inference7.5/ROM",
+          "section": "worked out from the Wilke ROM values (own inference 7.5/ROM)",
           "basis": "own-inference",
           "approximate": false
         },
@@ -1173,7 +1173,7 @@
           "value": 2.27,
           "unit": "Nm/deg",
           "source": "project-assumptions",
-          "section": "published-simulators.md §2b Wilke table,own inference7.5/ROM",
+          "section": "worked out from the Wilke ROM values (own inference 7.5/ROM)",
           "basis": "own-inference",
           "approximate": false
         }
@@ -1190,7 +1190,7 @@
           "value": 7.1,
           "unit": "deg",
           "source": "wilke-2017",
-          "section": "published-simulators.md §2b",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -1199,7 +1199,7 @@
           "value": 6.7,
           "unit": "deg",
           "source": "wilke-2017",
-          "section": "published-simulators.md §2b",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -1208,7 +1208,7 @@
           "value": 5.9,
           "unit": "deg",
           "source": "wilke-2017",
-          "section": "published-simulators.md §2b",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -1217,7 +1217,7 @@
           "value": 6.2,
           "unit": "deg",
           "source": "wilke-2017",
-          "section": "published-simulators.md §2b",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -1226,7 +1226,7 @@
           "value": 4.9,
           "unit": "deg",
           "source": "wilke-2017",
-          "section": "published-simulators.md §2b",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -1235,7 +1235,7 @@
           "value": 5.6,
           "unit": "deg",
           "source": "wilke-2017",
-          "section": "published-simulators.md §2b",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -1244,7 +1244,7 @@
           "value": 5.2,
           "unit": "deg",
           "source": "wilke-2017",
-          "section": "citation-audit-physics-tables.md §A/§B2, wilke-2017",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -1253,7 +1253,7 @@
           "value": 5.7,
           "unit": "deg",
           "source": "wilke-2017",
-          "section": "citation-audit-physics-tables.md §A/§B2, wilke-2017",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -1262,7 +1262,7 @@
           "value": 5.9,
           "unit": "deg",
           "source": "wilke-2017",
-          "section": "published-simulators.md §2b",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -1271,7 +1271,7 @@
           "value": 3.7,
           "unit": "deg",
           "source": "wilke-2017",
-          "section": "published-simulators.md §2b",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -1280,7 +1280,7 @@
           "value": 3.8,
           "unit": "deg",
           "source": "wilke-2017",
-          "section": "published-simulators.md §2b",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -1289,7 +1289,7 @@
           "value": 4.5,
           "unit": "deg",
           "source": "wilke-2017",
-          "section": "published-simulators.md §2b",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -1298,7 +1298,7 @@
           "value": 3.3,
           "unit": "deg",
           "source": "wilke-2017",
-          "section": "published-simulators.md §2b",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -1307,7 +1307,7 @@
           "value": 5,
           "unit": "deg",
           "source": "wilke-2017",
-          "section": "published-simulators.md §2b",
+          "section": "not recorded",
           "basis": "published",
           "approximate": true
         },
@@ -1316,7 +1316,7 @@
           "value": 5,
           "unit": "deg",
           "source": "wilke-2017",
-          "section": "published-simulators.md §2b",
+          "section": "not recorded",
           "basis": "published",
           "approximate": true
         },
@@ -1325,7 +1325,7 @@
           "value": 7.5,
           "unit": "N·m",
           "source": "wilke-2017",
-          "section": "published-simulators.md §2b",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -1334,7 +1334,7 @@
           "value": 3.1,
           "unit": "deg",
           "source": "wilke-2017",
-          "section": "published-simulators.md §2b ROM table",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -1343,7 +1343,7 @@
           "value": 3.8,
           "unit": "deg",
           "source": "wilke-2017",
-          "section": "published-simulators.md §2b ROM table",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -1352,7 +1352,7 @@
           "value": 4.1,
           "unit": "deg",
           "source": "wilke-2017",
-          "section": "published-simulators.md §2b ROM table",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -1361,7 +1361,7 @@
           "value": 2.8,
           "unit": "deg",
           "source": "wilke-2017",
-          "section": "published-simulators.md §2b ROM table",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -1370,7 +1370,7 @@
           "value": 2.8,
           "unit": "deg",
           "source": "wilke-2017",
-          "section": "published-simulators.md §2b ROM table",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -1379,7 +1379,7 @@
           "value": 3.1,
           "unit": "deg",
           "source": "wilke-2017",
-          "section": "published-simulators.md §2b ROM table",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -1388,7 +1388,7 @@
           "value": 3.8,
           "unit": "deg",
           "source": "wilke-2017",
-          "section": "published-simulators.md §2b ROM table",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         }
@@ -1398,7 +1398,7 @@
   "missing": [
     {
       "key": "rib-flexion-range",
-      "reason": "SYNTHESIS1.08–2.14 are not literal note endpoints; Mannen raw FE pairs retained, no ratios computed."
+      "reason": "A flexion range of 1.08–2.14 is not supplied as literal endpoints; Mannen raw FE pairs retained, no ratios computed here. The bench works the range out from those pairs when it samples."
     },
     {
       "key": "acute-screw-bone-stiffness",
@@ -1406,11 +1406,11 @@
     },
     {
       "key": "lumbar-disc-my-ry",
-      "reason": "The cadaver comparison table in published-simulators section2a has no My/Ry row."
+      "reason": "The cadaver comparison table has no My/Ry row."
     },
     {
       "key": "mannen-confirmed-units",
-      "reason": "The note says EZS units are not printed; Nm/deg is presumed, not confirmed."
+      "reason": "EZS units are not printed in the paper; Nm/deg is presumed, not confirmed."
     }
   ]
 }

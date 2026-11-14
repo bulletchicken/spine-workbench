@@ -201,7 +201,7 @@ fn input() -> LayoutInput {
 
 #[test]
 fn the_first_body_contact_can_flip_by_tilt_without_any_centre_uncertainty() {
-    // fusion-levels 2a: LTV is the most cephalad TL/L body touched.
+    // LTV is the most cephalad TL/L body touched.
     // T12 initially spans y=[0.001,30.001], so L1 is the first touch.
     // With a positive 0.001-radian tilt, its left edge is
     // 15.001 - 15 cos(a) - 10 sin(a) < 0, so T12 becomes the LTV.

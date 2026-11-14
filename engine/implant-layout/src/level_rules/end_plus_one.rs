@@ -41,7 +41,7 @@ mod tests {
         fixture.reading.curves = vec![curve];
         fixture.reading.major = Some(0);
         let (offset, _) = threshold("end-plus-one", "liv-below-end").unwrap();
-        // The note says EV+1. Move the made-up EV through T10,T11,T12;
+        // The rule takes EV+1. Move the made-up EV through T10,T11,T12;
         // counting down by the printed offset gives T11,T12,L1.
         for end in 9..=11 {
             fixture.reading.curves[0].lower_index = end;

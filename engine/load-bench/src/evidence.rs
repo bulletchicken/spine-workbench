@@ -1,11 +1,11 @@
-//! Compiled evidence in the units and precision transcribed in the notes.
+//! Compiled evidence with published units and precision.
 //! [`Evidence::read`] parses all six files strictly; [`Evidence::value`]
 //! performs an exact lookup. It never interpolates, chooses a neighbouring
 //! row, supplies a missing number, or silently converts a unit.
 //!
 //! `Bench` rows hold chosen inputs or labelled priors. `Beside` preserves
 //! conflicting evidence; `Input` holds inputs behind an inference. Read
-//! status describes the research note's access, not a new paper inspection.
+//! status describes how much of the publication was read.
 //! See `evidence/README.md` for keys, provenance and known gaps.
 
 use serde::Deserialize;
@@ -41,7 +41,7 @@ pub enum Usage {
     Input,
 }
 
-/// A reported number, or a calculation/choice made in the notes.
+/// A reported number, or a project calculation or choice.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub enum Basis {
@@ -119,7 +119,7 @@ pub enum Unit {
 }
 
 /// One cell. Endpoints, SDs and SEs have separate terms, each with its
-/// source and note section. `approximate` preserves the note's qualification.
+/// source and publication locator. `approximate` preserves the qualification.
 #[derive(Clone, Debug, PartialEq, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct Value {
@@ -160,7 +160,7 @@ pub struct Table {
     pub missing: Vec<MissingValue>,
 }
 
-/// How far the research note read the source.
+/// How much of the source was read.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub enum Read {
@@ -169,8 +169,8 @@ pub enum Read {
     Secondary,
 }
 
-/// Bibliography as available in the notes. Missing titles or journals
-/// stay `None`; a descriptive note heading is not a paper title.
+/// Bibliographic fields recorded for the publication. Missing titles or journals
+/// stay `None`; a descriptive heading is not a paper title.
 #[derive(Clone, Debug, PartialEq, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct Citation {
@@ -194,8 +194,8 @@ pub struct Source {
     pub pmid: Option<String>,
     pub doi: Option<String>,
     pub pmcid: Option<String>,
-    /// The supplied audit that identified this bibliographic record.
-    /// `None` means no record for this paper was supplied in that audit.
+    /// What the bibliographic confirmation covered: "bibliographic record and
+    /// read status" or "bibliographic record only". `None` means none is recorded.
     pub record_note: Option<String>,
     pub read: Read,
     pub n: Option<String>,

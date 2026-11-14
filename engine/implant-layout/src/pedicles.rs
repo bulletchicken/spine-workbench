@@ -211,7 +211,7 @@ pub fn drawn_outer_width(
 /// The canonical sampler slot must be available in the supplied version.
 /// The medial wall uses Chiu's physical side and region;
 /// the lateral wall uses that physical side's pooled value. Neither wall
-/// spread is drawn: SYNTHESIS uses their central thicknesses only.
+/// spread is drawn: only their central thicknesses are used.
 pub fn draw_width(
     level: Level,
     side: BodySide,
@@ -466,7 +466,7 @@ pub(crate) fn inner_channel_floor() -> Option<f64> {
 fn normal(cell: &Cell) -> Option<(f64, f64)> {
     match cell.value {
         PublishedValue::MeanSd { mean, sd } => Some((mean, sd)),
-        // DECISIONS explicitly reads Gao/Zheng +/- and the Sato width
+        // This project reads Gao/Zheng +/- and the Sato width
         // ratios as SDs. This interpretation stays out of the reader.
         PublishedValue::PlusMinus { value, spread } => Some((value, spread)),
         _ => None,

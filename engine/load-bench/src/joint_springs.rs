@@ -41,7 +41,7 @@ impl Stiffness {
     }
 
     /// Read Tachi's AP/ML/CC columns through the evidence reader. The axis
-    /// mapping follows the citation audit: AP moment is lateral bending,
+    /// mapping follows Table 1's headings: AP moment is lateral bending,
     /// ML moment is flexion/extension, CC moment is axial rotation.
     /// `lumbosacral` selects the distinct L5/S1 row, never a fallback.
     pub fn from_evidence(evidence: &Evidence, lumbosacral: bool) -> Result<Self, SpringError> {

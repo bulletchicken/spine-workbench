@@ -1,4 +1,4 @@
-//! Hand readings from fusion-levels §§2a–2d. All geometry is synthetic.
+//! Hand readings of landmarks. All geometry is synthetic.
 //! A premeasured curve isolates the landmark rule from end detection.
 
 use implant_layout::curves::lumbar::PedicleOutlines;
@@ -214,8 +214,8 @@ impl HandSpine {
 
 #[test]
 fn a_substantial_touch_above_the_lower_end_is_still_the_most_proximal_touch() {
-    // fusion-levels §2a and SYNTHESIS 2.5: MOST PROXIMAL substantially
-    // touched vertebra. Unlike SV, this definition has no LEV lower bound.
+    // Choose the most proximal substantially touched vertebra.
+    // Unlike SV, this definition has no LEV lower bound.
     // T10/T11 are 100 mm away; T12 is centred on the CSVL; LEV is L1.
     let mut s = HandSpine::new(Level::L1);
     s.offset(Level::T12, 0.0);
@@ -235,10 +235,10 @@ fn a_substantial_touch_above_the_lower_end_is_still_the_most_proximal_touch() {
 
 #[test]
 fn a_non_substantial_last_touch_uses_the_body_below_it() {
-    // fusion-levels §2b, Qin: if the LAST TOUCHED vertebra is only an
-    // nSTV, LIV=nSTV+1. T12's body spans [-2,28] and its right pedicle
-    // [1,5], so y=0 touches body only. L1 is clear; L2 is substantial.
-    // LTV is T12, hence its next caudal body L1 is the rule's answer.
+    // Qin: if the last touched vertebra is only an nSTV, LIV=nSTV+1.
+    // T12's body spans [-2,28] and its right pedicle [1,5], so y=0 touches
+    // body only. L1 is clear; L2 is substantial. LTV is T12,
+    // hence its next caudal body L1 is the rule's answer.
     let mut s = HandSpine::new(Level::T12);
     s.offset(Level::T12, 13.0);
     s.offset(Level::L2, 0.0);
@@ -360,7 +360,7 @@ fn the_stable_minus_one_step_goes_up_and_its_centre_boundary_counts() {
 
 #[test]
 fn the_published_distance_is_skipped_when_counting_up_from_the_sacrum() {
-    // Wang as corrected by the citation audit: first cranial body >10.
+    // Wang: first cranial body >10.
     let limit = threshold("deviated-vertebra", "first-cephalad-deviation-min");
     for (y, expected) in [
         (limit - 0.1, Level::T12),
@@ -549,8 +549,8 @@ fn bend(
 
 #[test]
 fn type_five_c_lower_ends_use_the_strict_cobb_limit_and_reachable_neutral() {
-    // fusion-levels §2d: >60 degrees or disc cannot reach zero means
-    // LEV+1. A disc passing from negative to positive reaches zero.
+    // >60 degrees or a disc that cannot reach zero means LEV+1.
+    // A disc passing from negative to positive reaches zero.
     // The hand lower end L4 therefore gives L4 or its caudal neighbour L5.
     let mut s = HandSpine::new(Level::L4);
     s.reading.curves[0].region = Some(CurveRegion::ThoracolumbarLumbar);
@@ -610,8 +610,8 @@ fn type_five_c_lower_ends_use_the_strict_cobb_limit_and_reachable_neutral() {
 
 #[test]
 fn type_five_c_upper_options_step_cephalad_across_the_region_boundary() {
-    // fusion-levels §3: posterior options UEV and one above, with no
-    // caudal option. L1's predecessor is T12; T12's is T11.
+    // Posterior options are UEV and one above, with no caudal option.
+    // L1's predecessor is T12; T12's is T11.
     let mut s = HandSpine::new(Level::L4);
     s.reading.curves[0].region = Some(CurveRegion::ThoracolumbarLumbar);
     s.reading.curves[0].apex_index = s.index(Level::L2);

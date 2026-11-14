@@ -1,4 +1,4 @@
-//! Expected cells are typed from the named note sections, independently of
+//! Expected cells are typed by hand from the publications, independently of
 //! the JSON reader. No fixture is generated from the bundled evidence.
 
 use load_bench::evidence::{
@@ -26,9 +26,9 @@ fn check(
 }
 
 #[test]
-fn joint_springs_keep_the_note_units_and_the_disagreeing_tables() {
+fn joint_springs_keep_the_published_units_and_the_disagreeing_tables() {
     let e = Evidence::read().unwrap();
-    // published-simulators §2c: every cell, including the facetectomy row.
+    // Every stiffness cell, including the facetectomy row.
     for (key, translations, moments) in [
         (
             "t1-2-to-l4-5-intact",
@@ -67,7 +67,7 @@ fn joint_springs_keep_the_note_units_and_the_disagreeing_tables() {
             ],
         );
     }
-    // published-simulators §1 release: signed percentage reductions.
+    // Release: signed percentage reductions.
     check(
         &e,
         TableKind::JointSprings,
@@ -81,7 +81,7 @@ fn joint_springs_keep_the_note_units_and_the_disagreeing_tables() {
             ("compression", -14.0),
         ],
     );
-    // published-simulators §2a: two discrete intact-segment preload results.
+    // Two discrete intact-segment preload results.
     check(
         &e,
         TableKind::JointSprings,
@@ -98,7 +98,7 @@ fn joint_springs_keep_the_note_units_and_the_disagreeing_tables() {
         Unit::N,
         &[("lower-preload", 250.0), ("upper-preload", 500.0)],
     );
-    // §2b Mannen raw EZS pairs: units explicitly absent in the note.
+    // Mannen raw EZS pairs: units are not printed in the paper.
     for (key, lb, fe, ar) in [
         ("rib-mannen-t1-t4", [6.85, 4.70], [2.29, 2.12], [3.28, 1.35]),
         ("rib-mannen-t4-t8", [8.30, 4.48], [4.74, 3.36], [4.51, 1.08]),
@@ -125,7 +125,7 @@ fn joint_springs_keep_the_note_units_and_the_disagreeing_tables() {
             ],
         );
     }
-    // §2b Watkins percentages and the note's own sampled bounds.
+    // Watkins percentages and the project sampling bounds.
     check(
         &e,
         TableKind::JointSprings,
@@ -154,7 +154,7 @@ fn joint_springs_keep_the_note_units_and_the_disagreeing_tables() {
         Unit::Ratio,
         &[("lower", 1.3), ("upper", 4.0)],
     );
-    // §2a, physiological 642 N: comparison only, not Tachi's units.
+    // Physiological 642 N: comparison only, not Tachi's units.
     check(
         &e,
         TableKind::JointSprings,
@@ -168,7 +168,7 @@ fn joint_springs_keep_the_note_units_and_the_disagreeing_tables() {
             ("mz-rz-sd", 1.0),
         ],
     );
-    // §2b Wilke secants are the note's inference, with ROM kept beside them.
+    // Wilke secants are inferred, with ROM kept beside them.
     check(
         &e,
         TableKind::JointSprings,
@@ -189,7 +189,7 @@ fn joint_springs_keep_the_note_units_and_the_disagreeing_tables() {
         Unit::Degrees,
         &[("t1-t2-lb", 5.9), ("t1-t2-ar", 6.2), ("t11-t12-ar", 3.3)],
     );
-    // §2f and earlier flexibility note §3: fitted factors have another baseline.
+    // Fitted factors have another baseline.
     check(
         &e,
         TableKind::JointSprings,
@@ -208,7 +208,7 @@ fn joint_springs_keep_the_note_units_and_the_disagreeing_tables() {
 #[test]
 fn rod_materials_keep_the_table_body_text_and_other_material_sets_separate() {
     let e = Evidence::read().unwrap();
-    // implant-mechanics §4 Material properties: Prasad's table, all15cells.
+    // Prasad's material table, all15cells.
     for (key, young, yl, yu, ul, uu) in [
         ("titanium-alloy", 114.0, 827.0, 1103.0, 860.0, 965.0),
         ("cobalt-chrome", 240.0, 500.0, 1500.0, 900.0, 1540.0),
@@ -244,7 +244,7 @@ fn rod_materials_keep_the_table_body_text_and_other_material_sets_separate() {
             }
         );
     }
-    // Same note/table gives conflicting body-text values explicitly.
+    // Prasad also prints conflicting body-text values.
     check(
         &e,
         TableKind::RodMaterials,
@@ -261,7 +261,7 @@ fn rod_materials_keep_the_table_body_text_and_other_material_sets_separate() {
         Unit::Mpa,
         &[("cocr-yield-lower", 448.0), ("cocr-yield-upper", 1606.0)],
     );
-    // published-simulators §1 and §2d: conflicting simulator sets.
+    // Conflicting simulator material sets.
     check(
         &e,
         TableKind::RodMaterials,
@@ -278,7 +278,7 @@ fn rod_materials_keep_the_table_body_text_and_other_material_sets_separate() {
         Unit::Mpa,
         &[("yield", 390.0)],
     );
-    // fast-physics TableB: these Poisson ratios belong to these sets only.
+    // These Poisson ratios belong to these material sets only.
     check(
         &e,
         TableKind::RodMaterials,
@@ -311,7 +311,7 @@ fn rod_materials_keep_the_table_body_text_and_other_material_sets_separate() {
         Unit::Ratio,
         &[("poisson-ratio", 0.30)],
     );
-    // fast-physics §7 textbook comparison, not the bench modulus.
+    // Textbook comparison, not the bench modulus.
     check(
         &e,
         TableKind::RodMaterials,
@@ -328,7 +328,7 @@ fn rod_materials_keep_the_table_body_text_and_other_material_sets_separate() {
 #[test]
 fn anchor_strengths_preserve_se_population_and_bone_prior_inputs() {
     let e = Evidence::read().unwrap();
-    // implant-mechanics §1 Trajectory and TableB: SE, not SD.
+    // Trajectory: SE, not SD.
     check(
         &e,
         TableKind::AnchorStrength,
@@ -345,7 +345,7 @@ fn anchor_strengths_preserve_se_population_and_bone_prior_inputs() {
         Unit::N,
         &[("mean", 611.0), ("se", 50.0)],
     );
-    // §1 Thoracic screws against hooks.
+    // Thoracic screws against hooks.
     for (row, expected) in [
         ("t4-t8-screw", 531.0),
         ("t9-t12-screw", 807.0),
@@ -361,8 +361,7 @@ fn anchor_strengths_preserve_se_population_and_bone_prior_inputs() {
             &[("mean", expected)],
         );
     }
-    // citation-audit-physics-tables.md §A/§B3 supplies exact Soshi force precision.
-    // §1 Bone density, TableB/C: Soshi DOES supply screw diameter.
+    // Soshi abstract supplies exact force precision and screw diameter.
     check(
         &e,
         TableKind::AnchorStrength,
@@ -391,7 +390,7 @@ fn anchor_strengths_preserve_se_population_and_bone_prior_inputs() {
         Unit::Ratio,
         &[("grade-i", 0.47), ("grade-ii", 0.26)],
     );
-    // growth §3, exact prevalence behind own mixture (not pull-out calibration).
+    // Exact prevalence behind the project mixture, not pull-out calibration.
     check(
         &e,
         TableKind::AnchorStrength,
@@ -408,7 +407,7 @@ fn anchor_strengths_preserve_se_population_and_bone_prior_inputs() {
         Unit::Percent,
         &[("osteopenia", 32.9)],
     );
-    // mechanics §1 Young bone: separate populations, no combined animal range.
+    // Young bone: separate populations, no combined animal range.
     check(
         &e,
         TableKind::AnchorStrength,
@@ -435,8 +434,7 @@ fn anchor_strengths_preserve_se_population_and_bone_prior_inputs() {
 #[test]
 fn loads_preserve_literal_activity_edges_and_both_walking_sources() {
     let e = Evidence::read().unwrap();
-    // growth §4/TableE and citation-audit-physics-tables.md §A/§B7:
-    // fractions confirmed as printed in Keenan; Winter itself unopened.
+    // Fractions confirmed as printed in Keenan; Winter itself unopened.
     check(
         &e,
         TableKind::DailyLoads,
@@ -477,7 +475,7 @@ fn loads_preserve_literal_activity_edges_and_both_walking_sources() {
         Unit::Mm,
         &[("mean", 28.0), ("sd", 5.6)],
     );
-    // outcomes §7/TableD: different implant populations at each endpoint.
+    // Different implant populations at each telemetry endpoint.
     check(
         &e,
         TableKind::DailyLoads,
@@ -494,7 +492,7 @@ fn loads_preserve_literal_activity_edges_and_both_walking_sources() {
         Unit::Ratio,
         &[("upper", 1.71)],
     );
-    // growth §5 and TableF: one adult's pressure ratio, inferred load multiple.
+    // One adult's pressure ratio, inferred load multiple.
     check(
         &e,
         TableKind::DailyLoads,
@@ -519,7 +517,7 @@ fn loads_preserve_literal_activity_edges_and_both_walking_sources() {
         Unit::Kg,
         &[("lower", 29.0), ("upper", 63.0)],
     );
-    // growth §5 adult passage: use 7499/9999/12499, not rounded TableF.
+    // Adult activity bounds: use 7499/9999/12499, not the rounded project bands.
     for (key, low, high) in [
         ("steps-low", 5000.0, 7499.0),
         ("steps-typical", 7500.0, 9999.0),
@@ -569,9 +567,9 @@ fn loads_preserve_literal_activity_edges_and_both_walking_sources() {
 }
 
 #[test]
-fn fatigue_keeps_the_published_inputs_beside_the_notes_own_calculation() {
+fn fatigue_keeps_the_published_inputs_beside_the_project_calculation() {
     let e = Evidence::read().unwrap();
-    // mechanics §4 Construct tests; fast §7 Derived calibration/TableB.
+    // Construct tests and derived calibration.
     for (key, load, max, amplitude, mean, equivalent, uts) in [
         ("titanium-alloy", 250.0, 306.0, 138.0, 168.0, 169.0, 900.0),
         ("cobalt-chrome", 290.0, 355.0, 160.0, 195.0, 191.0, 1200.0),
@@ -648,7 +646,7 @@ fn fatigue_keeps_the_published_inputs_beside_the_notes_own_calculation() {
             Basis::Published
         );
     }
-    // fast §7: Slivka's 20–40% drop and note's converted 0.6–0.8.
+    // Slivka's 20–40% drop and the converted 0.6–0.8 factor.
     check(
         &e,
         TableKind::Fatigue,
@@ -665,7 +663,7 @@ fn fatigue_keeps_the_published_inputs_beside_the_notes_own_calculation() {
         Unit::Ratio,
         &[("lower", 0.6), ("upper", 0.8)],
     );
-    // fast §7 textbook bounds are not a construct level.
+    // Textbook bounds are not a construct level.
     check(
         &e,
         TableKind::Fatigue,
@@ -741,7 +739,7 @@ fn every_key_resolves_and_every_source_keeps_its_access_and_sample() {
         }
     }
     assert_eq!(used, source_keys);
-    // Directly from note headers/passages, not implied by a PMC link.
+    // Recorded reading status is not implied by a PMC link.
     let tachi = e.source("tachi-2021").unwrap();
     assert_eq!(tachi.read, Read::FullText);
     assert_eq!(tachi.n.as_deref(), Some("47"));
@@ -802,9 +800,9 @@ fn unknown_fields_are_refused_at_every_evidence_object() {
 }
 
 #[test]
-fn audited_paper_records_have_titles_identifiers_and_complete_locations() {
+fn published_paper_records_have_titles_identifiers_and_complete_locations() {
     let e = Evidence::read().unwrap();
-    // Hand-entered record identifiers from citation-audit-physics-tables.md §A.
+    // Publication identifiers.
     // Liljenqvist has no DOI in the supplied record; all records have a PMID.
     for (key, pmid, doi) in [
         ("tachi-2021", "34712654", Some("10.3389/fbioe.2021.746902")),
@@ -929,11 +927,9 @@ fn audited_paper_records_have_titles_identifiers_and_complete_locations() {
         let s = e.source(key).unwrap();
         assert_eq!(s.pmid.as_deref(), Some(pmid), "{key}");
         assert_eq!(s.doi.as_deref(), doi, "{key}");
-        assert!(
-            s.record_note
-                .as_deref()
-                .unwrap()
-                .contains("citation-audit-physics-tables.md")
+        assert_eq!(
+            s.record_note.as_deref(),
+            Some("bibliographic record and read status")
         );
         assert!(
             s.citation.title.as_deref().is_some_and(|v| !v.is_empty()),
@@ -955,7 +951,7 @@ fn audited_paper_records_have_titles_identifiers_and_complete_locations() {
         assert!(s.citation.title.is_some(), "identified paper: {}", s.key);
         assert!(s.pmid.is_some() || s.doi.is_some(), "{}", s.key);
     }
-    // §A record locations and corrected first-author-only entries.
+    // Record locations (volume, issue, pages) and corrected first-author-only entries.
     let liljenqvist = e.source("liljenqvist-2001").unwrap();
     assert_eq!(
         liljenqvist.citation.authors,
@@ -992,10 +988,10 @@ fn audited_paper_records_have_titles_identifiers_and_complete_locations() {
 }
 
 #[test]
-fn the_audit_separates_contradictory_material_sets_and_selects_paired_strengths() {
+fn the_evidence_separates_contradictory_material_sets_and_selects_paired_strengths() {
     use shapes::implant_layout::RodMaterial;
     let e = Evidence::read().unwrap();
-    // citation-audit-physics-tables.md §A/§B1, Prasad body text.
+    // Prasad's body-text strengths, kept apart from the Table 1 sets.
     check(
         &e,
         TableKind::RodMaterials,
@@ -1042,8 +1038,8 @@ fn the_audit_separates_contradictory_material_sets_and_selects_paired_strengths(
             .to_lowercase()
             .contains("anneal")
     );
-    // DECISIONS Rod strengths: endpoint differences bound the affine
-    // UTS(q)-yield(q) for every shared q in[0,1]. Independent q is forbidden.
+    // Endpoint differences bound the affine UTS(q)-yield(q) for every
+    // shared q in[0,1]. Independent q is forbidden.
     for (material, y0, y1, u0, u1, margin0, margin1) in [
         (
             RodMaterial::TitaniumAlloy,
@@ -1083,7 +1079,14 @@ fn the_audit_separates_contradictory_material_sets_and_selects_paired_strengths(
             assert_eq!(cell.value, expected);
             assert_eq!(cell.unit, Unit::Mpa);
             assert_eq!(cell.source, "prasad-2017");
-            assert!(cell.section.contains("citation-audit-physics-tables.md"));
+            assert_eq!(
+                cell.section,
+                if material == RodMaterial::TitaniumAlloy {
+                    "body text"
+                } else {
+                    "Table 1"
+                }
+            );
         }
         assert_eq!(pair.ultimate_lower.value - pair.yield_lower.value, margin0);
         assert_eq!(pair.ultimate_upper.value - pair.yield_upper.value, margin1);
@@ -1092,10 +1095,10 @@ fn the_audit_separates_contradictory_material_sets_and_selects_paired_strengths(
 }
 
 #[test]
-fn the_audit_corrects_the_thoracic_span_and_its_secant_arithmetic() {
+fn the_evidence_corrects_the_thoracic_span_and_its_secant_arithmetic() {
     let e = Evidence::read().unwrap();
-    // citation-audit-physics-tables.md §A/§B2: narrow the stated span,
-    // retaining T6-T7 separately. No5.2–5.7 range may claim to cover it.
+    // Narrow the stated span, retaining T6-T7 separately.
+    // No5.2–5.7 range may claim to cover it.
     check(
         &e,
         TableKind::JointSprings,
@@ -1119,7 +1122,7 @@ fn the_audit_corrects_the_thoracic_span_and_its_secant_arithmetic() {
         );
     }
     // Own secants:7.5N·m /5.7deg and7.5N·m /5.2deg, recomputed
-    // from the audited inputs, without copying the old rounded results.
+    // from the published inputs, without copying the old rounded results.
     for (term, expected) in [("t2-t6-ar-lower", 7.5 / 5.7), ("t2-t6-ar-upper", 7.5 / 5.2)] {
         let c = e
             .value(TableKind::JointSprings, "thoracic-secants", term)
@@ -1127,14 +1130,17 @@ fn the_audit_corrects_the_thoracic_span_and_its_secant_arithmetic() {
         assert_eq!(c.value, expected);
         assert_eq!(c.unit, Unit::NmPerDegree);
         assert_eq!(c.basis, Basis::OwnInference);
-        assert!(c.section.contains("citation-audit-physics-tables.md"));
+        assert_eq!(
+            c.section,
+            "worked out from the Wilke ROM endpoints (own inference: applied moment over ROM)"
+        );
     }
 }
 
 #[test]
-fn the_audit_keeps_exact_soshi_forces_beside_own_rounded_ratios() {
+fn the_evidence_keeps_exact_soshi_forces_beside_own_rounded_ratios() {
     let e = Evidence::read().unwrap();
-    // citation-audit-physics-tables.md §A/§B3, abstract precision.
+    // Soshi abstract precision.
     check(
         &e,
         TableKind::AnchorStrength,
@@ -1178,9 +1184,9 @@ fn the_audit_keeps_exact_soshi_forces_beside_own_rounded_ratios() {
 }
 
 #[test]
-fn the_audit_resolves_axes_and_distinguishes_the_specimen_sets() {
+fn the_evidence_resolves_axes_and_distinguishes_the_specimen_sets() {
     let e = Evidence::read().unwrap();
-    // citation-audit-physics-tables.md §A/§B5/§B8 and DECISIONS Joint axes.
+    // Joint-axis mappings retain the published headings.
     for (key, moments) in [
         ("t1-2-to-l4-5-intact", [448.0, 644.0, 738.0]),
         ("t1-2-to-l4-5-facetectomy", [224.0, 406.0, 406.0]),
@@ -1262,10 +1268,10 @@ fn the_audit_resolves_axes_and_distinguishes_the_specimen_sets() {
 }
 
 #[test]
-fn the_audit_distinguishes_gangnet_measurements_from_the_sagittal_prior() {
+fn the_evidence_distinguishes_gangnet_measurements_from_the_sagittal_prior() {
     let e = Evidence::read().unwrap();
-    // citation-audit-physics-tables.md §A/§B9: unsigned3D and left lateral,
-    // not two measurements of an anterior centroid coordinate.
+    // Unsigned3D and left lateral, not two measurements
+    // of an anterior centroid coordinate.
     check(
         &e,
         TableKind::DailyLoads,
@@ -1297,9 +1303,9 @@ fn the_audit_distinguishes_gangnet_measurements_from_the_sagittal_prior() {
 }
 
 #[test]
-fn the_audit_preserves_population_and_indirect_source_qualifications() {
+fn the_evidence_preserves_population_and_indirect_source_qualifications() {
     let e = Evidence::read().unwrap();
-    // citation-audit-physics-tables.md §A/§B4/§B6/§B7/§B9.
+    // Retain the stated populations and their separate qualifications.
     let pig = e.source("yilmaz-2009").unwrap();
     assert_eq!(
         pig.n.as_deref(),
@@ -1392,10 +1398,10 @@ fn the_audit_preserves_population_and_indirect_source_qualifications() {
 }
 
 #[test]
-fn additional_precisions_in_the_audit_remain_distinct_from_the_rounded_notes() {
+fn additional_precisions_remain_distinct_from_the_rounded_values() {
     let e = Evidence::read().unwrap();
-    // citation-audit-physics-tables.md §A quotes: separate material sets
-    // and exact source precisions, preserving the old note's rounded cells.
+    // Separate material sets and exact source precisions
+    // remain distinct from the rounded comparison cells.
     check(
         &e,
         TableKind::RodMaterials,
@@ -1438,8 +1444,7 @@ fn additional_precisions_in_the_audit_remain_distinct_from_the_rounded_notes() {
 #[test]
 fn supplementary_records_close_the_remaining_citations_without_raising_read_status() {
     let e = Evidence::read().unwrap();
-    // citations-physics-extra.json: bibliographic records only. The source
-    // read statuses below remain those of the original research notes.
+    // Bibliographic confirmation does not change how much of each paper was read.
     for (key, pmid, doi, read) in [
         (
             "abe-2015",
@@ -1584,7 +1589,7 @@ fn supplementary_records_close_the_remaining_citations_without_raising_read_stat
         assert!(
             source
                 .notes
-                .contains("bibliographic record confirmed; numbers not audited")
+                .contains("Bibliographic record confirmed; numbers not independently checked")
         );
     }
     let papers: Vec<_> = e
@@ -1611,7 +1616,7 @@ fn supplementary_records_close_the_remaining_citations_without_raising_read_stat
         );
         assert!(paper.pmid.is_some());
         if paper.key == "liljenqvist-2001" {
-            assert!(paper.doi.is_none()); // Supplied main-audit record has no DOI.
+            assert!(paper.doi.is_none()); // The bibliographic record has no DOI.
         } else {
             assert!(paper.doi.is_some(), "{}", paper.key);
         }

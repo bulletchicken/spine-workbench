@@ -1,5 +1,5 @@
-//! Independent hand geometry for the landmark definitions in fusion-levels
-//! sections 2a–2b. All vertebrae and outlines in this file are made up.
+//! Independent hand geometry for landmark definitions.
+//! All vertebrae and outlines in this file are made up.
 
 use forward_model::pedicles::pedicle_centres;
 use forward_model::rotation::{rot_x, rot_z, rotation_vector_from_matrix};
@@ -366,7 +366,7 @@ fn relabelling_relative_rules_moves_the_answer_and_preserves_their_values() {
         let b = after.iter().find(|vote| vote.rule == a.rule).unwrap();
         assert_eq!(b.level, a.level.map(next_standard_name), "{:?}", a.rule);
         // A newly named T12 may add an earlier LTV-domain probe. Compare
-        // the corresponding physical input rather than an audit-row count.
+        // the corresponding physical input rather than a count of input rows.
         for x in &a.inputs {
             let moved_level = x.level.map(next_standard_name);
             let y = b

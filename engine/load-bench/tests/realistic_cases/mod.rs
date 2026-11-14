@@ -1,9 +1,8 @@
 //! Actual made-up geometry → layout screws/contours → plain bench inputs.
 //!
-//! This helper is shared verbatim with the notes-only release diagnostic.
-//! It does not replace a reading, anchor, contour or material cell with a
-//! fabricated value. The exact synthetic standing poses are represented as
-//! a zero-uncertainty truth fit, following implant-layout's existing tests.
+//! No reading, anchor, contour or material cell is replaced by a fabricated
+//! value. The exact synthetic standing poses are represented as a
+//! zero-uncertainty truth fit, following implant-layout's existing tests.
 //! All coordinates are patient millimetres: x anterior, y left, z cranial.
 //!
 //! A layout contour samples its continuous shape at intervals <=2 mm. H

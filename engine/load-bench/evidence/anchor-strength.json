@@ -11,7 +11,7 @@
           "value": 481,
           "unit": "N",
           "source": "lehman-2003",
-          "section": "implant-mechanics.md §1 Trajectory and TableB",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -20,7 +20,7 @@
           "value": 54,
           "unit": "N",
           "source": "lehman-2003",
-          "section": "implant-mechanics.md §1 Trajectory and TableB",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         }
@@ -37,7 +37,7 @@
           "value": 611,
           "unit": "N",
           "source": "lehman-2003",
-          "section": "implant-mechanics.md §1 Trajectory and TableB",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -46,7 +46,7 @@
           "value": 50,
           "unit": "N",
           "source": "lehman-2003",
-          "section": "implant-mechanics.md §1 Trajectory and TableB",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         }
@@ -63,7 +63,7 @@
           "value": 481,
           "unit": "N",
           "source": "lehman-2003",
-          "section": "implant-mechanics.md TableB",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -72,7 +72,7 @@
           "value": 611,
           "unit": "N",
           "source": "lehman-2003",
-          "section": "implant-mechanics.md TableB",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         }
@@ -89,7 +89,7 @@
           "value": 531,
           "unit": "N",
           "source": "liljenqvist-2001",
-          "section": "implant-mechanics.md §1 Thoracic screws against hooks",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         }
@@ -106,7 +106,7 @@
           "value": 807,
           "unit": "N",
           "source": "liljenqvist-2001",
-          "section": "implant-mechanics.md §1 Thoracic screws against hooks",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         }
@@ -123,7 +123,7 @@
           "value": 321,
           "unit": "N",
           "source": "liljenqvist-2001",
-          "section": "implant-mechanics.md §1 Thoracic screws against hooks",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         }
@@ -133,14 +133,14 @@
       "key": "laminar-hook",
       "usage": "beside",
       "description": "T9–T12 supralaminar hook reference",
-      "notes": "Supralaminar hooks used atT9–T12;600N. Confirmed in audited abstract.",
+      "notes": "Supralaminar hooks used atT9–T12;600N, as the abstract states.",
       "values": [
         {
           "term": "mean",
           "value": 600,
           "unit": "N",
           "source": "liljenqvist-2001",
-          "section": "citation-audit-physics-tables.md §A/§B6, liljenqvist-2001",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         }
@@ -157,7 +157,7 @@
           "value": 1056.4,
           "unit": "N",
           "source": "soshi-1991",
-          "section": "citation-audit-physics-tables.md §A/§B3, soshi-1991 abstract",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -166,7 +166,7 @@
           "value": 495.6,
           "unit": "N",
           "source": "soshi-1991",
-          "section": "citation-audit-physics-tables.md §A/§B3, soshi-1991 abstract",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -175,7 +175,7 @@
           "value": 269.5,
           "unit": "N",
           "source": "soshi-1991",
-          "section": "citation-audit-physics-tables.md §A/§B3, soshi-1991 abstract",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -184,7 +184,7 @@
           "value": 7.0,
           "unit": "mm",
           "source": "soshi-1991",
-          "section": "implant-mechanics.md §1 Bone density",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         }
@@ -201,7 +201,7 @@
           "value": 0.47,
           "unit": "ratio",
           "source": "project-assumptions",
-          "section": "citation-audit-physics-tables.md §B3, own rounded ratios",
+          "section": "worked out from the published forces (own rounded ratios)",
           "basis": "own-inference",
           "approximate": true
         },
@@ -210,7 +210,7 @@
           "value": 0.26,
           "unit": "ratio",
           "source": "project-assumptions",
-          "section": "citation-audit-physics-tables.md §B3, own rounded ratios",
+          "section": "worked out from the published forces (own rounded ratios)",
           "basis": "own-inference",
           "approximate": true
         },
@@ -219,7 +219,7 @@
           "value": 1056.4,
           "unit": "N",
           "source": "soshi-1991",
-          "section": "citation-audit-physics-tables.md §A/§B3, published ratio inputs",
+          "section": "abstract, published ratio inputs",
           "basis": "published",
           "approximate": false
         },
@@ -228,7 +228,7 @@
           "value": 495.6,
           "unit": "N",
           "source": "soshi-1991",
-          "section": "citation-audit-physics-tables.md §A/§B3, published ratio inputs",
+          "section": "abstract, published ratio inputs",
           "basis": "published",
           "approximate": false
         },
@@ -237,7 +237,7 @@
           "value": 269.5,
           "unit": "N",
           "source": "soshi-1991",
-          "section": "citation-audit-physics-tables.md §A/§B3, published ratio inputs",
+          "section": "abstract, published ratio inputs",
           "basis": "published",
           "approximate": false
         }
@@ -254,7 +254,7 @@
           "value": 1.0,
           "unit": "ratio",
           "source": "project-assumptions",
-          "section": "SYNTHESIS.md §3.4 bone factor",
+          "section": "project assumption: bone factor",
           "basis": "own-inference",
           "approximate": false
         },
@@ -263,7 +263,7 @@
           "value": 2,
           "unit": "ratio",
           "source": "project-assumptions",
-          "section": "SYNTHESIS.md §3.4 bone factor",
+          "section": "project assumption: bone factor",
           "basis": "own-inference",
           "approximate": false
         },
@@ -272,7 +272,7 @@
           "value": 3,
           "unit": "ratio",
           "source": "project-assumptions",
-          "section": "SYNTHESIS.md §3.4 bone factor",
+          "section": "project assumption: bone factor",
           "basis": "own-inference",
           "approximate": false
         },
@@ -281,7 +281,7 @@
           "value": 1,
           "unit": "ratio",
           "source": "project-assumptions",
-          "section": "SYNTHESIS.md §3.4 bone factor",
+          "section": "project assumption: bone factor",
           "basis": "own-inference",
           "approximate": false
         },
@@ -290,7 +290,7 @@
           "value": 3,
           "unit": "ratio",
           "source": "project-assumptions",
-          "section": "SYNTHESIS.md §3.4 bone factor",
+          "section": "project assumption: bone factor",
           "basis": "own-inference",
           "approximate": false
         },
@@ -299,7 +299,7 @@
           "value": 0.47,
           "unit": "ratio",
           "source": "project-assumptions",
-          "section": "SYNTHESIS.md §3.4 bone factor",
+          "section": "project assumption: bone factor",
           "basis": "own-inference",
           "approximate": false
         },
@@ -308,7 +308,7 @@
           "value": 1.0,
           "unit": "ratio",
           "source": "project-assumptions",
-          "section": "SYNTHESIS.md §3.4 bone factor",
+          "section": "project assumption: bone factor",
           "basis": "own-inference",
           "approximate": false
         }
@@ -325,7 +325,7 @@
           "value": 38,
           "unit": "%",
           "source": "cheng-2000",
-          "section": "growth-and-loads.md §3",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -334,7 +334,7 @@
           "value": 36,
           "unit": "%",
           "source": "cheng-2000",
-          "section": "growth-and-loads.md §3",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -343,7 +343,7 @@
           "value": 32.9,
           "unit": "%",
           "source": "yip-2016",
-          "section": "growth-and-loads.md §3",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -352,7 +352,7 @@
           "value": 169,
           "unit": "people",
           "source": "yip-2016",
-          "section": "growth-and-loads.md §3",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -361,7 +361,7 @@
           "value": 513,
           "unit": "people",
           "source": "yip-2016",
-          "section": "growth-and-loads.md §3",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         }
@@ -371,14 +371,14 @@
       "key": "immature-pig",
       "usage": "beside",
       "description": "Immature pig context",
-      "notes": "Context only; not a human paediatric reference. Full-text precise group-mean extremes419.9/1341.2N retained separately from rounded old note420/1341N.",
+      "notes": "Context only; not a human paediatric reference. Full-text precise group-mean extremes419.9/1341.2N retained separately from rounded420/1341N.",
       "values": [
         {
           "term": "lower",
           "value": 420,
           "unit": "N",
           "source": "le-cann-2015",
-          "section": "implant-mechanics.md §1 Young bone and TableB",
+          "section": "abstract",
           "basis": "published",
           "approximate": true
         },
@@ -387,7 +387,7 @@
           "value": 1341,
           "unit": "N",
           "source": "le-cann-2015",
-          "section": "implant-mechanics.md §1 Young bone and TableB",
+          "section": "abstract",
           "basis": "published",
           "approximate": true
         },
@@ -396,7 +396,7 @@
           "value": 419.9,
           "unit": "N",
           "source": "le-cann-2015",
-          "section": "citation-audit-physics-tables.md §A, le-cann-2015",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -405,7 +405,7 @@
           "value": 1341.2,
           "unit": "N",
           "source": "le-cann-2015",
-          "section": "citation-audit-physics-tables.md §A, le-cann-2015",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         }
@@ -415,14 +415,14 @@
       "key": "six-week-pig",
       "usage": "beside",
       "description": "Pig pull-out three months after six-week surgery",
-      "notes": "Six weeks old at surgery;pull-out three months later;data from two animals (three operated,one lost),L1–L5. Original note rounded dilated mean379N;abstract precision378.7N retained separately.",
+      "notes": "Six weeks old at surgery;pull-out three months later;data from two animals (three operated,one lost),L1–L5. Dilated mean rounded to379N;abstract precision378.7N retained separately.",
       "values": [
         {
           "term": "mean",
           "value": 397,
           "unit": "N",
           "source": "yilmaz-2009",
-          "section": "citation-audit-physics-tables.md §A/§B4, yilmaz-2009 abstract",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -431,7 +431,7 @@
           "value": 80,
           "unit": "N",
           "source": "yilmaz-2009",
-          "section": "citation-audit-physics-tables.md §A/§B4, yilmaz-2009 abstract",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -440,7 +440,7 @@
           "value": 379,
           "unit": "N",
           "source": "yilmaz-2009",
-          "section": "citation-audit-physics-tables.md §A/§B4, yilmaz-2009 abstract",
+          "section": "abstract",
           "basis": "published",
           "approximate": true
         },
@@ -449,7 +449,7 @@
           "value": 73,
           "unit": "N",
           "source": "yilmaz-2009",
-          "section": "citation-audit-physics-tables.md §A/§B4, yilmaz-2009 abstract",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -458,7 +458,7 @@
           "value": 4.0,
           "unit": "mm",
           "source": "yilmaz-2009",
-          "section": "citation-audit-physics-tables.md §A/§B4, yilmaz-2009 abstract",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -467,7 +467,7 @@
           "value": 20,
           "unit": "mm",
           "source": "yilmaz-2009",
-          "section": "citation-audit-physics-tables.md §A/§B4, yilmaz-2009 abstract",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -476,7 +476,7 @@
           "value": 378.7,
           "unit": "N",
           "source": "yilmaz-2009",
-          "section": "citation-audit-physics-tables.md §A, Yilmaz abstract precision",
+          "section": "abstract precision",
           "basis": "published",
           "approximate": false
         }
@@ -486,14 +486,14 @@
       "key": "osteoporotic-lumbar",
       "usage": "beside",
       "description": "Pull-out after cyclic loading",
-      "notes": "Table B endpoints retain the associated uncertainties and intermediate depth from the supplying paragraph.",
+      "notes": "Mid-body and bicortical endpoints retain the associated uncertainties and intermediate depth.",
       "values": [
         {
           "term": "mid-body",
           "value": 583,
           "unit": "N",
           "source": "karami-2015",
-          "section": "implant-mechanics.md TableB;§1 Insertion depth",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -502,7 +502,7 @@
           "value": 306,
           "unit": "N",
           "source": "karami-2015",
-          "section": "implant-mechanics.md TableB;§1 Insertion depth",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -511,7 +511,7 @@
           "value": 713,
           "unit": "N",
           "source": "karami-2015",
-          "section": "implant-mechanics.md TableB;§1 Insertion depth",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -520,7 +520,7 @@
           "value": 321,
           "unit": "N",
           "source": "karami-2015",
-          "section": "implant-mechanics.md TableB;§1 Insertion depth",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -529,7 +529,7 @@
           "value": 797,
           "unit": "N",
           "source": "karami-2015",
-          "section": "implant-mechanics.md TableB;§1 Insertion depth",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -538,7 +538,7 @@
           "value": 285,
           "unit": "N",
           "source": "karami-2015",
-          "section": "implant-mechanics.md TableB;§1 Insertion depth",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         }
@@ -548,14 +548,14 @@
       "key": "immature-calf",
       "usage": "beside",
       "description": "Immature calf diameter comparison",
-      "notes": "DISAGREE in precision: table853 versus body852.5; preserve both, never round or substitute.",
+      "notes": "DISAGREE in precision: rounded853 versus abstract852.5; preserve both, never round or substitute.",
       "values": [
         {
           "term": "six-mm-table",
           "value": 853,
           "unit": "N",
           "source": "sairyo-1998",
-          "section": "implant-mechanics.md TableB",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -564,7 +564,7 @@
           "value": 1015,
           "unit": "N",
           "source": "sairyo-1998",
-          "section": "implant-mechanics.md TableB",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -573,7 +573,7 @@
           "value": 852.5,
           "unit": "N",
           "source": "sairyo-1998",
-          "section": "implant-mechanics.md §1 Young bone",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -582,7 +582,7 @@
           "value": 6,
           "unit": "mm",
           "source": "sairyo-1998",
-          "section": "implant-mechanics.md TableB and §1",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -591,7 +591,7 @@
           "value": 7,
           "unit": "mm",
           "source": "sairyo-1998",
-          "section": "implant-mechanics.md TableB and §1",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         }
@@ -608,7 +608,7 @@
           "value": 922,
           "unit": "N",
           "source": "kang-2014",
-          "section": "implant-mechanics.md TableB;§1 Young bone",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -617,7 +617,7 @@
           "value": 112,
           "unit": "N",
           "source": "kang-2014",
-          "section": "implant-mechanics.md TableB;§1 Young bone",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -626,7 +626,7 @@
           "value": 747,
           "unit": "N",
           "source": "kang-2014",
-          "section": "implant-mechanics.md TableB;§1 Young bone",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -635,7 +635,7 @@
           "value": 197,
           "unit": "N",
           "source": "kang-2014",
-          "section": "implant-mechanics.md TableB;§1 Young bone",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         }
@@ -652,7 +652,7 @@
           "value": 1568,
           "unit": "N",
           "source": "tsai-2009",
-          "section": "implant-mechanics.md TableB",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -661,7 +661,7 @@
           "value": 1904,
           "unit": "N",
           "source": "tsai-2009",
-          "section": "implant-mechanics.md TableB",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -670,7 +670,7 @@
           "value": 6,
           "unit": "mm",
           "source": "tsai-2009",
-          "section": "implant-mechanics.md TableB",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         },
@@ -679,7 +679,7 @@
           "value": 30,
           "unit": "mm",
           "source": "tsai-2009",
-          "section": "implant-mechanics.md TableB",
+          "section": "not recorded",
           "basis": "published",
           "approximate": false
         }
@@ -696,7 +696,7 @@
           "value": 1.27,
           "unit": "ratio",
           "source": "lehman-2003",
-          "section": "implant-mechanics.md TableC",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         }
@@ -713,7 +713,7 @@
           "value": 1.37,
           "unit": "ratio",
           "source": "karami-2015",
-          "section": "implant-mechanics.md TableC",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         }
@@ -730,7 +730,7 @@
           "value": 0.81,
           "unit": "ratio",
           "source": "kang-2014",
-          "section": "implant-mechanics.md TableC",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         }
@@ -747,7 +747,7 @@
           "value": 0.65,
           "unit": "ratio",
           "source": "sariyilmaz-2021",
-          "section": "implant-mechanics.md TableC",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         }
@@ -764,7 +764,7 @@
           "value": 1.19,
           "unit": "ratio",
           "source": "sairyo-1998",
-          "section": "implant-mechanics.md TableC",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -773,7 +773,7 @@
           "value": 1.24,
           "unit": "ratio",
           "source": "kueny-2014",
-          "section": "implant-mechanics.md TableC",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -782,7 +782,7 @@
           "value": 1,
           "unit": "mm",
           "source": "kueny-2014",
-          "section": "implant-mechanics.md TableC",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         }
@@ -799,7 +799,7 @@
           "value": 0.6,
           "unit": "ratio",
           "source": "weiser-2017",
-          "section": "implant-mechanics.md TableC",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -808,7 +808,7 @@
           "value": 0.45,
           "unit": "ratio",
           "source": "weiser-2017",
-          "section": "implant-mechanics.md TableC",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -817,7 +817,7 @@
           "value": 80,
           "unit": "mg/cm³",
           "source": "weiser-2017",
-          "section": "implant-mechanics.md TableC",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -826,7 +826,7 @@
           "value": 120,
           "unit": "mg/cm³",
           "source": "weiser-2017",
-          "section": "implant-mechanics.md TableC",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         }
@@ -836,14 +836,14 @@
       "key": "cortical-trajectory",
       "usage": "beside",
       "description": "Lumbar cortical versus traditional trajectory",
-      "notes": "P=0.08 as Table C prints it; not a significant effect.",
+      "notes": "P=0.08; not a significant effect.",
       "values": [
         {
           "term": "yield-pull-out",
           "value": 1.3,
           "unit": "ratio",
           "source": "santoni-2009",
-          "section": "implant-mechanics.md TableC",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -852,7 +852,7 @@
           "value": 0.08,
           "unit": "ratio",
           "source": "santoni-2009",
-          "section": "implant-mechanics.md TableC",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         }

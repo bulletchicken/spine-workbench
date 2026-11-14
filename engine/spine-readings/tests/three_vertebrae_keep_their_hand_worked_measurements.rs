@@ -1,5 +1,5 @@
 //! Answers follow directly from the patient frame and the half-wedge
-//! equations in docs/conventions/signs-and-wedges.md and SYNTHESIS 2.3.
+//! equations in docs/conventions/signs-and-wedges.md.
 //! Every film and vertebra here is made up.
 
 use shapes::confidence::{Confidence, ConfidenceBand};

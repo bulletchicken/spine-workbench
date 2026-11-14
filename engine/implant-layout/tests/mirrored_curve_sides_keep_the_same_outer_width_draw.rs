@@ -72,11 +72,10 @@ fn fit() -> SpineFit {
 
 #[test]
 fn a_concave_pedicle_keeps_its_width_when_reflected_to_the_other_side() {
-    // User's explicit mirror requirement: every size swaps sides and
-    // nothing else changes. The width equation in SYNTHESIS 2.8 has no
-    // physical-side term. Chiu walls are deliberately excluded here.
+    // Every size swaps sides and nothing else changes. The width equation has
+    // no physical-side term. Chiu walls are deliberately excluded here.
     // Set all supplied latent draws to zero to isolate the side-factor
-    // dimension owned by pedicles::draw_width.
+    // dimension in pedicles::draw_width.
     let sampler = NamedSampler::new(7, 32).unwrap();
     let version = Version {
         index: 2,

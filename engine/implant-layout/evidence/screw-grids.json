@@ -12,7 +12,7 @@
       },
       "unit": "mm",
       "source": "ramanathan-2026",
-      "section": "existing-tools-and-gaps.md §7",
+      "section": "not recorded",
       "qualifier": "Reported size category; no intermediate values supplied."
     },
     {
@@ -27,7 +27,7 @@
       },
       "unit": "mm",
       "source": "ramanathan-2026",
-      "section": "existing-tools-and-gaps.md §7"
+      "section": "not recorded"
     },
     {
       "coordinate": {
@@ -41,7 +41,7 @@
       },
       "unit": "mm",
       "source": "jiang-2022",
-      "section": "screw-sizing-and-placement.md §3 and P5"
+      "section": "not recorded"
     },
     {
       "coordinate": {
@@ -54,7 +54,7 @@
       },
       "unit": "mm",
       "source": "jiang-2022",
-      "section": "screw-sizing-and-placement.md §3 and P5"
+      "section": "not recorded"
     },
     {
       "coordinate": {
@@ -68,7 +68,7 @@
       },
       "unit": "mm",
       "source": "jiang-2022",
-      "section": "screw-sizing-and-placement.md §3 and P5"
+      "section": "not recorded"
     },
     {
       "coordinate": {
@@ -82,7 +82,7 @@
       },
       "unit": "mm",
       "source": "sarwahi-2023",
-      "section": "screw-sizing-and-placement.md §3 and P5"
+      "section": "abstract"
     },
     {
       "coordinate": {
@@ -95,7 +95,7 @@
       },
       "unit": "mm",
       "source": "sarwahi-2023",
-      "section": "screw-sizing-and-placement.md §3 and P5"
+      "section": "abstract"
     },
     {
       "coordinate": {
@@ -114,7 +114,7 @@
       },
       "unit": "mm",
       "source": "grabala-2023",
-      "section": "screw-sizing-and-placement.md §3; citation-audit-placement-tables.md §A Grabala 2023, screw sizes and cohort; §B.10",
+      "section": "not recorded",
       "qualifier": "Sizes individually listed against expansion percentages. Mixed-cause cohort n = 230: idiopathic 164, congenital 25, neuromuscular 23 and syndromic 18; not AIS only."
     },
     {
@@ -131,8 +131,8 @@
       },
       "unit": "mm",
       "source": "balikci-2019",
-      "section": "screw-sizing-and-placement.md §4 and P5; citation-audit-placement-tables.md §A Balikci 2019, Table 1 and available screws; §B.8",
-      "qualifier": "The original note prints steps of 2.5 and 5 mm. Table 1 gives the standard and mid-length catalogue values retained individually below; their groups are not combined. Series n = 120, ages 13–54 (mean 19.2): AIS 86, congenital 17, adult 10 and neuromuscular 7; not an exclusively AIS cohort."
+      "section": "Table 1",
+      "qualifier": "The steps of 2.5 and 5 mm are a summary of the listed lengths. Table 1 gives the standard and mid-length catalogue values retained individually below; their groups are not combined. Series n = 120, ages 13–54 (mean 19.2): AIS 86, congenital 17, adult 10 and neuromuscular 7; not an exclusively AIS cohort."
     },
     {
       "coordinate": {
@@ -145,7 +145,7 @@
       },
       "unit": "mm",
       "source": "balikci-2019",
-      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 1; §B Balikci 2019; §C.15",
+      "section": "Table 1",
       "qualifier": "Mid-length screws individually as printed; groups remain separate. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
       "printed": "27.5",
       "decimals": 1
@@ -161,7 +161,7 @@
       },
       "unit": "mm",
       "source": "balikci-2019",
-      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 1; §B Balikci 2019; §C.15",
+      "section": "Table 1",
       "qualifier": "Mid-length screws individually as printed; groups remain separate. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
       "printed": "32.5",
       "decimals": 1
@@ -177,7 +177,7 @@
       },
       "unit": "mm",
       "source": "balikci-2019",
-      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 1; §B Balikci 2019; §C.15",
+      "section": "Table 1",
       "qualifier": "Mid-length screws individually as printed; groups remain separate. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
       "printed": "37.5",
       "decimals": 1
@@ -193,7 +193,7 @@
       },
       "unit": "mm",
       "source": "balikci-2019",
-      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 1; §B Balikci 2019; §C.15",
+      "section": "Table 1",
       "qualifier": "Mid-length screws individually as printed; groups remain separate. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
       "printed": "42.5",
       "decimals": 1
@@ -209,7 +209,7 @@
       },
       "unit": "mm",
       "source": "balikci-2019",
-      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 1; §B Balikci 2019; §C.15",
+      "section": "Table 1",
       "qualifier": "Mid-length screws individually as printed; groups remain separate. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
       "printed": "47.5",
       "decimals": 1
@@ -225,7 +225,7 @@
       },
       "unit": "mm",
       "source": "balikci-2019",
-      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 1; §B Balikci 2019; §C.15",
+      "section": "Table 1",
       "qualifier": "Mid-length screws individually as printed; groups remain separate. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
       "printed": "52.5",
       "decimals": 1
@@ -241,7 +241,7 @@
       },
       "unit": "mm",
       "source": "balikci-2019",
-      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 1; §B Balikci 2019; §C.15",
+      "section": "Table 1",
       "qualifier": "Standard length screws individually as printed; groups remain separate. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
       "printed": "25",
       "decimals": 0
@@ -257,7 +257,7 @@
       },
       "unit": "mm",
       "source": "balikci-2019",
-      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 1; §B Balikci 2019; §C.15",
+      "section": "Table 1",
       "qualifier": "Standard length screws individually as printed; groups remain separate. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
       "printed": "30",
       "decimals": 0
@@ -273,7 +273,7 @@
       },
       "unit": "mm",
       "source": "balikci-2019",
-      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 1; §B Balikci 2019; §C.15",
+      "section": "Table 1",
       "qualifier": "Standard length screws individually as printed; groups remain separate. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
       "printed": "35",
       "decimals": 0
@@ -289,7 +289,7 @@
       },
       "unit": "mm",
       "source": "balikci-2019",
-      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 1; §B Balikci 2019; §C.15",
+      "section": "Table 1",
       "qualifier": "Standard length screws individually as printed; groups remain separate. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
       "printed": "40",
       "decimals": 0
@@ -305,7 +305,7 @@
       },
       "unit": "mm",
       "source": "balikci-2019",
-      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 1; §B Balikci 2019; §C.15",
+      "section": "Table 1",
       "qualifier": "Standard length screws individually as printed; groups remain separate. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
       "printed": "45",
       "decimals": 0
@@ -321,7 +321,7 @@
       },
       "unit": "mm",
       "source": "balikci-2019",
-      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 1; §B Balikci 2019; §C.15",
+      "section": "Table 1",
       "qualifier": "Standard length screws individually as printed; groups remain separate. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
       "printed": "50",
       "decimals": 0
@@ -337,7 +337,7 @@
       },
       "unit": "mm",
       "source": "balikci-2019",
-      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 1; §B Balikci 2019; §C.15",
+      "section": "Table 1",
       "qualifier": "Standard length screws individually as printed; groups remain separate. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
       "printed": "55",
       "decimals": 0
@@ -354,7 +354,7 @@
       },
       "unit": "mm",
       "source": "balikci-2019",
-      "section": "full-tables-from-five-papers.md §B Balikci 2019",
+      "section": "not recorded",
       "qualifier": "Available diameter bounds: \"Screws with a diameter of 5–8 mm (with 1-mm increments) were available\". The bounds are retained without expanding a catalogue. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
       "printed": "5–8 mm",
       "decimals": 0
@@ -370,7 +370,7 @@
       },
       "unit": "mm",
       "source": "balikci-2019",
-      "section": "full-tables-from-five-papers.md §B Balikci 2019",
+      "section": "not recorded",
       "qualifier": "Available diameter increment: \"Screws with a diameter of 5–8 mm (with 1-mm increments) were available\". The increment is separate from the bounds. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients.",
       "printed": "1-mm increments",
       "decimals": 0
@@ -380,13 +380,13 @@
     {
       "key": "balikci-table-1",
       "source": "balikci-2019",
-      "section": "full-tables-from-five-papers.md §A Balikci 2019 Table 1; §B Balikci 2019; §C.15",
+      "section": "Table 1",
       "text": "Lengths of mid-length and standard length screws; columns:  | Length (mm). Standard and mid-length groups are separate printed lists."
     },
     {
       "key": "balikci-2019-table-1-wording",
       "source": "balikci-2019",
-      "section": "full-tables-from-five-papers.md §A, balikci-2019 Table 1",
+      "section": "Table 1",
       "text": "Lengths of mid-length and standard length screws; column headers (verbatim, separated by |):  | Length (mm)"
     }
   ]

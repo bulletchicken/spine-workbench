@@ -19,7 +19,7 @@
       "population": "Girls with Lenke 1 AIS and female controls matched for age, sex and height; age 15 ± 2.6; height 154 vs 155 cm.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/article/PMC/PMC5638737",
-      "notes": "Original note: screw-sizing-and-placement.md §1, Table 1. Some means are printed in whole millimetres. The paper does not explicitly identify outer or inner cortical width, label its ± statistic, report curve direction or map curve sides to anatomical left/right. Treating ± as SD is this project's inference. Erratum PMID 28875444, PMC5638754 corrects the age/height p-values to p > 0.05 and Figure 4 colours; Table 3 is unchanged. Citation and audited observations read in citation-audit-placement-tables.md §A (gao-2017); corrections in §§B–C. The audit read full-text. Full-tables-from-five-papers.md §§A–C: Table 3 includes all three width and all three short pedicle-only length columns. The length is between guideline/lamina-axis intersections, not a chord. Every printed central decimal count is retained; all 36 lengths and 19 widths are whole-mm. The text reports PWv/PWn differences at T5/T7 without matching Table 3 markers; its 29% (35 of 120) dysplastic NAV-SC statement uses the non-structural apical denominator. The reported mean difference −9%, CI −8% to 14%, p=0.049 contradicts itself. Spacing and significance markers remain in literal printed text."
+      "notes": "Some means are printed in whole millimetres. The paper does not explicitly identify outer or inner cortical width, label its ± statistic, report curve direction or map curve sides to anatomical left/right. Treating ± as SD is this project's inference. Erratum PMID 28875444, PMC5638754 corrects the age/height p-values to p > 0.05 and Figure 4 colours; Table 3 is unchanged. Full text read. Table 3 includes all three width and all three short pedicle-only length columns. The length is between guideline/lamina-axis intersections, not a chord. Every printed central decimal count is retained; all 36 lengths and 19 widths are whole-mm. The text reports PWv/PWn differences at T5/T7 without matching Table 3 markers; its 29% (35 of 120) dysplastic NAV-SC statement uses the non-structural apical denominator. The reported mean difference −9%, CI −8% to 14%, p=0.049 contradicts itself. Spacing and significance markers remain in literal printed text."
     },
     {
       "key": "upendra-2010",
@@ -40,7 +40,7 @@
       "population": "AIS; 14 girls and 10 boys; all right thoracic or thoracolumbar curves (King II 12, III 7, IV 5); ages 12.3–18.3; Cobb 58–98°; 3 mm CT.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/article/PMC/PMC2856392",
-      "notes": "Original note: screw-sizing-and-placement.md §1, Tables 1 and 3; §3. Width is measured outer cortex to outer cortex. Table 1 width cells contain 8–22 pedicles; 7 occurs only at L5 in the angle table. The paper gives per-cell n, ranges and SDs for chords and angles at all levels; their complete transcription is retained from full-tables-from-five-papers.md §A, Tables 1–3. These tables follow Tables 1 and 2 where the paper's Table 4 disagrees: T10 concave width 5.21 versus 5.51 mm; T10 concave angle 12.8 versus 12.0°; L1 concave angle 16.6 versus 16.0°; L4 convex angle 17.8 versus 21°; L4 concave angle 18.7 versus 16.7°. Convex-as-right is this project's inference from all patients having right curves. The 80–115% diameter range cites other work. Citation and audited observations read in citation-audit-placement-tables.md §A (upendra-2010); corrections in §§B–C. The audit read full-text. Full-tables-from-five-papers.md §§B–C: narrowest outer-cortex-to-outer-cortex transverse width; chord runs from the most posterior transverse-process point along the pedicle axis to the anterior cortex. L4 convex angle 17.8 lies below its printed 18–24 range and is not used. Three small SDs (T3 concave width, T7 concave width and T7 concave angle) and T10 convex chord 33.35 are marked doubtful, without repairing them. The text says concave widths are smaller except T1, but L2 is another exception (6.16 concave versus 5.8 convex). Table 4b prints a degree sign only at the borrowed Liljenqvist T5 concave 11.7° cell. The abstract says average 215 pedicles, results 216; per-table counts are retained."
+      "notes": "Width is measured outer cortex to outer cortex. Table 1 width cells contain 8–22 pedicles; 7 occurs only at L5 in the angle table. The paper gives per-cell n, ranges and SDs for chords and angles at all levels; complete transcription of Tables 1–3 is retained. These tables follow Tables 1 and 2 where the paper's Table 4 disagrees: T10 concave width 5.21 versus 5.51 mm; T10 concave angle 12.8 versus 12.0°; L1 concave angle 16.6 versus 16.0°; L4 convex angle 17.8 versus 21°; L4 concave angle 18.7 versus 16.7°. Convex-as-right is this project's inference from all patients having right curves. The 80–115% diameter range cites other work. Full text read. Width is the narrowest outer-cortex-to-outer-cortex transverse width; chord runs from the most posterior transverse-process point along the pedicle axis to the anterior cortex. L4 convex angle 17.8 lies below its printed 18–24 range and is not used. Three small SDs (T3 concave width, T7 concave width and T7 concave angle) and T10 convex chord 33.35 are marked doubtful, without repairing them. The text says concave widths are smaller except T1, but L2 is another exception (6.16 concave versus 5.8 convex). Table 4b prints a degree sign only at the borrowed Liljenqvist T5 concave 11.7° cell. The abstract says average 215 pedicles, results 216; per-table counts are retained."
     },
     {
       "key": "pluemvitayaporn-2025",
@@ -61,7 +61,7 @@
       "population": "Thai patients with Lenke 5 curves; mean age 14.7 (12–22), mean Cobb 48° (36–84°).",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/article/PMC/PMC11875695",
-      "notes": "Original note: screw-sizing-and-placement.md §1, Table 1. Published online 2 December 2024, in the March 2025 issue. Width is the widest outer cortical diameter at the narrowest part of the pedicle, with explicitly named SD. Curve direction is not stated, and the concave side at thoracic levels outside the TL/L curve is undefined. Absolute widths are much smaller than other series; the earlier notes advise caution and use for the side pattern. Citation and audited observations read in citation-audit-placement-tables.md §A (pluemvitayaporn-2025); corrections in §§B–C. The audit read full-text."
+      "notes": "Published online 2 December 2024, in the March 2025 issue. Width is the widest outer cortical diameter at the narrowest part of the pedicle, with explicitly named SD. Curve direction is not stated, and the concave side at thoracic levels outside the TL/L curve is undefined. Absolute widths are much smaller than other series; caution is advised, with use for the side pattern. Full text read."
     },
     {
       "key": "zheng-2009",
@@ -82,7 +82,7 @@
       "population": "Chinese children aged 5–14 from a hospital registry, stratified random sampling with thoracic abnormalities excluded; not scoliosis-specific; 2 mm axial CT.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/article/PMC/PMC2899159",
-      "notes": "Original note: screw-sizing-and-placement.md §1, Table 2; §4; P4; P6. M and F columns remain separate. The paper gives every level, sex and age-band cell for inner width, chord length and angle, each with an unlabelled ± spread; complete transcription is retained from full-tables-from-five-papers.md §A, Tables 1–4. Reading its first Table 1 row per level as inner width, the second as outer width, and its ± as SD are this project's inferences. Table 3 describes length from posterior cortex to anterior cortex, while Figure 1 describes posterior pedicle cortex to the posterior longitudinal ligament along the pedicle axis. The pooled 5–8-year range is printed as 28.11–32.26 mm for boys and 27.28–32.29 mm for girls. The paper says the angle is measured from the midline to the pedicle mid-axis and becomes negative below T10; reading positive as convergent and negative as divergent is this project's inference. The 50–80% AP penetration statement is cited rather than measured. Citation and audited observations read in citation-audit-placement-tables.md §A (zheng-2009); corrections in §§B–C. The audit read full-text. Full-tables-from-five-papers.md §§A–C: all inner/outer widths, sagittal diameters, lengths and transverse angles for all twelve levels, three age bands and both sexes are retained. The malformed T10 outer 5–8 F cell remains exactly 4.83 ± 072, not repaired to a numerical spread and not used. T1 inner 9–11 M ±0.15 is doubtful; Table 4 T10 5–8 F remains printed 6.45±3.35 (spacing only). The prose calls p >0.05 significant for length/angle, calls T1 the largest sagittal diameter while Table 2 makes it smallest, and quotes length intervals that are not the table minima/maxima. No age-band or sex n is stated. Sagittal diameter is superior-inferior cortical height at the isthmus."
+      "notes": "M and F columns remain separate. The paper gives every level, sex and age-band cell for inner width, chord length and angle, each with an unlabelled ± spread; complete transcription of Tables 1–4 is retained. Reading its first Table 1 row per level as inner width, the second as outer width, and its ± as SD are this project's inferences. Table 3 describes length from posterior cortex to anterior cortex, while Figure 1 describes posterior pedicle cortex to the posterior longitudinal ligament along the pedicle axis. The pooled 5–8-year range is printed as 28.11–32.26 mm for boys and 27.28–32.29 mm for girls. The paper says the angle is measured from the midline to the pedicle mid-axis and becomes negative below T10; reading positive as convergent and negative as divergent is this project's inference. The 50–80% AP penetration statement is cited rather than measured. Full text read. All inner/outer widths, sagittal diameters, lengths and transverse angles for all twelve levels, three age bands and both sexes are retained. The malformed T10 outer 5–8 F cell remains exactly 4.83 ± 072, not repaired to a numerical spread and not used. T1 inner 9–11 M ±0.15 is doubtful; Table 4 T10 5–8 F remains printed 6.45±3.35 (spacing only). The prose calls p >0.05 significant for length/angle, calls T1 the largest sagittal diameter while Table 2 makes it smallest, and quotes length intervals that are not the table minima/maxima. No age-band or sex n is stated. Sagittal diameter is superior-inferior cortical height at the isthmus."
     },
     {
       "key": "chiu-2024",
@@ -100,10 +100,10 @@
       "pmcid": null,
       "read": "abstract",
       "n": "191 patients; 6,230 analysed pedicles (right 3,064; left 3,166); 264 fully corticalized pedicles excluded (right 183; left 81)",
-      "population": "AIS with major thoracic curves; age range not supplied by the audit.",
+      "population": "AIS with major thoracic curves; age range not recorded.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/38408520",
-      "notes": "Original note: screw-sizing-and-placement.md §1. Wall measurements are abstract-only. The 0.85 ± 0.28 mm medial and 0.64 ± 0.26 mm lateral pair is right-sided; the left pair is medial 0.86 ± 0.26 mm and lateral 0.64 ± 0.26 mm. T7 0.73 ± 0.24 mm and T8 0.73 ± 0.23 mm are medial-wall values. The abstract calls these sites “right concave” but elsewhere says “the left concave medial pedicle width being thicker than the right convex medial pedicle width”; their curve side remains unresolved. The 264 fully cortical pedicles were excluded from the 6,230 analysed. Citation and audited observations read in citation-audit-placement-tables.md §A (chiu-2024); corrections in §§B–C. The audit read abstract. Full-tables-from-five-papers.md §D, abstract: right medial regions T1–T3 0.89±0.28, T4–T10 0.75±0.23, T11–L5 0.92±0.30 mm; left T1–T3 0.88±0.26, T4–T7 0.76±0.24, T8–L5 0.90±0.27 mm. Aggregate right/left and lateral pairs are retained separately. The abstract calls left concave/right convex, but also calls the right periapical region concave; the curve side of its T7/T8 medial values is unresolved."
+      "notes": "Wall measurements are abstract-only. The 0.85 ± 0.28 mm medial and 0.64 ± 0.26 mm lateral pair is right-sided; the left pair is medial 0.86 ± 0.26 mm and lateral 0.64 ± 0.26 mm. T7 0.73 ± 0.24 mm and T8 0.73 ± 0.23 mm are medial-wall values. The abstract calls these sites “right concave” but elsewhere says “the left concave medial pedicle width being thicker than the right convex medial pedicle width”; their curve side remains unresolved. The 264 fully cortical pedicles were excluded from the 6,230 analysed. Abstract read. The abstract gives right medial regions T1–T3 0.89±0.28, T4–T10 0.75±0.23, T11–L5 0.92±0.30 mm; left T1–T3 0.88±0.26, T4–T7 0.76±0.24, T8–L5 0.90±0.27 mm. Aggregate right/left and lateral pairs are retained separately. The abstract calls left concave/right convex, but also calls the right periapical region concave; the curve side of its T7/T8 medial values is unresolved."
     },
     {
       "key": "sato-2022",
@@ -124,7 +124,7 @@
       "population": "Japanese AIS, enrolled ages 12–20 (inclusion range 10–20), mean age 16.2; 49 girls and 8 boys; Lenke 1/2 right main thoracic curves; 0.5 mm CT. Right is always convex and left always concave.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/article/PMC/PMC9450434",
-      "notes": "Original note: screw-sizing-and-placement.md §1; §3; P1; P7. The whole right-side neutral-vertebra ±1 block repeats the left-side apex ±1 block, a probable error in the paper. Both neutral outer-width cells remain only as printed and are not used; the apex and neutral ratios 0.73 and 1.08 remain in use. The paper's ± for widths and neutral ratio is unlabelled. The 25% expansion rule cites Takeshita 2009, Cahill 2004 and Yazici 2006. The 26.3% too-narrow-for-4-mm-with-expansion group differs from the 71.9% under-4-mm-outer-width group. Regression coefficients are not supplied. Citation and audited observations read in citation-audit-placement-tables.md §A (sato-2022); corrections in §§B–C. The audit read full-text. Full-tables-from-five-papers.md §§A–C: Tables 2–3 are retained with all height/width and cortical/cancellous rows, ranges and p-values. Eleven of twelve numbers in the right neutral block duplicate the left apex block; the entire right neutral block is not used. Both neutral outer widths remain excluded under the project decision. Apex Lt.H/Rt.H 0.86 ±0.52 (0.75–0.97) is a probable misprint and is not used; no inferred 0.05 is supplied. Table 6 prints Level of AV B=0.058 with CI 0.38/0.85, which does not contain B. Figure 1 mislabels cancellous-width ratios as Lt.W/Rt.W and Lt.h/Rt.h. Table 1 prints BMI in % and Hight; mean age is 16.2 there but 16.3 in the text. No correction found by the note; publisher-page check was unavailable."
+      "notes": "The whole right-side neutral-vertebra ±1 block repeats the left-side apex ±1 block, a probable error in the paper. Both neutral outer-width cells remain only as printed and are not used; the apex and neutral ratios 0.73 and 1.08 remain in use. The paper's ± for widths and neutral ratio is unlabelled. The 25% expansion rule cites Takeshita 2009, Cahill 2004 and Yazici 2006. The 26.3% too-narrow-for-4-mm-with-expansion group differs from the 71.9% under-4-mm-outer-width group. Regression coefficients are not supplied. Full text read. Tables 2–3 are retained with all height/width and cortical/cancellous rows, ranges and p-values. Eleven of twelve numbers in the right neutral block duplicate the left apex block; the entire right neutral block is not used. Both neutral outer widths remain excluded by project decision. Apex Lt.H/Rt.H 0.86 ±0.52 (0.75–0.97) is a probable misprint and is not used; no inferred 0.05 is supplied. Table 6 prints Level of AV B=0.058 with CI 0.38/0.85, which does not contain B. Figure 1 mislabels cancellous-width ratios as Lt.W/Rt.W and Lt.h/Rt.h. Table 1 prints BMI in % and Hight; mean age is 16.2 there but 16.3 in the text. No correction found; publisher-page check was unavailable."
     },
     {
       "key": "akazawa-2015",
@@ -145,7 +145,7 @@
       "population": "AIS; inner channel graded on CT.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/26124077",
-      "notes": "Original note: screw-sizing-and-placement.md §3; P2. Channel-grade boundaries are explicitly assigned: grade 1 ≥4 mm; grade 2 ≥2 and <4 mm; grade 3 ≥1 and <2 mm; grade 4 <1 mm. Citation and audited observations read in citation-audit-placement-tables.md §A (akazawa-2015); corrections in §§B–C. The audit read abstract."
+      "notes": "Channel-grade boundaries are explicitly assigned: grade 1 ≥4 mm; grade 2 ≥2 and <4 mm; grade 3 ≥1 and <2 mm; grade 4 <1 mm. Abstract read."
     },
     {
       "key": "misenhimer-1989",
@@ -166,7 +166,7 @@
       "population": "Adult cadaver spines.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/2718038",
-      "notes": "Original note: screw-sizing-and-placement.md §3; P1. Citation and audited observations read in citation-audit-placement-tables.md §A (misenhimer-1989); corrections in §§B–C. The audit read abstract."
+      "notes": "Abstract read."
     },
     {
       "key": "grabala-2023",
@@ -187,7 +187,7 @@
       "population": "Children aged 2–18 with mixed causes: idiopathic 164, congenital 25, neuromuscular 23, syndromic 18; MRI before and CT after surgery; single centre. Not an AIS-only cohort.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/article/PMC/PMC10455094",
-      "notes": "Original note: screw-sizing-and-placement.md §3; P1. MRI width definition is unclear. Table 3 postoperative minus preoperative values do not equal the printed mean expanding column at several levels: T5 6.07−3.79 = 2.28 versus 2.55 mm; L3 6.88−5.14 = 1.74 versus 2.89 mm; L5 7.02−5.68 = 1.34 versus 2.68 mm. The preoperative and postoperative pedicle sets differ. For 5.0 mm screws, expansion is 32% in Table 6 and 39% in the discussion; both statements remain distinct. Percentages are not converted into width ratios. Citation and audited observations read in citation-audit-placement-tables.md §A (grabala-2023); corrections in §§B–C. The audit read full-text."
+      "notes": "MRI width definition is unclear. Table 3 postoperative minus preoperative values do not equal the printed mean expanding column at several levels: T5 6.07−3.79 = 2.28 versus 2.55 mm; L3 6.88−5.14 = 1.74 versus 2.89 mm; L5 7.02−5.68 = 1.34 versus 2.68 mm. The preoperative and postoperative pedicle sets differ. For 5.0 mm screws, expansion is 32% in Table 6 and 39% in the discussion; both statements remain distinct. Percentages are not converted into width ratios. Full text read."
     },
     {
       "key": "sarwahi-2023",
@@ -208,7 +208,7 @@
       "population": "AIS, comparing 6.5 mm screws at all levels with 5.0–5.5 mm screws at all levels.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/37134132",
-      "notes": "Original note: screw-sizing-and-placement.md §3; P5. Citation and audited observations read in citation-audit-placement-tables.md §A (sarwahi-2023); corrections in §§B–C. The audit read abstract."
+      "notes": "Abstract read."
     },
     {
       "key": "katsumi-2025",
@@ -229,7 +229,7 @@
       "population": "AIS, navigated screws; Lenke 1 and Lenke 5 compared.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/40856839",
-      "notes": "Original note: screw-sizing-and-placement.md §3. The increment corresponding to OR 1.607 is not given in the abstract; no per-unit interpretation is added. Citation and audited observations read in citation-audit-placement-tables.md §A (katsumi-2025); corrections in §§B–C. The audit read abstract."
+      "notes": "The increment corresponding to OR 1.607 is not given in the abstract; no per-unit interpretation is added. Abstract read."
     },
     {
       "key": "jiang-2022",
@@ -250,7 +250,7 @@
       "population": "AIS, 25 girls and 9 boys, mean age 15.0; 30 Lenke 1 and 4 Lenke 2; freehand thoracic screws checked by CT.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/article/PMC/PMC9636753",
-      "notes": "Original note: screw-sizing-and-placement.md §3; §6; P3; P5. Identifiers and full citation are confirmed by the audit. Citation and audited observations read in citation-audit-placement-tables.md §A (jiang-2022); corrections in §§B–C. The audit read full-text."
+      "notes": "Full text read."
     },
     {
       "key": "balikci-2019",
@@ -271,7 +271,7 @@
       "population": "Mixed scoliosis series: AIS 86, congenital 17, adult 10, neuromuscular 7; ages 13–54, mean 19.2. Diameter chosen using insertional torque.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/article/PMC/PMC6773991",
-      "notes": "Original note: screw-sizing-and-placement.md §3; §4; P4; P5. The 80–100% chord rule is secondary: Krag was not opened in the earlier notes. The regional usual screw lengths cite Kuraishi's J Spinal Disord Tech 2013 paper and duplicate that evidence rather than form an independent observation. Table 1 supplies standard lengths 25, 30, 35, 40, 45, 50, 55 mm and mid-lengths 27.5, 32.5, 37.5, 42.5, 47.5, 52.5 mm. Citation and audited observations read in citation-audit-placement-tables.md §A (balikci-2019); corrections in §§B–C. The audit read full-text. Full-tables-from-five-papers.md §§A–C: Tables 1, 2 and 4 are retained as printed, including confidence intervals and p-value bounds. Available diameters are 5–8 mm in 1-mm increments. Screw length is the nearest length to the probe depth from the starting hole to contact with the anterior cortex, without perforation. No per-level screw lengths are tabulated. Table 4 concave percentages remain 43.5 and 56.5 despite their counts, not recomputed. Text cross-references Tables 3/4 rather than 2/4 for region/side, and Table 2 for unlisted chord lengths. Printed Standart and Proksimal compansatuary and the Table 3 LIV footnote calling it the caudal adjacent vertebra of upper instrumented vertebra are source misprints."
+      "notes": "The 80–100% chord rule is secondary: Krag was not opened. The regional usual screw lengths cite Kuraishi's J Spinal Disord Tech 2013 paper and duplicate that evidence rather than form an independent observation. Table 1 supplies standard lengths 25, 30, 35, 40, 45, 50, 55 mm and mid-lengths 27.5, 32.5, 37.5, 42.5, 47.5, 52.5 mm. Full text read. Tables 1, 2 and 4 are retained as printed, including confidence intervals and p-value bounds. Available diameters are 5–8 mm in 1-mm increments. Screw length is the nearest length to the probe depth from the starting hole to contact with the anterior cortex, without perforation. No per-level screw lengths are tabulated. Table 4 concave percentages remain 43.5 and 56.5 despite their counts, not recomputed. Text cross-references Tables 3/4 rather than 2/4 for region/side, and Table 2 for unlisted chord lengths. Printed Standart and Proksimal compansatuary and the Table 3 LIV footnote calling it the caudal adjacent vertebra of upper instrumented vertebra are source misprints."
     },
     {
       "key": "kuraishi-2013",
@@ -292,7 +292,7 @@
       "population": "Right thoracic AIS; CT navigation.",
       "label": "conference-abstract",
       "url": "https://europepmc.org/article/PMC/PMC3675381",
-      "notes": "Original note: screw-sizing-and-placement.md §4; P4. SOSORT 2012 meeting abstract, published in Scoliosis in 2013; abstract read. The same work is reported in the full paper: Kuraishi S, Takahashi J, Hirabayashi H, Hashidate H, Ogihara N, Mukaiyama K, Kato H. J Spinal Disord Tech. 2013;26(1):22–28. PMID 21959835; DOI 10.1097/bsd.0b013e31823162ef. Its abstract carries the same regional-length sentence. The source key here continues to identify the meeting abstract, DOI 10.1186/1748-7161-8-S1-O27, rather than silently substituting the full paper. Citation and audited observations read in citation-audit-placement-tables.md §A (kuraishi-2013); corrections in §§B–C. The audit read abstract. Full-tables-from-five-papers.md §D identifies the corresponding full paper separately as kuraishi-2013-full-paper; these two records describe the same work and the same 15 patients, not independent cohorts."
+      "notes": "SOSORT 2012 meeting abstract, published in Scoliosis in 2013; abstract read. The same work is reported in the full paper: Kuraishi S, Takahashi J, Hirabayashi H, Hashidate H, Ogihara N, Mukaiyama K, Kato H. J Spinal Disord Tech. 2013;26(1):22–28. PMID 21959835; DOI 10.1097/bsd.0b013e31823162ef. Its abstract carries the same regional-length sentence. The source key here continues to identify the meeting abstract, DOI 10.1186/1748-7161-8-S1-O27, rather than silently substituting the full paper. The corresponding full paper is identified separately as kuraishi-2013-full-paper; these two records describe the same work and the same 15 patients, not independent cohorts."
     },
     {
       "key": "sarwahi-2017",
@@ -313,7 +313,7 @@
       "population": "Patients with spine deformity plus cadavers, assessed for anterior or anterolateral screw breach and proximity to vital structures.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/28296814",
-      "notes": "Original note: screw-sizing-and-placement.md §4. The 4 mm figure is an anterior breach threshold from this series, not an anatomical margin measurement on the fitted spine. Citation and audited observations read in citation-audit-placement-tables.md §A (sarwahi-2017); corrections in §§B–C. The audit read abstract."
+      "notes": "The 4 mm figure is an anterior breach threshold from this series, not an anatomical margin measurement on the fitted spine. Abstract read."
     },
     {
       "key": "takeshita-2010",
@@ -334,7 +334,7 @@
       "population": "Right thoracic curves; left pedicle–aorta relation.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/20127493",
-      "notes": "Original note: screw-sizing-and-placement.md §4; P4. Mirror warning levels for left thoracic curves are not supplied. Citation and audited observations read in citation-audit-placement-tables.md §A (takeshita-2010); corrections in §§B–C. The audit read abstract."
+      "notes": "Mirror warning levels for left thoracic curves are not supplied. Abstract read."
     },
     {
       "key": "fennell-2014",
@@ -355,7 +355,7 @@
       "population": "Thoracic screw placement in 33 consecutive patients, not an AIS cohort; the technique was not tested in severe scoliotic spines.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/25147977",
-      "notes": "Original note: screw-sizing-and-placement.md §5; P6. Medial angulation is approximately 30° at T1–T2 and 20° at T3–T12. The abstract explicitly says the technique was not tested in severe scoliotic spines. Citation and audited observations read in citation-audit-placement-tables.md §A (fennell-2014); corrections in §§B–C. The audit read abstract."
+      "notes": "Medial angulation is approximately 30° at T1–T2 and 20° at T3–T12. The abstract explicitly says the technique was not tested in severe scoliotic spines. Abstract read."
     },
     {
       "key": "peng-2023",
@@ -376,7 +376,7 @@
       "population": "Mixed thoracic diseases including stenosis, deformity, fractures, infection and others; not an AIS cohort. Thoracic screw technique uses the 30°/20° scheme and upper-endplate-parallel aim.",
       "label": "peer-reviewed",
       "url": "https://www.frontiersin.org/articles/10.3389/fsurg.2023.1219816/full",
-      "notes": "Original note: screw-sizing-and-placement.md §5; P6. Angles were checked on radiographs only. The cohort is not AIS-specific. Citation and audited observations read in citation-audit-placement-tables.md §A (peng-2023); corrections in §§B–C. The audit read full-text."
+      "notes": "Angles were checked on radiographs only. The cohort is not AIS-specific. Full text read."
     },
     {
       "key": "lehman-2003",
@@ -397,7 +397,7 @@
       "population": "Cadaver thoracic vertebrae; straight-forward compared with anatomic sagittal trajectory.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/14501914",
-      "notes": "Original note: screw-sizing-and-placement.md §5; P6. Separate salvage paper PMID 14501916 is not this source. Pull-out spreads are described as SE in implant-mechanics Table B. Citation and audited observations read in citation-audit-placement-tables.md §A (lehman-2003); corrections in §§B–C. The audit read abstract."
+      "notes": "Separate salvage paper PMID 14501916 is not this source. Pull-out spreads are described as SE. Abstract read."
     },
     {
       "key": "ramanathan-2026",
@@ -418,7 +418,7 @@
       "population": "AIS screw size selection compared across freehand and navigation.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/article/PMC/PMC13295182",
-      "notes": "Original note: existing-tools-and-gaps.md §7. The last 137 freehand cases and first 137 O-arm navigation cases were compared. Article XML supplies the e25525 page field, absent from the Europe PMC page field. Observed diameter bands do not establish a uniform catalogue grid. Citation and audited observations read in citation-audit-placement-tables.md §A (ramanathan-2026); corrections in §§B–C. The audit read full-text."
+      "notes": "The last 137 freehand cases and first 137 O-arm navigation cases were compared. Article XML supplies the e25525 page field, absent from the Europe PMC page field. Observed diameter bands do not establish a uniform catalogue grid. Full text read."
     },
     {
       "key": "ao-lenke",
@@ -439,7 +439,7 @@
       "population": "Adolescent idiopathic scoliosis classification guideline.",
       "label": "guideline",
       "url": "https://stg.edit.surgeryreference.aofoundation.org/spine/deformities/adolescent-idiopathic-scoliosis/further-reading/lenke-classification",
-      "notes": "Original note: fusion-levels.md §1; Table B. Guideline page opened according to the note; not the original JBJS structural-criteria table. Original description: AO Surgery Reference. [Year not supplied]. Lenke classification. [Guideline web page]."
+      "notes": "Guideline page opened; not the original JBJS structural-criteria table. AO Surgery Reference. [Year not supplied]. Lenke classification. [Guideline web page]."
     },
     {
       "key": "lenke-2001",
@@ -460,7 +460,7 @@
       "population": "AIS classification using standing coronal/lateral and supine side-bending films.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/11507125",
-      "notes": "Original note: fusion-levels.md §1; Table B; measurement_error_and_decisions.md §3. The abstract does not state the structural minor-curve thresholds; use ao-lenke for those. The audit record has a PMID but no DOI. Citation and audited observations read in citation-audit-placement-tables.md §A (lenke-2001); corrections in §§B–C. The audit read abstract."
+      "notes": "The abstract does not state the structural minor-curve thresholds; use ao-lenke for those. The bibliographic record has a PMID but no DOI. Abstract read."
     },
     {
       "key": "liu-2020",
@@ -481,7 +481,7 @@
       "population": "Lenke 1A/2A thoracic-only fusions.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/article/PMC/PMC7788412",
-      "notes": "Original note: fusion-levels.md §2a–2c; outcomes-over-time.md §2. The full-text proximal/distal ladder is read in the audit. Its proximal comparison study/patient counts are SV 4/369, EV 4/371, NV 5/472, LTV 4/398 and STV/nSTV+1 3/426; distal counts differ: SV 4/233, EV 4/250, NV 5/286, LTV 4/441 and STV 2/158. The full-text SV−1 odds ratio 2.60 retained from the earlier note takes precedence over the abstract's 2.59 and the misquoting 2026 review; no new rounding is applied. Definitions of adding-on vary. Suk 2003, Qin 2016 and Wang 2011 rules are secondary reports within this source. Table 1 prints Wang 2011's n=45 rule as the first vertebra in the cephalad direction from the sacrum whose deviation from the CSVL is more than 10 mm, chosen as LIV; the threshold is for that vertebra itself, not LIV+1. Citation and audited observations read in citation-audit-placement-tables.md §A (liu-2020); corrections in §§B–C. The audit read full-text."
+      "notes": "The proximal/distal ladder is read from the full text. Its proximal comparison study/patient counts are SV 4/369, EV 4/371, NV 5/472, LTV 4/398 and STV/nSTV+1 3/426; distal counts differ: SV 4/233, EV 4/250, NV 5/286, LTV 4/441 and STV 2/158. The full-text SV−1 odds ratio 2.60 takes precedence over the abstract's 2.59 and the misquoting 2026 review; no new rounding is applied. Definitions of adding-on vary. Suk 2003, Qin 2016 and Wang 2011 rules are secondary reports within this source. Table 1 prints Wang 2011's n=45 rule as the first vertebra in the cephalad direction from the sacrum whose deviation from the CSVL is more than 10 mm, chosen as LIV; the threshold is for that vertebra itself, not LIV+1. Full text read."
     },
     {
       "key": "chen-2025",
@@ -502,7 +502,7 @@
       "population": "Lenke 1–2 with LIV at or below LTV/LSTV; derivation cohort only.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/article/PMC/PMC12361177",
-      "notes": "Original note: fusion-levels.md §2b; Table B. The key reflects online-first publication in 2025; the bibliographic record year is 2026, Global Spine J 16(2). PPV is 55.5%, taking precedence over the synthesis's rounded 55%. The discussion misprints NPV as 55.5%; the audited result is 100%. The full-cohort n does not identify the under-15 subgroup sample. That subgroup's specificity 94% and PPV 77% have unspecified subgroup n. Citation and audited observations read in citation-audit-placement-tables.md §A (chen-2025); corrections in §§B–C. The audit read full-text."
+      "notes": "The key reflects online-first publication in 2025; the bibliographic record year is 2026, Global Spine J 16(2). PPV is 55.5%, taking precedence over a rounded 55%. The discussion misprints NPV as 55.5%; the reported result is 100%. The full-cohort n does not identify the under-15 subgroup sample. That subgroup's specificity 94% and PPV 77% have unspecified subgroup n. Full text read."
     },
     {
       "key": "bmc-level-review",
@@ -523,7 +523,7 @@
       "population": "AIS level-selection review; primary populations differ by rule.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/article/PMC/PMC12870182",
-      "notes": "Original note: fusion-levels.md §2b; §2d; §3; §4; Table B. Lenke 2007, Rose & Lenke 2007, Yang, Li and Kaya primaries were not opened in the earlier notes; their rule attribution remains secondary. The review is Chen R et al., BMC Surg 2026, as confirmed by the audit. Citation and audited observations read in citation-audit-placement-tables.md §A (bmc-level-review); corrections in §§B–C. The audit read full-text."
+      "notes": "Lenke 2007, Rose & Lenke 2007, Yang, Li and Kaya primaries were not opened; their rule attribution remains secondary. The review is Chen R et al., BMC Surg 2026. Full text read."
     },
     {
       "key": "korean-level-review",
@@ -544,7 +544,7 @@
       "population": "AIS selective-fusion review; primary populations differ by criterion.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/article/PMC/PMC8273784",
-      "notes": "Original note: fusion-levels.md §4; Table B. Ratios are reported in the opened review; Lenke 2003's abstract does not give the ratio, and Sanders' primary was not opened in the earlier notes. Table 2 for selective lumbar fusion prints “TL/L side bending <25°”, while the earlier notes read this as thoracic bending. The evidence keeps the printed wording; interpreting this as the thoracic curve criterion is this project's inference. Sanders' ratio is 1.25 or greater, with thoracic bending 20° or less; this is distinct from the review's >1.25 ratio formulation. Citation and audited observations read in citation-audit-placement-tables.md §A (korean-level-review); corrections in §§B–C. The audit read full-text."
+      "notes": "Ratios are reported in the opened review; Lenke 2003's abstract does not give the ratio, and Sanders' primary was not opened. Table 2 for selective lumbar fusion prints “TL/L side bending <25°”. The evidence keeps the printed wording; interpreting this as the thoracic curve criterion is this project's inference. Sanders' ratio is 1.25 or greater, with thoracic bending 20° or less; this is distinct from the review's >1.25 ratio formulation. Full text read."
     },
     {
       "key": "larson-2013",
@@ -565,7 +565,7 @@
       "population": "Anchor-density systematic review; AIS context.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/27927354",
-      "notes": "Original note: existing-tools-and-gaps.md §7. Density is reported as implants per fused level. Citation and audited observations read in citation-audit-placement-tables.md §A (larson-2013); corrections in §§B–C. The audit read abstract."
+      "notes": "Density is reported as implants per fused level. Abstract read."
     },
     {
       "key": "mimo-2024",
@@ -586,7 +586,7 @@
       "population": "Single thoracic curves of 45–65°; randomised density comparison; two-year correction.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/37973031",
-      "notes": "Original note: implant-mechanics.md §6. High density ≥1.8 and low density ≤1.4 implants per fused level; the equivalence margin was ±10%. Citation and audited observations read in citation-audit-placement-tables.md §A (mimo-2024); corrections in §§B–C. The audit read abstract."
+      "notes": "High density ≥1.8 and low density ≤1.4 implants per fused level; the equivalence margin was ±10%. Abstract read."
     },
     {
       "key": "zhao-2024",
@@ -607,7 +607,7 @@
       "population": "AIS proximal junctional kyphosis meta-analysis.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/article/PMC/PMC11350560",
-      "notes": "Original note: outcomes-over-time.md §1. Cohort totals are internally inconsistent; no sum is substituted. The hook odds-ratio confidence interval is 0.31–0.74 in the table; prose misprints 0.31–0.47. The table places 47 in a column headed “Chi 2 (%)”; the audit reads it as presumably I², so the original column-label uncertainty remains. Citation and audited observations read in citation-audit-placement-tables.md §A (zhao-2024); corrections in §§B–C. The audit read full-text."
+      "notes": "Cohort totals are internally inconsistent; no sum is substituted. The hook odds-ratio confidence interval is 0.31–0.74 in the table; prose misprints 0.31–0.47. The table places 47 in a column headed “Chi 2 (%)”; it is read as presumably I², so the original column-label uncertainty remains. Full text read."
     },
     {
       "key": "cammarata-2014",
@@ -628,7 +628,7 @@
       "population": "Adult scoliosis patient-specific multibody models.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/24480964",
-      "notes": "Original note: outcomes-over-time.md §1. Approximate 26% reduction is a computational result, distinct from the AIS clinical hook odds association. Citation and audited observations read in citation-audit-placement-tables.md §A (cammarata-2014); corrections in §§B–C. The audit read abstract."
+      "notes": "Approximate 26% reduction is a computational result, distinct from the AIS clinical hook odds association. Abstract read."
     },
     {
       "key": "wilke-2024",
@@ -649,7 +649,7 @@
       "population": "Surgeons choosing AIS classification, fusion levels and implants from standing and bending films.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/article/PMC/PMC11022599",
-      "notes": "Original note: existing-tools-and-gaps.md §7. This is not the Schlager 2024 eight-surgeon study. Citation and audited observations read in citation-audit-placement-tables.md §A (wilke-2024); corrections in §§B–C. The audit read full-text."
+      "notes": "This is not the Schlager 2024 eight-surgeon study. Full text read."
     },
     {
       "key": "cidambi-2012",
@@ -670,7 +670,7 @@
       "population": "5.5 mm ultra-high-strength steel rod contour-loss series.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/22426445",
-      "notes": "Original note: implant-mechanics.md §4, contour-loss table; outcomes-over-time.md §3, rod shape change. Overcontour is about 20°, not an exact measured prescription. Implant-mechanics.md prints the concave angle as 45.6° → −21° and deflection −13 mm; no final-angle arithmetic is inferred. Its before/after kyphosis ± pairs do not name a spread statistic. The audited abstract reports concave deflection decrease 13 mm and angle decrease 21°, convex deflection increase 1.5 mm and angle increase 2°; the convex angle change is not statistically significant (P=0.18). Citation and audited observations read in citation-audit-placement-tables.md §A (cidambi-2012); corrections in §§B–C. The audit read abstract."
+      "notes": "Overcontour is about 20°, not an exact measured prescription. The concave angle is recorded as 45.6° → −21° and deflection −13 mm; no final-angle arithmetic is inferred. The before/after kyphosis ± pairs are recorded without a named spread statistic. The abstract reports concave deflection decrease 13 mm and angle decrease 21°, convex deflection increase 1.5 mm and angle increase 2°; the convex angle change is not statistically significant (P=0.18). Abstract read."
     },
     {
       "key": "borrelli-2025",
@@ -691,7 +691,7 @@
       "population": "Lumbar multibody model with a 6.5 mm CFR-PEEK screw represented as a 15 mm cantilever; full cortical osseointegration assumed.",
       "label": "peer-reviewed",
       "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12006242/fullTextXML",
-      "notes": "Original note: fast-physics-methods.md §1; §3. The 15 mm cantilever is model free screw length, not a measured adolescent head offset above bone. The paper also assumes an average rod offset of 15 mm from posterior pedicles; it is a model value, not a measurement. Citation and audited observations read in citation-audit-placement-tables.md §A (borrelli-2025); corrections in §§B–C. The audit read full-text."
+      "notes": "The 15 mm cantilever is model free screw length, not a measured adolescent head offset above bone. The paper also assumes an average rod offset of 15 mm from posterior pedicles; it is a model value, not a measurement. Full text read."
     },
     {
       "key": "brooks-2018",
@@ -712,7 +712,7 @@
       "population": "Multicentre main thoracic fusion cohort; shoulder imbalance >1 cm.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/30348348",
-      "notes": "Original note: fusion-levels.md §3. Shoulder-level association contests the secondary Lenke shoulder rule. Citation and audited observations read in citation-audit-placement-tables.md §A (brooks-2018); corrections in §§B–C. The audit read abstract."
+      "notes": "Shoulder-level association contests the secondary Lenke shoulder rule. Abstract read."
     },
     {
       "key": "wang-2016",
@@ -733,7 +733,7 @@
       "population": "Ten AIS patient-specific multibody simulations; cobalt-chrome concave/convex configurations 5.5/5.5 mm and 6.0/5.5 mm.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/27750078",
-      "notes": "Original note: implant-mechanics.md §3, multibody simulation table. The 6.0 mm diameter is used only for the concave rod; the convex rod is 5.5 mm in both configurations. This is a computational rod-contour and diameter comparison, not a measured material-stiffness increment. Citation and audited observations read in citation-audit-placement-tables.md §A (wang-2016); corrections in §§B–C. The audit read abstract."
+      "notes": "The 6.0 mm diameter is used only for the concave rod; the convex rod is 5.5 mm in both configurations. This is a computational rod-contour and diameter comparison, not a measured material-stiffness increment. Abstract read."
     },
     {
       "key": "abe-2015",
@@ -754,7 +754,7 @@
       "population": "AIS, one boy and 19 girls, all Lenke 1; mean age 14.8; operations June 2009–June 2011; in vivo rod deformation followed by an elasto-plastic finite element model; 6 mm Ti6Al7Nb rods.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/article/PMC/PMC4331738",
-      "notes": "Original note: implant-mechanics.md §3; §4, material properties. Rod material is Ti6Al7Nb, not an assumed interchangeable titanium alloy. This is very probably the same 20-patient cohort as salmingo-2014: the group and concave 33.6° to 17.8° values agree. The two reports should not be counted as independent cohorts. Citation and audited observations read in citation-audit-placement-tables.md §A (abe-2015); corrections in §§B–C. The audit read full-text."
+      "notes": "Rod material is Ti6Al7Nb, not an assumed interchangeable titanium alloy. This is very probably the same 20-patient cohort as salmingo-2014: the group and concave 33.6° to 17.8° values agree. The two reports should not be counted as independent cohorts. Full text read."
     },
     {
       "key": "uiv-tilt-40020691",
@@ -775,7 +775,7 @@
       "population": "151 Lenke 1–2 AIS patients, 107 Lenke 1 and 44 Lenke 2; postoperative UIV tilt correlated with T1 tilt.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/40020691",
-      "notes": "Original note: fusion-levels.md §3. First author is indexed as “Wei Chan CY”. The audit read the abstract, although open full text exists. The r=0.708 observation is a correlation coefficient, not a ratio. Citation and audited observations read in citation-audit-placement-tables.md §A (uiv-tilt-40020691); corrections in §§B–C. The audit read abstract."
+      "notes": "First author is indexed as “Wei Chan CY”. The abstract was read, although open full text exists. The r=0.708 observation is a correlation coefficient, not a ratio."
     },
     {
       "key": "salmingo-2014",
@@ -796,7 +796,7 @@
       "population": "Twenty AIS patients, mean age 14; rod contour-loss series; titanium designation reported secondarily through Abe.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/24275616",
-      "notes": "Original note: implant-mechanics.md §4, contour-loss table. Concave 33.6° to 17.8° (reported change 15.8°); convex 25.5° to 23.9° (reported change 1.6°). Very probably the same 20 patients as abe-2015: the authors and concave values agree, so the reports are not independent. No material or diameter is inferred beyond what the earlier note supplies. Citation and audited observations read in citation-audit-placement-tables.md §A (salmingo-2014); corrections in §§B–C. The audit read abstract."
+      "notes": "Concave 33.6° to 17.8° (reported change 15.8°); convex 25.5° to 23.9° (reported change 1.6°). Very probably the same 20 patients as abe-2015: the authors and concave values agree, so the reports are not independent. No material or diameter is inferred beyond what is recorded. Abstract read."
     },
     {
       "key": "sia-2019",
@@ -817,7 +817,7 @@
       "population": "AIS, median age 16 for titanium and 17 for cobalt-chrome; 5.5 mm rods; concave rods only.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/article/PMC/PMC6459034",
-      "notes": "Original note: implant-mechanics.md §4, contour-loss table. Every value in Tables II and III for both materials is a median with interquartile range. Titanium rod angles are 60.5° to 37° and reduction 22.5°; cobalt-chrome angles are 51° to 28° and reduction 17°. Reductions are medians of each patient's change and need not equal the difference of medians. Convex contour was not measured. Citation and audited observations read in citation-audit-placement-tables.md §A (sia-2019); corrections in §§B–C. The audit read full-text."
+      "notes": "Every value in Tables II and III for both materials is a median with interquartile range. Titanium rod angles are 60.5° to 37° and reduction 22.5°; cobalt-chrome angles are 51° to 28° and reduction 17°. Reductions are medians of each patient's change and need not equal the difference of medians. Convex contour was not measured. Full text read."
     },
     {
       "key": "cerny-2014",
@@ -834,11 +834,11 @@
       "doi": "10.1186/1748-7161-9-11",
       "pmcid": "PMC4130697",
       "read": "full-text",
-      "n": "5,580 evaluations; author, 2 experts and 10 students; patient/specimen count not supplied in the earlier scout note",
+      "n": "5,580 evaluations; author, 2 experts and 10 students; patient/specimen count not recorded",
       "population": "Front-film pedicle-based rotation measurement method evaluated by the author, 2 experts and 10 students.",
       "label": "peer-reviewed",
       "url": "https://doi.org/10.1186/1748-7161-9-11",
-      "notes": "Original note: spine-3d-fit/scout/literature.md §1.1, §1.4, §9. About 30° is a method visibility limit; applying it to a convergence-band width is a project rule, not a result of this paper. Citation and audited observations read in citation-audit-placement-tables.md §A (cerny-2014); corrections in §§B–C. The audit read full-text."
+      "notes": "About 30° is a method visibility limit; applying it to a convergence-band width is a project rule, not a result of this paper. Full text read."
     },
     {
       "key": "boissiere-2023",
@@ -855,11 +855,11 @@
       "doi": "10.3390/children11010029",
       "pmcid": "PMC10813855",
       "read": "abstract",
-      "n": "99; sample unit not named in the supplied table row",
-      "population": "Spine-to-rod kyphosis comparison; age and diagnostic composition not supplied in the note.",
+      "n": "99; sample unit not recorded",
+      "population": "Spine-to-rod kyphosis comparison; age and diagnostic composition not recorded.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/38255344",
-      "notes": "Original note: implant-mechanics.md §4, contour-loss table. The note gives 5.5° spine-to-rod kyphosis disparity and the concave rod less kyphotic than the spine in 84%; no rod diameter, material or spread is supplied. Bibliography from citations-placement-extra.json; bibliographic record confirmed; numbers not audited."
+      "notes": "Recorded values are 5.5° spine-to-rod kyphosis disparity and the concave rod less kyphotic than the spine in 84%; no rod diameter, material or spread is recorded. Bibliographic record confirmed; numbers not independently checked."
     },
     {
       "key": "cui-2012",
@@ -880,7 +880,7 @@
       "population": "AIS CT investigation of medial-wall perforation risk along the probe path.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/21739245",
-      "notes": "Original note: screw-sizing-and-placement.md §5; P6. The 8–10 mm danger-depth range is along the probe path, not pedicle width or a cortex margin. The note supplies additional ± pairs without identifying their spread statistic. Bibliography from citations-placement-extra.json; bibliographic record confirmed; numbers not audited."
+      "notes": "The 8–10 mm danger-depth range is along the probe path, not pedicle width or a cortex margin. Further ± pairs reported for this series have no identified spread statistic. Bibliographic record confirmed; numbers not independently checked."
     },
     {
       "key": "etemadifar-2017",
@@ -901,7 +901,7 @@
       "population": "AIS series; screw positions checked by CT.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/article/PMC/PMC5353768",
-      "notes": "Original note: screw-sizing-and-placement.md §5, §6 and P6. The Kim/Lenke entry technique is described through this opened series: about 2 mm lateral to the midpoint of the superior facet, at the superior border of the transverse process for T1–T10. It is not a landmark measured on the fitted template. Bibliography from citations-placement-extra.json; bibliographic record confirmed; numbers not audited."
+      "notes": "The Kim/Lenke entry technique is described through this opened series: about 2 mm lateral to the midpoint of the superior facet, at the superior border of the transverse process for T1–T10. It is not a landmark measured on the fitted template. Bibliographic record confirmed; numbers not independently checked."
     },
     {
       "key": "ueno-2025",
@@ -919,17 +919,17 @@
       "pmcid": null,
       "read": "abstract",
       "n": "465 screws; patient count not supplied",
-      "population": "Robot or navigation study of grade-4 cortical channels; further cohort details not supplied in the note.",
+      "population": "Robot or navigation study of grade-4 cortical channels; further cohort details not recorded.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/40299013",
-      "notes": "Original note: screw-sizing-and-placement.md §3 and P1. Section 3 jointly reports 20.4–22.2% deviation with Akazawa 2023, without allocating the endpoints here. P1 separately prints a broader approximate 22–31% hard-floor summary with Akazawa 2015; neither interval is repaired or treated as a pooled estimate. Bibliography from citations-placement-extra.json; bibliographic record confirmed; numbers not audited."
+      "notes": "The 20.4–22.2% deviation is reported jointly with Akazawa 2023, without allocating the endpoints here. A broader approximate 22–31% hard-floor summary with Akazawa 2015 is kept separately; neither interval is repaired or treated as a pooled estimate. Bibliographic record confirmed; numbers not independently checked."
     },
     {
       "key": "screw-p1-hard-floor",
       "citation": {
         "authors": null,
         "year": null,
-        "title": "Research-note table P1 (13 November 2026). Diameter rules: hard-floor summary of Akazawa 2015 and Ueno 2025. [Secondary note summary, not a separate paper].",
+        "title": "Diameter rules: hard-floor summary of Akazawa 2015 and Ueno 2025. [Secondary summary, not a separate paper].",
         "journal": null,
         "volume": null,
         "issue": null,
@@ -940,17 +940,17 @@
       "pmcid": null,
       "read": "secondary",
       "n": "Akazawa 2015: 55 AIS patients, 810 planned pedicles; Ueno 2025: 465 screws; no pooled n supplied",
-      "population": "Inner channel under 1 mm; the note summary says screw failure about 22–31% even with robot.",
-      "label": "research-note-summary",
+      "population": "Inner channel under 1 mm; summarised as screw failure about 22–31% even with robot.",
+      "label": "secondary-summary",
       "url": "https://europepmc.org/abstract/MED/26124077",
-      "notes": "Original note: screw-sizing-and-placement.md P1; compare §3. This catalogue entry identifies the research note’s mixed-source P1 row, not an additional study. Linked Akazawa 2015 is one named constituent; Ueno 2025 is https://europepmc.org/abstract/MED/40299013. Do not assign the whole printed approximate interval to either constituent, or infer a pooled population. Section 3 separately gives Akazawa 31.5% and robot/navigation 20.4–22.2%; those statements remain distinct. Original description: Research-note table P1 (13 November 2026). Diameter rules: hard-floor summary of Akazawa 2015 and Ueno 2025. [Secondary note summary, not a separate paper]."
+      "notes": "This catalogue entry identifies a mixed-source summary row, not an additional study. Linked Akazawa 2015 is one named constituent; Ueno 2025 is https://europepmc.org/abstract/MED/40299013. Do not assign the whole approximate interval to either constituent, or infer a pooled population. Akazawa 31.5% and robot/navigation 20.4–22.2% are given separately; those statements remain distinct. Diameter rules: hard-floor summary of Akazawa 2015 and Ueno 2025. [Secondary summary, not a separate paper]."
     },
     {
       "key": "screw-p4-summary",
       "citation": {
         "authors": null,
         "year": null,
-        "title": "Research-note table P4 (13 November 2026). Lengths by region: measured AIS chord/trajectory summary. [Secondary summary of Balikci 2019, Kuraishi 2013, Upendra 2010 and Pluemvitayaporn 2025; not a separate paper].",
+        "title": "Lengths by region: measured AIS chord/trajectory summary. [Secondary summary of Balikci 2019, Kuraishi 2013, Upendra 2010 and Pluemvitayaporn 2025; not a separate paper].",
         "journal": null,
         "volume": null,
         "issue": null,
@@ -962,9 +962,9 @@
       "read": "secondary",
       "n": "Balikci: 120 patients, 86 AIS, 2,846 screws; Kuraishi: 15 patients; Upendra: 24 patients; Pluemvitayaporn: 112 patients; no pooled n supplied",
       "population": "Regional adolescent AIS chord/trajectory summary across the cited series; no level, side or sex allocation within a region.",
-      "label": "research-note-summary",
+      "label": "secondary-summary",
       "url": "https://europepmc.org/article/PMC/PMC2856392",
-      "notes": "Original note: screw-sizing-and-placement.md P4. The interval is transcribed from the note’s measured-chord column, not derived from the individual Table 3 cells or attributed to a new pooled study. The linked Upendra paper is one constituent; others are Balikci https://europepmc.org/article/PMC/PMC6773991, Kuraishi conference abstract https://europepmc.org/article/PMC/PMC3675381 and Pluemvitayaporn https://europepmc.org/article/PMC/PMC11875695. Their individual metadata and read statuses remain in their source entries. Original description: Research-note table P4 (13 November 2026). Lengths by region: measured AIS chord/trajectory summary. [Secondary summary of Balikci 2019, Kuraishi 2013, Upendra 2010 and Pluemvitayaporn 2025; not a separate paper]."
+      "notes": "The interval is a regional summary of measured chords, not derived from the individual per-level chord cells or attributed to a new pooled study. The linked Upendra paper is one constituent; others are Balikci https://europepmc.org/article/PMC/PMC6773991, Kuraishi conference abstract https://europepmc.org/article/PMC/PMC3675381 and Pluemvitayaporn https://europepmc.org/article/PMC/PMC11875695. Their individual metadata and read statuses remain in their source entries. Lengths by region: measured AIS chord/trajectory summary. [Secondary summary of Balikci 2019, Kuraishi 2013, Upendra 2010 and Pluemvitayaporn 2025; not a separate paper]."
     },
     {
       "key": "s1-liv-42811138",
@@ -985,7 +985,7 @@
       "population": "Lenke 1–2, lumbar modifiers A/B; adding-on analysis.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/42811138",
-      "notes": "Original note: fusion-levels.md §2b; Table B. Exact S1–LIV angle geometry is not given in the abstract; the 9.5° threshold does not establish a computable angle definition. Bibliography from citations-placement-extra.json; bibliographic record confirmed; numbers not audited."
+      "notes": "Exact S1–LIV angle geometry is not given in the abstract; the 9.5° threshold does not establish a computable angle definition. Bibliographic record confirmed; numbers not independently checked."
     },
     {
       "key": "ssv-40103372",
@@ -1006,7 +1006,7 @@
       "population": "Lenke 1–2 with LIV ≤ L1; DJK and sagittal stable vertebra analysis.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/40103372",
-      "notes": "Original note: fusion-levels.md §2b; Table B. Rule is no more proximal than SSV−1 and below preoperative distal junctional kyphosis; the note also lists other risk factors. This is distinct from the 122-patient postoperative-kyphosis cohort. Bibliography from citations-placement-extra.json; bibliographic record confirmed; numbers not audited."
+      "notes": "Rule is no more proximal than SSV−1 and below preoperative distal junctional kyphosis; other risk factors are also reported. This is distinct from the 122-patient postoperative-kyphosis cohort. Bibliographic record confirmed; numbers not independently checked."
     },
     {
       "key": "djk-34096362",
@@ -1027,7 +1027,7 @@
       "population": "Lenke 1–2 with LIV ≤ L1; sagittal stable vertebra inclusion and postoperative kyphosis.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/34096362",
-      "notes": "Original note: fusion-levels.md §2b; Table B. TK T5–T12 ≥25° or TLK T11–L2 ≥10° applies with SSV excluded. The 53.8% result is 7/13, not a full-cohort estimate. Bibliography from citations-placement-extra.json; bibliographic record confirmed; numbers not audited."
+      "notes": "TK T5–T12 ≥25° or TLK T11–L2 ≥10° applies with SSV excluded. The 53.8% result is 7/13, not a full-cohort estimate. Bibliographic record confirmed; numbers not independently checked."
     },
     {
       "key": "l3-bending-30739071",
@@ -1048,7 +1048,7 @@
       "population": "Lumbar curves greater than 60°; preoperative concave side-bending L3 translation.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/30739071",
-      "notes": "Original note: fusion-levels.md §2d; Table B. Translation threshold is strictly below 10 mm on the concave bending film, under the greater-than-60° curve condition; no standing-film substitution is implied. Bibliography from citations-placement-extra.json; bibliographic record confirmed; numbers not audited."
+      "notes": "Translation threshold is strictly below 10 mm on the concave bending film, under the greater-than-60° curve condition; no standing-film substitution is implied. Bibliographic record confirmed; numbers not independently checked."
     },
     {
       "key": "residual-t1-39658742",
@@ -1069,7 +1069,7 @@
       "population": "Lenke 1; residual T1 tilt and self-image analysis.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/39658742",
-      "notes": "Original note: fusion-levels.md §3; Table B. Preoperative PT Cobb >26.5° is the risk-factor threshold; T1 tilt >5° at two years is the distinct outcome definition. Bibliography from citations-placement-extra.json; bibliographic record confirmed; numbers not audited."
+      "notes": "Preoperative PT Cobb >26.5° is the risk-factor threshold; T1 tilt >5° at two years is the distinct outcome definition. Bibliographic record confirmed; numbers not independently checked."
     },
     {
       "key": "shoulder-36138576",
@@ -1090,7 +1090,7 @@
       "population": "Lenke 1; shoulder imbalance and main-thoracic overcorrection.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/abstract/MED/36138576",
-      "notes": "Original note: fusion-levels.md §3; Table B. Preoperative RSH >−6.5 mm and planned MT correction >76.9% are separate strict thresholds. The source’s imbalance definition is RSH ≥2 cm; no conversion is made in the tables. Bibliography from citations-placement-extra.json; bibliographic record confirmed; numbers not audited."
+      "notes": "Preoperative RSH >−6.5 mm and planned MT correction >76.9% are separate strict thresholds. The source’s imbalance definition is RSH ≥2 cm; no conversion is made in the tables. Bibliographic record confirmed; numbers not independently checked."
     },
     {
       "key": "coronal-decompensation-4417731",
@@ -1111,14 +1111,14 @@
       "population": "Selective fusion; coronal decompensation defined in the opened article by C7PL–CSVL >20 mm.",
       "label": "peer-reviewed",
       "url": "https://europepmc.org/article/PMC/PMC4417731",
-      "notes": "Original note: fusion-levels.md §5; Table B. Full text read in part according to the earlier note. The 20 mm definition is reported in that note; its numbers were not re-audited in the extra bibliography pass. Bibliography from citations-placement-extra.json; bibliographic record confirmed; numbers not audited."
+      "notes": "Full text read in part. Bibliographic record confirmed; numbers not independently checked."
     },
     {
       "key": "fusion-level-definitions",
       "citation": {
         "authors": null,
         "year": null,
-        "title": "Research note (13 November 2026). Choosing which levels to instrument (upper and lower instrumented vertebra) in AIS: DJK definition in Table B and section 5. [Secondary definition with no unique primary attribution].",
+        "title": "Distal junctional kyphosis (DJK) definition in AIS. [Secondary definition with no unique primary attribution].",
         "journal": null,
         "volume": null,
         "issue": null,
@@ -1128,11 +1128,11 @@
       "doi": null,
       "pmcid": null,
       "read": "secondary",
-      "n": "Definition summary; no unique cohort or pooled n supplied. Section 5 separately lists 1,034-, 122- and 196-patient series.",
+      "n": "Definition summary; no unique cohort or pooled n supplied. The 1,034-, 122- and 196-patient series are listed separately.",
       "population": "AIS distal junctional kyphosis definition; DJA from LIV to LIV+1 at least 10°.",
-      "label": "research-note-summary",
+      "label": "secondary-summary",
       "url": "https://europepmc.org/abstract/MED/40103372",
-      "notes": "Original note: fusion-levels.md §5 and Table B. This entry identifies the research note’s definition, not a new paper or a claim that one primary abstract uniquely supplies the threshold. The link is one study listed by the note; the 122-patient analysis is https://europepmc.org/abstract/MED/34096362 and the 196-patient series is https://europepmc.org/abstract/MED/40924388. Their samples are not pooled or summed. Original definition attribution remains uncertain. Original description: Research note (13 November 2026). Choosing which levels to instrument (upper and lower instrumented vertebra) in AIS: DJK definition in Table B and section 5. [Secondary definition with no unique primary attribution]."
+      "notes": "This entry identifies a secondary definition, not a new paper or a claim that one primary abstract uniquely supplies the threshold. The link is one of the studies listed for this definition; the 122-patient analysis is https://europepmc.org/abstract/MED/34096362 and the 196-patient series is https://europepmc.org/abstract/MED/40924388. Their samples are not pooled or summed. Original definition attribution remains uncertain. DJK definition. [Secondary definition with no unique primary attribution]."
     },
     {
       "key": "kuraishi-2013-full-paper",
@@ -1153,7 +1153,7 @@
       "population": "Fifteen patients with right-side thoracic adolescent idiopathic scoliosis who underwent pedicle screw fixation.",
       "label": "peer-reviewed",
       "url": "https://pubmed.ncbi.nlm.nih.gov/21959835/",
-      "notes": "full-tables-from-five-papers.md §D.7 supplies the full-paper bibliographic record, definitions and abstract observations. Published February 2013. Same work as the meeting abstract kuraishi-2013 (Scoliosis 8 Suppl 1:O27), retained as a second record; not independent evidence. No per-level diameters or chord values are supplied in the abstract."
+      "notes": "Published February 2013. Same work as the meeting abstract kuraishi-2013 (Scoliosis 8 Suppl 1:O27), retained as a second record; not independent evidence. No per-level diameters or chord values are supplied in the abstract."
     }
   ]
 }

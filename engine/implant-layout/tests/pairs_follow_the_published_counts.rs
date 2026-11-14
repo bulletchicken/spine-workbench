@@ -1,5 +1,4 @@
-//! Independent pair arithmetic from SYNTHESIS 2.6 and selective-fusion
-//! boundary words from fusion-levels section 4 and its citation audit.
+//! Independent pair arithmetic and selective-fusion boundaries.
 
 use implant_layout::curves;
 use implant_layout::evidence::{Coordinate, PublishedValue, Table, tables};
@@ -246,8 +245,9 @@ fn unread_rules_supply_no_candidates_and_no_modal_votes() {
 
 #[test]
 fn exactly_six_of_ten_holding_versions_settles_the_ends() {
-    // SYNTHESIS says strictly below0.6*N. Hand rows avoid a random draw deciding
-    // whether equality is reached. Geometry is irrelevant to this count.
+    // Ends are unsettled only when strictly fewer than 0.6*N versions hold.
+    // Hand rows avoid a random draw deciding whether equality is reached.
+    // Geometry is irrelevant to this count.
     let input = input();
     let measured = curves::measure(&input, &input.fit).unwrap();
     for holding in [5, 6] {
@@ -331,7 +331,7 @@ fn corrected_lumbar_bending_reads_the_thoracic_curve_and_omits_missing_twist() {
     use shapes::spine_readings::BodySide;
     let input = input();
     let mut reading = curves::measure(&input, &input.fit).unwrap();
-    // Independent section4 example: set the lumbar/thoracic Cobb ratio
+    // Independent example: set the lumbar/thoracic Cobb ratio
     // half a unit above its published threshold and the thoracic Cobb
     // below its printed limit. The thoracic bend crosses its own limit;
     // a much larger lumbar bend must never stand in for that reading.

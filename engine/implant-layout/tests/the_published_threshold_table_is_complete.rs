@@ -27,7 +27,7 @@ fn scalar(key: &str, group: &str, value: f64, unit: Unit, source: &str) -> &'sta
 
 #[test]
 fn the_kaya_criteria_keep_percent_and_grade_distinct() {
-    // fusion-levels.md §4 and Table B: lumbar flexibility >70%, AVR ≤grade2.
+    // Lumbar flexibility >70%, AVR ≤grade2.
     let flexibility = scalar(
         "lumbar-flexibility-min",
         "kaya-selective-thoracic",
@@ -67,7 +67,7 @@ fn the_kaya_criteria_keep_percent_and_grade_distinct() {
 
 #[test]
 fn the_s1_liv_angle_does_not_invent_its_missing_geometry() {
-    // fusion-levels.md §2b/Table B, PMID42811138: >9.5°, n177/289.
+    // PMID42811138: >9.5°, n177/289.
     let cell = scalar(
         "s1-liv-angle-min",
         "adding-on",
@@ -84,7 +84,7 @@ fn the_s1_liv_angle_does_not_invent_its_missing_geometry() {
 
 #[test]
 fn the_ssv_offset_and_postoperative_regions_remain_separate() {
-    // fusion-levels.md §2b/Table B, PMID40103372: no more proximal thanSSV−1.
+    // PMID40103372: no more proximal thanSSV−1.
     let offset = scalar(
         "liv-above-ssv-max",
         "djk",
@@ -99,7 +99,7 @@ fn the_ssv_offset_and_postoperative_regions_remain_separate() {
             .unwrap()
             .contains("no more proximal than SSV−1")
     );
-    // Same note, PMID34096362: postoperative TK≥25° OR TLK≥10° if SSV excluded.
+    // PMID34096362: postoperative TK≥25° OR TLK≥10° if SSV excluded.
     for (key, value, region) in [
         ("postoperative-kyphosis-t5-t12-min", 25.0, "T5–T12"),
         ("postoperative-kyphosis-t11-l2-min", 10.0, "T11–L2"),
@@ -126,7 +126,7 @@ fn the_ssv_offset_and_postoperative_regions_remain_separate() {
 
 #[test]
 fn l3_translation_retains_the_concave_bend_and_curve_eligibility() {
-    // fusion-levels.md §2d/Table B, PMID30739071: translation<10mm when lumbarCobb>60°.
+    // PMID30739071: translation<10mm when lumbarCobb>60°.
     let cell = scalar(
         "l3-bending-translation-max",
         "l3-on-concave-bend",
@@ -155,7 +155,7 @@ fn l3_translation_retains_the_concave_bend_and_curve_eligibility() {
 
 #[test]
 fn the_contested_shoulder_rule_keeps_all_named_options() {
-    // fusion-levels.md §3/Table B: Lenke1 left-highT2, levelT3/T4, right-highT4/T5.
+    // Lenke1 left-highT2, levelT3/T4, right-highT4/T5.
     for (group, first, last) in [
         ("lenke-1-left-shoulder-high", Level::T2, Level::T2),
         ("lenke-1-level-shoulders", Level::T3, Level::T4),
@@ -173,7 +173,7 @@ fn the_contested_shoulder_rule_keeps_all_named_options() {
 
 #[test]
 fn the_proximal_thoracic_criterion_keeps_its_film_condition() {
-    // fusion-levels.md §3/Table B, Chan2016 through review: PTbend≥15°.
+    // Chan2016 through review: PTbend≥15°.
     let cell = scalar(
         "pt-bending-cobb-min",
         "pt-behaves-structural",
@@ -193,7 +193,7 @@ fn the_proximal_thoracic_criterion_keeps_its_film_condition() {
 
 #[test]
 fn residual_t1_tilt_keeps_trigger_outcome_and_follow_up_distinct() {
-    // fusion-levels.md §3/Table B, PMID39658742: preoperativePT>26.5°, residualT1>5° at2years.
+    // PMID39658742: preoperativePT>26.5°, residualT1>5° at2years.
     for (key, value) in [
         ("preoperative-pt-cobb-min", 26.5),
         ("residual-t1-tilt-min", 5.0),
@@ -223,7 +223,7 @@ fn residual_t1_tilt_keeps_trigger_outcome_and_follow_up_distinct() {
 
 #[test]
 fn shoulder_height_keeps_its_negative_sign_and_correction_keeps_percent_units() {
-    // fusion-levels.md §3/Table B, PMID36138576: RSH>−6.5mm; MTcorrection>76.9%.
+    // PMID36138576: RSH>−6.5mm; MTcorrection>76.9%.
     for (key, value, unit) in [
         ("preoperative-rsh-min", -6.5, Unit::Mm),
         ("mt-correction-min", 76.9, Unit::Percent),
@@ -246,7 +246,7 @@ fn shoulder_height_keeps_its_negative_sign_and_correction_keeps_percent_units() 
 
 #[test]
 fn absolute_and_increased_proximal_junction_angles_are_two_criteria() {
-    // fusion-levels.md §5/Table B; outcomes-over-time.md §1: both≥10°, joined byAND.
+    // PJK definition: both≥10°, joined byAND.
     for key in ["absolute-pja-min", "pja-increase-min"] {
         let cell = scalar(key, "pjk-definition", 10.0, Unit::Degrees, "zhao-2024");
         let qualifier = cell.qualifier.as_deref().unwrap();
@@ -271,7 +271,7 @@ fn absolute_and_increased_proximal_junction_angles_are_two_criteria() {
 
 #[test]
 fn distal_junction_and_coronal_definitions_keep_their_attribution_limits() {
-    // fusion-levels.md §5/Table B: DJA≥10°, primary attribution not unique.
+    // DJA≥10°, primary attribution not unique.
     let cell = scalar(
         "distal-junction-angle-min",
         "djk-definition",
@@ -282,7 +282,7 @@ fn distal_junction_and_coronal_definitions_keep_their_attribution_limits() {
     let qualifier = cell.qualifier.as_deref().unwrap();
     assert!(qualifier.contains("Greater than or equal"));
     assert!(qualifier.contains("does not uniquely attribute"));
-    // Same table: C7PL−CSVL>20mm, PMC4417731 readinpart.
+    // Coronal decompensation: C7PL−CSVL >20 mm, PMC4417731 read in part.
     let cell = scalar(
         "c7pl-csvl-min",
         "coronal-decompensation",
@@ -301,8 +301,7 @@ fn distal_junction_and_coronal_definitions_keep_their_attribution_limits() {
 
 #[test]
 fn the_suk_summary_does_not_restrict_the_detailed_first_branch() {
-    // fusion-levels.md TableB prints0–1; §2b andSYNTHESIS2.5 sayNV≤EV+1.
-    // Retaining0–1 as a summary must not invent a lower bound for that inequality.
+    // The 0–1 summary must not invent a lower bound for the NV≤EV+1 rule.
     let summary = threshold("nv-ev-summary-interval", "suk-neutral-summary");
     assert_eq!(
         summary.value,

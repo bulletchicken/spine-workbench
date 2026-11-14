@@ -14,7 +14,7 @@
       },
       "unit": "mm",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "section": "Table 3",
       "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. The historical outer-width key does not assert an outer-cortex measurement; the paper does not specify outer or inner cortex.",
       "wholeMm": true,
       "printed": "7 ± 1.25",
@@ -34,7 +34,7 @@
       },
       "unit": "mm",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "section": "Table 3",
       "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. The historical outer-width key does not assert an outer-cortex measurement; the paper does not specify outer or inner cortex.",
       "wholeMm": true,
       "printed": "7 ± 1.09",
@@ -53,7 +53,7 @@
       },
       "unit": "mm",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "section": "Table 3",
       "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. The historical outer-width key does not assert an outer-cortex measurement; the paper does not specify outer or inner cortex.",
       "wholeMm": true,
       "printed": "7 ± 1.01",
@@ -73,7 +73,7 @@
       },
       "unit": "mm",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "section": "Table 3",
       "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. The historical outer-width key does not assert an outer-cortex measurement; the paper does not specify outer or inner cortex. Printed * and † compare this column with control and convex values at p <0.05.",
       "wholeMm": true,
       "printed": "5 ± 1.24*,†",
@@ -93,7 +93,7 @@
       },
       "unit": "mm",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "section": "Table 3",
       "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. The historical outer-width key does not assert an outer-cortex measurement; the paper does not specify outer or inner cortex.",
       "wholeMm": true,
       "printed": "6 ± 0.91",
@@ -112,7 +112,7 @@
       },
       "unit": "mm",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "section": "Table 3",
       "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. The historical outer-width key does not assert an outer-cortex measurement; the paper does not specify outer or inner cortex.",
       "wholeMm": true,
       "printed": "6 ± 1.02",
@@ -132,7 +132,7 @@
       },
       "unit": "mm",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "section": "Table 3",
       "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. The historical outer-width key does not assert an outer-cortex measurement; the paper does not specify outer or inner cortex. Printed * and † compare this column with control and convex values at p <0.05.",
       "wholeMm": false,
       "printed": "3.76 ± 1.37*,†",
@@ -152,7 +152,7 @@
       },
       "unit": "mm",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "section": "Table 3",
       "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. The historical outer-width key does not assert an outer-cortex measurement; the paper does not specify outer or inner cortex.",
       "wholeMm": false,
       "printed": "4.98 ± 1.03",
@@ -171,7 +171,7 @@
       },
       "unit": "mm",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "section": "Table 3",
       "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. The historical outer-width key does not assert an outer-cortex measurement; the paper does not specify outer or inner cortex.",
       "wholeMm": false,
       "printed": "4.89 ± 0.83",
@@ -191,7 +191,7 @@
       },
       "unit": "mm",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "section": "Table 3",
       "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. The historical outer-width key does not assert an outer-cortex measurement; the paper does not specify outer or inner cortex. Printed * and † compare this column with control and convex values at p <0.05.",
       "wholeMm": false,
       "printed": "3.41 ± 0.98*,†",
@@ -211,7 +211,7 @@
       },
       "unit": "mm",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "section": "Table 3",
       "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. The historical outer-width key does not assert an outer-cortex measurement; the paper does not specify outer or inner cortex.",
       "wholeMm": false,
       "printed": "4.44 ± 0.88",
@@ -230,7 +230,7 @@
       },
       "unit": "mm",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "section": "Table 3",
       "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. The historical outer-width key does not assert an outer-cortex measurement; the paper does not specify outer or inner cortex.",
       "wholeMm": false,
       "printed": "4.46 ± 0.89",
@@ -250,7 +250,7 @@
       },
       "unit": "mm",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "section": "Table 3",
       "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. The historical outer-width key does not assert an outer-cortex measurement; the paper does not specify outer or inner cortex. Printed * and † compare this column with control and convex values at p <0.05.",
       "wholeMm": false,
       "printed": "3.95 ± 1.05*,†",
@@ -270,7 +270,7 @@
       },
       "unit": "mm",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "section": "Table 3",
       "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. The historical outer-width key does not assert an outer-cortex measurement; the paper does not specify outer or inner cortex.",
       "wholeMm": false,
       "printed": "4.71±1.01",
@@ -289,7 +289,7 @@
       },
       "unit": "mm",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "section": "Table 3",
       "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. The historical outer-width key does not assert an outer-cortex measurement; the paper does not specify outer or inner cortex.",
       "wholeMm": false,
       "printed": "4.44 ± 0.75",
@@ -309,7 +309,7 @@
       },
       "unit": "mm",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "section": "Table 3",
       "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. The historical outer-width key does not assert an outer-cortex measurement; the paper does not specify outer or inner cortex. Printed * and † compare this column with control and convex values at p <0.05.",
       "wholeMm": false,
       "printed": "4.05 ± 1.05*,†",
@@ -329,7 +329,7 @@
       },
       "unit": "mm",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "section": "Table 3",
       "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. The historical outer-width key does not assert an outer-cortex measurement; the paper does not specify outer or inner cortex.",
       "wholeMm": false,
       "printed": "4.77 ± 1.01",
@@ -348,7 +348,7 @@
       },
       "unit": "mm",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "section": "Table 3",
       "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. The historical outer-width key does not assert an outer-cortex measurement; the paper does not specify outer or inner cortex.",
       "wholeMm": false,
       "printed": "4.61 ± 0.79",
@@ -368,7 +368,7 @@
       },
       "unit": "mm",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "section": "Table 3",
       "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. The historical outer-width key does not assert an outer-cortex measurement; the paper does not specify outer or inner cortex. Printed * and † compare this column with control and convex values at p <0.05.",
       "wholeMm": false,
       "printed": "3.97 ± 1.10*,†",
@@ -388,7 +388,7 @@
       },
       "unit": "mm",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "section": "Table 3",
       "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. The historical outer-width key does not assert an outer-cortex measurement; the paper does not specify outer or inner cortex.",
       "wholeMm": true,
       "printed": "5 ± 0.88",
@@ -407,7 +407,7 @@
       },
       "unit": "mm",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "section": "Table 3",
       "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. The historical outer-width key does not assert an outer-cortex measurement; the paper does not specify outer or inner cortex.",
       "wholeMm": false,
       "printed": "4.68 ± 0.80",
@@ -427,7 +427,7 @@
       },
       "unit": "mm",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "section": "Table 3",
       "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. The historical outer-width key does not assert an outer-cortex measurement; the paper does not specify outer or inner cortex. Printed * and † compare this column with control and convex values at p <0.05.",
       "wholeMm": false,
       "printed": "4.08 ± 1.11*,†",
@@ -447,7 +447,7 @@
       },
       "unit": "mm",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "section": "Table 3",
       "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. The historical outer-width key does not assert an outer-cortex measurement; the paper does not specify outer or inner cortex.",
       "wholeMm": true,
       "printed": "5 ± 1.04",
@@ -466,7 +466,7 @@
       },
       "unit": "mm",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "section": "Table 3",
       "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. The historical outer-width key does not assert an outer-cortex measurement; the paper does not specify outer or inner cortex.",
       "wholeMm": false,
       "printed": "4.99 ± 0.91",
@@ -486,7 +486,7 @@
       },
       "unit": "mm",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "section": "Table 3",
       "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. The historical outer-width key does not assert an outer-cortex measurement; the paper does not specify outer or inner cortex. Printed * and † compare this column with control and convex values at p <0.05.",
       "wholeMm": false,
       "printed": "4.92 ± 1.45*,†",
@@ -506,7 +506,7 @@
       },
       "unit": "mm",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "section": "Table 3",
       "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. The historical outer-width key does not assert an outer-cortex measurement; the paper does not specify outer or inner cortex.",
       "wholeMm": true,
       "printed": "5 ± 1.05",
@@ -525,7 +525,7 @@
       },
       "unit": "mm",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "section": "Table 3",
       "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. The historical outer-width key does not assert an outer-cortex measurement; the paper does not specify outer or inner cortex.",
       "wholeMm": true,
       "printed": "5 ± 0.90",
@@ -545,7 +545,7 @@
       },
       "unit": "mm",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "section": "Table 3",
       "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. The historical outer-width key does not assert an outer-cortex measurement; the paper does not specify outer or inner cortex.",
       "wholeMm": true,
       "printed": "6 ± 1.62",
@@ -565,7 +565,7 @@
       },
       "unit": "mm",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "section": "Table 3",
       "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. The historical outer-width key does not assert an outer-cortex measurement; the paper does not specify outer or inner cortex.",
       "wholeMm": true,
       "printed": "6 ± 1.43",
@@ -584,7 +584,7 @@
       },
       "unit": "mm",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "section": "Table 3",
       "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. The historical outer-width key does not assert an outer-cortex measurement; the paper does not specify outer or inner cortex.",
       "wholeMm": true,
       "printed": "6 ± 1.00",
@@ -604,7 +604,7 @@
       },
       "unit": "mm",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "section": "Table 3",
       "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. The historical outer-width key does not assert an outer-cortex measurement; the paper does not specify outer or inner cortex.",
       "wholeMm": true,
       "printed": "7 ± 2.04",
@@ -624,7 +624,7 @@
       },
       "unit": "mm",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "section": "Table 3",
       "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. The historical outer-width key does not assert an outer-cortex measurement; the paper does not specify outer or inner cortex.",
       "wholeMm": true,
       "printed": "7 ± 1.81",
@@ -643,7 +643,7 @@
       },
       "unit": "mm",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "section": "Table 3",
       "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. The historical outer-width key does not assert an outer-cortex measurement; the paper does not specify outer or inner cortex.",
       "wholeMm": true,
       "printed": "7 ± 1.73",
@@ -663,7 +663,7 @@
       },
       "unit": "mm",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "section": "Table 3",
       "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. The historical outer-width key does not assert an outer-cortex measurement; the paper does not specify outer or inner cortex.",
       "wholeMm": true,
       "printed": "7 ± 1.61",
@@ -683,7 +683,7 @@
       },
       "unit": "mm",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "section": "Table 3",
       "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. The historical outer-width key does not assert an outer-cortex measurement; the paper does not specify outer or inner cortex.",
       "wholeMm": true,
       "printed": "7 ± 1.83",
@@ -702,7 +702,7 @@
       },
       "unit": "mm",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §A Gao Table 3; §B Gao; §C4,14",
+      "section": "Table 3",
       "qualifier": "The paper leaves ± unlabelled; reading it as SD is this project's inference. Curve direction and the anatomical left/right mapping are not stated. The historical outer-width key does not assert an outer-cortex measurement; the paper does not specify outer or inner cortex.",
       "wholeMm": true,
       "printed": "7 ± 1.57",
@@ -722,8 +722,8 @@
       },
       "unit": "mm",
       "source": "pluemvitayaporn-2025",
-      "section": "screw-sizing-and-placement.md, section 1, Table 1",
-      "qualifier": "Alternative Lenke 5 cohort; the note cautions that absolute widths are substantially smaller than in other series."
+      "section": "Table 1",
+      "qualifier": "Alternative Lenke 5 cohort; absolute widths are substantially smaller than in other series and should be read with caution."
     },
     {
       "coordinate": {
@@ -739,8 +739,8 @@
       },
       "unit": "mm",
       "source": "pluemvitayaporn-2025",
-      "section": "screw-sizing-and-placement.md, section 1, Table 1",
-      "qualifier": "Alternative Lenke 5 cohort; the note cautions that absolute widths are substantially smaller than in other series."
+      "section": "Table 1",
+      "qualifier": "Alternative Lenke 5 cohort; absolute widths are substantially smaller than in other series and should be read with caution."
     },
     {
       "coordinate": {
@@ -756,8 +756,8 @@
       },
       "unit": "mm",
       "source": "pluemvitayaporn-2025",
-      "section": "screw-sizing-and-placement.md, section 1, Table 1",
-      "qualifier": "Alternative Lenke 5 cohort; the note cautions that absolute widths are substantially smaller than in other series."
+      "section": "Table 1",
+      "qualifier": "Alternative Lenke 5 cohort; absolute widths are substantially smaller than in other series and should be read with caution."
     },
     {
       "coordinate": {
@@ -773,8 +773,8 @@
       },
       "unit": "mm",
       "source": "pluemvitayaporn-2025",
-      "section": "screw-sizing-and-placement.md, section 1, Table 1",
-      "qualifier": "Alternative Lenke 5 cohort; the note cautions that absolute widths are substantially smaller than in other series."
+      "section": "Table 1",
+      "qualifier": "Alternative Lenke 5 cohort; absolute widths are substantially smaller than in other series and should be read with caution."
     },
     {
       "coordinate": {
@@ -790,8 +790,8 @@
       },
       "unit": "mm",
       "source": "pluemvitayaporn-2025",
-      "section": "screw-sizing-and-placement.md, section 1, Table 1",
-      "qualifier": "Alternative Lenke 5 cohort; the note cautions that absolute widths are substantially smaller than in other series."
+      "section": "Table 1",
+      "qualifier": "Alternative Lenke 5 cohort; absolute widths are substantially smaller than in other series and should be read with caution."
     },
     {
       "coordinate": {
@@ -807,8 +807,8 @@
       },
       "unit": "mm",
       "source": "pluemvitayaporn-2025",
-      "section": "screw-sizing-and-placement.md, section 1, Table 1",
-      "qualifier": "Alternative Lenke 5 cohort; the note cautions that absolute widths are substantially smaller than in other series."
+      "section": "Table 1",
+      "qualifier": "Alternative Lenke 5 cohort; absolute widths are substantially smaller than in other series and should be read with caution."
     },
     {
       "coordinate": {
@@ -824,8 +824,8 @@
       },
       "unit": "mm",
       "source": "pluemvitayaporn-2025",
-      "section": "screw-sizing-and-placement.md, section 1, Table 1",
-      "qualifier": "Alternative Lenke 5 cohort; the note cautions that absolute widths are substantially smaller than in other series."
+      "section": "Table 1",
+      "qualifier": "Alternative Lenke 5 cohort; absolute widths are substantially smaller than in other series and should be read with caution."
     },
     {
       "coordinate": {
@@ -841,8 +841,8 @@
       },
       "unit": "mm",
       "source": "pluemvitayaporn-2025",
-      "section": "screw-sizing-and-placement.md, section 1, Table 1",
-      "qualifier": "Alternative Lenke 5 cohort; the note cautions that absolute widths are substantially smaller than in other series."
+      "section": "Table 1",
+      "qualifier": "Alternative Lenke 5 cohort; absolute widths are substantially smaller than in other series and should be read with caution."
     },
     {
       "coordinate": {
@@ -858,8 +858,8 @@
       },
       "unit": "mm",
       "source": "pluemvitayaporn-2025",
-      "section": "screw-sizing-and-placement.md, section 1, Table 1",
-      "qualifier": "Alternative Lenke 5 cohort; the note cautions that absolute widths are substantially smaller than in other series."
+      "section": "Table 1",
+      "qualifier": "Alternative Lenke 5 cohort; absolute widths are substantially smaller than in other series and should be read with caution."
     },
     {
       "coordinate": {
@@ -875,8 +875,8 @@
       },
       "unit": "mm",
       "source": "pluemvitayaporn-2025",
-      "section": "screw-sizing-and-placement.md, section 1, Table 1",
-      "qualifier": "Alternative Lenke 5 cohort; the note cautions that absolute widths are substantially smaller than in other series."
+      "section": "Table 1",
+      "qualifier": "Alternative Lenke 5 cohort; absolute widths are substantially smaller than in other series and should be read with caution."
     },
     {
       "coordinate": {
@@ -892,8 +892,8 @@
       },
       "unit": "mm",
       "source": "pluemvitayaporn-2025",
-      "section": "screw-sizing-and-placement.md, section 1, Table 1",
-      "qualifier": "Alternative Lenke 5 cohort; the note cautions that absolute widths are substantially smaller than in other series."
+      "section": "Table 1",
+      "qualifier": "Alternative Lenke 5 cohort; absolute widths are substantially smaller than in other series and should be read with caution."
     },
     {
       "coordinate": {
@@ -909,8 +909,8 @@
       },
       "unit": "mm",
       "source": "pluemvitayaporn-2025",
-      "section": "screw-sizing-and-placement.md, section 1, Table 1",
-      "qualifier": "Alternative Lenke 5 cohort; the note cautions that absolute widths are substantially smaller than in other series."
+      "section": "Table 1",
+      "qualifier": "Alternative Lenke 5 cohort; absolute widths are substantially smaller than in other series and should be read with caution."
     },
     {
       "coordinate": {
@@ -926,8 +926,8 @@
       },
       "unit": "mm",
       "source": "pluemvitayaporn-2025",
-      "section": "screw-sizing-and-placement.md, section 1, Table 1",
-      "qualifier": "Alternative Lenke 5 cohort; the note cautions that absolute widths are substantially smaller than in other series."
+      "section": "Table 1",
+      "qualifier": "Alternative Lenke 5 cohort; absolute widths are substantially smaller than in other series and should be read with caution."
     },
     {
       "coordinate": {
@@ -943,8 +943,8 @@
       },
       "unit": "mm",
       "source": "pluemvitayaporn-2025",
-      "section": "screw-sizing-and-placement.md, section 1, Table 1",
-      "qualifier": "Alternative Lenke 5 cohort; the note cautions that absolute widths are substantially smaller than in other series."
+      "section": "Table 1",
+      "qualifier": "Alternative Lenke 5 cohort; absolute widths are substantially smaller than in other series and should be read with caution."
     },
     {
       "coordinate": {
@@ -960,8 +960,8 @@
       },
       "unit": "mm",
       "source": "pluemvitayaporn-2025",
-      "section": "screw-sizing-and-placement.md, section 1, Table 1",
-      "qualifier": "Alternative Lenke 5 cohort; the note cautions that absolute widths are substantially smaller than in other series."
+      "section": "Table 1",
+      "qualifier": "Alternative Lenke 5 cohort; absolute widths are substantially smaller than in other series and should be read with caution."
     },
     {
       "coordinate": {
@@ -977,8 +977,8 @@
       },
       "unit": "mm",
       "source": "pluemvitayaporn-2025",
-      "section": "screw-sizing-and-placement.md, section 1, Table 1",
-      "qualifier": "Alternative Lenke 5 cohort; the note cautions that absolute widths are substantially smaller than in other series."
+      "section": "Table 1",
+      "qualifier": "Alternative Lenke 5 cohort; absolute widths are substantially smaller than in other series and should be read with caution."
     },
     {
       "coordinate": {
@@ -994,8 +994,8 @@
       },
       "unit": "mm",
       "source": "pluemvitayaporn-2025",
-      "section": "screw-sizing-and-placement.md, section 1, Table 1",
-      "qualifier": "Alternative Lenke 5 cohort; the note cautions that absolute widths are substantially smaller than in other series."
+      "section": "Table 1",
+      "qualifier": "Alternative Lenke 5 cohort; absolute widths are substantially smaller than in other series and should be read with caution."
     },
     {
       "coordinate": {
@@ -1011,8 +1011,8 @@
       },
       "unit": "mm",
       "source": "pluemvitayaporn-2025",
-      "section": "screw-sizing-and-placement.md, section 1, Table 1",
-      "qualifier": "Alternative Lenke 5 cohort; the note cautions that absolute widths are substantially smaller than in other series."
+      "section": "Table 1",
+      "qualifier": "Alternative Lenke 5 cohort; absolute widths are substantially smaller than in other series and should be read with caution."
     },
     {
       "coordinate": {
@@ -1028,8 +1028,8 @@
       },
       "unit": "mm",
       "source": "pluemvitayaporn-2025",
-      "section": "screw-sizing-and-placement.md, section 1, Table 1",
-      "qualifier": "Alternative Lenke 5 cohort; the note cautions that absolute widths are substantially smaller than in other series."
+      "section": "Table 1",
+      "qualifier": "Alternative Lenke 5 cohort; absolute widths are substantially smaller than in other series and should be read with caution."
     },
     {
       "coordinate": {
@@ -1045,8 +1045,8 @@
       },
       "unit": "mm",
       "source": "pluemvitayaporn-2025",
-      "section": "screw-sizing-and-placement.md, section 1, Table 1",
-      "qualifier": "Alternative Lenke 5 cohort; the note cautions that absolute widths are substantially smaller than in other series."
+      "section": "Table 1",
+      "qualifier": "Alternative Lenke 5 cohort; absolute widths are substantially smaller than in other series and should be read with caution."
     },
     {
       "coordinate": {
@@ -1062,8 +1062,8 @@
       },
       "unit": "mm",
       "source": "pluemvitayaporn-2025",
-      "section": "screw-sizing-and-placement.md, section 1, Table 1",
-      "qualifier": "Alternative Lenke 5 cohort; the note cautions that absolute widths are substantially smaller than in other series."
+      "section": "Table 1",
+      "qualifier": "Alternative Lenke 5 cohort; absolute widths are substantially smaller than in other series and should be read with caution."
     },
     {
       "coordinate": {
@@ -1079,8 +1079,8 @@
       },
       "unit": "mm",
       "source": "pluemvitayaporn-2025",
-      "section": "screw-sizing-and-placement.md, section 1, Table 1",
-      "qualifier": "Alternative Lenke 5 cohort; the note cautions that absolute widths are substantially smaller than in other series."
+      "section": "Table 1",
+      "qualifier": "Alternative Lenke 5 cohort; absolute widths are substantially smaller than in other series and should be read with caution."
     },
     {
       "coordinate": {
@@ -1096,8 +1096,8 @@
       },
       "unit": "mm",
       "source": "pluemvitayaporn-2025",
-      "section": "screw-sizing-and-placement.md, section 1, Table 1",
-      "qualifier": "Alternative Lenke 5 cohort; the note cautions that absolute widths are substantially smaller than in other series."
+      "section": "Table 1",
+      "qualifier": "Alternative Lenke 5 cohort; absolute widths are substantially smaller than in other series and should be read with caution."
     },
     {
       "coordinate": {
@@ -1113,8 +1113,8 @@
       },
       "unit": "mm",
       "source": "pluemvitayaporn-2025",
-      "section": "screw-sizing-and-placement.md, section 1, Table 1",
-      "qualifier": "Alternative Lenke 5 cohort; the note cautions that absolute widths are substantially smaller than in other series."
+      "section": "Table 1",
+      "qualifier": "Alternative Lenke 5 cohort; absolute widths are substantially smaller than in other series and should be read with caution."
     },
     {
       "coordinate": {
@@ -1130,8 +1130,8 @@
       },
       "unit": "mm",
       "source": "pluemvitayaporn-2025",
-      "section": "screw-sizing-and-placement.md, section 1, Table 1",
-      "qualifier": "Alternative Lenke 5 cohort; the note cautions that absolute widths are substantially smaller than in other series."
+      "section": "Table 1",
+      "qualifier": "Alternative Lenke 5 cohort; absolute widths are substantially smaller than in other series and should be read with caution."
     },
     {
       "coordinate": {
@@ -1147,8 +1147,8 @@
       },
       "unit": "mm",
       "source": "pluemvitayaporn-2025",
-      "section": "screw-sizing-and-placement.md, section 1, Table 1",
-      "qualifier": "Alternative Lenke 5 cohort; the note cautions that absolute widths are substantially smaller than in other series."
+      "section": "Table 1",
+      "qualifier": "Alternative Lenke 5 cohort; absolute widths are substantially smaller than in other series and should be read with caution."
     },
     {
       "coordinate": {
@@ -1164,8 +1164,8 @@
       },
       "unit": "mm",
       "source": "pluemvitayaporn-2025",
-      "section": "screw-sizing-and-placement.md, section 1, Table 1",
-      "qualifier": "Alternative Lenke 5 cohort; the note cautions that absolute widths are substantially smaller than in other series."
+      "section": "Table 1",
+      "qualifier": "Alternative Lenke 5 cohort; absolute widths are substantially smaller than in other series and should be read with caution."
     },
     {
       "coordinate": {
@@ -1181,8 +1181,8 @@
       },
       "unit": "mm",
       "source": "pluemvitayaporn-2025",
-      "section": "screw-sizing-and-placement.md, section 1, Table 1",
-      "qualifier": "Alternative Lenke 5 cohort; the note cautions that absolute widths are substantially smaller than in other series."
+      "section": "Table 1",
+      "qualifier": "Alternative Lenke 5 cohort; absolute widths are substantially smaller than in other series and should be read with caution."
     },
     {
       "coordinate": {
@@ -1198,8 +1198,8 @@
       },
       "unit": "mm",
       "source": "pluemvitayaporn-2025",
-      "section": "screw-sizing-and-placement.md, section 1, Table 1",
-      "qualifier": "Alternative Lenke 5 cohort; the note cautions that absolute widths are substantially smaller than in other series."
+      "section": "Table 1",
+      "qualifier": "Alternative Lenke 5 cohort; absolute widths are substantially smaller than in other series and should be read with caution."
     },
     {
       "coordinate": {
@@ -1215,8 +1215,8 @@
       },
       "unit": "mm",
       "source": "pluemvitayaporn-2025",
-      "section": "screw-sizing-and-placement.md, section 1, Table 1",
-      "qualifier": "Alternative Lenke 5 cohort; the note cautions that absolute widths are substantially smaller than in other series."
+      "section": "Table 1",
+      "qualifier": "Alternative Lenke 5 cohort; absolute widths are substantially smaller than in other series and should be read with caution."
     },
     {
       "coordinate": {
@@ -1232,8 +1232,8 @@
       },
       "unit": "mm",
       "source": "pluemvitayaporn-2025",
-      "section": "screw-sizing-and-placement.md, section 1, Table 1",
-      "qualifier": "Alternative Lenke 5 cohort; the note cautions that absolute widths are substantially smaller than in other series."
+      "section": "Table 1",
+      "qualifier": "Alternative Lenke 5 cohort; absolute widths are substantially smaller than in other series and should be read with caution."
     },
     {
       "coordinate": {
@@ -1249,8 +1249,8 @@
       },
       "unit": "mm",
       "source": "pluemvitayaporn-2025",
-      "section": "screw-sizing-and-placement.md, section 1, Table 1",
-      "qualifier": "Alternative Lenke 5 cohort; the note cautions that absolute widths are substantially smaller than in other series."
+      "section": "Table 1",
+      "qualifier": "Alternative Lenke 5 cohort; absolute widths are substantially smaller than in other series and should be read with caution."
     },
     {
       "coordinate": {
@@ -1266,8 +1266,8 @@
       },
       "unit": "mm",
       "source": "pluemvitayaporn-2025",
-      "section": "screw-sizing-and-placement.md, section 1, Table 1",
-      "qualifier": "Alternative Lenke 5 cohort; the note cautions that absolute widths are substantially smaller than in other series."
+      "section": "Table 1",
+      "qualifier": "Alternative Lenke 5 cohort; absolute widths are substantially smaller than in other series and should be read with caution."
     },
     {
       "coordinate": {
@@ -1283,8 +1283,8 @@
       },
       "unit": "mm",
       "source": "pluemvitayaporn-2025",
-      "section": "screw-sizing-and-placement.md, section 1, Table 1",
-      "qualifier": "Alternative Lenke 5 cohort; the note cautions that absolute widths are substantially smaller than in other series."
+      "section": "Table 1",
+      "qualifier": "Alternative Lenke 5 cohort; absolute widths are substantially smaller than in other series and should be read with caution."
     },
     {
       "coordinate": {
@@ -1300,7 +1300,7 @@
       },
       "unit": "mm",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, A Upendra Table 1; B Upendra 2010 (full text)",
+      "section": "Table 1 (full text)",
       "qualifier": "Printed Table 1 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
       "n": 12,
       "range": {
@@ -1324,7 +1324,7 @@
       },
       "unit": "mm",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, A Upendra Table 1; B Upendra 2010 (full text)",
+      "section": "Table 1 (full text)",
       "qualifier": "Printed Table 1 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
       "n": 12,
       "range": {
@@ -1348,7 +1348,7 @@
       },
       "unit": "mm",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, A Upendra Table 1; B Upendra 2010 (full text)",
+      "section": "Table 1 (full text)",
       "qualifier": "Printed Table 1 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
       "n": 10,
       "range": {
@@ -1372,7 +1372,7 @@
       },
       "unit": "mm",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, A Upendra Table 1; B Upendra 2010 (full text)",
+      "section": "Table 1 (full text)",
       "qualifier": "Printed Table 1 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
       "n": 11,
       "range": {
@@ -1396,7 +1396,7 @@
       },
       "unit": "mm",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, A Upendra Table 1; B Upendra 2010 (full text)",
+      "section": "Table 1 (full text)",
       "qualifier": "Printed Table 1 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
       "n": 13,
       "range": {
@@ -1420,7 +1420,7 @@
       },
       "unit": "mm",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, A Upendra Table 1; B Upendra 2010 (full text)",
+      "section": "Table 1 (full text)",
       "qualifier": "Printed Table 1 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
       "n": 13,
       "range": {
@@ -1431,7 +1431,7 @@
       "decimals": 1,
       "mark": {
         "kind": "doubtful",
-        "reason": "The note flags the printed SD 0.31 mm as doubtful next to the printed range 3.4–5.1 mm; the figure is retained without repair."
+        "reason": "The printed SD 0.31 mm is doubtful next to the printed range 3.4–5.1 mm; the figure is retained without repair."
       }
     },
     {
@@ -1448,7 +1448,7 @@
       },
       "unit": "mm",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, A Upendra Table 1; B Upendra 2010 (full text)",
+      "section": "Table 1 (full text)",
       "qualifier": "Printed Table 1 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
       "n": 14,
       "range": {
@@ -1472,7 +1472,7 @@
       },
       "unit": "mm",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, A Upendra Table 1; B Upendra 2010 (full text)",
+      "section": "Table 1 (full text)",
       "qualifier": "Printed Table 1 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
       "n": 15,
       "range": {
@@ -1496,7 +1496,7 @@
       },
       "unit": "mm",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, A Upendra Table 1; B Upendra 2010 (full text)",
+      "section": "Table 1 (full text)",
       "qualifier": "Printed Table 1 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
       "n": 9,
       "range": {
@@ -1520,7 +1520,7 @@
       },
       "unit": "mm",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, A Upendra Table 1; B Upendra 2010 (full text)",
+      "section": "Table 1 (full text)",
       "qualifier": "Printed Table 1 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
       "n": 9,
       "range": {
@@ -1544,7 +1544,7 @@
       },
       "unit": "mm",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, A Upendra Table 1; B Upendra 2010 (full text)",
+      "section": "Table 1 (full text)",
       "qualifier": "Printed Table 1 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
       "n": 11,
       "range": {
@@ -1568,7 +1568,7 @@
       },
       "unit": "mm",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, A Upendra Table 1; B Upendra 2010 (full text)",
+      "section": "Table 1 (full text)",
       "qualifier": "Printed Table 1 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
       "n": 13,
       "range": {
@@ -1592,7 +1592,7 @@
       },
       "unit": "mm",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, A Upendra Table 1; B Upendra 2010 (full text)",
+      "section": "Table 1 (full text)",
       "qualifier": "Printed Table 1 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
       "n": 9,
       "range": {
@@ -1616,7 +1616,7 @@
       },
       "unit": "mm",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, A Upendra Table 1; B Upendra 2010 (full text)",
+      "section": "Table 1 (full text)",
       "qualifier": "Printed Table 1 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
       "n": 11,
       "range": {
@@ -1627,7 +1627,7 @@
       "decimals": 2,
       "mark": {
         "kind": "doubtful",
-        "reason": "The note flags the printed SD 0.21 mm as doubtful next to the printed range 4.6–6.3 mm; the figure is retained without repair."
+        "reason": "The printed SD 0.21 mm is doubtful next to the printed range 4.6–6.3 mm; the figure is retained without repair."
       }
     },
     {
@@ -1644,7 +1644,7 @@
       },
       "unit": "mm",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, A Upendra Table 1; B Upendra 2010 (full text)",
+      "section": "Table 1 (full text)",
       "qualifier": "Printed Table 1 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
       "n": 14,
       "range": {
@@ -1668,7 +1668,7 @@
       },
       "unit": "mm",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, A Upendra Table 1; B Upendra 2010 (full text)",
+      "section": "Table 1 (full text)",
       "qualifier": "Printed Table 1 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
       "n": 14,
       "range": {
@@ -1692,7 +1692,7 @@
       },
       "unit": "mm",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, A Upendra Table 1; B Upendra 2010 (full text)",
+      "section": "Table 1 (full text)",
       "qualifier": "Printed Table 1 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
       "n": 12,
       "range": {
@@ -1716,7 +1716,7 @@
       },
       "unit": "mm",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, A Upendra Table 1; B Upendra 2010 (full text)",
+      "section": "Table 1 (full text)",
       "qualifier": "Printed Table 1 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
       "n": 12,
       "range": {
@@ -1740,7 +1740,7 @@
       },
       "unit": "mm",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, A Upendra Table 1; B Upendra 2010 (full text)",
+      "section": "Table 1 (full text)",
       "qualifier": "Printed Table 1 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
       "n": 15,
       "range": {
@@ -1764,7 +1764,7 @@
       },
       "unit": "mm",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, A Upendra Table 1; B Upendra 2010 (full text)",
+      "section": "Table 1 (full text)",
       "qualifier": "Printed Table 1 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right. Table 4(a) repeats this cell as 5.51, disagreeing with Table 1’s 5.21; this primary cell follows Table 1.",
       "n": 15,
       "range": {
@@ -1788,7 +1788,7 @@
       },
       "unit": "mm",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, A Upendra Table 1; B Upendra 2010 (full text)",
+      "section": "Table 1 (full text)",
       "qualifier": "Printed Table 1 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
       "n": 16,
       "range": {
@@ -1812,7 +1812,7 @@
       },
       "unit": "mm",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, A Upendra Table 1; B Upendra 2010 (full text)",
+      "section": "Table 1 (full text)",
       "qualifier": "Printed Table 1 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
       "n": 16,
       "range": {
@@ -1836,7 +1836,7 @@
       },
       "unit": "mm",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, A Upendra Table 1; B Upendra 2010 (full text)",
+      "section": "Table 1 (full text)",
       "qualifier": "Printed Table 1 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
       "n": 19,
       "range": {
@@ -1860,7 +1860,7 @@
       },
       "unit": "mm",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, A Upendra Table 1; B Upendra 2010 (full text)",
+      "section": "Table 1 (full text)",
       "qualifier": "Printed Table 1 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
       "n": 22,
       "range": {
@@ -1884,7 +1884,7 @@
       },
       "unit": "mm",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, A Upendra Table 1; B Upendra 2010 (full text)",
+      "section": "Table 1 (full text)",
       "qualifier": "Printed Table 1 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
       "n": 18,
       "range": {
@@ -1908,7 +1908,7 @@
       },
       "unit": "mm",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, A Upendra Table 1; B Upendra 2010 (full text)",
+      "section": "Table 1 (full text)",
       "qualifier": "Printed Table 1 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
       "n": 19,
       "range": {
@@ -1932,7 +1932,7 @@
       },
       "unit": "mm",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, A Upendra Table 1; B Upendra 2010 (full text)",
+      "section": "Table 1 (full text)",
       "qualifier": "Printed Table 1 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
       "n": 13,
       "range": {
@@ -1956,7 +1956,7 @@
       },
       "unit": "mm",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, A Upendra Table 1; B Upendra 2010 (full text)",
+      "section": "Table 1 (full text)",
       "qualifier": "Printed Table 1 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
       "n": 13,
       "range": {
@@ -1980,7 +1980,7 @@
       },
       "unit": "mm",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, A Upendra Table 1; B Upendra 2010 (full text)",
+      "section": "Table 1 (full text)",
       "qualifier": "Printed Table 1 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
       "n": 11,
       "range": {
@@ -2004,7 +2004,7 @@
       },
       "unit": "mm",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, A Upendra Table 1; B Upendra 2010 (full text)",
+      "section": "Table 1 (full text)",
       "qualifier": "Printed Table 1 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
       "n": 11,
       "range": {
@@ -2028,7 +2028,7 @@
       },
       "unit": "mm",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, A Upendra Table 1; B Upendra 2010 (full text)",
+      "section": "Table 1 (full text)",
       "qualifier": "Printed Table 1 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
       "n": 9,
       "range": {
@@ -2052,7 +2052,7 @@
       },
       "unit": "mm",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, A Upendra Table 1; B Upendra 2010 (full text)",
+      "section": "Table 1 (full text)",
       "qualifier": "Printed Table 1 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
       "n": 9,
       "range": {
@@ -2076,7 +2076,7 @@
       },
       "unit": "mm",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, A Upendra Table 1; B Upendra 2010 (full text)",
+      "section": "Table 1 (full text)",
       "qualifier": "Printed Table 1 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
       "n": 8,
       "range": {
@@ -2100,7 +2100,7 @@
       },
       "unit": "mm",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, A Upendra Table 1; B Upendra 2010 (full text)",
+      "section": "Table 1 (full text)",
       "qualifier": "Printed Table 1 mean, SD, per-cell pedicle count and range; no rounding or interpolation. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
       "n": 8,
       "range": {
@@ -2123,7 +2123,7 @@
       },
       "unit": "mm",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, A Upendra Table 4(a); C6 (full text)",
+      "section": "Table 4(a) (full text)",
       "qualifier": "Alternative figure retained only as printed, separate from primary Tables 1–3. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right.",
       "printed": "5.51",
       "decimals": 2,
@@ -2143,7 +2143,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "6.06 ± 0.92",
       "decimals": 2,
@@ -2163,7 +2163,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "5.73 ± 0.94",
       "decimals": 2,
@@ -2183,7 +2183,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "6.84 ± 0.67",
       "decimals": 2,
@@ -2203,7 +2203,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "6.3 ± 0.68",
       "decimals": 1,
@@ -2223,7 +2223,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "7.44 ± 0.82",
       "decimals": 2,
@@ -2243,7 +2243,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "6.7 ± 0.89",
       "decimals": 1,
@@ -2263,7 +2263,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "5.38 ± 0.73",
       "decimals": 2,
@@ -2283,7 +2283,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "5.19 ± 0.94",
       "decimals": 2,
@@ -2303,7 +2303,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "5.82 ± 0.90",
       "decimals": 2,
@@ -2323,7 +2323,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "5.64 ± 0.71",
       "decimals": 2,
@@ -2343,7 +2343,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "6.26 ± 1.09",
       "decimals": 2,
@@ -2363,7 +2363,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "5.64 ± 0.90",
       "decimals": 2,
@@ -2383,7 +2383,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "4.53 ± 0.63",
       "decimals": 2,
@@ -2403,7 +2403,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "4.40 ± 0.81",
       "decimals": 2,
@@ -2423,7 +2423,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "4.93 ± 0.83",
       "decimals": 2,
@@ -2443,7 +2443,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "4.64 ± 0.65",
       "decimals": 2,
@@ -2463,7 +2463,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "5.11 ± 1.24",
       "decimals": 2,
@@ -2483,7 +2483,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "4.60 ± 0.81",
       "decimals": 2,
@@ -2503,7 +2503,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "3.89 ± 0.63",
       "decimals": 2,
@@ -2523,7 +2523,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "3.67 ± 0.84",
       "decimals": 2,
@@ -2543,7 +2543,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "4.10 ± 0.74",
       "decimals": 2,
@@ -2563,7 +2563,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "4.09 ± 0.51",
       "decimals": 2,
@@ -2583,7 +2583,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "4.36 ± 0.91",
       "decimals": 2,
@@ -2603,7 +2603,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "3.93 ± 0.88",
       "decimals": 2,
@@ -2623,7 +2623,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "3.85 ± 0.56",
       "decimals": 2,
@@ -2643,7 +2643,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "3.59 ± 0.64",
       "decimals": 2,
@@ -2663,7 +2663,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "3.97 ± 1.00",
       "decimals": 2,
@@ -2683,7 +2683,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "3.91 ± 0.46",
       "decimals": 2,
@@ -2703,7 +2703,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "4.39 ± 0.84",
       "decimals": 2,
@@ -2723,7 +2723,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "4.13 ± 0.82",
       "decimals": 2,
@@ -2743,7 +2743,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "3.99 ± 0.54",
       "decimals": 2,
@@ -2763,7 +2763,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "3.76 ± 0.68",
       "decimals": 2,
@@ -2783,7 +2783,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "4.27 ± 1.05",
       "decimals": 2,
@@ -2803,7 +2803,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "3.92 ± 0.55",
       "decimals": 2,
@@ -2823,7 +2823,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "4.56 ± 0.93",
       "decimals": 2,
@@ -2843,7 +2843,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "4.16 ± 0.81",
       "decimals": 2,
@@ -2863,7 +2863,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "4.19 ± 0.59",
       "decimals": 2,
@@ -2883,7 +2883,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "3.84 ± 0.61",
       "decimals": 2,
@@ -2903,7 +2903,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "4.43 ± 1.02",
       "decimals": 2,
@@ -2923,7 +2923,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "3.96 ± 0.47",
       "decimals": 2,
@@ -2943,7 +2943,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "4.81 ± 0.99",
       "decimals": 2,
@@ -2963,7 +2963,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "4.25 ± 0.82",
       "decimals": 2,
@@ -2983,7 +2983,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "4.54 ± 0.64",
       "decimals": 2,
@@ -3003,7 +3003,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "4.06 ± 0.67",
       "decimals": 2,
@@ -3023,7 +3023,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "4.78 ± 0.88",
       "decimals": 2,
@@ -3043,7 +3043,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "4.54 ± 0.57",
       "decimals": 2,
@@ -3063,7 +3063,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "5.09 ± 1.08",
       "decimals": 2,
@@ -3083,7 +3083,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "4.64 ± 1.16",
       "decimals": 2,
@@ -3103,7 +3103,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "4.84 ± 0.74",
       "decimals": 2,
@@ -3123,7 +3123,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "4.50 ± 0.58",
       "decimals": 2,
@@ -3143,7 +3143,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "5.04 ± 0.73",
       "decimals": 2,
@@ -3163,7 +3163,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "4.72 ± 0.67",
       "decimals": 2,
@@ -3183,7 +3183,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "5.70 ± 1.04",
       "decimals": 2,
@@ -3203,7 +3203,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "5.01 ± 0.79",
       "decimals": 2,
@@ -3223,7 +3223,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "5.34 ± 0.94",
       "decimals": 2,
@@ -3243,7 +3243,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009; §C.12",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "4.83 ± 072",
       "decimals": 2,
@@ -3267,7 +3267,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "5.75 ± 0.95",
       "decimals": 2,
@@ -3287,7 +3287,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "5.31 ± 0.83",
       "decimals": 2,
@@ -3307,7 +3307,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "6.42 ± 1.41",
       "decimals": 2,
@@ -3327,7 +3327,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "5.85 ± 1.18",
       "decimals": 2,
@@ -3347,7 +3347,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "5.83 ± 0.93",
       "decimals": 2,
@@ -3367,7 +3367,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "5.49 ± 0.66",
       "decimals": 2,
@@ -3387,7 +3387,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "6.36 ± 1.09",
       "decimals": 2,
@@ -3407,7 +3407,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "6.03 ± 0.99",
       "decimals": 2,
@@ -3427,7 +3427,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "7.22 ± 1.44",
       "decimals": 2,
@@ -3447,7 +3447,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "6.57 ± 1.38",
       "decimals": 2,
@@ -3467,7 +3467,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "6.27 ± 1.11",
       "decimals": 2,
@@ -3487,7 +3487,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "6.00 ± 0.95",
       "decimals": 2,
@@ -3507,7 +3507,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "6.69 ± 1.13",
       "decimals": 2,
@@ -3527,7 +3527,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "6.52 ± 1.13",
       "decimals": 2,
@@ -3547,7 +3547,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "7.83 ± 1.58",
       "decimals": 2,
@@ -3567,7 +3567,7 @@
       },
       "unit": "mm",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, Zheng 2009 Table 1; §B, Zheng 2009",
+      "section": "Table 1",
       "qualifier": "Full text. The paper does not state what ± denotes; reading it as a standard deviation is this project's own inference. Numbers of children per age band and sex are not stated. The first of the two unlabelled Table 1 rows at each level is stored as inner width and the second as outer width; that assignment is this project's own inference.",
       "printed": "7.39 ± 1.64",
       "decimals": 2,
@@ -3590,7 +3590,7 @@
       },
       "unit": "mm",
       "source": "sato-2022",
-      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 2; §B Sato 2022; §C.1",
+      "section": "Table 2",
       "qualifier": "Measurements are in a plane perpendicular to the pedicle axis through the isthmus. The table prints ± without defining its statistic. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper states right is always convex and left always concave. Per-cell observation counts are not supplied.",
       "range": {
         "lower": 2.9,
@@ -3612,7 +3612,7 @@
       },
       "unit": "mm",
       "source": "sato-2022",
-      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 2; §B Sato 2022; §C.1",
+      "section": "Table 2",
       "qualifier": "Measurements are in a plane perpendicular to the pedicle axis through the isthmus. The table prints ± without defining its statistic. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper states right is always convex and left always concave. Per-cell observation counts are not supplied.",
       "range": {
         "lower": 0.9,
@@ -3632,7 +3632,7 @@
       },
       "unit": "ratio",
       "source": "sato-2022",
-      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 2; §B Sato 2022; §C.1",
+      "section": "Table 2",
       "qualifier": "Right-versus-left comparison for this measurement and region; strictly less than the printed bound. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper states right is always convex and left always concave. Per-cell observation counts are not supplied.",
       "printed": "< 0.001*",
       "decimals": 3
@@ -3650,7 +3650,7 @@
       },
       "unit": "mm",
       "source": "sato-2022",
-      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 2; §B Sato 2022; §C.1",
+      "section": "Table 2",
       "qualifier": "Measurements are in a plane perpendicular to the pedicle axis through the isthmus. The table prints ± without defining its statistic. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper states right is always convex and left always concave. Per-cell observation counts are not supplied.",
       "range": {
         "lower": 0.9,
@@ -3660,7 +3660,7 @@
       "decimals": 1,
       "mark": {
         "kind": "probable-copy",
-        "reason": "full-tables-from-five-papers.md §B Sato and §C.1: the right-side NV ±1 block repeats the left-side APEX ±1 block in 11 of 12 numbers, a probable copy error. The right-side neutral block is not used; values remain as printed."
+        "reason": "The right-side NV ±1 block repeats the left-side APEX ±1 block in 11 of 12 numbers, a probable copy error. The right-side neutral block is not used; values remain as printed."
       },
       "usage": "printed-only"
     },
@@ -3677,7 +3677,7 @@
       },
       "unit": "mm",
       "source": "sato-2022",
-      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 2; §B Sato 2022; §C.1",
+      "section": "Table 2",
       "qualifier": "Measurements are in a plane perpendicular to the pedicle axis through the isthmus. The table prints ± without defining its statistic. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper states right is always convex and left always concave. Per-cell observation counts are not supplied.",
       "range": {
         "lower": 2.4,
@@ -3687,7 +3687,7 @@
       "decimals": 1,
       "mark": {
         "kind": "probable-copy",
-        "reason": "The right-side neutral block is a probable copy of the left-side apex block (11 of 12 numbers). DECISIONS withholds both neutral cortical-width sides; this left-side value is retained as printed, without asserting that the left cell itself was copied."
+        "reason": "The right-side neutral block is a probable copy of the left-side apex block (11 of 12 numbers). Both neutral cortical-width sides are withheld from use in this table; this left-side value is retained as printed, without asserting that the left cell itself was copied."
       },
       "usage": "printed-only"
     },
@@ -3702,7 +3702,7 @@
       },
       "unit": "ratio",
       "source": "sato-2022",
-      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 2; §B Sato 2022; §C.1",
+      "section": "Table 2",
       "qualifier": "Right-versus-left comparison for this measurement and region; Exact p-value as printed. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper states right is always convex and left always concave. Per-cell observation counts are not supplied.",
       "printed": "0.929",
       "decimals": 3
@@ -3712,85 +3712,85 @@
     {
       "key": "gao-width",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §B Gao 2017; Table 3",
+      "section": "Table 3",
       "text": "Pedicle width was defined as the shortest distance along the perpendicular to the line through the axis of the pedicle (Fig. 1). Pedicle diameter was measured on axial slices through the thinnest portion of the pedicle using reformatted slices closest to the middle of the pedicle in the craniocaudad dimension. Outer cortex versus inner canal is not stated."
     },
     {
       "key": "gao-table-3-heading",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §B Gao 2017; Table 3",
+      "section": "Table 3",
       "text": "Pedicle parameters in patients and controls; columns: Level | PWc (mm) | PWv (mm) | PWn (mm) | PLc (mm) | PLv (mm) | PLn (mm). PWc = pedicle width on the concave side; PWv = pedicle width on the convex side; PWn = pedicle width in controls; PLc = pedicle length on the concave side; PLv = pedicle length on the convex side; PLn = pedicle length in controls; *p < 0.05 versus PWn (PLn) group; †p < 0.05 versus PWv (PLv) group."
     },
     {
       "key": "upendra-outer-width",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, B Upendra 2010 (full text)",
+      "section": "not recorded (full text)",
       "text": "Transverse pedicle width: the narrowest width of the pedicle in the transverse plane, measured outer cortex to outer cortex on CT scans for ease and reproducibility."
     },
     {
       "key": "upendra-population-and-sides",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, B Upendra 2010 (full text)",
+      "section": "not recorded (full text)",
       "text": "Twenty-four AIS patients, curves <100°, 14 female and 10 male; mean age 14.6 years (12.3–18.3), mean Cobb 76° (58–98°); King II 12, King III 7, King IV 5. [own inference] Convex is read as right and concave as left because all 24 patients had right thoracic/thoracolumbar curves; the paper does not explicitly equate convex with right."
     },
     {
       "key": "upendra-statistics-and-table-authority",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md, A Upendra Tables 1–4; C5–C9 (full text)",
+      "section": "Tables 1–4 (full text)",
       "text": "Tables 1–3 explicitly label means, ranges, SD and number of pedicles separately. The printed field preserves the literal mean column; decimals records its printed decimal places. Table 4 conflicts are kept separately and are not used; Tables 1–3 supply primary figures. Doubtful cells remain usable as printed, while the impossible L4 convex angle is retained only for inspection."
     },
     {
       "key": "zheng-transverse-outer-diameter",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §B, Zheng 2009; §C.2",
+      "section": "Figure 1 caption; Table 1; places of the measurement-count and population statements not recorded",
       "text": "Figure 1 defines transverse diameter as “the medial-lateral inner and outer cortical width of the pedicle” measured at the isthmus. Three measurements per parameter at the isthmus were averaged. Table 1 does not label which of its two rows is inner or outer: assigning the first row as inner and second as outer is this project’s own inference. The paper does not define the ± statistic; interpreting it as SD is this project’s own inference. The paper states a total of 120 children aged 5–14, selected by stratified random sampling; per-age-band and sex counts are not stated."
     },
     {
       "key": "sato-table-2",
       "source": "sato-2022",
-      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 2",
+      "section": "Table 2",
       "text": "Differences in right and left pedicle diameters; columns: Variables |  |  | Rt. Pedicles | Lt. Pedicles | p-values. *Statistically significant. APEX±1, the region of the AV and its two adjacent vertebrae; H, cortical pedicle height; h, cancellous pedicle height; NV ± 1, the region of the NV and its two adjacent vertebrae; W, cortical pedicle width; w, cancellous pedicle width"
     },
     {
       "key": "sato-isthmus-plane",
       "source": "sato-2022",
-      "section": "full-tables-from-five-papers.md §B Sato 2022",
+      "section": "Fig. 1 caption, Table 2 footnotes and Discussion; places of the quoted measurement sentence and the side statement not recorded",
       "text": "Measured by \"cutting out pedicles in a plane perpendicular to the pedicle axis through the isthmus\". Fig. 1 names W cortical pedicle width and w cancellous pedicle width; the discussion treats W as the outer diameter. Right pedicle is always convex; left pedicle is always concave. H is cortical pedicle height and h cancellous pedicle height. Per-cell n is not supplied."
     },
     {
       "key": "kuraishi-full-paper-width",
       "source": "kuraishi-2013-full-paper",
-      "section": "full-tables-from-five-papers.md §D.7 Kuraishi 2013 full-paper abstract",
+      "section": "full-paper abstract",
       "text": "Pedicle diameter: \"the widest outer cortical diameter at the narrowest part of the pedicle\". The full-paper abstract gives no per-level diameters; it does not fill anatomy cells."
     },
     {
       "key": "upendra-2010-table-1-wording",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md §A, upendra-2010 Table 1",
+      "section": "Table 1",
       "text": "Transverse pedicle width (a) Convex pedicle (b) Concave pedicle; column headers (verbatim, separated by |): a) Convex pedicle / Level | No. of pedicles | Mean width (mm) | Range (mm) | S.D | (b) Concave pedicle / Level | No. of pedicles | Mean width (mm) | Range (mm) | S.D"
     },
     {
       "key": "upendra-2010-table-4(a)-wording",
       "source": "upendra-2010",
-      "section": "full-tables-from-five-papers.md §A, upendra-2010 Table 4(a)",
+      "section": "Table 4(a)",
       "text": "Comparison of pedicle width and transverse pedicle angle in Western, Japanese and Indian patients; (a) Mean pedicle width; (b) Mean transverse pedicle angle — (a) Mean pedicle width (mm); column headers (verbatim, separated by |):  | Convex pedicle / Liljenqvist spine 2000 endosteal width | Convex pedicle / Katsushi Takeshita spine 2009 outer pedicle width | Convex pedicle / Present study outer pedicle width | Concave pedicle / Liljenqvist spine 2000 endosteal width | Concave pedicle / Katsushi Takeshita spine 2009 outer pedicle width | Concave pedicle / Present study outer pedicle width"
     },
     {
       "key": "zheng-2009-table-1-wording",
       "source": "zheng-2009",
-      "section": "full-tables-from-five-papers.md §A, zheng-2009 Table 1",
+      "section": "Table 1",
       "text": "Transverse inner and outer pedicle diameters (mm); column headers (verbatim, separated by |):  | 5–8 years / M | 5–8 years / F | 9–11 years / M | 9–11 years / F | 12–14 years / M | 12–14 years / F"
     },
     {
       "key": "sato-2022-table-2-wording",
       "source": "sato-2022",
-      "section": "full-tables-from-five-papers.md §A, sato-2022 Table 2",
+      "section": "Table 2",
       "text": "Differences in right and left pedicle diameters; column headers (verbatim, separated by |): Variables |  |  | Rt. Pedicles | Lt. Pedicles | p-values. Footnotes: *Statistically significant. APEX±1, the region of the AV and its two adjacent vertebrae; H, cortical pedicle height; h, cancellous pedicle height; NV ± 1, the region of the NV and its two adjacent vertebrae; W, cortical pedicle width; w, cancellous pedicle width"
     },
     {
       "key": "gao-2017-table-3-wording",
       "source": "gao-2017",
-      "section": "full-tables-from-five-papers.md §A, gao-2017 Table 3",
+      "section": "Table 3",
       "text": "Pedicle parameters in patients and controls; column headers (verbatim, separated by |): Level | PWc (mm) | PWv (mm) | PWn (mm) | PLc (mm) | PLv (mm) | PLn (mm). Footnotes: PWc = pedicle width on the concave side; PWv = pedicle width on the convex side; PWn = pedicle width in controls; PLc = pedicle length on the concave side; PLv = pedicle length on the convex side; PLn = pedicle length in controls; *p < 0.05 versus PWn (PLn) group; †p < 0.05 versus PWv (PLv) group."
     }
   ]

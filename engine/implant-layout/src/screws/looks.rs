@@ -86,8 +86,9 @@ pub fn look_codes(input: LookInputs) -> Result<(Vec<LookCode>, Vec<String>), Lay
     Ok((looks, unique(sources)))
 }
 
-/// Film/context codes of 2.13. The first-pair count is supplied by the
-/// caller; screw construction itself does not evaluate a level rule.
+/// Film and context codes for cases the layout cannot judge. The first-pair
+/// count is supplied by the caller; screw construction itself does not evaluate
+/// a level rule.
 /// No history field exists in this version, so no history code is invented.
 pub fn context_looks(input: &LayoutInput, first_pair_versions: Option<u32>) -> Vec<CannotTell> {
     let mut output = Vec::new();

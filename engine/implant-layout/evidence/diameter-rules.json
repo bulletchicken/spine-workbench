@@ -11,7 +11,7 @@
       },
       "unit": "ratio",
       "source": "misenhimer-1989",
-      "section": "screw-sizing-and-placement.md §3 and P1"
+      "section": "abstract"
     },
     {
       "coordinate": {
@@ -24,7 +24,7 @@
       },
       "unit": "ratio",
       "source": "sato-2022",
-      "section": "screw-sizing-and-placement.md P1",
+      "section": "not recorded",
       "qualifier": "Cited expansion limit, not a direct estimate from this cohort; Takeshita/Yazici primaries not read in full."
     },
     {
@@ -39,7 +39,7 @@
       },
       "unit": "ratio",
       "source": "upendra-2010",
-      "section": "screw-sizing-and-placement.md §3 and P1",
+      "section": "not recorded",
       "qualifier": "Range cited from other work, not newly measured by Upendra."
     },
     {
@@ -54,7 +54,7 @@
       },
       "unit": "percent",
       "source": "sato-2022",
-      "section": "screw-sizing-and-placement.md §3"
+      "section": "not recorded"
     },
     {
       "coordinate": {
@@ -67,7 +67,7 @@
       },
       "unit": "mm",
       "source": "sato-2022",
-      "section": "screw-sizing-and-placement.md §3"
+      "section": "not recorded"
     },
     {
       "coordinate": {
@@ -80,7 +80,7 @@
       },
       "unit": "mm",
       "source": "sato-2022",
-      "section": "screw-sizing-and-placement.md §3"
+      "section": "not recorded"
     },
     {
       "coordinate": {
@@ -94,8 +94,8 @@
       },
       "unit": "percent",
       "source": "grabala-2023",
-      "section": "screw-sizing-and-placement.md P1; citation-audit-placement-tables.md §A Grabala 2023, Table 3; §B.10",
-      "qualifier": "Approximate range as printed in P1; width definition unclear. Not a diameter-ratio conversion. Mixed-cause cohort n = 230: idiopathic 164, congenital 25, neuromuscular 23 and syndromic 18; not AIS only. Table 3 has internal discrepancies: T5 postoperative 6.07 minus preoperative 3.79 is reported in the audit as 2.28 versus printed Mean Expanding 2.55; L3 6.88 minus 5.14 as 1.74 versus 2.89; L5 7.02 minus 5.68 as 1.34 versus 2.68. Preoperative N = 7954 and postoperative N = 5080 are different pedicle sets. The published expansion values are retained without repair."
+      "section": "Table 3",
+      "qualifier": "Approximate range; width definition unclear. Not a diameter-ratio conversion. Mixed-cause cohort n = 230: idiopathic 164, congenital 25, neuromuscular 23 and syndromic 18; not AIS only. Table 3 has internal discrepancies: T5 postoperative 6.07 minus preoperative 3.79 is 2.28 versus printed Mean Expanding 2.55; L3 6.88 minus 5.14 is 1.74 versus 2.89; L5 7.02 minus 5.68 is 1.34 versus 2.68. Preoperative N = 7954 and postoperative N = 5080 are different pedicle sets. The published expansion values are retained without repair."
     },
     {
       "coordinate": {
@@ -108,8 +108,8 @@
       },
       "unit": "percent",
       "source": "grabala-2023",
-      "section": "screw-sizing-and-placement.md §3; citation-audit-placement-tables.md §A Grabala 2023, Table 6; §B.10",
-      "qualifier": "Percentage, not a multiplier; MRI width definition unclear. Mixed-cause cohort n = 230: idiopathic 164, congenital 25, neuromuscular 23 and syndromic 18; not AIS only. Table 3 has internal discrepancies: T5 postoperative 6.07 minus preoperative 3.79 is reported in the audit as 2.28 versus printed Mean Expanding 2.55; L3 6.88 minus 5.14 as 1.74 versus 2.89; L5 7.02 minus 5.68 as 1.34 versus 2.68. Preoperative N = 7954 and postoperative N = 5080 are different pedicle sets. The published expansion values are retained without repair."
+      "section": "Table 6",
+      "qualifier": "Percentage, not a multiplier; MRI width definition unclear. Mixed-cause cohort n = 230: idiopathic 164, congenital 25, neuromuscular 23 and syndromic 18; not AIS only. Table 3 has internal discrepancies: T5 postoperative 6.07 minus preoperative 3.79 is 2.28 versus printed Mean Expanding 2.55; L3 6.88 minus 5.14 is 1.74 versus 2.89; L5 7.02 minus 5.68 is 1.34 versus 2.68. Preoperative N = 7954 and postoperative N = 5080 are different pedicle sets. The published expansion values are retained without repair."
     },
     {
       "coordinate": {
@@ -122,8 +122,8 @@
       },
       "unit": "percent",
       "source": "grabala-2023",
-      "section": "screw-sizing-and-placement.md §3; citation-audit-placement-tables.md §A Grabala 2023, Table 6; §B.10",
-      "qualifier": "Percentage, not a multiplier; MRI width definition unclear. Mixed-cause cohort n = 230: idiopathic 164, congenital 25, neuromuscular 23 and syndromic 18; not AIS only. Table 3 has internal discrepancies: T5 postoperative 6.07 minus preoperative 3.79 is reported in the audit as 2.28 versus printed Mean Expanding 2.55; L3 6.88 minus 5.14 as 1.74 versus 2.89; L5 7.02 minus 5.68 as 1.34 versus 2.68. Preoperative N = 7954 and postoperative N = 5080 are different pedicle sets. The published expansion values are retained without repair."
+      "section": "Table 6",
+      "qualifier": "Percentage, not a multiplier; MRI width definition unclear. Mixed-cause cohort n = 230: idiopathic 164, congenital 25, neuromuscular 23 and syndromic 18; not AIS only. Table 3 has internal discrepancies: T5 postoperative 6.07 minus preoperative 3.79 is 2.28 versus printed Mean Expanding 2.55; L3 6.88 minus 5.14 is 1.74 versus 2.89; L5 7.02 minus 5.68 is 1.34 versus 2.68. Preoperative N = 7954 and postoperative N = 5080 are different pedicle sets. The published expansion values are retained without repair."
     },
     {
       "coordinate": {
@@ -136,8 +136,8 @@
       },
       "unit": "percent",
       "source": "grabala-2023",
-      "section": "screw-sizing-and-placement.md §3; citation-audit-placement-tables.md §A Grabala 2023, Table 6; §B.10",
-      "qualifier": "Percentage, not a multiplier; MRI width definition unclear. Mixed-cause cohort n = 230: idiopathic 164, congenital 25, neuromuscular 23 and syndromic 18; not AIS only. Table 3 has internal discrepancies: T5 postoperative 6.07 minus preoperative 3.79 is reported in the audit as 2.28 versus printed Mean Expanding 2.55; L3 6.88 minus 5.14 as 1.74 versus 2.89; L5 7.02 minus 5.68 as 1.34 versus 2.68. Preoperative N = 7954 and postoperative N = 5080 are different pedicle sets. The published expansion values are retained without repair."
+      "section": "Table 6",
+      "qualifier": "Percentage, not a multiplier; MRI width definition unclear. Mixed-cause cohort n = 230: idiopathic 164, congenital 25, neuromuscular 23 and syndromic 18; not AIS only. Table 3 has internal discrepancies: T5 postoperative 6.07 minus preoperative 3.79 is 2.28 versus printed Mean Expanding 2.55; L3 6.88 minus 5.14 is 1.74 versus 2.89; L5 7.02 minus 5.68 is 1.34 versus 2.68. Preoperative N = 7954 and postoperative N = 5080 are different pedicle sets. The published expansion values are retained without repair."
     },
     {
       "coordinate": {
@@ -150,8 +150,8 @@
       },
       "unit": "percent",
       "source": "grabala-2023",
-      "section": "screw-sizing-and-placement.md §3; citation-audit-placement-tables.md §A Grabala 2023, Table 6; §B.10",
-      "qualifier": "Percentage, not a multiplier; MRI width definition unclear. Mixed-cause cohort n = 230: idiopathic 164, congenital 25, neuromuscular 23 and syndromic 18; not AIS only. Table 3 has internal discrepancies: T5 postoperative 6.07 minus preoperative 3.79 is reported in the audit as 2.28 versus printed Mean Expanding 2.55; L3 6.88 minus 5.14 as 1.74 versus 2.89; L5 7.02 minus 5.68 as 1.34 versus 2.68. Preoperative N = 7954 and postoperative N = 5080 are different pedicle sets. The published expansion values are retained without repair."
+      "section": "Table 6",
+      "qualifier": "Percentage, not a multiplier; MRI width definition unclear. Mixed-cause cohort n = 230: idiopathic 164, congenital 25, neuromuscular 23 and syndromic 18; not AIS only. Table 3 has internal discrepancies: T5 postoperative 6.07 minus preoperative 3.79 is 2.28 versus printed Mean Expanding 2.55; L3 6.88 minus 5.14 is 1.74 versus 2.89; L5 7.02 minus 5.68 is 1.34 versus 2.68. Preoperative N = 7954 and postoperative N = 5080 are different pedicle sets. The published expansion values are retained without repair."
     },
     {
       "coordinate": {
@@ -164,8 +164,8 @@
       },
       "unit": "percent",
       "source": "grabala-2023",
-      "section": "screw-sizing-and-placement.md §3; citation-audit-placement-tables.md §A Grabala 2023, Table 6; §B.10",
-      "qualifier": "Percentage, not a multiplier; MRI width definition unclear. Mixed-cause cohort n = 230: idiopathic 164, congenital 25, neuromuscular 23 and syndromic 18; not AIS only. Table 3 has internal discrepancies: T5 postoperative 6.07 minus preoperative 3.79 is reported in the audit as 2.28 versus printed Mean Expanding 2.55; L3 6.88 minus 5.14 as 1.74 versus 2.89; L5 7.02 minus 5.68 as 1.34 versus 2.68. Preoperative N = 7954 and postoperative N = 5080 are different pedicle sets. The published expansion values are retained without repair."
+      "section": "Table 6",
+      "qualifier": "Percentage, not a multiplier; MRI width definition unclear. Mixed-cause cohort n = 230: idiopathic 164, congenital 25, neuromuscular 23 and syndromic 18; not AIS only. Table 3 has internal discrepancies: T5 postoperative 6.07 minus preoperative 3.79 is 2.28 versus printed Mean Expanding 2.55; L3 6.88 minus 5.14 is 1.74 versus 2.89; L5 7.02 minus 5.68 is 1.34 versus 2.68. Preoperative N = 7954 and postoperative N = 5080 are different pedicle sets. The published expansion values are retained without repair."
     },
     {
       "coordinate": {
@@ -178,8 +178,8 @@
       },
       "unit": "percent",
       "source": "grabala-2023",
-      "section": "screw-sizing-and-placement.md §3; citation-audit-placement-tables.md §A Grabala 2023, discussion; §B.10",
-      "qualifier": "Internal source conflict: text gives 39%, table gives 32% for 5.0 mm. Mixed-cause cohort n = 230: idiopathic 164, congenital 25, neuromuscular 23 and syndromic 18; not AIS only. Table 3 has internal discrepancies: T5 postoperative 6.07 minus preoperative 3.79 is reported in the audit as 2.28 versus printed Mean Expanding 2.55; L3 6.88 minus 5.14 as 1.74 versus 2.89; L5 7.02 minus 5.68 as 1.34 versus 2.68. Preoperative N = 7954 and postoperative N = 5080 are different pedicle sets. The published expansion values are retained without repair."
+      "section": "Discussion",
+      "qualifier": "Internal source conflict: text gives 39%, table gives 32% for 5.0 mm. Mixed-cause cohort n = 230: idiopathic 164, congenital 25, neuromuscular 23 and syndromic 18; not AIS only. Table 3 has internal discrepancies: T5 postoperative 6.07 minus preoperative 3.79 is 2.28 versus printed Mean Expanding 2.55; L3 6.88 minus 5.14 is 1.74 versus 2.89; L5 7.02 minus 5.68 is 1.34 versus 2.68. Preoperative N = 7954 and postoperative N = 5080 are different pedicle sets. The published expansion values are retained without repair."
     },
     {
       "coordinate": {
@@ -192,8 +192,8 @@
       },
       "unit": "percent",
       "source": "grabala-2023",
-      "section": "screw-sizing-and-placement.md §3; citation-audit-placement-tables.md §A Grabala 2023, Table 1 and age-group results; §B.10",
-      "qualifier": "Mixed-cause cohort n = 230: idiopathic 164, congenital 25, neuromuscular 23 and syndromic 18; not AIS only. Table 3 has internal discrepancies: T5 postoperative 6.07 minus preoperative 3.79 is reported in the audit as 2.28 versus printed Mean Expanding 2.55; L3 6.88 minus 5.14 as 1.74 versus 2.89; L5 7.02 minus 5.68 as 1.34 versus 2.68. Preoperative N = 7954 and postoperative N = 5080 are different pedicle sets. The published expansion values are retained without repair."
+      "section": "Table 1 and age-group results",
+      "qualifier": "Mixed-cause cohort n = 230: idiopathic 164, congenital 25, neuromuscular 23 and syndromic 18; not AIS only. Table 3 has internal discrepancies: T5 postoperative 6.07 minus preoperative 3.79 is 2.28 versus printed Mean Expanding 2.55; L3 6.88 minus 5.14 is 1.74 versus 2.89; L5 7.02 minus 5.68 is 1.34 versus 2.68. Preoperative N = 7954 and postoperative N = 5080 are different pedicle sets. The published expansion values are retained without repair."
     },
     {
       "coordinate": {
@@ -206,8 +206,8 @@
       },
       "unit": "percent",
       "source": "grabala-2023",
-      "section": "screw-sizing-and-placement.md §3; citation-audit-placement-tables.md §A Grabala 2023, Table 1 and age-group results; §B.10",
-      "qualifier": "Mixed-cause cohort n = 230: idiopathic 164, congenital 25, neuromuscular 23 and syndromic 18; not AIS only. Table 3 has internal discrepancies: T5 postoperative 6.07 minus preoperative 3.79 is reported in the audit as 2.28 versus printed Mean Expanding 2.55; L3 6.88 minus 5.14 as 1.74 versus 2.89; L5 7.02 minus 5.68 as 1.34 versus 2.68. Preoperative N = 7954 and postoperative N = 5080 are different pedicle sets. The published expansion values are retained without repair."
+      "section": "Table 1 and age-group results",
+      "qualifier": "Mixed-cause cohort n = 230: idiopathic 164, congenital 25, neuromuscular 23 and syndromic 18; not AIS only. Table 3 has internal discrepancies: T5 postoperative 6.07 minus preoperative 3.79 is 2.28 versus printed Mean Expanding 2.55; L3 6.88 minus 5.14 is 1.74 versus 2.89; L5 7.02 minus 5.68 is 1.34 versus 2.68. Preoperative N = 7954 and postoperative N = 5080 are different pedicle sets. The published expansion values are retained without repair."
     },
     {
       "coordinate": {
@@ -220,8 +220,8 @@
       },
       "unit": "percent",
       "source": "grabala-2023",
-      "section": "screw-sizing-and-placement.md §3; citation-audit-placement-tables.md §A Grabala 2023, Table 1 and age-group results; §B.10",
-      "qualifier": "Mixed-cause cohort n = 230: idiopathic 164, congenital 25, neuromuscular 23 and syndromic 18; not AIS only. Table 3 has internal discrepancies: T5 postoperative 6.07 minus preoperative 3.79 is reported in the audit as 2.28 versus printed Mean Expanding 2.55; L3 6.88 minus 5.14 as 1.74 versus 2.89; L5 7.02 minus 5.68 as 1.34 versus 2.68. Preoperative N = 7954 and postoperative N = 5080 are different pedicle sets. The published expansion values are retained without repair."
+      "section": "Table 1 and age-group results",
+      "qualifier": "Mixed-cause cohort n = 230: idiopathic 164, congenital 25, neuromuscular 23 and syndromic 18; not AIS only. Table 3 has internal discrepancies: T5 postoperative 6.07 minus preoperative 3.79 is 2.28 versus printed Mean Expanding 2.55; L3 6.88 minus 5.14 is 1.74 versus 2.89; L5 7.02 minus 5.68 is 1.34 versus 2.68. Preoperative N = 7954 and postoperative N = 5080 are different pedicle sets. The published expansion values are retained without repair."
     },
     {
       "coordinate": {
@@ -234,7 +234,7 @@
       },
       "unit": "ratio",
       "source": "katsumi-2025",
-      "section": "screw-sizing-and-placement.md §3",
+      "section": "abstract",
       "qualifier": "Increment of the ratio corresponding to the OR is not supplied; cannot be used as a dose-response coefficient."
     },
     {
@@ -249,8 +249,8 @@
       },
       "unit": "percent",
       "source": "screw-p1-hard-floor",
-      "section": "screw-sizing-and-placement.md P1, Hard floor",
-      "qualifier": "Approximate 22–31% failure summary for inner channel < 1 mm, printed as even with robot. P1 cites Akazawa 2015 (810 pedicles) and Ueno 2025 (465 screws), not a pooled cohort. Detailed §3 separately reports Akazawa 2015 grade-4 31.5% and robot/navigation grade-4 20.4–22.2% (Ueno 2025 and Akazawa 2023). These different conditions and precisions are retained, not equated."
+      "section": "hard-floor summary of the cited studies; not a separate paper",
+      "qualifier": "Approximate 22–31% failure summary for inner channel < 1 mm, stated as even with robot. The summary cites Akazawa 2015 (810 pedicles) and Ueno 2025 (465 screws), not a pooled cohort. Akazawa 2015 grade-4 31.5% and robot/navigation grade-4 20.4–22.2% (Ueno 2025 and Akazawa 2023) are reported separately. These different conditions and precisions are retained, not equated."
     }
   ]
 }

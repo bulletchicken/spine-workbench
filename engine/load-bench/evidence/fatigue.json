@@ -4,14 +4,14 @@
       "key": "titanium-alloy",
       "usage": "bench",
       "description": "Construct-derived Goodman-equivalent reference",
-      "notes": "Own inference, not material endurance: 40 mm arm unverified; equal load sharing; note interprets printed R = 10 through stress fractions. No recalculation of rounded stress cells. Failure mode: Rod at set screw. Reproduction: moment=F×arm/2; stress=32M/(pi*d^3); Goodman=amplitude/(1-mean/UTS). goodman-uts is the historical assumed UTS used only to reproduce the copied169/191MPa calibration;DECISIONS now uses paired sampled ultimate strength for each version. Use Evidence::bench_strengths for the runtime pair.",
+      "notes": "Own inference, not material endurance: 40 mm arm unverified; equal load sharing; printed R = 10 is interpreted through stress fractions. No recalculation of rounded stress cells. Failure mode: Rod at set screw. Reproduction: moment=F×arm/2; stress=32M/(pi*d^3); Goodman=amplitude/(1-mean/UTS). goodman-uts is the historical assumed UTS used only to reproduce the copied169/191MPa calibration;the bench now uses paired sampled ultimate strength for each version. Use Evidence::bench_strengths for the runtime pair.",
       "values": [
         {
           "term": "run-out-load",
           "value": 250,
           "unit": "N",
           "source": "vieweg-2023",
-          "section": "implant-mechanics.md §4 Construct tests",
+          "section": "Table 1 (run-out load); not recorded for rod and screw sizes, active length, frequency, load ratio and cycle count",
           "basis": "published",
           "approximate": false
         },
@@ -20,7 +20,7 @@
           "value": 5.5,
           "unit": "mm",
           "source": "vieweg-2023",
-          "section": "implant-mechanics.md §4 Construct tests",
+          "section": "Table 1 (run-out load); not recorded for rod and screw sizes, active length, frequency, load ratio and cycle count",
           "basis": "published",
           "approximate": false
         },
@@ -29,7 +29,7 @@
           "value": 76,
           "unit": "mm",
           "source": "vieweg-2023",
-          "section": "implant-mechanics.md §4 Construct tests",
+          "section": "Table 1 (run-out load); not recorded for rod and screw sizes, active length, frequency, load ratio and cycle count",
           "basis": "published",
           "approximate": false
         },
@@ -38,7 +38,7 @@
           "value": 4.5,
           "unit": "mm",
           "source": "vieweg-2023",
-          "section": "implant-mechanics.md §4 Construct tests",
+          "section": "Table 1 (run-out load); not recorded for rod and screw sizes, active length, frequency, load ratio and cycle count",
           "basis": "published",
           "approximate": false
         },
@@ -47,7 +47,7 @@
           "value": 45,
           "unit": "mm",
           "source": "vieweg-2023",
-          "section": "implant-mechanics.md §4 Construct tests",
+          "section": "Table 1 (run-out load); not recorded for rod and screw sizes, active length, frequency, load ratio and cycle count",
           "basis": "published",
           "approximate": false
         },
@@ -56,7 +56,7 @@
           "value": 5000000,
           "unit": "cycles",
           "source": "vieweg-2023",
-          "section": "implant-mechanics.md §4 Construct tests",
+          "section": "Table 1 (run-out load); not recorded for rod and screw sizes, active length, frequency, load ratio and cycle count",
           "basis": "published",
           "approximate": false
         },
@@ -65,7 +65,7 @@
           "value": 5,
           "unit": "Hz",
           "source": "vieweg-2023",
-          "section": "implant-mechanics.md §4 Construct tests",
+          "section": "Table 1 (run-out load); not recorded for rod and screw sizes, active length, frequency, load ratio and cycle count",
           "basis": "published",
           "approximate": false
         },
@@ -74,7 +74,7 @@
           "value": 10,
           "unit": "ratio",
           "source": "vieweg-2023",
-          "section": "implant-mechanics.md §4 Construct tests",
+          "section": "Table 1 (run-out load); not recorded for rod and screw sizes, active length, frequency, load ratio and cycle count",
           "basis": "published",
           "approximate": false
         },
@@ -83,7 +83,7 @@
           "value": 40,
           "unit": "mm",
           "source": "project-assumptions",
-          "section": "fast-physics-methods.md §7 Derived calibration",
+          "section": "own inference: derived calibration of the published run-out load as rod stress, with an assumed arm and equal rod sharing",
           "basis": "own-inference",
           "approximate": false
         },
@@ -92,7 +92,7 @@
           "value": 2,
           "unit": "rods",
           "source": "project-assumptions",
-          "section": "fast-physics-methods.md §7 Derived calibration",
+          "section": "own inference: derived calibration of the published run-out load as rod stress, with an assumed arm and equal rod sharing",
           "basis": "own-inference",
           "approximate": false
         },
@@ -101,7 +101,7 @@
           "value": 5.0,
           "unit": "N·m",
           "source": "project-assumptions",
-          "section": "fast-physics-methods.md §7 Derived calibration",
+          "section": "own inference: derived calibration of the published run-out load as rod stress, with an assumed arm and equal rod sharing",
           "basis": "own-inference",
           "approximate": false
         },
@@ -110,7 +110,7 @@
           "value": 306,
           "unit": "MPa",
           "source": "project-assumptions",
-          "section": "fast-physics-methods.md §7 Derived calibration",
+          "section": "own inference: derived calibration of the published run-out load as rod stress, with an assumed arm and equal rod sharing",
           "basis": "own-inference",
           "approximate": true
         },
@@ -119,7 +119,7 @@
           "value": 138,
           "unit": "MPa",
           "source": "project-assumptions",
-          "section": "fast-physics-methods.md §7 Derived calibration",
+          "section": "own inference: derived calibration of the published run-out load as rod stress, with an assumed arm and equal rod sharing",
           "basis": "own-inference",
           "approximate": true
         },
@@ -128,7 +128,7 @@
           "value": 168,
           "unit": "MPa",
           "source": "project-assumptions",
-          "section": "fast-physics-methods.md §7 Derived calibration",
+          "section": "own inference: derived calibration of the published run-out load as rod stress, with an assumed arm and equal rod sharing",
           "basis": "own-inference",
           "approximate": true
         },
@@ -137,7 +137,7 @@
           "value": 169,
           "unit": "MPa",
           "source": "project-assumptions",
-          "section": "fast-physics-methods.md §7 Derived calibration",
+          "section": "own inference: derived calibration of the published run-out load as rod stress, with an assumed arm and equal rod sharing",
           "basis": "own-inference",
           "approximate": true
         },
@@ -146,7 +146,7 @@
           "value": 900,
           "unit": "MPa",
           "source": "project-assumptions",
-          "section": "fast-physics-methods.md §7 Derived calibration",
+          "section": "own inference: derived calibration of the published run-out load as rod stress, with an assumed arm and equal rod sharing",
           "basis": "own-inference",
           "approximate": true
         }
@@ -156,14 +156,14 @@
       "key": "cobalt-chrome",
       "usage": "bench",
       "description": "Construct-derived Goodman-equivalent reference",
-      "notes": "Own inference, not material endurance: 40 mm arm unverified; equal load sharing; note interprets printed R = 10 through stress fractions. No recalculation of rounded stress cells. Failure mode: Screw at block. Reproduction: moment=F×arm/2; stress=32M/(pi*d^3); Goodman=amplitude/(1-mean/UTS). goodman-uts is the historical assumed UTS used only to reproduce the copied169/191MPa calibration;DECISIONS now uses paired sampled ultimate strength for each version. Use Evidence::bench_strengths for the runtime pair.",
+      "notes": "Own inference, not material endurance: 40 mm arm unverified; equal load sharing; printed R = 10 is interpreted through stress fractions. No recalculation of rounded stress cells. Failure mode: Screw at block. Reproduction: moment=F×arm/2; stress=32M/(pi*d^3); Goodman=amplitude/(1-mean/UTS). goodman-uts is the historical assumed UTS used only to reproduce the copied169/191MPa calibration;the bench now uses paired sampled ultimate strength for each version. Use Evidence::bench_strengths for the runtime pair.",
       "values": [
         {
           "term": "run-out-load",
           "value": 290,
           "unit": "N",
           "source": "vieweg-2023",
-          "section": "implant-mechanics.md §4 Construct tests",
+          "section": "Table 1 (run-out load); not recorded for rod and screw sizes, active length, frequency, load ratio and cycle count",
           "basis": "published",
           "approximate": false
         },
@@ -172,7 +172,7 @@
           "value": 5.5,
           "unit": "mm",
           "source": "vieweg-2023",
-          "section": "implant-mechanics.md §4 Construct tests",
+          "section": "Table 1 (run-out load); not recorded for rod and screw sizes, active length, frequency, load ratio and cycle count",
           "basis": "published",
           "approximate": false
         },
@@ -181,7 +181,7 @@
           "value": 76,
           "unit": "mm",
           "source": "vieweg-2023",
-          "section": "implant-mechanics.md §4 Construct tests",
+          "section": "Table 1 (run-out load); not recorded for rod and screw sizes, active length, frequency, load ratio and cycle count",
           "basis": "published",
           "approximate": false
         },
@@ -190,7 +190,7 @@
           "value": 4.5,
           "unit": "mm",
           "source": "vieweg-2023",
-          "section": "implant-mechanics.md §4 Construct tests",
+          "section": "Table 1 (run-out load); not recorded for rod and screw sizes, active length, frequency, load ratio and cycle count",
           "basis": "published",
           "approximate": false
         },
@@ -199,7 +199,7 @@
           "value": 45,
           "unit": "mm",
           "source": "vieweg-2023",
-          "section": "implant-mechanics.md §4 Construct tests",
+          "section": "Table 1 (run-out load); not recorded for rod and screw sizes, active length, frequency, load ratio and cycle count",
           "basis": "published",
           "approximate": false
         },
@@ -208,7 +208,7 @@
           "value": 5000000,
           "unit": "cycles",
           "source": "vieweg-2023",
-          "section": "implant-mechanics.md §4 Construct tests",
+          "section": "Table 1 (run-out load); not recorded for rod and screw sizes, active length, frequency, load ratio and cycle count",
           "basis": "published",
           "approximate": false
         },
@@ -217,7 +217,7 @@
           "value": 5,
           "unit": "Hz",
           "source": "vieweg-2023",
-          "section": "implant-mechanics.md §4 Construct tests",
+          "section": "Table 1 (run-out load); not recorded for rod and screw sizes, active length, frequency, load ratio and cycle count",
           "basis": "published",
           "approximate": false
         },
@@ -226,7 +226,7 @@
           "value": 10,
           "unit": "ratio",
           "source": "vieweg-2023",
-          "section": "implant-mechanics.md §4 Construct tests",
+          "section": "Table 1 (run-out load); not recorded for rod and screw sizes, active length, frequency, load ratio and cycle count",
           "basis": "published",
           "approximate": false
         },
@@ -235,7 +235,7 @@
           "value": 40,
           "unit": "mm",
           "source": "project-assumptions",
-          "section": "fast-physics-methods.md §7 Derived calibration",
+          "section": "own inference: derived calibration of the published run-out load as rod stress, with an assumed arm and equal rod sharing",
           "basis": "own-inference",
           "approximate": false
         },
@@ -244,7 +244,7 @@
           "value": 2,
           "unit": "rods",
           "source": "project-assumptions",
-          "section": "fast-physics-methods.md §7 Derived calibration",
+          "section": "own inference: derived calibration of the published run-out load as rod stress, with an assumed arm and equal rod sharing",
           "basis": "own-inference",
           "approximate": false
         },
@@ -253,7 +253,7 @@
           "value": 5.8,
           "unit": "N·m",
           "source": "project-assumptions",
-          "section": "fast-physics-methods.md §7 Derived calibration",
+          "section": "own inference: derived calibration of the published run-out load as rod stress, with an assumed arm and equal rod sharing",
           "basis": "own-inference",
           "approximate": false
         },
@@ -262,7 +262,7 @@
           "value": 355,
           "unit": "MPa",
           "source": "project-assumptions",
-          "section": "fast-physics-methods.md §7 Derived calibration",
+          "section": "own inference: derived calibration of the published run-out load as rod stress, with an assumed arm and equal rod sharing",
           "basis": "own-inference",
           "approximate": true
         },
@@ -271,7 +271,7 @@
           "value": 160,
           "unit": "MPa",
           "source": "project-assumptions",
-          "section": "fast-physics-methods.md §7 Derived calibration",
+          "section": "own inference: derived calibration of the published run-out load as rod stress, with an assumed arm and equal rod sharing",
           "basis": "own-inference",
           "approximate": true
         },
@@ -280,7 +280,7 @@
           "value": 195,
           "unit": "MPa",
           "source": "project-assumptions",
-          "section": "fast-physics-methods.md §7 Derived calibration",
+          "section": "own inference: derived calibration of the published run-out load as rod stress, with an assumed arm and equal rod sharing",
           "basis": "own-inference",
           "approximate": true
         },
@@ -289,7 +289,7 @@
           "value": 191,
           "unit": "MPa",
           "source": "project-assumptions",
-          "section": "fast-physics-methods.md §7 Derived calibration",
+          "section": "own inference: derived calibration of the published run-out load as rod stress, with an assumed arm and equal rod sharing",
           "basis": "own-inference",
           "approximate": true
         },
@@ -298,7 +298,7 @@
           "value": 1200,
           "unit": "MPa",
           "source": "project-assumptions",
-          "section": "fast-physics-methods.md §7 Derived calibration",
+          "section": "own inference: derived calibration of the published run-out load as rod stress, with an assumed arm and equal rod sharing",
           "basis": "own-inference",
           "approximate": true
         }
@@ -308,14 +308,14 @@
       "key": "contour-knock-down",
       "usage": "bench",
       "description": "Contouring factor",
-      "notes": "Note converts 20–40% to 0.6–0.8; published effect Ti/steel 4.5 mm; uniform sampling and applying to 5.5 mm CoCr are own extrapolations.",
+      "notes": "Own conversion of 20–40% to 0.6–0.8; published effect Ti/steel 4.5 mm; uniform sampling and applying to 5.5 mm CoCr are own extrapolations.",
       "values": [
         {
           "term": "lower",
           "value": 0.6,
           "unit": "ratio",
           "source": "project-assumptions",
-          "section": "fast-physics-methods.md §7 and TableB",
+          "section": "own inference: published percentage reduction converted to a remaining fraction",
           "basis": "own-inference",
           "approximate": false
         },
@@ -324,7 +324,7 @@
           "value": 0.8,
           "unit": "ratio",
           "source": "project-assumptions",
-          "section": "fast-physics-methods.md §7 and TableB",
+          "section": "own inference: published percentage reduction converted to a remaining fraction",
           "basis": "own-inference",
           "approximate": false
         },
@@ -333,7 +333,7 @@
           "value": 20,
           "unit": "%",
           "source": "slivka-2013",
-          "section": "fast-physics-methods.md §7",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         },
@@ -342,7 +342,7 @@
           "value": 40,
           "unit": "%",
           "source": "slivka-2013",
-          "section": "fast-physics-methods.md §7",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         }
@@ -359,7 +359,7 @@
           "value": 25,
           "unit": "%",
           "source": "slivka-2013",
-          "section": "fast-physics-methods.md §7",
+          "section": "abstract",
           "basis": "published",
           "approximate": false
         }
@@ -376,7 +376,7 @@
           "value": 300,
           "unit": "MPa",
           "source": "ohrt-nissen-2018",
-          "section": "fast-physics-methods.md §7",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -385,7 +385,7 @@
           "value": 389,
           "unit": "MPa",
           "source": "ohrt-nissen-2018",
-          "section": "fast-physics-methods.md §7",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         }
@@ -402,7 +402,7 @@
           "value": 207,
           "unit": "MPa",
           "source": "ohrt-nissen-2018",
-          "section": "fast-physics-methods.md §7",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -411,7 +411,7 @@
           "value": 950,
           "unit": "MPa",
           "source": "ohrt-nissen-2018",
-          "section": "fast-physics-methods.md §7",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         }
@@ -428,7 +428,7 @@
           "value": 241,
           "unit": "MPa",
           "source": "ohrt-nissen-2018",
-          "section": "fast-physics-methods.md §7",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -437,7 +437,7 @@
           "value": 820,
           "unit": "MPa",
           "source": "ohrt-nissen-2018",
-          "section": "fast-physics-methods.md §7",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         }
@@ -447,14 +447,14 @@
       "key": "smooth-ti-coupon",
       "usage": "beside",
       "description": "Smooth polishedTi ELI coupon comparison",
-      "notes": "DISAGREE: coupon strain run-out converted by note to about 550–570 MPa; not contoured construct strength. Reversal count and unit kept as printed; no conversion to cycles.",
+      "notes": "DISAGREE: coupon strain run-out converted by own inference to about 550–570 MPa; not contoured construct strength. Reversal count and unit kept as printed; no conversion to cycles.",
       "values": [
         {
           "term": "strain-amplitude",
           "value": 0.005,
           "unit": "ratio",
           "source": "carrion-2016",
-          "section": "fast-physics-methods.md §7",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -463,7 +463,7 @@
           "value": -1,
           "unit": "ratio",
           "source": "carrion-2016",
-          "section": "fast-physics-methods.md §7",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -472,7 +472,7 @@
           "value": 2713156,
           "unit": "reversals",
           "source": "carrion-2016",
-          "section": "fast-physics-methods.md §7",
+          "section": "Table 1",
           "basis": "published",
           "approximate": false
         },
@@ -481,7 +481,7 @@
           "value": 110,
           "unit": "GPa",
           "source": "project-assumptions",
-          "section": "fast-physics-methods.md §7 own inference",
+          "section": "own inference: coupon strain amplitude converted to stress with an assumed Young's modulus range",
           "basis": "own-inference",
           "approximate": false
         },
@@ -490,7 +490,7 @@
           "value": 114,
           "unit": "GPa",
           "source": "project-assumptions",
-          "section": "fast-physics-methods.md §7 own inference",
+          "section": "own inference: coupon strain amplitude converted to stress with an assumed Young's modulus range",
           "basis": "own-inference",
           "approximate": false
         },
@@ -499,7 +499,7 @@
           "value": 550,
           "unit": "MPa",
           "source": "project-assumptions",
-          "section": "fast-physics-methods.md §7 own inference",
+          "section": "own inference: coupon strain amplitude converted to stress with an assumed Young's modulus range",
           "basis": "own-inference",
           "approximate": true
         },
@@ -508,7 +508,7 @@
           "value": 570,
           "unit": "MPa",
           "source": "project-assumptions",
-          "section": "fast-physics-methods.md §7 own inference",
+          "section": "own inference: coupon strain amplitude converted to stress with an assumed Young's modulus range",
           "basis": "own-inference",
           "approximate": true
         }
@@ -525,7 +525,7 @@
           "value": 0.006,
           "unit": "ratio",
           "source": "carrion-2016",
-          "section": "fast-physics-methods.md §7 coupon conditions",
+          "section": "Table 1 for the specimen rows; not recorded for the run-out definition",
           "basis": "published",
           "approximate": false
         },
@@ -534,7 +534,7 @@
           "value": -1,
           "unit": "ratio",
           "source": "carrion-2016",
-          "section": "fast-physics-methods.md §7 coupon conditions",
+          "section": "Table 1 for the specimen rows; not recorded for the run-out definition",
           "basis": "published",
           "approximate": false
         },
@@ -543,7 +543,7 @@
           "value": 124952,
           "unit": "reversals",
           "source": "carrion-2016",
-          "section": "fast-physics-methods.md §7 coupon conditions",
+          "section": "Table 1 for the specimen rows; not recorded for the run-out definition",
           "basis": "published",
           "approximate": false
         },
@@ -552,7 +552,7 @@
           "value": 207610,
           "unit": "reversals",
           "source": "carrion-2016",
-          "section": "fast-physics-methods.md §7 coupon conditions",
+          "section": "Table 1 for the specimen rows; not recorded for the run-out definition",
           "basis": "published",
           "approximate": false
         }
@@ -562,14 +562,14 @@
       "key": "r-minus-one-strain-0.004",
       "usage": "beside",
       "description": "Smooth Ti-6Al-4V ELI coupon condition",
-      "notes": "Note prints  >2.3–4.4 million reversals; two threshold ends, not measured failures.",
+      "notes": "Held as >2.3–4.4 million reversals; two threshold ends, not measured failures.",
       "values": [
         {
           "term": "strain-amplitude",
           "value": 0.004,
           "unit": "ratio",
           "source": "carrion-2016",
-          "section": "fast-physics-methods.md §7 coupon conditions",
+          "section": "Table 1 for the specimen rows; not recorded for the run-out definition",
           "basis": "published",
           "approximate": false
         },
@@ -578,7 +578,7 @@
           "value": -1,
           "unit": "ratio",
           "source": "carrion-2016",
-          "section": "fast-physics-methods.md §7 coupon conditions",
+          "section": "Table 1 for the specimen rows; not recorded for the run-out definition",
           "basis": "published",
           "approximate": false
         },
@@ -587,7 +587,7 @@
           "value": 2.3,
           "unit": "million reversals",
           "source": "carrion-2016",
-          "section": "fast-physics-methods.md §7 coupon conditions",
+          "section": "Table 1 for the specimen rows; not recorded for the run-out definition",
           "basis": "published",
           "approximate": false
         },
@@ -596,7 +596,7 @@
           "value": 4.4,
           "unit": "million reversals",
           "source": "carrion-2016",
-          "section": "fast-physics-methods.md §7 coupon conditions",
+          "section": "Table 1 for the specimen rows; not recorded for the run-out definition",
           "basis": "published",
           "approximate": false
         }
@@ -613,7 +613,7 @@
           "value": 0.004,
           "unit": "ratio",
           "source": "carrion-2016",
-          "section": "fast-physics-methods.md §7 coupon conditions",
+          "section": "Table 1 for the specimen rows; not recorded for the run-out definition",
           "basis": "published",
           "approximate": false
         },
@@ -622,7 +622,7 @@
           "value": 0,
           "unit": "ratio",
           "source": "carrion-2016",
-          "section": "fast-physics-methods.md §7 coupon conditions",
+          "section": "Table 1 for the specimen rows; not recorded for the run-out definition",
           "basis": "published",
           "approximate": false
         },
@@ -631,7 +631,7 @@
           "value": 2506668,
           "unit": "reversals",
           "source": "carrion-2016",
-          "section": "fast-physics-methods.md §7 coupon conditions",
+          "section": "Table 1 for the specimen rows; not recorded for the run-out definition",
           "basis": "published",
           "approximate": false
         }
@@ -648,7 +648,7 @@
           "value": 1000000,
           "unit": "cycles",
           "source": "carrion-2016",
-          "section": "fast-physics-methods.md §7 coupon conditions",
+          "section": "Table 1 for the specimen rows; not recorded for the run-out definition",
           "basis": "published",
           "approximate": false
         }

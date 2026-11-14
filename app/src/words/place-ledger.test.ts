@@ -205,7 +205,7 @@ describe('the Place evidence ledger', () => {
     expect(added.sources.some((candidate) => source !== undefined && matches(candidate, source))).toBe(true);
   });
 
-  it('keeps independently checked audit distinctions beside the copied numbers', () => {
+  it('keeps the corrected axis, strength and exclusion distinctions beside the copied numbers', () => {
     const springs = entry('place-bench-joint-springs-t1-2-to-l4-5-intact').publishedNumber;
     expect(springs).toContain('moment 1: 448 N·mm/deg');
     expect(springs).toContain('moment 2: 644 N·mm/deg');

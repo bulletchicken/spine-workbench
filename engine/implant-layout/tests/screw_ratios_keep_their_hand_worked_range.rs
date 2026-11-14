@@ -1,5 +1,5 @@
 //! An assembled anchor is checked against a deliberately imposed population.
-//! SYNTHESIS 2.10: five widths of 4.2 mm and five of 8.4 mm, k=1.25,
+//! Five widths of 4.2 mm and five of 8.4 mm, k=1.25,
 //! alpha=0.10 give 5 mm: 5.5 mm fails in half the versions. The ratios
 //! are five copies each of 25/21 and 25/42, with median 25/28.
 
@@ -133,7 +133,7 @@ fn a_half_and_half_width_population_reports_the_inverse_width_band() {
     let readings = vec![reading; input.versions as usize];
     let proposal = anchor(&input, &versions, &readings, Level::T7, BodySide::Right).unwrap();
     assert_eq!(proposal.diameter_mm, Some(5.0));
-    // SYNTHESIS 2.11: min(0.8*40, 40-4)=32, rounded down to 30 mm.
+    // min(0.8*40, 40-4)=32, rounded down to 30 mm.
     assert_eq!(proposal.length_mm, Some(30.0));
     let ratio = proposal.screw_to_pedicle.unwrap();
     for (actual, expected) in [

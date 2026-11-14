@@ -137,8 +137,8 @@ fn right_left_and_double_curves_assign_columns_and_distances_by_hand() {
             }
         }
     }
-    // SYNTHESIS 2.8: constant apex +/-1 and neutral +/-1, linear
-    // between. With neutral distance 4, the transition is distance1..3.
+    // Constant apex +/-1 and neutral +/-1, linear between.
+    // With neutral distance 4, the transition is distance1..3.
     assert_eq!(side_factor(0.73, 1.08, 0.0, 4.0), 0.73);
     assert_eq!(side_factor(0.73, 1.08, 1.0, 4.0), 0.73);
     assert!((side_factor(0.73, 1.08, 2.0, 4.0) - 0.905).abs() < 1e-14);

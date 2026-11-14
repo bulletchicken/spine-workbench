@@ -485,8 +485,7 @@ export const EVIDENCE_LEDGER = [
       'pluemvitayaporn-t12, level T12: 45.5 mm. key trajectory-length, group pluemvitayaporn-l1-l5: 46 to 51 mm. ' +
       'T1 range as printed; side allocation and sex not supplied. Lenke 5 series, n = 112. About 45.5 mm at T12; ' +
       'approximate, with side allocation and sex not supplied. Lenke 5 series, n = 112. One pooled L1–L5 range, ' +
-      'not individual-level or side-specific cells; Lenke 5 series, n = 112. P4 repeats the same range in a ' +
-      'mixed-series summary citing Balikci, Kuraishi, Upendra and Pluemvitayaporn.',
+      'not individual-level or side-specific cells; Lenke 5 series, n = 112.',
     population:
       'pluemvitayaporn-2025: Thai patients with Lenke 5 curves; mean age 14.7 (12–22), mean Cobb 48° (36–84°). ' +
       'Sample: 112 patients; 3,808 pedicles. [peer-reviewed; full-text].',
@@ -654,9 +653,10 @@ export const EVIDENCE_LEDGER = [
     publishedNumber:
       'key concave-convex-ratio, group apex-one: 0.73 ± 0.13 SD ratio (range 0.28 to 1.0); printed 0.73 ± 0.13 ' +
       '(0.28–1.00). key concave-convex-ratio, group neutral-one: 1.08 ± 0.17 (spread statistic not stated) ratio ' +
-      '(range 0.77 to 1.54); printed 1.08 ± 0.17 (0.77–1.54). Published cortical-width left/right ratio; ' +
-      'screw-sizing-and-placement.md P7 explicitly names its 0.13 as the ratio SD. The full-table note ' +
-      'transcribes the same ±. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 ' +
+      '(range 0.77 to 1.54); printed 1.08 ± 0.17 (0.77–1.54). Published cortical-width left/right ratio, ' +
+      'stored with its 0.13 as the ratio SD; the table ' +
+      'prints the same ± without defining its statistic. Cohort: 57 patients, 49 female and 8 male; Lenke 1 ' +
+      '(25) or Lenke 2 (32), 684 ' +
       'pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper ' +
       'states right is always convex and left always concave. Per-cell observation counts are not supplied. ' +
       'Published left/right ratio; left is concave and right is convex. The table prints ± without defining its ' +
@@ -890,11 +890,11 @@ export const EVIDENCE_LEDGER = [
     id: 'place-layout-diameter-rules-grabala-2023-expansion-by-level',
     feature: 'Screw diameter beside the pedicle width — expansion by level',
     publishedNumber:
-      'key expansion-by-level, group grabala: 47 to 71 percent. Approximate range as printed in P1; width ' +
+      'key expansion-by-level, group grabala: 47 to 71 percent. Approximate range; width ' +
       'definition unclear. Not a diameter-ratio conversion. Mixed-cause cohort n = 230: idiopathic 164, ' +
       'congenital 25, neuromuscular 23 and syndromic 18; not AIS only. Table 3 has internal discrepancies: T5 ' +
-      'postoperative 6.07 minus preoperative 3.79 is reported in the audit as 2.28 versus printed Mean Expanding ' +
-      '2.55; L3 6.88 minus 5.14 as 1.74 versus 2.89; L5 7.02 minus 5.68 as 1.34 versus 2.68. Preoperative N = ' +
+      'postoperative 6.07 minus preoperative 3.79 is 2.28 versus printed Mean Expanding ' +
+      '2.55; L3 6.88 minus 5.14 is 1.74 versus 2.89; L5 7.02 minus 5.68 is 1.34 versus 2.68. Preoperative N = ' +
       '7954 and postoperative N = 5080 are different pedicle sets. The published expansion values are retained ' +
       'without repair.',
     population:
@@ -926,18 +926,18 @@ export const EVIDENCE_LEDGER = [
       'expansion, group grabala-age-11-18: 62 percent. Percentage, not a multiplier; MRI width definition ' +
       'unclear. Mixed-cause cohort n = 230: idiopathic 164, congenital 25, neuromuscular 23 and syndromic 18; ' +
       'not AIS only. Table 3 has internal discrepancies: T5 postoperative 6.07 minus preoperative 3.79 is ' +
-      'reported in the audit as 2.28 versus printed Mean Expanding 2.55; L3 6.88 minus 5.14 as 1.74 versus 2.89; ' +
-      'L5 7.02 minus 5.68 as 1.34 versus 2.68. Preoperative N = 7954 and postoperative N = 5080 are different ' +
+      '2.28 versus printed Mean Expanding 2.55; L3 6.88 minus 5.14 is 1.74 versus 2.89; ' +
+      'L5 7.02 minus 5.68 is 1.34 versus 2.68. Preoperative N = 7954 and postoperative N = 5080 are different ' +
       'pedicle sets. The published expansion values are retained without repair. Internal source conflict: text ' +
       'gives 39 percent, table gives 32 percent for 5.0 mm. Mixed-cause cohort n = 230: idiopathic 164, ' +
       'congenital 25, neuromuscular 23 and syndromic 18; not AIS only. Table 3 has internal discrepancies: T5 ' +
-      'postoperative 6.07 minus preoperative 3.79 is reported in the audit as 2.28 versus printed Mean Expanding ' +
-      '2.55; L3 6.88 minus 5.14 as 1.74 versus 2.89; L5 7.02 minus 5.68 as 1.34 versus 2.68. Preoperative N = ' +
+      'postoperative 6.07 minus preoperative 3.79 is 2.28 versus printed Mean Expanding ' +
+      '2.55; L3 6.88 minus 5.14 is 1.74 versus 2.89; L5 7.02 minus 5.68 is 1.34 versus 2.68. Preoperative N = ' +
       '7954 and postoperative N = 5080 are different pedicle sets. The published expansion values are retained ' +
       'without repair. Mixed-cause cohort n = 230: idiopathic 164, congenital 25, neuromuscular 23 and syndromic ' +
       '18; not AIS only. Table 3 has internal discrepancies: T5 postoperative 6.07 minus preoperative 3.79 is ' +
-      'reported in the audit as 2.28 versus printed Mean Expanding 2.55; L3 6.88 minus 5.14 as 1.74 versus 2.89; ' +
-      'L5 7.02 minus 5.68 as 1.34 versus 2.68. Preoperative N = 7954 and postoperative N = 5080 are different ' +
+      '2.28 versus printed Mean Expanding 2.55; L3 6.88 minus 5.14 is 1.74 versus 2.89; ' +
+      'L5 7.02 minus 5.68 is 1.34 versus 2.68. Preoperative N = 7954 and postoperative N = 5080 are different ' +
       'pedicle sets. The published expansion values are retained without repair.',
     population:
       'grabala-2023: Children aged 2–18 with mixed causes: idiopathic 164, congenital 25, neuromuscular 23, ' +
@@ -985,7 +985,7 @@ export const EVIDENCE_LEDGER = [
       'from the 6,230 analysed pedicles; AIS with major thoracic curves. Right-side fully corticalized pedicles ' +
       'excluded from analysis. Left-side fully corticalized pedicles excluded from analysis.',
     population:
-      'chiu-2024: AIS with major thoracic curves; age range not supplied by the audit. Sample: 191 patients; ' +
+      'chiu-2024: AIS with major thoracic curves; age range not recorded. Sample: 191 patients; ' +
       '6,230 analysed pedicles (right 3,064; left 3,166); 264 fully corticalized pedicles excluded (right 183; ' +
       'left 81). [peer-reviewed; abstract].',
     sources: [
@@ -1046,7 +1046,7 @@ export const EVIDENCE_LEDGER = [
       'located at right concave T7" and "The right concave periapical region had the thinnest medial pedicle ' +
       'walls". Its curve-side attribution is unresolved; no curve side is assigned.',
     population:
-      'chiu-2024: AIS with major thoracic curves; age range not supplied by the audit. Sample: 191 patients; ' +
+      'chiu-2024: AIS with major thoracic curves; age range not recorded. Sample: 191 patients; ' +
       '6,230 analysed pedicles (right 3,064; left 3,166); 264 fully corticalized pedicles excluded (right 183; ' +
       'left 81). [peer-reviewed; abstract].',
     sources: [
@@ -1084,7 +1084,7 @@ export const EVIDENCE_LEDGER = [
       'periapical region had the thinnest medial pedicle walls". Its curve-side attribution is unresolved; no ' +
       'curve side is assigned.',
     population:
-      'chiu-2024: AIS with major thoracic curves; age range not supplied by the audit. Sample: 191 patients; ' +
+      'chiu-2024: AIS with major thoracic curves; age range not recorded. Sample: 191 patients; ' +
       '6,230 analysed pedicles (right 3,064; left 3,166); 264 fully corticalized pedicles excluded (right 183; ' +
       'left 81). [peer-reviewed; abstract].',
     sources: [
@@ -1203,7 +1203,8 @@ export const EVIDENCE_LEDGER = [
       'stated) mm; printed 3.73 ± 0.85. key inner-width, level T12, ageBand 12-14, sex male, group ' +
       'zheng-children: 4.99 ± 1.05 (spread statistic not stated) mm; printed 4.99 ± 1.05. key inner-width, level ' +
       'T12, ageBand 12-14, sex female, group zheng-children: 4.63 ± 1.32 (spread statistic not stated) mm; ' +
-      'printed 4.63 ± 1.32. Note-supplied pooled T4–T6 range for ages 5–8. The paper gives individual level and ' +
+      'printed 4.63 ± 1.32. Pooled T4–T6 range for ages 5–8, worked out from the printed cells. The paper ' +
+      'gives individual level and ' +
       'sex cells with spreads; the complete Table 1 cells are retained separately. [own inference] The first ' +
       'Table 1 row at each level is read as inner width and the second as outer width; the paper does not label ' +
       'those rows. The unlabelled ± is read as SD only by project inference. Full text. The paper does not state ' +
@@ -1312,8 +1313,9 @@ export const EVIDENCE_LEDGER = [
     id: 'place-layout-length-rules-balikci-2019-chord-penetration',
     feature: 'Screw length beside the published chord and cortex limits — chord penetration',
     publishedNumber:
-      'key chord-penetration, group krag-cited: 80 to 100 percent. Krag primary not opened; the note reports a ' +
-      'cited range. Choosing 0.8 is a later rule. Series n = 120, ages 13–54 (mean 19.2): AIS 86, congenital 17, ' +
+      'key chord-penetration, group krag-cited: 80 to 100 percent. Krag primary not opened; the range is ' +
+      'cited by Balikci. Choosing 0.8 is a later rule. Series n = 120, ages 13–54 (mean 19.2): AIS 86, ' +
+      'congenital 17, ' +
       'adult 10 and neuromuscular 7; not an exclusively AIS cohort.',
     population:
       'balikci-2019: Mixed scoliosis series: AIS 86, congenital 17, adult 10, neuromuscular 7; ages 13–54, mean ' +
@@ -1423,7 +1425,7 @@ export const EVIDENCE_LEDGER = [
     id: 'place-layout-length-rules-sarwahi-2017-aorta-contact-depth',
     feature: 'Screw length beside the published chord and cortex limits — aorta contact depth',
     publishedNumber:
-      'key aorta-contact-depth, group aorta: 5.7 ± 0.6 (spread statistic not stated) mm. The note prints ± ' +
+      'key aorta-contact-depth, group aorta: 5.7 ± 0.6 (spread statistic not stated) mm. The ± is recorded ' +
       'without naming either statistic; the spread is not labelled SD or SE. Abstract population: 165 ' +
       'spine-deformity patients (2800 screws) plus 8 cadavers (285 screws); not an exclusively AIS cohort.',
     population:
@@ -1446,7 +1448,7 @@ export const EVIDENCE_LEDGER = [
     id: 'place-layout-length-rules-sarwahi-2017-non-contact-depth',
     feature: 'Screw length beside the published chord and cortex limits — non contact depth',
     publishedNumber:
-      'key non-contact-depth, group aorta: 3.9 ± 0.2 (spread statistic not stated) mm. The note prints ± without ' +
+      'key non-contact-depth, group aorta: 3.9 ± 0.2 (spread statistic not stated) mm. The ± is recorded without ' +
       'naming either statistic; the spread is not labelled SD or SE. Abstract population: 165 spine-deformity ' +
       'patients (2800 screws) plus 8 cadavers (285 screws); not an exclusively AIS cohort.',
     population:
@@ -1470,7 +1472,7 @@ export const EVIDENCE_LEDGER = [
     feature: 'Screw length beside the published chord and cortex limits — anterior protrusion limit',
     publishedNumber:
       'key anterior-protrusion-limit, group balikci-cortex: 1 count. No more than about 1 thread past the ' +
-      'anterior cortical surface, as printed in P4; §4 says not >1 thread. Count is threads, not millimetres; ' +
+      'anterior cortical surface; the paper\'s words are not >1 thread. Count is threads, not millimetres; ' +
       'pitch is not supplied and no length conversion is made. Series n = 120, ages 13–54 (mean 19.2): AIS 86, ' +
       'congenital 17, adult 10 and neuromuscular 7; not an exclusively AIS cohort.',
     population:
@@ -1570,10 +1572,11 @@ export const EVIDENCE_LEDGER = [
       'selective-lumbar: 1.25 ratio. key rotation-ratio-min, group selective-lumbar: 1.25 ratio. key ' +
       'thoracic-cobb-max, group selective-lumbar: 40 degrees. key tll-bending-cobb-max, group selective-lumbar: ' +
       '25 degrees. key kyphosis-t10-l2-max, group selective-lumbar: 10 degrees. Strictly greater than. Strictly ' +
-      'less than; kyphosis condition applies if UIV is between T10 and L2. Exceptions and maturity conditions in ' +
-      'note are not encoded as rules here. Strictly less than 25 degrees. The selective-lumbar table prints TL/L ' +
-      'side bending <25 degrees; the old notes read it as thoracic bending. The project rule uses the thoracic ' +
-      'curve bending criterion as its own inference under DECISIONS, not as a statement printed in this review. ' +
+      'less than; kyphosis condition applies if UIV is between T10 and L2. The review\'s exceptions and ' +
+      'maturity conditions' +
+      ' are not encoded as rules here. Strictly less than 25 degrees. The selective-lumbar table prints TL/L ' +
+      'side bending <25 degrees. The project rule uses the thoracic ' +
+      'curve bending criterion as its own inference, not as a statement printed in this review. ' +
       'The table also allows >25 degrees if more criteria are met.',
     population:
       'korean-level-review: AIS selective-fusion review; primary populations differ by criterion. Sample: ' +
@@ -1644,8 +1647,8 @@ export const EVIDENCE_LEDGER = [
     id: 'place-layout-level-rule-thresholds-bmc-level-review-lenke-ab',
     feature: 'Level selection and curve criteria — lenke ab',
     publishedNumber:
-      'key liv-above-stable, group lenke-ab: 1 to 2 levels. Published SV−1 or SV−2. SYNTHESIS chooses SV−1; that ' +
-      'choice is not made here.',
+      'key liv-above-stable, group lenke-ab: 1 to 2 levels. Published SV−1 or SV−2. The level rule takes SV−1; that ' +
+      'choice is not made in this table.',
     population:
       'bmc-level-review: AIS level-selection review; primary populations differ by rule. Sample: Review; ' +
       'aggregate n not supplied. [peer-reviewed; full-text].',
@@ -1923,10 +1926,10 @@ export const EVIDENCE_LEDGER = [
       'key postoperative-kyphosis-t5-t12-min, group ssv-excluded-djk: 25 degrees. key ' +
       'postoperative-kyphosis-t11-l2-min, group ssv-excluded-djk: 10 degrees. Greater than or equal to 25 ' +
       'degrees, postoperative T5–T12, with SSV excluded. The published test joins the two regional criteria with ' +
-      'OR. Lenke 1–2, LIV≤L1; whole cohort n=122, subgroup n=13 in the note; no patient-specific rate is ' +
+      'OR. Lenke 1–2, LIV≤L1; whole cohort n=122, subgroup n=13; no patient-specific rate is ' +
       'inferred. Greater than or equal to 10 degrees, postoperative T11–L2, with SSV excluded. The published ' +
-      'test joins the two regional criteria with OR. Lenke 1–2, LIV≤L1; whole cohort n=122, subgroup n=13 in the ' +
-      'note; no patient-specific rate is inferred.',
+      'test joins the two regional criteria with OR. Lenke 1–2, LIV≤L1; whole cohort n=122, subgroup n=13' +
+      '; no patient-specific rate is inferred.',
     population:
       'djk-34096362: Lenke 1–2 with LIV ≤ L1; sagittal stable vertebra inclusion and postoperative kyphosis. ' +
       'Sample: 122 patients; SSV excluded 42, SSV included 80; postoperative threshold subgroup 13. ' +
@@ -2167,9 +2170,10 @@ export const EVIDENCE_LEDGER = [
     id: 'place-layout-level-rule-thresholds-liu-2020-suk-neutral-summary',
     feature: 'Level selection and curve criteria — suk neutral summary',
     publishedNumber:
-      'key nv-ev-summary-interval, group suk-neutral-summary: 0 to 1 levels. Table B prints 0–1 levels for the ' +
-      'first branch (same level or one below). The detailed rule and SYNTHESIS say NV≤EV+1 and provide no ' +
-      'separate lower bound; this summary interval must not exclude a more proximal NV from that detailed ' +
+      'key nv-ev-summary-interval, group suk-neutral-summary: 0 to 1 levels. The interval of 0–1 levels ' +
+      'summarises the ' +
+      'first branch (same level or one below). The level rule applies NV≤EV+1 with no ' +
+      'separate lower bound; this summary interval must not exclude a more proximal NV from that ' +
       'branch. Suk 2003 n=42, secondary within Liu.',
     population:
       'liu-2020: Lenke 1A/2A thoracic-only fusions. Sample: 6 studies; 732 patients; 150 with adding-on; ' +
@@ -2194,13 +2198,15 @@ export const EVIDENCE_LEDGER = [
       'key transverse-angle-summary, group zheng-p6-t1, level T1: 31 degrees. key transverse-angle-summary, ' +
       'group zheng-p6-t2, level T2: 20 degrees. key transverse-angle-summary, group zheng-p6-t3, level T3: 13 ' +
       'degrees. key transverse-angle-summary, group zheng-p6-t4-t10: 4 to 8 degrees. key ' +
-      'transverse-angle-summary, group zheng-p6-t11-t12: -6 to -4 degrees. Approximately 31° at T1, as printed ' +
-      'in the research note’s P6 summary; separate from exact Table 2 sex columns. No specific age-band or sex ' +
-      'allocation is supplied. Approximately 20° at T2, as printed in the research note’s P6 summary; separate ' +
-      'from exact Table 2 sex columns. No specific age-band or sex allocation is supplied. Approximately 13° at ' +
-      'T3, as printed in the research note’s P6 summary; separate from exact Table 2 sex columns. No specific ' +
-      'age-band or sex allocation is supplied. Approximately 4–8° across T4–T10, as printed; one regional range ' +
-      'with no single-level, age-band or sex allocation. Printed endpoint order: approximately −4 to −6° at ' +
+      'transverse-angle-summary, group zheng-p6-t11-t12: -6 to -4 degrees. Approximately 31° at T1, a' +
+      ' summary figure; separate from the exact sex columns. No specific age-band or sex ' +
+      'allocation is supplied. Approximately 20° at T2, a summary figure; separate ' +
+      'from the exact sex columns. No specific age-band or sex allocation is supplied. Approximately 13° at ' +
+      'T3, a summary figure; separate from the exact sex columns. No specific ' +
+      'age-band or sex allocation is supplied. Approximately 4–8° across T4–T10, a summary figure; one ' +
+      'regional range ' +
+      'with no single-level, age-band or sex allocation. Summary figure, endpoints in the order given: ' +
+      'approximately −4 to −6° at ' +
       'T11–T12. Interpreting negative angles as divergent is [own inference]. Lower/upper are ordered interval ' +
       'bounds. One regional range, with no single-level, age-band or sex allocation.',
     population:
@@ -2222,8 +2228,8 @@ export const EVIDENCE_LEDGER = [
     feature: 'Pedicle direction from published angles — transverse angle summary',
     publishedNumber:
       'key transverse-angle-summary, group upendra-p6-ais: 12 to 26 degrees. Published AIS summary 12–26°, ' +
-      'concave larger than convex. The summary does not allocate endpoints to a side or individual level; exact ' +
-      'Table 3 columns stay separate.',
+      'concave larger than convex. The summary does not allocate endpoints to a side or individual level; the exact ' +
+      'per-level columns stay separate.',
     population:
       'upendra-2010: AIS; 14 girls and 10 boys; all right thoracic or thoracolumbar curves (King II 12, III 7, ' +
       'IV 5); ages 12.3–18.3; Cobb 58–98°; 3 mm CT. Sample: 24 patients; width n 213 convex/223 concave; angle n ' +
@@ -2874,7 +2880,8 @@ export const EVIDENCE_LEDGER = [
       'outer-width, level L4, group pluemvitayaporn-lenke-5, curveSide convex: 6.27 ± 1.38 SD mm. key ' +
       'outer-width, level L5, group pluemvitayaporn-lenke-5, curveSide concave: 8.71 ± 2.21 SD mm. key ' +
       'outer-width, level L5, group pluemvitayaporn-lenke-5, curveSide convex: 9.07 ± 1.89 SD mm. Alternative ' +
-      'Lenke 5 cohort; the note cautions that absolute widths are substantially smaller than in other series.',
+      'Lenke 5 cohort; absolute widths are substantially smaller than in other series and should be read ' +
+      'with caution.',
     population:
       'pluemvitayaporn-2025: Thai patients with Lenke 5 curves; mean age 14.7 (12–22), mean Cobb 48° (36–84°). ' +
       'Sample: 112 patients; 3,808 pedicles. [peer-reviewed; full-text].',
@@ -3174,8 +3181,8 @@ export const EVIDENCE_LEDGER = [
     id: 'place-layout-placement-checks-chen-2025-sensitivity',
     feature: 'Published placement checks and entry observations — sensitivity',
     publishedNumber:
-      'key sensitivity, group liv-index: 100 percent. Derivation cohort only. Section 2b PPV 55.5 percent ' +
-      'retained rather than rounded 55 percent in summary table/SYNTHESIS.',
+      'key sensitivity, group liv-index: 100 percent. Derivation cohort only. PPV 55.5 percent ' +
+      'retained rather than a rounded 55 percent.',
     population:
       'chen-2025: Lenke 1–2 with LIV at or below LTV/LSTV; derivation cohort only. Sample: 112 patients in the ' +
       'full cohort; 10 with adding-on; under-15 subgroup n not supplied. [peer-reviewed; full-text].',
@@ -3197,8 +3204,8 @@ export const EVIDENCE_LEDGER = [
     feature: 'Published placement checks and entry observations — specificity',
     publishedNumber:
       'key specificity, group liv-index: 92 percent. key specificity, group liv-index-under-15: 94 percent. ' +
-      'Derivation cohort only. Section 2b PPV 55.5 percent retained rather than rounded 55 percent in summary ' +
-      'table/SYNTHESIS. Under 15 years: specificity 94 percent; strictly less than 15 years. Subgroup n not ' +
+      'Derivation cohort only. PPV 55.5 percent retained rather than a rounded 55 percent' +
+      '. Under 15 years: specificity 94 percent; strictly less than 15 years. Subgroup n not ' +
       'supplied. The full-cohort n = 112 must not be assigned to this subgroup; derivation cohort only, full ' +
       'text.',
     population:
@@ -3222,8 +3229,8 @@ export const EVIDENCE_LEDGER = [
     feature: 'Published placement checks and entry observations — positive test value',
     publishedNumber:
       'key positive-test-value, group liv-index: 55.5 percent. key positive-test-value, group ' +
-      'liv-index-under-15: 77 percent. Derivation cohort only. Section 2b PPV 55.5 percent retained rather than ' +
-      'rounded 55 percent in summary table/SYNTHESIS. Under 15 years: PPV 77 percent; strictly less than 15 ' +
+      'liv-index-under-15: 77 percent. Derivation cohort only. PPV 55.5 percent retained rather than ' +
+      'a rounded 55 percent. Under 15 years: PPV 77 percent; strictly less than 15 ' +
       'years. Subgroup n not supplied. The full-cohort n = 112 must not be assigned to this subgroup; derivation ' +
       'cohort only, full text.',
     population:
@@ -3246,8 +3253,8 @@ export const EVIDENCE_LEDGER = [
     id: 'place-layout-placement-checks-chen-2025-negative-test-value',
     feature: 'Published placement checks and entry observations — negative test value',
     publishedNumber:
-      'key negative-test-value, group liv-index: 100 percent. Derivation cohort only. Section 2b PPV 55.5 ' +
-      'percent retained rather than rounded 55 percent in summary table/SYNTHESIS.',
+      'key negative-test-value, group liv-index: 100 percent. Derivation cohort only. PPV 55.5 ' +
+      'percent retained rather than a rounded 55 percent.',
     population:
       'chen-2025: Lenke 1–2 with LIV at or below LTV/LSTV; derivation cohort only. Sample: 112 patients in the ' +
       'full cohort; 10 with adding-on; under-15 subgroup n not supplied. [peer-reviewed; full-text].',
@@ -3480,7 +3487,7 @@ export const EVIDENCE_LEDGER = [
     population:
       'cerny-2014: Front-film pedicle-based rotation measurement method evaluated by the author, 2 experts and ' +
       '10 students. Sample: 5,580 evaluations; author, 2 experts and 10 students; patient/specimen count not ' +
-      'supplied in the earlier scout note. [peer-reviewed; full-text].',
+      'recorded. [peer-reviewed; full-text].',
     sources: [
       {
         citation:
@@ -3779,7 +3786,7 @@ export const EVIDENCE_LEDGER = [
     id: 'place-layout-rod-choices-cidambi-2012-concave-change',
     feature: 'Rod material, diameter and contour observations — concave change',
     publishedNumber:
-      'key concave-change, group uhss-steel: -21 degrees. Minus 21 degrees as printed in the contour-loss table; ' +
+      'key concave-change, group uhss-steel: -21 degrees. Minus 21 degrees as reported; ' +
       'no final-angle arithmetic or pooled 16–22 degree interval is inferred.',
     population:
       'cidambi-2012: 5.5 mm ultra-high-strength steel rod contour-loss series. Sample: 27 patients. ' +
@@ -4083,7 +4090,7 @@ export const EVIDENCE_LEDGER = [
     feature: 'Rod material, diameter and contour observations — before kyphosis',
     publishedNumber:
       'key before-kyphosis, group cidambi-t5-t12: 19 ± 14 (spread statistic not stated) degrees. Before: T5–T12 ' +
-      'kyphosis 19 ± 14 degrees; the note names neither statistic. Paired cohort n = 27; abstract. Change ' +
+      'kyphosis 19 ± 14 degrees; neither statistic is recorded. Paired cohort n = 27; abstract. Change ' +
       'reported as not significant.',
     population:
       'cidambi-2012: 5.5 mm ultra-high-strength steel rod contour-loss series. Sample: 27 patients. ' +
@@ -4106,7 +4113,7 @@ export const EVIDENCE_LEDGER = [
     feature: 'Rod material, diameter and contour observations — after kyphosis',
     publishedNumber:
       'key after-kyphosis, group cidambi-t5-t12: 22 ± 6 (spread statistic not stated) degrees. After: T5–T12 ' +
-      'kyphosis 22 ± 6 degrees; the note names neither statistic. Paired cohort n = 27; abstract. Change ' +
+      'kyphosis 22 ± 6 degrees; neither statistic is recorded. Paired cohort n = 27; abstract. Change ' +
       'reported as not significant.',
     population:
       'cidambi-2012: 5.5 mm ultra-high-strength steel rod contour-loss series. Sample: 27 patients. ' +
@@ -4174,11 +4181,11 @@ export const EVIDENCE_LEDGER = [
     publishedNumber:
       'key before-kyphosis, group sia-titanium: 20 median (IQR not supplied) degrees. key before-kyphosis, group ' +
       'sia-cobalt-chrome: 25 median (IQR not supplied) degrees. Titanium before kyphosis median 20 degrees; ' +
-      'titanium subgroup n = 10, full text. Tables II and III label values Median (IQR), but this audit does not ' +
-      'transcribe this kyphosis IQR; it remains absent pending transcription. Concave rods only. Cobalt-chrome ' +
+      'titanium subgroup n = 10, full text. Tables II and III label values Median (IQR);' +
+      ' this kyphosis IQR is not recorded and remains absent. Concave rods only. Cobalt-chrome ' +
       'before kyphosis median 25 degrees; cobalt-chrome subgroup n = 11, full text. Tables II and III label ' +
-      'values Median (IQR), but this audit does not transcribe this kyphosis IQR; it remains absent pending ' +
-      'transcription. Concave rods only.',
+      'values Median (IQR); this kyphosis IQR is not recorded and remains absent' +
+      '. Concave rods only.',
     population:
       'sia-2019: AIS, median age 16 for titanium and 17 for cobalt-chrome; 5.5 mm rods; concave rods only. ' +
       'Sample: 21 patients: titanium 10; cobalt-chrome 11. [peer-reviewed; full-text].',
@@ -4200,11 +4207,11 @@ export const EVIDENCE_LEDGER = [
     publishedNumber:
       'key after-kyphosis, group sia-titanium: 26 median (IQR not supplied) degrees. key after-kyphosis, group ' +
       'sia-cobalt-chrome: 23 median (IQR not supplied) degrees. Titanium after kyphosis median 26 degrees; ' +
-      'titanium subgroup n = 10, full text. Tables II and III label values Median (IQR), but this audit does not ' +
-      'transcribe this kyphosis IQR; it remains absent pending transcription. Concave rods only. Cobalt-chrome ' +
+      'titanium subgroup n = 10, full text. Tables II and III label values Median (IQR);' +
+      ' this kyphosis IQR is not recorded and remains absent. Concave rods only. Cobalt-chrome ' +
       'after kyphosis median 23 degrees; cobalt-chrome subgroup n = 11, full text. Tables II and III label ' +
-      'values Median (IQR), but this audit does not transcribe this kyphosis IQR; it remains absent pending ' +
-      'transcription. Concave rods only.',
+      'values Median (IQR); this kyphosis IQR is not recorded and remains absent' +
+      '. Concave rods only.',
     population:
       'sia-2019: AIS, median age 16 for titanium and 17 for cobalt-chrome; 5.5 mm rods; concave rods only. ' +
       'Sample: 21 patients: titanium 10; cobalt-chrome 11. [peer-reviewed; full-text].',
@@ -4225,10 +4232,10 @@ export const EVIDENCE_LEDGER = [
     feature: 'Rod material, diameter and contour observations — spine rod kyphosis disparity',
     publishedNumber:
       'key spine-rod-kyphosis-disparity, group boissiere-concave: 5.5 degrees. Spine-to-rod kyphosis disparity ' +
-      '5.5 degrees; n = 99, abstract. The note supplies no rod diameter for this cohort.',
+      '5.5 degrees; n = 99, abstract. No rod diameter is recorded for this cohort.',
     population:
-      'boissiere-2023: Spine-to-rod kyphosis comparison; age and cohort composition not supplied in the note. ' +
-      'Sample: 99; sample unit not named in the supplied table row. [peer-reviewed; abstract].',
+      'boissiere-2023: Spine-to-rod kyphosis comparison; age and cohort composition not recorded. ' +
+      'Sample: 99; sample unit not recorded. [peer-reviewed; abstract].',
     sources: [
       {
         citation:
@@ -4249,8 +4256,8 @@ export const EVIDENCE_LEDGER = [
       'key rod-less-kyphotic-share, group boissiere-concave: 84 percent. Concave rod less kyphotic than the ' +
       'spine in 84 percent of the n = 99 cohort; abstract. This is not the percentage of rod flattening.',
     population:
-      'boissiere-2023: Spine-to-rod kyphosis comparison; age and cohort composition not supplied in the note. ' +
-      'Sample: 99; sample unit not named in the supplied table row. [peer-reviewed; abstract].',
+      'boissiere-2023: Spine-to-rod kyphosis comparison; age and cohort composition not recorded. ' +
+      'Sample: 99; sample unit not recorded. [peer-reviewed; abstract].',
     sources: [
       {
         citation:
@@ -4269,7 +4276,7 @@ export const EVIDENCE_LEDGER = [
     feature: 'Rod material, diameter and contour observations — contour loss p value',
     publishedNumber:
       'key contour-loss-p-value, group sia-material-comparison: 0.173 ratio. Reported p = 0.173 alongside the ' +
-      'titanium/cobalt-chrome contour observations, n = 21 (Ti 10, CoCr 11). The research note does not name the ' +
+      'titanium/cobalt-chrome contour observations, n = 21 (Ti 10, CoCr 11). This entry does not name the ' +
       'statistical test; no test or significance conclusion is inferred.',
     population:
       'sia-2019: AIS, median age 16 for titanium and 17 for cobalt-chrome; 5.5 mm rods; concave rods only. ' +
@@ -4375,7 +4382,8 @@ export const EVIDENCE_LEDGER = [
     id: 'place-layout-screw-grids-balikci-2019-length-step',
     feature: 'Published screw diameter and length choices — length step',
     publishedNumber:
-      'key length-step, group balikci: 2.5, 5 mm. The original note prints steps of 2.5 and 5 mm. Table 1 gives ' +
+      'key length-step, group balikci: 2.5, 5 mm. The steps of 2.5 and 5 mm are a summary of the listed ' +
+      'lengths. Table 1 gives ' +
       'the standard and mid-length catalogue values retained individually below; their groups are not combined. ' +
       'Series n = 120, ages 13–54 (mean 19.2): AIS 86, congenital 17, adult 10 and neuromuscular 7; not an ' +
       'exclusively AIS cohort.',
@@ -4714,7 +4722,7 @@ export const EVIDENCE_LEDGER = [
       'side. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and ' +
       'neuromuscular 7. Counts below are screws, not patients. Printed Mid-length screws distribution, concave ' +
       'side. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 and ' +
-      'neuromuscular 7. Counts below are screws, not patients. §C.15 notes the printed percentages are slightly ' +
+      'neuromuscular 7. Counts below are screws, not patients. The printed percentages are slightly ' +
       'off: mid-length 43.5 percent versus 620/1423, and standard 56.5 percent versus 803/1423. Printed 43.5 and ' +
       '56.5 are retained; no percentage is recomputed. 95 percent confidence interval as printed for the whole ' +
       'row; no region, side or effect parameter is inferred. 120 patients (72 women, 48 men), mean age 19.2 and ' +
@@ -4751,7 +4759,7 @@ export const EVIDENCE_LEDGER = [
       'AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients. Printed ' +
       'Standart length screws distribution, concave side. 120 patients (72 women, 48 men), mean age 19.2 and ' +
       'range 13–54; AIS 86, congenital 17, adult 10 and neuromuscular 7. Counts below are screws, not patients. ' +
-      '§C.15 notes the printed percentages are slightly off: mid-length 43.5 percent versus 620/1423, and ' +
+      'The printed percentages are slightly off: mid-length 43.5 percent versus 620/1423, and ' +
       'standard 56.5 percent versus 803/1423. Printed 43.5 and 56.5 are retained; no percentage is recomputed. ' +
       '95 percent confidence interval as printed for the whole row; no region, side or effect parameter is ' +
       'inferred. 120 patients (72 women, 48 men), mean age 19.2 and range 13–54; AIS 86, congenital 17, adult 10 ' +
@@ -5151,10 +5159,10 @@ export const EVIDENCE_LEDGER = [
     publishedNumber:
       'No separate per-level numerical table is supplied by this source record. Recorded sample: 465 screws; ' +
       'patient count not supplied. Robot or navigation study of grade-4 cortical channels; further cohort ' +
-      'details not supplied in the note.',
+      'details not recorded.',
     population:
-      'ueno-2025: Robot or navigation study of grade-4 cortical channels; further cohort details not supplied in ' +
-      'the note. Sample: 465 screws; patient count not supplied. [peer-reviewed; abstract].',
+      'ueno-2025: Robot or navigation study of grade-4 cortical channels; further cohort details not recorded' +
+      '. Sample: 465 screws; patient count not supplied. [peer-reviewed; abstract].',
     sources: [
       {
         citation:
@@ -5301,8 +5309,8 @@ export const EVIDENCE_LEDGER = [
     id: 'place-bench-anchor-strength-laminar-hook',
     feature: 'T9–T12 supralaminar hook reference',
     publishedNumber:
-      'mean: 600 N [published; liljenqvist-2001]. Supralaminar hooks used atT9–T12;600N. Confirmed in audited ' +
-      'abstract. Table use: beside.',
+      'mean: 600 N [published; liljenqvist-2001]. Supralaminar hooks used atT9–T12;600N, as the ' +
+      'abstract states. Table use: beside.',
     population:
       'liljenqvist-2001: Adult thoracic spines; T4–T8 andT9–T12 screws and hooks. Sample: 9 spines;90 tests. ' +
       '[peer-reviewed; abstract].',
@@ -5351,7 +5359,7 @@ export const EVIDENCE_LEDGER = [
       'arithmetic:grade-i=495.6/1056.4 rounded to0.47;grade-ii=269.5/1056.4 rounded to0.26. Ratios not printed ' +
       'in abstract. Published inputs retained here beside the derived ratios. Table use: input.',
     population:
-      'project-assumptions: No measured population; explicit choices and calculations in the project notes. ' +
+      'project-assumptions: No measured population; explicit project choices and calculations. ' +
       'Sample: not supplied. [own-inference; secondary]. soshi-1991: Cadaveric lumbar vertebrae, normal and ' +
       'osteoporosis gradesI/II;7.0mm screws. Adulthood not stated in the abstract. Sample: not supplied. ' +
       '[peer-reviewed; abstract].',
@@ -5403,7 +5411,7 @@ export const EVIDENCE_LEDGER = [
       'lower: about 420 N [published; le-cann-2015]; upper: about 1341 N [published; le-cann-2015]; full text ' +
       'lower: 419.9 N [published; le-cann-2015]; full text upper: 1341.2 N [published; le-cann-2015]. Context ' +
       'only; not a human paediatric reference. Full-text unrounded group-mean extremes419.9/1341.2N retained ' +
-      'separately from rounded old note420/1341N. Table use: beside.',
+      'separately from rounded420/1341N. Table use: beside.',
     population:
       'le-cann-2015: Immature pigs aged90 and140 days; mono-/bicortical, thoracic/lumbar. Sample: 80 vertebrae. ' +
       '[peer-reviewed; full-text].',
@@ -5428,7 +5436,7 @@ export const EVIDENCE_LEDGER = [
       '[published; yilmaz-2009]; dilated sd: 73 N [published; yilmaz-2009]; diameter: 4.0 mm [published; ' +
       'yilmaz-2009]; length: 20 mm [published; yilmaz-2009]; dilated mean abstract: 378.7 N [published; ' +
       'yilmaz-2009]. Six weeks old at surgery;pull-out three months later;data from two animals (three ' +
-      'operated,one lost),L1–L5. Original note rounded dilated mean379N;abstract precision378.7N retained ' +
+      'operated,one lost),L1–L5. Dilated mean rounded to379N;abstract precision378.7N retained ' +
       'separately. Table use: beside.',
     population:
       'yilmaz-2009: Pigs six weeks old at surgery;pull-out tested three months later after killing;L1–L5. Data ' +
@@ -5452,11 +5460,12 @@ export const EVIDENCE_LEDGER = [
     publishedNumber:
       'mid body: 583 N [published; karami-2015]; mid body sd: 306 N [published; karami-2015]; pericortical: 713 ' +
       'N [published; karami-2015]; pericortical sd: 321 N [published; karami-2015]; bicortical: 797 N ' +
-      '[published; karami-2015]; bicortical sd: 285 N [published; karami-2015]. Table B endpoints retain the ' +
-      'associated uncertainties and intermediate depth from the supplying paragraph. Table use: beside.',
+      '[published; karami-2015]; bicortical sd: 285 N [published; karami-2015]. Mid-body and bicortical ' +
+      'endpoints retain the ' +
+      'associated uncertainties and intermediate depth. Table use: beside.',
     population:
-      'karami-2015: Osteoporotic lumbar spines; pull-out after cyclic loading. Age not provided in the supplying ' +
-      'passage. Sample: 10 spines;100 pedicles. [peer-reviewed; abstract].',
+      'karami-2015: Osteoporotic lumbar spines; pull-out after cyclic loading. Age not recorded' +
+      '. Sample: 10 spines;100 pedicles. [peer-reviewed; abstract].',
     sources: [
       {
         citation:
@@ -5563,8 +5572,8 @@ export const EVIDENCE_LEDGER = [
       'bicortical over mid body: 1.37 ratio [published; karami-2015]. One study; multipliers are not established ' +
       'to stack. Table use: beside.',
     population:
-      'karami-2015: Osteoporotic lumbar spines; pull-out after cyclic loading. Age not provided in the supplying ' +
-      'passage. Sample: 10 spines;100 pedicles. [peer-reviewed; abstract].',
+      'karami-2015: Osteoporotic lumbar spines; pull-out after cyclic loading. Age not recorded' +
+      '. Sample: 10 spines;100 pedicles. [peer-reviewed; abstract].',
     sources: [
       {
         citation:
@@ -5631,8 +5640,8 @@ export const EVIDENCE_LEDGER = [
       'capacity scaling. Table use: beside.',
     population:
       'sairyo-1998: Immature calf; 6 and7 mm screws. Sample: 10 vertebrae. [peer-reviewed; abstract]. ' +
-      'kueny-2014: Osteoporotic lumbar vertebrae; diameter increment comparison. Age not provided in the ' +
-      'supplying passage. Sample: 39 vertebrae. [peer-reviewed; abstract].',
+      'kueny-2014: Osteoporotic lumbar vertebrae; diameter increment comparison. Age not recorded' +
+      '. Sample: 39 vertebrae. [peer-reviewed; abstract].',
     sources: [
       {
         citation:
@@ -5661,7 +5670,7 @@ export const EVIDENCE_LEDGER = [
       'upper exclusive: 80 mg/cm³ [published; weiser-2017]; high bmd lower exclusive: 120 mg/cm³ [published; ' +
       'weiser-2017]. Low BMD <80 versus high BMD >120 mg/cm³; no slope inferred. Table use: beside.',
     population:
-      'weiser-2017: QCT bone-density groups; cyclic screw failure. Age not provided in the supplying passage. ' +
+      'weiser-2017: QCT bone-density groups; cyclic screw failure. Age not recorded. ' +
       'Sample: 21 T12 vertebrae. [peer-reviewed; abstract].',
     sources: [
       {
@@ -5680,11 +5689,11 @@ export const EVIDENCE_LEDGER = [
     id: 'place-bench-anchor-strength-cortical-trajectory',
     feature: 'Lumbar cortical versus traditional trajectory',
     publishedNumber:
-      'yield pull out: 1.3 ratio [published; santoni-2009]; p: 0.08 ratio [published; santoni-2009]. P=0.08 as ' +
-      'Table C prints it; not a significant effect. Table use: beside.',
+      'yield pull out: 1.3 ratio [published; santoni-2009]; p: 0.08 ratio [published; santoni-2009]. P=0.08' +
+      '; not a significant effect. Table use: beside.',
     population:
-      'santoni-2009: lumbar cortical versus traditional screw trajectory. Age not provided in the supplying ' +
-      'passage. Sample: not supplied. [peer-reviewed; abstract].',
+      'santoni-2009: lumbar cortical versus traditional screw trajectory. Age not recorded' +
+      '. Sample: not supplied. [peer-reviewed; abstract].',
     sources: [
       {
         citation:
@@ -5703,7 +5712,7 @@ export const EVIDENCE_LEDGER = [
     publishedNumber:
       'fraction: 0.081 fraction-of-body-weight [published; winter-via-keenan-2015]. As printed in Keenan2015 ' +
       'equations4/5,attributed there to Winter DA, Biomechanics and Motor Control of Human Movement,4th ed,John ' +
-      'Wiley & Sons,2009. Textbook not opened;no memory-based substitution. Original cadaver population eight ' +
+      'Wiley & Sons,2009. Textbook not opened. Original cadaver population eight ' +
       'males aged61–83. Table use: bench.',
     population:
       'winter-via-keenan-2015: Winter cadavers aged61–83; fractions borrowed in AIS girls with Lenke1 ' +
@@ -5726,7 +5735,7 @@ export const EVIDENCE_LEDGER = [
     publishedNumber:
       'fraction: 0.056 fraction-of-body-weight [published; winter-via-keenan-2015]. As printed in Keenan2015 ' +
       'equations4/5,attributed there to Winter DA, Biomechanics and Motor Control of Human Movement,4th ed,John ' +
-      'Wiley & Sons,2009. Textbook not opened;no memory-based substitution. Original cadaver population eight ' +
+      'Wiley & Sons,2009. Textbook not opened. Original cadaver population eight ' +
       'males aged61–83. Applying arms overT1–T4 is own inference. Table use: bench.',
     population:
       'winter-via-keenan-2015: Winter cadavers aged61–83; fractions borrowed in AIS girls with Lenke1 ' +
@@ -5774,7 +5783,7 @@ export const EVIDENCE_LEDGER = [
       't1: 0.6 kg [published; keenan-2014]; l5: 1.5 kg [published; keenan-2014]; body mean: 58.2 kg [published; ' +
       'keenan-2014]; body sd: 11.6 kg [published; keenan-2014]; trunk total: 27.8 percent [published; ' +
       'keenan-2014]; trunk total sd: 0.5 percent [published; keenan-2014]; trunk total fraction: 0.278 ' +
-      'fraction-of-body-weight [published; keenan-2014]. No full 17-level table in note. Table use: input.',
+      'fraction-of-body-weight [published; keenan-2014]. No full 17-level table supplied. Table use: input.',
     population:
       'keenan-2014: AIS girls, age 15.0±2.7, Cobb52±5.9°, weight58.2±11.6 kg; CT torso slices. Sample: 20. ' +
       '[peer-reviewed; abstract].',
@@ -5801,9 +5810,10 @@ export const EVIDENCE_LEDGER = [
       'Using28/5.6as sagittal anterior offset distribution is own inference. Frontal centroid at body centre ' +
       'ignores the published left lateralization and remains own choice. Table use: bench.',
     population:
-      'project-assumptions: No measured population; explicit choices and calculations in the project notes. ' +
-      'Sample: not supplied. [own-inference; secondary]. gangnet-2003: 34 healthy upright standing adults as ' +
-      'described in the task;the abstract supplies no ages. Sample: 34. [peer-reviewed; abstract].',
+      'project-assumptions: No measured population; explicit project choices and calculations. ' +
+      'Sample: not supplied. [own-inference; secondary]. gangnet-2003: 34 healthy upright standing ' +
+      'subjects, taken here as adults' +
+      ';the abstract supplies no ages. Sample: 34. [peer-reviewed; abstract].',
     sources: [
       {
         citation:
@@ -5886,7 +5896,7 @@ export const EVIDENCE_LEDGER = [
       'wilke-1999]; standing relaxed: 0.5 MPa [published; wilke-1999]. Pressure ratio borrowed as passive ' +
       'standing-load multiplier; one adult; no independent flexed posture or muscle forces. Table use: bench.',
     population:
-      'project-assumptions: No measured population; explicit choices and calculations in the project notes. ' +
+      'project-assumptions: No measured population; explicit project choices and calculations. ' +
       'Sample: not supplied. [own-inference; secondary]. wilke-1999: Man aged45, 70 kg; intradiscal pressure ' +
       'atL4–L5. Sample: 1. [peer-reviewed; abstract].',
     sources: [
@@ -6087,8 +6097,9 @@ export const EVIDENCE_LEDGER = [
       'inferred comparison. Table use: beside.',
     population:
       'rohlmann-2008-standing: Adults with instrumented vertebral body replacements, one month after surgery. ' +
-      'Sample: 2. [peer-reviewed; abstract]. project-assumptions: No measured population; explicit choices and ' +
-      'calculations in the project notes. Sample: not supplied. [own-inference; secondary]. wilke-1999: Man ' +
+      'Sample: 2. [peer-reviewed; abstract]. project-assumptions: No measured population; explicit project ' +
+      'choices and ' +
+      'calculations. Sample: not supplied. [own-inference; secondary]. wilke-1999: Man ' +
       'aged45, 70 kg; intradiscal pressure atL4–L5. Sample: 1. [peer-reviewed; abstract].',
     sources: [
       {
@@ -6114,10 +6125,10 @@ export const EVIDENCE_LEDGER = [
     feature: 'Unsupported sitting pressure comparison',
     publishedNumber:
       'multiple: about 0.9 ratio [own-inference; project-assumptions]; sitting pressure: 0.46 MPa [published; ' +
-      'wilke-1999]; standing pressure: 0.5 MPa [published; wilke-1999]. Note rounds pressure ratio to about 0.9; ' +
+      'wilke-1999]; standing pressure: 0.5 MPa [published; wilke-1999]. Pressure ratio rounded to about 0.9; ' +
       'no new division. Table use: beside.',
     population:
-      'project-assumptions: No measured population; explicit choices and calculations in the project notes. ' +
+      'project-assumptions: No measured population; explicit project choices and calculations. ' +
       'Sample: not supplied. [own-inference; secondary]. wilke-1999: Man aged45, 70 kg; intradiscal pressure ' +
       'atL4–L5. Sample: 1. [peer-reviewed; abstract].',
     sources: [
@@ -6161,7 +6172,7 @@ export const EVIDENCE_LEDGER = [
       'wilke-1999]; standing pressure: 0.5 MPa [published; wilke-1999]; weight: 20 kg [published; wilke-1999]. ' +
       'One adult pressure input, not a prescribed paediatric load. Table use: beside.',
     population:
-      'project-assumptions: No measured population; explicit choices and calculations in the project notes. ' +
+      'project-assumptions: No measured population; explicit project choices and calculations. ' +
       'Sample: not supplied. [own-inference; secondary]. wilke-1999: Man aged45, 70 kg; intradiscal pressure ' +
       'atL4–L5. Sample: 1. [peer-reviewed; abstract].',
     sources: [
@@ -6462,7 +6473,8 @@ export const EVIDENCE_LEDGER = [
     id: 'place-bench-daily-loads-vbr-lifting-peak',
     feature: 'VBR lifting peak',
     publishedNumber:
-      'peak: 1650 N [published; rohlmann-2014-activities]. Peak lifting10.8 kg crate; growth note separately ' +
+      'peak: 1650 N [published; rohlmann-2014-activities]. Peak lifting10.8 kg crate; a separate reading of ' +
+      'the same paper ' +
       'gives1649 N, not substituted. Table use: beside.',
     population:
       'rohlmann-2014-activities: Adults aged62–71, 60–74kg; L1/L3vertebral body replacements, posterior fixator ' +
@@ -6578,16 +6590,17 @@ export const EVIDENCE_LEDGER = [
       '[own-inference; project-assumptions]; amplitude: about 138 MPa [own-inference; project-assumptions]; ' +
       'mean: about 168 MPa [own-inference; project-assumptions]; goodman equivalent: about 169 MPa ' +
       '[own-inference; project-assumptions]; goodman uts: about 900 MPa [own-inference; project-assumptions]. ' +
-      'Own inference, not material endurance: 40 mm arm unverified; equal load sharing; note interprets printed ' +
-      'R = 10 through stress fractions. No recalculation of rounded stress cells. Failure mode: Rod at set ' +
+      'Own inference, not material endurance: 40 mm arm unverified; equal load sharing; printed ' +
+      'R = 10 is interpreted through stress fractions. No recalculation of rounded stress cells. Failure ' +
+      'mode: Rod at set ' +
       'screw. Reproduction: moment=F×arm/2; stress=32M/(pi*d^3); Goodman=amplitude/(1-mean/UTS). goodman-uts is ' +
-      'the historical assumed UTS used only to reproduce the copied169/191MPa calibration;The current rule now ' +
+      'the historical assumed UTS used only to reproduce the copied169/191MPa calibration;the bench now ' +
       'uses paired sampled ultimate strength for each version. Use Evidence::bench_strengths for the runtime ' +
       'pair. Table use: bench.',
     population:
       'vieweg-2023: F1717-21 vertebrectomy constructs, 76 mm active length, 5.5 mm rods, 4.5×45 mm screws. ' +
       'Sample: 6 per dynamic compression-bending group. [peer-reviewed; full-text]. project-assumptions: No ' +
-      'measured population; explicit choices and calculations in the project notes. Sample: not supplied. ' +
+      'measured population; explicit project choices and calculations. Sample: not supplied. ' +
       '[own-inference; secondary].',
     sources: [
       {
@@ -6615,16 +6628,17 @@ export const EVIDENCE_LEDGER = [
       '[own-inference; project-assumptions]; amplitude: about 160 MPa [own-inference; project-assumptions]; ' +
       'mean: about 195 MPa [own-inference; project-assumptions]; goodman equivalent: about 191 MPa ' +
       '[own-inference; project-assumptions]; goodman uts: about 1200 MPa [own-inference; project-assumptions]. ' +
-      'Own inference, not material endurance: 40 mm arm unverified; equal load sharing; note interprets printed ' +
-      'R = 10 through stress fractions. No recalculation of rounded stress cells. Failure mode: Screw at block. ' +
+      'Own inference, not material endurance: 40 mm arm unverified; equal load sharing; printed ' +
+      'R = 10 is interpreted through stress fractions. No recalculation of rounded stress cells. Failure ' +
+      'mode: Screw at block. ' +
       'Reproduction: moment=F×arm/2; stress=32M/(pi*d^3); Goodman=amplitude/(1-mean/UTS). goodman-uts is the ' +
-      'historical assumed UTS used only to reproduce the copied169/191MPa calibration;The current rule now uses ' +
+      'historical assumed UTS used only to reproduce the copied169/191MPa calibration;the bench now uses ' +
       'paired sampled ultimate strength for each version. Use Evidence::bench_strengths for the runtime pair. ' +
       'Table use: bench.',
     population:
       'vieweg-2023: F1717-21 vertebrectomy constructs, 76 mm active length, 5.5 mm rods, 4.5×45 mm screws. ' +
       'Sample: 6 per dynamic compression-bending group. [peer-reviewed; full-text]. project-assumptions: No ' +
-      'measured population; explicit choices and calculations in the project notes. Sample: not supplied. ' +
+      'measured population; explicit project choices and calculations. Sample: not supplied. ' +
       '[own-inference; secondary].',
     sources: [
       {
@@ -6645,10 +6659,10 @@ export const EVIDENCE_LEDGER = [
     publishedNumber:
       'lower: 0.6 ratio [own-inference; project-assumptions]; upper: 0.8 ratio [own-inference; ' +
       'project-assumptions]; reduction lower: 20 percent [published; slivka-2013]; reduction upper: 40 percent ' +
-      '[published; slivka-2013]. Note converts 20–40 percent to 0.6–0.8; published effect Ti/steel 4.5 mm; ' +
+      '[published; slivka-2013]. Own conversion of 20–40 percent to 0.6–0.8; published effect Ti/steel 4.5 mm; ' +
       'uniform sampling and applying to 5.5 mm CoCr are own extrapolations. Table use: bench.',
     population:
-      'project-assumptions: No measured population; explicit choices and calculations in the project notes. ' +
+      'project-assumptions: No measured population; explicit project choices and calculations. ' +
       'Sample: not supplied. [own-inference; secondary]. slivka-2013: Contoured/re-bent4.5 mm Ti, ' +
       'stainless-steel, CoCr rod constructs; CoCrscrews failed first. Sample: not supplied. [peer-reviewed; ' +
       'abstract].',
@@ -6746,13 +6760,14 @@ export const EVIDENCE_LEDGER = [
       'carrion-2016]; reversals more than: 2713156 reversals [published; carrion-2016]; young modulus lower: 110 ' +
       'GPa [own-inference; project-assumptions]; young modulus upper: 114 GPa [own-inference; ' +
       'project-assumptions]; stress lower: about 550 MPa [own-inference; project-assumptions]; stress upper: ' +
-      'about 570 MPa [own-inference; project-assumptions]. DISAGREE: coupon strain run-out converted by note to ' +
+      'about 570 MPa [own-inference; project-assumptions]. DISAGREE: coupon strain run-out converted by own ' +
+      'inference to ' +
       'about 550–570 MPa; not contoured construct strength. Reversal count and unit kept as printed; no ' +
       'conversion to cycles. Table use: beside.',
     population:
       'carrion-2016: Annealed polished wroughtTi-6Al-4VELI coupons, strain-controlled. Sample: 38 specimens. ' +
-      '[peer-reviewed; full-text]. project-assumptions: No measured population; explicit choices and ' +
-      'calculations in the project notes. Sample: not supplied. [own-inference; secondary].',
+      '[peer-reviewed; full-text]. project-assumptions: No measured population; explicit project choices and ' +
+      'calculations. Sample: not supplied. [own-inference; secondary].',
     sources: [
       {
         citation:
@@ -6793,7 +6808,7 @@ export const EVIDENCE_LEDGER = [
     publishedNumber:
       'strain amplitude: 0.004 ratio [published; carrion-2016]; strain ratio: -1 ratio [published; ' +
       'carrion-2016]; run out lower more than: 2.3 million reversals [published; carrion-2016]; run out upper ' +
-      'more than: 4.4 million reversals [published; carrion-2016]. Note prints >2.3–4.4 million reversals; two ' +
+      'more than: 4.4 million reversals [published; carrion-2016]. Held as >2.3–4.4 million reversals; two ' +
       'threshold ends, not measured failures. Table use: beside.',
     population:
       'carrion-2016: Annealed polished wroughtTi-6Al-4VELI coupons, strain-controlled. Sample: 38 specimens. ' +
@@ -6862,8 +6877,8 @@ export const EVIDENCE_LEDGER = [
       'tachi-2021]; moment 3: 738 N·mm/deg [published; tachi-2021]. Moment-1 = AP (x; lateral bending);moment-2 ' +
       '= ML (y; flexion-extension);moment-3 = CC (z; axial rotation). Force columns AP/ML/CC. Tachi borrows ' +
       'stiffness from Argoubi and Shirazi-Adl1996,an adult lumbar source;uniform T1/2–L4/5 application is the ' +
-      'planner choice. Confirmed in citation-audit-physics-tables.md §A/§B8 and the current joint-axis ' +
-      'convention. Table use: bench.',
+      'planner choice. ' +
+      'Table use: bench.',
     population:
       'tachi-2021: AIS planner comparison against postoperative CT. Sample: 47. [peer-reviewed; full-text].',
     sources: [
@@ -6886,8 +6901,8 @@ export const EVIDENCE_LEDGER = [
       'tachi-2021]; moment 3: 406 N·mm/deg [published; tachi-2021]. Moment-1 = AP (x; lateral bending);moment-2 ' +
       '= ML (y; flexion-extension);moment-3 = CC (z; axial rotation). Force columns AP/ML/CC. Tachi borrows ' +
       'stiffness from Argoubi and Shirazi-Adl1996,an adult lumbar source;uniform T1/2–L4/5 application is the ' +
-      'planner choice. Confirmed in citation-audit-physics-tables.md §A/§B8 and the current joint-axis ' +
-      'convention. Table use: beside.',
+      'planner choice. ' +
+      'Table use: beside.',
     population:
       'tachi-2021: AIS planner comparison against postoperative CT. Sample: 47. [peer-reviewed; full-text].',
     sources: [
@@ -6910,8 +6925,8 @@ export const EVIDENCE_LEDGER = [
       'tachi-2021]; moment 3: 410 N·mm/deg [published; tachi-2021]. Moment-1 = AP (x; lateral bending);moment-2 ' +
       '= ML (y; flexion-extension);moment-3 = CC (z; axial rotation). Force columns AP/ML/CC. Tachi borrows ' +
       'stiffness from Argoubi and Shirazi-Adl1996,an adult lumbar source;uniform T1/2–L4/5 application is the ' +
-      'planner choice. Confirmed in citation-audit-physics-tables.md §A/§B8 and the current joint-axis ' +
-      'convention. Table use: bench.',
+      'planner choice. ' +
+      'Table use: bench.',
     population:
       'tachi-2021: AIS planner comparison against postoperative CT. Sample: 47. [peer-reviewed; full-text].',
     sources: [
@@ -6983,7 +6998,7 @@ export const EVIDENCE_LEDGER = [
       'supplies scale 10 endpoint with a different baseline. No identification of absolute stiffness from films. ' +
       'Table use: bench.',
     population:
-      'project-assumptions: No measured population; explicit choices and calculations in the project notes. ' +
+      'project-assumptions: No measured population; explicit project choices and calculations. ' +
       'Sample: not supplied. [own-inference; secondary]. petit-2004: Scoliosis bending-film personalisation of ' +
       'per-segment torsion springs. Sample: 10. [peer-reviewed; abstract].',
     sources: [
@@ -7378,8 +7393,8 @@ export const EVIDENCE_LEDGER = [
     feature: 'CoCr modulus printed in planner',
     publishedNumber:
       'young modulus: 420 GPa [published; tachi-2021]; poisson ratio: 0.3 ratio [published; tachi-2021]. ' +
-      'DISAGREE; probable error or deliberate stiffening; bench uses Prasad 240 GPa. Audit confirms Poisson ' +
-      'ratio0.3 for this separate material set,not for Prasad. Table use: beside.',
+      'DISAGREE; probable error or deliberate stiffening; bench uses Prasad 240 GPa. Poisson ' +
+      'ratio0.3 is printed for this separate material set,not for Prasad. Table use: beside.',
     population:
       'tachi-2021: AIS planner comparison against postoperative CT. Sample: 47. [peer-reviewed; full-text].',
     sources: [
@@ -7398,8 +7413,8 @@ export const EVIDENCE_LEDGER = [
     feature: 'Ti material set in FE planner',
     publishedNumber:
       'young modulus: 108 GPa [published; little-2013]; yield: 390 MPa [published; little-2013]; poisson ratio: ' +
-      '0.3 ratio [published; little-2013]. DISAGREE; as printed; bench uses Prasad set. Audit confirms Poisson ' +
-      'ratio0.3 for this separate material set,not for Prasad. Table use: beside.',
+      '0.3 ratio [published; little-2013]. DISAGREE; as printed; bench uses Prasad set. Poisson ' +
+      'ratio0.3 is printed for this separate material set,not for Prasad. Table use: beside.',
     population:
       'little-2013: AIS FE comparison with1-week standing Cobb; adult material properties. Sample: 8. ' +
       '[peer-reviewed; full-text].',
@@ -7545,12 +7560,13 @@ export const EVIDENCE_LEDGER = [
     feature: 'Ultra-high-strength steel comparison',
     publishedNumber:
       'uts: 200 ksi [published; cidambi-2012]; approximate uts: about 1380 MPa [own-inference; ' +
-      'project-assumptions]. Copy both the published ksi and the note’s approximate MPa; reader does not convert ' +
+      'project-assumptions]. Both the published ksi and the own approximate MPa are held; the reader does ' +
+      'not convert ' +
       'them. Table use: beside.',
     population:
-      'cidambi-2012: Patients with 5.5 mm ultra-high-strength steel rods; disease label not restated in the ' +
-      'supplying table. Sample: 27. [peer-reviewed; abstract]. project-assumptions: No measured population; ' +
-      'explicit choices and calculations in the project notes. Sample: not supplied. [own-inference; secondary].',
+      'cidambi-2012: Patients with 5.5 mm ultra-high-strength steel rods; disease label not restated. ' +
+      'Sample: 27. [peer-reviewed; abstract]. project-assumptions: No measured population; ' +
+      'explicit project choices and calculations. Sample: not supplied. [own-inference; secondary].',
     sources: [
       {
         citation:
@@ -7566,14 +7582,14 @@ export const EVIDENCE_LEDGER = [
   },
   {
     id: 'place-bench-rod-materials-section-table-reference',
-    feature: 'Reference inputs for computed section Table A',
+    feature: 'Reference inputs for the computed rod section table',
     publishedNumber:
       'titanium yield: 900 MPa [own-inference; project-assumptions]; young modulus titanium: 114 GPa [published; ' +
       'prasad-2017]; young modulus cobalt chrome: 240 GPa [published; prasad-2017]; young modulus stainless ' +
       'steel: 193 GPa [published; prasad-2017]. Inputs beside copied own-inference outputs; I=pi*d^4/64; ' +
       'Z=pi*d^3/32; EI=E*I; My=yield*Z. No new calculation. Table use: input.',
     population:
-      'project-assumptions: No measured population; explicit choices and calculations in the project notes. ' +
+      'project-assumptions: No measured population; explicit project choices and calculations. ' +
       'Sample: not supplied. [own-inference; secondary]. prasad-2017: Review of implant alloys; wrought ' +
       'Ti-6Al-4V,CoCrMo and Stainless steel316L;Table1 states no steel condition. Sample: not supplied. ' +
       '[peer-reviewed; full-text].',

@@ -117,7 +117,7 @@ pub fn evaluate(ctx: &RuleContext<'_>) -> Result<RuleReading, LayoutError> {
         if modifier == LumbarModifier::ClearOfApex {
             Ok(ctx.reading.vertebrae[sv].level)
         } else {
-            // SYNTHESIS explicitly takes SV-1 from the published range
+            // The level rule takes SV-1 from the published range
             // SV-1 or SV-2. Its lower endpoint is read, never retyped.
             shift(ctx, ctx.reading.vertebrae[sv].level, -(offset as i32))
         }

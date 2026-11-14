@@ -12,7 +12,7 @@
       },
       "unit": "ratio",
       "source": "sato-2022",
-      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 3; §B Sato 2022; §C.10",
+      "section": "Table 3",
       "qualifier": "Published left/right ratio; left is concave and right is convex. The table prints ± without defining its statistic. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper states right is always convex and left always concave. Per-cell observation counts are not supplied.",
       "range": {
         "lower": 0.75,
@@ -22,7 +22,7 @@
       "decimals": 2,
       "mark": {
         "kind": "probable-misprint",
-        "reason": "full-tables-from-five-papers.md §C.10: the printed spread 0.52 cannot fit within the printed 0.75–0.97 range and is a probable misprint. Neither the spread nor the ratio is repaired; this observation is not used."
+        "reason": "The printed spread 0.52 cannot fit within the printed 0.75–0.97 range and is a probable misprint. Neither the spread nor the ratio is repaired; this observation is not used."
       },
       "usage": "printed-only"
     },
@@ -38,7 +38,7 @@
       },
       "unit": "ratio",
       "source": "sato-2022",
-      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 3; §B Sato 2022; §C.10",
+      "section": "Table 3",
       "qualifier": "Published left/right ratio; left is concave and right is convex. The table prints ± without defining its statistic. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper states right is always convex and left always concave. Per-cell observation counts are not supplied.",
       "range": {
         "lower": 0.82,
@@ -58,7 +58,7 @@
       },
       "unit": "ratio",
       "source": "sato-2022",
-      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 3",
+      "section": "Table 3",
       "qualifier": "Comparison of APEX ±1 with NV ±1 for this ratio; p is strictly less than 0.001 as printed. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper states right is always convex and left always concave. Per-cell observation counts are not supplied.",
       "printed": "< 0.001*",
       "decimals": 3
@@ -75,8 +75,8 @@
       },
       "unit": "ratio",
       "source": "sato-2022",
-      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 3; §B Sato 2022; §C.10",
-      "qualifier": "Published cortical-width left/right ratio; screw-sizing-and-placement.md P7 explicitly names its 0.13 as the ratio SD. The full-table note transcribes the same ±. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper states right is always convex and left always concave. Per-cell observation counts are not supplied.",
+      "section": "Table 3",
+      "qualifier": "Published cortical-width left/right ratio, stored with its 0.13 as the ratio SD; the table prints the same ± without defining its statistic. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper states right is always convex and left always concave. Per-cell observation counts are not supplied.",
       "range": {
         "lower": 0.28,
         "upper": 1.0
@@ -96,7 +96,7 @@
       },
       "unit": "ratio",
       "source": "sato-2022",
-      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 3; §B Sato 2022; §C.10",
+      "section": "Table 3",
       "qualifier": "Published left/right ratio; left is concave and right is convex. The table prints ± without defining its statistic. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper states right is always convex and left always concave. Per-cell observation counts are not supplied.",
       "range": {
         "lower": 0.77,
@@ -116,7 +116,7 @@
       },
       "unit": "ratio",
       "source": "sato-2022",
-      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 3",
+      "section": "Table 3",
       "qualifier": "Comparison of APEX ±1 with NV ±1 for this ratio; p is strictly less than 0.001 as printed. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper states right is always convex and left always concave. Per-cell observation counts are not supplied.",
       "printed": "< 0.001*",
       "decimals": 3
@@ -133,7 +133,7 @@
       },
       "unit": "ratio",
       "source": "sato-2022",
-      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 3; §B Sato 2022; §C.10",
+      "section": "Table 3",
       "qualifier": "Published left/right ratio; left is concave and right is convex. The table prints ± without defining its statistic. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper states right is always convex and left always concave. Per-cell observation counts are not supplied.",
       "range": {
         "lower": 0.36,
@@ -154,7 +154,7 @@
       },
       "unit": "ratio",
       "source": "sato-2022",
-      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 3; §B Sato 2022; §C.10",
+      "section": "Table 3",
       "qualifier": "Published left/right ratio; left is concave and right is convex. The table prints ± without defining its statistic. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper states right is always convex and left always concave. Per-cell observation counts are not supplied.",
       "range": {
         "lower": 0.58,
@@ -174,7 +174,7 @@
       },
       "unit": "ratio",
       "source": "sato-2022",
-      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 3",
+      "section": "Table 3",
       "qualifier": "Comparison of APEX ±1 with NV ±1 for this ratio; p is strictly less than 0.001 as printed. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper states right is always convex and left always concave. Per-cell observation counts are not supplied.",
       "printed": "< 0.001*",
       "decimals": 3
@@ -191,7 +191,7 @@
       },
       "unit": "ratio",
       "source": "sato-2022",
-      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 3; §B Sato 2022; §C.10",
+      "section": "Table 3",
       "qualifier": "Published left/right ratio; left is concave and right is convex. The table prints ± without defining its statistic. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper states right is always convex and left always concave. Per-cell observation counts are not supplied.",
       "range": {
         "lower": 0.11,
@@ -212,7 +212,7 @@
       },
       "unit": "ratio",
       "source": "sato-2022",
-      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 3; §B Sato 2022; §C.10",
+      "section": "Table 3",
       "qualifier": "Published left/right ratio; left is concave and right is convex. The table prints ± without defining its statistic. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper states right is always convex and left always concave. Per-cell observation counts are not supplied.",
       "range": {
         "lower": 0.53,
@@ -232,7 +232,7 @@
       },
       "unit": "ratio",
       "source": "sato-2022",
-      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 3",
+      "section": "Table 3",
       "qualifier": "Comparison of APEX ±1 with NV ±1 for this ratio; p is strictly less than 0.001 as printed. Cohort: 57 patients, 49 female and 8 male; Lenke 1 (25) or Lenke 2 (32), 684 pedicles. Enrolled ages 12–20, Table 1 age 16.2 ± 2.4; 10–20 is the abstract inclusion range. The paper states right is always convex and left always concave. Per-cell observation counts are not supplied.",
       "printed": "< 0.001*",
       "decimals": 3
@@ -249,7 +249,7 @@
       },
       "unit": "ratio",
       "source": "sato-2022",
-      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 3",
+      "section": "Table 3",
       "qualifier": "Existing explicit range lookup retained: cortical-width left/right ratio at APEX ±1; the range is printed, not calculated.",
       "printed": "0.28–1.00",
       "decimals": 2
@@ -259,19 +259,19 @@
     {
       "key": "sato-table-3",
       "source": "sato-2022",
-      "section": "full-tables-from-five-papers.md §A Sato 2022 Table 3",
+      "section": "Table 3",
       "text": "Right and left pedicle diameter ratios in APEX±1 and NV ± 1; columns: Variables |  | APEX ±1 | NV ±1 | p-values. *Statistically significant. APEX±1 the region of the apical vertebra and its two adjacent vertebrae; Lt.H/Rt.H left/right pedicle height of the cortical bone; Lt.h/Rt.h left/right pedicle height of the cancellous bone; Lt.W/Rt.W left/right pedicle width of the cortical bone; Lt.w/Rt.w left/right pedicle width of the cancellous bone; NV ± 1 the region of the NV and its two adjacent vertebrae"
     },
     {
       "key": "sato-ratio-reading",
       "source": "sato-2022",
-      "section": "full-tables-from-five-papers.md §B Sato 2022; §C.1, §C.10",
-      "text": "Ratios are left/right; the paper states left is concave and right convex. Table 3 is retained independently of Table 2: no ratio is recomputed from Table 2 means. Apex cortical-width ratio retains the original note P7 explicit SD label; other ± statistics remain unlabelled. Apex cortical-height ratio 0.86 ± 0.52 (0.75–0.97) is retained as a probable misprint, not used."
+      "section": "Tables 2 and 3; place of the side statement not recorded",
+      "text": "Ratios are left/right; the paper states left is concave and right convex. Table 3 is retained independently of Table 2: no ratio is recomputed from Table 2 means. The apex cortical-width ratio is stored with an explicit SD label; other ± statistics remain unlabelled. Apex cortical-height ratio 0.86 ± 0.52 (0.75–0.97) is retained as a probable misprint, not used."
     },
     {
       "key": "sato-2022-table-3-wording",
       "source": "sato-2022",
-      "section": "full-tables-from-five-papers.md §A, sato-2022 Table 3",
+      "section": "Table 3",
       "text": "Right and left pedicle diameter ratios in APEX±1 and NV ± 1; column headers (verbatim, separated by |): Variables |  | APEX ±1 | NV ±1 | p-values. Footnotes: *Statistically significant. APEX±1 the region of the apical vertebra and its two adjacent vertebrae; Lt.H/Rt.H left/right pedicle height of the cortical bone; Lt.h/Rt.h left/right pedicle height of the cancellous bone; Lt.W/Rt.W left/right pedicle width of the cortical bone; Lt.w/Rt.w left/right pedicle width of the cancellous bone; NV ± 1 the region of the NV and its two adjacent vertebrae"
     }
   ]
