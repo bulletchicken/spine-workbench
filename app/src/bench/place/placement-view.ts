@@ -1,6 +1,6 @@
 import type { AnchorProposal, BodySide, ImageRight, ImplantLayout, LayoutProposals, Level, LookCode } from '@/shapes';
-import { TEMPLATE_LEVELS } from '@/shapes';
-import { DAILY_LOADS_WITHHELD, CANNOT_TELL_WORDS, SHARED_LOOK_WORDS, PLACE_LIMITS, PLACE_WORDS as W, lookWords } from '@/words/place';
+import { levelOrder } from './hand-state';
+import { DAILY_STOPS_NOT_SHOWN, CANNOT_TELL_WORDS, SHARED_LOOK_WORDS, PLACE_LIMITS, PLACE_WORDS as W, lookWords } from '@/words/place';
 
 /** Facing names the body's side at the right of the upright front film. */
 export function filmSide(side: BodySide, namedFor: ImageRight): 'left' | 'right' {
@@ -30,7 +30,7 @@ export function reviewItems(result: LayoutProposals, namedFor: ImageRight = 'pat
     return codes.length === 0 ? [] : [{ id: `anchor:${String(i)}`, label: W.pedicleName(anchor.level, filmSide(anchor.side, namedFor)), levels: [anchor.level], sentences: codes.map((code) => lookWords(code, anchor.kind, anchor.lengthMm, shortest)), anchor: i }];
   });
   const unsettled = result.cannotTell.filter((reason) => reason.code === 'ends-unsettled').flatMap((reason) => reason.levels);
-  if (!result.firstIsSketch) {
+  if (!result.firstIsSketch&&layout.change.kind!=='changed-by-hand') {
     const both = unsettled.includes(layout.upper) && unsettled.includes(layout.lower);
     const pair = both ? result.pairs.find((p) => p.upper === layout.upper && p.lower === layout.lower) : undefined;
     for (const [upper, level, counts] of [[true, layout.upper, result.upperEnds], [false, layout.lower, result.lowerEnds]] as const) {
@@ -42,7 +42,7 @@ export function reviewItems(result: LayoutProposals, namedFor: ImageRight = 'pat
       items.push({ id: upper ? 'upper' : 'lower', label: W.end(upper, level), levels: [level], sentences: [sentence, ...(pair === undefined ? [] : [W.pair(layout.upper, layout.lower, pair.versionsHolding, result.versions)])], anchor: null });
     }
   }
-  items.sort((a, b) => TEMPLATE_LEVELS.standard.indexOf(a.levels[0] ?? layout.upper) - TEMPLATE_LEVELS.standard.indexOf(b.levels[0] ?? layout.upper));
+  const order=levelOrder();items.sort((a,b)=>order.indexOf(a.levels[0]??layout.upper)-order.indexOf(b.levels[0]??layout.upper));
   if (looks.shared.length > 0) items.unshift({ id: 'every-pedicle', label: W.everyPedicle, levels: [], sentences: looks.shared.map((code) => SHARED_LOOK_WORDS[code]), anchor: null });
   if (result.cannotTell.some((reason) => reason.code === 'names-may-be-one-off')) items.push({ id: 'names', label: W.levelNames, levels: [], sentences: [W.names], anchor: null,
     details: result.namingScenarios.filter((s) => s.shift === -1 || s.shift === 1).map((s) => ({ summary: W.namingSummary(s.shift, s.changes.length), rows: s.changes.flatMap((change) => [W.namingChange(change, filmSide(change.side, namedFor)), ...(change.looksAdded.length === 0 ? [] : [W.addedLooks(scenarioSentences(change.looksAdded, change.kindTo, change.lengthToMm, shortest))]), ...(change.looksRemoved.length === 0 ? [] : [W.removedLooks(scenarioSentences(change.looksRemoved, change.kindFrom, change.lengthFromMm, shortest))])]) })) });
@@ -55,7 +55,7 @@ export function placementCounts(result: LayoutProposals) {
 export function countWords(result: LayoutProposals): string { const c = placementCounts(result); return W.counts(c.screws, c.hooks, c.empty); }
 
 /** Limits describe what is on the stage; placement comparison is a later piece. */
-export function limitsForPlacement(loaded:boolean,frontOnly:boolean,noScale:boolean,dailyLoads = !DAILY_LOADS_WITHHELD):string[] {
+export function limitsForPlacement(loaded:boolean,frontOnly:boolean,noScale:boolean,dailyLoads = !DAILY_STOPS_NOT_SHOWN):string[] {
   const always=new Set(['preview','tables','tablePopulations','bones','fit','names','frontOnly','noScale']);
   return Object.entries(PLACE_LIMITS).filter(([key])=>key!=='comparison'&&(dailyLoads||(key!=='loads'&&key!=='walking'))&&(loaded||always.has(key))&&(key!=='frontOnly'||frontOnly)&&(key!=='noScale'||noScale)).map(([,line])=>line);
 }

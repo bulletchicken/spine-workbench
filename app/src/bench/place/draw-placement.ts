@@ -6,12 +6,11 @@ import { anchorLoad, anchorPoint, movedPoint } from './load-view';
 import { FORMATION } from '@/spine-3d/scene/look';
 
 /** Symbolic heads and hooks; only screw shafts and rods use supplied dimensions. */
-export const PLACE_DRAWING = { bone: .55, reviewBone: .34, ink: .8, headRadius: 3.2, headDepth: 2, hookRadius: 4, hookWidth: .7, emptyWidth: .25, screwSegments: 10, ringRadiusPx: 10, ringWidthPx: 1.5, staggerMs: 60, arrivalMs: 1200, backAzimuth: 146, backElevation: 14 } as const;
-export interface DrawnPlacement { layer: SceneLayer; parts: Group[]; reveal(count: number, strength: number): void; poses(poses: readonly VertebraPose[], loaded: boolean, rods: RodLine[] | null, target?: readonly VertebraPose[], riding?: boolean): void; point(id:string): [number,number,number] | null; loadTo(parts: readonly PartResult[] | null, normalise?: boolean): (p: number) => void; remove(): void }
+export const PLACE_DRAWING = { bone: .55, reviewBone: .34, ink: .8, headRadius: 3.2, headDepth: 2, hookRadius: 4, hookWidth: .7, emptyWidth: .25, screwSegments: 10, ringRadiusPx: 10, ringWidthPx: 1.5, staggerMs: 60, arrivalMs: 1200, backAzimuth: 146, backElevation: 14, endHandleRadiusPx: 12 } as const;
+export interface DrawnPlacement { layer: SceneLayer; parts: Group[]; reveal(count: number, strength: number): void; fadeParts(ids:readonly string[],progress:number):void; poses(poses: readonly VertebraPose[], loaded: boolean, rods: RodLine[] | null, target?: readonly VertebraPose[], riding?: boolean): void; point(id:string): [number,number,number] | null; loadTo(parts: readonly PartResult[] | null): (p: number) => void; remove(): void }
 export function drawPlacement(spine: Pick<DrawnSpine, 'levels' | 'addLayer'>, fit: SpineFit, layout: ImplantLayout, unsettled: readonly string[]): DrawnPlacement {
   const layer = spine.addLayer(), geometries: BufferGeometry[] = [], parts: Group[] = [];
   const own = <T extends BufferGeometry>(geometry: T): T => { geometries.push(geometry); return geometry; };
-  const paint = layer.flat(FORMATION.ink, PLACE_DRAWING.ink);
   const inks = new Map<string, ReturnType<SceneLayer['flat']>>();
   const ink = (id: string) => { let found=inks.get(id); if(found===undefined){found=layer.flat(FORMATION.ink,PLACE_DRAWING.ink);inks.set(id,found);} return found; };
   const rodGroups = new Map<string, Group>();
@@ -50,7 +49,7 @@ export function drawPlacement(spine: Pick<DrawnSpine, 'levels' | 'addLayer'>, fi
     const pieces = unsettled.includes(level) ? 8 : 1;
     for (let i = 0; i < pieces; i++) {
       const start = -width + 2 * width * i / pieces, end = pieces === 1 ? width : start + width / pieces;
-      group.add(new Line(own(new BufferGeometry().setFromPoints([new Vector3(0, start, z), new Vector3(0, end, z)])), paint));
+      group.add(new Line(own(new BufferGeometry().setFromPoints([new Vector3(0, start, z), new Vector3(0, end, z)])), ink(upper?'upper':'lower')));
     }
     add(group, upper ? 'upper' : 'lower', layer.onBone(level));
   }
@@ -101,20 +100,17 @@ export function drawPlacement(spine: Pick<DrawnSpine, 'levels' | 'addLayer'>, fi
   return { layer, parts,
     poses: drawRods,
     point: (id)=>rodPoints.get(id)??null,
-    loadTo(loads,normalise=false) {
-      // While daily stops are withheld, Rods-in ink uses the largest middle of its own kind.
-      const largest=(kind: 'anchor' | 'rod-span')=>Math.max(0,...(loads??[]).filter((p)=>p.part.kind===kind).map((p)=>p.share.p50));
-      const maxima=normalise?{anchor:largest('anchor'),'rod-span':largest('rod-span')}:null;
+    loadTo(loads) {
       const transitions=[...inks].map(([id,material])=>{
         const anchor=id.startsWith('anchor:')?layout.anchors[Number(id.slice(7))]:undefined;
         const part=anchor?.kind==='none'?undefined:anchor===undefined?loads?.find((p)=>p.part.kind==='rod-span'?id===`span:${p.part.side}:${p.part.from}:${p.part.to}`:p.part.kind==='rod'&&id===`rod:${p.part.side}`):anchorLoad(loads??[],anchor);
-        const max=part!==undefined&&maxima!==null&&(part.part.kind==='anchor'||part.part.kind==='rod-span')?maxima[part.part.kind]:1;
-        const share=part===undefined||max===0?0:part.share.p50/max;
+        const share=part?.share.p50??0;
         return {material,from:material.opacity,to:part===undefined?PLACE_DRAWING.ink:.25+.75*Math.max(0,Math.min(1,share))};
       });
       return (p)=>{for(const t of transitions)t.material.opacity=t.from+(t.to-t.from)*p;layer.changed();};
     },
-    reveal(count, strength) { parts.forEach((part, i) => { part.visible = i < count; }); paint.opacity = PLACE_DRAWING.ink * strength;for(const material of inks.values())material.opacity=PLACE_DRAWING.ink*strength; layer.changed(); },
+    reveal(count, strength) { parts.forEach((part, i) => { part.visible = i < count; });for(const material of inks.values())material.opacity=PLACE_DRAWING.ink*strength; layer.changed(); },
+    fadeParts(ids,progress) {for(const [id,material] of inks)if(ids.includes(id)||id.startsWith('span:')&&ids.includes(`rod:${id.split(':')[1]??''}`))material.opacity=PLACE_DRAWING.ink*progress;layer.changed();},
     remove() { layer.remove(); for (const geometry of [...geometries,...rodGeometry]) geometry.dispose(); }
   };
 }

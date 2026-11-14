@@ -13,6 +13,7 @@ import { PLACE_LOAD_WORDS as L } from '@/words/place';
 import { LoadEstimates } from './LoadEstimates';
 import { PlaceSheet } from './PlaceSheet';
 import { PlaceDrawing } from './PlaceDrawing';
+import { handState, openWhy } from './hand-state';
 import { placeState } from './place-state';
 import { placementFixture } from './placement-fixture.scenes';
 const loop = vi.hoisted(() => new Set<(dt: number) => void>());
@@ -136,4 +137,36 @@ it('leaves daily-only variation lines out of the sheet while retaining other sou
   const sheet=putOnThePage(<LoadEstimates accepted={accepted}/>);
   expect([...sheet.host.querySelectorAll('.load-estimate-list li > p')].map((p)=>p.textContent)).toEqual(['Varies most with: the fit.']);
   sheet.takeDown();
+});
+
+it('keeps stage focus when Escape closes a kept chip before walking again',()=>{
+  const {page}=mount(),stage=page.host.querySelector<HTMLElement>('.three-stage');stage?.focus();pressKey('Escape');
+  expect(placeState.getState()).toMatchObject({pressed:null,keyboard:true});expect(document.activeElement).toBe(stage);
+  pressKey('ArrowDown');expect(placeState.getState().hovered).toBe('upper');page.takeDown();
+});
+
+it('uses only entered engine sizes for the source marker, restoring table words and alternatives',()=>{
+  const {page,result}=mount(),anchor=result.layouts[0]?.anchors[0];if(anchor===undefined)throw new Error('anchor');
+  act(()=>{handState.setState({choices:[{level:anchor.level,side:anchor.side,kind:'screw',diameterMm:anchor.diameterMm,lengthMm:anchor.lengthMm}]});placeState.setState({result:{...result}});});
+  expect(page.host.querySelector('.place-chip')?.textContent).not.toContain('Set by hand');expect(page.host.querySelector('.place-chip')?.textContent).toContain('Also ');
+  anchor.diameterStatus='entered';act(()=>{placeState.setState({result:{...result}});});expect(page.host.querySelector('.place-chip')?.textContent).toContain('Set by hand');
+  anchor.diameterStatus='from-tables';anchor.lengthStatus='from-tables';act(()=>{placeState.setState({result:{...result}});});
+  expect(page.host.querySelector('.place-chip')?.textContent).toContain('from tables for teenagers');expect(page.host.querySelector('.place-chip')?.textContent).toContain('Also ');page.takeDown();
+});
+it('resets Why here through Escape, Done, outside press and M, including reopening with M',()=>{
+  const {page,accepted}=mount();page.takeDown();const sheet=putOnThePage(<PlaceSheet accepted={accepted}/>);
+  for(const close of [()=>pressKey('Escape'),()=>{const done=[...sheet.host.querySelectorAll('button')].find((b)=>b.textContent==='Done');act(()=>{done?.click();});},()=>{act(()=>{document.body.dispatchEvent(new MouseEvent('pointerdown',{bubbles:true}));});},()=>pressKey('m')]){
+    act(()=>{openWhy('lower');});expect(sheet.host.querySelector('#place-sheet-title')?.textContent).toBe('Why here');close();expect(handState.getState().why).toBeNull();
+    pressKey('m');expect(sheet.host.querySelector('#place-sheet-title')?.textContent).toBe('What needs a look');pressKey('Escape');
+  }
+  sheet.takeDown();
+});
+
+it('gives the daily and beside-rods notes once without expecting missing adjacent-level estimates',()=>{
+  const {page,accepted,result}=mount();page.takeDown();const layout=result.layouts[0];if(layout===undefined)throw new Error('layout');layout.upper='T1';
+  act(()=>{loadState.setState({phase:'loaded',result:bench(),stop:'rods-in'});});
+  const sheet=putOnThePage(<LoadEstimates accepted={accepted}/>),notes=[...sheet.host.querySelectorAll('.panel-note p')].map((p)=>p.textContent);
+  expect(notes.filter((line)=>line===L.dailyLoads)).toHaveLength(1);expect(notes.filter((line)=>line===L.besideRods)).toHaveLength(1);
+  expect(sheet.host.textContent).not.toContain('Starts at T1: there is no level above');expect(sheet.host.textContent).not.toContain('Loads in daily life are not worked out yet.');
+  expect([...sheet.host.querySelectorAll('.load-estimate-list li > span')].map((n)=>n.textContent)).not.toContain('Level above');sheet.takeDown();
 });

@@ -8,6 +8,7 @@ import { MARK_WORDS } from './marks';
 import { ON_THIS_DEVICE_WORDS } from './on-this-device';
 import { PREVIEW_NOTICE } from './preview-notice';
 import { SHELL_WORDS } from './shell';
+import { PLACE_EDIT_WORDS, LEVEL_RULE_NAMES, PLACE_WORDS } from './place';
 import { STAGE_WORDS } from './stage';
 
 const design = readFileSync(new URL('../../../DESIGN.md', import.meta.url), 'utf8');
@@ -49,6 +50,12 @@ describe('the system’s words', () => {
       ...Object.keys(FILM_NAMES).map((kind) => STAGE_WORDS.film(kind as keyof typeof FILM_NAMES)),
       MARK_WORDS.outlinesOn('front'), MARK_WORDS.outline('T3', false), MARK_WORDS.outline('T3', true),
     ]) expect(words, text).toContain(text);
+  });
+
+  it('holds hand changes in Place to section 8',()=>{
+    const fixed=Object.values(PLACE_EDIT_WORDS).flatMap((value)=>typeof value==='string'?[value]:typeof value==='object'?Object.values(value):[]);
+    const forms=[PLACE_EDIT_WORDS.yours('T4','L2'),PLACE_EDIT_WORDS.rules(5,7),PLACE_EDIT_WORDS.ruleAt('End vertebra plus one','L1',19,32),PLACE_EDIT_WORDS.ruleUnread('Shoulder level'),PLACE_EDIT_WORDS.rodOption('Cobalt chrome',5.5),PLACE_EDIT_WORDS.lengthSize(25),PLACE_WORDS.stage];
+    for(const text of [...fixed,...Object.values(LEVEL_RULE_NAMES),...forms])expect(words,text).toContain(text);
   });
 
   it('lists as waiting only words the document really lacks', () => {

@@ -128,17 +128,17 @@ it('keeps empty places at placement ink, joins caps to their spans, and releases
   const emptyMesh=inside.registrations().find((p)=>p.id===`anchor:${String(empty)}`)?.object.children[0];if(!(emptyMesh instanceof Mesh)||!(emptyMesh.material instanceof MeshBasicMaterial))throw new Error('empty mesh');expect(emptyMesh.material.opacity).toBe(.8);
   const nonempty=layout.anchors.filter((a)=>a.kind!=='none');const one=nonempty[0],two=nonempty[1];if(one===undefined||two===undefined)throw new Error('anchors');
   const own=(a:typeof one,share:number):PartResult=>({part:{kind:'anchor',level:a.level,side:a.side},share:{p10:share,p50:share,p90:share},demand:null,steady:false,versionsPastStrength:0,sources:[]});
-  drawn.loadTo([own(one,.1),own(two,.2),{...own(one,.05),part:{kind:'rod-span',side:rod.side,from:heads[0].level,to:heads[1].level}}],true)(1);
+  drawn.loadTo([own(one,.1),own(two,.2),{...own(one,.05),part:{kind:'rod-span',side:rod.side,from:heads[0].level,to:heads[1].level}}])(1);
   const firstMesh=inside.registrations().find((p)=>p.id===`anchor:${String(layout.anchors.indexOf(one))}`)?.object.children[0];
   if(!(firstMesh instanceof Mesh)||!(firstMesh.material instanceof MeshBasicMaterial)||!(segment.material instanceof MeshBasicMaterial))throw new Error('material');
-  expect(firstMesh.material.opacity).toBe(.625);expect(segment.material.opacity).toBe(1);
+  expect(firstMesh.material.opacity).toBe(.325);expect(segment.material.opacity).toBe(.2875);
   const removeListener=vi.spyOn(segment.geometry,'removeEventListener');unregister.mockClear();drawn.poses(shift,true,null);expect(unregister).toHaveBeenCalledWith(end);expect(removeListener).toHaveBeenCalledWith('dispose',expect.any(Function));
   inside.layer.onSpine.add(end);expect(inside.registrations().some((p)=>p.object===end)).toBe(false);end.removeFromParent();
   const middle=drawn.point(`rod:${rod.side}`);expect(middle?.[2]).toBeLessThan(anchorPoint(heads[0],MADE_UP_CASE.fit,shift)[2]);expect(middle?.[2]).toBeGreaterThan(anchorPoint(heads.at(-1)??heads[0],MADE_UP_CASE.fit,shift)[2]);
   drawn.remove();
 });
 
-it('withholds daily stops and their parts while preserving the full model for direct use',()=>{
+it('keeps daily stops and their parts off screen while preserving the full model for direct use',()=>{
   const answer=result(),rods=answer.layouts[0]?.stops.find((s)=>s.stop==='rods-in');if(rods===undefined)throw new Error('rods');
   rods.parts=structuredClone(rods.parts);
   expect(SHOWN_LOAD_STOPS).toEqual(['before','rods-in']);expect(Object.keys(LOAD_STOPS)).toHaveLength(5);
@@ -154,7 +154,7 @@ it('withholds daily stops and their parts while preserving the full model for di
   expect(loadLabels(answer,proposals,MADE_UP_CASE.fit,'rods-in').find((l)=>l.id==='anchor')?.anchor).toBe(0);
 });
 
-it('retains daily variation words for the full model but withholds them through the screen switch',()=>{
+it('retains daily variation words for the full model but omits them through the screen switch',()=>{
   for(const unknown of ['weight','steps','walking','contour-knock-down'] as const){expect(variationWords(unknown)).toBeNull();expect(variationWords(unknown,false)).toMatch(/^Varies most with:/);}
   expect(variationWords('geometry')).toBe('Varies most with: the fit.');expect(variationWords(null)).toBeNull();
 });

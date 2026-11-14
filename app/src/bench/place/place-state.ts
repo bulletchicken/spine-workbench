@@ -10,9 +10,9 @@ import { placementFailure, type PlacementFailure } from './placement-failure';
 export type PlaceView = 'front' | 'side' | 'top' | 'back';
 export interface PlaceState {
   input: LayoutInput | null; key: string | null; fitKey: string | null; phase: 'idle' | 'working' | 'ready' | 'failed'; result: LayoutProposals | null; failure: PlacementFailure | null;
-  hovered: string | null; pressed: string | null; changed: boolean; arriving: boolean; review: number | null; sheet: boolean; chosen: PlaceView | null;
+  keyboard:boolean; hovered: string | null; pressed: string | null; changed: boolean; arriving: boolean; review: number | null; sheet: boolean; chosen: PlaceView | null;
 }
-const initial: PlaceState = { input: null, key: null, fitKey: null, phase: 'idle', result: null, failure: null, hovered: null, pressed: null, changed: false, arriving: false, review: null, sheet: false, chosen: 'back' };
+const initial: PlaceState = { input: null, key: null, fitKey: null, phase: 'idle', result: null, failure: null, keyboard:false, hovered: null, pressed: null, changed: false, arriving: false, review: null, sheet: false, chosen: 'back' };
 export const placeState = createStore<PlaceState>()(() => initial);
 let shownFit: string | null = null, request = 0;
 /** Only a placement actually shown can be replaced by a changed spine. */
@@ -25,7 +25,7 @@ export function notePlacementShown(): void {
   }
 }
 currentStep.subscribe((state) => {
-  if (state.slug !== 'place') placeState.setState({ sheet: false, review: null, hovered: null, pressed: null, changed: false, chosen: 'back' });
+  if (state.slug !== 'place') placeState.setState({ keyboard:false,sheet: false, review: null, hovered: null, pressed: null, changed: false, chosen: 'back' });
 });
 caseStore.subscribe((state, before) => {
   // Opening resets the history to this sentinel. Starting the history afresh

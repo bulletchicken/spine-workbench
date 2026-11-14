@@ -43,7 +43,7 @@ export const PLACE_WORDS = {
   pair: (upper: Level, lower: Level, count: number, total: number) => `Together, ${upper} to ${lower} holds in ${String(count)} of ${String(total)} versions.`,
   namingSummary: (shift: number, count: number) => `${shift < 0 ? 'One higher' : 'One lower'}: ${String(count)} ${count === 1 ? 'place changes' : 'places change'}.`,
   namingChange: (change: AnchorChange, side: 'left' | 'right') => `${change.level}, ${side} of the front film → ${change.renamedAs}: ${change.kindFrom === 'none' ? 'empty place' : change.kindFrom}${change.diameterFromMm === null ? '' : `, ${change.diameterFromMm.toFixed(1)} mm`}${change.lengthFromMm === null ? '' : ` × ${String(Math.round(change.lengthFromMm * 10) / 10)} mm`} → ${change.kindTo === 'none' ? 'empty place' : change.kindTo}${change.diameterToMm === null ? '' : `, ${change.diameterToMm.toFixed(1)} mm`}${change.lengthToMm === null ? '' : ` × ${String(Math.round(change.lengthToMm * 10) / 10)} mm`}.`,
-  stage: 'Placement preview. Up and Down walk the parts; Left and Right cross sides; Enter keeps a part open; Escape closes it.',
+  stage: 'Placement preview. Up and Down walk the parts; Left and Right cross sides; Enter opens part controls or Why here; Shift with Up or Down moves an end; Escape cancels a held end or closes it.',
   gallery: 'Place', galleryState: 'A made-up first placement',
 };
 
@@ -123,7 +123,8 @@ export const PLACE_LOAD_WORDS = {
   twistMissing: 'Twist at the apex needs twist measured on the films.',
   kyphosisMissing: 'Kyphosis needs a side film that shows the vertebrae it is read between.',
   typicalRod: "Its contour aims for a typical upper back: no side film measured this one's.",
-  dailyNotYet: 'Loads in daily life are not worked out yet.',
+  dailyLoads: "In this model standing, bending forward and walking add little to the forces locked in when the rods go in. The model has no muscles, and its figures for these loads come from adults; none measured in a child's fused spine was found.",
+  besideRods: 'This model does not work out the load on the levels beside the rods.',
   trunkNotBalanced: 'The model does not rebalance the trunk above and below the rods.',
   weight: 'Weight not given: 29 to 63 kg is assumed, the range in one published group.',
   steps: 'Steps a day not given: 8,000 to 16,000 is assumed, without a published source.',
@@ -141,14 +142,38 @@ export const PLACE_LOAD_WORDS = {
   span: (from: Level, to: Level, side: 'left' | 'right') => `${from} to ${to}, ${side} of the front film · rod span`,
   anchorRange: (level: Level, side: 'left' | 'right') => `${level}, ${side} of the front film · strength allowance`,
   stepsYear: (low: string, high: string) => `About ${low} to ${high} million steps in the year.`,
-  noAbove: 'Starts at T1: there is no level above to compare.',
 };
 export const LOAD_STOPS = { before: 'Before', 'rods-in': 'Rods in', standing: 'Standing', 'bending-forward': 'Bending forward', 'year-of-walking': 'A year of walking' } as const;
-// Restore the daily stops here only when their model is ready to show.
+// Daily stops are not shown as stops: they give nearly the same load readings.
 export const SHOWN_LOAD_STOPS: readonly BenchStop[] = ['before', 'rods-in'];
-export const DAILY_LOADS_WITHHELD = !SHOWN_LOAD_STOPS.includes('standing');
+export const DAILY_STOPS_NOT_SHOWN = !SHOWN_LOAD_STOPS.includes('standing');
 export const ESTIMATE_TAGS = { 'set-by-the-films': 'Set by the films', 'comparison-only': 'For comparing placements only', assumed: 'Assumed' } as const;
 export const ESTIMATE_NAMES = {
   'main-cobb': 'Main curve in the model', kyphosis: 'Kyphosis', 'apical-twist': 'Twist at the apex', 'heaviest-anchor-force': "Heaviest anchor’s force", 'heaviest-anchor-demand': "Heaviest anchor’s share of its strength allowance", 'heaviest-anchor-over-median': 'Heaviest anchor against the middle of the anchor forces', 'heaviest-rod-use': "Heaviest rod span’s share of its yield", 'junction-above': 'Level above', 'junction-below': 'Level below', 'heaviest-rod-swing': 'Heaviest rod swing against the test-bench level',
 } satisfies Record<import('@/shapes').Measure, string>;
 export const UNKNOWN_NAMES = { geometry: 'the fit', 'stiffness-scale': 'stiffness', 'rib-cage': 'the rib cage', bone: 'bone', weight: 'weight', steps: 'steps a day', walking: 'how the walking is done', 'rod-yield': 'rod strength', preload: "how much the joints stiffen under the body’s weight", 'slice-offset': "how far in front of the spine the trunk’s weight acts", 'contour-knock-down': 'how much bending weakens the rod against repeated loads' } satisfies Record<import('@/shapes').SampledUnknown, string>;
+
+export const PLACE_EDIT_WORDS = {
+  less:'−', more:'+', lengthSize:(value:number)=>`${String(value)} mm`,
+  yours:(upper:Level,lower:Level)=>`Your placement: ${upper} to ${lower}.`,
+  undo:'Undo', startFirst:'Start again from the first placement', setByHand:'Set by hand',
+  screw:'Screw', hook:'Hook', none:'None', kind:'Part', diameter:'Diameter', length:'Length',
+  decreaseDiameter:'Smaller diameter', increaseDiameter:'Larger diameter', decreaseLength:'Shorter screw', increaseLength:'Longer screw',
+  noScrew:'The tables give no screw size here.', noDirection:'The films give no direction for this part.',
+  fittedSpan:'The span uses fitted levels from T1 to L5.',
+  twoAnchors:'A side keeps at least two screws or hooks.', endsApart:'The ends stay at least one level apart.',
+  failed:'That change could not be made. Nothing was changed.', why:'Why here',
+  rules:(count:number,total:number)=>`${String(count)} of ${String(total)} rules`,
+  ruleAt:(name:string,level:Level,count:number,total:number)=>`${name}: ${level} in ${String(count)} of ${String(total)} versions.`,
+  ruleUnread:(name:string)=>`${name}: could not be read.`,
+  keepScrew:'Keep the screw', useHook:'Use a hook', leaveEmpty:'Leave it empty',
+  rodPair:'Both rods', rodOption:(name:string,diameter:number)=>`${name} · ${diameter.toFixed(1)} mm`,
+  materials:{'cobalt-chrome':'Cobalt chrome','titanium-alloy':'Titanium alloy','stainless-steel':'Stainless steel'},
+  upperEnd:'Upper end', lowerEnd:'Lower end',
+};
+export const LEVEL_RULE_NAMES = {
+  'end-plus-one':'End vertebra plus one', 'suk-neutral':'Neutral vertebra', 'last-touched':'Last touched vertebra', 'stable-minus-one':'Stable vertebra minus one',
+  'substantially-touched':'Substantially touched vertebra', 'lenke-l3-l4':'L3 or L4', 'lev-plus-one-5c':'Lower end vertebra plus one in type 5C',
+  'liv-index':'Lower end index', 'deviated-vertebra':'Deviated vertebra', 'upper-end-vertebra':'Upper end vertebra', 'uev-5c':'Upper end in type 5C',
+  'lenke-shoulder':'Shoulder level', 'selective-thoracic':'Thoracic curve alone', 'selective-lumbar':'Lumbar curve alone',
+} satisfies Record<import('@/shapes').LevelRule,string>;

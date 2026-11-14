@@ -29,5 +29,5 @@ export interface DockSpec extends DockBase {
   stops?: { chosen: import('@/shapes').BenchStop; choose(name: import('@/shapes').BenchStop): void };
   more?: DockAction & { expanded?: boolean; controls?: string };
   small?: string;
-  review?: { label: string; sentences: readonly string[]; count: string; details?: readonly { summary: string; rows: readonly string[] }[] };
+  review?: { choices?:readonly (DockAction & {chosen:boolean;reason:string|null;busy:boolean})[]; label: string; sentences: readonly string[]; count: string; details?: readonly { summary: string; rows: readonly string[] }[] };
 }

@@ -9,7 +9,6 @@ import { poseBetween } from '@/spine-3d/placing/pose-between';
 import { FORMATION } from '@/spine-3d/scene/look';
 import type { DrawnSpine } from '@/spine-3d/scene/drawn-spine';
 import type { DrawnPlacement } from './draw-placement';
-import { DAILY_LOADS_WITHHELD } from '@/words/place';
 import { loadState } from './load-state';
 import { drawingPoses, rodsInDrawing, stopResult, shownLoadStop, shownStopResult } from './load-view';
 export const LOAD_DRAWING = { moveMs: 600, ghostStrength: .12, labelGapPx: 24, rangeWidthPx: 64 } as const;
@@ -36,7 +35,7 @@ export function useLoadDrawing(accepted: AcceptedSpine, handle: RefObject<Spine3
     const parts=loaded&&!before?shownStopResult(load.result,load.stop)?.parts??[]:null;
     // Create seated spans before taking their current ink strengths.
     hardware.poses(from,loaded&&!before&&drawing?.source!=='fit',drawing?.rods??null,drawing?.poses,before&&shapeChange);
-    const ink=hardware.loadTo(parts,DAILY_LOADS_WITHHELD),ghostFrom=ghosts.current.map((g)=>g.spineValues().strength);
+    const ink=hardware.loadTo(parts),ghostFrom=ghosts.current.map((g)=>g.spineValues().strength);
     let elapsed=0, faded=false;moving.current=shapeChange;
     const frame=(dt:number)=>{
       elapsed+=dt;

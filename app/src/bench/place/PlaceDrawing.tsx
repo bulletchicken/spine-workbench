@@ -9,7 +9,7 @@ import { durationOf } from '@/choreography/timing';
 import type { Spine3DHandle } from '@/spine-3d/view/Spine3D';
 import type { AcceptedSpine } from '@/view-state/spine-build';
 import { threeState } from '@/view-state/three-state';
-import { DAILY_LOADS_WITHHELD, ESTIMATE_NAMES, ESTIMATE_TAGS, PLACE_LOAD_WORDS as L, PLACE_WORDS as W } from '@/words/place';
+import { DAILY_STOPS_NOT_SHOWN, ESTIMATE_NAMES, ESTIMATE_TAGS, PLACE_LOAD_WORDS as L, PLACE_WORDS as W, PLACE_EDIT_WORDS as importedEditWords } from '@/words/place';
 import { drawPlacement, type DrawnPlacement, PLACE_DRAWING as D } from './draw-placement';
 import { filmSide, placementLooks, reviewItems } from './placement-view';
 import { placeState } from './place-state';
@@ -18,6 +18,10 @@ import { loadState } from './load-state';
 import { anchorLoad, anchorPoint, loadLabels, pastWords, rangeWords, shownLoadStop, shownStopResult } from './load-view';
 import { useLoadDrawing } from './load-drawing';
 import { RangeBar, scaleFor } from './LoadEstimates';
+import { PartControls } from './PartControls';
+import { EndHandles } from './EndHandles';
+import { changePlacement, fittedLevels, handState, openWhy, snapEnd } from './hand-state';
+import { useEngine } from '@/engine-room/use-engine';
 import { PlacementCaption } from './PlacementCaption';
 import './place.css';
 
@@ -29,9 +33,11 @@ export function PlaceDrawing({ accepted, handle }: { accepted: AcceptedSpine; ha
   const loadParts=stop==='before'?[]:currentLoad?.parts??[];
   const result = state.result, layout = result?.layouts[0];
   const items = useMemo(() => result === null ? [] : reviewItems(result, accepted.input.front.marks.namedFor), [result, accepted.input.front.marks.namedFor]);
+  const itemsRef=useRef(items);useLayoutEffect(()=>{itemsRef.current=items;},[items]);
   const item = state.review === null ? undefined : items[state.review];
   const looks = useMemo(() => layout === undefined ? null : placementLooks(layout), [layout]);
   const selected = state.pressed ?? state.hovered;
+  const hasLayout=layout!==undefined;
   const anchor = selected?.startsWith('anchor:') === true ? layout?.anchors[Number(selected.slice(7))] : undefined;
   const span=selected?.startsWith('span:')===true?selected.split(':'):null;
   const rod = span!==null?layout?.rods.find((r)=>r.side===span[1]):selected?.startsWith('rod:') === true ? layout?.rods.find((r) => `rod:${r.side}` === selected) : undefined;
@@ -47,7 +53,7 @@ export function PlaceDrawing({ accepted, handle }: { accepted: AcceptedSpine; ha
   useLayoutEffect(() => { threeState.getState().light(levels); return () => { threeState.getState().light([]); }; }, [levels]);
   useLayoutEffect(() => {
     const on = handle.current, spine = on?.spine(), stage = on?.stage();
-    if (layout === undefined || on == null || spine == null || stage == null) return;
+    if (!hasLayout || on == null || spine == null || stage == null) return;
     const view = stage.view(); on.lookFrom({ ...view, azimuth: D.backAzimuth, elevation: D.backElevation, perspective: 1 });
     const surface = root.current;
     const fade = surface === null ? 0 : durationOf(surface, '--dur-appear');
@@ -57,12 +63,12 @@ export function PlaceDrawing({ accepted, handle }: { accepted: AcceptedSpine; ha
       elapsed += dt;
       const progress = fade === 0 ? 1 : Math.min(1, elapsed / fade);
       const review = placeState.getState().review;
-      const target = review === null || items[review]?.levels.length === 0 ? D.bone : D.reviewBone;
+      const target = review === null || itemsRef.current[review]?.levels.length === 0 ? D.bone : D.reviewBone;
       spine.set({ strength: from + (target - from) * progress });
       if (progress === 1) { veiling.current = false; stop(); }
     });
     return () => { stop(); veiling.current = false; spine.set({ strength: 1 }); on.lookFrom(view, { animate: false }); placeState.setState({ hovered: null, pressed: null }); };
-  }, [handle, layout, items]);
+  }, [handle, hasLayout]);
   useLayoutEffect(() => {
     const on = handle.current, stage = on?.stage(), surface = root.current;
     if (on == null || stage == null || surface === null) return;
@@ -81,7 +87,13 @@ export function PlaceDrawing({ accepted, handle }: { accepted: AcceptedSpine; ha
     if (layout === undefined || spine == null || stage == null || surface === null) return;
     const marks = result?.firstIsSketch === true ? [] : result?.cannotTell.filter((r) => r.code === 'ends-unsettled').flatMap((r) => r.levels) ?? [];
     const drawn = drawPlacement(spine, accepted.fit, layout, marks); drawnRef.current=drawn;
-    if (!placeState.getState().arriving) return () => { drawn.remove(); drawnRef.current=null; };
+    if (!placeState.getState().arriving) {
+      const changes=handState.getState().flashing;
+      if(changes.length===0)return () => { drawn.remove(); drawnRef.current=null; };
+      let elapsed=0;drawn.fadeParts(changes,0);const fade=durationOf(surface,'--dur-appear');
+      const stop=joinLoop((dt)=>{elapsed+=dt;const p=fade===0?1:Math.min(1,elapsed/fade);drawn.fadeParts(changes,p);if(p===1){stop();handState.setState({flashing:[]});}});
+      return ()=>{stop();drawn.remove();drawnRef.current=null;};
+    }
     const reduced = window.matchMedia(SYSTEM_ASKS_FOR_REDUCED).matches || surface.closest('[data-motion="reduced"]') !== null;
     const fade = durationOf(surface, '--dur-appear');
     let elapsed = 0, finished = false;
@@ -115,7 +127,7 @@ export function PlaceDrawing({ accepted, handle }: { accepted: AcceptedSpine; ha
     return ()=>{observer.disconnect();unstage();};
   },[handle,layout]);
   const motion=useLoadDrawing(accepted,handle,drawnRef,root);
-  const labels=useMemo(()=>result===null||load.result===null?[]:loadLabels(load.result,result,accepted.fit,shownLoadStop(load.stop),DAILY_LOADS_WITHHELD?'rods-in':'bending-forward'),[result,load.result,load.stop,accepted.fit]);
+  const labels=useMemo(()=>result===null||load.result===null?[]:loadLabels(load.result,result,accepted.fit,shownLoadStop(load.stop),DAILY_STOPS_NOT_SHOWN?'rods-in':'bending-forward'),[result,load.result,load.stop,accepted.fit]);
   useEffect(() => {
     const on = handle.current, spine = on?.spine(), stage = on?.stage();
     if (layout === undefined || on == null || spine == null || stage == null) return;
@@ -129,7 +141,7 @@ export function PlaceDrawing({ accepted, handle }: { accepted: AcceptedSpine; ha
       on.lookFrom(view);
     }
   }, [handle, item, layout, state.chosen]);
-  useKey('popover', ['Escape'], () => { placeState.setState({ pressed: null, hovered: null }); }, () => state.pressed !== null && !state.sheet);
+  useKey('popover', ['Escape'], () => { placeState.setState({ pressed: null, hovered: null, keyboard:true });root.current?.closest<HTMLElement>('.three-stage')?.focus(); }, () => state.pressed !== null && !state.sheet);
   useEffect(() => {
     if (state.pressed === null) return;
     const outside = (event: PointerEvent) => { if (!(event.target instanceof Element) || event.target.closest('.three-stage') === null) placeState.setState({ pressed: null, hovered: null }); };
@@ -138,8 +150,9 @@ export function PlaceDrawing({ accepted, handle }: { accepted: AcceptedSpine; ha
   }, [state.pressed]);
   const partIds = useMemo(() => layout === undefined ? [] : ['upper', ...layout.anchors.map((_, i) => `anchor:${String(i)}`), 'lower', ...layout.rods.filter((r) => r.standingPointsMm.length > 1).map((r) => `rod:${r.side}`)], [layout]);
   useKey('gesture', ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Enter', 'Escape'], (event) => {
+    placeState.setState({keyboard:true});
     if (event.key === 'Escape') { placeState.setState({ pressed: null, hovered: null, review: null }); return; }
-    if (event.key === 'Enter') { placeState.setState({ pressed: selected ?? partIds[0] ?? null }); return; }
+    if (event.key === 'Enter') { const id=selected??partIds[0]??null;if(id==='upper'||id==='lower')openWhy(id);else placeState.setState({pressed:id});return; }
     let index = partIds.indexOf(selected ?? '');
     if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
       if (anchor !== undefined && layout !== undefined) {
@@ -230,26 +243,42 @@ export function PlaceDrawing({ accepted, handle }: { accepted: AcceptedSpine; ha
   const facing = accepted.input.front.marks.namedFor;
   const title = span!==null&&span[2]!==undefined&&span[3]!==undefined?L.span(span[2] as import('@/shapes').Level,span[3] as import('@/shapes').Level,filmSide(rod?.side??'left',facing)):anchor === undefined ? rod === undefined ? chosenEnd === undefined ? null : W.end(selected === 'upper', chosenEnd) : W.rod(filmSide(rod.side, facing)) : W.part(anchor.level, filmSide(anchor.side, facing), anchor.kind);
   const width = anchor?.pedicle.outerWidthMm;
+  const entered=anchor?.diameterStatus==='entered'||anchor?.lengthStatus==='entered';
   const wider = anchor?.kind === 'screw' ? anchor.widerThanPedicle.find((count) => count.diameterMm === anchor.diameterMm) : undefined;
   return <div className="place-drawing" data-load-stop={loaded?stop:undefined} ref={root} aria-hidden={state.sheet || undefined}>
+    {state.input!==null&&layout!==undefined&&<EndKeyboard selected={selected} layout={layout}/>}
     {layout !== undefined && !state.arriving && <PlacementCaption />}
     {layout !== undefined && <svg className="place-labels" style={{ opacity: state.arriving ? 0 : 1 }} aria-hidden="true">
       {layout.anchors.map((_, i) => (looks?.local[i]?.length ?? 0) > 0 || (layout.anchors[i]!==undefined&&(anchorLoad(loadParts,layout.anchors[i])?.versionsPastStrength??0)>0) || selected === `anchor:${String(i)}` || item?.anchor === i ? <g key={i} data-anchor={i}><circle className={selected === `anchor:${String(i)}` ? 'pointed' : 'look'} r={D.ringRadiusPx} /></g> : null)}
       {loadParts.filter((p)=>p.versionsPastStrength>0&&(p.part.kind==='rod-span'||p.part.kind==='rod')).map((p)=>p.part.kind==='rod-span'?<g key={JSON.stringify(p.part)} data-load-part={`${p.part.side}:${p.part.from}:${p.part.to}`}><circle className="look" r={D.ringRadiusPx}/></g>:p.part.kind==='rod'?<g key={JSON.stringify(p.part)} data-load-part={`rod:${p.part.side}`}><circle className="look" r={D.ringRadiusPx}/></g>:null)}
       {loaded&&load.result!==null&&labels.map((label)=><g key={label.id} data-range={label.id} className="load-label-group"><path className="load-leader"/><foreignObject width="208" height="104"><div className="load-label"><p><LevelWords>{label.anchor===undefined?ESTIMATE_NAMES[label.measure]:L.anchorRange(label.level,filmSide(layout.anchors[label.anchor]?.side??'left',accepted.input.front.marks.namedFor))}</LevelWords></p><div className="num">{rangeWords(label.measure,label.band)}</div><RangeBar band={label.band} scale={load.result===null?undefined:scaleFor(load.result,label.measure)}/><small>{ESTIMATE_TAGS[label.tag]}</small></div></foreignObject></g>)}
       {([['upper', layout.upper], ['lower', layout.lower]] as const).map(([end, level]) => <g key={end} data-end={end}><text x="24" className="num">{level}</text>{result?.firstIsSketch !== true && result?.cannotTell.some((r) => r.code === 'ends-unsettled' && r.levels.includes(level)) === true && <circle className="look" r={D.ringRadiusPx} />}</g>)}
+      {state.input!==null&&result!==null&&<EndHandles layout={layout} result={result} handle={handle} drawn={drawnRef}/>}
     </svg>}
     {title !== null && !state.arriving && !state.sheet && <div ref={chip} className="place-chip glass" role="status">
       <div><LevelWords>{title}</LevelWords></div>
       {anchor?.diameterMm != null && anchor.lengthMm !== null && <div className="num">{W.size(anchor.diameterMm, anchor.lengthMm)}</div>}
       {rod !== undefined && <div className="num">{W.diameter(rod.diameterMm)}</div>}
-      {anchor?.kind === 'screw' && (anchor.diameterAlsoSeen.length > 0 || anchor.lengthAlsoSeen.length > 0) && <p>{W.also(anchor.diameterAlsoSeen, anchor.lengthAlsoSeen)}</p>}
+      {!entered&&anchor?.kind === 'screw' && (anchor.diameterAlsoSeen.length > 0 || anchor.lengthAlsoSeen.length > 0) && <p>{W.also(anchor.diameterAlsoSeen, anchor.lengthAlsoSeen)}</p>}
       {selectedLoad?.demand!=null&&<p><span className="num">{rangeWords('heaviest-anchor-demand',selectedLoad.demand)}</span> {L.strengthAllowance}</p>}
       {selectedLoad?.demand!=null&&<small>{ESTIMATE_TAGS.assumed}</small>}
       {selectedLoad!==undefined&&load.result!==null&&pastWords(selectedLoad,load.result)!==null&&<><p className="past-strength"><i className="dot" aria-hidden="true"/>{pastWords(selectedLoad,load.result)}</p><small className="load-context">{L.pastContext(selectedLoad.part.kind==='anchor')}</small><p>{L.partAssumed}</p></>}
       {loaded&&stop!=='before'&&rod?.targetKyphosisStatus==='typical'&&<p>{L.typicalRod}</p>}
       {wider !== undefined && wider.versions > 0 && result !== null && <p>{W.wider(wider.versions, result.versions)}</p>}
-      {anchor !== undefined && width != null && <p>{W.pedicle(width.p10, width.p90)}{W.origin}</p>}
+      {entered?<p>{importedEditWords.setByHand}</p>:anchor !== undefined && width != null && <p>{W.pedicle(width.p10, width.p90)}{W.origin}</p>}
+      {state.pressed!==null&&layout!==undefined&&result!==null&&state.input!==null&&<PartControls layout={layout} anchor={anchor} rod={rod} choices={result.choices}/>}
     </div>}
   </div>;
+}
+
+function EndKeyboard({selected,layout}:{selected:string|null;layout:import('@/shapes').ImplantLayout}) {
+  const engine=useEngine();
+  useKey('popover',['ArrowUp','ArrowDown'],(event)=>{
+    if(!event.shiftKey||selected!=='upper'&&selected!=='lower')return false;
+    if(handState.getState().busy!==null)return true;
+    const levels=fittedLevels(),at=levels.indexOf(layout[selected]),wanted=levels[at+(event.key==='ArrowUp'?-1:1)];
+    if(wanted!==undefined){const level=snapEnd(layout,selected,wanted,levels);if(level!==layout[selected])void changePlacement(engine,{kind:'end',end:selected,level});}
+    return true;
+  },()=>!placeState.getState().sheet&&document.activeElement?.classList.contains('three-stage')===true);
+  return null;
 }

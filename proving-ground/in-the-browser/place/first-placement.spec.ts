@@ -99,6 +99,41 @@ test('the made-up case reaches Place and returns to its 3D spine', async ({ page
   await dock.getByRole('button', { name: 'More', exact: true }).click();
   await expect(page.getByRole('dialog', { name: 'What needs a look', exact: true })).toBeVisible();
   await page.keyboard.press('Escape');
+  const lowerHandle=page.locator('[data-end-handle="lower"]'),beforeLower=await lowerHandle.locator('text').textContent(),handleBox=await lowerHandle.locator('circle').boundingBox();
+  if(handleBox===null)throw new Error('the lower handle has no box');
+  await page.mouse.move(handleBox.x+handleBox.width/2,handleBox.y+handleBox.height/2);await page.mouse.down();
+  await page.mouse.move(handleBox.x+handleBox.width/2,handleBox.y+handleBox.height/2+32,{steps:6});
+  await expect(lowerHandle.locator('text')).not.toHaveText(beforeLower??'');await page.keyboard.press('Escape');await page.mouse.up();
+  await expect(lowerHandle.locator('text')).toHaveText(beforeLower??'');await expect(dock.getByRole('heading',{level:2})).toHaveText(/^A first placement:/);await expect(dock.getByRole('button',{name:'Undo',exact:true})).toHaveCount(0);
+  const stage=page.locator('.three-stage'),chip=page.locator('.place-chip');
+  async function choosePart(fragment:string){
+    await stage.focus();await page.keyboard.press('Escape');
+    for(let at=0;at<40;at++){
+      await page.keyboard.press('ArrowDown');
+      if(await chip.count()&&(await chip.innerText()).split('\n')[0]?.includes(fragment)===true){await page.keyboard.press('Enter');return;}
+    }
+    throw new Error(`No part named ${fragment}`);
+  }
+  await choosePart('· screw');
+  await expect(chip.getByRole('navigation',{name:'Part',exact:true})).toBeVisible();
+  await page.screenshot({path:info.outputPath('screw-controls.png')});
+  await chip.getByRole('button',{name:'Hook',exact:true}).click();
+  await expect(dock.getByRole('heading',{level:2})).toHaveText(/^Your placement:/,{timeout:60_000});
+  await expect(chip).toContainText('· hook');
+  await choosePart('· screw');
+  await chip.getByRole('button',{name:'Larger diameter',exact:true}).click();
+  await expect(chip).toContainText('Set by hand',{timeout:60_000});
+  await expect(chip).not.toContainText('Also ');
+  await stage.focus();await page.keyboard.press('Escape');
+  for(let at=0;at<40;at++){await page.keyboard.press('ArrowDown');if(await chip.count()&&(await chip.innerText()).startsWith('Lower end'))break;}
+  const beforeEnd=await chip.innerText();await page.keyboard.press('Shift+ArrowDown');
+  await expect.poll(()=>chip.innerText()).not.toBe(beforeEnd);
+  await expect(dock.getByRole('heading',{level:2})).toHaveText(/^Your placement:/);
+  for(let at=0;at<3;at++)await dock.getByRole('button',{name:'Undo',exact:true}).click();
+  await expect(dock.getByRole('heading',{level:2})).toHaveText(/^A first placement:/);
+  // Another hand change gives the load the placement currently on the stage.
+  await choosePart('· screw');await chip.getByRole('button',{name:'Hook',exact:true}).click();
+  await expect(dock.getByRole('heading',{level:2})).toHaveText(/^Your placement:/,{timeout:60_000});
   await dock.getByRole('button', { name: 'Put it under load', exact: true }).click();
   await expect(dock.getByRole('button', { name: 'Stop', exact: true })).toBeVisible();
   await expect(dock.getByRole('button', { name: 'Stop', exact: true })).toBeFocused();
@@ -145,7 +180,7 @@ test('the made-up case reaches Place and returns to its 3D spine', async ({ page
   await expect(page.getByRole('heading',{name:'All estimates',exact:true})).toBeVisible();
   await expect(page.locator('.load-estimate-list')).toContainText('Heaviest anchor');
   await expect(page.locator('.load-estimate-list .load-range').first()).toBeVisible();
-  await expect(page.locator('.load-estimates')).toContainText('Loads in daily life are not worked out yet.');
+  await expect(page.locator('.load-estimates')).toContainText("In this model standing, bending forward and walking add little to the forces locked in when the rods go in. The model has no muscles, and its figures for these loads come from adults; none measured in a child's fused spine was found.");
   await expect(page.locator('.load-estimates')).toContainText('The model does not rebalance the trunk above and below the rods.');
   await expect(page.locator('.load-estimates')).not.toContainText(/Weight not given|Steps a day not given|million steps|rod swing/i);
   await page.screenshot({path:info.outputPath('all-estimates.png')});
