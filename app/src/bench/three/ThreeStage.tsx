@@ -5,10 +5,13 @@ import type { AcceptedSpine } from '@/view-state/spine-build';
 import { currentStep } from '@/view-state/current-step';
 import { threeState } from '@/view-state/three-state';
 import { Spine3D, type Spine3DHandle } from '@/spine-3d/view/Spine3D';
-import { namedView } from '@/spine-3d/looking/framing';
+import { restingView as fittedRestingView } from './resting-view';
 import type { ViewName } from '@/spine-3d/looking/named-views';
 import { useKey } from '@/building-blocks/keyboard/use-key';
 import { usePageState } from '@/look-and-feel/page-state';
+import { PlaceDrawing } from '../place/PlaceDrawing';
+import { placeState } from '../place/place-state';
+import { PLACE_WORDS } from '@/words/place';
 import { NameChip } from './NameChip';
 import { compareFilm } from './comparison';
 import { createMove, type Move } from './move';
@@ -22,7 +25,10 @@ class ViewBoundary extends Component<{ children: ReactNode }, { failed: boolean 
   override componentDidCatch() { failSpineView(); }
   override render() { return this.state.failed ? null : this.props.children; }
 }
-function Drawing({ accepted, filmDriver }: { accepted: AcceptedSpine; filmDriver?: FilmDriver | null }) {
+function Drawing({ accepted, filmDriver, placing = false }: { accepted: AcceptedSpine; filmDriver?: FilmDriver | null; placing?: boolean }) {
+  const arriving = useStore(placeState, (s) => s.arriving);
+  const lastPart = useRef<string | null>(null);
+  const placeSheet = useStore(placeState, (s) => s.sheet);
   const pointed = useStore(threeState, (s) => s.pointed);
   const rowLevels = useStore(threeState, (s) => s.rowLevels);
   const highlighted = useMemo(() => rowLevels.length > 0 ? rowLevels : pointed === null ? [] : [pointed], [pointed, rowLevels]);
@@ -39,6 +45,10 @@ function Drawing({ accepted, filmDriver }: { accepted: AcceptedSpine; filmDriver
   const moving = useStore(threeState, (s) => s.moving);
   const handle = useRef<Spine3DHandle>(null);
   const chosen = useStore(threeState, (s) => s.chosen);
+  useLayoutEffect(() => { lastPart.current = null; }, [accepted]);
+  useLayoutEffect(() => {
+    if (placing && !arriving && lastPart.current !== null) placeState.setState({ hovered: lastPart.current });
+  }, [placing, arriving]);
   const drawing = useMemo(() => ({ ...accepted.fit, vertebrae: accepted.fit.vertebrae.filter((v) => v.level !== 'C7' && TEMPLATE_LEVELS.standard.includes(v.level)) }), [accepted]);
   const films = useMemo(() => ({
     front: { geometry: accepted.input.front.geometry, size: accepted.input.front.size, pixels: null },
@@ -47,13 +57,7 @@ function Drawing({ accepted, filmDriver }: { accepted: AcceptedSpine; filmDriver
   const restingView = (name: ViewName = 'three-quarter') => {
     const stage = handle.current?.stage(), part = root.current;
     if (stage == null || part === null) return null;
-    const css = getComputedStyle(part);
-    const read = (key: string) => parseFloat(css.getPropertyValue(key)) || 0;
-    const narrow = window.innerWidth <= (read('--break-narrow-w') || 900);
-    const reserve = (narrow ? read('--rail-h') / 2 : read('--panel-w')) + read('--tile-gap');
-    const size = stage.size();
-    const view = namedView(stage.bounds(), { width: Math.max(1, size.width - 2 * reserve), height: size.height }, name);
-    return { ...view, aimAt: [size.width / 2, size.height / 2] as const };
+    return fittedRestingView(stage, part, name);
   };
   const latestRest = useRef(restingView);
   useLayoutEffect(() => { latestRest.current = restingView; });
@@ -78,7 +82,7 @@ function Drawing({ accepted, filmDriver }: { accepted: AcceptedSpine; filmDriver
   }, [accepted, filmDriver]);
   useLayoutEffect(() => {
     const on = handle.current, canvas = root.current?.querySelector('canvas');
-    if (on === null || canvas == null || filmDriver == null || filmDriver.moment !== 'three' || moving) return;
+    if (placing || on === null || canvas == null || filmDriver == null || filmDriver.moment !== 'three' || moving) return;
     if (compared === null) {
       if (!accepted.movePending) on.lookFrom(latestRest.current(threeState.getState().chosen ?? 'three-quarter') ?? 'three-quarter', { animate: previousCompare.current !== null });
       previousCompare.current = null; return;
@@ -87,10 +91,10 @@ function Drawing({ accepted, filmDriver }: { accepted: AcceptedSpine; filmDriver
     previousCompare.current = compared;
     origin.current = document.querySelector<HTMLElement>(`.tile[data-place="${compared}"]`);
     return compareFilm(filmDriver, on, canvas);
-  }, [accepted, compared, filmDriver, moving]);
-  useEffect(() => { if (chosen !== null) handle.current?.lookFrom(latestRest.current(chosen) ?? chosen); }, [chosen]);
-  return <div ref={root} className="three-stage" data-testid="three-stage" data-state={moving ? 'moving' : 'settled'} data-compared={compared ?? undefined} inert={sheet} onPointerMove={(event) => {
-      if (moving || sheet) return;
+  }, [accepted, compared, filmDriver, moving, placing]);
+  useEffect(() => { if (!placing && chosen !== null) handle.current?.lookFrom(latestRest.current(chosen) ?? chosen); }, [chosen, placing]);
+  return <div ref={root} className="three-stage" tabIndex={placing ? 0 : undefined} aria-label={placing ? PLACE_WORDS.stage : undefined} data-place={placing || undefined} data-testid="three-stage" data-state={moving ? 'moving' : 'settled'} data-compared={compared ?? undefined} inert={sheet || placing && placeSheet} onPointerMove={(event) => {
+      if (moving || sheet || placing) return;
       setPointer({ x: event.clientX, y: event.clientY });
       if (compared !== null) {
         const canvas = root.current?.querySelector('canvas'), stage = handle.current?.stage();
@@ -98,12 +102,13 @@ function Drawing({ accepted, filmDriver }: { accepted: AcceptedSpine; filmDriver
           const box = canvas.getBoundingClientRect(); threeState.getState().point(stage.pick(event.clientX - box.left, event.clientY - box.top)?.level ?? null);
         }
       }
-    }} onPointerLeave={() => { threeState.getState().point(null); }}>
-    <NameChip level={moving || sheet ? null : pointed} x={pointer.x} y={pointer.y} />
-    <Spine3D ref={handle} fit={drawing} bones={accepted.bones} films={films} view="three-quarter" highlighted={highlighted} onPoint={(level) => { threeState.getState().point(level); }} onChoose={(level) => { threeState.getState().point(level); }} turnable={!moving && compared === null && !sheet} shadow onTurned={() => { threeState.getState().choose(null); threeState.getState().point(null); }} />
+    }} onPointerLeave={() => { threeState.getState().point(null); if (placing) { lastPart.current = null; placeState.setState({ hovered: null }); } }} onPointerDown={() => { if (placing) root.current?.focus(); }}>
+    <NameChip level={moving || sheet || placing ? null : pointed} x={pointer.x} y={pointer.y} />
+    <Spine3D ref={handle} fit={drawing} bones={accepted.bones} films={films} view="three-quarter" highlighted={highlighted} onPoint={(level) => { if (!placing) threeState.getState().point(level); }} onPointed={(found) => { if (!placing) return; lastPart.current = found?.kind === 'part' ? found.id : null; if (!placeState.getState().arriving) placeState.setState({ hovered: lastPart.current }); }} onChosen={(found) => { if (placing && !placeState.getState().arriving) placeState.setState({ pressed: found?.kind === 'part' ? found.id : null }); }} onChoose={(level) => { threeState.getState().point(level); }} turnable={!moving && compared === null && !sheet && (!placing || !placeSheet)} shadow onTurned={() => { if (placing) placeState.setState({ chosen: null }); threeState.getState().choose(null); threeState.getState().point(null); }} />
+    {placing && <PlaceDrawing accepted={accepted} handle={handle} />}
   </div>;
 }
 
-export function ThreeStage({ accepted, filmDriver }: { accepted: AcceptedSpine; filmDriver?: FilmDriver | null }) {
-  return <ViewBoundary><Drawing accepted={accepted} {...(filmDriver === undefined ? {} : { filmDriver })} /></ViewBoundary>;
+export function ThreeStage({ accepted, filmDriver, placing = false }: { accepted: AcceptedSpine; filmDriver?: FilmDriver | null; placing?: boolean }) {
+  return <ViewBoundary><Drawing accepted={accepted} placing={placing} {...(filmDriver === undefined ? {} : { filmDriver })} /></ViewBoundary>;
 }

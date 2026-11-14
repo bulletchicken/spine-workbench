@@ -3,7 +3,7 @@
 // that draw it agree without importing each other.
 
 /** `data-moment`, on `<html>`: the moment the design system's stylesheet draws. */
-export type MomentAttr = 'films' | 'find' | 'three';
+export type MomentAttr = 'films' | 'find' | 'three' | 'place';
 /** `data-films`, on `<html>`: some place is empty, a film is being read, or all four are in. */
 export type FilmsAttr = 'empty' | 'landing' | 'ready';
 /** `data-step`, on the app root. */

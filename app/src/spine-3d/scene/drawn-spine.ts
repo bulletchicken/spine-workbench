@@ -160,7 +160,7 @@ export interface DrawnSpineInside {
   model: SpineModel;
   flat: boolean;
   layers: readonly SceneLayerInside[];
-  pass(which: 'base' | 'opaque-depth' | 'parts' | 'rest', texture?: Texture | null, width?: number, height?: number): void;
+  pass(which: 'base' | 'layer-depth' | 'parts' | 'rest', texture?: Texture | null, width?: number, height?: number, veil?: Texture | null): void;
   /** The solid meshes that can be pointed at, each tagged with its level. */
   pickable(): Mesh[];
   /** True when the bone of `level` is filled in at this point of its own frame. */
@@ -442,22 +442,28 @@ export function drawSpine(model: SpineModel, host: SpineHost, flat = false): Dra
     model,
     flat,
     layers,
-    pass(which, texture = null, width = 1, height = 1) {
+    pass(which, texture = null, width = 1, height = 1, veil = null) {
       if (formationGroup !== undefined) {
-        if (which === 'opaque-depth') { formationVisible = formationGroup.visible; passing = true; formationGroup.visible = false; }
+        if (which === 'layer-depth') { formationVisible = formationGroup.visible; passing = true; formationGroup.visible = false; }
         else if (which === 'parts') formationGroup.visible = false;
         else if (passing) { formationGroup.visible = formationVisible; if (which === 'rest') passing = false; }
       }
       for (const bone of bones) {
         paintBone(bone);
-        if (which === 'opaque-depth') {
-          bone.depthOnly.visible = !flat && bone.solid.visible && bone.materials.uniforms.strength.value >= 1;
+        if (which === 'layer-depth') {
+          bone.depthOnly.visible = !flat && bone.solid.visible;
+          bone.materials.depthOnly.colorWrite = true;
+          bone.materials.depthOnly.transparent = false;
+          bone.materials.depthOnly.color.setScalar(bone.materials.uniforms.strength.value);
           bone.solid.visible = false; bone.lines.visible = false;
-        } else if (which === 'parts') {
-          bone.depthOnly.visible = false; bone.solid.visible = false; bone.lines.visible = false;
+        } else {
+          bone.materials.depthOnly.colorWrite = false; bone.materials.depthOnly.transparent = true;
+          if (which === 'parts') {
+            bone.depthOnly.visible = false; bone.solid.visible = false; bone.lines.visible = false;
+          }
         }
       }
-      for (const layer of layers) { layer.prepare(spineValues.strength, texture, width, height); layer.show(which === 'parts' || which === 'rest'); }
+      for (const layer of layers) { layer.prepare(spineValues.strength, texture, width, height, veil); layer.show(which === 'parts' || which === 'rest'); }
     },
     pickable: () => (!flat && !removed && spineValues.visible ? bones.filter((bone) => bone.solid.visible && bone.materials.uniforms.strength.value > 0).map((bone) => bone.solid) : []),
     followFilm() {

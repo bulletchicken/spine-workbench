@@ -10,6 +10,7 @@ import { spineBuild } from '@/view-state/spine-build';
 import { threeState } from '@/view-state/three-state';
 import { THREE_WORDS } from '@/words/three';
 import { READINGS_WORDS } from '@/words/spine-readings';
+import { PLACE_WORDS } from '@/words/place';
 import { threeDock } from './three-dock';
 export function ThreeScreen() {
   const c = useCase((s) => s.case);
@@ -34,6 +35,7 @@ export function ThreeScreen() {
       const rest = threeDock(accepted.fit, accepted.input.side !== null, chosen, (name) => { if (!threeState.getState().moving && !threeState.getState().sheet) threeState.getState().choose(name); });
       dock = moving ? { scene: 'three', sentence: rest.sentence, ...(rest.helper === undefined ? {} : { helper: rest.helper }) } : {
         ...rest,
+        primary: { label: PLACE_WORDS.enter, press: () => { currentStep.getState().go('place'); } },
         ...(narrow ? { quiet: { label: READINGS_WORDS.title, controls: 'measurements', expanded: sheet, press: () => { threeState.getState().showSheet(!sheet); } } } : {}),
       };
     }

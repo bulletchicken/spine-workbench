@@ -67,7 +67,10 @@ it('separates the bone veil from spine fading and removes only the resources own
   const freeShape = vi.spyOn(shape, 'dispose'), freeMaterial = vi.spyOn(material, 'dispose');
   for (const strength of [.55, .34]) {
     spine.set({ strength }); inside.pass('rest'); expect(material.opacity).toBe(.8);
-    inside.pass('opaque-depth'); expect(inside.pickable()).toHaveLength(0);
+    inside.pass('layer-depth'); expect(inside.pickable()).toHaveLength(0);
+    const mask = inside.root.children[0]?.children[0];
+    if (!(mask instanceof Mesh) || !(mask.material instanceof MeshBasicMaterial)) throw new Error('Missing depth surface');
+    expect(mask.visible).toBe(true); expect(mask.material.color.r).toBe(strength); expect(mask.material.colorWrite).toBe(true);
     inside.pass('rest'); expect(inside.pickable()).toHaveLength(model.bones.length);
     layer.onSpine.visible = false; inside.pass('base'); inside.pass('parts'); inside.pass('rest'); expect(layer.onSpine.visible).toBe(false); layer.onSpine.visible = true;
   }

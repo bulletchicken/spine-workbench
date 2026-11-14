@@ -83,7 +83,7 @@ describe('Find through the frame', () => {
   it('takes the made-up case from Films to found, then reviews each doubtful level', async () => {
     await mount(); press('Use the sample case'); await tick(1000);
     const steps = [...host.querySelectorAll<HTMLButtonElement>('nav.steps button')];
-    expect(steps.map((button) => button.textContent)).toEqual(['Films', 'Find', '3D']);
+    expect(steps.map((button) => button.textContent)).toEqual(['Films', 'Find', '3D', 'Place']);
     expect(steps.at(-1)?.disabled).toBe(true);
     expect(caseStore.getState().case.films).toHaveLength(4);
     const called = vi.spyOn(engine, 'runAutoPass'); press('Find the spine');

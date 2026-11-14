@@ -74,7 +74,7 @@ export function AppFrame({ steps = FOUND_STEPS, parts = FOUND_PARTS }: AppFrameP
   const Screen = onScreen?.Screen;
   const OpeningCase = parts.OpeningCase;
   const screen = Screen === undefined ? null : <Screen key={onScreen?.slug} />;
-  usePageState('moment', onScreen?.slug === 'three' ? 'three' : onScreen?.slug === 'find' ? 'find' : 'films');
+  usePageState('moment', onScreen?.slug === 'place' ? 'place' : onScreen?.slug === 'three' ? 'three' : onScreen?.slug === 'find' ? 'find' : 'films');
 
   return (
     <div

@@ -7,7 +7,9 @@ import { currentStep } from '@/view-state/current-step';
 import { threeState } from '@/view-state/three-state';
 import type { AcceptedSpine } from '@/view-state/spine-build';
 import { spineBuild } from '@/view-state/spine-build';
+import { placeState } from '../place/place-state';
 import { ThreeStage } from './ThreeStage';
+vi.mock('../place/PlaceDrawing', () => ({ PlaceDrawing: () => null }));
 const heard = vi.hoisted(() => ({ props: null as Spine3DProps | null, look: vi.fn(), wall: vi.fn(), fail: false }));
 vi.mock('@/spine-3d/view/Spine3D', () => ({ Spine3D: function MockSpine(props: Spine3DProps) {
   useImperativeHandle(props.ref, () => ({ stage: () => ({ size: () => ({ width: 1000, height: 700 }), bounds: () => ({ low: [0, 0, 0], high: [100, 500, 100] }), setView: () => undefined, film: () => ({ set: heard.wall }) }), spine: () => null, lookFrom: heard.look, settle: () => undefined }) as never);
@@ -60,5 +62,17 @@ it('names a pointed bone, shares its level and keeps the chip following movement
   act(() => { canvas.dispatchEvent(new MouseEvent('pointermove', { bubbles: true, clientX: 150, clientY: 210 })); });
   expect(chip?.style.left).toBe('150px');
   act(() => { heard.props?.onPoint?.(null); }); expect(chip?.classList.contains('show')).toBe(false);
+  page.takeDown();
+});
+
+it('keeps the arriving part under a resting pointer and clears a named view after a hand turn', () => {
+  placeState.setState({ arriving: true, hovered: null, chosen: 'back' });
+  const page = putOnThePage(<ThreeStage accepted={accepted()} placing />);
+  act(() => { heard.props?.onPointed?.({ kind: 'part', id: 'anchor:2' } as never); });
+  expect(placeState.getState().hovered).toBeNull();
+  act(() => { placeState.setState({ arriving: false }); });
+  expect(placeState.getState().hovered).toBe('anchor:2');
+  act(() => { heard.props?.onTurned?.(); });
+  expect(placeState.getState().chosen).toBeNull();
   page.takeDown();
 });

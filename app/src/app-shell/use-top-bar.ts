@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { hasCaseToSave, saveCurrentCase } from '@/bench/save-case';
 import { useEngine } from '@/engine-room/use-engine';
 import { useStore } from 'zustand';
+import { threeState } from '@/view-state/three-state';
 import { spineBuild } from '@/view-state/spine-build';
 import { useCase } from '@/case-state/case-store';
 import { popoverOpen, usePopoverOpen } from '@/on-this-device/popover-open';
@@ -17,6 +18,7 @@ export function useTopBar(steps: readonly StepContract[]): TopBarProps {
   const engine = useEngine();
   const [saving, setSaving] = useState(false);
   useStore(spineBuild);
+  useStore(threeState, (s) => s.moving);
   const { slug } = useCurrentStep();
   const c = useCase((store) => store.case);
   const promiseOpen = usePopoverOpen().open;
