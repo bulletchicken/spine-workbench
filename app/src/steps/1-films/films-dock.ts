@@ -1,15 +1,17 @@
+import { exclusionWords, type SideExclusion } from '@/bench/search-films';
+import { SIDE_WORDS } from '@/words/side';
 import type { DockHelper, DockSpec } from '@/guide/dock-spec';
 import type { FilmKind } from '@/shapes';
 import type { FilmIntakeState } from '@/view-state/film-intake';
 import { faultWords } from '@/words/faults';
 import { FILMS_WORDS as W } from '@/words/films';
 
-export interface FilmsState { inPlace: readonly FilmKind[]; intake: FilmIntakeState; sampleFilms: number }
+export interface FilmsState { inPlace: readonly FilmKind[]; intake: FilmIntakeState; sampleFilms: number; canFind?: boolean; sideExclusion?: SideExclusion | null }
 export interface FilmsActions { choose: () => void; sample: () => void; startOver: () => void; find: () => void }
 const words = (text: string): DockHelper => ({ kind: 'words', words: [text] });
 
-export function filmsDock({ inPlace, intake, sampleFilms }: FilmsState, act: FilmsActions): DockSpec {
-  const primary = { label: W.findTheSpine, press: act.find, disabled: !inPlace.includes('front') };
+export function filmsDock({ inPlace, intake, sampleFilms, canFind = inPlace.includes('front'), sideExclusion = null }: FilmsState, act: FilmsActions): DockSpec {
+  const primary = { label: W.findTheSpine, press: act.find, disabled: !canFind };
   const sampleLabel = intake.nextSample >= sampleFilms ? W.useSampleCase : W.useSampleFilm;
   let spec: DockSpec;
   if (intake.making || intake.reading.length > 0) {
@@ -37,12 +39,14 @@ export function filmsDock({ inPlace, intake, sampleFilms }: FilmsState, act: Fil
     spec = {
       scene: 'ready',
       sentence: sample ? sampleFilms === 1 ? W.oneSampleIn : W.sampleIn((intake.sample ?? 0) + 1, sampleFilms)
-        : !front ? W.frontToAdd : inPlace.length === 4 ? W.allIn : inPlace.length === 1 ? W.frontIn : W.someIn(inPlace.length),
+        : !front && inPlace.includes('side') ? SIDE_WORDS.sideIn : !front ? W.frontToAdd : inPlace.length === 4 ? W.allIn : inPlace.length === 1 ? W.frontIn : W.someIn(inPlace.length),
       helper: words(sample ? W.sampleHelp : !front ? W.frontToAddHelp : inPlace.length === 4 ? W.allInHelp : W.canFind),
       quiet: { label: sample ? intake.nextSample >= sampleFilms ? W.useSampleCase : W.nextSampleFilm : W.startOver, press: sample ? act.sample : act.startOver },
       primary,
     };
   }
+  if (sideExclusion !== null) spec = { ...spec, helper: words(exclusionWords(sideExclusion)) };
+  else if (canFind && !inPlace.includes('front') && inPlace.includes('side')) spec = { ...spec, helper: words(W.canFind) };
   const notice = intake.notice;
   if (notice === null) return spec;
   if (notice.kind === 'left-out') return { ...spec, sentence: W.leftOut(notice.count), helper: words(W.leftOutHelp) };
