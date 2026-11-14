@@ -12,6 +12,7 @@ import { checkCase } from './checks';
 import { pace, storyFilmOf } from './film-jobs';
 import type { StandInScripts } from './stand-in-engine';
 import type { StandInAnswer, StandInJobs } from './stand-in-worker';
+import { fitStory } from './fit-story';
 import { sampleReadings } from './spine-readings';
 
 export const CHAIN_STAGES: readonly Stage[] = ['chain', 'naming', 'confidence'];
@@ -55,6 +56,7 @@ export function spineJobs(story: StandInStory, scripts: StandInScripts): StandIn
       }),
     'make-up-spine': () => answer(films.makeUpMs, () => story.madeUp.spine),
     'compare-with-answer-key': ({ marks, key }) => answer(adjust.compareMs, () => compareWithAnswerKey(marks, key)),
+    'fit-spine': (input) => answer(scripts.pace === 'slow' ? find.slowMs : adjust.compareMs, () => fitStory(input)),
     'measure-spine': (input) => answer(adjust.compareMs, () => sampleReadings(input)),
   };
 }
