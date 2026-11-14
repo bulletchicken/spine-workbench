@@ -4,6 +4,7 @@
 mod anchors;
 mod catalogue;
 mod naming;
+pub(crate) mod rebuild;
 
 use crate::LayoutError;
 use crate::alternatives::{self, Alternative};
@@ -93,13 +94,15 @@ pub fn assemble(
                 }
                 Err(error) => return Err(error),
             };
-            if f64::from(pair.versions_holding)
-                < pairs::ENDS_HOLDING_SHARE * f64::from(input.versions)
+            if !fallback
+                && let Some(unsettled) = pairs::unsettled_ends(
+                    pair,
+                    input.versions,
+                    &pair_readings.upper_ends,
+                    &pair_readings.lower_ends,
+                )
             {
-                cannot_tell.push(CannotTell {
-                    code: CannotTellCode::EndsUnsettled,
-                    levels: vec![pair.upper, pair.lower],
-                });
+                cannot_tell.push(unsettled);
             }
             let alternatives = alternatives::one_step(input, &first, &rod);
             layouts.push(first);
@@ -130,9 +133,17 @@ pub fn assemble(
         None => Vec::new(),
     };
     Ok(LayoutProposals {
-        first_is_sketch: false,
-        upper_ends: Vec::new(),
-        lower_ends: Vec::new(),
+        first_is_sketch: fallback && !layouts.is_empty(),
+        upper_ends: if fallback || layouts.is_empty() {
+            Vec::new()
+        } else {
+            pair_readings.upper_ends
+        },
+        lower_ends: if fallback || layouts.is_empty() {
+            Vec::new()
+        } else {
+            pair_readings.lower_ends
+        },
         tier: if input.fit.side_film.is_some() {
             FitTier::TwoFilms
         } else {
@@ -159,44 +170,9 @@ fn layout(
 ) -> Result<ImplantLayout, LayoutError> {
     let levels = alternatives::levels(input, alternative.upper, alternative.lower)
         .ok_or_else(|| LayoutError::Refused("instrumented-span-not-fitted".into()))?;
-    let mut anchors = Vec::new();
-    for &level in &levels {
-        if let std::collections::btree_map::Entry::Vacant(entry) = candidates.entry(level) {
-            let pair = screws::anchors(
-                input,
-                &readings.versions.versions,
-                &readings.measured,
-                &[level],
-            )?;
-            entry.insert(pair);
-        }
-        anchors.extend(candidates[&level].iter().cloned());
-    }
-    let apex = readings
-        .nominal
-        .major
-        .map(|i| readings.nominal.vertebrae[readings.nominal.curves[i].apex_index].level);
-    anchors::apply(
-        &mut anchors,
-        &levels,
-        apex,
-        readings
-            .nominal
-            .major
-            .and_then(|i| readings.nominal.curves.get(i))
-            .map(|c| c.convex),
-        alternative.pattern,
-    )?;
-    let released_levels = levels
-        .iter()
-        .copied()
-        .filter(|level| {
-            *level != alternative.lower
-                && anchors.iter().any(|a| {
-                    a.level == *level && a.kind == shapes::implant_layout::AnchorKind::Screw
-                })
-        })
-        .collect();
+    let mut anchors = candidate_anchors(input, readings, candidates, &levels)?;
+    apply_pattern(&mut anchors, &levels, readings, alternative.pattern)?;
+    let released_levels = released_levels(&anchors, &levels, alternative.lower);
     let rods = rods::propose(
         &input.fit,
         &levels,
@@ -213,6 +189,64 @@ fn layout(
         rods,
         released_levels,
     })
+}
+
+fn candidate_anchors(
+    input: &LayoutInput,
+    readings: &LevelReadings,
+    candidates: &mut BTreeMap<Level, Vec<AnchorProposal>>,
+    levels: &[Level],
+) -> Result<Vec<AnchorProposal>, LayoutError> {
+    let mut anchors = Vec::new();
+    for &level in levels {
+        if let std::collections::btree_map::Entry::Vacant(entry) = candidates.entry(level) {
+            let pair = screws::anchors(
+                input,
+                &readings.versions.versions,
+                &readings.measured,
+                &[level],
+            )?;
+            entry.insert(pair);
+        }
+        anchors.extend(candidates[&level].iter().cloned());
+    }
+    Ok(anchors)
+}
+
+fn apply_pattern(
+    anchors: &mut [AnchorProposal],
+    levels: &[Level],
+    readings: &LevelReadings,
+    pattern: Pattern,
+) -> Result<(), LayoutError> {
+    let apex = readings
+        .nominal
+        .major
+        .map(|i| readings.nominal.vertebrae[readings.nominal.curves[i].apex_index].level);
+    anchors::apply(
+        anchors,
+        levels,
+        apex,
+        readings
+            .nominal
+            .major
+            .and_then(|i| readings.nominal.curves.get(i))
+            .map(|c| c.convex),
+        pattern,
+    )
+}
+
+fn released_levels(anchors: &[AnchorProposal], levels: &[Level], lower: Level) -> Vec<Level> {
+    levels
+        .iter()
+        .copied()
+        .filter(|level| {
+            *level != lower
+                && anchors.iter().any(|a| {
+                    a.level == *level && a.kind == shapes::implant_layout::AnchorKind::Screw
+                })
+        })
+        .collect()
 }
 
 fn merge(values: Vec<CannotTell>) -> Vec<CannotTell> {

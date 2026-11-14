@@ -43,9 +43,6 @@ use shapes::implant_layout::{ImplantLayout, LayoutInput, LayoutProposals, Rebuil
 /// existing error code with this refusal's name in its detail.
 #[derive(Clone, Debug, PartialEq, Eq, thiserror::Error)]
 pub enum LayoutError {
-    /// Changing a placement by hand is not built yet.
-    #[error("rebuild-not-built")]
-    RebuildNotBuilt,
     /// The named entry point is not built yet.
     #[error("implant-layout-not-built: {0}")]
     NotBuilt(&'static str),
@@ -66,9 +63,7 @@ impl From<LayoutError> for EngineError {
         let code = match error {
             LayoutError::NoSpine => ErrorCode::PassNoSpineFound,
             LayoutError::InvalidValue { .. } => ErrorCode::CaseInvalidValue,
-            LayoutError::RebuildNotBuilt | LayoutError::NotBuilt(_) | LayoutError::Refused(_) => {
-                ErrorCode::ToolRefused
-            }
+            LayoutError::NotBuilt(_) | LayoutError::Refused(_) => ErrorCode::ToolRefused,
         };
         Self::new(code, error.to_string()).with_detail(error.to_string())
     }
@@ -95,7 +90,7 @@ pub fn propose_layouts(input: &LayoutInput) -> Result<LayoutProposals, LayoutErr
     proposal::propose(input)
 }
 
-/// A placement changed by hand, refused until rebuilding is available.
-pub fn rebuild_layout(_input: &RebuildInput) -> Result<ImplantLayout, LayoutError> {
-    Err(LayoutError::RebuildNotBuilt)
+/// A whole placement changed by hand, using the original proposal's draws.
+pub fn rebuild_layout(input: &RebuildInput) -> Result<ImplantLayout, LayoutError> {
+    proposal::rebuild::rebuild(input)
 }

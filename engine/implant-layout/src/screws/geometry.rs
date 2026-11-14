@@ -13,6 +13,8 @@ use shapes::spine_readings::BodySide;
 const ROOT_TOLERANCE: f64 = 1e-11;
 /// This project's fixed bisection count, independent of platform clocks.
 const ROOT_STEPS: usize = 64;
+/// This project's retry budget for cancellation in nearly parallel slices.
+const ROOT_REFINEMENT_STEPS: usize = 4;
 
 /// One table-implied path on the generic fitted body, never a bone landmark.
 #[derive(Clone, Copy, Debug, PartialEq)]
@@ -151,6 +153,20 @@ fn anterior_exit(
     direction: Vector3<f64>,
     anterior: Vector3<f64>,
 ) -> Option<Vector3<f64>> {
+    // Keep every accepted intersection unchanged. Only a refused ray is
+    // retried with the unsquared quadratics: expanding their squares can
+    // lose the separation of two roots when the ray nearly parallels a slice.
+    anterior_exit_in_pass(endplates, start, direction, anterior, false)
+        .or_else(|| anterior_exit_in_pass(endplates, start, direction, anterior, true))
+}
+
+fn anterior_exit_in_pass(
+    endplates: &Endplates,
+    start: Vector3<f64>,
+    direction: Vector3<f64>,
+    anterior: Vector3<f64>,
+    refine: bool,
+) -> Option<Vector3<f64>> {
     let bottom = endplates.bottom;
     let top = endplates.top;
     let centre = [bottom.centre, top.centre - bottom.centre];
@@ -172,8 +188,14 @@ fn anterior_exit(
             polynomial[i + j] += a[i] * a[j] + b[i] * b[j] - denominator[i] * denominator[j];
         }
     }
+    let roots = roots_on_unit_interval(&polynomial);
     let mut candidates = Vec::new();
-    for s in roots_on_unit_interval(&polynomial) {
+    for &root in &roots {
+        let s = if refine {
+            refine_root(root, &a, &b, &denominator)
+        } else {
+            root
+        };
         let c = centre[0] + centre[1] * s;
         let u = width[0] + width[1] * s;
         let v = depth[0] + depth[1] * s;
@@ -215,6 +237,28 @@ fn anterior_exit(
         })
         .max_by(|a, b| a.0.total_cmp(&b.0))
         .map(|(_, point)| point)
+}
+
+fn refine_root(root: f64, a: &[f64; 3], b: &[f64; 3], denominator: &[f64; 3]) -> f64 {
+    let mut s = root;
+    for _ in 0..ROOT_REFINEMENT_STEPS {
+        let av = polynomial_value(a, s);
+        let bv = polynomial_value(b, s);
+        let dv = polynomial_value(denominator, s);
+        let value = av * av + bv * bv - dv * dv;
+        let derivative = 2.0
+            * (av * (a[1] + 2.0 * a[2] * s) + bv * (b[1] + 2.0 * b[2] * s)
+                - dv * (denominator[1] + 2.0 * denominator[2] * s));
+        if derivative == 0.0 || value == 0.0 {
+            break;
+        }
+        let next = s - value / derivative;
+        if !next.is_finite() || !(0.0..=1.0).contains(&next) {
+            break;
+        }
+        s = next;
+    }
+    s
 }
 
 fn determinant_polynomial(
@@ -432,6 +476,36 @@ mod tests {
         let actual =
             anterior_exit(&plates, expected - direction * 40.0, direction, direction).unwrap();
         assert!((actual - expected).norm() < 1e-8);
+    }
+
+    #[test]
+    fn a_nearly_parallel_ray_keeps_its_worked_anterior_exit() {
+        let mut pose = body();
+        pose.wedge_front = 0.12;
+        pose.wedge_side = -0.18;
+        pose.bottom_half_width = 18.0;
+        pose.bottom_half_depth = 14.0;
+        let plates = Endplates::of(&VertebraParams::from(&pose));
+        let fraction = 0.63;
+        let blend = |a: Vector3<f64>, b: Vector3<f64>| a * (1.0 - fraction) + b * fraction;
+        let centre = blend(plates.bottom.centre, plates.top.centre);
+        let width = blend(
+            plates.bottom.width_axis * plates.bottom.half_width,
+            plates.top.width_axis * plates.top.half_width,
+        );
+        let depth = blend(
+            plates.bottom.depth_axis * plates.bottom.half_depth,
+            plates.top.depth_axis * plates.top.half_depth,
+        );
+        // The 3/5, -4/5 rim point is exact. The ray nearly parallels this
+        // slice, so squaring its intersection equations gives close roots.
+        let expected = centre + width * 0.6 - depth * 0.8;
+        let normal = unit(width.cross(&depth)).unwrap();
+        let direction = unit(-unit(depth).unwrap() + normal * 1e-5).unwrap();
+        let start = expected - direction * 40.0;
+        assert!(anterior_exit_in_pass(&plates, start, direction, Vector3::x(), false).is_none());
+        let actual = anterior_exit(&plates, start, direction, Vector3::x()).unwrap();
+        assert!((actual - expected).norm() < 1e-7);
     }
 
     #[test]

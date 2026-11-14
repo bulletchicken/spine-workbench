@@ -33,6 +33,9 @@ pub fn anchor(
     let (k, k_source) =
         sizing::default_width_ratio().ok_or_else(|| refused("missing-width-ratio"))?;
     let (share, share_range, mut sources) = chord_shares(input.child.age_years)?;
+    let mut diameter_sources = vec![k_source.clone()];
+    let mut length_sources = sources.clone();
+    let mut direction_sources = Vec::new();
     sources.push(k_source);
     for (table, key, group) in [
         (Table::ChannelGrades, "inner-diameter-max", "grade-4"),
@@ -53,9 +56,16 @@ pub fn anchor(
     }
     let (margin, margin_source) =
         required_scalar(Table::LengthRules, "anterior-breach-threshold", "aorta")?;
+    length_sources.push(margin_source.clone());
     sources.push(margin_source);
     let chord = anatomy::chord(level, position.curve_side, input.child.age_years);
     let angle = anatomy::medial_angle(level, position.curve_side);
+    if let Some(c) = &chord {
+        length_sources.extend(c.sources.iter().cloned());
+    }
+    if let Some(a) = &angle {
+        direction_sources.extend(a.sources.iter().cloned());
+    }
     let nominal_trajectory = chord
         .as_ref()
         .zip(angle.as_ref())
@@ -99,6 +109,7 @@ pub fn anchor(
         max_twist = max_twist.max(vertebra.angles.twist_rad.to_degrees().abs());
         if let Some(c) = anatomy::chord(level, position.curve_side, input.child.age_years) {
             sources.extend(c.sources.iter().cloned());
+            length_sources.extend(c.sources.iter().cloned());
             nearest |= c.nearest_age;
             let z = sampler.normal(&format!("versions-pedicles/{i}/{latent:?}/chord"), v.index)?;
             let drawn = c.mean
@@ -117,6 +128,7 @@ pub fn anchor(
         }
         if let Some(a) = anatomy::medial_angle(level, position.curve_side) {
             sources.extend(a.sources.iter().cloned());
+            direction_sources.extend(a.sources.iter().cloned());
             let z = sampler.normal(&format!("versions-pedicles/{i}/{latent:?}/angle"), v.index)?;
             let direction =
                 geometry::direction(&vertebra.pose, side, a.mean + a.sd.unwrap_or(0.0) * z)?;
@@ -127,6 +139,18 @@ pub fn anchor(
     }
     let pedicle = pedicles::estimate(&widths, position.curve_side);
     let outer: Vec<_> = widths.iter().flatten().map(|w| w.outer_mm).collect();
+    let wider_than_pedicle = if outer.len() == versions.len() {
+        dgrid
+            .iter()
+            .map(|size| DiameterCount {
+                diameter_mm: size.mm,
+                versions: outer.iter().filter(|&&w| w < size.mm / k).count() as u32,
+            })
+            .collect()
+    } else {
+        Vec::new()
+    };
+    diameter_sources.extend(pedicle.sources.iter().cloned());
     let diameter = if outer.len() == versions.len() {
         sizing::choose_diameter(&outer, &dgrid, k, sizing::DEFAULT_ALPHA)?
     } else {
@@ -169,6 +193,7 @@ pub fn anchor(
     {
         if let Some(g) = dgrid.iter().find(|g| g.mm == selected) {
             sources.extend(g.sources.iter().cloned());
+            diameter_sources.extend(g.sources.iter().cloned());
         }
     }
     for selected in [length.mm]
@@ -178,6 +203,7 @@ pub fn anchor(
     {
         if let Some(g) = lgrid.iter().find(|g| g.mm == selected) {
             sources.extend(g.sources.iter().cloned());
+            length_sources.extend(g.sources.iter().cloned());
         }
     }
     let diameters_beside = diameters_beside(&outer, &dgrid, outer.len() == versions.len())?;
@@ -237,12 +263,39 @@ pub fn anchor(
     } else {
         AnchorKind::None
     };
-    Ok(AnchorProposal {
-        wider_than_pedicle: Vec::new(),
-        screw_here: None,
-        diameter_sources: Vec::new(),
-        length_sources: Vec::new(),
-        direction_sources: Vec::new(),
+    let medial_angle = angle.map(|a| AngleFromTable {
+        angle_deg: a.mean,
+        source: a.sources[0].clone(),
+    });
+    let screw_here = diameter
+        .mm
+        .zip(length.mm)
+        .map(|(diameter_mm, length_mm)| ScrewHere {
+            diameter_mm,
+            diameter_also_seen: diameter.also_seen.clone(),
+            length_mm,
+            length_also_seen: length_also_seen.clone(),
+            screw_to_pedicle,
+            medial_angle: medial_angle.clone(),
+        });
+    let mut anchor = AnchorProposal {
+        wider_than_pedicle,
+        screw_here,
+        diameter_sources: if diameter.mm.is_some() {
+            unique(diameter_sources)
+        } else {
+            Vec::new()
+        },
+        length_sources: if length.mm.is_some() {
+            unique(length_sources)
+        } else {
+            Vec::new()
+        },
+        direction_sources: if has_geometry {
+            unique(direction_sources)
+        } else {
+            Vec::new()
+        },
         look_sources: Vec::new(),
         level,
         side,
@@ -255,10 +308,7 @@ pub fn anchor(
         } else {
             ValueStatus::Missing
         },
-        medial_angle: angle.map(|a| AngleFromTable {
-            angle_deg: a.mean,
-            source: a.sources[0].clone(),
-        }),
+        medial_angle,
         medial_angles_beside,
         convergence_deg,
         diameter_mm: diameter.mm,
@@ -284,7 +334,9 @@ pub fn anchor(
         pedicle,
         looks,
         sources: unique(sources),
-    })
+    };
+    refresh_look_sources(&mut anchor);
+    Ok(anchor)
 }
 
 /// Bilateral candidate anchors in the supplied instrumented order. Apply
@@ -305,6 +357,40 @@ pub fn anchors(
         }
     }
     Ok(result)
+}
+
+/// Replay the existing width ensemble for a diameter entered by hand.
+/// An unread width leaves the ratio absent for the whole ensemble.
+pub(crate) fn ratio_for_diameter(
+    input: &LayoutInput,
+    versions: &[Version],
+    readings: &[SpineReading],
+    level: Level,
+    side: BodySide,
+    diameter_mm: f64,
+) -> Result<Option<Band>, LayoutError> {
+    validate_ensemble(input, versions, readings)?;
+    if !diameter_mm.is_finite() || diameter_mm <= 0.0 {
+        return Err(invalid("diameter"));
+    }
+    let sampler = NamedSampler::new(u64::from(input.seed), input.versions)?;
+    let mut ratios = Vec::with_capacity(versions.len());
+    for (version, reading) in versions.iter().zip(readings) {
+        let Some(width) = pedicles::draw_width(
+            level,
+            side,
+            input.child.age_years,
+            pedicles::position_in_curve(reading, level, side),
+            version,
+            &sampler,
+            input.pedicle_child_share,
+        )?
+        else {
+            return Ok(None);
+        };
+        ratios.push(diameter_mm / width.outer_mm);
+    }
+    Ok(band(&ratios))
 }
 
 /// Published regional practice range, for display alone. It never enters

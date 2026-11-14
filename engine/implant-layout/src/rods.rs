@@ -435,6 +435,7 @@ pub fn propose_with_overbend(
     let mut result = Vec::new();
     for side in [BodySide::Left, BodySide::Right] {
         let mut heads = Vec::new();
+        let mut standing_heads = Vec::new();
         let mut head_levels = Vec::new();
         for pose in &target.poses {
             let matching: Vec<_> = anchors
@@ -478,6 +479,7 @@ pub fn propose_with_overbend(
                     };
             let local_head = before.rotation_matrix().transpose() * (nominal_head - before.centre);
             heads.push(after.centre + after.rotation_matrix() * local_head);
+            standing_heads.push(nominal_head);
             head_levels.push(pose.level);
         }
         if heads.len() < 2 {
@@ -500,7 +502,12 @@ pub fn propose_with_overbend(
             0.0
         };
         let heads: Vec<[f64; 3]> = heads.into_iter().map(Into::into).collect();
-        let contoured = contour(&heads, &head_levels, overbend)?;
+        let (contoured, stations) = contour_with_stations(&heads, &head_levels, overbend)?;
+        let standing = ReferenceCurve::interpolation(&standing_heads)?;
+        let standing_points_mm = stations
+            .into_iter()
+            .map(|station| standing.eval(station).0.into())
+            .collect();
         let overbend = contoured.overbend_deg;
         let points = contoured.points_mm;
         let length_mm = contoured.length_mm;
@@ -528,7 +535,7 @@ pub fn propose_with_overbend(
         sources.sort();
         sources.dedup();
         result.push(RodProposal {
-            standing_points_mm: Vec::new(),
+            standing_points_mm,
             side,
             curve_side,
             material: choice.material,
@@ -588,6 +595,16 @@ pub fn contour(
     levels: &[Level],
     overbend_deg: f64,
 ) -> Result<RodContour, LayoutError> {
+    Ok(contour_with_stations(heads, levels, overbend_deg)?.0)
+}
+
+// Retain the target's head-span stations so both drawings have matching
+// points, including each occupied head, even when their arc lengths differ.
+fn contour_with_stations(
+    heads: &[[f64; 3]],
+    levels: &[Level],
+    overbend_deg: f64,
+) -> Result<(RodContour, Vec<Station>), LayoutError> {
     if heads.len() != levels.len() || levels.windows(2).any(|p| p[0] >= p[1]) {
         return Err(invalid("rod-heads", "matching-increasing-levels-required"));
     }
@@ -597,7 +614,7 @@ pub fn contour(
     let heads: Vec<_> = heads.iter().copied().map(Vector3::from).collect();
     let reference = ReferenceCurve::new(&heads)?;
     let cut = thoracic_end(levels);
-    build_contour(
+    build_contour_with_stations(
         &reference,
         cut,
         if cut.is_some() { overbend_deg } else { 0.0 },
@@ -788,6 +805,14 @@ fn build_contour(
     cut: Option<Station>,
     extra_deg: f64,
 ) -> Result<RodContour, LayoutError> {
+    Ok(build_contour_with_stations(reference, cut, extra_deg)?.0)
+}
+
+fn build_contour_with_stations(
+    reference: &ReferenceCurve,
+    cut: Option<Station>,
+    extra_deg: f64,
+) -> Result<(RodContour, Vec<Station>), LayoutError> {
     let placement = Placement::new(reference, cut, extra_deg.to_radians())?;
     let middle = if extra_deg != 0.0 {
         Some(reference.at_arc(placement.cut_arc * 0.5))
@@ -795,6 +820,10 @@ fn build_contour(
         None
     };
     let mut points = vec![reference.spline.heads[0].into()];
+    let mut stations = vec![Station {
+        span: 0,
+        fraction: 0.0,
+    }];
     let mut angles = vec![
         placement
             .value(Station {
@@ -857,6 +886,7 @@ fn build_contour(
                     point = *reference.spline.heads.last().expect("two heads");
                 }
                 points.push(point.into());
+                stations.push(station);
                 let previous = *angles.last().expect("a starting tangent");
                 angles.push(previous + wrapped(angle - previous));
                 if cut.is_some_and(|c| c.span == span && c.fraction == fraction) {
@@ -868,13 +898,16 @@ fn build_contour(
             end_index = Some(points.len() - 1);
         }
     }
-    Ok(RodContour {
-        points_mm: points,
-        sagittal_tangent_rad: angles,
-        thoracic_end_index: end_index,
-        length_mm: length,
-        overbend_deg: extra_deg,
-    })
+    Ok((
+        RodContour {
+            points_mm: points,
+            sagittal_tangent_rad: angles,
+            thoracic_end_index: end_index,
+            length_mm: length,
+            overbend_deg: extra_deg,
+        },
+        stations,
+    ))
 }
 
 fn sagittal_angle(v: Vector3<f64>) -> f64 {
@@ -959,14 +992,15 @@ struct ReferenceCurve {
     sagittal_prefix: Vec<f64>,
 }
 impl ReferenceCurve {
-    fn new(heads: &[Vector3<f64>]) -> Result<Self, LayoutError> {
-        let spline = CubicSpline::new(heads)?;
-        let shape = analytic_shape(heads);
-        let mut result = Self {
-            spline,
-            shape,
+    fn interpolation(heads: &[Vector3<f64>]) -> Result<Self, LayoutError> {
+        Ok(Self {
+            spline: CubicSpline::new(heads)?,
+            shape: analytic_shape(heads),
             sagittal_prefix: vec![0.0],
-        };
+        })
+    }
+    fn new(heads: &[Vector3<f64>]) -> Result<Self, LayoutError> {
+        let mut result = Self::interpolation(heads)?;
         for span in 0..heads.len() - 1 {
             let arc = result.partial_arc(span, 1.0);
             if !arc.is_finite() || arc <= CONTOUR_EPS {

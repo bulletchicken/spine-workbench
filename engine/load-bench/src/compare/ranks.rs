@@ -12,7 +12,7 @@ type Scalar = (SampledUnknown, fn(&BenchRun) -> f64);
 pub(super) fn driver(
     runs: &Runs<'_>,
     samples: &[(u32, f64)],
-) -> (SampledUnknown, BTreeMap<u32, f64>) {
+) -> (Option<SampledUnknown>, BTreeMap<u32, f64>) {
     let mut columns: Vec<Column> = Vec::new();
     let geometry_count = runs
         .values()
@@ -84,10 +84,7 @@ pub(super) fn driver(
         ));
     }
     let values: Vec<_> = samples.iter().map(|row| row.1).collect();
-    let mut selected = (
-        SampledUnknown::Geometry,
-        samples.iter().map(|row| (row.0, 0.0)).collect(),
-    );
+    let mut selected = (None, samples.iter().map(|row| (row.0, 0.0)).collect());
     let mut largest = 0.0;
     for (unknown, column) in columns {
         if column.len() != samples.len() || column.iter().any(|row| !row.1.is_finite()) {
@@ -97,7 +94,7 @@ pub(super) fn driver(
             spearman(&values, &column.iter().map(|row| row.1).collect::<Vec<_>>()).abs();
         if correlation > largest {
             largest = correlation;
-            selected = (unknown, column.into_iter().collect());
+            selected = (Some(unknown), column.into_iter().collect());
         }
     }
     selected

@@ -306,6 +306,23 @@ fn a_complete_synthetic_proposal_keeps_bands_sources_and_apical_flags() {
                 .unwrap()
             })
             .collect();
+        assert_eq!(a.wider_than_pedicle.len(), sizing::diameter_grid().len());
+        assert_eq!(
+            a.wider_than_pedicle[0].versions,
+            a.pedicle.versions_too_narrow
+        );
+        assert!(a.wider_than_pedicle.windows(2).all(|pair| {
+            pair[0].diameter_mm < pair[1].diameter_mm && pair[0].versions <= pair[1].versions
+        }));
+        for count in &a.wider_than_pedicle {
+            assert_eq!(
+                count.versions,
+                widths
+                    .iter()
+                    .filter(|&&width| width < count.diameter_mm / k)
+                    .count() as u32
+            );
+        }
         if let Some(d) = a.diameter_mm {
             assert!(
                 widths.iter().filter(|&&w| w < d / k).count() as f64 / widths.len() as f64
@@ -342,6 +359,11 @@ fn a_childs_lumbar_table_is_absent_and_cannot_make_a_screw() {
     assert_eq!(a.pedicle.outer_width_mm, None);
     assert_eq!(a.diameter_mm, None);
     assert_eq!(a.length_mm, None);
+    assert!(a.wider_than_pedicle.is_empty());
+    assert!(a.pedicle.sources.is_empty());
+    assert!(a.diameter_sources.is_empty());
+    assert!(a.length_sources.is_empty());
+    assert!(a.screw_here.is_none());
     assert!(a.looks.contains(&LookCode::NoTableForThisAge));
     assert_ne!(a.kind, AnchorKind::Screw);
     let older = fixture_input();
@@ -356,6 +378,159 @@ fn a_childs_lumbar_table_is_absent_and_cannot_make_a_screw() {
     .unwrap();
     assert!(a.pedicle.outer_width_mm.is_some());
     assert!(!a.looks.contains(&LookCode::NoTableForThisAge));
+}
+
+#[test]
+fn each_number_and_look_keeps_its_own_resolving_sources() {
+    let input = fixture_input();
+    let all = readings(&input, 0..input.versions).unwrap();
+    let candidates = anchors(
+        &input,
+        &all.versions.versions,
+        &all.measured,
+        &[Level::T4, Level::T8, Level::L1],
+    )
+    .unwrap();
+    for candidate in &candidates {
+        assert_eq!(
+            candidate.looks,
+            candidate
+                .look_sources
+                .iter()
+                .map(|look| look.code)
+                .collect::<Vec<_>>()
+        );
+        for source in candidate
+            .pedicle
+            .sources
+            .iter()
+            .chain(&candidate.diameter_sources)
+            .chain(&candidate.length_sources)
+            .chain(&candidate.direction_sources)
+            .chain(candidate.look_sources.iter().flat_map(|look| &look.sources))
+        {
+            assert!(candidate.sources.contains(source), "{source}");
+            assert!(
+                crate::evidence::tables().source(source).is_some(),
+                "{source}"
+            );
+        }
+        assert!(candidate.pedicle.sources.contains(&"chiu-2024".into()));
+        assert!(candidate.direction_sources.contains(&"upendra-2010".into()));
+        assert!(!candidate.direction_sources.contains(&"fennell-2014".into()));
+        assert!(candidate.length_sources.contains(&"balikci-2019".into()));
+        for look in &candidate.look_sources {
+            match look.code {
+                LookCode::NearTheAorta => assert_eq!(look.sources, vec!["takeshita-2010"]),
+                LookCode::ConcaveApexNeedsCt => assert_eq!(look.sources, vec!["sato-2022"]),
+                LookCode::DirectionUnreadable => {
+                    assert!(look.sources.contains(&"cerny-2014".into()))
+                }
+                LookCode::NoTableForThisAge => assert!(look.sources.is_empty()),
+                _ => {}
+            }
+        }
+    }
+}
+
+#[test]
+fn a_pattern_retains_the_same_screw_size_at_hooks_and_empty_pedicles() {
+    let input = fixture_input();
+    let all = readings(&input, 0..input.versions).unwrap();
+    let levels = [Level::T4, Level::T5, Level::T6, Level::T7];
+    let original = anchors(&input, &all.versions.versions, &all.measured, &levels).unwrap();
+    for anchor in &original {
+        if anchor.kind == AnchorKind::Screw {
+            let size = anchor.screw_here.as_ref().unwrap();
+            assert_eq!(Some(size.diameter_mm), anchor.diameter_mm);
+            assert_eq!(Some(size.length_mm), anchor.length_mm);
+            assert_eq!(size.diameter_also_seen, anchor.diameter_also_seen);
+            assert_eq!(size.length_also_seen, anchor.length_also_seen);
+            assert_eq!(size.screw_to_pedicle, anchor.screw_to_pedicle);
+            assert_eq!(size.medial_angle, anchor.medial_angle);
+        }
+    }
+    let mut hooks = original.clone();
+    apply(&mut hooks, &levels, Some(Level::T6), Pattern::HooksAtTop).unwrap();
+    assert!(
+        hooks[..2]
+            .iter()
+            .all(|a| a.kind == AnchorKind::Hook && a.screw_here.is_some())
+    );
+    for (before, after) in original.iter().zip(&hooks) {
+        assert_eq!(before.screw_here, after.screw_here);
+        assert_eq!(before.wider_than_pedicle, after.wider_than_pedicle);
+    }
+    let mut sparse = original.clone();
+    apply(&mut sparse, &levels, Some(Level::T6), Pattern::KeyLevels).unwrap();
+    assert!(
+        sparse
+            .iter()
+            .any(|a| a.kind == AnchorKind::None && a.screw_here.is_some())
+    );
+    for (before, after) in original.iter().zip(&sparse) {
+        assert_eq!(before.screw_here, after.screw_here);
+    }
+}
+
+#[test]
+fn a_hand_width_ensemble_retains_width_and_count_sources() {
+    let draws = [3.0, 3.2, 4.0, 5.0].map(|outer_mm| {
+        Some(pedicles::WidthDraw {
+            outer_mm,
+            inner_mm: outer_mm - 2.0,
+            sources: vec!["gao-2017".into(), "chiu-2024".into()],
+        })
+    });
+    let estimate = pedicles::estimate(&draws, CurveSide::Outside);
+    // Only 3.0 lies strictly below 3.2; an inner width of one is retained.
+    assert_eq!(estimate.versions_too_narrow, 1);
+    assert_eq!(estimate.versions_inner_under_1_mm, 0);
+    assert_eq!(
+        estimate.sources,
+        vec!["akazawa-2015", "chiu-2024", "gao-2017", "sato-2022"]
+    );
+}
+
+#[test]
+fn an_entered_diameter_uses_the_same_width_floor_and_requires_every_draw() {
+    let mut input = fixture_input();
+    input.pedicle_child_share = Some(1.0);
+    let mut all = readings(&input, 0..input.versions).unwrap();
+    for version in &mut all.versions.versions {
+        version.z_child = -1e6;
+    }
+    // Every width is truncated to 0.5 mm, so a 4 mm screw has ratio 8.
+    let ratio = ratio_for_diameter(
+        &input,
+        &all.versions.versions,
+        &all.measured,
+        Level::T6,
+        BodySide::Left,
+        4.0,
+    )
+    .unwrap();
+    assert_eq!(
+        ratio,
+        Some(Band {
+            p10: 8.0,
+            p50: 8.0,
+            p90: 8.0
+        })
+    );
+    input.child.age_years = Some(10.0);
+    assert_eq!(
+        ratio_for_diameter(
+            &input,
+            &all.versions.versions,
+            &all.measured,
+            Level::L1,
+            BodySide::Left,
+            4.0,
+        )
+        .unwrap(),
+        None
+    );
 }
 
 #[test]

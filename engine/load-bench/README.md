@@ -62,12 +62,20 @@ The result contract includes nullable `mainCurve` (`upper`, `apex`, `lower`)
 and, at each stop, nullable `middle` drawing poses and nullable `rods` drawing
 lines (`side`, `pointsMm`). A middle run is separate from the versions and
 must never enter estimates or counts. The fields are currently null at every
-stop, including `before`. Per-part `demand` is also null; its contract is an
-anchor's force over bone-adjusted strength over settled versions, absent at
-`before` and for other parts. `Estimate.sources`, `PartResult.sources` and
-`StopResult.cyclesSources` are currently empty evidence-key lists. Their
-emptiness must not be read as film-only provenance while they are unfilled.
-Before-stop estimates and shares retain their existing representation.
+stop, including `before`: batches do not carry the original fit, a separate
+drawing run, seated rod lines or the selected curve into comparison. They
+cannot be recovered from the sampled versions. Per-part `demand` is an
+anchor's force over bone-adjusted strength over settled versions, absent for
+empty pedicles and other parts. At `before`, only shape estimates remain;
+there are no load estimates, load paired counts or part shares. Load scales
+start at the lowest loaded p10, without a zero from `before`.
+
+`Estimate.sources` and `PartResult.sources` retain keys from the selected
+mechanical, strength and fatigue evidence rows. Film-only values have no
+sources. `StopResult.cyclesSources` retains the year-length assumption.
+A part's sources cover its load and strength, including the loads behind its
+shared denominator across stops and settled placements. Missing prior-row
+provenance is detailed under the limits below.
 
 ## What is computed
 
@@ -186,9 +194,8 @@ correlation with that estimate. Ties receive equal average ranks. Dot order
 sorts by the unknown most correlated with the **paired difference**. These
 associations describe the chosen ensemble, not causal attribution. Geometry
 and rib cage use the strongest individual component. `mostlyFrom` and
-`sortedBy` are nullable when no unknown moves with the result; aggregation
-currently keeps its existing answers present, including the geometry
-fallback with version-index dot order for constant correlations. Ghosts are
+`sortedBy` are null when no unknown has nonzero rank correlation with the
+result; dots then follow global version order. Ghosts are
 actual version poses nearest the p10 and p90 main-Cobb ranks; a pose is never
 interpolated between spines.
 
@@ -201,8 +208,9 @@ margins, count cutoffs and tag cutoffs are project thresholds, not clinical
 thresholds. A count past published strength is also an assumption; it is not a
 failure probability.
 
-`PairedCount.outcomes` reserves one `lower`, `higher` or `tie` for each dot,
-following `order`; it is currently empty. `clearAt` is the clear-count
+`PairedCount.outcomes` contains one `lower`, `higher` or `tie` for each dot,
+following `order`. Its outcome totals equal the corresponding counts.
+`clearAt` is the clear-count
 threshold of three quarters of the number of entries in `order`, rounded
 up. The existing `lower`, `higher`, `ties` and dot order are unchanged.
 
@@ -334,6 +342,21 @@ scale, the lever arms are those of a typical-sized child. The same assumptions
 must be kept for every compared placement. Density and contour changes can
 change which local constrained state is reached; a published-direction probe
 is plausibility, not truth about this child's spine.
+
+Batches do not retain the child's activity or whether weight was supplied.
+Comparison therefore omits the selected `steps-low`, `steps-typical` or
+`steps-active` row (`tudor-locke-2008`), or the absent-activity
+`steps-if-absent` row and its `child-steps` basis (`tudor-locke-2011`), from
+`cyclesSources`. The `project-assumptions` key is still present for the
+year-length row; it does not establish which step prior was used. Comparison
+also omits the `weight-if-absent` row (`schmid-2020-ais`) from daily-load
+estimates and parts. It cannot infer these prior choices from sampled values.
+Step counts do not enter the rod swing amplitude ratio.
+
+The T1–T8 screw strength quantile is drawn, but it is not among the named
+unknowns available to `mostlyFrom` or `sortedBy`. Those fields can describe
+associations only with the unknowns carried into comparison; a null does not
+rule out movement with that strength draw.
 
 ## Numerical checks
 

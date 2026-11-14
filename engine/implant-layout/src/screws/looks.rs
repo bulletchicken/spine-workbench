@@ -86,6 +86,71 @@ pub fn look_codes(input: LookInputs) -> Result<(Vec<LookCode>, Vec<String>), Lay
     Ok((looks, unique(sources)))
 }
 
+/// Keep one provenance entry for each retained look, including looks added
+/// while applying a pattern or changing a size. Missing table coverage is
+/// an absence of evidence, so it has no publication key of its own.
+pub fn refresh_look_sources(anchor: &mut AnchorProposal) {
+    anchor.look_sources = anchor
+        .looks
+        .iter()
+        .map(|&code| {
+            let mut sources = Vec::new();
+            let mut add = |table, key, group| {
+                if let Some(c) = cell(table, key, group) {
+                    sources.push(c.source.clone());
+                }
+            };
+            match code {
+                LookCode::ConcaveApexNeedsCt => add(
+                    Table::PlacementChecks,
+                    "patients-under-outer-width",
+                    "apex-one-under-4mm",
+                ),
+                LookCode::MayBeTooNarrow => {
+                    add(Table::ChannelGrades, "inner-diameter-max", "grade-4");
+                    add(
+                        Table::DiameterRules,
+                        "outer-width-required-above",
+                        "expansion-25",
+                    );
+                    sources.extend(anchor.pedicle.sources.iter().cloned());
+                    sources.extend(anchor.diameter_sources.iter().cloned());
+                    sources.extend(anchor.diameters_beside.iter().map(|r| r.source.clone()));
+                }
+                LookCode::NearTheAorta => {
+                    for group in ["right-thoracic-left-upper", "right-thoracic-left-lower"] {
+                        add(Table::PlacementChecks, "aorta-warning-levels", group);
+                    }
+                }
+                LookCode::DirectionUnreadable => {
+                    add(
+                        Table::PlacementChecks,
+                        "pedicle-method-visibility-limit",
+                        "cerny-pedicle-shadow",
+                    );
+                    sources.extend(anchor.direction_sources.iter().cloned());
+                }
+                LookCode::ShorterThanTables | LookCode::ChordFromNearestAge => {
+                    sources.extend(anchor.length_sources.iter().cloned());
+                }
+                LookCode::NoTableForThisAge => {}
+            }
+            LookSources {
+                code,
+                sources: unique(sources),
+            }
+        })
+        .collect();
+    anchor.sources = unique(
+        anchor.sources.iter().cloned().chain(
+            anchor
+                .look_sources
+                .iter()
+                .flat_map(|look| look.sources.iter().cloned()),
+        ),
+    );
+}
+
 /// Film and context codes for cases the layout cannot judge. The first-pair
 /// count is supplied by the caller; screw construction itself does not evaluate
 /// a level rule.

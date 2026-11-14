@@ -18,7 +18,6 @@ use shapes::levels::Level;
 use shapes::made_up::CurveRegion;
 use shapes::naming::Template;
 use shapes::spine_fit::SpineFit;
-#[cfg(test)]
 use shapes::spine_readings::LevelCount;
 use std::collections::{BTreeMap, BTreeSet};
 
@@ -40,6 +39,10 @@ pub struct PairReadings {
     /// The compatible fusion region supplying each pair's rule counts
     /// and checks, in exactly the same order as `pairs`.
     pub regions: Vec<FusionRegion>,
+    /// Marginal end counts from each version's one modal pair, most
+    /// frequent first. Ties use cranial upper and caudal lower levels.
+    pub upper_ends: Vec<LevelCount>,
+    pub lower_ends: Vec<LevelCount>,
     pub first: Option<usize>,
     pub cannot_tell: Vec<CannotTell>,
 }
@@ -240,6 +243,57 @@ pub fn first_pair(pairs: &[LevelPair]) -> Option<&LevelPair> {
     pairs.iter().max_by(|a, b| first_order(a, b))
 }
 
+fn end_counts(holding: &BTreeMap<(Level, Level), u32>, end: RuleEnd) -> Vec<LevelCount> {
+    let mut counts = BTreeMap::<Level, u32>::new();
+    for (&(upper, lower), &versions) in holding {
+        let level = if end == RuleEnd::Upper { upper } else { lower };
+        *counts.entry(level).or_default() += versions;
+    }
+    let mut counts: Vec<_> = counts
+        .into_iter()
+        .map(|(level, versions)| LevelCount { level, versions })
+        .collect();
+    counts.sort_by(|a, b| {
+        b.versions.cmp(&a.versions).then_with(|| match end {
+            RuleEnd::Upper => a.level.cmp(&b.level),
+            RuleEnd::Lower => b.level.cmp(&a.level),
+        })
+    });
+    counts
+}
+
+/// Retain the pair's unsettled test, naming only the chosen ends held
+/// in too few versions. If each chosen end is steady but their pair is
+/// unsettled, both chosen ends are named.
+pub fn unsettled_ends(
+    pair: &LevelPair,
+    versions: u32,
+    upper_ends: &[LevelCount],
+    lower_ends: &[LevelCount],
+) -> Option<CannotTell> {
+    let threshold = ENDS_HOLDING_SHARE * f64::from(versions);
+    if f64::from(pair.versions_holding) >= threshold {
+        return None;
+    }
+    let mut levels = Vec::new();
+    for (end, counts) in [(pair.upper, upper_ends), (pair.lower, lower_ends)] {
+        let held = counts
+            .iter()
+            .find(|count| count.level == end)
+            .map_or(0, |count| count.versions);
+        if f64::from(held) < threshold {
+            levels.push(end);
+        }
+    }
+    if levels.is_empty() {
+        levels.extend([pair.upper, pair.lower]);
+    }
+    Some(CannotTell {
+        code: CannotTellCode::EndsUnsettled,
+        levels,
+    })
+}
+
 fn context<'a>(
     input: &'a LayoutInput,
     readings: &'a LevelReadings,
@@ -438,6 +492,8 @@ pub fn build(input: &LayoutInput, readings: &LevelReadings) -> Result<PairReadin
             *holding.entry(pair).or_default() += 1;
         }
     }
+    let upper_ends = end_counts(&holding, RuleEnd::Upper);
+    let lower_ends = end_counts(&holding, RuleEnd::Lower);
     let mut pairs = Vec::new();
     let mut regions = Vec::new();
     for (key, (mut pair, region)) in merged {
@@ -454,24 +510,19 @@ pub fn build(input: &LayoutInput, readings: &LevelReadings) -> Result<PairReadin
             .expect("first pair belongs to list")
     });
     let cannot_tell = match first {
-        Some(i)
-            if f64::from(pairs[i].versions_holding)
-                < ENDS_HOLDING_SHARE * f64::from(input.versions) =>
-        {
-            vec![CannotTell {
-                code: CannotTellCode::EndsUnsettled,
-                levels: vec![pairs[i].upper, pairs[i].lower],
-            }]
-        }
+        Some(i) => unsettled_ends(&pairs[i], input.versions, &upper_ends, &lower_ends)
+            .into_iter()
+            .collect(),
         None => vec![CannotTell {
             code: CannotTellCode::NoLevelMeetsTheRule,
             levels: Vec::new(),
         }],
-        _ => Vec::new(),
     };
     Ok(PairReadings {
         pairs,
         regions,
+        upper_ends,
+        lower_ends,
         first,
         cannot_tell,
     })
@@ -482,6 +533,103 @@ mod tests {
     use super::*;
     use crate::level_rules::test_spine::Fixture;
     use shapes::implant_layout::{LumbarModifier, SelectiveReading};
+
+    #[test]
+    fn separate_end_counts_keep_the_joint_count_and_name_only_unsettled_ends() {
+        let pair = |versions_holding| LevelPair {
+            upper: Level::T4,
+            lower: Level::L3,
+            versions_holding,
+            rules_at: Vec::new(),
+            rules_near: Vec::new(),
+            rules_against: Vec::new(),
+            stop_short: Vec::new(),
+            checks: Vec::new(),
+            free_segments_below: 3,
+        };
+        // Ten hand-counted versions: first both ends occur in six;
+        // then one chosen end has five, then both have five. Both ends
+        // can have seven while their exact pair has only four. A mode
+        // elsewhere does not settle the chosen end.
+        for (holding, expected) in [
+            (
+                vec![((Level::T4, Level::L3), 6), ((Level::T5, Level::L4), 4)],
+                None,
+            ),
+            (
+                vec![((Level::T4, Level::L3), 5), ((Level::T4, Level::L4), 5)],
+                Some(vec![Level::L3]),
+            ),
+            (
+                vec![((Level::T4, Level::L3), 5), ((Level::T5, Level::L3), 5)],
+                Some(vec![Level::T4]),
+            ),
+            (
+                vec![((Level::T4, Level::L3), 5), ((Level::T5, Level::L4), 5)],
+                Some(vec![Level::T4, Level::L3]),
+            ),
+            (
+                vec![
+                    ((Level::T4, Level::L3), 4),
+                    ((Level::T4, Level::L4), 3),
+                    ((Level::T5, Level::L3), 3),
+                ],
+                Some(vec![Level::T4, Level::L3]),
+            ),
+            (
+                vec![
+                    ((Level::T4, Level::L3), 1),
+                    ((Level::T5, Level::L3), 3),
+                    ((Level::T5, Level::L4), 3),
+                    ((Level::T5, Level::L5), 3),
+                ],
+                Some(vec![Level::T4, Level::L3]),
+            ),
+        ] {
+            let holding: BTreeMap<_, _> = holding.into_iter().collect();
+            let upper = end_counts(&holding, RuleEnd::Upper);
+            let lower = end_counts(&holding, RuleEnd::Lower);
+            let result =
+                unsettled_ends(&pair(holding[&(Level::T4, Level::L3)]), 10, &upper, &lower);
+            assert_eq!(result.map(|value| value.levels), expected);
+            assert_eq!(upper.iter().map(|count| count.versions).sum::<u32>(), 10);
+            assert_eq!(lower.iter().map(|count| count.versions).sum::<u32>(), 10);
+            for counts in [&upper, &lower] {
+                assert!(counts.windows(2).all(|w| w[0].versions >= w[1].versions));
+            }
+        }
+        let holding = BTreeMap::from([
+            ((Level::T4, Level::L3), 3),
+            ((Level::T5, Level::L3), 2),
+            ((Level::T5, Level::L4), 4),
+        ]);
+        assert_eq!(
+            end_counts(&holding, RuleEnd::Upper),
+            vec![
+                LevelCount {
+                    level: Level::T5,
+                    versions: 6
+                },
+                LevelCount {
+                    level: Level::T4,
+                    versions: 3
+                },
+            ]
+        );
+        assert_eq!(
+            end_counts(&holding, RuleEnd::Lower),
+            vec![
+                LevelCount {
+                    level: Level::L3,
+                    versions: 5
+                },
+                LevelCount {
+                    level: Level::L4,
+                    versions: 4
+                },
+            ]
+        );
+    }
 
     fn fixture() -> Fixture {
         let mut f = Fixture::new();
@@ -717,6 +865,26 @@ mod tests {
             })
             .collect();
         let result = build(&f.input, &rows).unwrap();
+        assert_eq!(
+            result.upper_ends,
+            vec![LevelCount {
+                level: Level::T4,
+                versions: 4
+            }]
+        );
+        assert_eq!(
+            result.lower_ends,
+            vec![
+                LevelCount {
+                    level: Level::L3,
+                    versions: 2
+                },
+                LevelCount {
+                    level: Level::T12,
+                    versions: 2
+                },
+            ]
+        );
         // Rows0,1 satisfy the readable thoracic selective criteria and
         // rows2,3 use the structural region: two counts at each exact
         // pair, four total, even though both regional sets were offered.

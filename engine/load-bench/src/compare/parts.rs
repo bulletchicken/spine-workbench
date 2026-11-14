@@ -79,11 +79,16 @@ fn values(layout: &ImplantLayout, stop: &StopValues) -> Vec<(PartRef, f64, bool)
 }
 
 pub(super) fn summarise(
+    evidence: &crate::evidence::Evidence,
     layout: &ImplantLayout,
+    layouts: &[ImplantLayout],
     own: &Runs<'_>,
     all: &[Runs<'_>],
     stop: BenchStop,
 ) -> Vec<PartResult> {
+    if stop == BenchStop::Before {
+        return Vec::new();
+    }
     let mut denominators: BTreeMap<u32, [f64; 4]> = BTreeMap::new();
     let mut missing_rod_comparisons = BTreeSet::new();
     for runs in all {
@@ -112,7 +117,7 @@ pub(super) fn summarise(
             }
         }
     }
-    let mut parts: Vec<(PartRef, Vec<f64>, u32)> = Vec::new();
+    let mut parts: Vec<(PartRef, Vec<f64>, u32, BTreeSet<u32>)> = Vec::new();
     for (version, run) in own.iter().filter(|(_, run)| run.settled) {
         let Some(value) = stop_values(run, stop) else {
             continue;
@@ -132,18 +137,25 @@ pub(super) fn summarise(
             if let Some(row) = parts.iter_mut().find(|row| row.0 == part) {
                 row.1.push(share);
                 row.2 += u32::from(past);
+                row.3.insert(*version);
             } else {
-                parts.push((part, vec![share], u32::from(past)));
+                parts.push((
+                    part,
+                    vec![share],
+                    u32::from(past),
+                    BTreeSet::from([*version]),
+                ));
             }
         }
     }
     parts
         .into_iter()
-        .filter_map(|(part, values, versions_past_strength)| {
+        .filter_map(|(part, values, versions_past_strength, versions)| {
             let share = band(&values)?;
+            let share_sources = share_sources(evidence, layouts, all, &versions, part);
             Some(PartResult {
-                demand: None,
-                sources: Vec::new(),
+                demand: demand(layout, own, stop, part),
+                sources: sources::part(evidence, layout, stop, part, &share_sources),
                 part,
                 share,
                 steady: values.len() == own.len()
@@ -152,4 +164,62 @@ pub(super) fn summarise(
             })
         })
         .collect()
+}
+
+fn share_sources(
+    evidence: &crate::evidence::Evidence,
+    layouts: &[ImplantLayout],
+    all: &[Runs<'_>],
+    versions: &BTreeSet<u32>,
+    part: PartRef,
+) -> Vec<String> {
+    let measure = [
+        Measure::HeaviestAnchorForce,
+        Measure::HeaviestRodUse,
+        Measure::JunctionAbove,
+        Measure::HeaviestRodSwing,
+    ][kind(part)];
+    let mut keys = BTreeSet::new();
+    for (layout, runs) in layouts.iter().zip(all) {
+        let mut stops = BTreeSet::new();
+        // Only versions that supplied this part's numerator can bring
+        // their denominator's evidence into its source list.
+        for (_, run) in runs
+            .iter()
+            .filter(|(version, run)| run.settled && versions.contains(version))
+        {
+            for value in &run.stops {
+                if values(layout, value)
+                    .iter()
+                    .any(|(candidate, _, _)| kind(*candidate) == kind(part))
+                {
+                    stops.insert(value.stop);
+                }
+            }
+        }
+        for stop in stops {
+            keys.extend(sources::estimate(evidence, layout, stop, measure));
+        }
+    }
+    keys.into_iter().collect()
+}
+
+fn demand(
+    layout: &ImplantLayout,
+    own: &Runs<'_>,
+    stop: BenchStop,
+    part: PartRef,
+) -> Option<shapes::spine_readings::Band> {
+    let PartRef::Anchor { level, side } = part else {
+        return None;
+    };
+    let index = layout.anchors.iter().position(|anchor| {
+        anchor.level == level && anchor.side == side && anchor.kind != AnchorKind::None
+    })?;
+    band(
+        &own.values()
+            .filter(|run| run.settled)
+            .filter_map(|run| stop_values(run, stop)?.anchor_demand.get(index).copied())
+            .collect::<Vec<_>>(),
+    )
 }

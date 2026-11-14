@@ -61,14 +61,23 @@ The contract also carries `firstIsSketch`, separate `upperEnds` and
 `diameterMm` and `versions`. `ScrewHere` holds `diameterMm`,
 `diameterAlsoSeen`, `lengthMm`, `lengthAlsoSeen`, nullable
 `screwToPedicle` and nullable `medialAngle`: the screw size before a
-pattern turns a pedicle into a hook or an empty place. Pedicle `sources`
-and anchor `diameterSources`, `lengthSources`, `directionSources` and
+pattern turns a pedicle into a hook or an empty place. On a hook or an
+empty place, `diameterSources` and `lengthSources` are retained as the
+sources behind `screwHere`'s table sizes. Pedicle `sources` cover the
+width draws and the thresholds behind both width counts. Anchor
+`diameterSources`, `lengthSources`, `directionSources` and
 `lookSources` retain evidence per quantity; each `LookSources` pairs a
 look `code` with its `sources`, beside the anchor's union of keys.
-These added lists are currently empty, `screwHere` is null and
-`firstIsSketch` is false. They do not yet describe the proposal's
-geometry, fallback status or evidence. `geometryStatus` covers both rod
-lines; a typical line must never be shown as measured millimetres.
+`firstIsSketch` marks a fallback span from the main curve when the rules
+cannot supply a pair. Its end counts are empty; other end counts use the
+same modal pair in each version, most frequent first. A sketch raises no
+`ends-unsettled`. For a rule-derived pair, the pair's holding test still
+raises `ends-unsettled`, judging each end by the level the first placement
+uses and naming only unsettled ends unless both ends separately hold
+steady. The standing rod line uses the target line's sampling stations,
+so each occupied head has a corresponding knot
+on each line. `geometryStatus` covers both lines; a typical line must
+never be shown as measured millimetres.
 
 `rebuild_layout(&RebuildInput) -> Result<ImplantLayout, LayoutError>` is
 the entry for a placement changed by hand. Its input carries the original
@@ -76,8 +85,22 @@ the entry for a placement changed by hand. Its input carries the original
 `rodDiameterMm`. Each `AnchorChoice` has `level`, `side`, `kind`, nullable
 `diameterMm` and nullable `lengthMm`; null asks for the size in
 `screwHere`. Unspecified pedicles follow the first placement's pattern
-over the new span. This entry currently returns `tool-refused` with
-detail `rebuild-not-built` for every input.
+over the new span, including table-driven substitutions. Rebuilding uses
+the original seed and version identities and returns `changed-by-hand`
+as its id and change. A changed screw size is `entered`, with an empty
+source list and also-seen list; its width counts still describe the same
+population draws. Its `screwHere` always keeps the size worked out from
+the tables before the pattern, or stays null when no table size exists.
+Unchanged sizes retain their table status, sources and also-seen lists.
+Unfitted or crossed ends, spans shorter than two levels or outside the
+fitted anatomical span from T1 through L5, duplicate or out-of-span
+pedicles, sizes outside the grids, sizes on a hook or empty choice,
+unsupported rod pairs, missing screw sizes, missing screw or hook
+direction, and fewer than two occupied anchors on either side return
+`case-invalid-value`. Other unavailable geometry retains its specific
+refusal rather than being filled in.
+Rod choices are sourced material and diameter pairs: not every material
+and diameter in the two separate catalogue lists form a pair.
 
 Errors distinguish invalid input, an empty fit and a refusal with a short
 reason. They cross the bridge as existing engine error codes. The layout
