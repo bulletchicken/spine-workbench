@@ -1,7 +1,9 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import type { LevelRule } from '@/shapes';
 import { describe, expect, it } from 'vitest';
-import { EVIDENCE_LEDGER, type EvidenceEntry, type EvidenceSource } from './evidence-ledger';
+import {
+  EVIDENCE_LEDGER, PLACE_SOURCES_WITHOUT_ENTRY, type EvidenceEntry, type EvidenceSource,
+} from './evidence-ledger';
 
 interface SourceRecord {
   key: string;
@@ -16,6 +18,9 @@ interface SourceRecord {
   };
   pmid: string | null;
   doi: string | null;
+  read: 'full-text' | 'abstract' | 'secondary';
+  n: string | null;
+  label: string;
 }
 
 interface LayoutCell {
@@ -32,27 +37,39 @@ interface BenchRow {
 interface TableFile {
   cells?: LayoutCell[];
   rows?: BenchRow[];
+  sources?: SourceRecord[];
 }
 
 function readJson(url: URL): unknown {
   return JSON.parse(readFileSync(url, 'utf8')) as unknown;
 }
 
-const catalogues = (['implant-layout', 'load-bench'] as const).map((crate) => {
+const catalogues = (['implant-layout', 'load-bench', 'spine-readings'] as const).map((crate) => {
   const folder = new URL(`../../../engine/${crate}/evidence/`, import.meta.url);
+  const files = readdirSync(folder).filter((name) => name.endsWith('.json')).sort();
+  const tables = files.filter((name) => name !== 'sources.json')
+    .map((name) => ({ name: name.replace(/\.json$/, ''), data: readJson(new URL(name, folder)) as TableFile }));
   return {
     crate,
-    sources: (readJson(new URL('sources.json', folder)) as { sources: SourceRecord[] }).sources,
-    tables: readdirSync(folder)
-      .filter((name) => name.endsWith('.json') && name !== 'sources.json')
-      .sort()
-      .map((name) => ({ name: name.replace(/\.json$/, ''), data: readJson(new URL(name, folder)) as TableFile })),
+    // Some crates keep their source records inside the numerical evidence file.
+    sources: files.includes('sources.json')
+      ? (readJson(new URL('sources.json', folder)) as { sources: SourceRecord[] }).sources
+      : tables.flatMap(({ data }) => data.sources ?? []),
+    tables,
   };
 });
 const floor = readJson(
   new URL('../../../engine/spine-readings/evidence/curve-floor.json', import.meta.url),
 ) as { value: { value: number }; unit: string; source: string; sources: SourceRecord[] };
-const placeEntries: readonly EvidenceEntry[] = EVIDENCE_LEDGER.slice(2);
+const placeEntries: readonly EvidenceEntry[] = EVIDENCE_LEDGER.filter((added) => added.id.startsWith('place-'));
+
+function recordsFor(added: EvidenceEntry): SourceRecord[] {
+  const crate = added.id.startsWith('place-bench-') ? 'load-bench'
+    : added.id.startsWith('place-readings-') ? 'spine-readings' : 'implant-layout';
+  const catalogue = catalogues.find((candidate) => candidate.crate === crate);
+  if (catalogue === undefined) throw new Error(`no source catalogue for ${crate}`);
+  return catalogue.sources;
+}
 
 function entry(id: string): EvidenceEntry {
   const found = placeEntries.find((candidate) => candidate.id === id);
@@ -62,7 +79,8 @@ function entry(id: string): EvidenceEntry {
 }
 
 function matches(source: EvidenceSource, record: SourceRecord): boolean {
-  return isPublication(record) && source.pmid === record.pmid && source.doi === record.doi;
+  return (source.key === undefined ? isPublication(record) : source.key === record.key)
+    && source.pmid === record.pmid && source.doi === record.doi;
 }
 
 function isPublication(source: SourceRecord): boolean {
@@ -115,22 +133,55 @@ describe('the Place evidence ledger', () => {
     for (const id of Object.values(rules)) expect(entry(id).sources.length, id).toBeGreaterThan(0);
   });
 
+  it('gives every place entry a source key and retains its recorded reading and sample size', () => {
+    for (const added of placeEntries) {
+      const records = recordsFor(added);
+      expect(added.sources.length, added.id).toBeGreaterThan(0);
+      for (const source of added.sources) {
+        expect(source.key, added.id).toBeDefined();
+        const record = records.find((candidate) => candidate.key === source.key);
+        expect(record, added.id).toBeDefined();
+        expect(source.pmid, added.id).toBe(record?.pmid);
+        expect(source.doi, added.id).toBe(record?.doi);
+        expect(source.reading, added.id).toBe(record?.read);
+      }
+      const first = records.find((record) => record.key === added.sources[0]?.key);
+      expect(added.sampleSize, added.id).toBe(first?.n ?? undefined);
+    }
+  });
+
+  it('distinguishes the secondary Winter attribution from the direct Keenan model', () => {
+    for (const id of ['head-neck', 'each-arm-hand']) {
+      expect(entry(`place-bench-daily-loads-${id}`).sources.map((source) => source.key))
+        .toEqual(['winter-via-keenan-2015']);
+    }
+    expect(entry('place-bench-daily-loads-tissue-density').sources.map((source) => source.key))
+      .toEqual(['keenan-2015']);
+  });
+
   for (const { crate, sources, tables } of catalogues) {
-    it(`covers every ${crate} publication with its recorded identifiers`, () => {
+    it(`covers every ${crate} evidence source with an entry or a stated kind`, () => {
       expect(sources.length).toBeGreaterThan(0);
       const keys = new Set(sources.map((source) => source.key));
       const used = new Set(tables.flatMap(({ data }) => sourceKeys(data)));
+      const entries = placeEntries.filter((added) => recordsFor(added) === sources);
+      const covered = new Set(placeEntries.flatMap((added) => added.sources.map((source) => source.key)));
+      const withoutEntry = new Set(Object.keys(PLACE_SOURCES_WITHOUT_ENTRY));
       expect(used.size).toBeGreaterThan(0);
-      for (const key of used) expect(keys.has(key), `${crate}: ${key}`).toBe(true);
+      for (const key of used) {
+        expect(keys.has(key), `${crate}: ${key}`).toBe(true);
+        expect(covered.has(key) || withoutEntry.has(key), `${crate}: ${key}`).toBe(true);
+      }
       // Registry-wide coverage also includes indirect and definition-only citations.
       for (const source of sources.filter(isPublication)) {
         expect(
-          placeEntries.some((added) => added.sources.some((candidate) => matches(candidate, source))),
+          entries.some((added) => added.sources.some((candidate) => matches(candidate, source))),
           `${crate}: ${source.key}`,
         ).toBe(true);
       }
     });
 
+    if (crate === 'spine-readings') continue;
     it(`keeps every published ${crate} table measurement or row tied to its own source`, () => {
       expect(tables.length).toBeGreaterThan(0);
       for (const { name, data } of tables) {
@@ -167,7 +218,7 @@ describe('the Place evidence ledger', () => {
   }
 
   it('takes every new citation and identifier from an embedded source record', () => {
-    const records = [...catalogues.flatMap(({ sources }) => sources), ...floor.sources];
+    const records = catalogues.flatMap(({ sources }) => sources);
     for (const added of placeEntries) {
       expect(added.sources.length, added.id).toBeGreaterThan(0);
       for (const source of added.sources) {
@@ -187,11 +238,25 @@ describe('the Place evidence ledger', () => {
     }
   });
 
-  it('excludes the five non-publication source records', () => {
-    const records = catalogues.flatMap(({ sources }) => sources).filter((source) => source.pmid === null && source.doi === null);
-    expect(records.map((source) => source.key).sort()).toEqual([
-      'ao-lenke', 'fusion-level-definitions', 'project-assumptions', 'screw-p1-hard-floor', 'screw-p4-summary',
-    ]);
+  it('shows uncitable sources by their recorded kind and never hides a publication', () => {
+    const records = catalogues.flatMap(({ sources }) => sources);
+    const kindsByLabel: Readonly<Record<string, string>> = {
+      'own-inference': 'project-assumption',
+      guideline: 'guideline-page',
+      'secondary-summary': 'summary-of-papers',
+    };
+    const uncitableKeys = new Set(records.filter((source) => !isPublication(source)).map((source) => source.key));
+    expect(Object.keys(PLACE_SOURCES_WITHOUT_ENTRY).sort()).toEqual([...uncitableKeys].sort());
+    for (const [key, kind] of Object.entries(PLACE_SOURCES_WITHOUT_ENTRY)) {
+      const matchingRecords = records.filter((source) => source.key === key);
+      expect(matchingRecords.length, key).toBeGreaterThan(0);
+      for (const record of matchingRecords) {
+        expect(record.pmid, key).toBeNull();
+        expect(record.doi, key).toBeNull();
+        expect(kind, key).toBe(kindsByLabel[record.label]);
+      }
+      expect(placeEntries.some((added) => added.sources.some((source) => source.key === key)), key).toBe(false);
+    }
     expect(placeEntries.flatMap((added) => added.sources)
       .filter((source) => source.pmid === null && source.doi === null)).toEqual([]);
   });
@@ -203,6 +268,7 @@ describe('the Place evidence ledger', () => {
     expect(added.publishedNumber).toContain('placement rules retain smaller curves');
     const source = floor.sources.find((record) => record.key === floor.source);
     expect(added.sources.some((candidate) => source !== undefined && matches(candidate, source))).toBe(true);
+    expect(added.sources[0]?.key).toBe(floor.source);
   });
 
   it('keeps the stiffness reference assumptions beside the published force range', () => {
