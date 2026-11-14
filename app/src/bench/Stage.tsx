@@ -1,6 +1,6 @@
 import { Fragment, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { cameras } from '@/film-viewer/camera/cameras';
-import { lookPoint, zoomOverFit } from '@/film-viewer/camera/camera';
+import { fit, lookPoint, zoomOverFit } from '@/film-viewer/camera/camera';
 import { comparisonLayout } from './three/comparison-layout';
 import { filmSpace } from '@/film-viewer/film-space';
 import type { FilmOnPage } from '@/spine-3d/looking/framing';
@@ -33,12 +33,18 @@ export interface StageFilm {
   light: { from: number; to: number; height: number } | null;
 }
 export interface Held { over: boolean; target: FilmKind | null }
+export interface MoveFilm {
+  film: StageFilm;
+  opening: { x: number; y: number; width: number; height: number; placement: import('@/film-viewer/film-space').FilmPlacement };
+  rail: { x: number; y: number; width: number; height: number; placement: import('@/film-viewer/film-space').FilmPlacement };
+}
 export interface FilmDriver {
   moment: Moment;
   compared: FilmKind | null;
   separation: number;
   shown(kind: FilmKind, canvas: DOMRect): FilmOnPage | null;
   opening(canvas: DOMRect): FilmOnPage | null;
+  moveFilm?(kind: 'front' | 'side', canvas: DOMRect): MoveFilm | null;
   set(trips: Readonly<Record<FilmKind, number>>): void;
   finish(): void;
 }
@@ -171,6 +177,9 @@ export function Stage({ moment, films, reading, held, leaving, marked, reviewing
     return { compared, separation: comparison?.shift ?? 0, layout, places: placeSpots(onPixels(stageLayout({ ...input, moment: 'films' }), measures)), moment, present, measures };
   }, [measures, moment, present, compared]);
 
+  const [findOpening, setFindOpening] = useState<{ drawing: Drawing; films: StageProps['films'] } | null>(null);
+  if (moment === 'find' && (findOpening?.drawing !== drawing || findOpening.films !== films)) setFindOpening({ drawing, films });
+
   usePageState('films', reading.length > 0 ? 'landing' : FILM_ORDER.every((kind) => films[kind] !== null) ? 'ready' : 'empty');
   usePageState('ready', fontsReady && measures.width > 0 && measures.height > 0);
   usePageState('drag', held.over);
@@ -183,7 +192,7 @@ export function Stage({ moment, films, reading, held, leaving, marked, reviewing
     const changedMoment = was !== null && (was.moment !== drawing.moment || was.compared !== drawing.compared || (moment === 'find' && was.present !== drawing.present));
     const resized = was === null || was.measures !== drawing.measures;
     previous.current = drawing;
-    if (forming && moment === 'three') { fly(part, new Map(), new Map()); draw(part, drawing); return; }
+    if (forming && moment === 'three') { fly(part, new Map(), new Map()); draw(part, openingRef.current?.drawing ?? was ?? drawing); return; }
     if (changedMoment && !resized && (motionIsReduced(part) || was.moment !== drawing.moment && (moment === 'three' || was.moment === 'three'))) {
       fly(part, new Map(), new Map());
       draw(part, was);
@@ -249,6 +258,12 @@ export function Stage({ moment, films, reading, held, leaving, marked, reviewing
     const stopSample = cameras.subscribe(placeCamera);
     const driver: FilmDriver = {
       moment, compared, separation: drawing.separation, shown,
+      moveFilm(kind, canvas) {
+        const old = opening?.films[kind], before = opening?.drawing.layout.spots[kind], after = drawing.layout.spots[kind], film = films[kind];
+        if (opening === null || old == null || before == null || after === null || film === null) return null;
+        const dx = opening.box.left - canvas.left, dy = opening.box.top - canvas.top;
+        return { film, opening: { ...before, x: before.x + dx, y: before.y + dy, placement: old.placement }, rail: { ...after, x: after.x + dx, y: after.y + dy, placement: fit({ ...old.frame, viewport: { width: after.width, height: after.height } }) } };
+      },
       opening(canvas) {
         const old = opening?.films.front;
         const spot = opening?.drawing.layout.spots.front;
@@ -266,7 +281,8 @@ export function Stage({ moment, films, reading, held, leaving, marked, reviewing
           if (from === null || to === null || tile === null || to.width <= 0) continue;
           const p = trips[kind];
           const start = flightFrom(from, to);
-          for (const [key, value] of Object.entries({ '--x': start.x + (to.x - start.x) * p, '--y': start.y + (to.y - start.y) * p, '--s': (start.s ** (1 - p)) })) tile.style.setProperty(key, String(value));
+          for (const [key, value] of Object.entries({ '--bw': to.width, '--bh': to.height, '--x': start.x + (to.x - start.x) * p, '--y': start.y + (to.y - start.y) * p, '--s': (start.s ** (1 - p)) })) tile.style.setProperty(key, String(value));
+          tile.style.setProperty('--r', `var(--r-${to.radius})`);
           placeCamera(kind);
         }
       },
@@ -274,7 +290,7 @@ export function Stage({ moment, films, reading, held, leaving, marked, reviewing
     };
     onFilmDriver(driver);
     return () => { sampledTrips = null; stopSample(); stopCapture(); onFilmDriver(null); };
-  }, [drawing, moment, compared, onFilmDriver]);
+  }, [drawing, moment, compared, onFilmDriver, films]);
 
   const faces = Object.fromEntries(FILM_ORDER.map((kind) => [kind, reading.includes(kind) ? 'reading' : films[kind] === null ? 'empty' : 'filled'])) as Record<FilmKind, 'empty' | 'reading' | 'filled'>;
   return (
@@ -284,16 +300,16 @@ export function Stage({ moment, films, reading, held, leaving, marked, reviewing
       <div ref={tiles} data-compared={compared ?? undefined} data-sheet={sheetOpen || undefined} className={['tiles', marked && 'marked', reviewing && 'reviewing'].filter(Boolean).join(' ')}>
         {FILM_ORDER.map((kind, index) => {
           const film = films[kind];
-          const spot = drawing.layout.spots[kind] ?? drawing.places[kind];
+          const spot = (forming && moment === 'three' ? findOpening?.drawing.layout.spots[kind] : null) ?? drawing.layout.spots[kind] ?? drawing.places[kind];
           const caption = captionSpot(spot);
           const rail = compared === kind ? stageLayout({ ...measures, present: present.split(',') as FilmKind[], moment: 'three' }).spots[kind] : null;
           return (
             <Fragment key={kind}>
-              {film !== null && <FilmTile kind={kind} index={index} film={moment === 'three' ? { ...film, names: compared === kind, on: film.on, only: null, frame: { kind: 'whole' }, light: null } : film} spot={spot} {...(moment === 'three' && onPressFilm !== undefined ? { onPress: () => { onPressFilm(kind); }, selected: compared === kind } : {})} glide={moment !== 'three'} replay={replay} target={held.target === kind}
+              {film !== null && <FilmTile kind={kind} index={index} film={moment === 'three' ? { ...film, names: compared === kind, on: film.on, only: null, frame: forming ? findOpening?.films[kind]?.frame ?? film.frame : { kind: 'whole' }, light: null } : film} spot={spot} {...(moment === 'three' && onPressFilm !== undefined ? { onPress: () => { onPressFilm(kind); }, selected: compared === kind } : {})} glide={moment !== 'three'} replay={replay} target={held.target === kind}
                 {...((moment === 'find' && !reviewing || moment === 'three' && compared === kind) && onPoint !== undefined ? { onPoint: (key: string | null) => { onPoint(kind, key); } } : {})} />}
               {compared === kind && <button type="button" className="compare-slot" aria-label={THREE_WORDS.railSlot} onClick={() => onPressFilm?.(kind)} style={{ left: rail?.x, top: rail?.y, width: rail?.width, height: rail?.height }} />}
-              <div className="caption" data-place={kind} aria-hidden="true" data-away={moment === 'find' && film === null || undefined}
-                style={{ '--i': index, '--cx': caption.centreX, '--cy': caption.top } as CSSProperties}>{FILM_NAMES[kind]}</div>
+              {(moment !== 'three' || film !== null) && <div className="caption" data-place={kind} aria-hidden="true" data-away={moment === 'find' && film === null || undefined}
+                style={{ '--i': index, '--cx': caption.centreX, '--cy': caption.top } as CSSProperties}>{FILM_NAMES[kind]}</div>}
             </Fragment>
           );
         })}

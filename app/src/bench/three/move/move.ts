@@ -7,7 +7,12 @@ import type { DrawnSpine } from '@/spine-3d/scene/drawn-spine';
 import { REVEAL_RISE } from '@/spine-3d/scene/look';
 import { viewBetween } from '@/spine-3d/motion/easing';
 import type { FilmDriver } from '../../Stage';
-import { LENGTH, sample } from './timeline';
+import { LENGTH as MESH_LENGTH, sample } from './timeline';
+import { LENGTH as POINTS_LENGTH } from './points-timeline';
+import { pointsMove } from './points-move';
+export const MOVE_TIMELINE: 'points' | 'mesh' = 'points';
+const LENGTHS = { points: POINTS_LENGTH, mesh: MESH_LENGTH };
+const LENGTH = LENGTHS[MOVE_TIMELINE];
 import './move.css';
 export interface Move { set(progress: number): void; play(): void; finish(): void; cancel(): void; dispose(): void }
 export interface MoveParts { stage: Stage; spine: DrawnSpine; films: FilmDriver; canvas: HTMLCanvasElement; host: HTMLElement; stageElement: HTMLElement; glow?: HTMLElement; restView?(): import('@/spine-3d/looking/view').View; arrivalParts?(): readonly HTMLElement[]; done(): void }
@@ -18,6 +23,7 @@ export function createMove(parts: MoveParts): Move {
   const to = parts.restView?.() ?? stage.namedView('three-quarter');
   const frozen = stage.film('front')?.plane();
   if (frozen !== undefined) spine.pressOnto({ towardReader: [...frozen.towardReader], out: frozen.out });
+  const points = MOVE_TIMELINE === 'points' ? pointsMove(stage, spine, films, canvas, from, to) : null;
   const system = window.matchMedia(SYSTEM_ASKS_FOR_REDUCED);
   const reduced = () => system.matches || host.closest('[data-motion="reduced"]') !== null;
   const fadeHalf = durationOf(host, '--dur-fade');
@@ -27,14 +33,29 @@ export function createMove(parts: MoveParts): Move {
     parts.glow?.removeAttribute('data-forming'); parts.glow?.style.removeProperty('--move-glow');
     host.removeAttribute('data-moving'); stageElement.removeAttribute('data-forming');
     host.style.removeProperty('opacity');
-    for (const tile of stageElement.querySelectorAll<HTMLElement>('.tile')) tile.style.removeProperty('--move-mark');
+    for (const tile of stageElement.querySelectorAll<HTMLElement>('.tile')) { tile.style.removeProperty('--move-mark'); tile.style.removeProperty('opacity'); }
     for (const caption of stageElement.querySelectorAll<HTMLElement>('.caption')) caption.style.removeProperty('opacity');
     for (const part of parts.arrivalParts?.() ?? []) { part.style.removeProperty('opacity'); part.style.removeProperty('transform'); }
   };
   const stop = () => { leave?.(); leave = null; };
   const set = (progress: number) => {
-    const s = sample(progress);
     host.setAttribute('data-moving', ''); stageElement.setAttribute('data-forming', '');
+    if (points !== null) {
+      const found = points.set(progress);
+      // The canvas must contain the replacement before its DOM film is hidden or resized.
+      stage.drawNow(); films.set(found.trips);
+      stageElement.style.setProperty('--move-names', String(found.names));
+      for (const tile of stageElement.querySelectorAll<HTMLElement>('.tile[data-place]')) {
+        const kind = tile.dataset.place as import('@/shapes').FilmKind;
+        tile.style.opacity = found.walls.includes(kind as 'front' | 'side') ? String(found.hand) : '';
+        tile.style.setProperty('--move-mark', '1');
+      }
+      for (const caption of stageElement.querySelectorAll<HTMLElement>('.caption[data-place]')) caption.style.opacity = String(found.caption(caption.dataset.place as import('@/shapes').FilmKind));
+      parts.glow?.setAttribute('data-forming', ''); parts.glow?.style.setProperty('--move-glow', String(found.glow));
+      (parts.arrivalParts?.() ?? []).forEach((part, index) => { const arrival = found.arrival(index); part.style.opacity = String(arrival.opacity); part.style.transform = `translateY(calc(var(--rise) * ${String(arrival.rise)}))`; });
+      return;
+    }
+    const s = sample(progress);
     films.set(s.trips);
     const view = viewBetween(from, to, s.travel);
     const turn = viewBetween(from, to, s.turn);
@@ -62,7 +83,7 @@ export function createMove(parts: MoveParts): Move {
   };
   const finish = () => {
     if (stopped) return;
-    stopped = true; stop();
+    stopped = true; stop(); points?.clear();
     spine.set({ cage: 0, pose: 1, reveal: 1, fill: 1, strength: 1, tint: 0 });
     spine.setSpine({ depth: 1, fill: 1, revealRise: REVEAL_RISE, cageOnFilm: 0, shadow: 1, offset: [0, 0, 0], turned: [0, 0], scale: 1 });
     stage.setView(() => parts.restView?.() ?? stage.namedView('three-quarter')); films.finish(); cleanStyles(); stage.drawNow(); parts.done();
@@ -79,7 +100,7 @@ export function createMove(parts: MoveParts): Move {
   const changed = () => { if (!stopped) finish(); };
   window.addEventListener('resize', changed); system.addEventListener('change', changed);
   const preference = new MutationObserver(() => { if (reduced()) changed(); }); preference.observe(host.closest('[data-motion]') ?? document.documentElement, { attributes: true, attributeFilter: ['data-motion'] });
-  const cancel = () => { stopped = true; stop(); cleanStyles(); };
+  const cancel = () => { stopped = true; stop(); points?.clear(); cleanStyles(); };
   return { set, finish, cancel, play() {
     if (stopped || leave !== null) return;
     const fading = reduced();
