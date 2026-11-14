@@ -7,9 +7,10 @@ import { MADE_UP_CASE } from '@/spine-3d/made-up-case/made-up-case';
 import { sceneLayer } from '@/spine-3d/scene/scene-layer';
 import type { Spine3DHandle } from '@/spine-3d/view/Spine3D';
 import type { AcceptedSpine } from '@/view-state/spine-build';
-import type { BenchResult } from '@/shapes';
+import type { BenchResult, PartResult } from '@/shapes';
 import { loadState } from './load-state';
 import { PLACE_LOAD_WORDS as L } from '@/words/place';
+import { LoadEstimates } from './LoadEstimates';
 import { PlaceSheet } from './PlaceSheet';
 import { PlaceDrawing } from './PlaceDrawing';
 import { placeState } from './place-state';
@@ -31,7 +32,7 @@ function mount() {
   const accepted = {key:'test',fit:MADE_UP_CASE.fit,bones:[],input:{front:{marks,geometry:MADE_UP_CASE.front.geometry,size:MADE_UP_CASE.front.size,markSpread:MADE_UP_CASE.front.markSpread,facingAssumed:true},side:null,typical:'built-in',twistReadings:[]}} satisfies AcceptedSpine;
   function Drawing(){const ref=useRef(handle as unknown as Spine3DHandle);return <div tabIndex={0} className="three-stage"><PlaceDrawing accepted={accepted} handle={ref}/></div>;}
   const page=putOnThePage(<Drawing/>);
-  return {page,result,point,listeners,look};
+  return {page,result,point,listeners,look,accepted};
 }
 it('shows source words only for a pedicle with a width and keeps the other sizes to one quiet line',()=>{
   const {page,result}=mount();
@@ -82,6 +83,7 @@ it('tags every anchor demand as assumed and explains past-allowance counts',()=>
   expect(page.host.querySelector('.place-chip > small')?.textContent).toBe('Assumed');expect(page.host.querySelector('.past-strength')).toBeNull();
   part.versionsPastStrength=1;act(()=>{loadState.setState({result:{...answer}});});
   expect(page.host.querySelector('.load-context')?.textContent).toBe(L.pastContext(true));
+  expect(page.host.querySelector('.past-strength > .dot')?.getAttribute('aria-hidden')).toBe('true');
   expect(L.pastContext(false)).toBe('Its level is a published test strength. The count is over versions of what is not known, not a verdict on this placement.');
   page.takeDown();
 });
@@ -99,4 +101,39 @@ it('hides only stage labels whose boxes overlap the open chip and restores them 
   rect.mockReturnValue(new DOMRect(200,200,208,104));
   act(()=>{placeState.setState({pressed:null,hovered:null});});expect(label.style.visibility).toBe('');
   page.takeDown();
+});
+
+function bench(parts:PartResult[]=[]):BenchResult {
+  return {versions:32,firstId:'first',mainCurve:null,scales:[],layouts:[{layoutId:'first',versionsUnsettled:0,counts:[],stops:[{stop:'rods-in',parts,estimates:[],middle:null,rods:null,ghosts:null,cyclesPerYear:null,cyclesSources:[],outsideStiffRod:0}]}]};
+}
+it('uses mono only for levels in review labels and past-allowance part names, with a look dot in the row',()=>{
+  const {page,result,accepted}=mount();page.takeDown();
+  const a=result.layouts[0]?.anchors[0];if(a===undefined)throw new Error('anchor');
+  act(()=>{loadState.setState({phase:'loaded',stop:'rods-in',result:bench([{part:{kind:'anchor',level:a.level,side:a.side},share:{p10:.1,p50:.2,p90:.3},demand:null,steady:false,versionsPastStrength:1,sources:[]}])});placeState.setState({sheet:true});});
+  const sheet=putOnThePage(<PlaceSheet accepted={accepted}/>),labels=[...sheet.host.querySelectorAll('.place-review-label')];
+  expect(labels.map((n)=>n.textContent)).toContain('Every pedicle');expect(labels.map((n)=>n.textContent)).toContain('Level names');
+  expect(labels.some((n)=>n.textContent==='Upper end · T4'&&n.querySelector('.level-name')?.textContent==='T4')).toBe(true);
+  expect(labels.every((n)=>!n.classList.contains('num')&&[...n.querySelectorAll('.level-name')].every((level)=>/^(T\d+|L\d+)$/.test(level.textContent)))).toBe(true);
+  const past=sheet.host.querySelector('.load-estimates > .past-strength');expect(past?.querySelector('.dot')?.getAttribute('aria-hidden')).toBe('true');
+  expect(past?.querySelector('.level-name')?.textContent).toBe(a.level);expect(past?.querySelector('.num')).toBeNull();
+  sheet.takeDown();
+});
+it('shows the typical contour note only for that rod and span after Before',()=>{
+  const {page,result}=mount(),left=result.layouts[0]?.rods.find((r)=>r.side==='left');if(left===undefined)throw new Error('rod');left.targetKyphosisStatus='typical';
+  act(()=>{loadState.setState({phase:'loaded',stop:'rods-in',result:bench()});placeState.setState({pressed:'rod:right'});});
+  expect(page.host.querySelector('.place-chip')?.textContent).not.toContain(L.typicalRod);
+  act(()=>{placeState.setState({pressed:'rod:left'});});expect(page.host.querySelector('.place-chip')?.textContent).toContain(L.typicalRod);
+  act(()=>{placeState.setState({pressed:'span:left:T4:T5'});});expect(page.host.querySelector('.place-chip')?.textContent).toContain(L.typicalRod);
+  act(()=>{loadState.setState({stop:'before'});});expect(page.host.querySelector('.place-chip')?.textContent).not.toContain(L.typicalRod);
+  page.takeDown();
+});
+it('leaves daily-only variation lines out of the sheet while retaining other sources',()=>{
+  const {page,accepted}=mount();page.takeDown();const answer=bench(),stop=answer.layouts[0]?.stops[0];if(stop===undefined)throw new Error('stop');
+  const unknowns=['weight','steps','walking','contour-knock-down','geometry'] as const;
+  const measures=['heaviest-anchor-force','heaviest-anchor-demand','heaviest-anchor-over-median','heaviest-rod-use','junction-above'] as const;
+  stop.estimates=unknowns.map((mostlyFrom,i)=>({measure:measures[i]??'junction-above',band:{p10:i,p50:i+1,p90:i+2},tag:'assumed',mostlyFrom,sources:[]}));
+  act(()=>{loadState.setState({phase:'loaded',result:answer,stop:'rods-in'});});
+  const sheet=putOnThePage(<LoadEstimates accepted={accepted}/>);
+  expect([...sheet.host.querySelectorAll('.load-estimate-list li > p')].map((p)=>p.textContent)).toEqual(['Varies most with: the fit.']);
+  sheet.takeDown();
 });

@@ -1,8 +1,8 @@
-import type { AnchorProposal, Band, BenchBatch, BenchResult, BenchStop, Estimate, ImplantLayout, LayoutProposals, Level, Measure, PartResult, SpineFit, StopResult, VertebraPose } from '@/shapes';
+import type { AnchorProposal, Band, BenchBatch, BenchResult, BenchStop, Estimate, ImplantLayout, LayoutProposals, Level, Measure, PartResult, SpineFit, SampledUnknown, StopResult, VertebraPose } from '@/shapes';
 import { TEMPLATE_LEVELS } from '@/shapes';
 import { placingOf } from '@/spine-3d/placing/place-vertebra';
 import { Quaternion, Vector3 } from 'three';
-import { PLACE_LOAD_WORDS as W, SHOWN_LOAD_STOPS, DAILY_LOADS_WITHHELD } from '@/words/place';
+import { PLACE_LOAD_WORDS as W, SHOWN_LOAD_STOPS, DAILY_LOADS_WITHHELD, UNKNOWN_NAMES } from '@/words/place';
 export function shownLoadStop(stop: BenchStop, shown: readonly BenchStop[] = SHOWN_LOAD_STOPS): BenchStop { return shown.includes(stop) ? stop : 'rods-in'; }
 export function stopResult(result: BenchResult | null, stop: BenchStop): StopResult | undefined { return result?.layouts.find((l) => l.layoutId === result.firstId)?.stops.find((s) => s.stop === stop); }
 export function unsettledCount(result: BenchResult): number { return result.layouts.find((l) => l.layoutId === result.firstId)?.versionsUnsettled ?? 0; }
@@ -27,14 +27,14 @@ export function estimatesAt(result: BenchResult, proposals: LayoutProposals, fit
 export function drawingPoses(fit: SpineFit, poses: readonly VertebraPose[] | null): VertebraPose[] {
   return fit.vertebrae.filter((v) => v.level !== 'C7' && TEMPLATE_LEVELS.standard.includes(v.level)).map((v) => { const at = poses?.find((p) => p.level === v.level); return at === undefined ? v.pose : { ...v.pose, centre: at.centre, rotation: at.rotation }; });
 }
-export function rodsInDrawing(result: BenchResult, batches: readonly BenchBatch[], fit: SpineFit): { poses: VertebraPose[]; source: 'middle' | 'version' | 'fit'; rods: StopResult['rods'] } {
+export function rodsInDrawing(result: BenchResult, batches: readonly BenchBatch[], fit: SpineFit): { poses: VertebraPose[]; source: 'middle' | 'version' | 'first-version' | 'fit'; rods: StopResult['rods'] } {
   const rodsIn = stopResult(result, 'rods-in');
   if (rodsIn?.middle != null) return { poses: drawingPoses(fit, rodsIn.middle), source: 'middle', rods: rodsIn.rods };
   const target = rodsIn?.estimates.find((e) => e.measure === 'main-cobb')?.band.p50;
   const runs = batches.flatMap((b) => b.runs).filter((r) => r.layoutId === result.firstId && r.settled).map((r) => ({ version: r.version, stop: r.stops.find((s) => s.stop === 'rods-in') })).filter((r) => r.stop?.poses != null);
-  if (target === undefined || runs.length === 0) return { poses: drawingPoses(fit, null), source: 'fit', rods: null };
-  runs.sort((a,b) => Math.abs((a.stop?.mainCobbDeg ?? Infinity) - target) - Math.abs((b.stop?.mainCobbDeg ?? Infinity) - target) || a.version - b.version);
-  return { poses: drawingPoses(fit, runs[0]?.stop?.poses ?? null), source: 'version', rods: null };
+  if (runs.length === 0) return { poses: drawingPoses(fit, null), source: 'fit', rods: null };
+  runs.sort((a,b) => (target===undefined?0:Math.abs((a.stop?.mainCobbDeg ?? Infinity) - target) - Math.abs((b.stop?.mainCobbDeg ?? Infinity) - target)) || a.version - b.version);
+  return { poses: drawingPoses(fit, runs[0]?.stop?.poses ?? null), source: target===undefined?'first-version':'version', rods: null };
 }
 export function anchorPoint(anchor: AnchorProposal, fit: SpineFit, poses: readonly VertebraPose[]): [number, number, number] {
   const from = fit.vertebrae.find((v) => v.level === anchor.level)?.pose, to = poses.find((p) => p.level === anchor.level);
@@ -71,4 +71,9 @@ export function pastWords(part: PartResult, result: BenchResult): string | null 
 export function shownStopResult(result: BenchResult | null, stop: BenchStop): StopResult | undefined {
   const at=stopResult(result,shownLoadStop(stop));
   return at===undefined||!DAILY_LOADS_WITHHELD?at:{...at,parts:at.parts.filter((p)=>p.part.kind!=='rod'),estimates:at.estimates.filter((e)=>e.measure!=='heaviest-rod-swing'),cyclesPerYear:null};
+}
+
+export function variationWords(unknown: SampledUnknown | null, dailyWithheld = DAILY_LOADS_WITHHELD): string | null {
+  if(unknown===null||dailyWithheld&&['weight','steps','walking','contour-knock-down'].includes(unknown))return null;
+  return W.varies(UNKNOWN_NAMES[unknown]);
 }

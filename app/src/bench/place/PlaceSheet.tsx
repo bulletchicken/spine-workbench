@@ -44,7 +44,7 @@ export function PlaceSheet({ accepted }: { accepted: AcceptedSpine }) {
   const diameters = result.layouts[0]?.anchors.flatMap((a) => a.diametersBeside.flatMap((d) => d.diameterMm === null ? [] : [W.otherDiameter(a.level, filmSide(a.side, accepted.input.front.marks.namedFor), d.diameterMm, d.widthRatio)])) ?? [];
   return <aside className="panel glass measurements sheet place-sheet" id="place-sheet" ref={panel} role="dialog" aria-modal="true" aria-labelledby="place-sheet-title">
     <h2 ref={heading} tabIndex={-1} id="place-sheet-title">{empty ? W.cannotTell : W.needsLook}</h2>
-    <ul className="place-sheet-list">{items.map((item, i) => <li key={item.id}><Button look="text" onPress={() => { placeState.setState({ sheet: false, review: i, pressed: null, hovered: null }); }}><span className="num">{item.label}</span> <LevelWords>{item.sentences.join(' ')}</LevelWords></Button></li>)}</ul>
+    <ul className="place-sheet-list">{items.map((item, i) => <li key={item.id}><Button look="text" onPress={() => { placeState.setState({ sheet: false, review: i, pressed: null, hovered: null }); }}><span className="place-review-label"><LevelWords>{item.label}</LevelWords></span> <LevelWords>{item.sentences.join(' ')}</LevelWords></Button></li>)}</ul>
     <LoadEstimates accepted={accepted}/>
     {!empty && <h2>{W.cannotTell}</h2>}
     <ul className="place-sheet-list">{reasons.map((r) => <li key={r.code}><LevelWords>{CANNOT_TELL_WORDS[r.code]}</LevelWords>{(r.code === 'ends-unsettled' || r.code === 'twist-not-measured') && r.levels.length > 0 && <span className="num"> {r.levels.join(', ')}</span>}</li>)}</ul>

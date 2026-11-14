@@ -21,7 +21,7 @@
 }
 
 .place-sheet-list .button-content { display: block; white-space: normal; }
-.place-sheet-list .button-content > .num { display: block; margin-bottom: var(--space-4); }
+.place-sheet-list .button-content > .place-review-label { display: block; margin-bottom: var(--space-4); }
 .dock:has(.scene.on .place-review) { height: auto; min-height: var(--dock-h); padding-block: var(--space-16); border-radius: var(--r-xlarge); }
 .dock [data-scene="place"] .say > p { white-space: normal; max-height: calc(2 * var(--line-small)); overflow: hidden; }
 .place-review details { margin-top: var(--space-12); font: var(--type-small); color: var(--ink-2); }
@@ -48,7 +48,8 @@
 .load-estimate-list strong { display: block; color: var(--ink); margin-top: var(--space-4); }
 .load-estimates > p { margin-top: var(--space-12); font: var(--type-small); color: var(--ink-2); }
 .load-estimate-list small { font: var(--type-small); }
-.place-chip .past-strength { color: var(--look); }
+.place-chip .past-strength, .load-estimates > .past-strength { color: var(--ink); }
+.past-strength .dot { display: inline-block; width: var(--dot); height: var(--dot); margin-right: var(--space-8); border-radius: 50%; background: var(--look); }
 .dock:has(.scene.on .load-stops) { width: min(calc(100% - 2 * var(--space-16)), calc(var(--col-max) + var(--panel-w) + 2 * var(--space-40))); height: auto; min-height: var(--dock-h); padding-block: var(--space-12); }
 .dock:has(.scene.on .load-stops) .say { min-width: 0; }
 .dock:has(.scene.on .load-stops) .say h2 { white-space: normal; }

@@ -14,7 +14,7 @@ import { placementFixture } from './placement-fixture.scenes';
 import { limitsForPlacement } from './placement-view';
 import { placeState } from './place-state';
 import { loadFailure, loadPlacement, loadState, stopLoading } from './load-state';
-import { anchorPoint, drawingPoses, estimatesAt, loadLabels, rangeWords, rodsInDrawing, shownLoadStop, shownStopResult } from './load-view';
+import { anchorPoint, drawingPoses, estimatesAt, loadLabels, rangeWords, rodsInDrawing, shownLoadStop, shownStopResult, variationWords } from './load-view';
 let key=0;
 const band=(p50:number)=>({p10:p50-.1,p50,p90:p50+.1});
 function result(): BenchResult {
@@ -52,6 +52,11 @@ it('chooses the settled rods-in version nearest the supplied middle and lets the
   const rods=answer.layouts[0]?.stops.find((s)=>s.stop==='rods-in');if(rods===undefined)throw new Error('stop');rods.middle=input.fit.vertebrae.map((v)=>v.pose);
   rods.rods=[{side:'left',pointsMm:[[0,0,500],[0,0,100]]}];
   const middle=rodsInDrawing(answer,batches,input.fit);expect(middle.source).toBe('middle');expect(middle.rods).toBe(rods.rods);rods.middle=null;
+  rods.estimates=rods.estimates.filter((e)=>e.measure!=='main-cobb');
+  batches.forEach((batch)=>{batch.runs.reverse();});
+  const firstSettled=rodsInDrawing(answer,batches,input.fit);
+  expect(firstSettled.source).toBe('first-version');expect(firstSettled.poses[0]?.centre[0]).toBe(chosen.poses[0]?.centre[0]);
+  expect(W.fallbackFirst).toBe('The spine drawn at Rods in is one of the versions.');
   expect(rodsInDrawing(answer,[],input.fit).source).toBe('fit');
 });
 it('keeps at most three labels, chooses the bending anchor with placement-order ties, and omits unknown readings',()=>{
@@ -147,4 +152,9 @@ it('withholds daily stops and their parts while preserving the full model for di
   const proposals=placementFixture(),part=rods.parts[1];if(part?.demand==null)throw new Error('anchor');part.demand=band(10);
   expect(loadLabels(answer,proposals,MADE_UP_CASE.fit,'rods-in','rods-in').find((l)=>l.id==='anchor')?.anchor).toBe(1);
   expect(loadLabels(answer,proposals,MADE_UP_CASE.fit,'rods-in').find((l)=>l.id==='anchor')?.anchor).toBe(0);
+});
+
+it('retains daily variation words for the full model but withholds them through the screen switch',()=>{
+  for(const unknown of ['weight','steps','walking','contour-knock-down'] as const){expect(variationWords(unknown)).toBeNull();expect(variationWords(unknown,false)).toMatch(/^Varies most with:/);}
+  expect(variationWords('geometry')).toBe('Varies most with: the fit.');expect(variationWords(null)).toBeNull();
 });

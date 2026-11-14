@@ -116,6 +116,7 @@ export const PLACE_LOAD_WORDS = {
   loaded: (stop: string, range: string | null) => range === null ? `${stop}.` : `${stop}: the main curve is ${range}.`,
   anchorHelper: (range: string) => `Heaviest anchor: ${range} of its strength allowance.`,
   fallback: 'The spine drawn at Rods in is one of the versions, the one nearest the middle.',
+  fallbackFirst: 'The spine drawn at Rods in is one of the versions.',
   noSettled: 'No version settled, so the spine is drawn as fitted.',
   mainCurve: 'The model reads the main curve between its own ends, so it can differ from the measurement in 3D.',
   placedCurve: "The curve is placed by the placement's own reading, which can sit one level from the model's.",

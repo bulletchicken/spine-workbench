@@ -15,7 +15,7 @@ import { filmSide, placementLooks, reviewItems } from './placement-view';
 import { placeState } from './place-state';
 import { restingView } from '../three/resting-view';
 import { loadState } from './load-state';
-import { anchorLoad, anchorPoint, loadLabels, pastWords, rangeWords, shownLoadStop, shownStopResult, typicalKyphosis } from './load-view';
+import { anchorLoad, anchorPoint, loadLabels, pastWords, rangeWords, shownLoadStop, shownStopResult } from './load-view';
 import { useLoadDrawing } from './load-drawing';
 import { RangeBar, scaleFor } from './LoadEstimates';
 import { PlacementCaption } from './PlacementCaption';
@@ -246,8 +246,8 @@ export function PlaceDrawing({ accepted, handle }: { accepted: AcceptedSpine; ha
       {anchor?.kind === 'screw' && (anchor.diameterAlsoSeen.length > 0 || anchor.lengthAlsoSeen.length > 0) && <p>{W.also(anchor.diameterAlsoSeen, anchor.lengthAlsoSeen)}</p>}
       {selectedLoad?.demand!=null&&<p><span className="num">{rangeWords('heaviest-anchor-demand',selectedLoad.demand)}</span> {L.strengthAllowance}</p>}
       {selectedLoad?.demand!=null&&<small>{ESTIMATE_TAGS.assumed}</small>}
-      {selectedLoad!==undefined&&load.result!==null&&pastWords(selectedLoad,load.result)!==null&&<><p className="past-strength">{pastWords(selectedLoad,load.result)}</p><small className="load-context">{L.pastContext(selectedLoad.part.kind==='anchor')}</small><p>{L.partAssumed}</p></>}
-      {loaded&&rod!==undefined&&layout!==undefined&&typicalKyphosis(layout)&&<p>{L.typicalRod}</p>}
+      {selectedLoad!==undefined&&load.result!==null&&pastWords(selectedLoad,load.result)!==null&&<><p className="past-strength"><i className="dot" aria-hidden="true"/>{pastWords(selectedLoad,load.result)}</p><small className="load-context">{L.pastContext(selectedLoad.part.kind==='anchor')}</small><p>{L.partAssumed}</p></>}
+      {loaded&&stop!=='before'&&rod?.targetKyphosisStatus==='typical'&&<p>{L.typicalRod}</p>}
       {wider !== undefined && wider.versions > 0 && result !== null && <p>{W.wider(wider.versions, result.versions)}</p>}
       {anchor !== undefined && width != null && <p>{W.pedicle(width.p10, width.p90)}{W.origin}</p>}
     </div>}
