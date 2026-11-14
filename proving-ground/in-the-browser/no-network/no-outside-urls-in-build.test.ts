@@ -19,6 +19,8 @@ const REVIEWED: Record<string, string> = {
   'http://www.w3.org/1999/xhtml': 'the XHTML namespace: three.js makes its canvases with createElementNS',
   'https://jcgt.org/published/0007/04/01/':
     'a paper cited in a comment inside the text of one of three.js’s shaders (sampling for rough reflections); the text is kept whole because it is a string',
+  'https://pmc.ncbi.nlm.nih.gov/articles/PMC5795289/':
+    'where the 2016 SOSORT guidelines can be read: the source the spine readings give for calling a curve a scoliosis from 10 degrees, as text in the engine’s evidence (engine/spine-readings/evidence), never fetched',
 };
 
 const ADDRESS = /(?:https?|wss?):\/\/[A-Za-z0-9\-._~:/?#[\]@!$&*+,;=%]*/g;
