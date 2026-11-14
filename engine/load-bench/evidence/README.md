@@ -95,13 +95,26 @@ ratio for a Prasad set. No shear modulus is derived or supplied.
   extremes 419.9/1,341.2 N. No cross-population animal range is fitted.
 - Gangnet's raw unsigned 3D body-centre/gravity-line distance is 28 mm (SD 5.6).
   The left lateral distance is 7.6 mm (SD 1.6), in 34 healthy upright standing
-  subjects taken here as adults; the abstract gives no ages. Both
+  subjects; the abstract gives no ages. Both
   raw measures are in `slice-offset`. Its generic `mean/sd` 28/5.6 cells now
-  explicitly carry own-inference provenance for the sagittal anterior reuse.
-  Frontal-at-body-centre is also a project choice and ignores the lateral mean.
+  explicitly carry own-inference provenance for the retained sagittal prior.
+  The offset is still drawn but the daily cases do not use it.
 - The walking lower 1.28 concerns internal-fixator load; upper 1.71 concerns
   resultant force on a vertebral body replacement, each normalised to its own
   standing reference. Sampling between them is a cross-quantity project prior.
+  The published ratios describe whole device loads. Applying them only to the
+  load standing adds is this project's reading because forces locked in by the
+  correction do not grow with posture. Each walking cycle's low point is assumed
+  to equal standing.
+- Rohlmann 2002's abstract, ten patients, places rising from a chair, sitting
+  down, sideways bending and twisting while standing at 111–120% of standing.
+  Forward flexion and extension are higher, with no figure, while walking gives
+  the highest measured load at 128%. The `stand-sit-bend-twist` row is retained
+  beside the bench and unused. The `ventral-flexion` row uses that ordering to
+  choose a uniform 1.20–1.28 bending-forward multiple: own inference, assumed.
+  It scales only the standing increment. Under the other reading, scaling the
+  whole load, bending forward would be 20–28% above standing. The Wilke 2.2
+  disc-pressure ratio also remains beside the bench and unused.
 - Mass fractions 0.081/0.056 are confirmed as printed in Keenan 2015, which is
   cited in full. It attributes them to Winter DA, *Biomechanics and Motor
   Control of Human Movement*, 4th ed, John Wiley & Sons, 2009. Winter's table

@@ -98,7 +98,7 @@ fn locked_rods(poses: &[Pose], bodies: &[usize], locks_rotation: bool) -> Vec<Lo
 }
 
 #[test]
-fn gravity_has_the_hand_worked_total_centroid_moment_and_direction() {
+fn compression_keeps_the_published_weight_and_has_no_offset_moment() {
     let evidence = Evidence::read().unwrap();
     let reference: Vec<_> = LOAD_LEVELS
         .iter()
@@ -119,12 +119,18 @@ fn gravity_has_the_hand_worked_total_centroid_moment_and_direction() {
     let offset = read("slice-offset", "mean");
     let weight = 40.0 * GRAVITY_N_PER_KG;
     let loads = daily_loads::gravity_loads(&evidence, &chain, 40.0, offset).unwrap();
-    // Arithmetic progression: sum = n(first+last)/2. Only the trunk
-    // centroids have the anterior lever; head and arm sites are body centres.
+    // Arithmetic progression: sum = n(first+last)/2. The straight column
+    // carries only compression, whatever the unused offset draw says.
     let slices = 17.0 * (top + bottom) / 2.0;
     let sum = loads.body_loads.iter().copied().sum::<Wrench>();
     assert!((sum[2] + weight * (slices + head + 2.0 * arm)).abs() < 1e-12);
-    assert!((sum[4] - weight * slices * offset).abs() < 1e-10);
+    assert_eq!(sum[4], 0.0);
+    assert_eq!(
+        loads.body_loads,
+        daily_loads::gravity_loads(&evidence, &chain, 40.0, -100.0)
+            .unwrap()
+            .body_loads
+    );
     assert_eq!(sum[0], 0.0);
     assert_eq!(sum[1], 0.0);
     assert_eq!(sum[3], 0.0);
@@ -134,8 +140,9 @@ fn gravity_has_the_hand_worked_total_centroid_moment_and_direction() {
     assert!(loads.sources.iter().all(|s| evidence.source(s).is_some()));
     let bare =
         daily_loads::solve_case(&chain, &chain.standing(), &[], &[], &loads.body_loads).unwrap();
-    // At rest the sacrum joint point is z=5 mm. Vertical forces through
-    // x=0 have no moment, so its flexion couple is exactly the applied sum.
+    // Every cut is on the compression line, so every intrinsic disc couple
+    // is zero, including at the sacrum.
+    assert!(bare.joint_moments_nmm.iter().all(|m| m.norm() < 1e-7));
     assert!((bare.joint_moments_nmm[16].y - sum[4]).abs() < 1e-7);
 }
 
@@ -182,6 +189,146 @@ fn axial_force_is_shared_by_the_hand_worked_parallel_stiffnesses() {
     assert!((response.displacement[8] + 0.4).abs() < 1e-12);
     assert!((response.head_wrenches_on_rod[0][0][2] + 6.0).abs() < 1e-11);
     assert!((response.head_wrenches_on_rod[0][1][2] - 6.0).abs() < 1e-11);
+}
+
+#[test]
+fn three_body_follower_compression_has_the_hand_worked_head_forces() {
+    let reference = [
+        vertebra(Level::L3, 100.0),
+        vertebra(Level::L4, 60.0),
+        vertebra(Level::L5, 20.0),
+    ];
+    let chain = chain(
+        &reference,
+        Stiffness::new([30.0, 30.0, 30.0, 3000.0, 3000.0, 3000.0]).unwrap(),
+    );
+    let poses = chain.standing();
+    let loads = daily_loads::compression_loads(&chain, &poses, &[12.0, 6.0, 3.0]).unwrap();
+    // Above the three cuts: 12, 18, 21 N downward. Straight centred cuts
+    // have no moment, independently of the constitutive model.
+    let cuts = chain.joint_motion_frames(&poses).unwrap();
+    for (i, cut) in cuts.iter().enumerate() {
+        let mut force = Vector3::zeros();
+        let mut moment = Vector3::zeros();
+        for j in 0..=i {
+            let f = loads[j].fixed_rows::<3>(0).into_owned();
+            force += f;
+            moment +=
+                loads[j].fixed_rows::<3>(3) + (poses[j].centre_mm - cut.upper_point_mm).cross(&f);
+        }
+        assert_eq!(force, Vector3::new(0.0, 0.0, -[12.0, 18.0, 21.0][i]));
+        assert_eq!(moment, Vector3::zeros());
+    }
+    // Each rod has EA/L=15 N/mm. The rod pair and 30 N/mm disc each
+    // carry half the 12 and 18 N crossing the two instrumented joints.
+    // Per rod: head forces -3, -1.5, +4.5 N. The bottom disc carries all
+    // 21 N, so u_bottom=-.7, u_middle=-1, u_top=-1.2 mm.
+    let locked: Vec<_> = [-9.0, 9.0]
+        .iter()
+        .map(|&side| {
+            let points: Vec<_> = poses
+                .iter()
+                .map(|p| p.centre_mm + Vector3::new(0.0, side, 0.0))
+                .collect();
+            let beam = CondensedRod::new(
+                &points,
+                &polyline_stations(&points).unwrap(),
+                BeamProperties {
+                    young_modulus_mpa: 600.0 / core::f64::consts::PI,
+                    shear_modulus_mpa: 75.0,
+                    diameter_mm: 2.0,
+                    shear_coefficient: 0.8,
+                },
+            )
+            .unwrap();
+            LockedRod {
+                ties: points
+                    .into_iter()
+                    .enumerate()
+                    .map(|(body, point_mm)| HeadTie {
+                        body,
+                        point_mm,
+                        locks_rotation: true,
+                    })
+                    .collect(),
+                stiffness: beam.stiffness,
+            }
+        })
+        .collect();
+    let rods = springback::prepare_rods(&poses, &locked).unwrap();
+    let response = daily_loads::solve_case(
+        &chain,
+        &poses,
+        &rods,
+        &vec![vec![Wrench::zeros(); 3]; 2],
+        &loads,
+    )
+    .unwrap();
+    for (body, expected) in [-1.2, -1.0, -0.7].iter().enumerate() {
+        assert!((response.displacement[6 * body + 2] - expected).abs() < 1e-12);
+    }
+    for rod in &response.head_wrenches_in_body_frame {
+        for (w, expected) in rod.iter().zip([-3.0, -1.5, 4.5]) {
+            assert!((w[2] - expected).abs() < 1e-10);
+            assert!(w.fixed_rows::<2>(0).norm() < 1e-10);
+        }
+    }
+}
+
+#[test]
+fn compression_has_zero_prefix_moment_at_every_disc_of_a_curved_column() {
+    let mut reference = small_chain().reference;
+    for (i, p) in reference.iter_mut().enumerate() {
+        p.centre[0] = [3.0, -1.0, 2.0, 0.0][i];
+        p.centre[1] = [2.0, 5.0, -3.0, 0.0][i];
+        p.rotation = [0.02 * i as f64, -0.03, 0.01];
+    }
+    let chain = chain(&reference, Stiffness::new([100.0; 6]).unwrap());
+    let poses = chain.standing();
+    let loads = daily_loads::compression_loads(&chain, &poses, &[12.0, 6.0, 3.0, 4.0]).unwrap();
+    for (i, cut) in chain
+        .joint_motion_frames(&poses)
+        .unwrap()
+        .iter()
+        .enumerate()
+    {
+        let mut moment = Vector3::zeros();
+        let mut force = Vector3::zeros();
+        for j in 0..=i {
+            let f = loads[j].fixed_rows::<3>(0).into_owned();
+            force += f;
+            moment +=
+                loads[j].fixed_rows::<3>(3) + (poses[j].centre_mm - cut.upper_point_mm).cross(&f);
+        }
+        assert!(moment.norm() < 1e-12);
+        assert!(force.cross(&poses[i].rotation.column(2)).norm() < 1e-12);
+    }
+}
+
+#[test]
+fn a_daily_rotation_past_the_method_limit_is_refused_including_scaled_cases() {
+    use load_bench::daily_loads::{DailyError, SMALL_ANGLE_LIMIT_RAD};
+    let chain = chain(
+        &[vertebra(Level::L5, 20.0)],
+        Stiffness::new([100.0; 6]).unwrap(),
+    );
+    let poses = chain.standing();
+    // Force-free single-disc statics: theta = M / k_rotation. The body
+    // centre translates with its disc pivot; no material lever is fitted.
+    let load = Wrench::new(
+        0.0,
+        0.0,
+        0.0,
+        100.0 * SMALL_ANGLE_LIMIT_RAD * 1.01,
+        0.0,
+        0.0,
+    );
+    assert!(matches!(
+        daily_loads::solve_case(&chain, &poses, &[], &[], &[load]),
+        Err(DailyError::SmallAngle)
+    ));
+    let response = daily_loads::solve_case(&chain, &poses, &[], &[], &[load * 0.6]).unwrap();
+    assert!(matches!(response.scaled(2.0), Err(DailyError::SmallAngle)));
 }
 
 #[test]
@@ -293,7 +440,9 @@ fn weight_scales_every_daily_wrench_and_common_stiffness_scaling_changes_none() 
     let rigid = chain.poses_from_deformations(&deformation).unwrap();
     let state =
         springback::solve(&chain, &rigid, &locked_rods(&rigid, &[1, 2], true), &rigid).unwrap();
-    let loads = vec![Wrench::new(2.0, -1.0, -4.0, 0.5, 3.0, -0.2); 4];
+    // Keep both the base and doubled synthetic cases within the stated
+    // small-angle method; the separate refusal test covers larger turns.
+    let loads = vec![Wrench::new(0.2, -0.1, -0.4, 0.05, 0.3, -0.02); 4];
     let response = daily_loads::solve_case(
         &chain,
         &state.poses,
@@ -624,7 +773,7 @@ fn run_fitted_case(front_only: bool) {
             .unwrap()
             .value,
         walking_multiple: read("walking", "lower"),
-        bending_multiple: read("bending-forward", "multiple"),
+        bending_multiple: read("ventral-flexion", "lower"),
     };
     let cases =
         daily_loads::solve(&evidence, &chain, &seated, &[Level::T6, Level::T7], input).unwrap();
@@ -665,8 +814,14 @@ fn run_fitted_case(front_only: bool) {
         &double.without_construct,
     )
     .unwrap();
-    assert!((r.above.unwrap() - r2.above.unwrap()).abs() < 1e-9);
-    assert!((r.below.unwrap() - r2.below.unwrap()).abs() < 1e-9);
+    assert_eq!(
+        r,
+        junctions::JunctionRatios {
+            above: None,
+            below: None
+        }
+    );
+    assert_eq!(r2, r);
     for (a, b) in cases
         .standing
         .head_wrenches_on_rod
@@ -675,15 +830,6 @@ fn run_fitted_case(front_only: bool) {
         .zip(cases.walking_peak.head_wrenches_on_rod.iter().flatten())
     {
         assert_eq!(a * input.walking_multiple, *b);
-    }
-    for (a, b) in cases
-        .standing
-        .head_wrenches_on_rod
-        .iter()
-        .flatten()
-        .zip(cases.bending_forward.head_wrenches_on_rod.iter().flatten())
-    {
-        assert_eq!(a * input.bending_multiple, *b);
     }
     assert!(cases.sources.iter().all(|s| evidence.source(s).is_some()));
     let demand = load_bench::anchor_demand::at_head(

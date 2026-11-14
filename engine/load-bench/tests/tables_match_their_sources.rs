@@ -1383,7 +1383,7 @@ fn the_evidence_preserves_population_and_indirect_source_qualifications() {
     );
     let walking = &e.row(TableKind::DailyLoads, "walking").unwrap().notes;
     assert!(
-        walking.contains("internal spinal fixation device")
+        walking.contains("whole load on a short posterior internal fixator")
             && walking.contains("resultant force on a vertebral body replacement")
     );
     check(

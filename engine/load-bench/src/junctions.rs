@@ -8,7 +8,7 @@
 
 use crate::chain::{Chain, ChainError, Pose};
 use crate::daily_loads::DailyResponse;
-use crate::joint_springs::rotation_response_tangent;
+use crate::joint_springs::rotation_response_tangent_with_material_scale;
 use nalgebra::{DVector, Vector3};
 use shapes::levels::Level;
 
@@ -73,6 +73,20 @@ pub fn moment_increments(
     poses: &[Pose],
     displacement: &DVector<f64>,
 ) -> Result<Vec<Vector3<f64>>, ChainError> {
+    moment_increments_with_material_scale(chain, poses, displacement, 1.0)
+}
+
+/// Use the same material increment and unchanged seated couple as the daily
+/// chain tangent, including the log's force-dependent curvature.
+pub(crate) fn moment_increments_with_material_scale(
+    chain: &Chain,
+    poses: &[Pose],
+    displacement: &DVector<f64>,
+    material_scale: f64,
+) -> Result<Vec<Vector3<f64>>, ChainError> {
+    if !material_scale.is_finite() || material_scale <= 0.0 {
+        return Err(ChainError::InvalidStiffness);
+    }
     if displacement.len() != 6 * poses.len() || displacement.iter().any(|v| !v.is_finite()) {
         return Err(ChainError::Dimensions);
     }
@@ -90,7 +104,11 @@ pub fn moment_increments(
                 Vector3::zeros()
             };
             let rotation = evaluation.deformation[i].fixed_rows::<3>(3).into_owned();
-            let (couple, tangent) = rotation_response_tangent(&rotation, &stiffness[i]);
+            let (couple, tangent) = rotation_response_tangent_with_material_scale(
+                &rotation,
+                &stiffness[i],
+                material_scale,
+            );
             let relative_turn = frame.lower_rotation.transpose() * (upper_turn - lower_turn);
             // Remove the exponential chart's +1/2[couple]x to get the
             // spatial derivative, then transport the lower frame once.

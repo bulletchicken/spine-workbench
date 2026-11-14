@@ -1,5 +1,8 @@
 //! Read fixed endpoints and join head loads to the outward stop values.
 
+#[cfg(test)]
+mod tests;
+
 mod stresses;
 
 use super::assembly::Placement;
@@ -9,7 +12,7 @@ use crate::evidence::Evidence;
 use crate::rigid_rod::RigidState;
 use crate::springback::SeatedState;
 use crate::versions::{Draw, refusal};
-use crate::{BenchError, anchor_demand, junctions};
+use crate::{BenchError, anchor_demand};
 use forward_model::{endplates::Endplates, vertebra_params::VertebraParams};
 use nalgebra::Vector3;
 use shapes::implant_layout::ImplantLayout;
@@ -151,6 +154,10 @@ pub(super) fn before(
     })
 }
 
+/// Produce loaded stops with no level-above or level-below comparison.
+/// Compression follows the column through the discs, so every disc outside
+/// the construct has zero couple with or without rods to first order. These
+/// measures are explicitly absent; no division of numerical moments decides it.
 #[allow(clippy::too_many_arguments)]
 pub(super) fn loaded(
     layout: &ImplantLayout,
@@ -170,7 +177,6 @@ pub(super) fn loaded(
         .map(|(p, r)| p.to_vertebra(r))
         .collect();
     let angles = readings.angles(&draw.geometry.fit, &poses);
-    let levels: Vec<_> = chain.reference.iter().map(|p| p.level).collect();
     let mut result = Vec::new();
     for (stop, response) in [
         (BenchStop::RodsIn, None),
@@ -191,36 +197,13 @@ pub(super) fn loaded(
             daily,
             stop == BenchStop::YearOfWalking,
         )?;
-        let junction = response
-            .map(|response| {
-                let multiple = if stop == BenchStop::BendingForward {
-                    crate::versions::cell(
-                        evidence,
-                        crate::evidence::TableKind::DailyLoads,
-                        "bending-forward",
-                        "multiple",
-                        crate::evidence::Unit::Ratio,
-                    )?
-                } else if stop == BenchStop::YearOfWalking {
-                    draw.values.walking_multiple
-                } else {
-                    1.0
-                };
-                let without = daily
-                    .without_construct
-                    .scaled(multiple)
-                    .map_err(|e| refusal(&e.to_string()))?;
-                junctions::ratios(&levels, layout.upper, layout.lower, response, &without)
-                    .map_err(|e| refusal(&e.to_string()))
-            })
-            .transpose()?;
         result.push(StopValues {
             stop,
             anchor_force_n: forces,
             anchor_demand: demands,
             rod_span_use: stresses.uses,
-            junction_above: junction.and_then(|j| j.above),
-            junction_below: junction.and_then(|j| j.below),
+            junction_above: None,
+            junction_below: None,
             main_cobb_deg: angles[0],
             kyphosis_deg: angles[1],
             apical_twist_deg: angles[2],
@@ -251,7 +234,9 @@ fn anchors(
                 .fixed_rows::<3>(0)
                 .into_owned();
             if let Some(response) = response {
-                force += response.head_wrenches_on_rod[r][h].fixed_rows::<3>(0);
+                let body = seated.corrected_rods[r].ties[h].body;
+                force = seated.poses[body].rotation.transpose() * force
+                    + response.head_wrenches_in_body_frame[r][h].fixed_rows::<3>(0);
             }
             let anchor = &layout.anchors[index];
             let demand = anchor_demand::at_head(

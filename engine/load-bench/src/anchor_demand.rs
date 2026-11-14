@@ -1,7 +1,8 @@
 //! Resultant head force against a published pull-out figure and a bone factor.
 //!
-//! Forces are patient-axis N (x anterior, y patient-left, z up). Taking the
-//! resultant makes either action sign equivalent. The ratio is a comparison
+//! Forces are N in any orthonormal frame (patient axes at rods-in, the
+//! vertebra's seated axes at daily stops); only the resultant length is used.
+//! Either action sign is equivalent. The ratio is a comparison
 //! with cadaveric test figures, not a probability. Screw diameter and length
 //! do not scale capacity: the thoracic reference dimensions and the lumbar
 //! reference length are absent. Head couples are not part of this force ratio.

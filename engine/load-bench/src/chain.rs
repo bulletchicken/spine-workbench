@@ -25,7 +25,8 @@
 //! chain factorisation without a dense chain solve.
 
 use crate::joint_springs::{
-    Stiffness, log_left_derivative, rotation_deformation, rotation_response_tangent,
+    Stiffness, log_left_derivative, rotation_deformation,
+    rotation_response_tangent_with_material_scale,
 };
 use forward_model::endplates::Endplates;
 use forward_model::rotation::{matrix_from_rotation_vector, rotation_vector_from_matrix};
@@ -347,6 +348,20 @@ impl Chain {
         poses: &[Pose],
         motion: &[Wrench],
     ) -> Result<Vec<Wrench>, ChainError> {
+        self.tangent_load_with_material_scale(poses, motion, 1.0)
+    }
+
+    /// Apply a tangent whose material stiffness changes without changing the
+    /// seated forces used by its geometric terms.
+    pub(crate) fn tangent_load_with_material_scale(
+        &self,
+        poses: &[Pose],
+        motion: &[Wrench],
+        material_scale: f64,
+    ) -> Result<Vec<Wrench>, ChainError> {
+        if !material_scale.is_finite() || material_scale <= 0.0 {
+            return Err(ChainError::InvalidStiffness);
+        }
         let evaluation = self.evaluate(poses)?;
         if motion.len() != poses.len()
             || motion.iter().flat_map(|u| u.iter()).any(|v| !v.is_finite())
@@ -373,15 +388,21 @@ impl Chain {
                     .0
                     .fixed_rows::<3>(0)
                     .component_mul(&q.fixed_rows::<3>(0));
-            let force_change = wl.cross(&force)
-                + lower.rotation
-                    * joint
-                        .stiffness
-                        .0
-                        .fixed_rows::<3>(0)
-                        .component_mul(&(lower.rotation.transpose() * relative));
-            let (local_couple, tangent) =
-                rotation_response_tangent(&q.fixed_rows::<3>(3).into_owned(), &joint.stiffness);
+            let mut material_change = lower.rotation
+                * joint
+                    .stiffness
+                    .0
+                    .fixed_rows::<3>(0)
+                    .component_mul(&(lower.rotation.transpose() * relative));
+            if material_scale != 1.0 {
+                material_change *= material_scale;
+            }
+            let force_change = wl.cross(&force) + material_change;
+            let (local_couple, tangent) = rotation_response_tangent_with_material_scale(
+                &q.fixed_rows::<3>(3).into_owned(),
+                &joint.stiffness,
+                material_scale,
+            );
             let couple = lower.rotation * local_couple;
             let couple_change = wl.cross(&couple)
                 + lower.rotation
@@ -422,6 +443,19 @@ impl Chain {
     /// Translation increments are mm at each body centre; rotation increments
     /// are patient-axis radians composed on the left.
     pub fn linearise(&self, poses: &[Pose]) -> Result<ChainLinearisation, ChainError> {
+        self.linearise_with_material_scale(poses, 1.0)
+    }
+
+    /// Material stiffness about the seated strain may be multiplied, while
+    /// the seated force and couple still determine all geometric stiffness.
+    pub(crate) fn linearise_with_material_scale(
+        &self,
+        poses: &[Pose],
+        material_scale: f64,
+    ) -> Result<ChainLinearisation, ChainError> {
+        if !material_scale.is_finite() || material_scale <= 0.0 {
+            return Err(ChainError::InvalidStiffness);
+        }
         let evaluation = self.evaluate(poses)?;
         let n = poses.len();
         let mut diagonal = vec![Matrix6::zeros(); n];
@@ -432,7 +466,7 @@ impl Chain {
             }
             let lower = poses.get(i + 1).unwrap_or(&self.ground);
             let (upper_hessian, lower_hessian, coupling) =
-                joint.tangent(&poses[i], lower, &evaluation.deformation[i]);
+                joint.tangent(&poses[i], lower, &evaluation.deformation[i], material_scale);
             diagonal[i] += upper_hessian;
             if i + 1 < n {
                 diagonal[i + 1] += lower_hessian;
@@ -456,6 +490,7 @@ impl Joint {
         upper: &Pose,
         lower: &Pose,
         deformation: &Wrench,
+        material_scale: f64,
     ) -> (Matrix6<f64>, Matrix6<f64>, Matrix6<f64>) {
         let r = upper.rotation * self.upper_attachment_mm;
         let q = upper.centre_mm - lower.centre_mm + r;
@@ -466,10 +501,17 @@ impl Joint {
         let translation_weights =
             Matrix3::from_diagonal(&self.stiffness.0.fixed_rows::<3>(0).into_owned());
         let a = lower.rotation * translation_weights * lower.rotation.transpose();
-        let a = (a + a.transpose()) * 0.5;
+        let mut a = (a + a.transpose()) * 0.5;
+        if material_scale != 1.0 {
+            a *= material_scale;
+        }
         let force = lower.rotation * (translation_weights * translation);
         let f_cross = force.cross_matrix();
-        let (local_couple, local_tangent) = rotation_response_tangent(&rotation, &self.stiffness);
+        let (local_couple, local_tangent) = rotation_response_tangent_with_material_scale(
+            &rotation,
+            &self.stiffness,
+            material_scale,
+        );
         let couple = lower.rotation * local_couple;
         let s = lower.rotation * local_tangent * lower.rotation.transpose();
         let ar = a * r_cross;
@@ -859,5 +901,90 @@ mod tests {
             (scalar_curvature - tangent).abs() < 0.01,
             "scalar {scalar_curvature} exact {tangent}"
         );
+    }
+
+    #[test]
+    fn material_stiffening_keeps_the_seated_compression_and_its_geometric_term() {
+        let mut reference = reference()[2];
+        reference.centre = [0.0, 0.0, 10.0];
+        let stiffness = Stiffness::new([100.0, 100.0, 100.0, 4000.0, 5000.0, 6000.0]).unwrap();
+        let chain = Chain::new(
+            &[reference],
+            &[stiffness],
+            Ground {
+                top_mm: Vector3::zeros(),
+                rotation: Matrix3::identity(),
+            },
+        )
+        .unwrap();
+        let poses =
+            vec![chain.standing()[0].incremented(&Wrench::new(0.0, 0.0, -3.0, 0.0, 0.0, 0.0))];
+        let ordinary = chain.linearise(&poses).unwrap();
+        let stiffened = chain.linearise_with_material_scale(&poses, 2.0).unwrap();
+        assert_eq!(stiffened.evaluation.gradient, ordinary.evaluation.gradient);
+        assert_eq!(stiffened.evaluation.gradient[0][2], -300.0);
+        // The head is 10 mm from the disc: k_x*10²+k_rx is material;
+        // the existing 300 N compression contributes -300*10 at either scale.
+        assert_eq!(
+            ordinary.diagonal[0][(3, 3)],
+            100.0 * 100.0 + 4000.0 - 3000.0
+        );
+        assert_eq!(
+            stiffened.diagonal[0][(3, 3)],
+            2.0 * (100.0 * 100.0 + 4000.0) - 3000.0
+        );
+        assert_eq!(stiffened.diagonal[0][(2, 2)], 200.0);
+    }
+
+    #[test]
+    fn the_stiffened_tangent_is_the_energy_curvature_at_unchanged_seated_stress() {
+        let chain = chain();
+        let deformation = [
+            Wrench::new(0.6, -0.3, -0.8, 0.4, -0.2, 0.3),
+            Wrench::new(-0.2, 0.5, -0.4, -0.1, 0.3, 0.2),
+            Wrench::new(0.1, -0.2, -0.6, 0.2, 0.1, -0.2),
+        ];
+        let poses = chain.poses_from_deformations(&deformation).unwrap();
+        let seated = chain.evaluate(&poses).unwrap();
+        let factor = 1.9;
+        let linear = chain.linearise_with_material_scale(&poses, factor).unwrap();
+        let tangent = dense_tangent(&linear);
+        assert_eq!(linear.evaluation.gradient, seated.gradient);
+        let motion = [
+            Wrench::new(0.7, -0.4, 0.3, 0.1, -0.2, 0.05),
+            Wrench::new(-0.2, 0.3, -0.1, -0.04, 0.1, -0.08),
+            Wrench::new(0.1, -0.2, 0.2, 0.03, -0.02, 0.07),
+        ];
+        let vector =
+            nalgebra::DVector::from_iterator(18, motion.iter().flat_map(|u| u.iter().copied()));
+        let action = chain
+            .tangent_load_with_material_scale(&poses, &motion, factor)
+            .unwrap();
+        let applied =
+            nalgebra::DVector::from_iterator(18, action.iter().flat_map(|w| w.iter().copied()));
+        assert!((&tangent * &vector - applied).norm() < 1e-8);
+        // Independent potential: the original energy plus extra quadratic
+        // strain energy centred on the seated strain. Its gradient there is
+        // unchanged, while its constitutive tangent is multiplied by factor.
+        let energy = |step: f64| {
+            let moved: Vec<_> = poses
+                .iter()
+                .zip(&motion)
+                .map(|(pose, u)| pose.incremented(&(u * step)))
+                .collect();
+            let evaluated = chain.evaluate(&moved).unwrap();
+            evaluated.energy_nmm
+                + evaluated
+                    .deformation
+                    .iter()
+                    .zip(&seated.deformation)
+                    .zip(chain.joint_stiffnesses())
+                    .map(|((now, start), k)| (factor - 1.0) * k.energy(&(now - start)))
+                    .sum::<f64>()
+        };
+        let h = 1e-4;
+        let difference = (energy(h) + energy(-h) - 2.0 * energy(0.0)) / (h * h);
+        let exact = vector.dot(&(&tangent * &vector));
+        assert!((difference - exact).abs() < 0.01 + exact.abs() * 1e-6);
     }
 }

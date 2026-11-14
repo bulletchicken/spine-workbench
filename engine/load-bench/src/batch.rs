@@ -11,7 +11,7 @@ mod stiffness_calibration;
 
 use crate::BenchError;
 use crate::daily_loads::{self, DailyInputs};
-use crate::evidence::{Evidence, TableKind, Unit};
+use crate::evidence::Evidence;
 use crate::{rigid_rod, springback, versions};
 use shapes::implant_layout::ImplantLayout;
 use shapes::load_bench::{BenchBatch, BenchInput, BenchRun};
@@ -126,13 +126,7 @@ fn run_one(
             slice_offset_mm: draws.slice_offset_mm,
             preload_factor: draws.preload_factor,
             walking_multiple: draws.walking_multiple,
-            bending_multiple: versions::cell(
-                evidence,
-                TableKind::DailyLoads,
-                "bending-forward",
-                "multiple",
-                Unit::Ratio,
-            )?,
+            bending_multiple: draw.bending_multiple,
         },
     ) {
         Ok(value) => value,

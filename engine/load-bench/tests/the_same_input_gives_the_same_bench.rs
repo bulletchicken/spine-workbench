@@ -578,7 +578,7 @@ fn thirty_two_versions_keep_their_bits_across_two_and_uneven_splits() {
     let fingerprint = bytes.iter().fold(0xcbf29ce484222325_u64, |hash, byte| {
         (hash ^ u64::from(*byte)).wrapping_mul(0x100000001b3)
     });
-    assert_eq!(fingerprint, 6_582_547_120_467_459_952);
+    assert_eq!(fingerprint, 1_232_493_941_679_091_838);
     let split = |cuts: &[u32]| {
         let mut runs = Vec::new();
         for pair in cuts.windows(2) {
@@ -626,6 +626,33 @@ fn two_films_run_from_fit_through_comparison() {
         batch.middle[0].rods_in.as_ref().unwrap(),
         &batch.middle[0].before
     );
+}
+
+#[test]
+fn correction_stops_keep_their_recorded_bytes_in_both_film_tiers() {
+    for (front_only, recorded) in [
+        (
+            false,
+            include_bytes!("fixtures/two_films_correction_stops.json").as_slice(),
+        ),
+        (
+            true,
+            include_bytes!("fixtures/front_only_correction_stops.json").as_slice(),
+        ),
+    ] {
+        let batch = run_load_bench(&fitted_input(front_only)).unwrap();
+        let correction: Vec<_> = batch.runs[0]
+            .stops
+            .iter()
+            .filter(|s| matches!(s.stop, BenchStop::Before | BenchStop::RodsIn))
+            .collect();
+        assert_eq!(correction.len(), 2);
+        assert_eq!(
+            serde_json::to_vec(&correction).unwrap(),
+            recorded,
+            "front_only={front_only}"
+        );
+    }
 }
 
 #[test]
@@ -728,6 +755,60 @@ fn a_failed_middle_solve_keeps_the_version_runs_and_standing_poses() {
         batch.runs[0].stops[0].poses.as_ref().unwrap().clone()
     );
     assert!(middle.rods_in.is_none() && middle.rods.is_none());
+}
+
+#[test]
+fn a_daily_refusal_drops_rods_in_and_all_later_stops_from_the_version() {
+    let mut input = resting_input(1);
+    let ordinary = run_load_bench(&input).unwrap();
+    assert!(ordinary.runs[0].settled);
+    assert_eq!(
+        ordinary.runs[0]
+            .stops
+            .iter()
+            .map(|stop| stop.stop)
+            .collect::<Vec<_>>(),
+        vec![
+            BenchStop::Before,
+            BenchStop::RodsIn,
+            BenchStop::Standing,
+            BenchStop::BendingForward,
+            BenchStop::YearOfWalking,
+        ]
+    );
+    // A deliberately excessive synthetic load leaves the small-angle
+    // method. Seating is independent of weight and still settles.
+    input.child.weight_kg = Some(1_000_000.0);
+    let excessive = run_load_bench(&input).unwrap();
+    assert_eq!(excessive.middle, ordinary.middle);
+    assert!(!excessive.runs[0].settled);
+    assert_eq!(excessive.runs[0].stops, ordinary.runs[0].stops[..1]);
+    assert!(
+        excessive.runs[0]
+            .stops
+            .iter()
+            .all(|stop| stop.stop != BenchStop::RodsIn)
+    );
+    let result = compare_layouts(&BenchCompareInput {
+        layouts: input.layouts,
+        batches: vec![excessive],
+    })
+    .unwrap();
+    assert_eq!(result.layouts[0].versions_unsettled, 1);
+    let rods_in = result.layouts[0]
+        .stops
+        .iter()
+        .find(|stop| stop.stop == BenchStop::RodsIn)
+        .unwrap();
+    assert!(rods_in.estimates.is_empty());
+    assert!(rods_in.parts.is_empty());
+    assert!(
+        result.layouts[0]
+            .stops
+            .iter()
+            .skip(1)
+            .all(|s| s.estimates.is_empty())
+    );
 }
 
 #[test]
@@ -1023,4 +1104,29 @@ fn fit_noise_and_seed_never_move_the_middle_drawing() {
         original.middle[0].rods_in.as_ref().unwrap(),
         &original.middle[0].before
     );
+}
+
+#[test]
+fn bending_draws_keep_the_assumed_interval_and_version_identity() {
+    let input = resting_input(4);
+    let evidence = load_bench::evidence::Evidence::read().unwrap();
+    let sampler = implant_layout::readings::NamedSampler::new(u64::from(input.seed), 4).unwrap();
+    let mut strata = Vec::new();
+    for version in 0..4 {
+        let draw =
+            load_bench::versions::draw(&input.fit, &input.child, input.seed, 4, version, &evidence)
+                .unwrap();
+        let quantile = sampler.uniform("versions-bench/bending", version).unwrap();
+        // This interval is the project's reading of the activity ordering.
+        assert_eq!(draw.bending_multiple, 1.20 + quantile * (1.28 - 1.20));
+        assert!((1.20..=1.28).contains(&draw.bending_multiple));
+        strata.push(libm::floor((draw.bending_multiple - 1.20) / (1.28 - 1.20) * 4.0) as u32);
+        let repeated =
+            load_bench::versions::draw(&input.fit, &input.child, input.seed, 4, version, &evidence)
+                .unwrap();
+        assert_eq!(draw.values, repeated.values);
+        assert_eq!(draw.bending_multiple, repeated.bending_multiple);
+    }
+    strata.sort();
+    assert_eq!(strata, vec![0, 1, 2, 3]);
 }
