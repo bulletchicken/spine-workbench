@@ -72,6 +72,8 @@ pub mod toolbox;
 pub mod vertebra;
 pub mod watch_frames;
 
+pub use auto_pass::SideFinder;
+
 /// The value of `format` in every case file.
 pub const CASE_FORMAT: &str = "spine-case";
 

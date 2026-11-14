@@ -203,9 +203,10 @@ Notes on inputs:
   `hand-built`, the search every other film gets, or `trained`, the
   trained vertebra finder (`engine/trained-finder`), made for real front
   films. The screens set it from where the films came from; it is never
-  guessed from the pixels. Side and bending films always get the
-  hand-built search. With `trained` and a front film among the films,
-  `runAutoPass` runs `trained-pass` on the front film's worker, side by
+  guessed from the pixels. With `sideFinder` omitted, side and bending
+  films keep the hand-built search. On that default side route, with
+  `trained` and a front film among the films, `runAutoPass` runs
+  `trained-pass` on the front film's worker, side by
   side with `film-pass` on each other film; `chain-pass` and
   `place-points` then run for the other films only, and not at all when
   there are none. The chain pass never sees the front film, so
@@ -214,17 +215,34 @@ Notes on inputs:
   once: each film's pass warnings in that order (the front film's from
   its trained pass), then the chain's. Replacing or retiring any of the
   films, or the signal, stops all of it, as with the hand-built stages.
-  With `trained` and no front film, or with `hand-built`, every film
-  gets the hand-built stages. The auto pass crate's own one-call entry
-  (`auto_pass::run::auto_pass`) does not route on it: it runs the
-  hand-built stages on every film it is given.
-- The trained finder answers with a `TrainedPassResult`: the front film's
-  `FilmMarks`, shaped as the auto pass shapes them, and its warnings. Its
+  With `sideFinder` omitted and either no trained front film or
+  `frontFinder: 'hand-built'`, every film gets the hand-built stages.
+  The auto pass crate's own one-call entry
+  (`auto_pass::run::auto_pass`) does not route on either selector: it
+  runs the hand-built stages on every film it is given.
+- `AutoPassInput.sideFinder` independently selects `hand-built` or
+  `trained` for the side film. It is optional on input: omission means
+  `hand-built`, while explicit `null` and unknown names are refused.
+  The caller routes this choice; it changes neither the front choice nor
+  bending films. A trained side request without compiled side weights
+  refuses with `side-finder-unavailable`. With weights, an absent or
+  unconfirmed side facing refuses with `pass-facing-required`. A facing
+  answer must set `confirmed.facing` and an anterior/posterior
+  `imageRight`; a geometry guess alone is not an answer. A facing that
+  does not suit a side film uses `case-invalid-value`.
+- A trained finder answers with a `TrainedPassResult`: one front or side
+  film's `FilmMarks`, shaped as the auto pass shapes them, and its
+  warnings. The front finder's
   level names are placed from where each vertebra sits, not counted from
   the first rib or the sacrum, so its naming carries the `estimated` flag:
   the names are an estimate until the user confirms L5. A
   vertebra its chain filled in between its neighbours, without seeing it,
   has every corner marked inferred and the `no-evidence` reason.
+  The side finder proposes L1–L5 only. Every outline needs a look and the
+  names are estimates. Its confidence score is 0 as an unavailable-score
+  sentinel, not a probability estimate: band `low`, reasons
+  `["level-uncertain"]`, `calibrated: false`, `endplateSpreadPx: null`
+  and `margin: null`. Unreviewed does not mean inferred or `no-evidence`.
 - `place-points` takes the first free vertebra id, since ids are unique
   across the case and never reused. `runAutoPass` places points film by
   film. Each film starts one above the highest id given to any earlier
@@ -310,9 +328,15 @@ documentation until the slice that owns its crate fills it.
 ## Engine info
 
 ```ts
-type EngineInfo = { engineVersion: string; shapesFingerprint: string; caseFormat: string; caseVersion: number };
+type EngineInfo = { engineVersion: string; shapesFingerprint: string; caseFormat: string; caseVersion: number; trainedSideFinder: boolean };
 ```
 
 `shapesFingerprint` is the SHA-256 of the shapes crate's source, compiled
 into the engine and written to `app/src/shapes/generated/fingerprint.ts`.
 See [worker messages](worker-messages.md) for the handshake.
+
+Every worker reports `trainedSideFinder` as a required output boolean
+from the same compiled build. It is independent of the case and facing
+answer. Older info without the field reads as `false`; explicit `null`
+is refused. `EngineInfo::current` starts it at `false`; the bridge sets
+the compiled side capability when available.

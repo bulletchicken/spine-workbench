@@ -36,7 +36,7 @@ import { Crew } from './crew';
 import type { SpawnWorker, WorkerEvents, WorkerLike } from './crew-member';
 import { RealEngine } from './real-engine';
 
-export const ENGINE_INFO: EngineInfo = { engineVersion: '9.9.9', shapesFingerprint: SHAPES_FINGERPRINT, caseFormat: 'spine-case', caseVersion: 1 };
+export const ENGINE_INFO: EngineInfo = { engineVersion: '9.9.9', shapesFingerprint: SHAPES_FINGERPRINT, caseFormat: 'spine-case', caseVersion: 1, trainedSideFinder: false };
 export const PANIC_MESSAGE = 'panicked at a fake job';
 
 /** The smallest valid WebAssembly module, handed to fake workers that never use it. */

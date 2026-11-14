@@ -81,5 +81,6 @@ pub fn input(films: Vec<Film>) -> AutoPassInput {
         },
         first_vertebra_id: 1000,
         front_finder: FrontFinder::HandBuilt,
+        side_finder: shapes::SideFinder::HandBuilt,
     }
 }

@@ -4,7 +4,7 @@ import './app-shell.gallery.css';
 import { StatusLine } from './StatusLine';
 import type { EngineStatus } from './use-engine-status';
 
-const INFO: EngineInfo = { engineVersion: '0.1.0', shapesFingerprint: 'gallery', caseFormat: 'spine-case', caseVersion: 1 };
+const INFO: EngineInfo = { engineVersion: '0.1.0', shapesFingerprint: 'gallery', caseFormat: 'spine-case', caseVersion: 1, trainedSideFinder: false };
 const READY: EngineStatus = { status: 'ready', info: INFO };
 
 const page: GalleryPage = {

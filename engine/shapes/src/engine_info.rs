@@ -17,6 +17,10 @@ pub struct EngineInfo {
     /// (`CASE_VERSION`), not the case store's version that edits and
     /// engine answers carry.
     pub case_version: u32,
+    /// Whether this build includes the trained side finder. This is a
+    /// build capability, independent of the open case.
+    #[serde(default)]
+    pub trained_side_finder: bool,
 }
 
 impl EngineInfo {
@@ -27,6 +31,7 @@ impl EngineInfo {
             shapes_fingerprint: crate::SHAPES_FINGERPRINT.to_owned(),
             case_format: crate::CASE_FORMAT.to_owned(),
             case_version: crate::CASE_VERSION,
+            trained_side_finder: false,
         }
     }
 }

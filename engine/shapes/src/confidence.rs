@@ -85,6 +85,11 @@ pub enum ConfidenceReason {
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct Confidence {
     /// 0 to 1: how likely the outline is on the right bone.
+    /// For the trained side finder, 0 is a conservative unavailable-score
+    /// sentinel, not a probability estimate. Its band is Low, its reasons
+    /// are [LevelUncertain], calibrated is false, and endplateSpreadPx and
+    /// margin are null.
+    #[schemars(description = "0 to 1: how likely the outline is on the right bone.")]
     pub score: f64,
     /// Never higher than [`ConfidenceBand::for_score`] gives; caps can
     /// lower it.

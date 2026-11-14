@@ -21,7 +21,7 @@ describe('sample films kept on this machine', () => {
     expect(sampleFilmFilesFrom(Object.fromEntries(Array.from({ length: 9 }, (_, n) => [String(n), 'data:image/png;base64,AA=='])))).toHaveLength(6);
   });
   it('offers no local film to the stand-in, and the found list to the real engine', async () => {
-    const info = (engineVersion: string) => () => Promise.resolve({ engineVersion, shapesFingerprint: '', caseFormat: 'spine-case', caseVersion: 1 });
+    const info = (engineVersion: string) => () => Promise.resolve({ engineVersion, shapesFingerprint: '', caseFormat: 'spine-case', caseVersion: 1, trainedSideFinder: false });
     expect(await sampleFilmFilesFor({ info: info('stand-in') })).toEqual([]);
     expect(await sampleFilmFilesFor({ info: info('0.1.0') })).toBe(sampleFilmFiles());
   });

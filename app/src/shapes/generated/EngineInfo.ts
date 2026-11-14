@@ -11,4 +11,9 @@ export type EngineInfo = { engineVersion: string, shapesFingerprint: string, cas
  * (`CASE_VERSION`), not the case store's version that edits and
  * engine answers carry.
  */
-caseVersion: number, };
+caseVersion: number, 
+/**
+ * Whether this build includes the trained side finder. This is a
+ * build capability, independent of the open case.
+ */
+trainedSideFinder: boolean, };

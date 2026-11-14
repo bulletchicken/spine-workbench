@@ -130,6 +130,7 @@ describe('the engine reports who it is', () => {
       shapesFingerprint: SHAPES_FINGERPRINT,
       caseFormat: CASE_FORMAT,
       caseVersion: CASE_VERSION,
+      trainedSideFinder: false,
     });
   });
 

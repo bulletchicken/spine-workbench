@@ -116,6 +116,7 @@ pub(crate) fn films_input(
         },
         first_vertebra_id: 1,
         front_finder: FrontFinder::Trained,
+        side_finder: shapes::SideFinder::HandBuilt,
     };
     let found = super::pass::conduct_auto_pass(&input, &decoded)?;
     let mut front = None;

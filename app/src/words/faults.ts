@@ -111,6 +111,18 @@ export function faultWords(code: ErrorCode): FaultWords {
       );
 
     // The auto pass
+    case 'side-finder-unavailable':
+      return words(
+        'The trained side finder is not in this build.',
+        'The side film is kept, but it cannot be searched here.',
+        'Use a build with the trained side finder to search this film.',
+      );
+    case 'pass-facing-required':
+      return words(
+        'Choose which way the patient faces.',
+        'Choose on the Side film before searching.',
+        'Choose whether the patient faces the left or right of the picture, then search again.',
+      );
     case 'pass-no-spine-found':
       return words(
         'No spine was found on this film',

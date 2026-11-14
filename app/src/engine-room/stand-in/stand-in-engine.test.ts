@@ -59,7 +59,7 @@ async function openAll(client: RealEngine): Promise<void> {
 
 describe('the stand-in engine', () => {
   it('reports itself as built from the app’s shapes', async () => {
-    expect(await start().info()).toEqual({ engineVersion: 'stand-in', shapesFingerprint: SHAPES_FINGERPRINT, caseFormat: CASE_FORMAT, caseVersion: CASE_VERSION });
+    expect(await start().info()).toEqual({ engineVersion: 'stand-in', shapesFingerprint: SHAPES_FINGERPRINT, caseFormat: CASE_FORMAT, caseVersion: CASE_VERSION, trainedSideFinder: false });
   });
 
   it('opens a story film by its bytes, and refuses anything else by its bytes', async () => {

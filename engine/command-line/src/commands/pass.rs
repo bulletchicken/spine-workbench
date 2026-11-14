@@ -54,6 +54,7 @@ pub fn run(args: &PassArgs) -> Outcome {
             crate::FrontFinder::Trained => FrontFinder::Trained,
             crate::FrontFinder::HandBuilt => FrontFinder::HandBuilt,
         },
+        side_finder: shapes::SideFinder::HandBuilt,
     };
     let answer = conduct_auto_pass(&input, &decoded)?;
     println!("{}", serde_json::to_string_pretty(&answer)?);
@@ -195,6 +196,7 @@ pub(super) fn find_marks(input: &ScoringFilm<'_>) -> Result<FilmMarks, EngineErr
         },
         first_vertebra_id: 1,
         front_finder: FrontFinder::HandBuilt,
+        side_finder: shapes::SideFinder::HandBuilt,
     };
     auto_pass::run::auto_pass(&input, &[decoded])?
         .marks
@@ -613,6 +615,7 @@ mod tests {
             },
             first_vertebra_id: 5,
             front_finder: FrontFinder::Trained,
+            side_finder: shapes::SideFinder::HandBuilt,
         }
     }
 

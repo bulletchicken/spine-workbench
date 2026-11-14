@@ -105,6 +105,19 @@ pub enum FrontFinder {
     HandBuilt,
 }
 
+/// Which finder reads the side film. The caller chooses from where the
+/// film came from; omission keeps the hand-built search.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
+#[cfg_attr(feature = "typescript", derive(ts_rs::TS))]
+#[serde(rename_all = "kebab-case")]
+pub enum SideFinder {
+    /// The trained network for real side films.
+    Trained,
+    /// The hand-built search for made-up films.
+    #[default]
+    HandBuilt,
+}
+
 /// Everything the auto pass needs from the app.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
 #[cfg_attr(feature = "typescript", derive(ts_rs::TS))]
@@ -133,14 +146,20 @@ pub struct AutoPassInput {
     /// pass's own one-call entry (`auto_pass::run::auto_pass`) does not
     /// route: it runs the hand-built stages on every film it is given.
     pub front_finder: FrontFinder,
+    /// Which finder reads the side film. Omission means hand-built;
+    /// explicit `null` is refused. The caller routes it, while
+    /// `auto_pass::run::auto_pass` stays hand-built on all supplied films.
+    #[serde(default)]
+    #[cfg_attr(feature = "typescript", ts(as = "Option<_>", optional))]
+    pub side_finder: SideFinder,
 }
 
-/// What the trained finder hands back for one front film.
+/// What the trained finder hands back for one front or side film.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
 #[cfg_attr(feature = "typescript", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TrainedPassResult {
-    /// The front film's marks, shaped exactly as the auto pass shapes
+    /// The film's marks, shaped exactly as the auto pass shapes
     /// them, with the names flagged as estimates.
     pub marks: FilmMarks,
     pub warnings: Vec<PassWarning>,

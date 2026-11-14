@@ -9,7 +9,7 @@ declare global {
 }
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
-const engine = { info: () => Promise.resolve({ engineVersion: 'x', shapesFingerprint: 'y', caseFormat: 'spine-case', caseVersion: 1 }) } as unknown as EngineClient;
+const engine = { info: () => Promise.resolve({ engineVersion: 'x', shapesFingerprint: 'y', caseFormat: 'spine-case', caseVersion: 1, trainedSideFinder: false }) } as unknown as EngineClient;
 let unmount: (() => void) | null = null;
 
 afterEach(() => {
