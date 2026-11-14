@@ -1,10 +1,11 @@
 //! Contract output: fixed nominal ends, paired version angles and counts.
 
 use crate::ReadingsError;
-use crate::bands::band;
+use crate::bands::{band, normal_band};
 use crate::curves::geometry::{lower_coronal_tilt_deg, upper_coronal_tilt_deg};
 use crate::curves::{self, ReadReason};
-use crate::readings::versions;
+use crate::plates::{self, PlateSpread};
+use crate::readings::versions_for_readings;
 use crate::sagittal::{level_index, plates, sacrum_tilt};
 use shapes::levels::Level;
 use shapes::spine_fit::SpineFit;
@@ -18,6 +19,7 @@ struct Frame<'a> {
     fit: &'a SpineFit,
     front: Vec<[f64; 2]>,
     side: Vec<[f64; 2]>,
+    spreads: Vec<PlateSpread>,
 }
 
 impl<'a> Frame<'a> {
@@ -42,7 +44,12 @@ impl<'a> Frame<'a> {
                 reason: "non-finite-angle".into(),
             });
         }
-        Ok(Self { fit, front, side })
+        Ok(Self {
+            fit,
+            front,
+            side,
+            spreads: plates::from_fit(fit),
+        })
     }
 
     fn front_pair(&self, upper: usize, lower: usize) -> f64 {
@@ -66,6 +73,20 @@ fn measured(value_deg: f64, values: Vec<f64>) -> Reading {
         value_deg,
         band: band(&values).expect("a finite angle in every version"),
     }
+}
+
+fn normal_measured(value_deg: f64, sd_rad: f64) -> Reading {
+    Reading::Measured {
+        value_deg,
+        band: normal_band(value_deg, sd_rad.to_degrees()),
+    }
+}
+
+fn front_pair(nominal: &Frame<'_>, a: usize, b: usize) -> Reading {
+    normal_measured(
+        nominal.front_pair(a, b),
+        libm::hypot(nominal.spreads[a].front[0], nominal.spreads[b].front[1]),
+    )
 }
 
 fn side_missing_reason(fit: &SpineFit) -> NotMeasured {
@@ -96,21 +117,21 @@ fn twist(nominal: &Frame<'_>, samples: &[Frame<'_>], index: usize) -> Reading {
     }
 }
 
-fn side_pair(nominal: &Frame<'_>, samples: &[Frame<'_>], a: usize, b: usize, sign: f64) -> Reading {
+fn side_pair(nominal: &Frame<'_>, a: usize, b: usize, sign: f64) -> Reading {
     let value = sign * nominal.side_pair(a, b);
     if !side_is_measured(nominal.fit, &[a, b]) {
         missing(side_missing_reason(nominal.fit), Some(value))
     } else {
-        measured(
+        normal_measured(
             value,
-            samples.iter().map(|s| sign * s.side_pair(a, b)).collect(),
+            libm::hypot(nominal.spreads[a].side[0], nominal.spreads[b].side[1]),
         )
     }
 }
 
-fn regional(nominal: &Frame<'_>, samples: &[Frame<'_>], a: Level, b: Level, sign: f64) -> Reading {
+fn regional(nominal: &Frame<'_>, a: Level, b: Level, sign: f64) -> Reading {
     match (level_index(nominal.fit, a), level_index(nominal.fit, b)) {
-        (Some(a), Some(b)) => side_pair(nominal, samples, a, b, sign),
+        (Some(a), Some(b)) => side_pair(nominal, a, b, sign),
         _ if nominal.fit.side_film.is_none() => missing(NotMeasured::NoSideFilm, None),
         _ => missing(NotMeasured::NotFitted, None),
     }
@@ -135,13 +156,9 @@ pub fn measure_spine(input: &ReadingsInput) -> Result<SpineReadings, ReadingsErr
             versions: input.versions,
         });
     }
-    let ensemble = versions(
-        &input.fit,
-        u64::from(input.seed),
-        input.versions,
-        0..input.versions,
-    )?;
-    let nominal = Frame::new(&input.fit)?;
+    let ensemble = versions_for_readings(input, 0..input.versions)?;
+    let mut nominal = Frame::new(&input.fit)?;
+    nominal.spreads = plates::from_input(input)?;
     let samples = ensemble
         .versions
         .iter()
@@ -167,9 +184,13 @@ pub fn measure_spine(input: &ReadingsInput) -> Result<SpineReadings, ReadingsErr
             let forward = v.angles.forward_lean_rad.to_degrees();
             VertebraReading {
                 level: v.level,
-                coronal_tilt: measured(
+                coronal_tilt: normal_measured(
                     coronal(&input.fit),
-                    samples.iter().map(|s| coronal(s.fit)).collect(),
+                    if v.corner_tilt_rad.is_some() {
+                        0.5 * libm::hypot(nominal.spreads[i].front[0], nominal.spreads[i].front[1])
+                    } else {
+                        nominal.spreads[i].front[0]
+                    },
                 ),
                 forward_lean: if side_is_measured(&input.fit, &[i]) {
                     measured(
@@ -195,11 +216,8 @@ pub fn measure_spine(input: &ReadingsInput) -> Result<SpineReadings, ReadingsErr
                 lower: input.fit.vertebrae[b].level,
                 angle,
             };
-            front.push(pair(measured(
-                nominal.front_pair(a, b),
-                samples.iter().map(|s| s.front_pair(a, b)).collect(),
-            )));
-            side.push(pair(side_pair(&nominal, &samples, a, b, 1.0)));
+            front.push(pair(front_pair(&nominal, a, b)));
+            side.push(pair(side_pair(&nominal, a, b, 1.0)));
         }
     }
     let lordosis_l1_s1 = if input.fit.side_film.is_none() {
@@ -214,9 +232,12 @@ pub fn measure_spine(input: &ReadingsInput) -> Result<SpineReadings, ReadingsErr
             )
         } else if let Some(sacrum) = sacrum {
             let value = sacrum - nominal.side[index][0];
-            measured(
+            normal_measured(
                 value,
-                samples.iter().map(|s| sacrum - s.side[index][0]).collect(),
+                libm::hypot(
+                    nominal.spreads[index].side[0],
+                    plates::sacrum_sd(input)?.unwrap_or(0.0),
+                ),
             )
         } else {
             missing(NotMeasured::NoSacrum, None)
@@ -225,10 +246,10 @@ pub fn measure_spine(input: &ReadingsInput) -> Result<SpineReadings, ReadingsErr
         missing(NotMeasured::NotFitted, None)
     };
     let sagittal = SagittalReadings {
-        kyphosis_t2_t5: regional(&nominal, &samples, Level::T2, Level::T5, 1.0),
-        kyphosis_t5_t12: regional(&nominal, &samples, Level::T5, Level::T12, 1.0),
-        kyphosis_t10_l2: regional(&nominal, &samples, Level::T10, Level::L2, 1.0),
-        lordosis_l1_l5: regional(&nominal, &samples, Level::L1, Level::L5, -1.0),
+        kyphosis_t2_t5: regional(&nominal, Level::T2, Level::T5, 1.0),
+        kyphosis_t5_t12: regional(&nominal, Level::T5, Level::T12, 1.0),
+        kyphosis_t10_l2: regional(&nominal, Level::T10, Level::L2, 1.0),
+        lordosis_l1_l5: regional(&nominal, Level::L1, Level::L5, -1.0),
         lordosis_l1_s1,
     };
     let floor_deg = crate::evidence::curve_floor_deg();
@@ -288,10 +309,7 @@ pub fn measure_spine(input: &ReadingsInput) -> Result<SpineReadings, ReadingsErr
                 lower_end_seen: counts(lower),
                 apex_seen: counts(apices),
                 versions_found,
-                cobb: measured(
-                    nominal.front_pair(a, b),
-                    samples.iter().map(|s| s.front_pair(a, b)).collect(),
-                ),
+                cobb: front_pair(&nominal, a, b),
                 apex_twist: twist(&nominal, &samples, apex),
                 bending_cobb,
             }

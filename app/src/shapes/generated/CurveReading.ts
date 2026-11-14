@@ -6,7 +6,21 @@ import type { LevelCount } from "./LevelCount";
 import type { Reading } from "./Reading";
 
 /**
- * A nominal front-plane curve; Cobb uses these fixed ends in every version.
+ * A front-plane curve between the most tilted end vertebrae of the fitted
+ * spine. Cobb is the angle on that fitted spine between those named ends.
+ * For the spread the marks were given, the band held the angle exact marks
+ * would give about three times in four on the two made-up thoracic curves
+ * (73% and 76%) and about eight times in ten on the lumbar one (84%). A
+ * second independent marking falls inside the band less often; main-Cobb
+ * second-marking coverage has not been measured. The band does not cover
+ * which vertebrae are the ends; their version counts describe that separately.
+ * On noisy marks, picking the most tilted plates with the same noise that
+ * is measured gives a measured bias of +3.1 to +3.9 degrees at the trained
+ * finder's stated noise on made-up thoracic spines. Noise can also split
+ * one real curve into shorter curves. The fixed-end band does not include
+ * choices of ends or curve splitting.
+ * Coverage was measured on three made-up main curves with independent
+ * noise, not minor curves; a real finder's errors may not be independent.
  */
 export type CurveReading = { region: CurveRegion, convex: BodySide, upperEnd: Level, lowerEnd: Level, apex: Level, upperEndSeen: Array<LevelCount>, lowerEndSeen: Array<LevelCount>, apexSeen: Array<LevelCount>, 
 /**

@@ -578,6 +578,7 @@ fn check_noisy_pairs(trained_front: bool, seeds: &[u64]) {
         }
     }
     if trained_front {
+        assert_eq!(used_count, [9, 8]);
         for coverage in 0..2 {
             eprintln!(
                 "trained coverage lumbar_only={} used={} front={} pair={} kyphosis={} lordosis={}",

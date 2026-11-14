@@ -187,8 +187,8 @@ The shared sampler now lives in `spine-readings`; `readings` re-exports
 its public sampler and adapts its errors. Every draw depends on seed,
 dimension name, total version count and global index. Splitting a run
 into batches leaves the versions unchanged. Combine a complete ensemble
-before reporting counts. Bands use linear interpolation at
-`p * (N - 1)` and give p10, p50 and p90. The same input produces the same
+before reporting counts. Sampled placement bands use linear interpolation
+at `p * (N - 1)` and give p10, p50 and p90. The same input produces the same
 ordered output and JSON. Numbering doubt is a scenario rather than a
 sampled probability.
 
@@ -215,12 +215,18 @@ spread is invented.
 
 Placement curve bands reselect the largest curve of each matching region
 and convex side in every version, so their end vertebrae can change.
-The shared `spine-readings` display bands instead measure the nominal
-curve's fixed end vertebrae in every version. These bands describe
-different quantities: the placement band combines curve/end selection
+Because each version picks its own most tilted ends, placement curve bands
+tend to sit above the fitted Cobb, and noise can add short curves found in only a
+few versions.
+The shared `spine-readings` display bands instead give closed-form bands
+from the plate spreads for the nominal curve's fixed end vertebrae. These
+bands describe different quantities: the placement band combines curve/end selection
 with geometric variation, whereas the display band keeps endpoint
 uncertainty separate. They must not be presented as interchangeable
-measurements.
+measurements. The version ensembles used by the placement rules and load
+bench take the fit-only plate-spread fallback, which gives narrower bands
+than the supplied-mark path; see the `spine-readings` README for measured
+coverage.
 
 ## Level rules and the first pair
 
@@ -458,10 +464,10 @@ passing them to the load bench.
 8. A year of walking compares rod swings with a laboratory test level;
    it gives neither a lifetime nor a date. Fusion time, relaxation,
    growth and maturity-to-remaining-growth are not modelled.
-9. Fit noise is independent per vertebra because only marginal SDs are
-   supplied. This can overstate adjacent joint-angle noise. Typical
-   one-film sagittal and inferred twist values are not sampled as
-   measurements.
+9. Upper and lower plate tilts are drawn independently using the fit-only
+   spread fallback; actual finder errors may be correlated. The fit exports
+   no joint covariance. Typical one-film sagittal and inferred twist values
+   are not sampled as measurements.
 10. Level names can be one off. Naming scenarios show consequences and
     carry no inferred probability. Shoulders, C7 plumb-line balance,
     missing sacrum geometry and an unavailable rotation-grade mapping

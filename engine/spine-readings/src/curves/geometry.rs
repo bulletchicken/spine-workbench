@@ -209,7 +209,7 @@ fn region(level: Level) -> Option<CurveRegion> {
 }
 
 // Collapse equal-tilt plateaux onto their first level. The endpoints and
-// each strict change of slope are alternating extremes, without smoothing.
+// each strict change of slope are alternating extremes of the fitted tilts.
 fn turning_points(tilts: &[f64]) -> Vec<usize> {
     let mut distinct = Vec::new();
     for (i, &tilt) in tilts.iter().enumerate() {

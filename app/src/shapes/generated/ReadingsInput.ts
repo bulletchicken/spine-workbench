@@ -3,6 +3,15 @@ import type { FilmToFit } from "./FilmToFit";
 import type { SpineFit } from "./SpineFit";
 
 /**
- * The fit, films when at hand, and 1 to 256 repeatable versions.
+ * The fit, films when at hand, and 1 to 256 repeatable versions. Plate
+ * spreads use the supplied marks and their stated own spread; absent films
+ * or levels, coincident plate corners or zero body height use sqrt(2) times
+ * the fit's reported tilt or lean spread, separately for each plate.
+ * That fallback gives narrower bands; placement and load-bench version
+ * ensembles use it. Each inferred corner has three times the stated spread.
+ * A share of height uses the marked body height. Millimetres use the film's
+ * stated spacing when present; otherwise the placement spacing, with the
+ * side scale removed for the side film. Shared
+ * translations cancel from a plate's direction.
  */
 export type ReadingsInput = { fit: SpineFit, front: FilmToFit | null, side: FilmToFit | null, bendLeft: FilmToFit | null, bendRight: FilmToFit | null, versions: number, seed: number, };

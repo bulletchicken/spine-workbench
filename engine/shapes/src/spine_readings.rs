@@ -1,5 +1,5 @@
 //! Angles on a fitted spine, with the reading on the fit separate from the
-//! spread over versions. Positions use x forward, y patient left, z up;
+//! uncertainty band. Positions use x forward, y patient left, z up;
 //! every angle here is in degrees. Typical values stay in not-measured.
 
 use crate::levels::Level;
@@ -20,8 +20,11 @@ pub enum FitTier {
     FrontFilmOnly,
 }
 
-/// The spread of a number over the versions: 10th, 50th and 90th
-/// percentiles, in the unit its field or measure names.
+/// The 10th, 50th and 90th percentiles, in the named unit. Front-plane
+/// angles and side-plane plate angles use closed-form normal percentiles
+/// from independent plate spreads; lean and twist use sampled percentiles.
+/// Bending angles keep singleton bands; bending-mark uncertainty is not
+/// propagated.
 #[derive(Clone, Copy, Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
 #[cfg_attr(feature = "typescript", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
@@ -51,7 +54,16 @@ pub enum BodySide {
     Right,
 }
 
-/// The fit, films when at hand, and 1 to 256 repeatable versions.
+/// The fit, films when at hand, and 1 to 256 repeatable versions. Plate
+/// spreads use the supplied marks and their stated own spread; absent films
+/// or levels, coincident plate corners or zero body height use sqrt(2) times
+/// the fit's reported tilt or lean spread, separately for each plate.
+/// That fallback gives narrower bands; placement and load-bench version
+/// ensembles use it. Each inferred corner has three times the stated spread.
+/// A share of height uses the marked body height. Millimetres use the film's
+/// stated spacing when present; otherwise the placement spacing, with the
+/// side scale removed for the side film. Shared
+/// translations cancel from a plate's direction.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
 #[cfg_attr(feature = "typescript", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
@@ -65,7 +77,10 @@ pub struct ReadingsInput {
     pub seed: u32,
 }
 
-/// The fitted values and their middle eight-in-ten version bands.
+/// Angles on the spine as fitted and their uncertainty bands. Repeated-mark
+/// coverage has been measured on made-up spines with independent noise;
+/// a real finder's errors may not be independent. See the crate README
+/// for which kinds of reading were measured and their coverage figures.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
 #[cfg_attr(feature = "typescript", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
@@ -89,7 +104,15 @@ pub struct VertebraReading {
     pub twist: Reading,
 }
 
-/// Upper-to-lower endplate angles, positive for the named bend.
+/// Upper-to-lower endplate angles, positive for the named bend. Plate
+/// spreads are independent in the side plane. L1-S1 also uses the marked
+/// sacrum's millimetre spread; with a share of height, the sacrum has no
+/// body height to supply its spread and the band holds that line fixed.
+/// With independent 1 mm side-corner noise on three made-up spines, bands
+/// held exact-mark angles 74–78% of the time for kyphoses and 65–71% for
+/// lordoses, below eight in ten. Front-film mark error enters fitted side
+/// tilts but is absent from bands built from the side film's spread alone.
+/// Do not label these readings with the front-plane eight-in-ten sentence.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
 #[cfg_attr(feature = "typescript", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
@@ -101,7 +124,21 @@ pub struct SagittalReadings {
     pub lordosis_l1_s1: Reading,
 }
 
-/// A nominal front-plane curve; Cobb uses these fixed ends in every version.
+/// A front-plane curve between the most tilted end vertebrae of the fitted
+/// spine. Cobb is the angle on that fitted spine between those named ends.
+/// For the spread the marks were given, the band held the angle exact marks
+/// would give about three times in four on the two made-up thoracic curves
+/// (73% and 76%) and about eight times in ten on the lumbar one (84%). A
+/// second independent marking falls inside the band less often; main-Cobb
+/// second-marking coverage has not been measured. The band does not cover
+/// which vertebrae are the ends; their version counts describe that separately.
+/// On noisy marks, picking the most tilted plates with the same noise that
+/// is measured gives a measured bias of +3.1 to +3.9 degrees at the trained
+/// finder's stated noise on made-up thoracic spines. Noise can also split
+/// one real curve into shorter curves. The fixed-end band does not include
+/// choices of ends or curve splitting.
+/// Coverage was measured on three made-up main curves with independent
+/// noise, not minor curves; a real finder's errors may not be independent.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
 #[cfg_attr(feature = "typescript", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
@@ -142,8 +179,11 @@ pub struct PairReading {
     pub angle: Reading,
 }
 
-/// A fitted value and its version band, or what is absent and the typical
-/// value used by the drawing, when one exists.
+/// A fitted value and its uncertainty band, or what is absent and the typical
+/// value used by the drawing, when one exists. For a curve, the value is its
+/// Cobb angle between the fitted spine's most tilted plates in their turning
+/// neighbourhoods. Every other fitted reading uses its named levels; bending
+/// Cobb uses marked bending lines at the standing curve's fixed ends.
 #[derive(Clone, Copy, Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
 #[cfg_attr(feature = "typescript", derive(ts_rs::TS))]
 #[serde(

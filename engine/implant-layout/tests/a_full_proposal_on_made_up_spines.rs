@@ -683,22 +683,32 @@ fn the_forty_degree_curve_keeps_its_narrow_looks_on_the_counted_pedicles() {
             }
         );
         let first = &p.layouts[0];
-        assert_eq!(first.anchors.len(), 14);
+        // Front only, 28 of 32 versions cannot read the end rules (no side
+        // film). The other four split 2-2 between T5 and T6 and 2-2 between
+        // T11 and T12; the cranial mode tie-break gives T5, and T5-T12 beats
+        // T5-T11 (one holding version each) on the caudal tie-break.
+        assert_eq!(first.anchors.len(), if front_only { 16 } else { 14 });
         assert_eq!(
             (first.upper, first.lower),
             if front_only {
-                (Level::T6, Level::T12)
+                (Level::T5, Level::T12)
             } else {
                 (Level::T5, Level::T11)
             }
         );
+        if front_only {
+            assert!(p.cannot_tell.iter().any(|c| {
+                c.code == CannotTellCode::EndsUnsettled && c.levels == vec![Level::T5, Level::T12]
+            }));
+        }
         let mut expected = vec![
             (Level::T7, BodySide::Left),
             (Level::T8, BodySide::Left),
             (Level::T9, BodySide::Left),
         ];
+        expected.insert(0, (Level::T5, BodySide::Left));
         if !front_only {
-            expected.insert(0, (Level::T5, BodySide::Right));
+            expected.insert(1, (Level::T5, BodySide::Right));
         }
         assert_eq!(
             first
@@ -711,6 +721,33 @@ fn the_forty_degree_curve_keeps_its_narrow_looks_on_the_counted_pedicles() {
         );
     }
 }
+
+#[test]
+fn exact_lumbar_poses_keep_end_plus_one_at_l4_in_every_version() {
+    let (input, _) = fixture(RecipeName::LumbarLeft30);
+    let reading = implant_layout::level_rules::measure(&input).unwrap();
+    let structural = reading
+        .regions
+        .iter()
+        .find(|r| r.region == implant_layout::level_rules::FusionRegion::Structural)
+        .unwrap();
+    let end = structural
+        .votes
+        .iter()
+        .find(|v| v.rule == shapes::implant_layout::LevelRule::EndPlusOne)
+        .unwrap();
+    // The exact lumbar curve's lower end is L3; adding one anatomical
+    // level gives L4. With zero pose spread every version gives that answer.
+    assert!(end.counts.unread.is_empty());
+    assert_eq!(
+        end.counts.levels,
+        vec![shapes::spine_readings::LevelCount {
+            level: Level::L4,
+            versions: input.versions,
+        }]
+    );
+}
+
 #[test]
 fn every_field_family_keeps_its_status_source_or_absence_code() {
     let (mut input, _) = fixture(RecipeName::RightThoracic40);
