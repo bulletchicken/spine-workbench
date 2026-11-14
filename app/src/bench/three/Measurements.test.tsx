@@ -49,3 +49,30 @@ it('retries the reading without requesting another fit', async () => {
   expect(spineBuild.getState().accepted).toBe(accepted);
   page.takeDown();
 });
+
+it('shows the same-spine assumption in the panel and narrow sheet only when Side was used', async () => {
+  const note = 'The front and side films are taken to show the same spine. Nothing here can check that.';
+  try {
+    for (const narrow of [false, true]) {
+      vi.stubGlobal('innerWidth', narrow ? 700 : 1200);
+      for (const sideUsed of [false, true]) {
+        const accepted = source();
+        accepted.key = `same-spine-${String(narrow)}-${String(sideUsed)}`;
+        accepted.fit = { ...accepted.fit, sideFilm: sideUsed ? { ...accepted.fit.frontFilm } : null };
+        spineBuild.getState().accept(accepted);
+        threeState.getState().clear();
+        threeState.getState().showSheet(narrow);
+        const engine = { measureSpine: (input: ReadingsInput) => Promise.resolve(sampleReadings(input)) } as unknown as EngineClient;
+        const page = putOnThePage(<EngineProvider engine={engine}><Measurements accepted={accepted} /></EngineProvider>);
+        await act(async () => { await Promise.resolve(); });
+        const panel = find('.measurements');
+        expect(panel.classList.contains('sheet')).toBe(narrow);
+        expect(panel.getAttribute('aria-hidden')).toBeNull();
+        expect(find('.panel-note', panel).textContent.includes(note)).toBe(sideUsed);
+        page.takeDown();
+      }
+    }
+  } finally {
+    vi.unstubAllGlobals();
+  }
+});

@@ -130,7 +130,8 @@ describe('the engine reports who it is', () => {
       shapesFingerprint: SHAPES_FINGERPRINT,
       caseFormat: CASE_FORMAT,
       caseVersion: CASE_VERSION,
-      trainedSideFinder: false,
+      // Side weights are optional and kept out of the repository; both builds are valid.
+      trainedSideFinder: expect.any(Boolean) as unknown,
     });
   });
 

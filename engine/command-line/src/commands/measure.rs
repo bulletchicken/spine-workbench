@@ -428,9 +428,108 @@ fn reading(value: &Reading) -> String {
 }
 
 #[cfg(test)]
+#[path = "../../../spine-readings/tests/pair_truth/mod.rs"]
+mod pair_truth;
+
+#[cfg(test)]
 mod tests {
     use super::*;
     use clap::Parser;
+
+    #[test]
+    fn ordinary_four_film_intake_keeps_truth_or_retries_front_exactly() {
+        let recipe = MadeUpRecipe {
+            name: RecipeName::RightThoracic40,
+            seed: 4,
+            tier: Tier::T1,
+        };
+        let made = made_up_spines::make_up_spine(&recipe).unwrap();
+        let decoded: Vec<_> = made
+            .films
+            .iter()
+            .map(|f| film_reader::read_film(&f.png, f.kind).unwrap())
+            .collect();
+        let films: Vec<_> = decoded
+            .iter()
+            .map(|d| super::super::pass::record(d, FilmGeometry::UNKNOWN))
+            .collect();
+        let pass = AutoPassInput {
+            case_version: 0,
+            films: films.clone(),
+            options: ChainOptions {
+                acquisition: shapes::auto_pass::Acquisition::Unknown,
+                population: shapes::auto_pass::Population::Adolescent,
+                template: None,
+            },
+            first_vertebra_id: 1,
+            front_finder: FrontFinder::HandBuilt,
+            side_finder: shapes::SideFinder::HandBuilt,
+        };
+        let found = auto_pass::run::auto_pass(&pass, &decoded).unwrap();
+        let to_fit = |kind| {
+            let record = films.iter().find(|f| f.kind == kind).unwrap();
+            let marks = found.marks.iter().find(|m| m.film == kind).unwrap().clone();
+            FilmToFit {
+                geometry: FilmGeometry {
+                    image_right: Some(marks.named_for),
+                    ..FilmGeometry::UNKNOWN
+                },
+                marks,
+                size: [record.image.width, record.image.height],
+                mark_spread: SIDE_SPREAD,
+                facing_assumed: true,
+            }
+        };
+        let request = FitFromFilms {
+            front: to_fit(FilmKind::Front),
+            side: Some(to_fit(FilmKind::Side)),
+            typical: TypicalSource::BuiltIn,
+            twist_readings: Vec::new(),
+        };
+        let fit = joint_fit::fit_from_films(&request).unwrap();
+        assert!(fit.converged);
+        let read = |request: &FitFromFilms, fit| {
+            spine_readings::measure_spine(&ReadingsInput {
+                fit,
+                front: Some(request.front.clone()),
+                side: request.side.clone(),
+                bend_left: None,
+                bend_right: None,
+                versions: 4,
+                seed: recipe.seed,
+            })
+            .unwrap()
+        };
+        let observed = read(&request, fit.clone());
+        eprintln!(
+            "ordinary intake: side_used={} curves={:?} sagittal={:?}",
+            fit.side_film.is_some(),
+            observed.curves,
+            observed.sagittal
+        );
+        if fit.side_film.is_none() {
+            let mut alone = request.clone();
+            alone.side = None;
+            assert_eq!(fit, joint_fit::fit_from_films(&alone).unwrap());
+        } else {
+            let exact = FitFromFilms {
+                front: film(
+                    &made.answer_key.films[0],
+                    made.answer_key.template,
+                    request.front.size,
+                ),
+                side: Some(film(
+                    &made.answer_key.films[1],
+                    made.answer_key.template,
+                    request.side.as_ref().unwrap().size,
+                )),
+                typical: TypicalSource::BuiltIn,
+                twist_readings: Vec::new(),
+            };
+            let truth = read(&exact, joint_fit::fit_from_films(&exact).unwrap());
+            pair_truth::check(&observed, &truth, false);
+        }
+    }
 
     #[test]
     fn measure_accepts_the_recipe_seed_and_view_switches() {

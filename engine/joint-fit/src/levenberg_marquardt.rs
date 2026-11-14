@@ -69,6 +69,7 @@ fn cost(problem: &Problem, numbers: &[f64]) -> Option<f64> {
 pub fn solve(problem: &Problem, mut numbers: DVector<f64>) -> Result<Solution, FitError> {
     let mut equations = normal(problem, numbers.as_slice())?;
     let mut damping = 1e-3;
+    let mut rejection = 2.0;
     for iteration in 1..=100 {
         let mut matrix = equations.matrix.clone();
         for i in 0..numbers.len() {
@@ -84,6 +85,16 @@ pub fn solve(problem: &Problem, mut numbers: DVector<f64>) -> Result<Solution, F
         if let Some(new_cost) = candidate_cost.filter(|value| *value <= equations.cost) {
             let relative = (equations.cost - new_cost) / equations.cost.max(f64::MIN_POSITIVE);
             let small = step.norm() < 1e-8;
+            // Compare the actual reduction with the quadratic prediction.
+            // A fixed damping reduction can keep a noisy pair taking
+            // rejected steps until the iteration limit.
+            let predicted =
+                -2.0 * equations.gradient.dot(&step) - step.dot(&(&equations.matrix * &step));
+            let gain = if predicted > 0.0 {
+                (equations.cost - new_cost) / predicted
+            } else {
+                0.0
+            };
             numbers = candidate;
             equations = normal(problem, numbers.as_slice())?;
             if small || relative < 1e-10 {
@@ -98,11 +109,14 @@ pub fn solve(problem: &Problem, mut numbers: DVector<f64>) -> Result<Solution, F
                     },
                 });
             }
-            damping = (damping / 3.0).max(1e-12);
+            damping *= (1.0 - libm::pow(2.0 * gain - 1.0, 3.0)).max(1.0 / 3.0);
+            damping = damping.max(1e-12);
+            rejection = 2.0;
         } else {
             // A rejected step never establishes convergence; only a step
             // accepted against the actual stacked objective may stop early.
-            damping = (damping * 10.0).min(1e20);
+            damping = (damping * rejection).min(1e20);
+            rejection *= 2.0;
         }
     }
     Ok(Solution {

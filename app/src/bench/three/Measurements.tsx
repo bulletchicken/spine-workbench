@@ -8,7 +8,7 @@ import { popoverOpen } from '@/on-this-device/popover-open';
 import { threeState } from '@/view-state/three-state';
 import type { AcceptedSpine } from '@/view-state/spine-build';
 import { GENERIC_BONES_NOTE } from '@/words/spine-3d';
-import { ASSUMED_FACING_NOTE, THREE_WORDS } from '@/words/three';
+import { ASSUMED_FACING_NOTE, SAME_SPINE_NOTE, THREE_WORDS } from '@/words/three';
 import { FILMS_WORDS } from '@/words/films';
 import { FIND_WORDS } from '@/words/find';
 import { READINGS_WORDS as W } from '@/words/spine-readings';
@@ -59,6 +59,7 @@ export function Measurements({ accepted }: { accepted: AcceptedSpine }) {
     <div className="panel-note">
       {state.phase === 'ready' && state.view.rows.length > 0 && <p>{W.meaning}</p>}
       <p>{GENERIC_BONES_NOTE}</p>
+      {accepted.fit.sideFilm !== null && <p>{SAME_SPINE_NOTE}</p>}
       {(accepted.fit.frontFilm.facingAssumed || accepted.fit.sideFilm?.facingAssumed === true) && <p>{ASSUMED_FACING_NOTE}</p>}
       {accepted.input.front.marks.naming.flags.includes('estimated') && <p>{FIND_WORDS.estimated}</p>}
     </div>
