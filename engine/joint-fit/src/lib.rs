@@ -8,6 +8,25 @@
 //! [`fit_from_films`] accepts one front film or a front and side pair, each
 //! with its own mark spread. Without a side film it takes what one film
 //! cannot show from the built-in typical spine, with that spine's spread.
+//!
+//! A used pair must converge and explain every fitted mark: normalised
+//! Euclidean RMS at most 1.75 both over the pair and on Side alone. Side's
+//! millimetre residuals use its fitted spacing. Front's comparison RMS,
+//! including each mark's shared body spread, may rise by at most 0.5 above
+//! its Front-only reference. If that reference fails, only this comparison
+//! is skipped. Inferred marks and pedicles keep their wider own spreads.
+//! Centre-height agreement is an additional check, not a substitute for
+//! these residual checks. See [`fit_from_films`] for the numerical evidence.
+//!
+//! These checks cannot establish level names or that both films show one
+//! person. With no spacing on either film, Side scale and offset are free:
+//! a chain named one level off, or a short lumbar film from another spine,
+//! can still agree geometrically. Such a fit may use Side.
+//!
+//! With Front marks as noisy as the trained finder's stated spread, accepted
+//! pairs can have Side curves about ten degrees from the exact answer.
+//! Some honest pairs do not settle within the iteration limit and use Front
+//! alone. Passing the residual checks does not guarantee accurate readings.
 
 #![forbid(unsafe_code)]
 

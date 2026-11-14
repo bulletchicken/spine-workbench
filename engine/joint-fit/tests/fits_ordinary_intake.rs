@@ -215,10 +215,12 @@ fn films_without_spacing_are_square_and_non_square_pixels_need_spacing() {
         square.front_film.mm_per_px[0],
         square.front_film.mm_per_px[1]
     );
-    let side = square
-        .side_film
-        .expect("the square-convention pair is used");
-    assert_eq!(side.mm_per_px[0], side.mm_per_px[1]);
+    // Erasing the detector aspect leaves a pair that cannot explain its
+    // marks at their stated spread. Keep the exact Front-only fallback.
+    let mut alone = without.clone();
+    alone.side = None;
+    assert!(square.side_film.is_none());
+    assert_eq!(square, fit_from_films(&alone).expect("square Front alone"));
     // Erasing aspect is not a change of one global length gauge. The
     // drawn height differs after matching row spacing, so non-square
     // films need their spacing to recover the original bodies.
@@ -357,4 +359,211 @@ fn facing_echoes_are_independent_and_legacy_placements_are_false() {
             assert_eq!(fit.side_film.expect("used Side").facing_assumed, side);
         }
     }
+}
+
+#[test]
+fn a_full_front_and_unscaled_lumbar_side_use_the_measured_lumbar_poses() {
+    let (mut pair, key) = projected(RecipeName::RightThoracic40, false, false, false);
+    pair.front.geometry.mm_per_px = None;
+    pair.front.mark_spread = MarkSpread::ShareOfHeight {
+        share: 0.11,
+        shared_share: 0.08,
+    };
+    pair.front.marks.naming.from_top = None;
+    pair.front.marks.naming.from_bottom = None;
+    pair.front.marks.naming.flags = vec![shapes::naming::NamingFlag::Estimated];
+    for v in &mut pair.front.marks.vertebrae {
+        let VertebraMarks::Front { points } = &mut v.marks else {
+            unreachable!("Front")
+        };
+        points.ped_l = shapes::marks::PedicleMark::NotVisible {
+            source: shapes::marks::MarkSource::Auto,
+        };
+        points.ped_r = shapes::marks::PedicleMark::NotVisible {
+            source: shapes::marks::MarkSource::Auto,
+        };
+    }
+    let side = pair.side.as_mut().expect("Side");
+    side.geometry.mm_per_px = None;
+    side.mark_spread = MarkSpread::Millimetres {
+        sd_mm: 1.0,
+        shared_sd_mm: 0.0,
+    };
+    side.marks.vertebrae.retain(|v| v.level >= Level::L1);
+    side.marks.naming.from_top = None;
+    side.marks.naming.from_bottom = None;
+    side.marks.naming.flags = vec![shapes::naming::NamingFlag::Estimated];
+    assert!(!side.facing_assumed);
+    assert_eq!(side.marks.vertebrae.len(), 5);
+    assert_eq!(pair.front.marks.vertebrae.len(), 17);
+    let fit = fit_from_films(&pair).expect("a partial pair");
+    assert!(fit.converged && fit.side_film.is_some());
+    assert_eq!(fit.lengths, FitLengths::TypicalSize);
+    assert!(!fit.side_film.expect("used Side").facing_assumed);
+    let gauge = fit.front_film.mm_per_px[0] / 0.3;
+    let mut largest = [0.0_f64; 5];
+    for v in &fit.vertebrae {
+        assert_eq!(v.inferred.depth, v.level < Level::L1);
+        if v.level < Level::L1 {
+            continue;
+        }
+        let truth = key
+            .poses
+            .iter()
+            .find(|p| p.level == v.level)
+            .expect("truth");
+        for (a, b) in v.pose.centre.into_iter().zip(truth.centre) {
+            largest[0] = largest[0].max((a / gauge - b).abs());
+        }
+        largest[1] = largest[1].max(
+            (v.angles.forward_lean_rad - angles(truth)[1])
+                .abs()
+                .to_degrees(),
+        );
+        for (a, b) in sizes(&v.pose).into_iter().zip(sizes(truth)) {
+            largest[2] = largest[2].max((a / gauge / b - 1.0).abs());
+        }
+        for (a, b) in angles(&v.pose).into_iter().zip(angles(truth)) {
+            largest[3] = largest[3].max((a - b).abs().to_degrees());
+        }
+        for (a, b) in [v.pose.wedge_front, v.pose.wedge_side]
+            .into_iter()
+            .zip([truth.wedge_front, truth.wedge_side])
+        {
+            largest[4] = largest[4].max((a - b).abs().to_degrees());
+        }
+    }
+    eprintln!(
+        "lumbar maximum centre mm, lean deg, size share, rotation deg, wedge deg {largest:?}"
+    );
+    // Lengths have one typical-size gauge. After matching it, require
+    // centres within 0.05 mm, lean within 0.05 degrees and sizes within 1%.
+    // Every rotation angle and both wedges must be within 2 degrees.
+    assert!(largest[0] < 0.05 && largest[1] < 0.05 && largest[2] < 0.01);
+    assert!(largest[3] < 2.0 && largest[4] < 2.0);
+}
+
+#[test]
+fn films_of_different_made_up_spines_are_not_a_pair() {
+    let mut pair = request(
+        input(RecipeName::Straight, 3, 0.0).0,
+        TypicalSource::BuiltIn,
+    );
+    let other = input(RecipeName::DoubleMajor55To45, 8, 0.0).0;
+    let side = pair.side.as_mut().expect("Side");
+    side.marks = other.side;
+    side.geometry = other.side_geometry;
+    side.size = other.side_size;
+    pair.front.geometry.mm_per_px = None;
+    side.geometry.mm_per_px = None;
+    let mut alone = pair.clone();
+    alone.side = None;
+    let front_only = fit_from_films(&alone).expect("Front alone");
+    let fit = fit_from_films(&pair).expect("Front fallback");
+    eprintln!(
+        "unrelated pair side used={} rms={} iterations={}",
+        fit.side_film.is_some(),
+        fit.rms_mm,
+        fit.iterations
+    );
+    assert!(fit.side_film.is_none());
+    assert_eq!(fit, front_only);
+}
+
+#[test]
+fn a_true_pair_keeps_a_displaced_side_level_whose_corners_are_inferred() {
+    for (displacement_mm, used) in [(20.0, true), (25.0, false)] {
+        let (mut pair, _) = projected(RecipeName::Straight, false, false, false);
+        let side = pair.side.as_mut().expect("Side");
+        side.mark_spread = MarkSpread::Millimetres {
+            sd_mm: 1.0,
+            shared_sd_mm: 0.0,
+        };
+        let level = side
+            .marks
+            .vertebrae
+            .iter_mut()
+            .find(|v| v.level == Level::L1)
+            .expect("L1");
+        let VertebraMarks::Side { points } = &mut level.marks else {
+            unreachable!("Side")
+        };
+        for mark in [
+            &mut points.sup_a,
+            &mut points.sup_p,
+            &mut points.inf_a,
+            &mut points.inf_p,
+        ] {
+            // Inferred corners have three spreads, but Side must still fit.
+            mark.at = Px::new(mark.at.x(), mark.at.y() + displacement_mm / 0.3);
+            mark.inferred = true;
+        }
+        let fit = fit_from_films(&pair).expect("the inferred corners have a wider spread");
+        eprintln!(
+            "displaced inferred level {displacement_mm} mm: used={} converged={} rms={} iterations={}",
+            fit.side_film.is_some(),
+            fit.converged,
+            fit.rms_mm,
+            fit.iterations
+        );
+        assert!(fit.converged);
+        assert_eq!(fit.side_film.is_some(), used);
+    }
+}
+
+#[test]
+fn a_short_side_film_of_another_spine_cannot_be_told_apart() {
+    // This records a limit, not a wish: free scale and offset can align
+    // short height profiles from different spines within these spreads.
+    let mut pair = request(
+        input(RecipeName::Straight, 3, 0.0).0,
+        TypicalSource::BuiltIn,
+    );
+    pair.front.mark_spread = MarkSpread::ShareOfHeight {
+        share: 0.11,
+        shared_share: 0.08,
+    };
+    pair.front.geometry.mm_per_px = None;
+    pair.front.geometry.mm_per_px_vertical = None;
+    for v in &mut pair.front.marks.vertebrae {
+        let VertebraMarks::Front { points } = &mut v.marks else {
+            unreachable!("Front")
+        };
+        points.ped_l = shapes::marks::PedicleMark::NotVisible {
+            source: shapes::marks::MarkSource::Auto,
+        };
+        points.ped_r = shapes::marks::PedicleMark::NotVisible {
+            source: shapes::marks::MarkSource::Auto,
+        };
+    }
+    let other = input(RecipeName::DoubleMajor55To45, 8, 0.0).0;
+    let side = pair.side.as_mut().expect("Side");
+    side.marks = other.side;
+    side.marks.vertebrae.retain(|v| v.level >= Level::L1);
+    side.geometry = other.side_geometry;
+    side.geometry.mm_per_px = None;
+    side.geometry.mm_per_px_vertical = None;
+    side.size = other.side_size;
+    side.mark_spread = MarkSpread::Millimetres {
+        sd_mm: 1.0,
+        shared_sd_mm: 0.0,
+    };
+    for film in [&mut pair.front, side] {
+        film.marks.naming.from_top = None;
+        film.marks.naming.from_bottom = None;
+        film.marks.naming.flags = vec![shapes::naming::NamingFlag::Estimated];
+    }
+    assert_eq!(pair.front.marks.vertebrae.len(), 17);
+    assert_eq!(pair.side.as_ref().expect("Side").marks.vertebrae.len(), 5);
+    let fit = fit_from_films(&pair).expect("a geometric fit cannot establish identity");
+    eprintln!(
+        "known short-side limit: used={} converged={} iterations={} rms={} side_scale={} side_offset_mm={}",
+        fit.side_film.is_some(),
+        fit.converged,
+        fit.iterations,
+        fit.rms_mm,
+        fit.side_scale,
+        fit.side_offset_mm
+    );
+    assert!(fit.converged && fit.side_film.is_some());
 }

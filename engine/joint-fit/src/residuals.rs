@@ -15,6 +15,8 @@ pub struct Row {
 pub struct Marks {
     pub weighted: Vec<f64>,
     pub squared_mm: [f64; 2],
+    pub squared_spreads: [f64; 2],
+    pub front_comparison_squared: f64,
     pub counts: [usize; 2],
 }
 
@@ -24,6 +26,7 @@ fn append(
     predicted: Mark,
     spacing: [f64; 2],
     sd: f64,
+    shared_sd: f64,
     view: usize,
 ) {
     let sd = sd * if observed.inferred { 3.0 } else { 1.0 };
@@ -32,7 +35,13 @@ fn append(
         (predicted.at.y() - observed.at.y()) * spacing[1],
     ];
     for difference in differences {
-        result.weighted.push(difference / sd);
+        let normalised = difference / sd;
+        result.weighted.push(normalised);
+        result.squared_spreads[view] += normalised * normalised;
+        if view == 0 {
+            result.front_comparison_squared +=
+                difference * difference / (sd * sd + shared_sd * shared_sd);
+        }
         result.squared_mm[view] += difference * difference;
     }
     result.counts[view] += 1;
@@ -48,13 +57,23 @@ pub fn marks(
     let mut result = Marks {
         weighted: Vec::with_capacity(20),
         squared_mm: [0.0; 2],
+        squared_spreads: [0.0; 2],
+        front_comparison_squared: 0.0,
         counts: [0; 2],
     };
     if let Some(observed) = observation.front {
         let predicted = front_marks(&v, &problem.front).ok()?;
         let sd = observation.spread_mm[0];
         for (o, p) in observed.corners().into_iter().zip(predicted.corners()) {
-            append(&mut result, o, p, problem.front_spacing, sd, 0);
+            append(
+                &mut result,
+                o,
+                p,
+                problem.front_spacing,
+                sd,
+                observation.shared_mm[0],
+                0,
+            );
         }
         for (o, p) in [
             (observed.ped_l, predicted.ped_l),
@@ -67,6 +86,7 @@ pub fn marks(
                     p.mark()?,
                     problem.front_spacing,
                     2.0 * sd,
+                    observation.shared_mm[0],
                     0,
                 );
             }
@@ -76,7 +96,7 @@ pub fn marks(
         let predicted = side_marks(&v, side?).ok()?;
         let sd = observation.spread_mm[1];
         for (o, p) in observed.corners().into_iter().zip(predicted.corners()) {
-            append(&mut result, o, p, problem.side_spacing, sd, 1);
+            append(&mut result, o, p, problem.side_spacing, sd, 0.0, 1);
         }
     }
     result

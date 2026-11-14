@@ -7,10 +7,10 @@ import { fitInputFor } from '../../app/src/bench/three/fit-input';
 import { createCaseStore } from '../../app/src/case-state/case-store';
 import { emptyCase } from '../../app/src/case-state/empty-case';
 import { createFilmPixels } from '../../app/src/case-state/film-pixels';
-import { ChainPass, FilmDesk, fit_from_films, initSync, make_up_spine } from '../../app/src/engine-room/wasm-build/wasm_bridge.js';
+import { ChainPass, FilmDesk, fit_from_films, initSync, make_up_spine, measure_spine } from '../../app/src/engine-room/wasm-build/wasm_bridge.js';
 import { SAMPLE_RECIPE } from '../../app/src/made-up-spines/the-sample-case';
 import { filmRecordFrom } from '../../app/src/open-and-save/film-record';
-import { compareLevels, type ChainAnswer, type Film, type FilmFacts, type FilmKind, type FilmMarks, type FilmPassResult, type FrontFinder, type MadeUpSpine, type SpineFit, type Step, type TrainedPassResult } from '../../app/src/shapes';
+import { compareLevels, type AnswerKey, type ChainAnswer, type Film, type FilmFacts, type FilmKind, type FilmMarks, type FilmPassResult, type FitFromFilms, type FrontFinder, type MadeUpSpine, type Reading, type SpineReadings, type SpineFit, type Step, type TrainedPassResult, type VertebraPose } from '../../app/src/shapes';
 import { createFitSources } from '../../app/src/view-state/fit-sources';
 import { madeUpFront, TRAINED_FRONT_RECIPE } from './made-up-front';
 
@@ -35,7 +35,7 @@ function open(png: Uint8Array, kind: FilmKind) {
   return { desk, film };
 }
 
-function applyAndFit(films: Film[], marks: FilmMarks[], finder: FrontFinder): SpineFit {
+function applyAndFit(films: Film[], marks: FilmMarks[], finder: FrontFinder): { fit: SpineFit; input: FitFromFilms } {
   const store = createCaseStore({ ...emptyCase(), films });
   const sources = createFitSources(); const pixels = createFilmPixels();
   const version = store.getState().version;
@@ -62,12 +62,72 @@ function applyAndFit(films: Film[], marks: FilmMarks[], finder: FrontFinder): Sp
     expect([pose.height, pose.topHalfWidth, pose.topHalfDepth, pose.bottomHalfWidth, pose.bottomHalfDepth].every((n) => Number.isFinite(n) && n > 0)).toBe(true);
   }
   console.info('intake fit', JSON.stringify({ finder, found: marks.map((m) => ({ film: m.film, levels: m.vertebrae.map((v) => v.level), flags: m.naming.flags, c7: m.landmarks.c7 })), fitted: fit.vertebrae.map((v) => v.level), converged: fit.converged, stop: fit.stopReason, iterations: fit.iterations, sideUsed: fit.sideFilm !== null, lengths: fit.lengths }));
-  return fit;
+  return { fit, input };
+}
+
+function value(reading: Reading): number {
+  if (reading.kind !== 'measured') throw new Error('a measured angle was expected');
+  return reading.valueDeg;
+}
+
+/** Independent rotation of the answer key's endplate normal. */
+function normal(pose: VertebraPose, top: boolean): [number, number, number] {
+  const sign = top ? 1 : -1;
+  const front = sign * pose.wedgeFront / 2; const side = sign * pose.wedgeSide / 2;
+  const v: [number, number, number] = [Math.sin(side), -Math.sin(front) * Math.cos(side), Math.cos(front) * Math.cos(side)];
+  const angle = Math.hypot(...pose.rotation);
+  if (angle === 0) return v;
+  const [x, y, z] = pose.rotation.map((r) => r / angle) as [number, number, number];
+  const c = Math.cos(angle); const s = Math.sin(angle); const dot = x * v[0] + y * v[1] + z * v[2];
+  return [c * v[0] + s * (y * v[2] - z * v[1]) + (1 - c) * x * dot,
+    c * v[1] + s * (z * v[0] - x * v[2]) + (1 - c) * y * dot,
+    c * v[2] + s * (x * v[1] - y * v[0]) + (1 - c) * z * dot];
+}
+
+function agreesWithTruth(readings: SpineReadings, key: AnswerKey) {
+  const main = readings.curves.filter((c) => c.region === 'main-thoracic').toSorted((a, b) => Math.abs(value(b.cobb)) - Math.abs(value(a.cobb)))[0];
+  const truth = key.angles.frontalCobb.find((c) => c.region === 'main-thoracic');
+  if (main === undefined || truth === undefined) throw new Error('no main curve');
+  expect(Math.abs(Math.abs(value(main.cobb)) - truth.degrees)).toBeLessThanOrEqual(6);
+  const levels = key.poses.map((p) => p.level);
+  const front = key.films.find((f) => f.kind === 'front');
+  if (front === undefined || front.geometry.mmPerPx === null) throw new Error('no exact front geometry');
+  const sx = front.geometry.mmPerPx; const sy = front.geometry.mmPerPxVertical ?? sx;
+  const span = front.vertebrae.filter((v) => compareLevels(v.level, 'T5') >= 0 && compareLevels(v.level, 'T12') <= 0);
+  const tilt = (index: number, top: boolean) => {
+    const marks = span[index]?.marks;
+    if (marks?.kind !== 'front') throw new Error('no true front marks');
+    const left = top ? marks.supL : marks.infL; const right = top ? marks.supR : marks.infR;
+    return Math.atan2((right.at[1] - left.at[1]) * sy, (left.at[0] - right.at[0]) * sx) * 180 / Math.PI;
+  };
+  let ends: [number, number, number] = [0, 0, 0];
+  for (let u = 0; u < span.length; u += 1) for (let l = u; l < span.length; l += 1) {
+    const angle = Math.abs(tilt(l, false) - tilt(u, true));
+    if (angle > ends[2]) ends = [u, l, angle];
+  }
+  const upper = span[ends[0]]; const lower = span[ends[1]];
+  if (upper === undefined || lower === undefined) throw new Error('no true main-curve ends');
+  const index = (level: VertebraPose['level']) => {
+    const at = levels.indexOf(level);
+    if (at < 0) throw new Error('a fitted curve end is absent from the answer key');
+    return at;
+  };
+  expect(Math.abs(index(main.upperEnd) - index(upper.level))).toBeLessThanOrEqual(1);
+  expect(Math.abs(index(main.lowerEnd) - index(lower.level))).toBeLessThanOrEqual(1);
+  for (const curve of readings.curves) expect(Math.abs(index(curve.lowerEnd) - index(curve.upperEnd))).toBeGreaterThan(1);
+  const sagittal = (level: VertebraPose['level'], top: boolean) => {
+    const pose = key.poses.find((p) => p.level === level);
+    if (pose === undefined) throw new Error('no true pose');
+    const n = normal(pose, top); return Math.atan2(n[0], n[2]) * 180 / Math.PI;
+  };
+  expect(Math.abs(value(readings.sagittal.kyphosisT5T12) - (sagittal('T5', true) - sagittal('T12', false)))).toBeLessThanOrEqual(8);
+  expect(Math.abs(value(readings.sagittal.lordosisL1L5) - (sagittal('L5', false) - sagittal('L1', true)))).toBeLessThanOrEqual(8);
 }
 
 describe('ordinary intake to the release fit', () => {
   it('finds all four made-up films through film-pass, chain and points before fitting the standing films', () => {
-    const pngs = (make_up_spine(SAMPLE_RECIPE) as MadeUpSpine).films;
+    const made = make_up_spine(SAMPLE_RECIPE) as MadeUpSpine;
+    const pngs = made.films;
     const opened = pngs.map(({ png, kind }) => open(png, kind));
     try {
       const results = opened.map(({ desk, film }) => finish<FilmPassResult>(desk.start_film_pass(film)));
@@ -81,7 +141,13 @@ describe('ordinary intake to the release fit', () => {
         return marks;
       });
       console.info('four-film recipe', JSON.stringify(SAMPLE_RECIPE));
-      applyAndFit(opened.map(({ film }) => film), marks, 'hand-built');
+      const { fit, input } = applyAndFit(opened.map(({ film }) => film), marks, 'hand-built');
+      if (fit.sideFilm === null) {
+        expect(fit).toEqual(fit_from_films({ ...input, side: null }));
+      } else {
+        const readings = measure_spine({ fit, front: input.front, side: input.side, bendLeft: null, bendRight: null, versions: 4, seed: SAMPLE_RECIPE.seed }) as SpineReadings;
+        agreesWithTruth(readings, made.answerKey);
+      }
     } finally { for (const { desk } of opened) desk.free(); }
   }, 300_000);
 
@@ -100,7 +166,7 @@ describe('ordinary intake to the release fit', () => {
       selected = trained(madeUpFront());
       console.info('trained Front fallback recipe', JSON.stringify(TRAINED_FRONT_RECIPE));
     }
-    const fit = applyAndFit([selected.film], [selected.result.marks], 'trained');
+    const { fit } = applyAndFit([selected.film], [selected.result.marks], 'trained');
     expect(fit.sideFilm).toBeNull();
     expect(fit.vertebrae.every((v) => v.rmsMm.side === null && v.inferred.depth)).toBe(true);
   }, 300_000);

@@ -12,7 +12,7 @@ use shapes::landmarks::Landmarks;
 use shapes::levels::Level;
 use shapes::made_up::{MadeUpRecipe, RecipeName, Tier};
 use shapes::naming::{ChosenBy, LevelNaming};
-use shapes::spine_fit::{FilmToFit, FitFromFilms, MarkSpread, TypicalSource};
+use shapes::spine_fit::{FilmToFit, FitFromFilms, FitLengths, MarkSpread, TypicalSource};
 use shapes::spine_readings::{FitTier, NotMeasured, Reading, ReadingsInput};
 use shapes::vertebra::{FilmMarks, VertebraMarks, VertebraOnFilm};
 use spine_readings::measure_spine;
@@ -90,6 +90,15 @@ fn not_on_side_film(reading: Reading) -> f64 {
 
 #[test]
 fn a_lumbar_side_film_leaves_thoracic_readings_typical_and_front_readings_unchanged() {
+    lumbar_side_readings(true);
+}
+
+#[test]
+fn a_lumbar_side_film_without_spacing_keeps_the_same_reading_coverage() {
+    lumbar_side_readings(false);
+}
+
+fn lumbar_side_readings(with_spacing: bool) {
     let recipe = MadeUpRecipe {
         name: RecipeName::RightThoracic40,
         seed: 3,
@@ -97,8 +106,15 @@ fn a_lumbar_side_film_leaves_thoracic_readings_typical_and_front_readings_unchan
     };
     let patient = make_up_patient(recipe.name, recipe.seed).unwrap();
     let layouts = film_recipes(&recipe, u64::from(recipe.seed));
-    let front = film(&patient, &FilmLayout::new(&layouts[0], &patient.standing));
+    let mut front = film(&patient, &FilmLayout::new(&layouts[0], &patient.standing));
     let mut side = film(&patient, &FilmLayout::new(&layouts[1], &patient.standing));
+    if !with_spacing {
+        for film in [&mut front, &mut side] {
+            film.geometry.mm_per_px = None;
+            film.geometry.mm_per_px_vertical = None;
+        }
+    }
+    assert!(!side.facing_assumed);
     // Remove the thoracic marks before fitting: only L1 to L5 are on this film.
     side.marks.vertebrae.retain(|v| v.level >= Level::L1);
     let side_levels = side
@@ -117,7 +133,16 @@ fn a_lumbar_side_film_leaves_thoracic_readings_typical_and_front_readings_unchan
         twist_readings: Vec::new(),
     })
     .unwrap();
-    assert!(fit.side_film.is_some());
+    assert!(fit.converged && fit.side_film.is_some());
+    assert_eq!(
+        fit.lengths,
+        if with_spacing {
+            FitLengths::Measured
+        } else {
+            FitLengths::TypicalSize
+        }
+    );
+    assert!(!fit.side_film.unwrap().facing_assumed);
     assert_eq!(fit.vertebrae.len(), 17);
     for v in &fit.vertebrae {
         assert_eq!(v.inferred.depth, v.level < Level::L1, "{:?}", v.level);

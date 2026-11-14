@@ -19,3 +19,5 @@ export const THREE_WORDS = {
   bonesReady: '3D drawing ready.',
 };
 export const ASSUMED_FACING_NOTE = 'Left and right assume the film is shown the usual way round.';
+
+export const SAME_SPINE_NOTE = 'The front and side films are taken to show the same spine. Nothing here can check that.';

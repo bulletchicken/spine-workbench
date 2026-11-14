@@ -38,7 +38,7 @@ pub fn start(problem: &Problem) -> DVector<f64> {
         .iter()
         .map(|v| v.front.map(|m| view(&problem.front, m.corners())))
         .collect();
-    let sides: Vec<_> = problem
+    let mut sides: Vec<_> = problem
         .observations
         .iter()
         .map(|v| {
@@ -46,12 +46,40 @@ pub fn start(problem: &Problem) -> DVector<f64> {
             v.side.map(|m| view(camera, m.corners()))
         })
         .collect();
-    let offset = fronts
+    // Shared centres register the films before fitting poses. Starting at
+    // equal pixel spacing can send a noisy pair into a slow local solve.
+    let shared: Vec<_> = fronts
         .iter()
         .zip(&sides)
-        .rev()
-        .find_map(|(f, s)| Some(f.as_ref()?.centre.y - s.as_ref()?.centre.y))
-        .unwrap_or(0.0);
+        .filter_map(|(f, s)| Some((f.as_ref()?.centre.y, s.as_ref()?.centre.y)))
+        .collect();
+    let count = shared.len().max(1) as f64;
+    let front_mean = shared.iter().map(|p| p.0).sum::<f64>() / count;
+    let side_mean = shared.iter().map(|p| p.1).sum::<f64>() / count;
+    let variance = shared
+        .iter()
+        .map(|p| (p.1 - side_mean) * (p.1 - side_mean))
+        .sum::<f64>();
+    let ratio = shared
+        .iter()
+        .map(|p| (p.0 - front_mean) * (p.1 - side_mean))
+        .sum::<f64>()
+        / variance;
+    let ratio = if ratio.is_finite() && ratio > 0.0 && libm::log(ratio).abs() < 14.0 {
+        ratio
+    } else {
+        1.0
+    };
+    let offset = if shared.is_empty() {
+        0.0
+    } else {
+        front_mean - ratio * side_mean
+    };
+    for view in sides.iter_mut().flatten() {
+        view.centre *= ratio;
+        view.height *= ratio;
+        view.half_sizes = view.half_sizes.map(|s| s * ratio);
+    }
     // Until the rotation matrices are composed, slots 3..6 are named angles.
     let mut poses = vec![[0.0; COUNT]; n];
     for i in 0..n {
@@ -148,6 +176,7 @@ pub fn start(problem: &Problem) -> DVector<f64> {
         }
         values.as_mut_slice()[i * COUNT..(i + 1) * COUNT].copy_from_slice(p);
     }
+    values[n * COUNT] = libm::log(ratio);
     values[n * COUNT + 1] = offset;
     values
 }
