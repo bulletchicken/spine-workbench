@@ -538,8 +538,8 @@ Shared parts are in `components.css`; the tables name the files that add behavio
 |---|---|
 | For | Trying the app on one film where the computer holds sample films of its own |
 | Dock | "Sample film 2 of 6 is in." over "Drop your own films at any time." With one sample film: "The sample film is in." |
-| Buttons | The quiet button brings the next thing: "Use a sample film", then "Next sample film", then "Use the sample case" after the last. Then "Find the spine" |
-| States | Scene: ready. A sample film goes in the Front place. Sample films leave the moment a film of the person's own arrives. "Use the sample case" still brings the made-up case of four |
+| Buttons | When a case is kept on this machine, the first offer is "Use the real sample case". Then "Use a sample film", "Next sample film", and "Use the sample case" after the last numbered front film; then round again. Find the spine stays the primary |
+| States | Scene: ready. A numbered sample goes in Front; a real sample case opens its named places together, with Front required. Its optional side-facing answer stays visible and can be changed. While reading: "Getting the real sample case ready…". Once in: the ordinary films-in sentence over "Real films of one patient, kept on this machine." It uses the ordinary finders and fit. Samples leave when a person’s own film arrives. "Use the sample case" keeps the made-up case’s words, "Four made-up films, drawn by the app.". With no local case the control is unchanged |
 | Do | Keep it to one control |
 | Do not | Show a name from a file. Show anything but made-up films in a picture of the product |
 
@@ -1102,10 +1102,10 @@ Shared parts are in `components.css`; the tables name the files that add behavio
 
 | | |
 |---|---|
-| For | Keeping the sizing limit visible without crowding the dock's helper |
-| Look | "Sized from published tables, not from this spine's bone." Centred Small type in `--ink-2`, one line, 12 above the real dock |
-| States | Shown once a placement has arrived, including review and comparison. Hidden during placement work, no-placement, placement refusal and failure. Loading, a load fault and Loaded keep it. It follows dock height and window changes |
-| Classes and files | `.place-caption` in `app/src/bench/place/place.css`; `app/src/bench/place/PlacementCaption.tsx` measures its place |
+| For | Keeping the sizing limit or a local case’s film credit visible without crowding the dock’s helper |
+| Look | Centred Small type in `--ink-2`, 12 above the real dock. Place shows "Sized from published tables, not from this spine's bone.". Films, Find and 3D show "Films: {credit}" when the local case supplies a credit, unchanged. A long credit may wrap |
+| States | Place’s sizing appears once the placement arrives, including review and comparison; not during placement work, no-placement, placement refusal or failure. Loading, a load fault and Loaded keep it. The film credit follows those films through Films, Find and 3D; in Place it moves to the sheet’s notes because sizing owns the caption. Credit leaves on replacement or Start over. Both captions follow dock height and window changes. Films and Find reserve the credit’s measured height and the usual gap below their film names |
+| Classes and files | `.stage-caption` in `app/src/bench/StageCaption.css`; `StageCaption.tsx` measures the actual dock. `FilmCredit.tsx` reads the credit; `place/PlacementCaption.tsx` keeps the placement’s sizing caption |
 
 #### Placement under load. Settled
 
@@ -1418,6 +1418,10 @@ The tables cover Films, Find, 3D, the first placement and its load calculation. 
 | Films | Film name | Bending right |
 | Films | Empty, dock sentence | Add the four films. |
 | Films | Quiet action | Use the sample case |
+| Films | Quiet action, local case | Use the real sample case |
+| Films | Local case, dock sentence | Getting the real sample case ready… |
+| Films | Local case, helper | Real films of one patient, kept on this machine. |
+| Films, Find, 3D; Place sheet notes | Local film credit | Films: {credit} |
 | Films | Quiet action | Use a sample film |
 | Films | Quiet action | Next sample film |
 | Films | Primary action | Find the spine |
@@ -2144,6 +2148,7 @@ grep -nE '#[0-9a-fA-F]{3,8}\b|rgba?\(|[0-9.]+(px|ms|em|rem|vw|vh)\b' app/src/loo
 
 ## 12. Decisions log
 
+- **14 November 2026 — A real sample case loads in one press.** A case kept only on this machine opens its named films together and uses the ordinary finders and fit; its unchanged credit travels with the films, in the stage caption or Place’s sheet notes. Ordinary builds exclude its films and metadata.
 - **14 November 2026 — Say what each measurement range holds.** The ranges now use the spread supplied with the marks and independently moving endplates, making them wider. Checks against made-up spines whose exact marks are known found that the earlier range held the exact angle about half the time; the new words distinguish the main curve, unchecked smaller curves, side readings and unchecked twist, and state where the figures were measured.
 
 - **14 November 2026 — Withhold load ranges when more than a quarter did not settle.** Almost half the versions can otherwise be discarded while a narrow range remains on screen. The versions that fail may not form a fair sample, so the result keeps its engine drawing and plain count but gives no ranges, load ink, ghosts or allowance counts. A quarter or fewer keeps the existing display.

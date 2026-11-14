@@ -1,3 +1,5 @@
+import { filmOrigins } from '@/view-state/film-origins';
+import { FILMS_WORDS } from '@/words/films';
 import { comparisonState } from './comparison-state';
 import { PlaceAge } from './PlaceAge';
 import { PlaceSources } from './PlaceSources';
@@ -19,6 +21,7 @@ import { filmSide, limitsForPlacement, reviewItems } from './placement-view';
 import '../three/measurements.css';
 import './place.css';
 export function PlaceSheet({ accepted }: { accepted: AcceptedSpine }) {
+  const credit = useStore(filmOrigins, (s) => s.credit);
   const hand=useStore(handState),comparison=useStore(comparisonState);
   const loaded=useStore(loadState,(s)=>s.phase==='loaded');
   const { sheet, result } = useStore(placeState), panel = useRef<HTMLElement>(null), heading = useRef<HTMLHeadingElement>(null);
@@ -63,7 +66,7 @@ export function PlaceSheet({ accepted }: { accepted: AcceptedSpine }) {
     <>{diameters.length > 0 && <><h2>{W.otherDiameters}</h2><ul className="place-sheet-list">{diameters.map((line) => <li key={line}><LevelWords>{line}</LevelWords></li>)}</ul></>}</>
     <h2>{W.about}</h2>
     <ul className="place-sheet-list">{limitsForPlacement(loaded,accepted.fit.sideFilm===null,accepted.input.front.geometry.mmPerPx===null).map((words) => <li key={words}><LevelWords>{words}</LevelWords></li>)}</ul>
-    <div className="panel-note">{accepted.input.front.facingAssumed && <p>{W.facing}</p>}<p>{W.sizing}</p><p>{W.unsaved}</p></div>
+    <div className="panel-note">{credit !== null && <p>{FILMS_WORDS.credit(credit)}</p>}{accepted.input.front.facingAssumed && <p>{W.facing}</p>}<p>{W.sizing}</p><p>{W.unsaved}</p></div>
     <PlaceSources records={sourceRecords(sourceKeys)}/>
     <div className="panel-acts">{hand.past.length>0&&<Button look="text" busy={hand.busy!==null} onPress={startFirstPlacement}>{E.startFirst}</Button>}<Button look="text" onPress={() => { placeState.setState({ sheet: false }); }}>{W.done}</Button></div>
   </aside>;

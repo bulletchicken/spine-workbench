@@ -14,7 +14,7 @@ import { chooseFilms, takeIn, takeInNextSample } from './film-intake';
 
 vi.mock('@/choreography/timing', () => ({ durationOnPage: () => 0 }));
 const samples = vi.hoisted(() => ({ files: [] as { bytes(): ArrayBuffer }[] }));
-vi.mock('@/sample-films/sample-films', () => ({
+vi.mock('@/sample-films/sample-films', () => ({ sampleCaseFor: () => Promise.resolve(null),
   sampleFilmFiles: () => samples.files,
   sampleFilmFilesFor: async (engine: { info(): Promise<{ engineVersion: string }> }) => (await engine.info()).engineVersion === 'stand-in' ? [] : samples.files,
 }));

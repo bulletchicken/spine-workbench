@@ -18,7 +18,8 @@ import { openAFilm } from '@/open-and-save/open-a-film';
 import { pickFilms } from '@/open-and-save/pick-files';
 import { readBytes } from '@/open-and-save/read-bytes';
 import { readDroppedFiles, type DroppedFile } from '@/open-and-save/read-dropped-files';
-import { sampleFilmFilesFor } from '@/sample-films/sample-films';
+import { answerSideFacing } from './SideFacing';
+import { sampleCaseFor, sampleFilmFilesFor } from '@/sample-films/sample-films';
 import type { ErrorCode, FilmKind } from '@/shapes';
 import { currentStep } from '@/view-state/current-step';
 import { findState } from '@/view-state/find-state';
@@ -41,7 +42,7 @@ function backToFilms(): IntakeNotice | null {
 }
 
 /** File judging is shared by a drop and the picker; neither keeps file names. */
-async function takeTold(engine: EngineClient, told: readonly DroppedFile[], onPlace: FilmKind | null, from: FilmIntakeState['from'], sample: number | null = null): Promise<void> {
+async function takeTold(engine: EngineClient, told: readonly DroppedFile[], onPlace: FilmKind | null, from: FilmIntakeState['from'], sample: number | null = null, slots?: readonly FilmKind[]): Promise<void> {
   if (told.length === 0) return;
   const saved = told.find((file) => file.kind === 'case');
   if (saved?.kind === 'case') {
@@ -68,9 +69,9 @@ async function takeTold(engine: EngineClient, told: readonly DroppedFile[], onPl
   const blobs = told.flatMap((file) => file.kind === 'film' ? [file.blob] : []);
   const refusals: ErrorCode[] = told.flatMap((file) => file.kind === 'refused' ? [file.code] : []);
   const wasFrom = filmIntake.getState().from;
-  if (blobs.length > 0 && (from !== 'yours' || wasFrom === 'sample-film' || wasFrom === 'made-up-case')) clearFilms(engine);
+  if (blobs.length > 0 && (from !== 'yours' || wasFrom === 'sample-film' || wasFrom === 'made-up-case' || wasFrom === 'real-case')) clearFilms(engine);
   const filled = caseStore.getState().case.films.map((film) => film.kind);
-  const { places, leftOut } = assignPlaces(blobs.length, onPlace, filled);
+  const { places, leftOut } = slots === undefined ? assignPlaces(blobs.length, onPlace, filled) : { places: slots, leftOut: 0 };
   const openings = places.map((kind, index) => ({ kind, blob: blobs[index] })).sort((a, b) => FILM_KINDS.indexOf(a.kind) - FILM_KINDS.indexOf(b.kind));
   if (places.length > 0) filmIntake.getState().source(from, sample);
   filmIntake.getState().begin(openings.map(({ kind }) => kind));
@@ -127,10 +128,23 @@ export function takeInNextSample(engine: EngineClient): Promise<void> {
   return queueFilmChange(async () => {
     try {
       const files = await sampleFilmFilesFor(engine);
-      const next = Math.min(filmIntake.getState().nextSample, files.length);
-      const file = files[next];
+      const local = await sampleCaseFor(engine);
+      const offset = local === null ? 0 : 1;
+      const next = Math.min(filmIntake.getState().nextSample, files.length + offset);
+      if (local !== null && next === 0) {
+        const places = FILM_KINDS.filter((kind) => local.films[kind] !== undefined);
+        await takeTold(engine, places.flatMap((kind) => {
+          const file = local.films[kind];
+          return file === undefined ? [] : [{ kind: 'film' as const, blob: new Blob([file.bytes()]) }];
+        }), null, 'real-case', null, places);
+        if (local.sideFaces !== undefined && caseStore.getState().case.films.some((film) => film.kind === 'side')) answerSideFacing(filmPixels.getState().openings.side, local.sideFaces === 'left' ? 'posterior' : 'anterior');
+        if (caseStore.getState().case.films.length > 0) filmOrigins.getState().setCredit(local.credit ?? null);
+        filmIntake.getState().next(1);
+        return;
+      }
+      const file = files[next - offset];
       if (file !== undefined) {
-        await takeTold(engine, [{ kind: 'film', blob: new Blob([file.bytes()]) }], 'front', 'sample-film', next);
+        await takeTold(engine, [{ kind: 'film', blob: new Blob([file.bytes()]) }], 'front', 'sample-film', next - offset);
         filmIntake.getState().next(next + 1);
         return;
       }

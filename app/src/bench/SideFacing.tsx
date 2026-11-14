@@ -1,4 +1,4 @@
-import { caseStore } from '@/case-state/case-store';
+import { useCase, caseStore } from '@/case-state/case-store';
 import { filmPixels } from '@/case-state/film-pixels';
 import { filmOf, marksOf } from '@/case-state/selectors';
 import { fitSources } from '@/view-state/fit-sources';
@@ -23,9 +23,10 @@ export function answerSideFacing(opening: number, imageRight: 'posterior' | 'ant
 }
 
 export function SideFacing({ opening }: { opening: number }) {
+  const facing = useCase((s) => { const g = filmOf(s.case, 'side')?.geometry; return g?.confirmed.facing === true ? g.imageRight : null; });
   return <fieldset className="side-controls" onClick={(event) => { event.stopPropagation(); }}>
     <legend>{W.facing}</legend>
-    <label><input type="radio" name={`side-facing-${String(opening)}`} onChange={() => { answerSideFacing(opening, 'posterior'); }} />{W.left}</label>
-    <label><input type="radio" name={`side-facing-${String(opening)}`} onChange={() => { answerSideFacing(opening, 'anterior'); }} />{W.right}</label>
+    <label><input type="radio" name={`side-facing-${String(opening)}`} checked={facing === 'posterior'} onChange={() => { answerSideFacing(opening, 'posterior'); }} />{W.left}</label>
+    <label><input type="radio" name={`side-facing-${String(opening)}`} checked={facing === 'anterior'} onChange={() => { answerSideFacing(opening, 'anterior'); }} />{W.right}</label>
   </fieldset>;
 }
