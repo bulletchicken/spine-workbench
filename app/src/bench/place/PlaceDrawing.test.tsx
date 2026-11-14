@@ -1,3 +1,4 @@
+import { filmOrigins } from '@/view-state/film-origins';
 import { EngineProvider } from '@/engine-room/use-engine';
 import type { EngineClient } from '@/engine-room/engine-client';
 import { act, useRef } from 'react';
@@ -184,4 +185,14 @@ it('keeps placement ink and engine poses while withholding poor-run sheet, chip,
  const strengths:number[]=[];root.traverse((object)=>{if(object instanceof Mesh&&object.material instanceof MeshBasicMaterial)strengths.push(object.material.opacity);});expect(strengths.length).toBeGreaterThan(0);expect(strengths.every((value)=>value===.8)).toBe(true);expect(spine.betweenPoses).toHaveBeenCalledWith(expect.anything(),expect.arrayContaining([expect.objectContaining({centre:stop.middle.find((pose)=>pose.level==='T1')?.centre})]),1);
  page.takeDown();const sheet=putOnThePage(<LoadEstimates accepted={accepted}/>);expect(sheet.host.textContent).toContain('Too few versions settled to give ranges.');expect(sheet.host.textContent).toContain('14 of 32 versions did not settle.');expect(sheet.host.querySelectorAll('.load-estimate-list,.past-strength,.load-range')).toHaveLength(0);expect(sheet.host.querySelector('.panel-note')?.textContent).toContain(L.allowance);
  act(()=>{layout.versionsUnsettled=8;loadState.setState({result:{...answer}});});expect(sheet.host.querySelector('.load-estimate-list')).not.toBeNull();expect(sheet.host.textContent).toContain('8 of 32 versions did not settle, so every range here is less sure.');sheet.takeDown();
+});
+
+it('keeps the local film credit in the Place sheet notes',()=>{
+  const {page,accepted}=mount();page.takeDown();
+  act(()=>{filmOrigins.getState().setCredit('Made-up example; CC0.');placeState.setState({sheet:true});});
+  const sheet=putOnThePage(<EngineProvider engine={{proposeLayouts:vi.fn()} as unknown as EngineClient}><PlaceSheet accepted={accepted}/></EngineProvider>);
+  expect(sheet.host.querySelector('.panel-note')?.textContent).toContain('Films: Made-up example; CC0.');
+  act(()=>{filmOrigins.getState().clear();});
+  expect(sheet.host.querySelector('.panel-note')?.textContent).not.toContain('Films:');
+  sheet.takeDown();
 });

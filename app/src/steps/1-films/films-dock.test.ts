@@ -65,3 +65,7 @@ describe('the Films dock', () => {
     expect(dock(['front'], { leaving: true })).toEqual(dock(['front']));
   });
 });
+
+it('names real case reading separately from made-up sample work', () => {
+  expect(filmsDock({ inPlace: [], sampleFilms: 0, realCase: true, intake: { ...createFilmIntake().getState(), from: 'real-case', reading: ['front'], readTotal: 4 } }, { choose: () => undefined, sample: () => undefined, startOver: () => undefined, find: () => undefined }).sentence).toBe('Getting the real sample case ready…');
+});

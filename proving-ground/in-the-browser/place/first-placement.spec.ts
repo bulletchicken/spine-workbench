@@ -36,6 +36,8 @@ test('the made-up case reaches Place and returns to its 3D spine', async ({ page
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/');
   await expect(page.getByTestId('engine-status')).toHaveAttribute('data-status', 'ready');
+  await expect(page.getByRole('button', { name: 'Use the real sample case', exact: true })).toHaveCount(0);
+  await expect(page.locator('.film-credit')).toHaveCount(0);
   const dock = page.locator('.dock .scene.on');
   const steps = page.getByRole('navigation', { name: 'Steps', exact: true });
   await dock.getByRole('button', { name: 'Use the sample case', exact: true }).click();

@@ -31,6 +31,7 @@ import { markAtLevel } from './three/spine-links';
 import { Measurements } from './three/Measurements';
 import { PlaceSheet } from './place/PlaceSheet';
 import { placeState } from './place/place-state';
+import { FilmCredit } from './FilmCredit';
 import { ThreeStage } from './three/ThreeStage';
 
 /** The stage stays mounted as the step changes, so each film keeps its tile. */
@@ -70,6 +71,7 @@ export default function Bench() {
   const pixels = useStore(filmPixels, (state) => state.films);
   const finding = useFindOnStage();
   const search = useSearchFilms();
+  const sideOrigin = useStore(filmOrigins, (s) => s.films.side?.from);
   const sideOpening = useStore(filmPixels, (s) => s.openings.side);
   const films = useMemo(() => Object.fromEntries(FILM_ORDER.map((kind) => {
     const record = records.find((film) => film.kind === kind);
@@ -111,6 +113,7 @@ export default function Bench() {
     {three && host !== null && build.accepted !== null && createPortal(<ThreeStage accepted={build.accepted} filmDriver={filmDriver} placing={placing} />, host)}
     {three && !placing && build.accepted !== null && <Measurements accepted={build.accepted} />}
     {three && placing && build.accepted !== null && <PlaceSheet accepted={build.accepted} />}
-    <Stage sideControls={reviewSide ? <SideReview onLooksRight={() => { findState.getState().approveSide(sideReviewKey(sideMarks, sideRevision)); }} onRename={renameSide} onLeaveOut={leaveSideOut} /> : search.sideExclusion === 'facing' ? <SideFacing key={sideOpening} opening={sideOpening} /> : search.sideExclusion !== null ? <p className="side-controls">{exclusionWords(search.sideExclusion)}</p> : null} compared={three && !placing ? threeView.compared : null} sheetOpen={three && (placing ? placeView.sheet : threeView.sheet)} {...(placing?{}:{onPressFilm:(kind:FilmKind) => { if (!three || threeView.moving) return; threeState.getState().compare(threeView.compared === kind ? null : kind); }})} forming={three && build.accepted?.movePending === true} onFilmDriver={setFilmDriver} moment={three ? 'three' : slug === 'find' || slug === 'three' && c.marks.length > 0 ? 'find' : 'films'} films={films} reading={intake.making ? FILM_ORDER : intake.reading} held={held} onPressPlace={pressPlace} leaving={intake.leaving} marked={finding.marked} reviewing={finding.reviewing} replay={finding.replay} {...(three ? { onPoint: (kind, key) => { const mark = c.marks.find((m) => m.film === kind)?.vertebrae.find((v) => String(v.id) === key); threeState.getState().point(mark?.level ?? null); } } : finding.onPoint === undefined ? {} : { onPoint: finding.onPoint })} />
+    <FilmCredit />
+    <Stage sideControls={slug === 'films' && sideOrigin === 'real-case' ? <SideFacing key={sideOpening} opening={sideOpening} /> : reviewSide ? <SideReview onLooksRight={() => { findState.getState().approveSide(sideReviewKey(sideMarks, sideRevision)); }} onRename={renameSide} onLeaveOut={leaveSideOut} /> : search.sideExclusion === 'facing' ? <SideFacing key={sideOpening} opening={sideOpening} /> : search.sideExclusion !== null ? <p className="side-controls">{exclusionWords(search.sideExclusion)}</p> : null} compared={three && !placing ? threeView.compared : null} sheetOpen={three && (placing ? placeView.sheet : threeView.sheet)} {...(placing?{}:{onPressFilm:(kind:FilmKind) => { if (!three || threeView.moving) return; threeState.getState().compare(threeView.compared === kind ? null : kind); }})} forming={three && build.accepted?.movePending === true} onFilmDriver={setFilmDriver} moment={three ? 'three' : slug === 'find' || slug === 'three' && c.marks.length > 0 ? 'find' : 'films'} films={films} reading={intake.making ? FILM_ORDER : intake.reading} held={held} onPressPlace={pressPlace} leaving={intake.leaving} marked={finding.marked} reviewing={finding.reviewing} replay={finding.replay} {...(three ? { onPoint: (kind, key) => { const mark = c.marks.find((m) => m.film === kind)?.vertebrae.find((v) => String(v.id) === key); threeState.getState().point(mark?.level ?? null); } } : finding.onPoint === undefined ? {} : { onPoint: finding.onPoint })} />
   </>;
 }

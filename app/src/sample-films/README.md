@@ -16,3 +16,27 @@ The sample control goes through the local films in number order, then the four-f
 then round again. With no local films it always offers the made-up case. Your own films replace
 the sample before they are taken in. Film bytes are inlined in the app's script; opening a sample
 needs no request.
+
+## One real case
+
+A local `on-this-machine/case/` folder may hold `front.png`, `side.png`, `bend-left.png`
+and `bend-right.png` (each also accepts `.jpg` or `.jpeg`). Only `front` is required.
+It is offered first as “Use the real sample case”, before the numbered front films and the
+made-up case. Each film goes straight to its named place and uses the ordinary finders and fit.
+Without this folder the sample control is unchanged. These files are inlined only in development
+and the deliberate machine build, never in an ordinary production build.
+
+An optional `case/case.json` may contain:
+
+```json
+{
+  "sideFaces": "left",
+  "credit": "Source name — licence and attribution"
+}
+```
+
+`sideFaces` is `"left"` or `"right"`, the side of the picture the patient faces in the side film.
+It answers the facing question; the question stays visible and can be changed.
+`credit` is one line shown unchanged after “Films: ” in the stage caption, or in Place’s sheet
+notes. A licence’s credit line belongs in `credit`. The credit leaves when these films are
+replaced or the case is started over. Neither field is required; never put film names in `credit`.

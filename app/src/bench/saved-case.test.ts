@@ -24,7 +24,7 @@ import { saveCurrentCase, hasCaseToSave } from './save-case';
 import { chooseCaseDestination } from '@/open-and-save/save-file';
 import { pickFilms } from '@/open-and-save/pick-files';
 
-vi.mock('@/sample-films/sample-films', () => ({ sampleFilmFilesFor: () => Promise.resolve([]) }));
+vi.mock('@/sample-films/sample-films', () => ({ sampleCaseFor: () => Promise.resolve(null), sampleFilmFilesFor: () => Promise.resolve([]) }));
 vi.mock('@/choreography/timing', () => ({ durationOnPage: () => 0 }));
 vi.mock('@/spine-3d/bones/load-bones', () => ({ loadBones: () => Promise.resolve([{ level: 'L3' }]) }));
 vi.mock('@/open-and-save/save-file', () => ({ chooseCaseDestination: vi.fn() }));

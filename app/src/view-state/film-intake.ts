@@ -8,7 +8,7 @@ export type IntakeNotice =
   | { kind: 'search-stopped' };
 
 export interface FilmIntakeState {
-  from: 'yours' | 'sample-film' | 'made-up-case' | null;
+  from: 'yours' | 'sample-film' | 'made-up-case' | 'real-case' | null;
   sample: number | null;
   nextSample: number;
   reading: readonly FilmKind[];

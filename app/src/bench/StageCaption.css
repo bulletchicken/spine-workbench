@@ -1,0 +1,6 @@
+.stage-caption { position: absolute; left: 50%; translate: -50% 0; width: var(--col); max-width: 100%; text-align: center; text-wrap: balance; font: var(--type-small); color: var(--ink-2); }
+
+.stage:has(> .film-credit) { --stage-caption-room: calc(0 * var(--hairline)); }
+
+/* Leave room for the credit below the film names; the 3D stage keeps its resting frame. */
+:is([data-moment="films"], [data-moment="find"]) .frame > .stage:has(> .film-credit) { bottom: calc(var(--stage-bottom) + var(--stage-caption-room)); }

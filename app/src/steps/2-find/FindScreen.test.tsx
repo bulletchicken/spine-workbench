@@ -23,7 +23,7 @@ import { findRun } from './find-run';
 import { clearSpineBuild } from '@/bench/three/build-spine';
 vi.mock('@/spine-3d/bones/load-bones', () => ({ loadBones: () => Promise.resolve([{ level: 'L3' }]) }));
 
-vi.mock('@/sample-films/sample-films', () => ({ sampleFilmFiles: () => [], sampleFilmFilesFor: () => Promise.resolve([]) }));
+vi.mock('@/sample-films/sample-films', () => ({ sampleCaseFor: () => Promise.resolve(null), sampleFilmFiles: () => [], sampleFilmFilesFor: () => Promise.resolve([]) }));
 vi.mock('@/choreography/timing', () => ({
   durationOnPage: (name: string) => ({ '--dur-scene': 640, '--stagger': 40, '--dur-fade': 160, '--dur-quick': 140, '--dur-light-lead': 700, '--dur-light': 4400, '--dur-hold': 560, '--hold-leave': 260 })[name],
   numberOnPage: (name: string) => ({ '--light-h': 200, '--light-edge': 60, '--film-h': 1300 })[name],
