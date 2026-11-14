@@ -7,6 +7,8 @@ import type { ViewOrRule } from '../scene/stage';
 import { FRONT_ONLY_CASE, MADE_UP_CASE } from '../made-up-case/made-up-case';
 import { fittedFilmCamera } from '../placing/fitted-film-camera';
 import type { SpineModel } from '../scene/spine-model';
+import type { Pointed } from '../scene/pointed';
+import type { SceneLayer } from '../scene/scene-layer';
 import { Spine3D, type Spine3DHandle } from './Spine3D';
 
 declare global {
@@ -18,7 +20,7 @@ globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 // jsdom has no GPU, so the stage is stood in for by one that writes down
 // what it is asked to do. Everything up to the stage is real: each bone (a
 // plain block here) is shaped to its fitted vertebra and given its shapes.
-const heard = vi.hoisted(() => ({ calls: [] as [string, ...unknown[]][], models: [] as unknown[] }));
+const heard = vi.hoisted(() => ({ calls: [] as [string, ...unknown[]][], models: [] as unknown[], hit: null as Pointed | null }));
 
 vi.mock('../scene/stage', () => ({
   makeStage: () => {
@@ -73,6 +75,8 @@ vi.mock('../scene/stage', () => ({
       namedView: (name: string) => ({ ...view, named: name }),
       size: () => ({ width: 400, height: 600 }),
       bounds: () => ({ low: [0, 0, 0], high: [1, 1, 1] }),
+      pick: () => heard.hit,
+      onDrawn: () => () => undefined,
       dispose: () => {
         say('dispose');
       },
@@ -120,7 +124,7 @@ let root: Root;
 
 beforeEach(() => {
   heard.calls.length = 0;
-  heard.models.length = 0;
+  heard.models.length = 0; heard.hit = null;
   vi.stubGlobal('matchMedia', () => ({ matches: true }));
   host = document.createElement('div');
   document.body.append(host);
@@ -229,4 +233,20 @@ describe('Spine3D', () => {
     expect(ready).toHaveBeenLastCalledWith(null);
     expect(host.querySelector('canvas')?.hasAttribute('data-hand')).not.toBe(true);
   });
+});
+
+
+it('passes a layer identity through the rich callback while preserving level-only screen callbacks', () => {
+  const handle = createRef<Spine3DHandle>(), onPoint = vi.fn(), onPointed = vi.fn();
+  show(<Spine3D fit={fit} bones={bones} ref={handle} onPoint={onPoint} onPointed={onPointed} />);
+  const spine = handle.current?.spine(), canvas = host.querySelector('canvas');
+  if (spine == null || canvas === null) throw new Error('Missing drawing');
+  const part: Pointed = { kind: 'part', spine, layer: {} as SceneLayer, id: 'anchor:T8' };
+  heard.hit = part;
+  act(() => { canvas.dispatchEvent(new MouseEvent('pointermove', { clientX: 30, clientY: 40 })); });
+  expect(onPointed).toHaveBeenLastCalledWith(part); expect(onPoint).toHaveBeenLastCalledWith(null);
+  heard.hit = { kind: 'bone', spine, level: 'T8' };
+  act(() => { canvas.dispatchEvent(new MouseEvent('pointermove', { clientX: 31, clientY: 40 })); });
+  expect(onPoint).toHaveBeenLastCalledWith('T8');
+  expect(named('spine.set').at(-1)).toEqual(['spine.set', { tint: 1 }, 'T8']);
 });

@@ -5,13 +5,12 @@
 // This is the one place the 3D view moves anything over time by itself, and
 // only because a hand threw it. Setting a view from outside ends the glide.
 
-import type { Level } from '@/shapes';
 import { joinLoop } from '@/choreography/one-loop';
 import { fittedScale } from '../looking/framing';
 import { perspectiveFor } from '../looking/named-views';
 import { type Turn, makeTurning } from '../looking/turning';
 import type { CanvasSize, View } from '../looking/view';
-import type { DrawnSpine } from './drawn-spine';
+import type { Pointed } from './pointed';
 import type { Stage } from './stage';
 
 /** The attribute the canvas wears while a hand may turn it: `free`, `on-a-bone` or `turning`. The stylesheet picks the cursor from it. */
@@ -22,9 +21,9 @@ export interface HandTurningOptions {
   /** The spine was turned or zoomed by hand. */
   onTurned?(): void;
   /** The level under the pointer changed; `null` when it is over no bone. */
-  onPoint?(pointed: { spine: DrawnSpine; level: Level } | null): void;
+  onPoint?(pointed: Pointed | null): void;
   /** A bone was pressed without dragging; `null` for a press on nothing. */
-  onChoose?(chosen: { spine: DrawnSpine; level: Level } | null): void;
+  onChoose?(chosen: Pointed | null): void;
 }
 
 export interface HandTurning {
@@ -38,7 +37,8 @@ export function attachHandTurning(stage: Stage, canvas: HTMLCanvasElement, optio
   const turning = makeTurning({ azimuth: 0, elevation: 0, zoom: 1 });
   const captured = new Set<number>();
   let gliding: (() => void) | null = null;
-  let pointed: { spine: DrawnSpine; level: Level } | null = null;
+  let pointed: Pointed | null = null;
+  let lastPointer: PointerEvent | null = null;
   /** The view the hand took hold of: its aim is kept, so the spine does not jump to the middle. */
   let held: View | null = null;
 
@@ -85,9 +85,11 @@ export function attachHandTurning(stage: Stage, canvas: HTMLCanvasElement, optio
   };
 
   const point = (event: PointerEvent) => {
+    lastPointer = event;
     const [x, y] = place(event);
     const now = stage.pick(x, y);
-    if (now?.spine === pointed?.spine && now?.level === pointed?.level) return;
+    if (now === null && pointed === null) return;
+    if (now !== null && pointed !== null && now.spine === pointed.spine && now.kind === pointed.kind && (now.kind === 'part' && pointed.kind === 'part' ? now.layer === pointed.layer && now.id === pointed.id : now.level === pointed.level)) return;
     pointed = now;
     canvas.setAttribute(HAND, now === null ? 'free' : 'on-a-bone');
     options.onPoint?.(now);
@@ -159,11 +161,13 @@ export function attachHandTurning(stage: Stage, canvas: HTMLCanvasElement, optio
   };
 
   const onLeave = () => {
+    lastPointer = null;
     if (pointed === null) return;
     pointed = null;
     options.onPoint?.(null);
   };
 
+  const stopDrawn = stage.onDrawn(() => { if (lastPointer !== null && !turning.held()) point(lastPointer); });
   canvas.setAttribute(HAND, 'free');
   canvas.addEventListener('pointerdown', onDown);
   canvas.addEventListener('pointermove', onMove);
@@ -175,6 +179,7 @@ export function attachHandTurning(stage: Stage, canvas: HTMLCanvasElement, optio
   return {
     rest,
     detach() {
+      stopDrawn();
       rest();
       for (const pointer of captured) if (canvas.hasPointerCapture(pointer)) canvas.releasePointerCapture(pointer);
       captured.clear();

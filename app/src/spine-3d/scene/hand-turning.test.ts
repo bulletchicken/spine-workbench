@@ -17,7 +17,7 @@ function setup() {
   const stage = {
     view: () => ({ azimuth: 0, elevation: 0, perspective: 0, pxPerMm: [1, 1], aim: [0, 0, 0], aimAt: [200, 300] }),
     size: () => ({ width: 400, height: 600 }), bounds: () => ({ low: [0, 0, 0], high: [100, 100, 100] }),
-    viewsSet: () => count, setView, pick: () => null,
+    viewsSet: () => count, setView, pick: () => null, onDrawn: () => () => undefined,
   } as unknown as Stage;
   const pointer = (name: string, x: number, time: number) => {
     const event = new Event(name);

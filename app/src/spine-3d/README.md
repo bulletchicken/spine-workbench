@@ -110,3 +110,62 @@ their reported standard deviations.
   depth.
 - `scene/look.ts` holds every colour and strength of the stage. They are
   the design's values; keep them equal to it.
+
+## Layers, poses and columns
+
+`spine.addLayer()` supplies `onSpine` in patient millimetres and
+`onBone(level)` in that vertebra's own unscaled frame. Bone groups follow
+its current pose, including pressing onto a film. Add meshes using
+`layer.lit(colour)` or `layer.flat(colour, strength)`, register their
+identity with `pointable(object, id)`, and call `changed()` after editing.
+A registration includes its children unless a child has its own registration.
+`inFront(object, true)` ignores bone occlusion while retaining depth testing
+against the other layer objects. The owner frees its geometries; the layer
+frees its supplied materials. `remove()` is idempotent.
+
+Per-bone `strength` veils the bones alone. Whole-spine
+`setSpine({ strength })` fades bones and layers together. The two supplied
+material kinds support ordinary mesh geometry; arbitrary shaders, skinning,
+instancing and sprite picking are outside this contract.
+
+With layers present, the stage first captures opaque bones' depth in a
+separate image. It draws films and bones with the existing nearest-surface
+bone depth pass, then their colour. It clears the working depth buffer and
+draws the layer objects, testing them against one another and, except for
+`inFront`, against the captured opaque-bone depth. Veiled bones are excluded
+from that image, so their colour never hides metal. This pass policy still
+needs review on a real graphics card at strengths .55 and .34.
+
+`betweenPoses(from, to, p)` samples complete, dimension-matched pose sets:
+straight-line centres and shortest quaternion turns, with progress clamped
+to 0–1. It changes drawing poses without changing `about(level)` or the fit.
+`settle()` returns to the fitted poses. Current bounds and landmarks follow
+the sampled poses.
+
+`stage.addSpine(model, { shapesFrom: source, flat: true })` shares the
+source's shaped bone and cage buffers after checking dimensions and levels.
+Pass the same model to avoid shaping anything twice. Shared geometry stays
+alive until its caller releases it and every drawing has gone. A flat spine
+is unlit, has no shadow or pointer hits, and takes `flatColour` and whole-spine
+`strength` from its caller.
+
+`stage.inColumns(spines, { gapPx, footPx })` fits each listed spine to its
+own equal cell. One view controls every column's turn, perspective and zoom.
+`columnOf(spine)` returns its CSS-pixel cell or null. Projection and picking
+use the same per-column camera. An empty list returns to ordinary framing.
+Unlisted ghosts draw behind the first column without changing its fit.
+The smallest supported cell is 96 × 320 CSS pixels, excluding the footer.
+
+`stage.pick(x, y)` returns a `Pointed`: either `{ kind: 'bone', spine,
+level }` or `{ kind: 'part', spine, layer, id }`. A registered mesh or line
+within 12 CSS pixels wins before bones, by screen distance, then nearer
+depth, then registration order. Hidden ancestors, zero-opacity materials,
+detached or disposed objects, removed layers and ghosts are excluded.
+Coordinates are independent of device pixel ratio.
+
+`Spine3D` retains its level-only `onPoint` and `onChoose` callbacks for
+existing screens. `onPointed` and `onChosen` receive the complete identity;
+part hits send null to the level-only callbacks. `onReady` exposes the same
+stage and primary-spine handles. The Layers gallery has a made-up fitted
+spine, internal cylinders, two rods, a veil dial, pose sampling, columns and
+a ghost for visual inspection.
