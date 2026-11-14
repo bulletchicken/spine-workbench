@@ -38,6 +38,9 @@
 //! | [`toolbox`] | wand and pin inputs, outputs, previews and warnings |
 //! | [`checks`] | case check findings |
 //! | [`made_up`] | made-up spine recipes, made-up cases, answer keys and comparisons |
+//! | [`spine_readings`] | fitted angles, curves and version bands |
+//! | [`implant_layout`] | placement proposals: level rules, level pairs, anchors, rods, what needs a look |
+//! | [`load_bench`] | placements under load over versions of the spine, and their comparison |
 //! | [`engine_info`] | `EngineInfo` |
 //! | [`errors`] | `EngineError` and every `ErrorCode` |
 //! | [`case_file_v1`] | `CaseFileV1`, the documented data file, and a case's contents with its PNGs |
@@ -54,8 +57,10 @@ pub mod engine_info;
 pub mod errors;
 pub mod film;
 pub mod film_geometry;
+pub mod implant_layout;
 pub mod landmarks;
 pub mod levels;
+pub mod load_bench;
 pub mod made_up;
 pub mod marks;
 pub mod naming;
