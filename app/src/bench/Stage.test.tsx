@@ -6,7 +6,7 @@ import { cameras } from '@/film-viewer/camera/cameras';
 import type { DrawState, FilmPainter } from '@/film-viewer/gpu/film-painter';
 import { filmSpace } from '@/film-viewer/film-space';
 import type { FilmSurface } from '@/film-viewer/gpu/gl-context';
-import { Stage, type StageFilm, type StageProps } from './Stage';
+import { Stage, type FilmDriver, type StageFilm, type StageProps } from './Stage';
 import { FILM_ORDER } from './stage-layout';
 
 const { steps, painters } = vi.hoisted(() => ({
@@ -267,4 +267,27 @@ describe('the stage', () => {
     act(() => { find('.mark:not(.under) polygon').dispatchEvent(new MouseEvent('pointerover', { bubbles: true })); });
     expect(point).not.toHaveBeenCalled();
   });
+});
+
+it('keeps the Find registration for formation and exposes the same rail tiles for comparison', async () => {
+  let driver: FilmDriver | null = null;
+  const onFilmDriver = (next: FilmDriver | null) => { driver = next; };
+  const current = (): FilmDriver => { if (driver === null) throw new Error('no film driver'); return driver; };
+  await show({ moment: 'find', films: { ...empty, front: madeUpFilm(), side: madeUpFilm() }, onFilmDriver });
+  const tile = find('.tile[data-place="front"]');
+  const before = cameras.placementOf('front');
+  if (before === null) throw new Error('no camera');
+  const zoom = before.zoom;
+  await show({ moment: 'three', forming: true });
+  expect(find('.tile[data-place="front"]')).toBe(tile);
+  expect(current().opening(DOMRect.fromRect())?.pxPerFilmPx).toBe(zoom);
+  act(() => { current().set({ front: 0, side: 0, 'bend-left': 0, 'bend-right': 0 }); });
+  expect(Number(tile.style.getPropertyValue('--s'))).toBeGreaterThan(1);
+  act(() => { current().finish(); });
+  expect(tile.style.getPropertyValue('--s')).toBe('1');
+  await show({ forming: false, compared: 'front', onPressFilm: vi.fn() });
+  expect(find('.tile[data-place="front"]')).toBe(tile);
+  expect(current().compared).toBe('front');
+  expect(host.querySelector('.compare-slot')).not.toBeNull();
+  expect(current().separation).toBeGreaterThan(0);
 });

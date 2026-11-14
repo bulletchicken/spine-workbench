@@ -10,7 +10,7 @@ import { spineBuild } from '@/view-state/spine-build';
 import { ThreeStage } from './ThreeStage';
 const heard = vi.hoisted(() => ({ props: null as Spine3DProps | null, look: vi.fn(), wall: vi.fn(), fail: false }));
 vi.mock('@/spine-3d/view/Spine3D', () => ({ Spine3D: function MockSpine(props: Spine3DProps) {
-  useImperativeHandle(props.ref, () => ({ stage: () => ({ film: () => ({ set: heard.wall }) }), spine: () => null, lookFrom: heard.look, settle: () => undefined }) as never);
+  useImperativeHandle(props.ref, () => ({ stage: () => ({ size: () => ({ width: 1000, height: 700 }), bounds: () => ({ low: [0, 0, 0], high: [100, 500, 100] }), setView: () => undefined, film: () => ({ set: heard.wall }) }), spine: () => null, lookFrom: heard.look, settle: () => undefined }) as never);
   heard.props = props;
   if (heard.fail) throw new Error('drawing unavailable');
   return <canvas />;
@@ -34,7 +34,7 @@ it('draws only the fitted standard bones, hides film walls and drives named view
   expect(props?.fit.frontFilm).toBe(source.fit.frontFilm); expect(props?.films?.front?.pixels).toBeNull();
   expect(heard.wall).toHaveBeenCalledWith({ strength: 0 });
   for (const name of ['front', 'side', 'top'] as const) {
-    act(() => { threeState.getState().choose(name); }); expect(heard.look).toHaveBeenLastCalledWith(name);
+    act(() => { threeState.getState().choose(name); }); expect(heard.look).toHaveBeenLastCalledWith(expect.objectContaining({ perspective: 0 }));
   }
   act(() => { heard.props?.onTurned?.(); }); expect(threeState.getState().chosen).toBeNull();
   expect(document.querySelector('[data-testid="three-stage"]')?.getAttribute('data-state')).toBe('settled');
@@ -46,4 +46,19 @@ it('catches setup failures and returns to Find with a retryable failure', () => 
   const page = putOnThePage(<ThreeStage accepted={accepted()} />);
   expect(currentStep.getState().slug).toBe('find'); expect(spineBuild.getState().phase).toBe('failed');
   expect(document.querySelector('canvas')).toBeNull(); page.takeDown();
+});
+
+it('names a pointed bone, shares its level and keeps the chip following movement on that bone', () => {
+  const page = putOnThePage(<ThreeStage accepted={accepted()} />);
+  act(() => { heard.props?.onPoint?.('T8'); });
+  expect(heard.props?.highlighted).toEqual(['T8']);
+  expect(document.documentElement.hasAttribute('data-links')).toBe(true);
+  const canvas = page.host.querySelector('canvas'); if (canvas === null) throw new Error('no canvas');
+  act(() => { canvas.dispatchEvent(new MouseEvent('pointermove', { bubbles: true, clientX: 100, clientY: 200 })); });
+  const chip = document.body.querySelector<HTMLElement>('.chip');
+  expect(chip?.textContent).toBe('T8'); expect(chip?.style.left).toBe('100px');
+  act(() => { canvas.dispatchEvent(new MouseEvent('pointermove', { bubbles: true, clientX: 150, clientY: 210 })); });
+  expect(chip?.style.left).toBe('150px');
+  act(() => { heard.props?.onPoint?.(null); }); expect(chip?.classList.contains('show')).toBe(false);
+  page.takeDown();
 });

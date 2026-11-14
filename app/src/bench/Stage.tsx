@@ -1,4 +1,9 @@
 import { Fragment, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
+import { cameras } from '@/film-viewer/camera/cameras';
+import { lookPoint, zoomOverFit } from '@/film-viewer/camera/camera';
+import { comparisonLayout } from './three/comparison-layout';
+import { filmSpace } from '@/film-viewer/film-space';
+import type { FilmOnPage } from '@/spine-3d/looking/framing';
 import type { FilmKind } from '@/shapes';
 import { durationOf } from '@/choreography/timing';
 import type { FilmSize } from '@/film-viewer/film-space';
@@ -6,6 +11,7 @@ import { usePageState } from '@/look-and-feel/page-state';
 import type { MarkToDraw } from '@/marks/mark-to-draw';
 import type { ReplaySignal } from '@/marks/TravellingLight';
 import { FILM_NAMES } from '@/words/film-names';
+import { THREE_WORDS } from '@/words/three';
 import { STAGE_WORDS } from '@/words/stage';
 import type { FilmFrame } from './film-framing';
 import { FilmPlaces } from './FilmPlaces';
@@ -27,7 +33,21 @@ export interface StageFilm {
   light: { from: number; to: number; height: number } | null;
 }
 export interface Held { over: boolean; target: FilmKind | null }
+export interface FilmDriver {
+  moment: Moment;
+  compared: FilmKind | null;
+  separation: number;
+  shown(kind: FilmKind, canvas: DOMRect): FilmOnPage | null;
+  opening(canvas: DOMRect): FilmOnPage | null;
+  set(trips: Readonly<Record<FilmKind, number>>): void;
+  finish(): void;
+}
 export interface StageProps {
+  compared?: FilmKind | null;
+  sheetOpen?: boolean;
+  onPressFilm?: (kind: FilmKind) => void;
+  forming?: boolean;
+  onFilmDriver?: (driver: FilmDriver | null) => void;
   moment: Moment;
   films: Readonly<Record<FilmKind, StageFilm | null>>;
   reading: readonly FilmKind[];
@@ -40,13 +60,15 @@ export interface StageProps {
   onPoint?: (film: FilmKind, key: string | null) => void;
 }
 
-interface Measures { width: number; height: number; displayHeight: number; railHeight: number; railGap: number; dx: number; dy: number }
+interface Measures { width: number; height: number; displayHeight: number; railHeight: number; railGap: number; dx: number; dy: number; narrow: boolean; tileGap: number; clear: number; maxHeight: number; caption: number }
 interface Drawing {
   layout: StageLayout;
   places: Record<FilmKind, Spot>;
   moment: Moment;
   present: string;
   measures: Measures;
+  compared: FilmKind | null;
+  separation: number;
 }
 
 /** Only the page's fractional offset is removed; the pure layout stays in whole stage pixels. */
@@ -94,11 +116,21 @@ function drawCaptions(tiles: HTMLElement, drawing: Drawing): void {
   }
 }
 
-export function Stage({ moment, films, reading, held, leaving, marked, reviewing, replay, onPressPlace, onPoint }: StageProps) {
+function captureOpening(part: HTMLElement, drawing: Drawing) {
+  const box = part.parentElement?.getBoundingClientRect();
+  if (box === undefined) return null;
+  return { drawing, box, films: Object.fromEntries(FILM_ORDER.map((kind) => {
+    const frame = cameras.frameOf(kind), placement = cameras.placementOf(kind);
+    return [kind, frame === null || placement === null ? null : { frame, placement, point: lookPoint(frame, placement), over: zoomOverFit(frame, placement) }];
+  })) };
+}
+
+export function Stage({ moment, films, reading, held, leaving, marked, reviewing, replay, onPressPlace, onPoint, forming = false, onFilmDriver, compared = null, sheetOpen = false, onPressFilm }: StageProps) {
   const tiles = useRef<HTMLDivElement>(null);
   const display = useRef<HTMLHeadingElement>(null);
-  const [measures, setMeasures] = useState<Measures>({ width: 0, height: 0, displayHeight: 0, railHeight: RAIL_HEIGHT, railGap: RAIL_GAP, dx: 0, dy: 0 });
+  const [measures, setMeasures] = useState<Measures>({ width: 0, height: 0, displayHeight: 0, railHeight: RAIL_HEIGHT, railGap: RAIL_GAP, dx: 0, dy: 0, narrow: false, tileGap: 0, clear: 0, maxHeight: 0, caption: 0 });
   const [fontsReady, setFontsReady] = useState(false);
+  const openingRef = useRef<ReturnType<typeof captureOpening> | null>(null);
   const previous = useRef<Drawing | null>(null);
   useGlidingCameras(tiles);
 
@@ -109,7 +141,8 @@ export function Stage({ moment, films, reading, held, leaving, marked, reviewing
     const measure = (width: number, height: number) => {
       const box = stage.getBoundingClientRect();
       const css = getComputedStyle(stage);
-      const next = { width, height, railHeight: parseFloat(css.getPropertyValue('--rail-h')) || RAIL_HEIGHT, railGap: parseFloat(css.getPropertyValue('--rail-gap')) || RAIL_GAP, displayHeight: display.current?.offsetHeight ?? 0, dx: box.left - Math.floor(box.left), dy: box.top - Math.floor(box.top) };
+      const value = (name: string) => parseFloat(css.getPropertyValue(name)) || 0;
+      const next = { width, height, narrow: window.innerWidth <= value('--break-narrow-w'), tileGap: value('--tile-gap'), clear: value('--space-24'), maxHeight: value('--tile-max-h'), caption: value('--caption-room'), railHeight: parseFloat(css.getPropertyValue('--rail-h')) || RAIL_HEIGHT, railGap: parseFloat(css.getPropertyValue('--rail-gap')) || RAIL_GAP, displayHeight: display.current?.offsetHeight ?? 0, dx: box.left - Math.floor(box.left), dy: box.top - Math.floor(box.top) };
       setMeasures((was) => Object.keys(next).every((key) => was[key as keyof Measures] === next[key as keyof Measures]) ? was : next);
     };
     measure(stage.clientWidth, stage.clientHeight);
@@ -132,8 +165,11 @@ export function Stage({ moment, films, reading, held, leaving, marked, reviewing
   const present = FILM_ORDER.filter((kind) => films[kind] !== null).join(',');
   const drawing = useMemo<Drawing>(() => {
     const input = { ...measures, present: present.split(',').filter(Boolean) as FilmKind[] };
-    return { layout: onPixels(stageLayout({ ...input, moment }), measures), places: placeSpots(onPixels(stageLayout({ ...input, moment: 'films' }), measures)), moment, present, measures };
-  }, [measures, moment, present]);
+    const layout = onPixels(stageLayout({ ...input, moment }), measures);
+    const comparison = compared === null ? null : comparisonLayout(measures.width, measures.height, measures.narrow ? 0 : measures.railHeight / 2 + measures.tileGap, measures.tileGap, measures.clear, measures.maxHeight, measures.caption);
+    if (compared !== null && comparison !== null) layout.spots[compared] = comparison.film;
+    return { compared, separation: comparison?.shift ?? 0, layout, places: placeSpots(onPixels(stageLayout({ ...input, moment: 'films' }), measures)), moment, present, measures };
+  }, [measures, moment, present, compared]);
 
   usePageState('films', reading.length > 0 ? 'landing' : FILM_ORDER.every((kind) => films[kind] !== null) ? 'ready' : 'empty');
   usePageState('ready', fontsReady && measures.width > 0 && measures.height > 0);
@@ -144,10 +180,11 @@ export function Stage({ moment, films, reading, held, leaving, marked, reviewing
     const part = tiles.current;
     if (part === null) return undefined;
     const was = previous.current;
-    const changedMoment = was !== null && (was.moment !== drawing.moment || (moment === 'find' && was.present !== drawing.present));
+    const changedMoment = was !== null && (was.moment !== drawing.moment || was.compared !== drawing.compared || (moment === 'find' && was.present !== drawing.present));
     const resized = was === null || was.measures !== drawing.measures;
     previous.current = drawing;
-    if (changedMoment && !resized && (motionIsReduced(part) || moment === 'three' || was.moment === 'three')) {
+    if (forming && moment === 'three') { fly(part, new Map(), new Map()); draw(part, drawing); return; }
+    if (changedMoment && !resized && (motionIsReduced(part) || was.moment !== drawing.moment && (moment === 'three' || was.moment === 'three'))) {
       fly(part, new Map(), new Map());
       draw(part, was);
       part.classList.add('fading');
@@ -175,27 +212,86 @@ export function Stage({ moment, films, reading, held, leaving, marked, reviewing
     fly(part, starts, rests);
     if (changedMoment && !resized) drawCaptions(part, drawing);
     return undefined;
-  }, [drawing, moment]);
+  }, [drawing, moment, forming]);
 
   useLayoutEffect(() => {
     const part = tiles.current;
     return () => { if (part !== null) fly(part, new Map(), new Map()); };
   }, []);
 
+  useLayoutEffect(() => {
+    const part = tiles.current;
+    if (part === null || onFilmDriver === undefined) return;
+    if (moment === 'find') openingRef.current = captureOpening(part, drawing);
+    const opening = openingRef.current;
+    const stopCapture = moment === 'find' ? cameras.subscribe(() => { openingRef.current = captureOpening(part, drawing); }) : () => undefined;
+    const shown = (kind: FilmKind, canvas: DOMRect): FilmOnPage | null => {
+      const placement = cameras.placementOf(kind);
+      const tile = part.querySelector<HTMLElement>(`.tile[data-place="${kind}"]`);
+      if (placement === null || tile === null) return null;
+      const box = tile.getBoundingClientRect();
+      const first = filmSpace(placement).toScreen([0, 0]);
+      const scale = tile.offsetWidth > 0 ? box.width / tile.offsetWidth : 1;
+      return { pxPerFilmPx: placement.zoom * scale, firstPixelAt: [box.left - canvas.left + first[0] * scale, box.top - canvas.top + first[1] * scale] };
+    };
+    let sampledTrips: Readonly<Record<FilmKind, number>> | null = null;
+    let placingCamera = false;
+    const placeCamera = (kind: FilmKind) => {
+      const old = opening?.films[kind], target = drawing.layout.spots[kind];
+      if (placingCamera || sampledTrips === null || old == null || target === null) return;
+      placingCamera = true;
+      const frame = cameras.frameOf(kind);
+      if (frame !== null && (frame.viewport.width !== target.width || frame.viewport.height !== target.height)) cameras.hang(kind, { ...frame, viewport: { width: target.width, height: target.height } });
+      cameras.travelTo(kind, old.point, old.over ** (1 - sampledTrips[kind]), false);
+      placingCamera = false;
+    };
+    // Viewer resizing must not replace a sampled camera with its ordinary contain fit.
+    const stopSample = cameras.subscribe(placeCamera);
+    const driver: FilmDriver = {
+      moment, compared, separation: drawing.separation, shown,
+      opening(canvas) {
+        const old = opening?.films.front;
+        const spot = opening?.drawing.layout.spots.front;
+        if (old == null || spot == null || opening === null) return shown('front', canvas);
+        const first = filmSpace(old.placement).toScreen([0, 0]);
+        return { pxPerFilmPx: old.placement.zoom, firstPixelAt: [opening.box.left + spot.x + first[0] - canvas.left, opening.box.top + spot.y + first[1] - canvas.top] };
+      },
+      set(trips) {
+        if (opening === null) return;
+        sampledTrips = trips;
+        part.classList.add('still');
+        for (const kind of FILM_ORDER) {
+          const from = opening.drawing.layout.spots[kind], to = drawing.layout.spots[kind];
+          const tile = part.querySelector<HTMLElement>(`.tile[data-place="${kind}"]`);
+          if (from === null || to === null || tile === null || to.width <= 0) continue;
+          const p = trips[kind];
+          const start = flightFrom(from, to);
+          for (const [key, value] of Object.entries({ '--x': start.x + (to.x - start.x) * p, '--y': start.y + (to.y - start.y) * p, '--s': (start.s ** (1 - p)) })) tile.style.setProperty(key, String(value));
+          placeCamera(kind);
+        }
+      },
+      finish() { sampledTrips = null; part.classList.add('still'); draw(part, drawing); for (const kind of FILM_ORDER) cameras.fit(kind, false); readLayout(part); part.classList.remove('still'); },
+    };
+    onFilmDriver(driver);
+    return () => { sampledTrips = null; stopSample(); stopCapture(); onFilmDriver(null); };
+  }, [drawing, moment, compared, onFilmDriver]);
+
   const faces = Object.fromEntries(FILM_ORDER.map((kind) => [kind, reading.includes(kind) ? 'reading' : films[kind] === null ? 'empty' : 'filled'])) as Record<FilmKind, 'empty' | 'reading' | 'filled'>;
   return (
     <>
       <h1 ref={display} className="display" style={{ '--head-y': drawing.layout.displayTop } as CSSProperties}>{STAGE_WORDS.display}</h1>
       <FilmPlaces spots={drawing.places} faces={faces} target={held.target} {...(moment === 'films' && onPressPlace !== undefined ? { onPress: onPressPlace } : {})} />
-      <div ref={tiles} className={['tiles', marked && 'marked', reviewing && 'reviewing'].filter(Boolean).join(' ')}>
+      <div ref={tiles} data-compared={compared ?? undefined} data-sheet={sheetOpen || undefined} className={['tiles', marked && 'marked', reviewing && 'reviewing'].filter(Boolean).join(' ')}>
         {FILM_ORDER.map((kind, index) => {
           const film = films[kind];
           const spot = drawing.layout.spots[kind] ?? drawing.places[kind];
           const caption = captionSpot(spot);
+          const rail = compared === kind ? stageLayout({ ...measures, present: present.split(',') as FilmKind[], moment: 'three' }).spots[kind] : null;
           return (
             <Fragment key={kind}>
-              {film !== null && <FilmTile kind={kind} index={index} film={moment === 'three' ? { ...film, names: false, on: null, only: null, frame: { kind: 'whole' }, light: null } : film} spot={spot} glide={moment !== 'three'} replay={replay} target={held.target === kind}
-                {...(moment === 'find' && !reviewing && onPoint !== undefined ? { onPoint: (key: string | null) => { onPoint(kind, key); } } : {})} />}
+              {film !== null && <FilmTile kind={kind} index={index} film={moment === 'three' ? { ...film, names: compared === kind, on: film.on, only: null, frame: { kind: 'whole' }, light: null } : film} spot={spot} {...(moment === 'three' && onPressFilm !== undefined ? { onPress: () => { onPressFilm(kind); }, selected: compared === kind } : {})} glide={moment !== 'three'} replay={replay} target={held.target === kind}
+                {...((moment === 'find' && !reviewing || moment === 'three' && compared === kind) && onPoint !== undefined ? { onPoint: (key: string | null) => { onPoint(kind, key); } } : {})} />}
+              {compared === kind && <button type="button" className="compare-slot" aria-label={THREE_WORDS.railSlot} onClick={() => onPressFilm?.(kind)} style={{ left: rail?.x, top: rail?.y, width: rail?.width, height: rail?.height }} />}
               <div className="caption" data-place={kind} aria-hidden="true" data-away={moment === 'find' && film === null || undefined}
                 style={{ '--i': index, '--cx': caption.centreX, '--cy': caption.top } as CSSProperties}>{FILM_NAMES[kind]}</div>
             </Fragment>
