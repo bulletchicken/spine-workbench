@@ -420,9 +420,14 @@ invented. Whole-spine codes retain absent sacrum, bends or side film,
 unmeasured twist, unsettled ends, numbering doubt and rule-specific
 missing observations. Bending acquisition posture is not in the input;
 `standing-bends` conservatively records that the source rules used
-supine bends. Assembly also applies `may-be-too-narrow` when either
-secondary diameter rule yields no grid size, even if the primary rule
-does [own inference]. Naming scenarios apply the same extra trigger.
+supine bends. `may-be-too-narrow` uses only the pedicle's own evidence:
+no grid diameter qualifies under the chosen rule, or the drawn outer
+width is below the existing 3.2 mm boundary in more than 10% of
+versions, or the inner channel is below 1 mm in more than 10%. The share
+threshold is the diameter rule's existing project threshold. A secondary
+diameter rule with no qualifying grid size remains in `diametersBeside`
+with a null `diameterMm` and its source. Naming scenarios use the same
+look triggers.
 Missing values and inapplicable rules stay distinct. Dimensional rules
 emit `no-film-scale` for a typical-size fit.
 

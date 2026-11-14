@@ -12,7 +12,9 @@ export type BenchResult = { versions: number,
  */
 firstId: string, 
 /**
- * The fitted curve measured as main; `null` when none was found.
+ * The curve measured as main, copied from the slice whose `versionFrom`
+ * is 0; `null` when that slice is not among the batches or the fitted
+ * spine has no curve.
  */
 mainCurve: MainCurve | null, layouts: Array<LayoutResult>, 
 /**

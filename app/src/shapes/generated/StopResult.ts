@@ -18,9 +18,13 @@ ghosts: Array<Array<VertebraPose>> | null,
 /**
  * A spine for drawing only: at `before`, the fit's standing poses
  * for the levels the bench carries; at `rods-in`, one extra run with
- * every drawn unknown at the middle of its range. `null` at later
- * stops, and at `rods-in` when that run does not settle.
- * It is never a version and never enters an estimate, part or count.
+ * every drawn unknown it uses at the middle of its range (quantile one
+ * half); pedicle draws are unused and omitted. `null` at later stops,
+ * at `rods-in` when that run fails or does not settle, and at both
+ * `before` and `rods-in` when the batches carry no middle run for this
+ * placement (the slice whose `versionFrom` is 0 was not supplied).
+ * Copied from that slice's `MiddleRun`. It is never a version and never
+ * enters an estimate, part or count.
  */
 middle: Array<VertebraPose> | null, 
 /**

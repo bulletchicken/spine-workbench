@@ -1,5 +1,5 @@
 /** The dock keeps these scenes mounted so their words and controls can fade together. */
-export type DockScene = 'add' | 'reading' | 'ready' | 'finding' | 'found' | 'review' | 'failed' | 'engine' | 'building' | 'build-failed' | 'three' | 'compare';
+export type DockScene = 'add' | 'reading' | 'ready' | 'finding' | 'found' | 'review' | 'failed' | 'engine' | 'building' | 'build-failed' | 'three' | 'compare' | 'place';
 
 export interface DockAction {
   label: string;
@@ -21,8 +21,11 @@ interface DockBase {
   quiet?: DockAction & { expanded?: boolean; controls?: string };
 }
 
-export type DockSpec = DockBase & (
-  | { primary?: DockAction & { disabled?: boolean }; secondary?: never; views?: never }
-  | { primary?: never; secondary: DockAction; views?: never }
-  | { primary?: never; secondary?: never; views: { chosen: 'front' | 'side' | 'top' | null; choose(name: 'front' | 'side' | 'top'): void } }
-);
+export interface DockSpec extends DockBase {
+  primary?: DockAction & { disabled?: boolean };
+  secondary?: DockAction;
+  views?: { chosen: 'front' | 'side' | 'top' | 'back' | null; choose(name: 'front' | 'side' | 'top' | 'back'): void; back?: boolean };
+  more?: DockAction & { expanded?: boolean; controls?: string };
+  small?: string;
+  review?: { label: string; sentences: readonly string[]; count: string; details?: readonly { summary: string; rows: readonly string[] }[] };
+}

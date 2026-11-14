@@ -1,13 +1,14 @@
 import { useEffect, useState, type CSSProperties } from 'react';
 import { Button } from '@/building-blocks/Button';
 import { Segmented } from '@/building-blocks/Segmented';
+import { PLACE_WORDS } from '@/words/place';
 import { THREE_WORDS } from '@/words/three';
 import { SHELL_WORDS } from '@/words/shell';
 import type { DockHelper, DockScene, DockSpec } from './dock-spec';
 import { LitButton } from './LitButton';
 import './Dock.css';
 
-const SCENES: readonly DockScene[] = ['add', 'reading', 'ready', 'finding', 'found', 'review', 'failed', 'engine', 'building', 'build-failed', 'three', 'compare'];
+const SCENES: readonly DockScene[] = ['add', 'reading', 'ready', 'finding', 'found', 'review', 'failed', 'engine', 'building', 'build-failed', 'three', 'compare', 'place'];
 
 /** Counts and progress change silently; the helper's words are spoken with the sentence. */
 function helperWords(helper: DockHelper | undefined): string {
@@ -77,12 +78,15 @@ function Scene({ name, spec }: { name: DockScene; spec: DockSpec | null }) {
           <div className="say">
             <h2><span key={shown.sentence} data-fresh="">{shown.sentence}</span></h2>
             {shown.helper !== undefined && <p><Helper helper={shown.helper} sentence={shown.sentence} on={on} /></p>}
+            {shown.small !== undefined && <p className="dock-small">{shown.small}</p>}
+            {shown.review !== undefined && <div className="place-review glass"><span className="num">{shown.review.count}</span><h3>{shown.review.label}</h3>{shown.review.sentences.map((sentence) => <p key={sentence}>{sentence}</p>)}{shown.review.details?.map((detail) => <details key={detail.summary}><summary>{detail.summary}</summary><ul>{detail.rows.map((row) => <li key={row}>{row}</li>)}</ul></details>)}</div>}
           </div>
+          {shown.more !== undefined && <Button look="text" aria-expanded={shown.more.expanded} aria-controls={shown.more.controls} {...(on ? { onPress: shown.more.press } : {})}>{shown.more.label}</Button>}
           {shown.quiet !== undefined && <Button look="text" aria-expanded={shown.quiet.expanded} aria-controls={shown.quiet.controls} {...(on ? { onPress: shown.quiet.press } : {})}>{shown.quiet.label}</Button>}
           {shown.secondary !== undefined && <Button look="standard" size="large" {...(on ? { onPress: shown.secondary.press } : {})}>{shown.secondary.label}</Button>}
           {shown.views !== undefined && <Segmented className="views" label={THREE_WORDS.view} chosen={shown.views.chosen} options={[
-            { id: 'front', label: THREE_WORDS.frontView }, { id: 'side', label: THREE_WORDS.sideView }, { id: 'top', label: THREE_WORDS.topView },
-          ]} onChoose={(name) => { if (on && (name === 'front' || name === 'side' || name === 'top')) shown.views.choose(name); }} />}
+            { id: 'front', label: THREE_WORDS.frontView }, { id: 'side', label: THREE_WORDS.sideView }, { id: 'top', label: THREE_WORDS.topView }, ...(shown.views.back === true ? [{ id: 'back', label: PLACE_WORDS.back }] : []),
+          ]} onChoose={(name) => { if (on && (name === 'front' || name === 'side' || name === 'top' || name === 'back')) shown.views?.choose(name); }} />}
           {shown.primary !== undefined && (
             <LitButton label={shown.primary.label} disabled={shown.primary.disabled} asleep={!on} onPress={shown.primary.press} />
           )}

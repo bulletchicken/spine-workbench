@@ -19,10 +19,11 @@ layout: LayoutInput, upper: Level, lower: Level,
  */
 anchors: Array<AnchorChoice>, 
 /**
- * One of `LayoutChoices`.
+ * Together with `rodDiameterMm`, one pair of `LayoutChoices.rods`; any
+ * other pair is refused.
  */
 rodMaterial: RodMaterial, 
 /**
- * One of `LayoutChoices`.
+ * Together with `rodMaterial`, one pair of `LayoutChoices.rods`.
  */
 rodDiameterMm: number, };

@@ -33,7 +33,7 @@ function failureCode(error: unknown): ErrorCode {
 }
 
 function backToFilms(): IntakeNotice | null {
-  if (currentStep.getState().slug === 'three') { currentStep.getState().go('films'); return null; }
+  if (currentStep.getState().slug === 'three' || currentStep.getState().slug === 'place') { currentStep.getState().go('films'); return null; }
   if (currentStep.getState().slug !== 'find') return null;
   const phase = findState.getState().phase;
   currentStep.getState().go('films');

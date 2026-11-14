@@ -104,8 +104,8 @@ body > .glow { position: fixed; }
 }
 .glow::before { width: var(--glow-w-quiet); height: var(--glow-h-quiet); background: var(--glow-quiet); filter: blur(var(--glow-blur-quiet)); }
 .glow::after { width: var(--glow-w-wide); height: var(--glow-h-wide); background: var(--glow); filter: blur(var(--glow-blur-wide)); opacity: 0; }
-[data-moment="three"] .glow::before { opacity: 0; }
-[data-moment="three"] .glow::after { opacity: 1; }
+:is([data-moment="three"], [data-moment="place"]) .glow::before { opacity: 0; }
+:is([data-moment="three"], [data-moment="place"]) .glow::after { opacity: 1; }
 
 /* ---------- Glass: only for what floats ---------- */
 
@@ -378,8 +378,8 @@ body > .glow { position: fixed; }
   transition: box-shadow var(--quick);
 }
 /* In 3D the films wait in the rail. Pointing at one lights its edge. */
-[data-moment="three"] .tile { pointer-events: auto; cursor: pointer; }
-[data-moment="three"] .tile:is(:hover, .is-hover)::after { box-shadow: inset 0 0 0 calc(var(--mark-stroke) / var(--s, 1)) var(--film-edge-hover); }
+:is([data-moment="three"], [data-moment="place"]) .tile { pointer-events: auto; cursor: pointer; }
+:is([data-moment="three"], [data-moment="place"]) .tile:is(:hover, .is-hover)::after { box-shadow: inset 0 0 0 calc(var(--mark-stroke) / var(--s, 1)) var(--film-edge-hover); }
 /* The one film the held files are over: the firmer ring, on its lit edge. */
 [data-drag] .tile[data-drop-target]::after { box-shadow: inset 0 0 0 var(--ring-width) var(--accent); }
 @keyframes land { from { opacity: 0; translate: 0 var(--rise); } }
@@ -479,7 +479,7 @@ body > .glow { position: fixed; }
   transition: transform var(--scene) calc(var(--i, 0) * var(--stagger)), opacity var(--appear) var(--delay-caption);
 }
 /* In the rail the films have no names. Nor has a place whose film is not on the stage in Find. */
-:is([data-moment="three"] .caption, .caption[data-away]) { opacity: 0; transition-delay: calc(var(--i, 0) * var(--stagger)), 0s; }
+:is([data-moment="three"], [data-moment="place"]) .caption, .caption[data-away] { opacity: 0; transition-delay: calc(var(--i, 0) * var(--stagger)), 0s; }
 
 /* Used while a layout is applied without movement, and for the fade that replaces movement. */
 .tiles { transition: opacity var(--dur-fade) var(--ease-fade); }
@@ -498,7 +498,7 @@ html[data-leaving] :is(.tiles, .spine, .panel) { opacity: 0; transition: opacity
   opacity: 0; visibility: hidden; transform: translateY(var(--rise));
   transition: opacity var(--quick), visibility 0s var(--dur-quick), transform 0s var(--dur-quick);
 }
-[data-moment="three"] .frame > .spine {
+:is([data-moment="three"], [data-moment="place"]) .frame > .spine {
   opacity: 1; visibility: visible; transform: none;
   transition: opacity var(--dur-rise) var(--ease-fade) var(--delay-in), transform var(--scene) var(--delay-in), visibility 0s;
 }
@@ -632,10 +632,10 @@ body > .chip { position: fixed; z-index: var(--z-chip); left: 0; top: 0; opacity
 
 /* Links: in 3D the outlines stay with their films, unseen. Pointing at a bone shows its outline
    on the films in the rail as a small blue block. */
-[data-moment="three"][data-links] .marks { opacity: 1; visibility: visible; }
-[data-moment="three"][data-links] .mark { opacity: 0; }
-[data-moment="three"][data-links] .mark.on { opacity: 1; }
-[data-moment="three"][data-links] .mark.on polygon { fill: var(--accent); }
+:is([data-moment="three"], [data-moment="place"])[data-links] .marks { opacity: 1; visibility: visible; }
+:is([data-moment="three"], [data-moment="place"])[data-links] .mark { opacity: 0; }
+:is([data-moment="three"], [data-moment="place"])[data-links] .mark.on { opacity: 1; }
+:is([data-moment="three"], [data-moment="place"])[data-links] .mark.on polygon { fill: var(--accent); }
 
 /* Film beside spine: the stage in two equal halves, the film at the left and the spine at the
    right, in the same view and at the same scale. */

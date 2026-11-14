@@ -27,14 +27,14 @@ describe('the dock', () => {
   it('keeps all scenes in order, with only the current one on and the others inert', () => {
     const page = putOnThePage(<Dock spec={add()} />);
     const scenes = [...document.querySelectorAll('.scene')];
-    expect(scenes.map((scene) => scene.getAttribute('data-scene'))).toEqual(['add', 'reading', 'ready', 'finding', 'found', 'review', 'failed', 'engine', 'building', 'build-failed', 'three', 'compare']);
+    expect(scenes.map((scene) => scene.getAttribute('data-scene'))).toEqual(['add', 'reading', 'ready', 'finding', 'found', 'review', 'failed', 'engine', 'building', 'build-failed', 'three', 'compare', 'place']);
     expect(document.querySelectorAll('.scene.on')).toHaveLength(1);
     for (const scene of scenes) {
       expect(scene.hasAttribute('inert')).toBe(!scene.classList.contains('on'));
       expect(scene.getAttribute('aria-hidden')).toBe(scene.classList.contains('on') ? null : 'true');
     }
     page.show(<Dock spec={null} />);
-    expect(document.querySelectorAll('.scene')).toHaveLength(12);
+    expect(document.querySelectorAll('.scene')).toHaveLength(13);
     expect(document.querySelector('.scene.on')).toBeNull();
     expect(find('[role="status"]').textContent).toBe('');
   });

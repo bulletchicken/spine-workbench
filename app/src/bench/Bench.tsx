@@ -28,6 +28,8 @@ import { useFindOnStage } from './find-on-stage';
 import { hasCurrentFit } from './three/build-spine';
 import { markAtLevel } from './three/spine-links';
 import { Measurements } from './three/Measurements';
+import { PlaceSheet } from './place/PlaceSheet';
+import { placeState } from './place/place-state';
 import { ThreeStage } from './three/ThreeStage';
 
 /** The stage stays mounted as the step changes, so each film keeps its tile. */
@@ -45,7 +47,9 @@ export default function Bench() {
   const build = useStore(spineBuild);
   const host = useSpineHost();
   const valid = hasCurrentFit(c);
-  const three = slug === 'three' && valid && build.accepted !== null;
+  const placeView = useStore(placeState);
+  const placing = slug === 'place';
+  const three = (slug === 'three' || placing) && valid && build.accepted !== null;
   const [filmDriver, setFilmDriver] = useState<FilmDriver | null>(null);
   const [bonesReady, setBonesReady] = useState(false);
   useEffect(() => {
@@ -54,7 +58,7 @@ export default function Bench() {
     return () => { mounted = false; };
   }, []);
   useLayoutEffect(() => {
-    if (slug === 'three' && !valid) currentStep.getState().go(c.marks.some((f) => (f.film === 'front' || f.film === 'side') && f.vertebrae.length > 0) ? 'find' : 'films');
+    if ((slug === 'three' || slug === 'place') && !valid) currentStep.getState().go(c.marks.some((f) => (f.film === 'front' || f.film === 'side') && f.vertebrae.length > 0) ? 'find' : 'films');
   }, [slug, valid, c]);
   useEffect(() => {
     const stage = host?.parentElement?.querySelector('main.stage');
@@ -103,8 +107,9 @@ export default function Bench() {
   };
   return <>
     <span className="spoken-only" data-testid="bones-status" data-status={bonesReady ? 'ready' : 'loading'}>{bonesReady ? THREE_WORDS.bonesReady : ''}</span>
-    {three && host !== null && build.accepted !== null && createPortal(<ThreeStage accepted={build.accepted} filmDriver={filmDriver} />, host)}
-    {three && build.accepted !== null && <Measurements accepted={build.accepted} />}
-    <Stage sideControls={reviewSide ? <SideReview onLooksRight={() => { findState.getState().approveSide(sideReviewKey(sideMarks, sideRevision)); }} onRename={renameSide} onLeaveOut={leaveSideOut} /> : search.sideExclusion === 'facing' ? <SideFacing key={sideOpening} opening={sideOpening} /> : search.sideExclusion !== null ? <p className="side-controls">{exclusionWords(search.sideExclusion)}</p> : null} compared={three ? threeView.compared : null} sheetOpen={three && threeView.sheet} onPressFilm={(kind) => { if (!three || threeView.moving) return; threeState.getState().compare(threeView.compared === kind ? null : kind); }} forming={three && build.accepted?.movePending === true} onFilmDriver={setFilmDriver} moment={three ? 'three' : slug === 'find' || slug === 'three' && c.marks.length > 0 ? 'find' : 'films'} films={films} reading={intake.making ? FILM_ORDER : intake.reading} held={held} onPressPlace={pressPlace} leaving={intake.leaving} marked={finding.marked} reviewing={finding.reviewing} replay={finding.replay} {...(three ? { onPoint: (kind, key) => { const mark = c.marks.find((m) => m.film === kind)?.vertebrae.find((v) => String(v.id) === key); threeState.getState().point(mark?.level ?? null); } } : finding.onPoint === undefined ? {} : { onPoint: finding.onPoint })} />
+    {three && host !== null && build.accepted !== null && createPortal(<ThreeStage accepted={build.accepted} filmDriver={filmDriver} placing={placing} />, host)}
+    {three && !placing && build.accepted !== null && <Measurements accepted={build.accepted} />}
+    {three && placing && build.accepted !== null && <PlaceSheet accepted={build.accepted} />}
+    <Stage sideControls={reviewSide ? <SideReview onLooksRight={() => { findState.getState().approveSide(sideReviewKey(sideMarks, sideRevision)); }} onRename={renameSide} onLeaveOut={leaveSideOut} /> : search.sideExclusion === 'facing' ? <SideFacing key={sideOpening} opening={sideOpening} /> : search.sideExclusion !== null ? <p className="side-controls">{exclusionWords(search.sideExclusion)}</p> : null} compared={three ? threeView.compared : null} sheetOpen={three && (placing ? placeView.sheet : threeView.sheet)} onPressFilm={(kind) => { if (!three || placing || threeView.moving) return; threeState.getState().compare(threeView.compared === kind ? null : kind); }} forming={three && build.accepted?.movePending === true} onFilmDriver={setFilmDriver} moment={three ? 'three' : slug === 'find' || slug === 'three' && c.marks.length > 0 ? 'find' : 'films'} films={films} reading={intake.making ? FILM_ORDER : intake.reading} held={held} onPressPlace={pressPlace} leaving={intake.leaving} marked={finding.marked} reviewing={finding.reviewing} replay={finding.replay} {...(three ? { onPoint: (kind, key) => { const mark = c.marks.find((m) => m.film === kind)?.vertebrae.find((v) => String(v.id) === key); threeState.getState().point(mark?.level ?? null); } } : finding.onPoint === undefined ? {} : { onPoint: finding.onPoint })} />
   </>;
 }

@@ -8,5 +8,5 @@ export function threeDock(fit: SpineFit, suppliedSide: boolean, chosen: ThreeVie
   const words = [fit.sideFilm === null ? W.front : W.pair];
   if (suppliedSide && fit.sideFilm === null) words.push(W.unusedSide);
   if (levels.size < 17) words.push(W.partial);
-  return { scene: 'three', sentence: W.settled, helper: { kind: 'words', words: [words.join(' ')] }, views: { chosen, choose } };
+  return { scene: 'three', sentence: W.settled, helper: { kind: 'words', words: [words.join(' ')] }, views: { chosen, choose: (name) => { if (name !== 'back') choose(name); } } };
 }

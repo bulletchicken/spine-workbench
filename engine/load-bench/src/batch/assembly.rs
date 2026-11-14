@@ -6,7 +6,7 @@ use crate::evidence::{Evidence, TableKind, Unit};
 use crate::joint_springs::Stiffness;
 use crate::rigid_rod::{Anchor, Construct, HeadKind, Rod};
 use crate::rod_beams::{BeamProperties, polyline_stations};
-use crate::versions::{self, Draw, cell, refusal};
+use crate::versions::{self, cell, refusal};
 use forward_model::{endplates::Endplates, vertebra_params::VertebraParams};
 use nalgebra::{Matrix3, Vector3};
 use shapes::implant_layout::{AnchorKind, ImplantLayout, ValueStatus};
@@ -35,8 +35,8 @@ pub(super) fn reference(fit: &SpineFit) -> Vec<shapes::made_up::VertebraPose> {
 
 pub(super) fn chain(
     fit: &SpineFit,
-    draw: &Draw,
-    _layout: &ImplantLayout,
+    stiffness_scale: f64,
+    rib_factors: [f64; 3],
     e: &Evidence,
 ) -> Result<Chain, BenchError> {
     let reference = reference(fit);
@@ -51,13 +51,13 @@ pub(super) fn chain(
     for pose in &reference {
         let mut factors = [1.0; 6];
         if pose.level < Level::T12 {
-            factors[3] *= draw.values.rib_factors[1];
-            factors[4] *= draw.values.rib_factors[0];
-            factors[5] *= draw.values.rib_factors[2];
+            factors[3] *= rib_factors[1];
+            factors[4] *= rib_factors[0];
+            factors[5] *= rib_factors[2];
         }
         stiffness.push(
             Stiffness::from_evidence(e, pose.level == Level::L5)
-                .and_then(|k| k.scaled(draw.values.stiffness_scale, factors))
+                .and_then(|k| k.scaled(stiffness_scale, factors))
                 .map_err(|error| refusal(&error.to_string()))?,
         );
     }

@@ -5,7 +5,7 @@
   pointer-events: auto;
 }
 [data-moment="three"] .tiles .tile { pointer-events: auto; cursor: pointer; }
-[data-moment="three"] .tile > .film { pointer-events: none; }
+:is([data-moment="three"], [data-moment="place"]) .tile > .film { pointer-events: none; }
 .three-stage[data-compared] { inset-inline: 0; }
 .compare-slot { position: absolute; border: none; padding: 0; background: var(--soft-1); border-radius: var(--r-small); pointer-events: auto; cursor: pointer; }
 .tiles[data-sheet] { visibility: hidden; pointer-events: none; }
@@ -15,7 +15,7 @@
 }
 
 .frame > .spine { transform: none; }
-[data-moment="three"] .frame > .spine { transform: none; }
+:is([data-moment="three"], [data-moment="place"]) .frame > .spine { transform: none; }
 
 [data-moment="three"] .tiles[data-compared="front"] .tile[data-place="front"] .film,
 [data-moment="three"] .tiles[data-compared="side"] .tile[data-place="side"] .film { pointer-events: auto; }

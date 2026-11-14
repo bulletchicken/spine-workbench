@@ -1,7 +1,7 @@
 //! Only sourced values enter the public change catalogue.
 
 use crate::{rods, screws::sizing};
-use shapes::implant_layout::LayoutChoices;
+use shapes::implant_layout::{LayoutChoices, RodChoice};
 
 pub(super) fn choices() -> LayoutChoices {
     let diameters = sizing::diameter_grid();
@@ -29,6 +29,13 @@ pub(super) fn choices() -> LayoutChoices {
         screw_lengths_mm: lengths.into_iter().map(|g| g.mm).collect(),
         rod_diameters_mm,
         rod_materials,
+        rods: rods
+            .into_iter()
+            .map(|rod| RodChoice {
+                material: rod.material,
+                diameter_mm: rod.diameter_mm,
+            })
+            .collect(),
         sources,
     }
 }

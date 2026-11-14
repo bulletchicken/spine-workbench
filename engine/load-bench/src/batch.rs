@@ -3,6 +3,7 @@
 //! are held fixed while the same geometry draws are used for every layout.
 
 mod assembly;
+mod middle;
 mod values;
 
 use crate::BenchError;
@@ -46,15 +47,23 @@ pub fn run(input: &BenchInput) -> Result<BenchBatch, BenchError> {
             )
         })
         .collect::<Result<Vec<_>, _>>()?;
+    let mut main_curve = None;
+    let mut middle = Vec::new();
     let mut runs = Vec::new();
     for layout in &input.layouts {
         let construct = assembly::construct(&input.fit, layout, &evidence)?;
         let readings = values::Readings::new(&input.fit, layout)?;
+        main_curve = readings.main_curve;
+        if input.version_from == 0 {
+            middle.push(middle::run(layout, &input.fit, &evidence, &construct));
+        }
         for draw in &draws {
             runs.push(run_one(layout, draw, &evidence, &construct, &readings)?);
         }
     }
     Ok(BenchBatch {
+        middle,
+        main_curve,
         version_from: input.version_from,
         version_count: input.version_count,
         runs,
@@ -68,7 +77,12 @@ fn run_one(
     construct: &assembly::Placement,
     readings: &values::Readings,
 ) -> Result<BenchRun, BenchError> {
-    let base_chain = assembly::chain(&draw.geometry.fit, draw, layout, evidence)?;
+    let base_chain = assembly::chain(
+        &draw.geometry.fit,
+        draw.values.stiffness_scale,
+        draw.values.rib_factors,
+        evidence,
+    )?;
     let chain = daily_loads::loaded_chain(evidence, &base_chain, 1.0, &layout.released_levels)
         .map_err(|error| versions::refusal(&error.to_string()))?;
     let mut draws = draw.values;

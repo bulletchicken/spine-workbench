@@ -36,6 +36,11 @@ beforeEach(() => {
 afterEach(() => { engine.stop(); vi.restoreAllMocks(); });
 
 describe('taking films in', () => {
+  it('leaves Place for Films before a new film is taken in', async () => {
+    currentStep.getState().go('place');
+    await takeIn(engine,[blob('front')],null);
+    expect(currentStep.getState().slug).toBe('films');
+  });
   it('assigns a drop on Side, opens in place order, and stores each record beside its pixels', async () => {
     const opened = vi.spyOn(engine, 'openFilm');
     const landed: string[] = [];

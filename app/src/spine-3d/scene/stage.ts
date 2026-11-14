@@ -202,7 +202,7 @@ export function makeStage(canvas: HTMLCanvasElement): Stage {
         const ratio = renderer.getPixelRatio();
         depthTarget.scissor.set(cell.left * ratio, (size.height - cell.bottom) * ratio, (cell.right - cell.left) * ratio, (cell.bottom - cell.top) * ratio);
       }
-      for (const { inside, shadow } of shown) { inside.pass('opaque-depth'); shadow.pivot.visible = false; }
+      for (const { inside, shadow } of shown) { inside.pass('layer-depth'); shadow.pivot.visible = false; }
       for (const { mesh } of wallState) mesh.visible = false;
       renderer.setRenderTarget(depthTarget);
       renderer.render(scene, camera);
@@ -233,7 +233,7 @@ export function makeStage(canvas: HTMLCanvasElement): Stage {
       renderer.autoClear = false;
       renderer.clearDepth();
       for (const { mesh } of wallState) mesh.visible = false;
-      for (const { inside, shadow } of shown) { inside.pass('parts', depthTarget.depthTexture, depthTarget.width, depthTarget.height); shadow.pivot.visible = false; }
+      for (const { inside, shadow } of shown) { inside.pass('parts', depthTarget.depthTexture, depthTarget.width, depthTarget.height, depthTarget.texture); shadow.pivot.visible = false; }
       renderer.render(scene, camera);
       renderer.autoClear = true;
       for (const { mesh, visible } of wallState) mesh.visible = visible;

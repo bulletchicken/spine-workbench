@@ -128,12 +128,13 @@ Per-bone `strength` veils the bones alone. Whole-spine
 material kinds support ordinary mesh geometry; arbitrary shaders, skinning,
 instancing and sprite picking are outside this contract.
 
-With layers present, the stage first captures opaque bones' depth in a
+With layers present, the stage first captures the nearest bones' depth and strength in a
 separate image. It draws films and bones with the existing nearest-surface
 bone depth pass, then their colour. It clears the working depth buffer and
 draws the layer objects, testing them against one another and, except for
-`inFront`, against the captured opaque-bone depth. Veiled bones are excluded
-from that image, so their colour never hides metal. This pass policy still
+`inFront`, against the captured bone depth. Opaque bones hide parts behind them;
+a veiled bone attenuates the ink behind its surface by its strength. Parts in
+front of the bone retain their own ink strength. This pass policy still
 needs review on a real graphics card at strengths .55 and .34.
 
 `betweenPoses(from, to, p)` samples complete, dimension-matched pose sets:

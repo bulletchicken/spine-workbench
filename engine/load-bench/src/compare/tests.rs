@@ -158,6 +158,8 @@ fn loaded_sources_keep_the_rows_behind_each_number() {
     let result = compare(&BenchCompareInput {
         layouts: vec![layout],
         batches: vec![BenchBatch {
+            middle: Vec::new(),
+            main_curve: None,
             version_from: 0,
             version_count: 1,
             runs: vec![run],
@@ -230,6 +232,8 @@ fn input(runs: Vec<BenchRun>, count: u32) -> BenchCompareInput {
     BenchCompareInput {
         layouts: vec![layout("first"), layout("other")],
         batches: vec![BenchBatch {
+            middle: Vec::new(),
+            main_curve: None,
             version_from: 0,
             version_count: count,
             runs,
@@ -508,6 +512,8 @@ fn dot_order_follows_the_paired_difference_and_ghosts_are_actual_versions() {
     let result = compare(&BenchCompareInput {
         layouts: vec![layout("first")],
         batches: vec![BenchBatch {
+            middle: Vec::new(),
+            main_curve: None,
             version_from: 0,
             version_count: 11,
             runs,
@@ -642,6 +648,8 @@ fn a_missing_rod_comparison_does_not_become_a_known_peak() {
     let result = compare(&BenchCompareInput {
         layouts: vec![layout],
         batches: vec![BenchBatch {
+            middle: Vec::new(),
+            main_curve: None,
             version_from: 0,
             version_count: 1,
             runs: vec![computed],
@@ -663,6 +671,8 @@ fn missing_solves_cannot_set_a_narrow_estimate_or_a_steady_share() {
     let result = compare(&BenchCompareInput {
         layouts: vec![layout("first")],
         batches: vec![BenchBatch {
+            middle: Vec::new(),
+            main_curve: None,
             version_from: 0,
             version_count: 2,
             runs: vec![run("first", 0, 20.0, 1.0), missing],
@@ -690,6 +700,8 @@ fn anchor_demand_uses_settled_ratios_and_before_has_only_shape_estimates() {
     let result = compare(&BenchCompareInput {
         layouts: vec![layout("first")],
         batches: vec![BenchBatch {
+            middle: Vec::new(),
+            main_curve: None,
             version_from: 0,
             version_count: 3,
             runs: vec![
@@ -794,4 +806,124 @@ fn outcomes_keep_their_versions_when_dot_order_changes() {
         }
         assert_eq!(count.clear_at, 3);
     }
+}
+
+#[test]
+fn drawing_runs_copy_only_to_shape_stops_and_never_change_summaries() {
+    let mut input = input(
+        vec![run("first", 0, 20.0, 4.0), run("other", 0, 15.0, 3.0)],
+        1,
+    );
+    let baseline = compare(&input).unwrap();
+    let pose = shapes::made_up::VertebraPose {
+        level: Level::T8,
+        centre: [0.0, 0.0, 100.0],
+        rotation: [0.0; 3],
+        height: 20.0,
+        wedge_front: 0.0,
+        wedge_side: 0.0,
+        top_half_width: 12.0,
+        top_half_depth: 8.0,
+        bottom_half_width: 12.0,
+        bottom_half_depth: 8.0,
+    };
+    let middle = MiddleRun {
+        layout_id: "first".into(),
+        before: vec![pose],
+        rods_in: Some(vec![shapes::made_up::VertebraPose {
+            centre: [1.0, 0.0, 100.0],
+            ..pose
+        }]),
+        rods: Some(vec![RodLine {
+            side: BodySide::Left,
+            points_mm: vec![[1.0, 2.0, 100.0], [1.0, 2.0, 80.0]],
+        }]),
+    };
+    input.batches[0].middle = vec![middle.clone()];
+    input.batches[0].main_curve = Some(MainCurve {
+        upper: Level::T5,
+        apex: Level::T8,
+        lower: Level::T12,
+    });
+    let mut with = compare(&input).unwrap();
+    assert_eq!(with.main_curve, input.batches[0].main_curve);
+    assert_eq!(with.layouts[0].stops[0].middle, Some(middle.before));
+    assert_eq!(with.layouts[0].stops[1].middle, middle.rods_in);
+    assert_eq!(with.layouts[0].stops[1].rods, middle.rods);
+    assert!(
+        with.layouts[0]
+            .stops
+            .iter()
+            .skip(2)
+            .all(|stop| stop.middle.is_none() && stop.rods.is_none())
+    );
+    assert!(with.layouts[0].stops[0].rods.is_none());
+    assert!(
+        with.layouts[1]
+            .stops
+            .iter()
+            .all(|stop| stop.middle.is_none() && stop.rods.is_none())
+    );
+    for layout in &mut with.layouts {
+        for stop in &mut layout.stops {
+            stop.middle = None;
+            stop.rods = None;
+        }
+    }
+    with.main_curve = None;
+    assert_eq!(
+        serde_json::to_vec(&with).unwrap(),
+        serde_json::to_vec(&baseline).unwrap()
+    );
+
+    input.batches[0].middle[0].rods_in = None;
+    input.batches[0].middle[0].rods = None;
+    let unsettled = compare(&input).unwrap();
+    assert!(unsettled.layouts[0].stops[0].middle.is_some());
+    assert!(unsettled.layouts[0].stops[1].middle.is_none());
+    assert!(unsettled.layouts[0].stops[1].rods.is_none());
+
+    // A later slice still carries the fitted curve, but cannot supply drawing data.
+    input.batches[0].version_from = 1;
+    input.batches[0].middle.clear();
+    for run in &mut input.batches[0].runs {
+        run.version = 1;
+    }
+    let without = compare(&input).unwrap();
+    assert!(without.main_curve.is_none());
+    assert!(
+        without
+            .layouts
+            .iter()
+            .flat_map(|l| &l.stops)
+            .all(|s| s.middle.is_none() && s.rods.is_none())
+    );
+}
+
+#[test]
+fn batches_must_agree_on_the_fitted_curve_including_its_absence() {
+    let mut input = input(
+        vec![run("first", 0, 20.0, 4.0), run("other", 0, 15.0, 3.0)],
+        1,
+    );
+    let mut later = input.batches[0].clone();
+    later.version_from = 1;
+    for run in &mut later.runs {
+        run.version = 1;
+    }
+    input.batches.push(later);
+    let curve = MainCurve {
+        upper: Level::T5,
+        apex: Level::T8,
+        lower: Level::T12,
+    };
+    input.batches[0].main_curve = Some(curve);
+    assert_eq!(compare(&input), Err(refused("main-curves-not-shared")));
+    input.batches[1].main_curve = Some(MainCurve {
+        apex: Level::T9,
+        ..curve
+    });
+    assert_eq!(compare(&input), Err(refused("main-curves-not-shared")));
+    input.batches[1].main_curve = Some(curve);
+    assert!(compare(&input).is_ok());
 }

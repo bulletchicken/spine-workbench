@@ -63,8 +63,8 @@ export function sceneLayer(root: Group, holders: ReadonlyMap<Level, Group>, chan
     layer,
     registrations: () => [...registrations.values()].filter(({ object }) => contains(object)),
     show(on: boolean) { spineGate.visible = on; for (const group of gates.values()) group.visible = on; },
-    prepare(strength: number, texture: Texture | null, width: number, height: number) {
-      materials.strength(strength); materials.mask(texture, width, height);
+    prepare(strength: number, texture: Texture | null, width: number, height: number, veil: Texture | null = null) {
+      materials.strength(strength); materials.mask(texture, width, height, veil);
       for (const group of [onSpine, ...bones.values()]) group.traverse((object) => {
         if (!(object instanceof Mesh || object instanceof Line)) return;
         let inFront = false;

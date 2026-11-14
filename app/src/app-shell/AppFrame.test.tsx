@@ -86,7 +86,7 @@ describe('the one stage frame', () => {
     expect(find('main.stage').getAttribute('aria-label')).toBe('The films');
     expect(find('main.stage').children).toHaveLength(0);
     expect(find('footer.dock.glass').getAttribute('aria-label')).toBe('What to do now');
-    expect(document.querySelectorAll('.scene')).toHaveLength(12);
+    expect(document.querySelectorAll('.scene')).toHaveLength(13);
     expect(document.querySelector('.scene.on')).toBeNull();
     expect(frame.querySelector(':scope > p.notice')).not.toBeNull();
     expect(find('.app-frame').getAttribute('data-step')).toBe('');
@@ -159,6 +159,15 @@ describe('the one stage frame', () => {
     expect(find('.scene.on').querySelector('button')).toBeNull();
     expect(pressKey('Enter').defaultPrevented).toBe(false);
     expect(saidNow()).toBe(before);
+  });
+
+  it('keeps Place distinct from Films and returns to the 3D page state', async () => {
+    const { engine } = mount([fixtureStep(3, 'three', '3D'), fixtureStep(4, 'place', 'Place')]);
+    await ready(engine);
+    act(() => { currentStep.getState().go('place'); });
+    expect(document.documentElement.getAttribute('data-moment')).toBe('place');
+    act(() => { currentStep.getState().go('three'); });
+    expect(document.documentElement.getAttribute('data-moment')).toBe('three');
   });
 
   it('shows the first available step and hands its words to the single dock outside the screen', async () => {

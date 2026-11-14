@@ -25,7 +25,7 @@
 //   reaches it is fine; in WebKit it is reported, and a journey that
 //   retires a worker straight after starting it will fail there.
 
-import type { BrowserContext, ConsoleMessage, Page, Route } from '@playwright/test';
+import { test as browserTest, type BrowserContext, type ConsoleMessage, type Page, type Route } from '@playwright/test';
 
 export interface Violation {
   /** `page`, or the URL of the worker's script. */
@@ -44,6 +44,27 @@ export interface RecorderOptions {
 }
 
 const MARK = 'content-policy-violation ';
+
+const recordingContexts = new WeakSet<BrowserContext>();
+
+function closedRequest(error: unknown): boolean {
+  return error instanceof Error && /(?:^|: )(?:Response has been disposed|Target page, context or browser has been closed|Target closed|Test ended\.)(?:$|\n)/.test(error.message);
+}
+
+/** The recorder drains before the built-in context fixture disposes its request client. */
+export const test = browserTest.extend<{ policyRecorderCleanup: undefined }>({
+  policyRecorderCleanup: [async ({ context }, use) => {
+    await use(undefined);
+    if (!recordingContexts.has(context) || context.isClosed()) return;
+    try {
+      // Closing pages stops new script requests before the existing handlers are drained.
+      await Promise.all(context.pages().map((page) => page.close()));
+      await context.unrouteAll({ behavior: 'wait' });
+    } catch (error) {
+      if (!context.isClosed() && !closedRequest(error)) throw error;
+    }
+  }, { auto: true }],
+});
 
 /**
  * Run in the page and in each worker: report every violation through the
@@ -64,6 +85,7 @@ const LISTENER = `(${listen.toString()})(${JSON.stringify(MARK)});\n`;
 export class PolicyRecorder {
   private readonly found: Violation[] = [];
   private readonly pending: Promise<void>[] = [];
+  private readonly pages = new Set<Page>();
   /** Every worker script URL Playwright has seen started. */
   private readonly workerScripts = new Set<string>();
   /** Scripts served that start with a static import. */
@@ -72,6 +94,7 @@ export class PolicyRecorder {
   private readonly listeningScripts = new Set<string>();
 
   private constructor(
+    private readonly context: BrowserContext,
     private readonly origin: string,
     private readonly options: RecorderOptions,
   ) {}
@@ -83,10 +106,12 @@ export class PolicyRecorder {
    * chain.
    */
   static async attach(context: BrowserContext, origin: string, options: RecorderOptions = {}): Promise<PolicyRecorder> {
-    const recorder = new PolicyRecorder(origin, options);
+    const recorder = new PolicyRecorder(context, origin, options);
+    recordingContexts.add(context);
     await context.addInitScript(listen, MARK);
     await context.route('**', (route) => recorder.serve(route));
     const watch = (page: Page) => {
+      recorder.pages.add(page);
       page.on('console', (message) => {
         recorder.read(message);
       });
@@ -122,16 +147,22 @@ export class PolicyRecorder {
 
   /** Serves a script from the app's origin with the listener in front; passes anything else on. */
   private async serve(route: Route): Promise<void> {
-    const request = route.request();
-    if (request.resourceType() !== 'script' || new URL(request.url()).origin !== this.origin) {
-      await route.fallback();
-      return;
+    try {
+      const request = route.request();
+      if (request.resourceType() !== 'script' || new URL(request.url()).origin !== this.origin) {
+        await route.fallback();
+        return;
+      }
+      const response = await route.fetch();
+      const script = await response.text();
+      if (/^\s*import\s*[\w{*"'`]/.test(script)) this.importingScripts.add(request.url());
+      this.listeningScripts.add(request.url());
+      await route.fulfill({ response, body: LISTENER + (this.options.workerPrelude ?? '') + script });
+    } catch (error) {
+      // A closed page cannot run this response. Active requests must still fail on every other error.
+      if (this.context.isClosed() || (this.pages.size > 0 && [...this.pages].every((page) => page.isClosed())) || closedRequest(error)) return;
+      throw error;
     }
-    const response = await route.fetch();
-    const script = await response.text();
-    if (/^\s*import\s*[\w{*"'`]/.test(script)) this.importingScripts.add(request.url());
-    this.listeningScripts.add(request.url());
-    await route.fulfill({ response, body: LISTENER + (this.options.workerPrelude ?? '') + script });
   }
 
   private read(message: ConsoleMessage): void {

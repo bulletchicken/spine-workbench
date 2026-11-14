@@ -11,8 +11,8 @@
 // a worker's first line there (see test-rig/policy-violations.ts). Later violations in a WebKit
 // worker are still recorded, as content-policy.spec.ts shows.
 
-import { expect, test } from '@playwright/test';
-import { PolicyRecorder } from '../test-rig/policy-violations';
+import { expect } from '@playwright/test';
+import { PolicyRecorder, test } from '../test-rig/policy-violations';
 
 const OUTSIDE = 'https://example.org/';
 const OUTSIDE_SOCKET = 'wss://example.org/';
