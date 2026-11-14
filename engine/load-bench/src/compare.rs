@@ -83,6 +83,7 @@ pub fn compare(input: &BenchCompareInput) -> Result<BenchResult, BenchError> {
                 let sign_consistent =
                     index > 0 && sign_keeps as f64 >= COMPARISON_SIGN_SHARE * own.len() as f64;
                 estimates.push(Estimate {
+                    sources: Vec::new(),
                     measure,
                     band: range,
                     tag: if samples.len() == own.len() {
@@ -90,7 +91,7 @@ pub fn compare(input: &BenchCompareInput) -> Result<BenchResult, BenchError> {
                     } else {
                         EstimateTag::Assumed
                     },
-                    mostly_from: ranks::driver(own, &samples).0,
+                    mostly_from: Some(ranks::driver(own, &samples).0),
                 });
                 if index > 0 && !paired.is_empty() {
                     result.counts.push(count(own, stop, measure, &paired));
@@ -102,6 +103,9 @@ pub fn compare(input: &BenchCompareInput) -> Result<BenchResult, BenchError> {
                 .filter_map(|run| stop_values(run, stop)?.cycles_per_year)
                 .collect();
             result.stops.push(StopResult {
+                middle: None,
+                rods: None,
+                cycles_sources: Vec::new(),
                 stop,
                 estimates,
                 parts: parts::summarise(layout, own, &runs, stop),
@@ -131,6 +135,7 @@ pub fn compare(input: &BenchCompareInput) -> Result<BenchResult, BenchError> {
             .or_insert((estimate.band.p10, estimate.band.p90));
     }
     Ok(BenchResult {
+        main_curve: None,
         versions: first.len() as u32,
         first_id: input.layouts[0].id.clone(),
         layouts,
@@ -428,13 +433,15 @@ fn count(
     let mut order: Vec<_> = paired.iter().map(|row| row.0).collect();
     order.sort_by(|a, b| driver[a].total_cmp(&driver[b]).then(a.cmp(b)));
     let mut result = PairedCount {
+        outcomes: Vec::new(),
+        clear_at: libm::ceil(CLEAR_SHARE * order.len() as f64) as u32,
         measure,
         stop,
         lower: 0,
         higher: 0,
         ties: 0,
         order,
-        sorted_by,
+        sorted_by: Some(sorted_by),
     };
     for (_, own, first) in paired {
         let margin = if angular(measure) {

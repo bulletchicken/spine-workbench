@@ -26,7 +26,7 @@ use shapes::engine_info::EngineInfo;
 use shapes::errors::EngineError;
 use shapes::film::FilmFacts;
 use shapes::film_geometry::{GeometryGuess, ScaleResult};
-use shapes::implant_layout::{LayoutInput, LayoutProposals};
+use shapes::implant_layout::{LayoutInput, LayoutProposals, RebuildInput};
 use shapes::landmarks::LandmarkName;
 use shapes::levels::Level;
 use shapes::load_bench::{BenchBatch, BenchCompareInput, BenchInput, BenchResult};
@@ -104,7 +104,7 @@ fn clear(folder: &Path) -> Outcome {
 /// worker message, or a list the app checks its own constants against.
 fn write_types(folder: &Path) -> Outcome {
     let config = Config::new().with_out_dir(folder);
-    let exports: [Export; 45] = [
+    let exports: [Export; 46] = [
         CaseFileV1::export_all,
         OpenedCase::export_all,
         EngineInfo::export_all,
@@ -140,6 +140,7 @@ fn write_types(folder: &Path) -> Outcome {
         FitFromFilms::export_all,
         LayoutInput::export_all,
         LayoutProposals::export_all,
+        RebuildInput::export_all,
         BenchInput::export_all,
         BenchBatch::export_all,
         BenchCompareInput::export_all,

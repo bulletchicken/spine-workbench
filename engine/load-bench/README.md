@@ -58,6 +58,17 @@ loads enter summaries. Their unused springback share is zero and must only be
 read when `settled` is true. Incomplete estimate ensembles remain assumed,
 and incomplete part ensembles are not called steady.
 
+The result contract includes nullable `mainCurve` (`upper`, `apex`, `lower`)
+and, at each stop, nullable `middle` drawing poses and nullable `rods` drawing
+lines (`side`, `pointsMm`). A middle run is separate from the versions and
+must never enter estimates or counts. The fields are currently null at every
+stop, including `before`. Per-part `demand` is also null; its contract is an
+anchor's force over bone-adjusted strength over settled versions, absent at
+`before` and for other parts. `Estimate.sources`, `PartResult.sources` and
+`StopResult.cyclesSources` are currently empty evidence-key lists. Their
+emptiness must not be read as film-only provenance while they are unfilled.
+Before-stop estimates and shares retain their existing representation.
+
 ## What is computed
 
 The chain has one rigid body per vertebra and six springs at each disc. The
@@ -174,9 +185,10 @@ Tags are computed per estimate using project thresholds:
 correlation with that estimate. Ties receive equal average ranks. Dot order
 sorts by the unknown most correlated with the **paired difference**. These
 associations describe the chosen ensemble, not causal attribution. Geometry
-and rib cage use the strongest individual component; constant correlations
-fall back to geometry with version-index dot order because the contract has
-no absent-driver value. Ghosts are
+and rib cage use the strongest individual component. `mostlyFrom` and
+`sortedBy` are nullable when no unknown moves with the result; aggregation
+currently keeps its existing answers present, including the geometry
+fallback with version-index dot order for constant correlations. Ghosts are
 actual version poses nearest the p10 and p90 main-Cobb ranks; a pose is never
 interpolated between spines.
 
@@ -188,6 +200,11 @@ binomial standard error at 32 versions is sqrt(0.25/32), about 0.088. These
 margins, count cutoffs and tag cutoffs are project thresholds, not clinical
 thresholds. A count past published strength is also an assumption; it is not a
 failure probability.
+
+`PairedCount.outcomes` reserves one `lower`, `higher` or `tie` for each dot,
+following `order`; it is currently empty. `clearAt` is the clear-count
+threshold of three quarters of the number of entries in `order`, rounded
+up. The existing `lower`, `higher`, `ties` and dot order are unchanged.
 
 ## Embedded tables and sources
 

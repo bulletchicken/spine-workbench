@@ -342,6 +342,7 @@ pub fn estimate(draws: &[Option<WidthDraw>], side: CurveSide) -> PedicleEstimate
     .and_then(central);
     let inner_floor = inner_channel_floor();
     PedicleEstimate {
+        sources: Vec::new(),
         outer_width_mm: complete.then(|| band(&outer)).flatten(),
         inner_width_mm: complete.then(|| band(&inner)).flatten(),
         versions_too_narrow: threshold

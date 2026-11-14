@@ -34,6 +34,7 @@ import type {
   FilmMarks,
   FitFromFilms,
   GeometryGuess,
+  ImplantLayout,
   LayoutInput,
   LayoutProposals,
   MadeUpRecipe,
@@ -45,6 +46,7 @@ import type {
   PinOutput,
   Px,
   ReadingsInput,
+  RebuildInput,
   RegionWandInput,
   RegionWandOutput,
   ScaleResult,
@@ -147,6 +149,12 @@ export interface EngineClient {
    * rejects with `pass-cancelled`, which the screen lets go by.
    */
   proposeLayouts(input: LayoutInput): Promise<LayoutProposals>;
+  /**
+   * A whole placement after its ends, anchors or rods are changed by
+   * hand. A newer call replaces a waiting one; a replaced call rejects
+   * with `pass-cancelled`, which the screen lets go by.
+   */
+  rebuildLayout(input: RebuildInput): Promise<ImplantLayout>;
   /**
    * Every placement on one slice of versions (`versionFrom`,
    * `versionCount`), through every stop. The screen sends a few versions

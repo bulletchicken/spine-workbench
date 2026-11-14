@@ -3,10 +3,13 @@ import type { AnchorKind } from "./AnchorKind";
 import type { AngleFromTable } from "./AngleFromTable";
 import type { Band } from "./Band";
 import type { BodySide } from "./BodySide";
+import type { DiameterCount } from "./DiameterCount";
 import type { DiameterRule } from "./DiameterRule";
 import type { Level } from "./Level";
 import type { LookCode } from "./LookCode";
+import type { LookSources } from "./LookSources";
 import type { PedicleEstimate } from "./PedicleEstimate";
+import type { ScrewHere } from "./ScrewHere";
 import type { ValueStatus } from "./ValueStatus";
 
 /**
@@ -74,4 +77,39 @@ lengthAlsoSeen: Array<number>, lengthStatus: ValueStatus,
  * The lengths used in practice in this region, shortest and longest,
  * shown and never imposed.
  */
-usualLengthMm: [number, number] | null, pedicle: PedicleEstimate, looks: Array<LookCode>, sources: Array<string>, };
+usualLengthMm: [number, number] | null, pedicle: PedicleEstimate, 
+/**
+ * For each diameter of `LayoutChoices.screwDiametersMm`, the versions
+ * in which the drawn outer width is under that diameter divided by
+ * the width ratio the diameter rule uses (the same test as
+ * `versionsTooNarrow`), on every anchor whatever its kind. Empty
+ * without a width table; these are population draws, never measured
+ * pedicle widths.
+ */
+widerThanPedicle: Array<DiameterCount>, 
+/**
+ * The screw size at this pedicle before the pattern chooses its
+ * kind, including for a hook or an empty place. `null` when no size
+ * can be found; a screw repeats its own size here.
+ */
+screwHere: ScrewHere | null, looks: Array<LookCode>, 
+/**
+ * Source keys behind the chosen diameter; empty without a source.
+ */
+diameterSources: Array<string>, 
+/**
+ * Source keys behind the chosen length; empty without a source.
+ */
+lengthSources: Array<string>, 
+/**
+ * Source keys behind the direction; empty without a source.
+ */
+directionSources: Array<string>, 
+/**
+ * One source list per entry of `looks`, in the same order.
+ */
+lookSources: Array<LookSources>, 
+/**
+ * The union of this anchor's source keys.
+ */
+sources: Array<string>, };

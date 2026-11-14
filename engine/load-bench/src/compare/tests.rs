@@ -7,6 +7,12 @@ use shapes::spine_readings::{Band, BodySide};
 
 fn anchor(side: BodySide) -> AnchorProposal {
     AnchorProposal {
+        wider_than_pedicle: Vec::new(),
+        screw_here: None,
+        diameter_sources: Vec::new(),
+        length_sources: Vec::new(),
+        direction_sources: Vec::new(),
+        look_sources: Vec::new(),
         level: Level::T8,
         side,
         kind: AnchorKind::Screw,
@@ -34,6 +40,7 @@ fn anchor(side: BodySide) -> AnchorProposal {
         length_status: ValueStatus::FromTables,
         usual_length_mm: None,
         pedicle: PedicleEstimate {
+            sources: Vec::new(),
             outer_width_mm: None,
             inner_width_mm: None,
             versions_too_narrow: 0,
@@ -152,6 +159,22 @@ fn pairing_uses_version_numbers_and_changes_only_when_versions_are_mismatched() 
 }
 
 #[test]
+fn the_clear_count_rounds_up_three_quarters_of_the_paired_dots() {
+    let mut runs = Vec::new();
+    for version in 0..6 {
+        runs.push(run("first", version, 20.0, 1.0));
+        let mut other = run("other", version, 23.0, 1.0);
+        other.settled = version != 5;
+        runs.push(other);
+    }
+    let result = compare(&input(runs, 6)).unwrap();
+    let count = cobb_count(&result);
+    // Five paired dots need four votes; the unpaired sixth does not count.
+    assert_eq!(count.order.len(), 5);
+    assert_eq!(count.clear_at, 4);
+}
+
+#[test]
 fn global_shares_have_one_denominator_and_strength_counts_keep_their_units() {
     let mut other_run = run("other", 0, 20.0, 16.0);
     other_run.stops[3].anchor_force_n = vec![32.0, 16.0];
@@ -235,7 +258,7 @@ fn unknowns_follow_tied_rank_correlation_and_unsettled_runs_do_not_vote() {
         .iter()
         .find(|value| value.measure == Measure::HeaviestAnchorForce)
         .unwrap();
-    assert_eq!(force.mostly_from, SampledUnknown::StiffnessScale);
+    assert_eq!(force.mostly_from, Some(SampledUnknown::StiffnessScale));
     assert_eq!(
         force.band,
         Band {
@@ -279,7 +302,7 @@ fn dot_order_follows_the_paired_difference_and_ghosts_are_actual_versions() {
     }
     let result = compare(&input(runs, 3)).unwrap();
     let count = cobb_count(&result);
-    assert_eq!(count.sorted_by, SampledUnknown::StiffnessScale);
+    assert_eq!(count.sorted_by, Some(SampledUnknown::StiffnessScale));
     assert_eq!(count.order, vec![1, 0, 2]);
     assert_eq!((count.lower, count.higher, count.ties), (0, 2, 1));
     let mut runs = Vec::new();
@@ -387,6 +410,7 @@ fn changed_draws_and_geometry_are_refused_before_pairing() {
 fn yield_draws_match_for_the_same_material_and_can_differ_between_materials() {
     use shapes::implant_layout::{CoronalLine, RodMaterial, RodProposal};
     let rod = RodProposal {
+        standing_points_mm: Vec::new(),
         side: BodySide::Left,
         curve_side: CurveSide::Outside,
         material: RodMaterial::CobaltChrome,
