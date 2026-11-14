@@ -15,8 +15,8 @@ export function partDisposals() {
         const material = child.material as Material | Material[];
         const resources: (BufferGeometry | Material)[] = [child.geometry as BufferGeometry, ...Array.isArray(material) ? material : [material]];
         for (const resource of resources) {
-          if (watched.has(resource)) continue;
-          const onDispose = () => { disposed.add(resource); };
+          if (watched.has(resource) || disposed.has(resource)) continue;
+          const onDispose = () => { disposed.add(resource); resource.removeEventListener('dispose',onDispose); watched.delete(resource); };
           watched.set(resource, onDispose); resource.addEventListener('dispose', onDispose);
         }
       });

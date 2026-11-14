@@ -7,13 +7,16 @@ import { MADE_UP_CASE } from '@/spine-3d/made-up-case/made-up-case';
 import { sceneLayer } from '@/spine-3d/scene/scene-layer';
 import type { Spine3DHandle } from '@/spine-3d/view/Spine3D';
 import type { AcceptedSpine } from '@/view-state/spine-build';
+import type { BenchResult } from '@/shapes';
+import { loadState } from './load-state';
+import { PLACE_LOAD_WORDS as L } from '@/words/place';
 import { PlaceSheet } from './PlaceSheet';
 import { PlaceDrawing } from './PlaceDrawing';
 import { placeState } from './place-state';
 import { placementFixture } from './placement-fixture.scenes';
 const loop = vi.hoisted(() => new Set<(dt: number) => void>());
 vi.mock('@/choreography/one-loop', () => ({ joinLoop: (step: (dt: number) => void) => { loop.add(step); return () => { loop.delete(step); }; } }));
-vi.mock('@/choreography/timing', () => ({ durationOf: () => 160 }));
+vi.mock('@/choreography/timing', () => ({ durationOf: () => 160, curveOf: () => (p:number)=>p }));
 vi.mock('./PlacementCaption', () => ({ PlacementCaption: () => null }));
 afterEach(() => { vi.unstubAllGlobals(); loop.clear(); });
 function mount() {
@@ -22,7 +25,7 @@ function mount() {
   const result = placementFixture(); placeState.setState({key:'test',phase:'ready',result,arriving:false,pressed:'anchor:0',hovered:null,review:null,sheet:false,chosen:'back'});
   const root = new Group(), levels = MADE_UP_CASE.fit.vertebrae.map((v)=>v.level), holders = new Map(levels.map((level)=>{const group=new Group();root.add(group);return [level,group] as const;}));
   const listeners = new Set<()=>void>(), point = {x:100,y:200}, look = vi.fn();
-  const spine = { levels, set:vi.fn(), valuesOf:()=>({strength:.55}), addLayer:()=>sceneLayer(root,holders,()=>undefined,()=>undefined).layer, landmarks:()=>null };
+  const spine = { levels, setSpine:vi.fn(), bounds:()=>({low:[0,0,0],high:[100,500,100]}), betweenPoses:vi.fn(), centre:()=>[0,0,0], set:vi.fn(), valuesOf:()=>({strength:.55}), addLayer:()=>sceneLayer(root,holders,()=>undefined,()=>undefined).layer, landmarks:()=>null };
   const handle = {spine:()=>spine,stage:()=>({view:()=>({azimuth:146,elevation:14,perspective:1,pxPerMm:[1,1],aim:[0,0,0],aimAt:[500,350]}),size:()=>({width:1000,height:700}),bounds:()=>({low:[0,0,0],high:[100,500,100]}),onDrawn:(fn:()=>void)=>{listeners.add(fn);return ()=>listeners.delete(fn);},patientToCanvas:()=>point,toCanvas:()=>point}),lookFrom:look};
   const marks = smallStory().pass.marks.find((m)=>m.film==='front'); if(marks===undefined)throw new Error('front');
   const accepted = {key:'test',fit:MADE_UP_CASE.fit,bones:[],input:{front:{marks,geometry:MADE_UP_CASE.front.geometry,size:MADE_UP_CASE.front.size,markSpread:MADE_UP_CASE.front.markSpread,facingAssumed:true},side:null,typical:'built-in',twistReadings:[]}} satisfies AcceptedSpine;
@@ -68,5 +71,32 @@ it('leaves M idle without a placement instead of opening a hidden sheet',()=>{
   const page=putOnThePage(<PlaceSheet accepted={{} as never}/>);
   pressKey('m');expect(placeState.getState().sheet).toBe(false);
   act(()=>{placeState.setState({phase:'failed'});});pressKey('m');expect(placeState.getState().sheet).toBe(false);
+  page.takeDown();
+});
+
+it('tags every anchor demand as assumed and explains past-allowance counts',()=>{
+  const {page,result}=mount(),anchor=result.layouts[0]?.anchors[0];if(anchor===undefined)throw new Error('anchor');
+  const part={part:{kind:'anchor' as const,level:anchor.level,side:anchor.side},share:{p10:.1,p50:.2,p90:.3},demand:{p10:.2,p50:.3,p90:.4},steady:false,versionsPastStrength:0,sources:[]};
+  const answer:BenchResult={versions:32,firstId:'first',mainCurve:null,scales:[],layouts:[{layoutId:'first',versionsUnsettled:0,counts:[],stops:[{stop:'rods-in',parts:[part],estimates:[],middle:null,rods:null,ghosts:null,cyclesPerYear:null,cyclesSources:[],outsideStiffRod:0}]}]};
+  act(()=>{loadState.setState({phase:'loaded',result:answer,stop:'rods-in'});});
+  expect(page.host.querySelector('.place-chip > small')?.textContent).toBe('Assumed');expect(page.host.querySelector('.past-strength')).toBeNull();
+  part.versionsPastStrength=1;act(()=>{loadState.setState({result:{...answer}});});
+  expect(page.host.querySelector('.load-context')?.textContent).toBe(L.pastContext(true));
+  expect(L.pastContext(false)).toBe('Its level is a published test strength. The count is over versions of what is not known, not a verdict on this placement.');
+  page.takeDown();
+});
+
+it('hides only stage labels whose boxes overlap the open chip and restores them after it closes',()=>{
+  const {page,listeners}=mount(),svg=page.host.querySelector('.place-labels'),chip=page.host.querySelector('.place-chip');
+  if(svg===null||chip===null)throw new Error('drawing');
+  const label=document.createElementNS('http://www.w3.org/2000/svg','g'),box=document.createElementNS('http://www.w3.org/2000/svg','foreignObject');
+  label.dataset.range='test';label.append(box);svg.append(label);
+  vi.spyOn(chip,'getBoundingClientRect').mockReturnValue(new DOMRect(100,100,200,200));
+  const rect=vi.spyOn(box,'getBoundingClientRect').mockReturnValue(new DOMRect(200,200,208,104));
+  act(()=>{listeners.forEach((fn)=>{fn();});});expect(label.style.visibility).toBe('hidden');
+  rect.mockReturnValue(new DOMRect(400,100,208,104));
+  act(()=>{listeners.forEach((fn)=>{fn();});});expect(label.style.visibility).toBe('');
+  rect.mockReturnValue(new DOMRect(200,200,208,104));
+  act(()=>{placeState.setState({pressed:null,hovered:null});});expect(label.style.visibility).toBe('');
   page.takeDown();
 });

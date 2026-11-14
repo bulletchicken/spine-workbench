@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, type RefObject } from 'react';
 import { useStore } from 'zustand';
+import { LevelWords } from '@/building-blocks/LevelWords';
 import { useKey } from '@/building-blocks/keyboard/use-key';
 import { takeKeys } from '@/building-blocks/keyboard/keyboard';
 import { joinLoop } from '@/choreography/one-loop';
@@ -8,26 +9,41 @@ import { durationOf } from '@/choreography/timing';
 import type { Spine3DHandle } from '@/spine-3d/view/Spine3D';
 import type { AcceptedSpine } from '@/view-state/spine-build';
 import { threeState } from '@/view-state/three-state';
-import { PLACE_WORDS as W } from '@/words/place';
-import { drawPlacement, PLACE_DRAWING as D } from './draw-placement';
+import { DAILY_LOADS_WITHHELD, ESTIMATE_NAMES, ESTIMATE_TAGS, PLACE_LOAD_WORDS as L, PLACE_WORDS as W } from '@/words/place';
+import { drawPlacement, type DrawnPlacement, PLACE_DRAWING as D } from './draw-placement';
 import { filmSide, placementLooks, reviewItems } from './placement-view';
 import { placeState } from './place-state';
 import { restingView } from '../three/resting-view';
+import { loadState } from './load-state';
+import { anchorLoad, anchorPoint, loadLabels, pastWords, rangeWords, shownLoadStop, shownStopResult, typicalKyphosis } from './load-view';
+import { useLoadDrawing } from './load-drawing';
+import { RangeBar, scaleFor } from './LoadEstimates';
 import { PlacementCaption } from './PlacementCaption';
 import './place.css';
 
 export function PlaceDrawing({ accepted, handle }: { accepted: AcceptedSpine; handle: RefObject<Spine3DHandle | null> }) {
   const state = useStore(placeState), root = useRef<HTMLDivElement>(null), chip = useRef<HTMLDivElement>(null);
-  const veiling = useRef(false);
+  const veiling = useRef(false), drawnRef=useRef<DrawnPlacement|null>(null);
+  const load=useStore(loadState);
+  const stop=shownLoadStop(load.stop),loaded=load.phase==='loaded',currentLoad=loaded?shownStopResult(load.result,stop):undefined;
+  const loadParts=stop==='before'?[]:currentLoad?.parts??[];
   const result = state.result, layout = result?.layouts[0];
   const items = useMemo(() => result === null ? [] : reviewItems(result, accepted.input.front.marks.namedFor), [result, accepted.input.front.marks.namedFor]);
   const item = state.review === null ? undefined : items[state.review];
   const looks = useMemo(() => layout === undefined ? null : placementLooks(layout), [layout]);
   const selected = state.pressed ?? state.hovered;
   const anchor = selected?.startsWith('anchor:') === true ? layout?.anchors[Number(selected.slice(7))] : undefined;
-  const rod = selected?.startsWith('rod:') === true ? layout?.rods.find((r) => `rod:${r.side}` === selected) : undefined;
+  const span=selected?.startsWith('span:')===true?selected.split(':'):null;
+  const rod = span!==null?layout?.rods.find((r)=>r.side===span[1]):selected?.startsWith('rod:') === true ? layout?.rods.find((r) => `rod:${r.side}` === selected) : undefined;
+  const selectedLoad=anchor===undefined?loadParts.find((p)=>p.part.kind==='rod-span'?selected===`span:${p.part.side}:${p.part.from}:${p.part.to}`:p.part.kind==='rod'&&selected===`rod:${p.part.side}`):anchorLoad(loadParts,anchor);
   const chosenEnd = selected === 'upper' ? layout?.upper : selected === 'lower' ? layout?.lower : undefined;
-  const levels = useMemo(() => item?.levels ?? (anchor === undefined ? chosenEnd === undefined ? [] : [chosenEnd] : [anchor.level]), [item, anchor, chosenEnd]);
+  const levels = useMemo(() => {
+    if(item!==undefined)return item.levels;
+    if(anchor!==undefined)return [anchor.level];
+    if(chosenEnd!==undefined)return [chosenEnd];
+    const ids=selected?.startsWith('span:')===true?selected.split(':'):[];
+    return ids.slice(2).filter((level)=>accepted.fit.vertebrae.some((v)=>v.level===level)) as import('@/shapes').Level[];
+  }, [item, anchor, chosenEnd, selected, accepted.fit]);
   useLayoutEffect(() => { threeState.getState().light(levels); return () => { threeState.getState().light([]); }; }, [levels]);
   useLayoutEffect(() => {
     const on = handle.current, spine = on?.spine(), stage = on?.stage();
@@ -64,8 +80,8 @@ export function PlaceDrawing({ accepted, handle }: { accepted: AcceptedSpine; ha
     const on = handle.current, spine = on?.spine(), stage = on?.stage(), surface = root.current;
     if (layout === undefined || spine == null || stage == null || surface === null) return;
     const marks = result?.firstIsSketch === true ? [] : result?.cannotTell.filter((r) => r.code === 'ends-unsettled').flatMap((r) => r.levels) ?? [];
-    const drawn = drawPlacement(spine, accepted.fit, layout, marks);
-    if (!placeState.getState().arriving) return () => { drawn.remove(); };
+    const drawn = drawPlacement(spine, accepted.fit, layout, marks); drawnRef.current=drawn;
+    if (!placeState.getState().arriving) return () => { drawn.remove(); drawnRef.current=null; };
     const reduced = window.matchMedia(SYSTEM_ASKS_FOR_REDUCED).matches || surface.closest('[data-motion="reduced"]') !== null;
     const fade = durationOf(surface, '--dur-appear');
     let elapsed = 0, finished = false;
@@ -80,8 +96,26 @@ export function PlaceDrawing({ accepted, handle }: { accepted: AcceptedSpine; ha
     const unkey = takeKeys('gesture', ['Enter'], () => { stop(); finish(); }, () => !finished);
     const skip = (event: PointerEvent) => { if (finished || event.target instanceof Element && event.target.closest('.steps') !== null) return; event.preventDefault(); event.stopPropagation(); stop(); finish(); };
     document.addEventListener('pointerdown', skip, true);
-    return () => { stop(); unkey(); document.removeEventListener('pointerdown', skip, true); drawn.remove(); };
+    return () => { stop(); unkey(); document.removeEventListener('pointerdown', skip, true); drawn.remove(); drawnRef.current=null; };
   }, [accepted, handle, layout, result]);
+  useLayoutEffect(()=>{
+    const on=handle.current,stage=on?.stage(),surface=root.current,dock=surface?.closest('.frame, .place-gallery')?.querySelector('.dock');
+    if(layout===undefined||on==null||stage==null||surface==null||dock==null)return;
+    let previous='',wasNarrow=false;
+    const fit=()=>{
+      const size=stage.size(),box=surface.getBoundingClientRect(),top=dock.getBoundingClientRect().top;
+      const key=`${String(size.width)}:${String(size.height)}:${String(top)}`;if(key===previous)return;previous=key;
+      const narrow=window.innerWidth<1100;if(!narrow&&!wasNarrow)return;wasNarrow=narrow;
+      const caption=surface.querySelector('.place-caption'),gap=parseFloat(getComputedStyle(surface).getPropertyValue('--space-12'));
+      const clear=narrow?Math.max(1,Math.min(size.height,top-box.top-(caption?.getBoundingClientRect().height??0)-2*gap)):size.height;
+      const base=restingView(stage,surface),view=stage.view(),scale=Math.min(1,clear/size.height);
+      on.lookFrom({...view,aimAt:[size.width/2,clear/2],pxPerMm:[base.pxPerMm[0]*scale,base.pxPerMm[1]*scale]},{animate:false});
+    };
+    fit();const observer=new ResizeObserver(fit);observer.observe(dock);observer.observe(surface);const unstage=stage.onDrawn(fit);
+    return ()=>{observer.disconnect();unstage();};
+  },[handle,layout]);
+  const motion=useLoadDrawing(accepted,handle,drawnRef,root);
+  const labels=useMemo(()=>result===null||load.result===null?[]:loadLabels(load.result,result,accepted.fit,shownLoadStop(load.stop),DAILY_LOADS_WITHHELD?'rods-in':'bending-forward'),[result,load.result,load.stop,accepted.fit]);
   useEffect(() => {
     const on = handle.current, spine = on?.spine(), stage = on?.stage();
     if (layout === undefined || on == null || spine == null || stage == null) return;
@@ -132,7 +166,7 @@ export function PlaceDrawing({ accepted, handle }: { accepted: AcceptedSpine; ha
       if (first !== undefined) surface.dataset.boneStrength = String(spine.valuesOf(first)?.strength);
       for (const node of surface.querySelectorAll<SVGElement>('[data-anchor]')) {
         const a = layout.anchors[Number(node.dataset.anchor)]; if (a === undefined) continue;
-        const p = stage.patientToCanvas(a.entryMm, spine); node.setAttribute('transform', `translate(${String(p.x)} ${String(p.y)})`);
+        const p = stage.patientToCanvas(anchorPoint(a,accepted.fit,motion.poses.current), spine); node.setAttribute('transform', `translate(${String(p.x)} ${String(p.y)})`);
       }
       for (const node of surface.querySelectorAll<SVGElement>('[data-end]')) {
         const upper = node.dataset.end === 'upper', level = upper ? layout.upper : layout.lower;
@@ -144,7 +178,39 @@ export function PlaceDrawing({ accepted, handle }: { accepted: AcceptedSpine; ha
         node.querySelector('text')?.setAttribute('x', String(Math.max(left.x, right.x) - point.x + gap));
         node.setAttribute('transform', `translate(${String(point.x)} ${String(point.y)})`);
       }
-      let point = anchor?.entryMm ?? rod?.standingPointsMm[0];
+      for(const node of surface.querySelectorAll<SVGGElement>('[data-load-part]')){
+        const partId=node.dataset.loadPart??'',whole=drawnRef.current?.point(partId);
+        if(whole!=null){const p=stage.patientToCanvas(whole,spine);node.setAttribute('transform',`translate(${String(p.x)} ${String(p.y)})`);continue;}
+        const [side,from,to]=partId.split(':');
+        const a=layout.anchors.find((a)=>a.side===side&&a.level===from),b=layout.anchors.find((a)=>a.side===side&&a.level===to);
+        if(a===undefined)continue;
+        const x=stage.patientToCanvas(anchorPoint(a,accepted.fit,motion.poses.current),spine),y=b===undefined?x:stage.patientToCanvas(anchorPoint(b,accepted.fit,motion.poses.current),spine);
+        node.setAttribute('transform',`translate(${String((x.x+y.x)/2)} ${String((x.y+y.y)/2)})`);
+      }
+      const positions=[...surface.querySelectorAll<SVGGElement>('[data-range]')].flatMap((node)=>{
+        const label=labels.find((l)=>l.id===node.dataset.range);if(label===undefined)return[];
+        const a=label.anchor===undefined?undefined:layout.anchors[label.anchor];
+        const scene=spine.centre(label.level);if(scene===null)return[];
+        const at=a===undefined?stage.toCanvas(scene):stage.patientToCanvas(anchorPoint(a,accepted.fit,motion.poses.current),spine);
+        return [{node,at,left:label.id==='main-cobb',y:at.y-32}];
+      });
+      const bounds=spine.bounds();
+      const edges=[bounds.low[0],bounds.high[0]].flatMap((x)=>[bounds.low[1],bounds.high[1]].flatMap((y)=>[bounds.low[2],bounds.high[2]].map((z)=>stage.toCanvas([x,y,z]).x)));
+      for(const left of [true,false]){
+        let previous=16;
+        for(const at of positions.filter((p)=>p.left===left).sort((a,b)=>a.y-b.y)){
+          const x=left?Math.max(16,Math.min(...edges)-232):Math.min(stage.size().width-224,Math.max(...edges)+24);
+          const y=Math.max(previous,Math.min(stage.size().height-112,at.y));previous=y+104;
+          at.node.setAttribute('transform',`translate(${String(at.at.x)} ${String(at.at.y)})`);
+          const box=at.node.querySelector('foreignObject');box?.setAttribute('x',String(x-at.at.x));box?.setAttribute('y',String(y-at.at.y));
+          at.node.querySelector('path')?.setAttribute('d',`M0 0L${String(x-at.at.x+(left?208:0))} ${String(y-at.at.y+24)}`);
+        }
+      }
+      let point = anchor===undefined?rod===undefined?undefined:layout.anchors.filter((a)=>a.side===rod.side&&a.kind!=='none').map((a)=>anchorPoint(a,accepted.fit,motion.poses.current))[0]:anchorPoint(anchor,accepted.fit,motion.poses.current);
+      const spanId=selected?.startsWith('span:')===true?selected.split(':'):[];
+      const from=layout.anchors.find((a)=>a.side===spanId[1]&&a.level===spanId[2]),to=layout.anchors.find((a)=>a.side===spanId[1]&&a.level===spanId[3]);
+      if(from!==undefined&&to!==undefined){const a=anchorPoint(from,accepted.fit,motion.poses.current),b=anchorPoint(to,accepted.fit,motion.poses.current);point=[(a[0]+b[0])/2,(a[1]+b[1])/2,(a[2]+b[2])/2];}
+      if(rod!==undefined)point=drawnRef.current?.point(selected??'')??point;
       if (point === undefined && chosenEnd !== undefined) point = accepted.fit.vertebrae.find((v) => v.level === chosenEnd)?.pose.centre;
       if (point !== undefined && chip.current !== null) {
         const p = stage.patientToCanvas(point, spine), css = getComputedStyle(surface);
@@ -152,24 +218,36 @@ export function PlaceDrawing({ accepted, handle }: { accepted: AcceptedSpine; ha
         chip.current.style.left = `${String(Math.max(0, Math.min(stage.size().width - chip.current.offsetWidth, p.x + dx)))}px`;
         chip.current.style.top = `${String(Math.max(0, Math.min(stage.size().height - chip.current.offsetHeight, p.y + dy)))}px`;
       }
+      const chipBox = chip.current?.getBoundingClientRect();
+      for (const label of surface.querySelectorAll<SVGGElement>('[data-range]')) {
+        const box = label.querySelector('foreignObject')?.getBoundingClientRect();
+        const overlaps = chipBox !== undefined && box !== undefined && chipBox.left < box.right && chipBox.right > box.left && chipBox.top < box.bottom && chipBox.bottom > box.top;
+        label.style.visibility = overlaps ? 'hidden' : '';
+      }
     };
     project(); return stage.onDrawn(project);
-  }, [accepted, anchor, chosenEnd, handle, layout, rod, state.sheet, state.arriving]);
+  }, [accepted, anchor, chosenEnd, handle, layout, rod, selected, state.sheet, state.arriving, motion.poses, labels]);
   const facing = accepted.input.front.marks.namedFor;
-  const title = anchor === undefined ? rod === undefined ? chosenEnd === undefined ? null : W.end(selected === 'upper', chosenEnd) : W.rod(filmSide(rod.side, facing)) : W.part(anchor.level, filmSide(anchor.side, facing), anchor.kind);
+  const title = span!==null&&span[2]!==undefined&&span[3]!==undefined?L.span(span[2] as import('@/shapes').Level,span[3] as import('@/shapes').Level,filmSide(rod?.side??'left',facing)):anchor === undefined ? rod === undefined ? chosenEnd === undefined ? null : W.end(selected === 'upper', chosenEnd) : W.rod(filmSide(rod.side, facing)) : W.part(anchor.level, filmSide(anchor.side, facing), anchor.kind);
   const width = anchor?.pedicle.outerWidthMm;
   const wider = anchor?.kind === 'screw' ? anchor.widerThanPedicle.find((count) => count.diameterMm === anchor.diameterMm) : undefined;
-  return <div className="place-drawing" ref={root} aria-hidden={state.sheet || undefined}>
+  return <div className="place-drawing" data-load-stop={loaded?stop:undefined} ref={root} aria-hidden={state.sheet || undefined}>
     {layout !== undefined && !state.arriving && <PlacementCaption />}
     {layout !== undefined && <svg className="place-labels" style={{ opacity: state.arriving ? 0 : 1 }} aria-hidden="true">
-      {layout.anchors.map((_, i) => (looks?.local[i]?.length ?? 0) > 0 || selected === `anchor:${String(i)}` || item?.anchor === i ? <g key={i} data-anchor={i}><circle className={selected === `anchor:${String(i)}` ? 'pointed' : 'look'} r={D.ringRadiusPx} /></g> : null)}
+      {layout.anchors.map((_, i) => (looks?.local[i]?.length ?? 0) > 0 || (layout.anchors[i]!==undefined&&(anchorLoad(loadParts,layout.anchors[i])?.versionsPastStrength??0)>0) || selected === `anchor:${String(i)}` || item?.anchor === i ? <g key={i} data-anchor={i}><circle className={selected === `anchor:${String(i)}` ? 'pointed' : 'look'} r={D.ringRadiusPx} /></g> : null)}
+      {loadParts.filter((p)=>p.versionsPastStrength>0&&(p.part.kind==='rod-span'||p.part.kind==='rod')).map((p)=>p.part.kind==='rod-span'?<g key={JSON.stringify(p.part)} data-load-part={`${p.part.side}:${p.part.from}:${p.part.to}`}><circle className="look" r={D.ringRadiusPx}/></g>:p.part.kind==='rod'?<g key={JSON.stringify(p.part)} data-load-part={`rod:${p.part.side}`}><circle className="look" r={D.ringRadiusPx}/></g>:null)}
+      {loaded&&load.result!==null&&labels.map((label)=><g key={label.id} data-range={label.id} className="load-label-group"><path className="load-leader"/><foreignObject width="208" height="104"><div className="load-label"><p><LevelWords>{label.anchor===undefined?ESTIMATE_NAMES[label.measure]:L.anchorRange(label.level,filmSide(layout.anchors[label.anchor]?.side??'left',accepted.input.front.marks.namedFor))}</LevelWords></p><div className="num">{rangeWords(label.measure,label.band)}</div><RangeBar band={label.band} scale={load.result===null?undefined:scaleFor(load.result,label.measure)}/><small>{ESTIMATE_TAGS[label.tag]}</small></div></foreignObject></g>)}
       {([['upper', layout.upper], ['lower', layout.lower]] as const).map(([end, level]) => <g key={end} data-end={end}><text x="24" className="num">{level}</text>{result?.firstIsSketch !== true && result?.cannotTell.some((r) => r.code === 'ends-unsettled' && r.levels.includes(level)) === true && <circle className="look" r={D.ringRadiusPx} />}</g>)}
     </svg>}
     {title !== null && !state.arriving && !state.sheet && <div ref={chip} className="place-chip glass" role="status">
-      <div>{title}</div>
+      <div><LevelWords>{title}</LevelWords></div>
       {anchor?.diameterMm != null && anchor.lengthMm !== null && <div className="num">{W.size(anchor.diameterMm, anchor.lengthMm)}</div>}
       {rod !== undefined && <div className="num">{W.diameter(rod.diameterMm)}</div>}
       {anchor?.kind === 'screw' && (anchor.diameterAlsoSeen.length > 0 || anchor.lengthAlsoSeen.length > 0) && <p>{W.also(anchor.diameterAlsoSeen, anchor.lengthAlsoSeen)}</p>}
+      {selectedLoad?.demand!=null&&<p><span className="num">{rangeWords('heaviest-anchor-demand',selectedLoad.demand)}</span> {L.strengthAllowance}</p>}
+      {selectedLoad?.demand!=null&&<small>{ESTIMATE_TAGS.assumed}</small>}
+      {selectedLoad!==undefined&&load.result!==null&&pastWords(selectedLoad,load.result)!==null&&<><p className="past-strength">{pastWords(selectedLoad,load.result)}</p><small className="load-context">{L.pastContext(selectedLoad.part.kind==='anchor')}</small><p>{L.partAssumed}</p></>}
+      {loaded&&rod!==undefined&&layout!==undefined&&typicalKyphosis(layout)&&<p>{L.typicalRod}</p>}
       {wider !== undefined && wider.versions > 0 && result !== null && <p>{W.wider(wider.versions, result.versions)}</p>}
       {anchor !== undefined && width != null && <p>{W.pedicle(width.p10, width.p90)}{W.origin}</p>}
     </div>}

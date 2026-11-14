@@ -7,6 +7,8 @@ export interface SceneLayer {
   readonly onSpine: Group;
   onBone(level: Level): Group;
   pointable(object: Object3D, id: string): void;
+  /** Release a part registration before removing or replacing its object. */
+  unpointable(object: Object3D): void;
   inFront(object: Object3D, on: boolean): void;
   lit(colour: ColorRepresentation): MeshStandardMaterial;
   flat(colour: ColorRepresentation, strength: number): MeshBasicMaterial;
@@ -45,6 +47,7 @@ export function sceneLayer(root: Group, holders: ReadonlyMap<Level, Group>, chan
       const order = registrations.get(object)?.order ?? registrationOrder++;
       registrations.set(object, { object, id, order, layer }); changed();
     },
+    unpointable(object) { registrations.delete(object); front.delete(object); changed(); },
     inFront(object, on) {
       if (gone || !contains(object)) throw new RangeError('Object is outside the layer');
       if (on) front.add(object); else front.delete(object);

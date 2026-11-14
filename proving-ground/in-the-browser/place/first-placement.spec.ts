@@ -16,6 +16,21 @@ async function escapedDockText(page: Page): Promise<string[]> {
   });
 }
 
+/** A count's width must never choose a control's row. */
+async function fixedDockRows(page: Page, control: '.views' | '.load-stops') {
+  await expect.poll(() => page.locator('.dock .scene.on').evaluate((scene, selector) => {
+    const words=scene.querySelector('.say')?.getBoundingClientRect(),nav=scene.querySelector(selector)?.getBoundingClientRect(),box=scene.getBoundingClientRect();
+    const actions=[...scene.querySelectorAll(':scope > button')].map((button)=>({primary:button.classList.contains('primary'),box:button.getBoundingClientRect()}));
+    if(words===undefined||nav===undefined||actions.length===0)return false;
+    const first=actions[0];if(first===undefined)return false;
+    return words.bottom<=nav.top && nav.bottom<=Math.min(...actions.map((a)=>a.box.top))
+      && Math.abs(nav.left-box.left)<1 && Math.abs(nav.right-box.right)<1
+      && actions.every((a)=>Math.abs(a.box.y+a.box.height/2-first.box.y-first.box.height/2)<1)
+      && actions.filter((a)=>a.primary).every((a)=>Math.abs(a.box.right-box.right)<1)
+      && Math.abs(first.box.left-box.left)<1;
+  }, control)).toBe(true);
+}
+
 test('the made-up case reaches Place and returns to its 3D spine', async ({ page }, info) => {
   test.setTimeout(180_000);
   await page.setViewportSize({ width: 1440, height: 900 });
@@ -38,6 +53,7 @@ test('the made-up case reaches Place and returns to its 3D spine', async ({ page
   await expect(dock.getByRole('heading', {level:2})).toHaveText(/^A first placement:/, { timeout: 60_000 });
   await expect(page.locator('html')).toHaveAttribute('data-moment', 'place');
   expect(await original.evaluate((node) => node.isConnected)).toBe(true);
+  await expect(page.locator('.tile[role="button"]')).toHaveCount(0);
   const caption = page.locator('.place-caption');
   for (const [width, height] of [[1440, 900], [900, 800], [640, 800]] as const) {
     await page.setViewportSize({ width, height });
@@ -51,6 +67,15 @@ test('the made-up case reaches Place and returns to its 3D spine', async ({ page
     const cap = await caption.boundingBox(), capsule = await page.locator('.dock').boundingBox();
     if (cap === null || capsule === null) throw new Error('the caption or dock has no box');
     expect(cap.y + cap.height).toBeLessThan(capsule.y);
+    if(width<=900){
+      await fixedDockRows(page,'.views');
+      await expect.poll(()=>dock.locator('.views').evaluate((nav)=>{
+        const current=nav.querySelector('[aria-current="true"]')?.getBoundingClientRect(),style=getComputedStyle(nav,'::before');
+        if(current===undefined)return false;
+        const thumbLeft=nav.getBoundingClientRect().left+parseFloat(style.left)+new DOMMatrix(style.transform).m41;
+        return Math.abs(thumbLeft-current.left)<1;
+      })).toBe(true);
+    }
     await page.screenshot({ path: info.outputPath(`place-${String(width)}.png`) });
   }
   await page.setViewportSize({ width: 1440, height: 900 });
@@ -64,18 +89,73 @@ test('the made-up case reaches Place and returns to its 3D spine', async ({ page
   await expect(viewButtons.locator('[aria-current="true"]')).toHaveCount(0);
   await dock.getByRole('button', { name: 'Back', exact: true }).click();
   await expect(dock.getByRole('button', { name: 'Back', exact: true })).toHaveAttribute('aria-current', 'true');
-  await dock.getByRole('button', { name: /^Review the \d+$/ }).click();
-  await expect(dock.locator('.place-review .num')).toHaveText(/^1 of \d+$/);
+  const review=dock.getByRole('button', { name: /^Review the \d+$/ });
+  const reviewCount=(await review.innerText()).match(/\d+/)?.[0];
+  if(reviewCount===undefined)throw new Error('the review count is missing');
+  await review.click();
+  await expect(dock.locator('.place-review .num')).toHaveText(`1 of ${reviewCount}`);
   await expect(dock.getByRole('heading', {level:2})).toHaveText('What needs a look');
   await dock.getByRole('button', { name: 'Done', exact: true }).click();
   await dock.getByRole('button', { name: 'More', exact: true }).click();
   await expect(page.getByRole('dialog', { name: 'What needs a look', exact: true })).toBeVisible();
+  await page.keyboard.press('Escape');
+  await dock.getByRole('button', { name: 'Put it under load', exact: true }).click();
+  await expect(dock.getByRole('button', { name: 'Stop', exact: true })).toBeVisible();
+  await expect(dock.getByRole('button', { name: 'Stop', exact: true })).toBeFocused();
+  await dock.getByRole('button', { name: 'Stop', exact: true }).click();
+  await expect(dock.locator('.say')).toContainText('Stopped. Nothing was kept.');
+  await expect(dock.getByRole('button',{name:'Put it under load',exact:true})).toBeFocused();
+  await dock.getByRole('button', { name: 'Put it under load', exact: true }).click();
+  await expect(dock.getByRole('progressbar')).toBeVisible();
+  const stops=dock.getByRole('navigation', { name: 'Load stop', exact: true });
+  await expect(stops).toBeVisible({timeout:60_000});
+  await expect(stops.getByRole('button',{name:'Rods in',exact:true})).toBeFocused();
+  await expect(stops.getByRole('button')).toHaveText(['Before','Rods in']);
+  for(const name of ['Standing','Bending forward','A year of walking'])await expect(stops.getByRole('button',{name,exact:true})).toHaveCount(0);
+  let beforePoint: string|null=null;
+  for(const [name,key] of [['Before','before'],['Rods in','rods-in']] as const){
+    await stops.getByRole('button',{name,exact:true}).click();
+    await expect(page.locator('.place-drawing')).toHaveAttribute('data-load-stop',key);
+    await expect(stops.getByRole('button',{name,exact:true})).toHaveAttribute('aria-current','true');
+    if(key==='before'){
+      await expect(dock.getByRole('heading',{level:2})).toHaveText('Before: the spine as fitted.');
+      await expect(page.locator('[data-range]')).toHaveCount(0);
+      await page.waitForTimeout(700);
+      beforePoint=await page.locator('[data-anchor="4"]').getAttribute('transform');
+    }else{
+      await expect(dock.getByRole('heading',{level:2})).toHaveText(new RegExp('^'+name+': the main curve is'));
+      await expect.poll(()=>page.locator('[data-anchor="4"]').getAttribute('transform')).not.toBe(beforePoint);
+      expect(await page.locator('[data-range]').count()).toBeLessThanOrEqual(3);
+    }
+    await expect.poll(()=>escapedDockText(page)).toEqual([]);
+    await page.waitForTimeout(900);
+    await page.screenshot({path:info.outputPath(`loaded-${key}.png`)});
+  }
+  for(const [width,height] of [[900,800],[640,800]] as const){
+    await page.setViewportSize({width,height});
+    await stops.getByRole('button',{name:'Rods in',exact:true}).click();
+    await expect.poll(()=>escapedDockText(page)).toEqual([]);
+    await fixedDockRows(page,'.load-stops');
+    if(width<900)await expect(page.locator('.load-label-group').first()).not.toBeVisible();
+    await page.waitForTimeout(400);
+    await page.screenshot({path:info.outputPath(`loaded-rods-in-${String(width)}.png`)});
+  }
+  await page.setViewportSize({width:1440,height:900});
+  await dock.getByRole('button',{name:'All estimates',exact:true}).click();
+  await expect(page.getByRole('heading',{name:'All estimates',exact:true})).toBeVisible();
+  await expect(page.locator('.load-estimate-list')).toContainText('Heaviest anchor');
+  await expect(page.locator('.load-estimate-list .load-range').first()).toBeVisible();
+  await expect(page.locator('.load-estimates')).toContainText('Loads in daily life are not worked out yet.');
+  await expect(page.locator('.load-estimates')).toContainText('The model does not rebalance the trunk above and below the rods.');
+  await expect(page.locator('.load-estimates')).not.toContainText(/Weight not given|Steps a day not given|million steps|rod swing/i);
+  await page.screenshot({path:info.outputPath('all-estimates.png')});
   await page.keyboard.press('Escape');
   await steps.getByRole('button', { name: '3D', exact: true }).click();
   await expect(page.locator('html')).toHaveAttribute('data-moment', 'three');
   await expect(canvas).toBeVisible();
   expect(await original.evaluate((node) => node.isConnected)).toBe(true);
   await expect(page.locator('#measurements')).toBeVisible();
+  await expect(page.locator('.tile[role="button"]')).toHaveCount(4);
   await expect(page.locator('.place-drawing')).toHaveCount(0);
   await expect(caption).toHaveCount(0);
 });

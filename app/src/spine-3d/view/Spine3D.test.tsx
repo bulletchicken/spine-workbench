@@ -217,6 +217,9 @@ describe('Spine3D', () => {
       handle.current?.settle();
     });
     expect(named('spine.settle').length).toBe(1);
+    act(()=>{handle.current?.addFlatSpine();handle.current?.addFlatSpine();});
+    expect(heard.models).toHaveLength(3);
+    expect(heard.models[1]).toBe(heard.models[0]);expect(heard.models[2]).toBe(heard.models[0]);
   });
 
   it('gives everything back when it goes: the stage, the spine and the films', () => {

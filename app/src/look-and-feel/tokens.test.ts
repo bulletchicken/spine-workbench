@@ -93,7 +93,7 @@ describe('the refreshed system', () => {
     for (const [path, digest] of [
       ['../../../DESIGN.md', '6895cf7173bba23ac4b4f038351c671b00b99fed46fbba52e4d6bf84a8eb9dd4'],
       ['./tokens.css', '199dfa63180da1630b89d2401f8901fb8d1d57b029cbde639a39e5aa8f191e27'],
-      ['./components.css', 'a8832ee494a5a83e9391d2311fdb68d79402b387e9cb454eebb1f0ccf9ab0115'],
+      ['./components.css', 'a8c95925f0cd5d20bbd03885bb7b5a3908bff9a83eedab75e1c205a95d2d8d7b'],
     ] as const) {
       expect(createHash('sha256').update(read(path)).digest('hex'), path).toBe(digest);
     }
@@ -147,7 +147,7 @@ describe('the earlier tokens', () => {
 // Names set from outside the stylesheet that reads them.
 const SET_FROM_OUTSIDE = new Set([
   // Written by script on an element, as geometry: the screens' own, as the head of components.css lists them.
-  '--film-zoom', '--k', '--i', '--at', '--p', '--x', '--y', '--s', '--bw', '--bh', '--r', '--cx', '--cy', '--px', '--zx', '--zy', '--zw', '--zh', '--tw', '--th', '--head-y',
+  '--film-zoom', '--k', '--i', '--at', '--options', '--p', '--x', '--y', '--s', '--bw', '--bh', '--r', '--cx', '--cy', '--px', '--zx', '--zy', '--zw', '--zh', '--tw', '--th', '--head-y',
   // Read by components.css and never written: the film viewer does the pushing in and the light is drawn in SVG.
   '--z', '--tx', '--ty',
   // Written by the slider.
