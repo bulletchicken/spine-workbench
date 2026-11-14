@@ -20,7 +20,7 @@ use shapes::spine_readings::FitTier;
 use std::collections::{BTreeMap, BTreeSet};
 
 /// Compute the complete ensemble once; construct all placements from those
-/// same draws. Missing rule inputs never become stand-in votes.
+/// same draws. Missing rule inputs never become substitute votes.
 pub fn propose(input: &LayoutInput) -> Result<LayoutProposals, LayoutError> {
     validate(input)?;
     let working = registered_input(input);
