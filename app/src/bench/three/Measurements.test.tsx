@@ -26,7 +26,7 @@ it('requests once across strict mounting and remounts, and renders signed rows, 
   expect(measureSpine).toHaveBeenCalledTimes(1);
   expect(measureSpine).toHaveBeenCalledWith(expect.objectContaining({ fit: accepted.fit, front: accepted.input.front, versions: 32, seed: 7 }));
   expect(find('.panel').textContent).toContain('No side-to-side curve was found.');
-  expect(find('.panel').textContent).toContain('Each band covers eight in ten of the spines that fit these marks.');
+  expect(find('.panel').textContent).toContain('For kyphosis the range holds it about three times in four, for lordosis about two times in three.');
   expect(find('.panel').textContent).toContain('Names are estimates. Check where T1 is.');
   expect(find('.panel').textContent).toContain('Left and right assume the film is shown the usual way round.');
   expect(find('.measures li .m-band').textContent).toBe('± 0°');
@@ -75,4 +75,54 @@ it('shows the same-spine assumption in the panel and narrow sheet only when Side
   } finally {
     vi.unstubAllGlobals();
   }
+});
+
+it('shows range notes in order for the measured rows in the panel and narrow sheet', async () => {
+  const main = "The main curve's range holds the angle that exact marks would give about three times in four, for the spread the marks were given. A range does not cover which vertebrae are the ends.";
+  const smaller = "The smaller curves' ranges were not checked.";
+  const side = 'For kyphosis the range holds it about three times in four, for lordosis about two times in three.';
+  const twist = "The twist's range has not been checked this way.";
+  const noisy = 'On noisy marks a curve can read a few degrees high, and noise can split one curve into shorter ones.';
+  const figures = 'These figures were measured on made-up spines.';
+  const rangeNotes = [main, smaller, side, twist, noisy, figures];
+  const measured = { kind: 'measured', valueDeg: 20, band: { p10: 14, p50: 20, p90: 26 } } as const;
+  const missing = { kind: 'not-measured', reason: 'no-side-film', typicalDeg: null } as const;
+  const noTwist = { kind: 'not-measured', reason: 'twist-not-measured', typicalDeg: null } as const;
+  try {
+    for (const narrow of [false, true]) {
+      vi.stubGlobal('innerWidth', narrow ? 700 : 1200);
+      for (const [count, hasSide, hasTwist, expected] of [
+        [1, false, false, [main, noisy, figures]],
+        [2, true, false, [main, smaller, side, noisy, figures]],
+        [1, true, true, [main, side, twist, noisy, figures]],
+        [0, true, false, [side, figures]],
+        [0, false, false, []],
+      ] as const) {
+        const accepted = source();
+        accepted.key = `range-notes-${String(narrow)}-${String(count)}-${String(hasSide)}-${String(hasTwist)}`;
+        accepted.fit = { ...accepted.fit, sideFilm: hasSide ? { ...accepted.fit.frontFilm } : null };
+        spineBuild.getState().accept(accepted);
+        threeState.getState().clear();
+        threeState.getState().showSheet(narrow);
+        const engine = { measureSpine: (input: ReadingsInput) => {
+          const result = sampleReadings(input);
+          result.sagittal.kyphosisT5T12 = hasSide ? measured : missing;
+          result.sagittal.lordosisL1L5 = hasSide ? measured : missing;
+          result.sagittal.lordosisL1S1 = missing;
+          result.curves = Array.from({ length: count }, (_, i) => ({
+            region: 'main-thoracic', convex: 'left', upperEnd: i === 0 ? 'T5' : 'T6', lowerEnd: 'T12', apex: 'T8',
+            upperEndSeen: [], lowerEndSeen: [], apexSeen: [], versionsFound: 32,
+            cobb: measured, apexTwist: hasTwist ? measured : noTwist, bendingCobb: missing,
+          }));
+          return Promise.resolve(result);
+        } } as unknown as EngineClient;
+        const page = putOnThePage(<EngineProvider engine={engine}><Measurements accepted={accepted} /></EngineProvider>);
+        await act(async () => { await Promise.resolve(); });
+        const panel = find('.measurements');
+        expect(panel.classList.contains('sheet')).toBe(narrow);
+        expect([...panel.querySelectorAll('.panel-note p')].map((p) => p.textContent).filter((text) => rangeNotes.includes(text))).toEqual(expected);
+        page.takeDown();
+      }
+    }
+  } finally { vi.unstubAllGlobals(); }
 });

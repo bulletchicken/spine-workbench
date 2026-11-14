@@ -57,7 +57,7 @@ export function Measurements({ accepted }: { accepted: AcceptedSpine }) {
       <span className="m-name">{row.name}</span><span className="m-value num">{row.value}<span className="m-band">{row.band}</span></span><span className="m-about">{row.about}</span>
     </li>)}</ul>{state.view.reasons.map((reason) => <p className="m-about" key={reason}>{reason}</p>)}</>}
     <div className="panel-note">
-      {state.phase === 'ready' && state.view.rows.length > 0 && <p>{W.meaning}</p>}
+      {state.phase === 'ready' && state.view.notes.map((note) => <p key={note}>{note}</p>)}
       <p>{GENERIC_BONES_NOTE}</p>
       {accepted.fit.sideFilm !== null && <p>{SAME_SPINE_NOTE}</p>}
       {(accepted.fit.frontFilm.facingAssumed || accepted.fit.sideFilm?.facingAssumed === true) && <p>{ASSUMED_FACING_NOTE}</p>}

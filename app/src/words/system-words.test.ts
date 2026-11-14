@@ -9,6 +9,7 @@ import { ON_THIS_DEVICE_WORDS } from './on-this-device';
 import { PREVIEW_NOTICE } from './preview-notice';
 import { SHELL_WORDS } from './shell';
 import { PLACE_LOAD_WORDS, PLACE_COMPARE_WORDS, PLACE_AGE_WORDS, PLACE_SOURCE_WORDS, PLACE_EDIT_WORDS, LEVEL_RULE_NAMES, PLACE_WORDS } from './place';
+import { READINGS_WORDS } from './spine-readings';
 import { STAGE_WORDS } from './stage';
 
 const design = readFileSync(new URL('../../../DESIGN.md', import.meta.url), 'utf8');
@@ -65,6 +66,10 @@ describe('the system’s words', () => {
   });
 
   it('holds the too-few-settled words to section 8',()=>{for(const text of [PLACE_LOAD_WORDS.tooFew,PLACE_LOAD_WORDS.tooFewColumn,PLACE_LOAD_WORDS.didNotSettle(14,32)])expect(words,text).toContain(text);});
+
+  it('holds the measurement range notes to section 8', () => {
+    for (const text of [READINGS_WORDS.mainRange, READINGS_WORDS.smallerRanges, READINGS_WORDS.sideRanges, READINGS_WORDS.twistRange, READINGS_WORDS.noisyCurves, READINGS_WORDS.rangeFigures]) expect(words, text).toContain(text);
+  });
 
   it('lists as waiting only words the document really lacks', () => {
     for (const text of NOT_IN_THE_DOCUMENT_YET) expect(words, text).not.toContain(text);
