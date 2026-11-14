@@ -3,10 +3,11 @@
 use super::NamedSampler;
 use super::sampler::invalid;
 use crate::ReadingsError;
-use forward_model::rotation::{rot_x, rot_y, rot_z, rotation_vector_from_matrix};
+use crate::plates::{self, PlateSpread};
 use shapes::levels::Level;
 use shapes::spine_fit::SpineFit;
 use shapes::spine_readings::BodySide;
+use shapes::spine_readings::ReadingsInput;
 use std::ops::Range;
 
 /// The independent normal attached to one pedicle. Shared-child noise is
@@ -18,8 +19,9 @@ pub struct PedicleDraw {
     pub z_pedicle: f64,
 }
 
-/// One perturbed copy of the fit. Sizes, wedges, SDs and inferred flags
-/// remain the fit's. Only centres and named angles are moved.
+/// One perturbed copy of the fit. Centres and independently drawn upper
+/// and lower plate tilts move; wedges and body angles encode those plates.
+/// Sizes, reported SDs and inferred flags remain the fit's.
 #[derive(Clone, Debug, PartialEq)]
 pub struct Version {
     /// Zero-based index in the complete ensemble, independent of batching.
@@ -50,13 +52,13 @@ pub struct VersionSet {
 /// Draw a single version. Geometry dimension names use top-to-bottom
 /// positions, not level labels, so relabelling every level changes no draw.
 /// These names are `versions-geometry/{i}/centre/{axis}` and
-/// `versions-geometry/{i}/angle/{axis}` with zero-based axes in the fit's
-/// order. Pedicles use `versions-pedicles/child` and
+/// `versions-geometry/{i}/plate/{front|side}/{upper|lower}` and
+/// `versions-geometry/{i}/angle/2` for twist, with zero-based positions. Pedicles use `versions-pedicles/child` and
 /// `versions-pedicles/{i}/left` or `/right`.
 pub fn version(fit: &SpineFit, seed: u64, n: u32, k: u32) -> Result<Version, ReadingsError> {
     validate(fit)?;
     let sampler = NamedSampler::new(seed, n)?;
-    draw(fit, &sampler, k)
+    draw(fit, &plates::from_fit(fit), &sampler, k)
 }
 
 /// Draw `range` of the complete N-version ensemble. Empty batches are
@@ -72,17 +74,48 @@ pub fn versions(
     if range.start > range.end || range.end > n {
         return Err(invalid("version-range", "outside-ensemble"));
     }
+    let spreads = plates::from_fit(fit);
+    make_set(fit, &spreads, sampler, n, range)
+}
+
+/// Draw versions with plate spreads from the supplied films and their stated
+/// mark spread. A level absent from those films uses the fit-only fallback.
+pub fn versions_for_readings(
+    input: &ReadingsInput,
+    range: Range<u32>,
+) -> Result<VersionSet, ReadingsError> {
+    validate(&input.fit)?;
+    let sampler = NamedSampler::new(u64::from(input.seed), input.versions)?;
+    if range.start > range.end || range.end > input.versions {
+        return Err(invalid("version-range", "outside-ensemble"));
+    }
+    let spreads = plates::from_input(input)?;
+    make_set(&input.fit, &spreads, sampler, input.versions, range)
+}
+
+fn make_set(
+    fit: &SpineFit,
+    spreads: &[PlateSpread],
+    sampler: NamedSampler,
+    total: u32,
+    range: Range<u32>,
+) -> Result<VersionSet, ReadingsError> {
     let versions = range
-        .map(|k| draw(fit, &sampler, k))
+        .map(|k| draw(fit, spreads, &sampler, k))
         .collect::<Result<_, _>>()?;
     Ok(VersionSet {
         nominal: fit.clone(),
-        total: n,
+        total,
         versions,
     })
 }
 
-fn draw(fit: &SpineFit, sampler: &NamedSampler, k: u32) -> Result<Version, ReadingsError> {
+fn draw(
+    fit: &SpineFit,
+    spreads: &[PlateSpread],
+    sampler: &NamedSampler,
+    k: u32,
+) -> Result<Version, ReadingsError> {
     // This also checks k for an empty chain (although validate refuses one).
     let z_child = sampler.normal("versions-pedicles/child", k)?;
     let has_side = fit.side_film.is_some();
@@ -95,39 +128,15 @@ fn draw(fit: &SpineFit, sampler: &NamedSampler, k: u32) -> Result<Version, Readi
                 vertebra.pose.centre[axis] += vertebra.sd.centre_mm[axis] * z;
             }
         }
-        let mut angles = [
-            vertebra.angles.side_tilt_rad,
-            vertebra.angles.forward_lean_rad,
-            vertebra.angles.twist_rad,
-        ];
-        for (axis, angle) in angles.iter_mut().enumerate() {
-            let z = sampler.normal(&format!("versions-geometry/{i}/angle/{axis}"), k)?;
-            // A typical lean or inferred twist is not a measured draw.
-            if (axis != 1 || (has_side && !vertebra.inferred.depth))
-                && (axis != 2 || !vertebra.inferred.twist)
-            {
-                *angle += vertebra.sd.angles_rad[axis] * z;
-                if axis == 0 {
-                    vertebra.corner_tilt_rad = vertebra
-                        .corner_tilt_rad
-                        .map(|tilt| tilt + vertebra.sd.angles_rad[axis] * z);
-                }
-            }
-        }
-        vertebra.angles.side_tilt_rad = angles[0];
-        vertebra.angles.forward_lean_rad = angles[1];
-        vertebra.angles.twist_rad = angles[2];
-        // Preserve the nominal rotation bit-for-bit when angle SDs vanish.
-        if angles
-            != [
-                fit.vertebrae[i].angles.side_tilt_rad,
-                fit.vertebrae[i].angles.forward_lean_rad,
-                fit.vertebrae[i].angles.twist_rad,
-            ]
-        {
-            let matrix = rot_x(angles[0]) * rot_y(angles[1]) * rot_z(angles[2]);
-            vertebra.pose.rotation = rotation_vector_from_matrix(&matrix).into();
-        }
+        super::plates::perturb(
+            vertebra,
+            &fit.vertebrae[i],
+            spreads[i],
+            sampler,
+            i,
+            k,
+            has_side,
+        )?;
         for (side, name) in [(BodySide::Left, "left"), (BodySide::Right, "right")] {
             pedicles.push(PedicleDraw {
                 level: vertebra.level,

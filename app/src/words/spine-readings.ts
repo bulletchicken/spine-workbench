@@ -1,7 +1,12 @@
 import type { CurveRegion, Level, NotMeasured } from '@/shapes';
 export const READINGS_WORDS = {
   title: 'Measurements', loading: 'Reading the spine…', failed: 'The measurements could not be read.',
-  meaning: 'Each band covers eight in ten of the spines that fit these marks.',
+  mainRange: "The main curve's range holds the angle that exact marks would give about three times in four, for the spread the marks were given. A range does not cover which vertebrae are the ends.",
+  smallerRanges: "The smaller curves' ranges were not checked.",
+  sideRanges: 'For kyphosis the range holds it about three times in four, for lordosis about two times in three.',
+  twistRange: "The twist's range has not been checked this way.",
+  noisyCurves: 'On noisy marks a curve can read a few degrees high, and noise can split one curve into shorter ones.',
+  rangeFigures: 'These figures were measured on made-up spines.',
   kyphosis: 'Thoracic kyphosis', lordosis: 'Lumbar lordosis', twist: 'Rotation at the apex',
   kyphosisAbout: 'T5 to T12, seen from the side',
   lordosisAbout: (sacrum: boolean) => sacrum ? 'L1 to the sacrum, seen from the side' : 'L1 to L5, seen from the side',

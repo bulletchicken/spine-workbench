@@ -2,6 +2,14 @@
 import type { Reading } from "./Reading";
 
 /**
- * Upper-to-lower endplate angles, positive for the named bend.
+ * Upper-to-lower endplate angles, positive for the named bend. Plate
+ * spreads are independent in the side plane. L1-S1 also uses the marked
+ * sacrum's millimetre spread; with a share of height, the sacrum has no
+ * body height to supply its spread and the band holds that line fixed.
+ * With independent 1 mm side-corner noise on three made-up spines, bands
+ * held exact-mark angles 74–78% of the time for kyphoses and 65–71% for
+ * lordoses, below eight in ten. Front-film mark error enters fitted side
+ * tilts but is absent from bands built from the side film's spread alone.
+ * Do not label these readings with the front-plane eight-in-ten sentence.
  */
 export type SagittalReadings = { kyphosisT2T5: Reading, kyphosisT5T12: Reading, kyphosisT10L2: Reading, lordosisL1L5: Reading, lordosisL1S1: Reading, };

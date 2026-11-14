@@ -227,8 +227,8 @@ fn no_typical_side_value_can_change_a_measured_reading() {
 
 fn percentiles(mut values: Vec<f64>) -> Band {
     values.sort_by(f64::total_cmp);
-    // Independently locate the 10,50,90% positions on the ordered 32 rows:
-    // 3.1,15.5,27.9, so interpolate those neighbouring observations.
+    // Locate each percentile in the ordered observations and interpolate
+    // its two neighbours independently of the band implementation.
     let at = |p: f64| {
         let x = p * (values.len() - 1) as f64;
         let i = libm::floor(x) as usize;
@@ -243,36 +243,92 @@ fn percentiles(mut values: Vec<f64>) -> Band {
 }
 
 #[test]
-fn a_pair_band_comes_from_paired_angles_and_not_subtracted_marginal_bands() {
+fn a_pair_band_combines_the_two_independent_plate_spreads_without_a_seed() {
     let mut input = hand_spine();
     input.fit.vertebrae[0].sd.angles_rad[0] = 2.0_f64.to_radians();
     input.fit.vertebrae[1].sd.angles_rad[0] = 3.0_f64.to_radians();
-    let drawn = versions(&input.fit, u64::from(input.seed), 32, 0..32).unwrap();
-    let expected = percentiles(
-        drawn
-            .versions
-            .iter()
-            .map(|v| {
-                (v.fit.vertebrae[1].corner_tilt_rad.unwrap()
-                    - v.fit.vertebrae[0].corner_tilt_rad.unwrap())
-                .to_degrees()
-            })
-            .collect(),
-    );
     let answer = measure_spine(&input).unwrap();
     let (nominal, band) = measured(answer.between.front[0].angle);
+    // Each endplate has sqrt(2) times its body's spread. A difference of
+    // independent 2*sqrt(2) and 3*sqrt(2) degree tilts has variance 26 deg².
+    let half_width = 1.281_551_565_544_600_4 * libm::sqrt(26.0);
     near(nominal, 7.0, 1e-12);
-    for (a, b) in [
-        (band.p10, expected.p10),
-        (band.p50, expected.p50),
-        (band.p90, expected.p90),
-    ] {
-        near(a, b, 1e-10);
-    }
+    near(band.p10, 7.0 - half_width, 1e-12);
+    near(band.p50, 7.0, 1e-12);
+    near(band.p90, 7.0 + half_width, 1e-12);
     let upper = measured(answer.vertebrae[0].coronal_tilt).1;
     let lower = measured(answer.vertebrae[1].coronal_tilt).1;
     assert!((band.p10 - (lower.p10 - upper.p10)).abs() > 0.1);
     assert!((band.p90 - (lower.p90 - upper.p90)).abs() > 0.1);
+    for (seed, versions) in [(0, 1), (17, 8), (u32::MAX, 64)] {
+        input.seed = seed;
+        input.versions = versions;
+        let changed = measure_spine(&input).unwrap();
+        assert_eq!(answer.between.front, changed.between.front);
+        for (before, after) in answer.vertebrae.iter().zip(changed.vertebrae) {
+            assert_eq!(before.coronal_tilt, after.coronal_tilt);
+        }
+        for (before, after) in answer.curves.iter().zip(changed.curves) {
+            assert_eq!(before.cobb, after.cobb);
+        }
+    }
+}
+
+fn drawn_plate_bands(seeds: u64, tolerance_deg: f64) {
+    use forward_model::endplates::Endplates;
+    use forward_model::vertebra_params::VertebraParams;
+    use spine_readings::curves::geometry::sagittal_tilt_deg;
+    use spine_readings::curves::geometry::{lower_coronal_tilt_deg, upper_coronal_tilt_deg};
+
+    let mut input = input(vec![
+        vertebra(Level::T6, -10.0, 12.0, 0.0, 100.0),
+        vertebra(Level::T10, 20.0, -8.0, 0.0, 70.0),
+    ]);
+    input.fit.vertebrae[0].sd.angles_rad = [2.0_f64.to_radians(), 1.5_f64.to_radians(), 0.0];
+    input.fit.vertebrae[1].sd.angles_rad = [3.0_f64.to_radians(), 2.5_f64.to_radians(), 0.0];
+    let written = measure_spine(&input).unwrap();
+    let mut front = Vec::new();
+    let mut side = Vec::new();
+    for seed in 0..seeds {
+        for version in versions(&input.fit, seed, 32, 0..32).unwrap().versions {
+            let v = &version.fit.vertebrae;
+            front.push(lower_coronal_tilt_deg(&v[1]) - upper_coronal_tilt_deg(&v[0]));
+            let upper = Endplates::of(&VertebraParams::from(&v[0].pose));
+            let lower = Endplates::of(&VertebraParams::from(&v[1].pose));
+            side.push(
+                sagittal_tilt_deg(&upper.top.normal) - sagittal_tilt_deg(&lower.bottom.normal),
+            );
+        }
+    }
+    for (reading, drawn, sd_deg) in [
+        (written.between.front[0].angle, front, libm::sqrt(26.0)),
+        (written.between.side[0].angle, side, libm::sqrt(17.0)),
+    ] {
+        let (value, closed) = measured(reading);
+        let expected_half = 1.281_551_565_544_600_4 * sd_deg;
+        near(closed.p10, value - expected_half, 1e-10);
+        near(closed.p50, value, 1e-12);
+        near(closed.p90, value + expected_half, 1e-10);
+        let drawn = percentiles(drawn);
+        for (got, expected) in [
+            (drawn.p10, closed.p10),
+            (drawn.p50, closed.p50),
+            (drawn.p90, closed.p90),
+        ] {
+            near(got, expected, tolerance_deg);
+        }
+    }
+}
+
+#[test]
+fn a_small_drawn_set_stays_near_the_closed_form_plate_bands() {
+    drawn_plate_bands(8, 1.0);
+}
+
+#[test]
+#[ignore = "16384 drawn geometries; run in release mode"]
+fn sixteen_thousand_drawn_versions_agree_with_the_closed_form_front_and_side_bands() {
+    drawn_plate_bands(512, 0.25);
 }
 
 #[test]
@@ -312,11 +368,7 @@ fn choosing_extreme_ends_again_in_each_version_inflates_the_angle() {
     for v in &mut input.fit.vertebrae {
         v.sd.angles_rad[0] = 1.6_f64.to_radians();
     }
-    // The nominal lower end (the first +20° tie) is exact. The fixed-end
-    // angle then carries only the upper end's symmetric normal noise.
-    // Stratification bounds its median by the two central quantiles,
-    // within 0.016° of 40° for every seed; no seed selection is needed.
-    input.fit.vertebrae[7].sd.angles_rad[0] = 0.0;
+    // The closed-form band stays centred on the fixed fitted plate pair.
     let answer = measure_spine(&input).unwrap();
     let (nominal, fixed) = measured(answer.curves[0].cobb);
     let drawn = versions(
@@ -331,14 +383,18 @@ fn choosing_extreme_ends_again_in_each_version_inflates_the_angle() {
             .versions
             .iter()
             .map(|v| {
-                let tilts: Vec<_> = v
-                    .fit
-                    .vertebrae
+                use spine_readings::curves::geometry::{
+                    lower_coronal_tilt_deg, upper_coronal_tilt_deg,
+                };
+                let bodies = &v.fit.vertebrae;
+                let min = bodies[..3]
                     .iter()
-                    .map(|b| b.corner_tilt_rad.unwrap().to_degrees())
-                    .collect();
-                let min = tilts[..3].iter().copied().fold(f64::INFINITY, f64::min);
-                let max = tilts[6..].iter().copied().fold(f64::NEG_INFINITY, f64::max);
+                    .map(upper_coronal_tilt_deg)
+                    .fold(f64::INFINITY, f64::min);
+                let max = bodies[6..]
+                    .iter()
+                    .map(lower_coronal_tilt_deg)
+                    .fold(f64::NEG_INFINITY, f64::max);
                 max - min
             })
             .collect(),

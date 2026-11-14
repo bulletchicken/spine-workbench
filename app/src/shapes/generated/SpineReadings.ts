@@ -6,6 +6,9 @@ import type { SagittalReadings } from "./SagittalReadings";
 import type { VertebraReading } from "./VertebraReading";
 
 /**
- * The fitted values and their middle eight-in-ten version bands.
+ * Angles on the spine as fitted and their uncertainty bands. Repeated-mark
+ * coverage has been measured on made-up spines with independent noise;
+ * a real finder's errors may not be independent. See the crate README
+ * for which kinds of reading were measured and their coverage figures.
  */
 export type SpineReadings = { tier: FitTier, versions: number, vertebrae: Array<VertebraReading>, sagittal: SagittalReadings, curves: Array<CurveReading>, between: BetweenReadings, };

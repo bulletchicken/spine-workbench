@@ -7,11 +7,10 @@
 //! sagittal tilt minus lower sagittal tilt, atan2(normal.x, normal.z).
 //! Named twist is positive when the body's front turns to the left.
 //!
-//! Every nonzero curve between alternating tilt extremes is retained:
+//! Every nonzero curve between alternating fitted tilt extremes is retained:
 //! the floor applies only to the contract’s `SpineReadings.curves`, never
-//! this per-version Rust API consumed by level rules. Fit marginal errors
-//! are independent in the versions;
-//! neighbouring joint-angle noise can therefore be overstated.
+//! this per-version Rust API consumed by level rules. Plate errors are
+//! drawn independently in the versions; actual finder errors may be correlated.
 
 pub mod geometry;
 pub use geometry::measure;

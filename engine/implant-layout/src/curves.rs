@@ -9,8 +9,9 @@
 //!
 //! Every nonzero curve between alternating tilt extremes is retained:
 //! the evidence gives no minimum minor-curve size. No scoliosis cutoff is
-//! supplied here. Fit marginal errors are independent in the versions;
-//! neighbouring joint-angle noise can therefore be overstated.
+//! supplied here. Upper and lower plates are drawn independently in the
+//! versions, at sqrt(2) times the fit's reported tilt spread; actual finder
+//! errors may be correlated.
 
 pub mod classification;
 pub mod geometry;

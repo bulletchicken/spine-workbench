@@ -6,6 +6,7 @@
 pub mod bands;
 pub mod curves;
 pub mod evidence;
+mod plates;
 pub mod readings;
 mod report;
 mod sagittal;

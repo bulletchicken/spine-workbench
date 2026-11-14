@@ -194,7 +194,7 @@ fn known_normal_quantiles_and_symmetric_tails_are_resolved() {
 }
 
 #[test]
-fn the_fit_is_moved_by_its_sds_in_named_angle_order() {
+fn centres_and_independent_plates_keep_their_named_streams() {
     let nominal = fit();
     let sampler = NamedSampler::new(5, 32).unwrap();
     let version = version(&nominal, 5, 32, 9).unwrap();
@@ -211,8 +211,7 @@ fn the_fit_is_moved_by_its_sds_in_named_angle_order() {
     {
         assert_eq!(got.inferred, original.inferred);
         assert_eq!(got.sd, original.sd);
-        let mut angles = [0.0; 3];
-        for (axis, angle) in angles.iter_mut().enumerate() {
+        for axis in 0..3 {
             let centre_z = sampler
                 .normal(&format!("versions-geometry/{i}/centre/{axis}"), 9)
                 .unwrap();
@@ -220,14 +219,55 @@ fn the_fit_is_moved_by_its_sds_in_named_angle_order() {
                 got.pose.centre[axis],
                 original.pose.centre[axis] + original.sd.centre_mm[axis] * centre_z
             );
-            *angle = original.sd.angles_rad[axis]
-                * sampler
-                    .normal(&format!("versions-geometry/{i}/angle/{axis}"), 9)
-                    .unwrap();
         }
-        assert_eq!(got.angles.side_tilt_rad, angles[0]);
-        assert_eq!(got.angles.forward_lean_rad, angles[1]);
-        assert_eq!(got.angles.twist_rad, angles[2]);
+        let plates = forward_model::endplates::Endplates::of(
+            &forward_model::vertebra_params::VertebraParams::from(&got.pose),
+        );
+        for (plane, name, sd, actual) in [
+            (
+                0,
+                "front",
+                original.sd.angles_rad[0],
+                [
+                    spine_readings::curves::geometry::upper_coronal_tilt_deg(got),
+                    spine_readings::curves::geometry::lower_coronal_tilt_deg(got),
+                ],
+            ),
+            (
+                1,
+                "side",
+                original.sd.angles_rad[1],
+                [
+                    spine_readings::curves::geometry::sagittal_tilt_deg(&plates.top.normal),
+                    spine_readings::curves::geometry::sagittal_tilt_deg(&plates.bottom.normal),
+                ],
+            ),
+        ] {
+            for (j, label) in ["upper", "lower"].into_iter().enumerate() {
+                let expected = (core::f64::consts::SQRT_2
+                    * sd
+                    * sampler
+                        .normal(&format!("versions-geometry/{i}/plate/{name}/{label}"), 9)
+                        .unwrap())
+                .to_degrees();
+                assert!(
+                    (actual[j] - expected).abs() < 1e-10,
+                    "plane={plane} plate={j}"
+                );
+            }
+        }
+        assert_eq!(
+            got.angles.twist_rad,
+            original.sd.angles_rad[2]
+                * sampler
+                    .normal(&format!("versions-geometry/{i}/angle/2"), 9)
+                    .unwrap()
+        );
+        let angles = [
+            got.angles.side_tilt_rad,
+            got.angles.forward_lean_rad,
+            got.angles.twist_rad,
+        ];
         // Written out by hand: the third column of Rx(a) Ry(b) Rz(c)
         // is (sin b, -sin a cos b, cos a cos b), independent of c.
         let rotation = matrix_from_rotation_vector(&Vector3::from(got.pose.rotation));

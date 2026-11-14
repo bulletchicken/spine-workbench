@@ -1,10 +1,16 @@
 //! Independent distribution, boundary and identity probes for shared versions.
 
+use forward_model::endplates::Endplates;
+use forward_model::rotation::{rot_x, rot_y, rot_z, rotation_vector_from_matrix};
+use forward_model::vertebra_params::VertebraParams;
 use shapes::levels::Level;
 use shapes::made_up::VertebraPose;
 use shapes::spine_fit::{
     FitAngles, FitRmsMm, FitStandardDeviations, FitStopReason, FittedVertebra, InferredFit,
     SpineFit,
+};
+use spine_readings::curves::geometry::{
+    lower_coronal_tilt_deg, sagittal_tilt_deg, upper_coronal_tilt_deg,
 };
 use spine_readings::readings::{NamedSampler, inverse_normal, version, versions};
 
@@ -205,31 +211,59 @@ fn correlation(a: &[f64], b: &[f64]) -> f64 {
     covariance / libm::sqrt(variance_a * variance_b)
 }
 
+fn plate_tilts(v: &FittedVertebra) -> [f64; 4] {
+    let plates = Endplates::of(&VertebraParams::from(&v.pose));
+    [
+        upper_coronal_tilt_deg(v).to_radians(),
+        lower_coronal_tilt_deg(v).to_radians(),
+        sagittal_tilt_deg(&plates.top.normal).to_radians(),
+        sagittal_tilt_deg(&plates.bottom.normal).to_radians(),
+    ]
+}
+
+fn tilted_fit(corner_tilt: bool) -> SpineFit {
+    let mut fit = nominal();
+    for v in &mut fit.vertebrae {
+        v.angles.side_tilt_rad = 0.18;
+        v.angles.forward_lean_rad = -0.22;
+        v.angles.twist_rad = 0.27;
+        v.pose.rotation =
+            rotation_vector_from_matrix(&(rot_x(0.18) * rot_y(-0.22) * rot_z(0.27))).into();
+        v.pose.wedge_front = 0.07;
+        v.pose.wedge_side = -0.05;
+        v.corner_tilt_rad = corner_tilt.then_some(0.17);
+    }
+    fit
+}
+
 #[test]
-#[ignore = "many-version marginal-spread sweep"]
-fn every_vertebra_and_axis_has_its_stated_marginal_sd() {
-    let fit = nominal();
+#[ignore = "8192 draws of three vertebrae; run in release mode"]
+fn centres_projected_plates_and_twist_have_their_stated_independent_spreads() {
+    let fit = tilted_fit(false);
     let original = serde_json::to_vec(&fit).unwrap();
-    let mut columns = vec![Vec::new(); 18];
-    // Independent standard normals have mean 0 and variance 1. These
-    // bounds are a little over five normal-sample standard errors for
-    // 8192 draws; a wrong axis, omitted noise, or factor of two fails.
+    let mut columns = vec![Vec::new(); 24];
+    // Independent standard normals have mean zero and variance one.
+    // Body tilt and lean now encode the drawn plates; they are not separate
+    // random dimensions whose marginal spreads can be asserted directly.
     for seed in 0..256 {
         for sampled in versions(&fit, seed, 32, 0..32).unwrap().versions {
             for (i, (got, expected)) in sampled.fit.vertebrae.iter().zip(&fit.vertebrae).enumerate()
             {
-                let angles = [
-                    got.angles.side_tilt_rad,
-                    got.angles.forward_lean_rad,
-                    got.angles.twist_rad,
-                ];
                 for axis in 0..3 {
-                    columns[6 * i + axis].push(
+                    columns[8 * i + axis].push(
                         (got.pose.centre[axis] - expected.pose.centre[axis])
                             / expected.sd.centre_mm[axis],
                     );
-                    columns[6 * i + 3 + axis].push(angles[axis] / expected.sd.angles_rad[axis]);
                 }
+                let plates = plate_tilts(got);
+                let nominal_plates = plate_tilts(expected);
+                for (plate, (got, nominal)) in plates.iter().zip(&nominal_plates).enumerate() {
+                    let sd = core::f64::consts::SQRT_2 * expected.sd.angles_rad[plate / 2];
+                    columns[8 * i + 3 + plate].push((got - nominal) / sd);
+                }
+                columns[8 * i + 7].push(
+                    (got.angles.twist_rad - expected.angles.twist_rad) / expected.sd.angles_rad[2],
+                );
                 assert_eq!(got.sd, expected.sd);
                 assert_eq!(got.inferred, expected.inferred);
                 assert_eq!(got.pose.height, expected.pose.height);
@@ -256,4 +290,43 @@ fn every_vertebra_and_axis_has_its_stated_marginal_sd() {
         }
     }
     assert_eq!(serde_json::to_vec(&fit).unwrap(), original);
+}
+
+fn check_plate_independence(seeds: u64, bound: f64) {
+    for corner_tilt in [false, true] {
+        let mut fit = tilted_fit(corner_tilt);
+        fit.vertebrae.truncate(1);
+        fit.origin_level = fit.vertebrae[0].level;
+        let nominal = plate_tilts(&fit.vertebrae[0]);
+        let mut columns = [Vec::new(), Vec::new(), Vec::new(), Vec::new()];
+        for seed in 0..seeds {
+            for version in versions(&fit, seed, 32, 0..32).unwrap().versions {
+                for (i, tilt) in plate_tilts(&version.fit.vertebrae[0])
+                    .into_iter()
+                    .enumerate()
+                {
+                    columns[i].push(tilt - nominal[i]);
+                }
+            }
+        }
+        for (plane, upper, lower) in [("front", 0, 1), ("side", 2, 3)] {
+            let observed = correlation(&columns[upper], &columns[lower]);
+            eprintln!(
+                "corner_tilt={corner_tilt} {plane}: {} draws, upper/lower correlation={observed:.6}",
+                seeds * 32
+            );
+            assert!(observed.abs() < bound, "{plane}: correlation {observed}");
+        }
+    }
+}
+
+#[test]
+fn a_small_set_moves_upper_and_lower_plates_independently_in_both_planes() {
+    check_plate_independence(16, 0.15);
+}
+
+#[test]
+#[ignore = "16384 draws with nonzero tilt, wedges and twist; run in release mode"]
+fn many_versions_have_near_zero_upper_lower_plate_correlation_in_both_planes() {
+    check_plate_independence(512, 0.04);
 }

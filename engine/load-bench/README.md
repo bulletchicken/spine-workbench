@@ -448,8 +448,9 @@ are in `evidence/sources.json` and `evidence/README.md` where recorded.
    interval from the activity ordering, and all its results are assumed.
 8. A year of walking compares rod swings with levels rods survived on a test
    bench. It gives no lifetime and no date.
-9. Fit noise is drawn independently for each vertebra because the fit exports
-   no joint covariance. This overstates neighbouring-joint noise.
+9. Upper and lower plate tilts are drawn independently using the fit-only
+   spread fallback; actual finder errors may be correlated. The fit exports
+   no joint covariance.
 10. Level names may be one off. The placement panel carries the changes under
     alternative numbering; a bench comparison assumes the supplied names.
 11. A placement is not saved with the case.

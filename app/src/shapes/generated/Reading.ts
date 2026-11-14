@@ -3,7 +3,10 @@ import type { Band } from "./Band";
 import type { NotMeasured } from "./NotMeasured";
 
 /**
- * A fitted value and its version band, or what is absent and the typical
- * value used by the drawing, when one exists.
+ * A fitted value and its uncertainty band, or what is absent and the typical
+ * value used by the drawing, when one exists. For a curve, the value is its
+ * Cobb angle between the fitted spine's most tilted plates in their turning
+ * neighbourhoods. Every other fitted reading uses its named levels; bending
+ * Cobb uses marked bending lines at the standing curve's fixed ends.
  */
 export type Reading = { "kind": "measured", valueDeg: number, band: Band, } | { "kind": "not-measured", reason: NotMeasured, typicalDeg: number | null, };

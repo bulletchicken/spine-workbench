@@ -27,6 +27,7 @@ export function readingsView(result: SpineReadings, front: FilmToFit) {
   const inclusive = (upper: Level, lower: Level) => result.between.levels.filter((level) => TEMPLATE_LEVELS.standard.indexOf(level) >= TEMPLATE_LEVELS.standard.indexOf(upper) && TEMPLATE_LEVELS.standard.indexOf(level) <= TEMPLATE_LEVELS.standard.indexOf(lower));
   const direction = (bodyLeft: boolean) => pictureDirection(bodyLeft === (front.geometry.imageRight === 'patient-right'));
   for (const curve of result.curves) add(JSON.stringify([curve.region, curve.convex, curve.upperEnd, curve.lowerEnd, curve.apex]), REGION_NAMES[curve.region], curve.cobb, curveAbout(curve.upperEnd, curve.lowerEnd, direction(curve.convex === 'left')), inclusive(curve.upperEnd, curve.lowerEnd), true);
+  const curveRows = rows.length;
   if (result.curves.length === 0) reasons.add(REASON_WORDS['no-curve'] ?? '');
   const s = result.sagittal;
   add('kyphosis', W.kyphosis, s.kyphosisT5T12, W.kyphosisAbout, inclusive('T5', 'T12'));
@@ -38,5 +39,14 @@ export function readingsView(result: SpineReadings, front: FilmToFit) {
   else for (const v of result.vertebrae) if (v.twist.kind === 'not-measured' && v.twist.reason === 'twist-not-measured') reason(v.twist);
   const vertebrae = result.vertebrae.map((v) => { if (!known(v.level)) throw new Error('reading-level'); return { level: v.level, coronalTilt: clean(v.coronalTilt), forwardLean: clean(v.forwardLean), twist: clean(v.twist) }; });
   const pairs = { front: result.between.front.map((p) => ({ ...p, angle: clean(p.angle) })), side: result.between.side.map((p) => ({ ...p, angle: clean(p.angle) })) };
-  return { rows, reasons: [...reasons], byLevel: (level: Level) => vertebrae.find((v) => v.level === level), between: (plane: 'front' | 'side', upper: Level, lower: Level) => pairs[plane].find((p) => p.upper === upper && p.lower === lower) };
+  const sideRows = rows.some((row) => row.key === 'kyphosis' || row.key === 'lordosis');
+  const notes = [
+    ...(curveRows > 0 ? [W.mainRange] : []),
+    ...(curveRows > 1 ? [W.smallerRanges] : []),
+    ...(sideRows ? [W.sideRanges] : []),
+    ...(rows.some((row) => row.key === 'twist') ? [W.twistRange] : []),
+    ...(curveRows > 0 ? [W.noisyCurves] : []),
+    ...(curveRows > 0 || sideRows ? [W.rangeFigures] : []),
+  ];
+  return { rows, notes, reasons: [...reasons], byLevel: (level: Level) => vertebrae.find((v) => v.level === level), between: (plane: 'front' | 'side', upper: Level, lower: Level) => pairs[plane].find((p) => p.upper === upper && p.lower === lower) };
 }

@@ -909,12 +909,12 @@ Shared parts are in `components.css`; the tables name the files that add behavio
 | | |
 |---|---|
 | For | A short list of measurements, each with its band |
-| Parts | Title. Measured rows. One quiet line for each reason something is not measured. A hairline, the band's meaning and small print. One quiet "Start over" button |
+| Parts | Title. Measured rows. One quiet line for each reason something is not measured. A hairline, range notes for the rows shown and small print. One quiet "Start over" button |
 | Row | Name at the left (13 / 20, 500). Value at the right (mono 16 / 20, `--ink`) with its band 6 after it (mono 13, `--ink-2`). Under both, the levels, view and direction (caption, `--ink-2`). Front curves come in the engine's order, largest first, then T5 to T12 kyphosis, lordosis, then twist at the largest curve's apex when measured. The screen applies no curve threshold |
 | Size | 320 wide, corner 28, regular glass. Padding 24 at the top and sides, 10 at the bottom. Title to first row 18. Rows 16 apart. Then 20, the hairline, 14, the small print, 6, the buttons. The buttons' words line up with the rows |
 | States | Loading: "Reading the spine…". Failed: "The measurements could not be read." with "Try again". Ready: measured rows and distinct reasons. Hidden during comparison. The formation clock brings in the panel and rows as section 7 says; otherwise the panel arrives in 280 after 220 and rows follow 40 apart. Pointer or keyboard focus on a row tints its fitted levels; leaving clears the tint. A focused row has a 2 blue ring, 4 out, with corner 4 |
 | Not measured | Never a number, including a typical value. The reason lines in section 8 appear once each. No bending-film line is shown. A not-fitted result fails the readings rather than becoming a row |
-| Under the numbers | "Each band covers eight in ten of the spines that fit these marks." appears when there are measured rows. The bone-shape note always follows. Assumed facing adds its note. Estimated Front names add "Names are estimates. Check where T1 is." The narrow sheet has the same notes |
+| Under the numbers | The range notes in section 8 appear in this order: the main-curve line when any front curve row is shown, then the smaller-curves line when more than one is shown; the kyphosis and lordosis line when either row is shown; the twist line when a twist row is shown; the noisy-marks line when any front curve row is shown; and the made-up-spines line once, last, whenever the main-curve or kyphosis and lordosis line appears. The bone-shape note always follows. When Side was used, the same-spine note follows it. Assumed facing adds its note. Estimated Front names add "Names are estimates. Check where T1 is." The narrow sheet has the same notes |
 | Classes | `.panel.glass.measurements`, `.measures`, `.m-name`, `.m-value`, `.m-band`, `.m-about`, `.panel-note`, `.panel-acts` in `components.css` and `app/src/bench/three/measurements.css`. `app/src/bench/three/Measurements.tsx` mounts them; `app/src/bench/three/readings-view.ts` supplies rows and reasons |
 | Do | Name, value with band, and what it was measured across |
 | Do not | Show a number without its band |
@@ -1565,7 +1565,12 @@ The tables cover Films, Find, 3D, the first placement and its load calculation. 
 | 3D | Panel title and narrow dock action | Measurements |
 | 3D | Loading | Reading the spine… |
 | 3D | Readings failed | The measurements could not be read. |
-| 3D | Under the measured rows | Each band covers eight in ten of the spines that fit these marks. |
+| 3D | Any front curve row | The main curve's range holds the angle that exact marks would give about three times in four, for the spread the marks were given. A range does not cover which vertebrae are the ends. |
+| 3D | More than one front curve row | The smaller curves' ranges were not checked. |
+| 3D | Kyphosis or lordosis row | For kyphosis the range holds it about three times in four, for lordosis about two times in three. |
+| 3D | Twist row | The twist's range has not been checked this way. |
+| 3D | Any front curve row, after the twist note | On noisy marks a curve can read a few degrees high, and noise can split one curve into shorter ones. |
+| 3D | Once, last, when a main-curve or side-range note appears | These figures were measured on made-up spines. |
 | 3D | Row name | Thoracic kyphosis |
 | 3D | Row name | Lumbar lordosis |
 | 3D | Row name | Rotation at the apex |
@@ -1928,13 +1933,13 @@ The tables cover Films, Find, 3D, the first placement and its load calculation. 
 | Thing | Rule |
 |---|---|
 | Value | The reading on the spine as fitted, rounded to a whole degree. Halves round away from zero; negative zero is 0. It is not the median of the versions |
-| Band | Take the larger distance from the unrounded reading to the engine band's lower or upper end, then round up to a whole degree. Do not measure from the rounded value shown on screen. The band uses the 10th and 90th percentiles of 32 versions |
+| Band | Take the larger distance from the unrounded reading to the engine band's lower or upper end, then round up to a whole degree. Do not measure from the rounded value shown on screen. The range comes from the spread the marks were given, with each endplate moving on its own, and is wider than before; what it holds was measured separately for each kind of reading |
 | Front curves and twist | A size, with its band, and "toward the left of the picture" or "toward the right of the picture". The effective film facing maps the direction. The direction phrase is dropped only when the unrounded twist is exactly zero. A twist that rounds to 0° can still carry a direction |
 | Thoracic kyphosis and lumbar lordosis | Keep the sign. A negative value uses the true minus sign, −, not a hyphen. Forward lean is not shown on screen |
 | Thoracic kyphosis | T5 to T12, seen from the side |
 | Lumbar lordosis | L1 to the sacrum when measured; otherwise L1 to L5, with the no-sacrum line when that is the reason |
 | Missing measurement | No number, including any typical value. Show each reason once. No bending-film line is shown; a not-fitted result fails the readings |
-| Repeated reading | 32 versions, seed 7, so the same inputs give the same reading |
+| Repeated reading | The same inputs give the same reading. Front and side plate-angle ranges do not depend on the versions seed or count; twist uses 32 versions, seed 7 |
 
 While any film's facing is assumed, no screen names the patient's left or right. Directions are sides of the picture. The panel and sheet add the assumed-facing note in the words table. `app/src/bench/three/degree-band.ts` writes the value and band; `app/src/bench/three/readings-view.ts` writes rows, directions and missing reasons.
 
@@ -2138,6 +2143,8 @@ grep -nE '#[0-9a-fA-F]{3,8}\b|rgba?\(|[0-9.]+(px|ms|em|rem|vw|vh)\b' app/src/loo
 - Open the app as well. Go through the four moments at 1440 by 900, 1100 by 760, 700 by 900 and 640 by 800, the four window sizes section 5 gives sizes for, with this document open beside it.
 
 ## 12. Decisions log
+
+- **14 November 2026 — Say what each measurement range holds.** The ranges now use the spread supplied with the marks and independently moving endplates, making them wider. Checks against made-up spines whose exact marks are known found that the earlier range held the exact angle about half the time; the new words distinguish the main curve, unchecked smaller curves, side readings and unchecked twist, and state where the figures were measured.
 
 - **14 November 2026 — Withhold load ranges when more than a quarter did not settle.** Almost half the versions can otherwise be discarded while a narrow range remains on screen. The versions that fail may not form a fair sample, so the result keeps its engine drawing and plain count but gives no ranges, load ink, ghosts or allowance counts. A quarter or fewer keeps the existing display.
 

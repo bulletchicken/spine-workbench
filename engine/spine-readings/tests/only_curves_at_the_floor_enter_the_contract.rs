@@ -68,9 +68,9 @@ fn a_forty_five_degree_curve_and_a_six_degree_wobble_name_one_curve() {
 fn versions_found_counts_the_fixed_pair_reaching_the_floor() {
     let mut input = single_curve(10.5);
     input.versions = 64;
-    // Only the nominal lower end moves, by a normal SD of two degrees.
-    // It reaches 10 degrees iff its standard-normal draw is >= -0.25,
-    // whose probability is about 0.599. Stratification therefore puts
+    // Only the nominal lower end moves. Its plate SD is sqrt(2)*2 degrees.
+    // It reaches 10 degrees iff its standard-normal draw is >= -0.177,
+    // whose probability is about 0.570. Stratification therefore puts
     // some versions on each side, without depending on a lucky seed.
     input.fit.vertebrae[2].sd.angles_rad[0] = 2.0_f64.to_radians();
     let answer = measure_spine(&input).unwrap();
@@ -87,14 +87,16 @@ fn versions_found_counts_the_fixed_pair_reaching_the_floor() {
         .versions
         .iter()
         .filter(|v| {
-            let upper = v.fit.vertebrae[0].corner_tilt_rad.unwrap();
-            let lower = v.fit.vertebrae[2].corner_tilt_rad.unwrap();
-            (lower - upper).to_degrees().abs() >= 10.0
+            let upper =
+                spine_readings::curves::geometry::upper_coronal_tilt_deg(&v.fit.vertebrae[0]);
+            let lower =
+                spine_readings::curves::geometry::lower_coronal_tilt_deg(&v.fit.vertebrae[2]);
+            (lower - upper).abs() >= 10.0
         })
         .count() as u32;
     assert_eq!(curve.versions_found, expected);
     assert!(
-        (38..=39).contains(&expected),
+        (36..=37).contains(&expected),
         "{expected} fixed pairs reach the floor"
     );
 }

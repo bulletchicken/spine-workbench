@@ -1,6 +1,18 @@
-//! Percentiles over a complete set of versions.
+//! Closed-form normal bands and percentiles over a set of versions.
 
 use shapes::spine_readings::Band;
+
+/// Exact normal percentiles for a fixed linear angle, in degrees. The
+/// 90th standard-normal percentile is 1.2815515655446004; the lower tail
+/// is its negative. No seed or finite ensemble enters this calculation.
+pub(crate) fn normal_band(value_deg: f64, sd_deg: f64) -> Band {
+    let half = 1.281_551_565_544_600_4 * sd_deg;
+    Band {
+        p10: value_deg - half,
+        p50: value_deg,
+        p90: value_deg + half,
+    }
+}
 
 /// This project's percentile convention: linear interpolation at p*(n-1).
 /// Empty or non-finite samples have no band.
