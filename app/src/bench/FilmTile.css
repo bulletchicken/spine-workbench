@@ -1,3 +1,5 @@
 .tile > .film { inset: 0; }
 .film > .hung-film { position: absolute; inset: 0; }
 .tiles[data-flying] .tile { pointer-events: none; }
+/* On Films the place beneath the film owns replacement, including presses over an outline. */
+[data-moment="films"] .tiles .mark polygon { pointer-events: none; }

@@ -15,6 +15,8 @@ reaches it only through the engine room.
 
 Real films need the real engine in development (`/?engine=real`); the stand-in reads only its own.
 
+Saved cases open through the film picker or a drop; Save case appears after vertebrae are found. Version 1 keeps films, marks, level names and facing; review looks start again on reopen.
+
 ## Folders
 
 | Folder | Holds |

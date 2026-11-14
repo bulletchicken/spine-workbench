@@ -7,6 +7,8 @@ import { find, focusOn, pressKey, pressOn, putOnThePage } from '@/building-block
 import { caseStore } from '@/case-state/case-store';
 import { emptyCase } from '@/case-state/empty-case';
 import { EngineFailure, type EngineClient } from '@/engine-room/engine-client';
+import { smallStory } from '@/engine-room/stand-in/small-story';
+import { filmRecordFrom } from '@/open-and-save/film-record';
 import { startStandInEngine } from '@/engine-room/stand-in/stand-in-engine';
 import { EngineProvider } from '@/engine-room/use-engine';
 import { popoverOpen } from '@/on-this-device/popover-open';
@@ -18,6 +20,7 @@ import { dockNow, useShowInDock } from '@/view-state/dock-now';
 import { preferences } from '@/view-state/preferences';
 import { faultWords } from '@/words/faults';
 import { PREVIEW_NOTICE } from '@/words/preview-notice';
+import { TopBar } from './TopBar';
 import { AppFrame } from './AppFrame';
 import type { RoomParts } from './room-parts';
 
@@ -90,6 +93,43 @@ describe('the one stage frame', () => {
     expect(document.querySelector('.guide-column, .status-line, .case-title, .top-bar-save')).toBeNull();
     expect(find('.brand-mark').getAttribute('viewBox')).toBe('0 0 20 20');
     expect(document.querySelectorAll('.brand-mark rect')).toHaveLength(3);
+  });
+
+  it('shows Save case before the trust badge only while a present film has found vertebrae', async () => {
+    const { engine } = mount(STEPS);
+    await ready(engine);
+    const story = smallStory();
+    expect(document.querySelector('.bar-save')).toBeNull();
+    act(() => { caseStore.getState().apply([{ kind: 'set-film', film: filmRecordFrom(story.films.front.facts) }]); });
+    expect(document.querySelector('.bar-save')).toBeNull();
+    act(() => {
+      const state = caseStore.getState();
+      const marks = story.pass.marks.find((m) => m.film === 'front');
+      if (marks === undefined) throw new Error('missing Front marks');
+      state.apply([{ kind: 'open-case', case: { ...state.case, marks: [marks], nextVertebraId: 100 } }]);
+    });
+    expect(find('.bar-save').textContent).toBe('Save case');
+    expect(find('.bar-save').nextElementSibling).toBe(find('.badge'));
+    act(() => { caseStore.getState().apply([{ kind: 'remove-film', film: 'front' }]); });
+    expect(document.querySelector('.bar-save')).toBeNull();
+  });
+
+  it('keeps Save focused while busy and accepts no second press', () => {
+    const onSave = vi.fn();
+    const bar = (saving: boolean) => <TopBar rail={[]} onGoToStep={nothing} requests={{ sent: 0, blocked: 0 }} promiseOpen={false} onPromiseOpenChange={nothing} onSave={onSave} saving={saving} />;
+    const page = putOnThePage(bar(false));
+    const save = find('.bar-save') as HTMLButtonElement;
+    focusOn(save);
+    page.show(bar(true));
+    expect(document.activeElement).toBe(save);
+    expect(save.disabled).toBe(false);
+    expect(save.getAttribute('aria-disabled')).toBe('true');
+    pressOn(save);
+    expect(onSave).not.toHaveBeenCalled();
+    page.show(bar(false));
+    expect(document.activeElement).toBe(save);
+    pressOn(save);
+    expect(onSave).toHaveBeenCalledTimes(1);
   });
 
   it('keeps the approved notice word for word and the browser’s engine hooks', async () => {

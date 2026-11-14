@@ -8,16 +8,19 @@ import type { OpenedCase } from '@/shapes';
 import { EngineFailure } from '../engine-client';
 
 const MARK = 'stand-in case file';
+// Intake recognises cases by these bytes; this development payload is still not a zip.
+const PREFIX = 'PK\u0003\u0004';
 
 export function packCase(opened: OpenedCase): Uint8Array {
   const films = opened.films.map((film) => ({ kind: film.kind, png: toBase64(film.png) }));
-  return new TextEncoder().encode(JSON.stringify({ mark: MARK, case: opened.case, films }));
+  return new TextEncoder().encode(PREFIX + JSON.stringify({ mark: MARK, case: opened.case, films }));
 }
 
 export function unpackCase(bytes: ArrayBuffer): OpenedCase {
   let read: unknown;
   try {
-    read = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes));
+    const text = new TextDecoder('utf-8', { fatal: true }).decode(bytes);
+    read = JSON.parse(text.startsWith(PREFIX) ? text.slice(PREFIX.length) : text);
   } catch {
     throw notACase();
   }

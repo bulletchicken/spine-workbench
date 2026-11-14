@@ -1,6 +1,7 @@
 // The standing promise and the note that makes it checkable.
 export const ON_THIS_DEVICE_WORDS = {
   badge: 'On this device only',
+  savedCase: 'A saved case holds your films. It stays on this device unless you move it.',
   lead: 'Your films never leave this computer.',
   boneCredit: 'Bone shapes: BodyParts3D, © The Database Center for Life Science licensed under CC Attribution 4.0 International.',
   blocked: (attempts: number): string =>
