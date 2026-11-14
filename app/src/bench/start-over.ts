@@ -1,3 +1,5 @@
+import { clearSpineBuild } from './three/build-spine';
+import { fitSources } from '@/view-state/fit-sources';
 import { caseStore } from '@/case-state/case-store';
 import { emptyCase } from '@/case-state/empty-case';
 import { filmPixels } from '@/case-state/film-pixels';
@@ -23,6 +25,8 @@ export function queueFilmChange(change: () => Promise<void>): Promise<void> {
 
 /** Samples and personal films never share the stage. This reset has no fade or step change. */
 export function clearFilms(engine: Pick<EngineClient, 'retireFilm'>): void {
+  clearSpineBuild();
+  fitSources.getState().clear();
   for (const kind of FILM_KINDS) {
     engine.retireFilm(kind);
     filmPixels.getState().retired(kind);

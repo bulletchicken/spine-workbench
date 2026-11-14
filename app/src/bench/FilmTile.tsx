@@ -16,6 +16,7 @@ interface FilmTileProps {
   index: number;
   film: StageFilm;
   replay: ReplaySignal | null;
+  glide?: boolean;
   target: boolean;
   onPoint?: (key: string | null) => void;
 }
@@ -24,14 +25,14 @@ function Light({ light, replay, width, ...given }: { light: StageFilm['light']; 
   return light === null || replay === null ? null : <TravellingLight {...given} {...light} width={width} signal={replay} />;
 }
 
-export function FilmTile({ kind, spot, index, film, replay, target, onPoint }: FilmTileProps) {
+export function FilmTile({ kind, spot, index, film, replay, target, onPoint, glide = true }: FilmTileProps) {
   const light = useLayer('light', Light, { light: film.light, replay, width: film.size.width });
   const outlines = useLayer('outlines', MarksOverlay, { label: MARK_WORDS.outlinesOn(kind), marks: film.outlines, on: film.on, only: film.only, ...(onPoint === undefined ? {} : { onPoint }) });
   const layers = useMemo(() => [light, outlines], [light, outlines]);
   return (
     <div className="tile in" data-place={kind} data-names={film.names ? 'on' : 'off'} data-drop-target={target || undefined}
       style={{ '--i': index, '--bw': spot.width, '--bh': spot.height, '--x': spot.x, '--y': spot.y, '--s': 1, '--r': `var(--r-${spot.radius})` } as CSSProperties}>
-      <div className="film"><HungFilm kind={kind} size={film.size} pixels={film.pixels} thumbnail={film.thumbnail} layers={layers} frame={film.frame} glide /></div>
+      <div className="film"><HungFilm kind={kind} size={film.size} pixels={film.pixels} thumbnail={film.thumbnail} layers={layers} frame={film.frame} glide={glide} /></div>
     </div>
   );
 }

@@ -1,0 +1,10 @@
+/* Reserve the rail symmetrically, keeping the spine on the frame's centre line. */
+.three-stage {
+  position: absolute;
+  inset: 0 calc(var(--rail-h) / 2 + var(--tile-gap));
+  pointer-events: auto;
+}
+/* The rail has no actions until comparison is available. */
+[data-moment="three"] .tiles .tile { pointer-events: none; cursor: default; }
+.frame > .spine { transform: none; }
+[data-moment="three"] .frame > .spine { transform: none; }

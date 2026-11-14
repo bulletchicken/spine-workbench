@@ -1,4 +1,10 @@
-import { useMemo } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { useSpineHost } from '@/app-shell/spine-host';
+import { loadBones } from '@/spine-3d/bones/load-bones';
+import { currentStep } from '@/view-state/current-step';
+import { spineBuild } from '@/view-state/spine-build';
+import { THREE_WORDS } from '@/words/three';
 import { useStore } from 'zustand';
 import { useCase } from '@/case-state/case-store';
 import { filmPixels } from '@/case-state/film-pixels';
@@ -8,13 +14,35 @@ import { useFilmIntake } from './film-intake';
 import { Stage, type StageFilm } from './Stage';
 import { FILM_ORDER } from './stage-layout';
 import { useFindOnStage } from './find-on-stage';
+import { hasCurrentFit } from './three/build-spine';
+import { ThreeStage } from './three/ThreeStage';
 
 /** The stage stays mounted as the step changes, so each film keeps its tile. */
 export default function Bench() {
   const { held, pressPlace } = useFilmIntake();
   const intake = useFilmIntakeState();
   const { slug } = useCurrentStep();
-  const records = useCase((state) => state.case.films);
+  const c = useCase((state) => state.case);
+  const records = c.films;
+  const build = useStore(spineBuild);
+  const host = useSpineHost();
+  const valid = hasCurrentFit(c);
+  const three = slug === 'three' && valid && build.accepted !== null;
+  const [bonesReady, setBonesReady] = useState(false);
+  useEffect(() => {
+    let mounted = true;
+    void loadBones().then(() => { if (mounted) setBonesReady(true); }, () => undefined);
+    return () => { mounted = false; };
+  }, []);
+  useLayoutEffect(() => {
+    if (slug === 'three' && !valid) currentStep.getState().go(c.marks.some((f) => f.film === 'front' && f.vertebrae.length > 0) ? 'find' : 'films');
+  }, [slug, valid, c]);
+  useEffect(() => {
+    const stage = host?.parentElement?.querySelector('main.stage');
+    if (build.busy) stage?.setAttribute('aria-busy', 'true');
+    else stage?.removeAttribute('aria-busy');
+    return () => { stage?.removeAttribute('aria-busy'); };
+  }, [build.busy, host]);
   const pixels = useStore(filmPixels, (state) => state.films);
   const finding = useFindOnStage();
   const films = useMemo(() => Object.fromEntries(FILM_ORDER.map((kind) => {
@@ -26,5 +54,9 @@ export default function Bench() {
     };
     return [kind, film];
   })) as Record<(typeof FILM_ORDER)[number], StageFilm | null>, [records, pixels, slug, finding.films]);
-  return <Stage moment={slug === 'find' ? 'find' : 'films'} films={films} reading={intake.making ? FILM_ORDER : intake.reading} held={held} onPressPlace={pressPlace} leaving={intake.leaving} marked={finding.marked} reviewing={finding.reviewing} replay={finding.replay} {...(finding.onPoint === undefined ? {} : { onPoint: finding.onPoint })} />;
+  return <>
+    <span className="spoken-only" data-testid="bones-status" data-status={bonesReady ? 'ready' : 'loading'}>{bonesReady ? THREE_WORDS.bonesReady : ''}</span>
+    {three && host !== null && build.accepted !== null && createPortal(<ThreeStage accepted={build.accepted} />, host)}
+    <Stage moment={three ? 'three' : slug === 'find' || slug === 'three' && c.marks.length > 0 ? 'find' : 'films'} films={films} reading={intake.making ? FILM_ORDER : intake.reading} held={held} onPressPlace={pressPlace} leaving={intake.leaving} marked={finding.marked} reviewing={finding.reviewing} replay={finding.replay} {...(finding.onPoint === undefined ? {} : { onPoint: finding.onPoint })} />
+  </>;
 }

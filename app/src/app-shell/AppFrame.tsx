@@ -17,6 +17,7 @@ import { usePreferences } from '@/view-state/preferences';
 import { faultWords } from '@/words/faults';
 import { SHELL_WORDS } from '@/words/shell';
 import './AppFrame.css';
+import { SpineHost } from './spine-host';
 import { PreviewNotice } from './PreviewNotice';
 import { stepOnScreen } from './rail-steps';
 import { findRoomParts, type RoomParts } from './room-parts';
@@ -71,7 +72,7 @@ export function AppFrame({ steps = FOUND_STEPS, parts = FOUND_PARTS }: AppFrameP
   const Screen = onScreen?.Screen;
   const OpeningCase = parts.OpeningCase;
   const screen = Screen === undefined ? null : <Screen key={onScreen?.slug} />;
-  usePageState('moment', onScreen?.slug === 'find' ? 'find' : 'films');
+  usePageState('moment', onScreen?.slug === 'three' ? 'three' : onScreen?.slug === 'find' ? 'find' : 'films');
 
   return (
     <div
@@ -82,6 +83,7 @@ export function AppFrame({ steps = FOUND_STEPS, parts = FOUND_PARTS }: AppFrameP
     >
       <div className="glow" aria-hidden="true" />
       <div className="frame">
+        <SpineHost>
         <LiveTopBar steps={steps} />
         <BenchRegion Bench={parts.Bench} CaseSheet={parts.CaseSheet} />
         <LitStandsDown value={sheetIsOpen}>
@@ -89,6 +91,7 @@ export function AppFrame({ steps = FOUND_STEPS, parts = FOUND_PARTS }: AppFrameP
           <LiveDock engine={engine} />
         </LitStandsDown>
         <PreviewNotice engine={engine} />
+        </SpineHost>
       </div>
     </div>
   );
