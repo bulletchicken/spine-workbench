@@ -80,9 +80,9 @@ export default function Bench() {
   const sideMarks = c.marks.find((m) => m.film === 'side');
   const reviewSide = slug === 'find' && review.phase === 'found' && sideSource?.finder === 'trained' && sideSource.opening === sideOpening && sideMarks !== undefined;
   const renameSide = (change: SideNameChange) => {
-    if (sideMarks === undefined || review.sideBaseline === null || change === 'too-low') return;
+    if (sideMarks === undefined || review.sideBaseline === null) return;
     const baseline = review.sideBaseline;
-    const renamed = renamedSide(baseline, change, 'drop');
+    const renamed = renamedSide(baseline, change);
     if (JSON.stringify(sideMarks) === JSON.stringify(renamed)) return;
     clearSpineBuild();
     const last = caseStore.getState().history.undo.at(-1);
@@ -105,6 +105,6 @@ export default function Bench() {
     <span className="spoken-only" data-testid="bones-status" data-status={bonesReady ? 'ready' : 'loading'}>{bonesReady ? THREE_WORDS.bonesReady : ''}</span>
     {three && host !== null && build.accepted !== null && createPortal(<ThreeStage accepted={build.accepted} filmDriver={filmDriver} />, host)}
     {three && build.accepted !== null && <Measurements accepted={build.accepted} />}
-    <Stage sideControls={reviewSide ? <SideReview allowTooLow={false} onLooksRight={() => { findState.getState().approveSide(sideReviewKey(sideMarks, sideRevision)); }} onRename={renameSide} onLeaveOut={leaveSideOut} /> : search.sideExclusion === 'facing' ? <SideFacing key={sideOpening} opening={sideOpening} /> : search.sideExclusion !== null ? <p className="side-controls">{exclusionWords(search.sideExclusion)}</p> : null} compared={three ? threeView.compared : null} sheetOpen={three && threeView.sheet} onPressFilm={(kind) => { if (!three || threeView.moving) return; threeState.getState().compare(threeView.compared === kind ? null : kind); }} forming={three && build.accepted?.movePending === true} onFilmDriver={setFilmDriver} moment={three ? 'three' : slug === 'find' || slug === 'three' && c.marks.length > 0 ? 'find' : 'films'} films={films} reading={intake.making ? FILM_ORDER : intake.reading} held={held} onPressPlace={pressPlace} leaving={intake.leaving} marked={finding.marked} reviewing={finding.reviewing} replay={finding.replay} {...(three ? { onPoint: (kind, key) => { const mark = c.marks.find((m) => m.film === kind)?.vertebrae.find((v) => String(v.id) === key); threeState.getState().point(mark?.level ?? null); } } : finding.onPoint === undefined ? {} : { onPoint: finding.onPoint })} />
+    <Stage sideControls={reviewSide ? <SideReview onLooksRight={() => { findState.getState().approveSide(sideReviewKey(sideMarks, sideRevision)); }} onRename={renameSide} onLeaveOut={leaveSideOut} /> : search.sideExclusion === 'facing' ? <SideFacing key={sideOpening} opening={sideOpening} /> : search.sideExclusion !== null ? <p className="side-controls">{exclusionWords(search.sideExclusion)}</p> : null} compared={three ? threeView.compared : null} sheetOpen={three && threeView.sheet} onPressFilm={(kind) => { if (!three || threeView.moving) return; threeState.getState().compare(threeView.compared === kind ? null : kind); }} forming={three && build.accepted?.movePending === true} onFilmDriver={setFilmDriver} moment={three ? 'three' : slug === 'find' || slug === 'three' && c.marks.length > 0 ? 'find' : 'films'} films={films} reading={intake.making ? FILM_ORDER : intake.reading} held={held} onPressPlace={pressPlace} leaving={intake.leaving} marked={finding.marked} reviewing={finding.reviewing} replay={finding.replay} {...(three ? { onPoint: (kind, key) => { const mark = c.marks.find((m) => m.film === kind)?.vertebrae.find((v) => String(v.id) === key); threeState.getState().point(mark?.level ?? null); } } : finding.onPoint === undefined ? {} : { onPoint: finding.onPoint })} />
   </>;
 }
