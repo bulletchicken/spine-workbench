@@ -67,6 +67,9 @@
 //! The final solve allows 80 steps, 24 backtracks
 //! and 14 damping trials. It requires scaled equality residual <= 2e-12
 //! and full KKT residual <= 1e-12 + 2e-11 times the largest balanced term,
+//! including, for release, the individual wrench of each joint between two
+//! rigid groups, or a group and the sacrum, on either body, mapped to its
+//! group's scaled coordinates, with moment about its origin,
 //! plus an undamped positive definite reduced Lagrangian tangent. A cap
 //! leaves `settled=false` with a reason and empty load arrays. These work
 //! limits use no elapsed time. The detailed damping, trust and restoration

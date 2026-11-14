@@ -205,6 +205,34 @@ impl Model for ReleasedModel<'_> {
     fn dimension(&self) -> usize {
         self.dimension
     }
+    fn balanced_term_scale(&self, state: &State) -> Option<f64> {
+        let poses = self.bodies(state);
+        let wrenches = self.chain.joint_wrenches(&poses).ok()?;
+        let mut scale = 0.0_f64;
+        for (joint, pair) in wrenches.iter().enumerate() {
+            for (body, wrench) in [(joint, &pair[0]), (joint + 1, &pair[1])] {
+                // Ground has no solver coordinates.
+                let Some(pose) = poses.get(body) else {
+                    continue;
+                };
+                let group = self.body_group[body];
+                let force = wrench.fixed_rows::<3>(0).into_owned();
+                let arm = pose.centre_mm - state.groups[group].centre_mm;
+                let moment = wrench.fixed_rows::<3>(3) + arm.cross(&force);
+                for value in (force * LENGTH_MM)
+                    .iter()
+                    .copied()
+                    .chain(self.bases(state, group).iter().map(|b| b.dot(&moment)))
+                {
+                    if !value.is_finite() {
+                        return None;
+                    }
+                    scale = scale.max(value.abs());
+                }
+            }
+        }
+        Some(scale)
+    }
     fn constraint_data(&self, state: &State) -> Option<(DVector<f64>, DMatrix<f64>)> {
         Some(self.constraints(state))
     }
@@ -498,3 +526,6 @@ pub(super) fn solve(
         iterations: result.iterations,
     })
 }
+
+#[cfg(test)]
+mod tests;

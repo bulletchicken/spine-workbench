@@ -499,6 +499,12 @@ fixed by seed, ensemble size and global version index, shared by placements.
 
 ## Numerical checks
 
+The nonlinear solve requires full KKT residual <= 1e-12 + 2e-11 times the
+largest balanced term; for release this includes the largest single wrench
+of a joint between two rigid groups, or between a group and the sacrum, on
+either body, mapped to its group's scaled coordinates with the moment about
+the group's origin.
+
 Linear correction and daily solves recover rod strains in the moving frame
 before applying stiffness. Up to eight improving refinement steps check the
 same body and free-frame equations at the unchanged 1e-9 relative tolerance;
