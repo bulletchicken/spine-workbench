@@ -12,12 +12,15 @@ use shapes::levels::Level;
 
 /// Compare the centre line with finite projected pedicle outlines in one
 /// place. Between the two outer edges it either crosses an outline or is
-/// medial to it. The later fit-length gate belongs here because these
+/// medial to it. A physical film scale is required because these
 /// outlines incorporate published millimetre widths.
 pub fn centre_line_meets_or_is_medial_to_pedicle(
     ctx: &RuleContext<'_>,
     index: usize,
 ) -> Reading<bool> {
+    if ctx.fit.lengths == shapes::spine_fit::FitLengths::TypicalSize {
+        return Err(CannotTellCode::NoFilmScale);
+    }
     let vertebra = &ctx.reading.vertebrae[index];
     let offset = vertebra.centre_line_offset_mm?;
     let outline = ctx

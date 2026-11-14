@@ -135,7 +135,7 @@ pub fn anchor(
             also_seen: Vec::new(),
         }
     };
-    let length = if chord_complete {
+    let mut length = if chord_complete {
         sizing::choose_length(&chords, &lgrid, share, margin, sizing::DEFAULT_ALPHA)?
     } else {
         sizing::SizeChoice {
@@ -143,6 +143,13 @@ pub fn anchor(
             also_seen: Vec::new(),
         }
     };
+    let shorter_than_grid = chord_complete && length.mm.is_none();
+    // This project's catalogue floor retains a screw when its drawn
+    // chord limits reject every length. The refusal stays visible as a look.
+    if shorter_than_grid {
+        length.mm = lgrid.first().map(|g| g.mm);
+        length.also_seen.retain(|&mm| Some(mm) != length.mm);
+    }
     let mut length_also_seen = length.also_seen;
     for f in share_range {
         if chord_complete
@@ -206,7 +213,7 @@ pub fn anchor(
         inner_narrow_share: f64::from(pedicle.versions_inner_under_1_mm) / versions.len() as f64,
         convergence: convergence_deg,
         max_abs_twist_deg: max_twist,
-        shorter_than_grid: chord_complete && length.mm.is_none(),
+        shorter_than_grid,
         nearest_chord_age: nearest,
     })?;
     sources.extend(look_sources);

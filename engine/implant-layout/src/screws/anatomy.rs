@@ -20,7 +20,8 @@ pub struct Distribution {
 /// Read the chord for this age and curve side. The complete younger
 /// thoracic table now covers the formerly absent 9–11 band, so its earlier
 /// nearest-band rule is dormant. Children outside the printed age bands,
-/// lumbar children, nonstandard levels and absent side columns have no chord.
+/// lumbar children and nonstandard levels have no chord. Outside a curve,
+/// this project's inference averages the two published side columns.
 pub fn chord(level: Level, side: CurveSide, age_years: Option<f64>) -> Option<Distribution> {
     if let Some(age) = age_years {
         if !age.is_finite() || age < 0.0 {
@@ -103,6 +104,13 @@ pub fn age_band(age: f64) -> Option<AgeBand> {
 }
 
 fn upendra(table: Table, key: &str, level: Level, side: CurveSide) -> Option<Distribution> {
+    if side == CurveSide::Outside {
+        let concave = upendra(table, key, level, CurveSide::Concave)?;
+        let convex = upendra(table, key, level, CurveSide::Convex)?;
+        let mut value = interpolate_levels(&concave, &convex, 0.5)?;
+        value.sd = concave.sd.zip(convex.sd).map(|(a, b)| a.max(b));
+        return Some(value);
+    }
     let target = Level::MEASURED.iter().position(|&item| item == level)?;
     let coordinate = |level| Coordinate {
         key: key.into(),
@@ -238,7 +246,11 @@ mod tests {
         );
         assert_eq!(actual.sources, lower.sources);
         assert!(medial_angle(Level::T13, CurveSide::Convex).is_none());
-        assert!(medial_angle(Level::T7, CurveSide::Outside).is_none());
+        let concave = medial_angle(Level::T7, CurveSide::Concave).unwrap();
+        let convex = medial_angle(Level::T7, CurveSide::Convex).unwrap();
+        let outside = medial_angle(Level::T7, CurveSide::Outside).unwrap();
+        assert_eq!(outside.mean, (concave.mean + convex.mean) * 0.5);
+        assert_eq!(outside.sd, concave.sd.zip(convex.sd).map(|(a, b)| a.max(b)));
     }
 
     #[test]

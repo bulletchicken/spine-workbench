@@ -7,8 +7,11 @@ use crate::curves::Reading;
 use shapes::implant_layout::{CannotTellCode, LevelRule, Measurement, RuleEnd};
 
 /// Compare the spine's lateral distance with the published millimetre
-/// threshold in one place. The later fit-length gate belongs here.
+/// threshold in one place. A typical drawing has no physical scale.
 pub fn deviation_exceeds_mm(ctx: &RuleContext<'_>, index: usize, minimum_mm: f64) -> Reading<bool> {
+    if ctx.fit.lengths == shapes::spine_fit::FitLengths::TypicalSize {
+        return Err(CannotTellCode::NoFilmScale);
+    }
     ctx.reading.vertebrae[index]
         .centre_line_offset_mm
         .map(|offset| offset.abs() > minimum_mm)

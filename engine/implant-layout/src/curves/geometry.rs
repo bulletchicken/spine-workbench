@@ -15,9 +15,21 @@ pub use shared::geometry::{frontal_tilt_deg, sagittal_tilt_deg};
 /// Adapt the layout's films without inventing observations or film noise.
 /// These geometric readers use only marks, geometry and size.
 pub(crate) fn measurement_input(input: &LayoutInput) -> ReadingsInput {
+    let front = input.front.as_ref().map(|value| {
+        let mut front = film(value);
+        // The fit's provisional spacing registers marks to the same
+        // typical drawing. Dimensional rules still check FitLengths.
+        if front.geometry.mm_per_px.is_none()
+            && input.fit.lengths == shapes::spine_fit::FitLengths::TypicalSize
+        {
+            front.geometry.mm_per_px = Some(input.fit.front_film.mm_per_px[0]);
+            front.geometry.mm_per_px_vertical = Some(input.fit.front_film.mm_per_px[1]);
+        }
+        front
+    });
     ReadingsInput {
         fit: input.fit.clone(),
-        front: input.front.as_ref().map(film),
+        front,
         side: None,
         bend_left: input.bend_left.as_ref().map(film),
         bend_right: input.bend_right.as_ref().map(film),

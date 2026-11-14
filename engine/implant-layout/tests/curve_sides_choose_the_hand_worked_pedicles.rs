@@ -124,14 +124,14 @@ fn right_left_and_double_curves_assign_columns_and_distances_by_hand() {
                     }
                     if level <= Level::T12 {
                         // Gao control widths do not have a curve-side
-                        // column. Upendra chords/angles do; outside a
-                        // curve there is no such column to borrow.
+                        // column. Outside a curve, Upendra's two side
+                        // columns supply the project's combined prior.
                         assert!(width_prior(level, Some(14.0), expected_side).is_some());
-                        assert_eq!(chord(level, expected_side, None).is_some(), thoracic);
-                        assert_eq!(medial_angle(level, expected_side).is_some(), thoracic);
+                        assert!(chord(level, expected_side, None).is_some());
+                        assert!(medial_angle(level, expected_side).is_some());
                     } else {
-                        assert_eq!(width_prior(level, None, expected_side).is_some(), lumbar);
-                        assert_eq!(chord(level, expected_side, None).is_some(), lumbar);
+                        assert!(width_prior(level, None, expected_side).is_some());
+                        assert!(chord(level, expected_side, None).is_some());
                     }
                 }
             }
@@ -144,4 +144,30 @@ fn right_left_and_double_curves_assign_columns_and_distances_by_hand() {
     assert!((side_factor(0.73, 1.08, 2.0, 4.0) - 0.905).abs() < 1e-14);
     assert_eq!(side_factor(0.73, 1.08, 3.0, 4.0), 1.08);
     assert_eq!(side_factor(0.73, 1.08, 4.0, 4.0), 1.08);
+}
+
+#[test]
+fn unreadable_twist_uses_the_end_and_an_overlap_uses_the_nearer_apex() {
+    let mut spine = reading(BodySide::Right, false);
+    for vertebra in &mut spine.vertebrae {
+        vertebra.twist_deg = Err(CannotTellCode::TwistNotMeasured);
+    }
+    // T2..T10 around T6: both end distances are four levels.
+    for level in [Level::T3, Level::T9] {
+        let position = position_in_curve(&spine, level, BodySide::Left);
+        assert_eq!(position.neutral_distance, Some(4.0));
+        assert_eq!(position.curve_side, CurveSide::Concave);
+    }
+    // A smaller left-convex curve T8..L5, apex T12, overlaps T8..T10.
+    // T8 is nearer T6; T10 is nearer T12, regardless of Cobb magnitude.
+    let mut second = curve(7, 16, 11, BodySide::Left);
+    second.cobb_deg = 10.0;
+    spine.curves.push(second);
+    let upper = position_in_curve(&spine, Level::T8, BodySide::Left);
+    assert_eq!(upper.curve_side, CurveSide::Concave);
+    assert_eq!(upper.apex_distance, 2.0);
+    let lower = position_in_curve(&spine, Level::T10, BodySide::Left);
+    assert_eq!(lower.curve_side, CurveSide::Convex);
+    assert_eq!(lower.apex_distance, 2.0);
+    assert_eq!(lower.neutral_distance, Some(4.0));
 }

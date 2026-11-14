@@ -16,8 +16,8 @@ pub(super) fn apply(
     convex: Option<BodySide>,
     pattern: Pattern,
 ) -> Result<(), LayoutError> {
-    // The earlier pattern's odd slot is left-first. This project's
-    // canonical right-convex frame makes that choice reflect with a curve.
+    // This project's canonical right-convex frame makes alternating
+    // non-key sides reflect with the curve. Bilateral keys stay paired.
     let reflected = pattern == Pattern::KeyLevels && convex == Some(BodySide::Left);
     if reflected {
         swap(anchors);

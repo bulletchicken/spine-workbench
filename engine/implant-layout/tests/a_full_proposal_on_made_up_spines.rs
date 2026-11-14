@@ -718,7 +718,6 @@ fn all_placements_mirror_with_the_spine() {
 }
 
 #[test]
-#[ignore = "shared CSVL reader still requires a physical film scale"]
 fn a_marked_sacrum_remains_readable_at_the_fits_typical_scale() {
     let (mut input, mut films) = fixture(RecipeName::RightThoracic40);
     films[0].geometry.mm_per_px = None;
@@ -743,7 +742,6 @@ fn a_marked_sacrum_remains_readable_at_the_fits_typical_scale() {
 }
 
 #[test]
-#[ignore = "key-level priority chooses a physical left side at an odd density cap"]
 fn an_odd_key_level_cap_is_independent_of_physical_side() {
     let (input, _) = fixture(RecipeName::RightThoracic40);
     let readings = implant_layout::readings::readings(&input, 0..input.versions).unwrap();
@@ -789,7 +787,6 @@ fn an_odd_key_level_cap_is_independent_of_physical_side() {
 }
 
 #[test]
-#[ignore = "frozen cannot-tell contract lacks the required no-film-scale code"]
 fn the_no_film_scale_reason_crosses_the_contract() {
     let code: CannotTellCode = serde_json::from_str("\"no-film-scale\"")
         .expect("the dimensional-rule refusal has a contract code");
@@ -797,7 +794,6 @@ fn the_no_film_scale_reason_crosses_the_contract() {
 }
 
 #[test]
-#[ignore = "the raw pedicle estimator labels absent bands from-tables"]
 fn an_absent_width_has_missing_provenance() {
     let estimate =
         implant_layout::pedicles::estimate(&[None], shapes::implant_layout::CurveSide::Outside);

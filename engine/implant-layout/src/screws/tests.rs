@@ -358,6 +358,39 @@ fn a_childs_lumbar_table_is_absent_and_cannot_make_a_screw() {
     assert!(!a.looks.contains(&LookCode::NoTableForThisAge));
 }
 
+#[test]
+fn unknown_age_and_unmeasured_twist_keep_every_covered_thoracic_width() {
+    let mut input = fixture_input();
+    input.child.age_years = None;
+    for vertebra in &mut input.fit.vertebrae {
+        vertebra.inferred.twist = true;
+    }
+    let all = readings(&input, 0..input.versions).unwrap();
+    for level in Level::MEASURED
+        .into_iter()
+        .filter(|level| *level <= Level::T12)
+    {
+        for side in [BodySide::Left, BodySide::Right] {
+            let candidate =
+                anchor(&input, &all.versions.versions, &all.measured, level, side).unwrap();
+            assert!(
+                candidate.pedicle.outer_width_mm.is_some(),
+                "{level:?} {side:?}"
+            );
+            assert!(
+                !candidate.looks.contains(&LookCode::NoTableForThisAge),
+                "{level:?} {side:?}"
+            );
+            if candidate.looks.contains(&LookCode::ShorterThanTables)
+                && candidate.diameter_mm.is_some()
+            {
+                assert_eq!(candidate.kind, AnchorKind::Screw);
+                assert_eq!(candidate.length_mm, Some(25.0));
+            }
+        }
+    }
+}
+
 fn candidate(level: Level, side: BodySide) -> AnchorProposal {
     AnchorProposal {
         level,

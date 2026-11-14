@@ -23,7 +23,8 @@ pub enum Pattern {
 /// This project's key-level inference honours the density cap when a
 /// short span cannot contain every bilateral key level: endpoints first,
 /// apex next, then their neighbours, followed by alternating sides. A
-/// partial final pair takes left first. This priority is not a paper rule.
+/// bilateral key pair is never split to fill an odd slot in the cap.
+/// This priority is not a paper rule.
 pub fn apply(
     anchors: &mut [AnchorProposal],
     levels: &[Level],
@@ -91,7 +92,7 @@ pub fn apply(
             }
         }
         selected.fill(false);
-        for &i in priority.iter().take(cap) {
+        for &i in priority.iter().take(cap - cap % 2) {
             selected[i] = true;
         }
     }

@@ -20,7 +20,7 @@ pub const ROUNDING_HALF_MM: f64 = 0.5;
 
 /// Position supplied by a curve reading. Distances are in vertebral levels,
 /// not mm. `neutral_distance` is the apex-to-neutral distance on this side
-/// of the apex; no measured neutral means no interpolated side factor.
+/// of the apex, falling back to that curve end when twist is unreadable.
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct CurvePosition {
     pub curve_side: CurveSide,
@@ -57,6 +57,12 @@ pub struct WidthDraw {
 /// This project's mean of male/female columns and larger printed spread.
 /// Both cells must exist; a missing column is never filled from its mate.
 pub fn combine_sexes(male: &Cell, female: &Cell) -> Option<WidthPrior> {
+    combine_columns(male, female)
+}
+
+// Project inference for unlabelled sex or curve side: equal-weight means
+// and the larger printed spread, retaining both cells' rounding terms.
+fn combine_columns(male: &Cell, female: &Cell) -> Option<WidthPrior> {
     let (m, ms) = normal(male)?;
     let (f, fs) = normal(female)?;
     let mut rounding = Vec::new();
@@ -90,7 +96,8 @@ pub fn age_band(age: f64) -> Option<AgeBand> {
 /// Outer-width prior from the exact population row. Thoracic ages 12+
 /// (or absent) use Gao controls; lumbar ages 12+ use Upendra's curve side.
 /// Under-12 lumbar, uncovered child ages, nonstandard levels and absent
-/// side columns return no value. No body-size multiplier is applied.
+/// side columns return no value. Outside a curve, this project's prior
+/// combines the two side columns. No body-size multiplier is applied.
 pub fn width_prior(level: Level, age: Option<f64>, side: CurveSide) -> Option<WidthPrior> {
     if age.is_some_and(|age| !age.is_finite() || age < 0.0) {
         return None;
@@ -122,16 +129,23 @@ pub fn width_prior(level: Level, age: Option<f64>, side: CurveSide) -> Option<Wi
             },
         )?)
     } else if (Level::L1..=Level::L5).contains(&level) && !young {
-        prior_from_cell(tables().lookup(
-            Table::PedicleWidths,
-            &Coordinate {
-                key: "outer-width".into(),
-                level: Some(level),
-                curve_side: Some(side),
-                group: Some("upendra-ais".into()),
-                ..Coordinate::default()
-            },
-        )?)
+        let column = |side| {
+            tables().lookup(
+                Table::PedicleWidths,
+                &Coordinate {
+                    key: "outer-width".into(),
+                    level: Some(level),
+                    curve_side: Some(side),
+                    group: Some("upendra-ais".into()),
+                    ..Coordinate::default()
+                },
+            )
+        };
+        if side == CurveSide::Outside {
+            combine_columns(column(CurveSide::Concave)?, column(CurveSide::Convex)?)
+        } else {
+            prior_from_cell(column(side)?)
+        }
     } else {
         None
     }
@@ -335,14 +349,19 @@ pub fn estimate(draws: &[Option<WidthDraw>], side: CurveSide) -> PedicleEstimate
         versions_inner_under_1_mm: inner_floor
             .map_or(0, |t| inner.iter().filter(|&&w| w < t).count() as u32),
         curve_side: side,
-        status: ValueStatus::FromTables,
+        status: if complete {
+            ValueStatus::FromTables
+        } else {
+            ValueStatus::Missing
+        },
     }
 }
 
 /// Curve position for a measured version. Shared endpoints choose the
-/// larger Cobb, with top-to-bottom order breaking ties. Neutral vertebrae
+/// nearer apex, with top-to-bottom order breaking ties. Neutral vertebrae
 /// are the nearer-zero member of a measured twist sign crossing; the
-/// nearest such level outward from the apex supplies the distance.
+/// nearest such level outward from the apex supplies the distance. This
+/// project's fallback is the end vertebra on that side of the apex.
 pub fn position_in_curve(reading: &SpineReading, level: Level, side: BodySide) -> CurvePosition {
     let Some(index) = reading.vertebrae.iter().position(|v| v.level == level) else {
         return CurvePosition::OUTSIDE;
@@ -352,7 +371,10 @@ pub fn position_in_curve(reading: &SpineReading, level: Level, side: BodySide) -
         .iter()
         .filter(|c| c.upper_index <= index && index <= c.lower_index)
         .fold(None, |found: Option<&crate::curves::Curve>, c| {
-            if found.is_none_or(|f| c.cobb_deg > f.cobb_deg) {
+            if found.is_none_or(|f| {
+                level_distance(reading, index, c.apex_index)
+                    < level_distance(reading, index, f.apex_index)
+            }) {
                 Some(c)
             } else {
                 found
@@ -387,7 +409,17 @@ pub fn position_in_curve(reading: &SpineReading, level: Level, side: BodySide) -
             CurveSide::Concave
         },
         apex_distance: level_distance(reading, index, apex),
-        neutral_distance: neutral,
+        neutral_distance: Some(neutral.unwrap_or_else(|| {
+            level_distance(
+                reading,
+                if index <= apex {
+                    curve.upper_index
+                } else {
+                    curve.lower_index
+                },
+                apex,
+            )
+        })),
     }
 }
 

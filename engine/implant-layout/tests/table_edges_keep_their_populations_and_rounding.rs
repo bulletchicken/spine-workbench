@@ -138,8 +138,8 @@ fn fractional_age_edges_choose_the_stated_populations_and_both_sex_columns() {
     assert!(width_prior(Level::T13, None, CurveSide::Convex).is_none());
     assert!(chord(Level::T13, CurveSide::Convex, None).is_none());
     assert!(medial_angle(Level::T13, CurveSide::Convex).is_none());
-    assert!(width_prior(Level::L1, None, CurveSide::Outside).is_none());
-    assert!(chord(Level::L1, CurveSide::Outside, None).is_none());
+    assert!(width_prior(Level::L1, None, CurveSide::Outside).is_some());
+    assert!(chord(Level::L1, CurveSide::Outside, None).is_some());
     // The female 5-8 T10 width is printed-only because its spread is
     // malformed. Both sex columns are required, so the usable male
     // column cannot supply the whole answer (DECISIONS exclusions).

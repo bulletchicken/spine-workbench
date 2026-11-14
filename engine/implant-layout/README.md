@@ -108,8 +108,8 @@ provenance is partly implicit: curve geometry comes from film-derived
 readings, classification applies the cited rules to those readings, and
 selective criteria retain sources through their enclosing/sibling
 fields. The literal requirement for per-number wire provenance remains
-unmet; adding the missing fields belongs to a contract change. The rod
-positional-status gap described below is separate.
+unmet; adding the missing fields belongs to a contract change. Rod
+positions have a separate `geometryStatus` as described below.
 
 `tier` is `front-film-only` exactly when `fit.sideFilm` is null, and
 `two-films` otherwise. A supplied side film that was set aside by the fit
@@ -123,22 +123,16 @@ When `fit.lengths` is `typical-size`, angles still have meaning. The
 required rule is that a comparison against published millimetres or a
 table pedicle width must be unreadable with `no-film-scale`: this covers
 the deviated-vertebra rule, substantially-touched rule, lumbar modifier
-and stable-minus-one's modifier dependency. That requirement is not yet
-implemented: the frozen `CannotTellCode` has no `NoFilmScale` member, so
-the typed outputs cannot express the reason and these guards remain
-blocked. The provisional registration described above must not be read
-as satisfying that requirement. This implementation is incomplete until
-the contract and these dimensional-rule outputs are repaired.
+and stable-minus-one's modifier dependency. These guards check
+`FitLengths` even when the marks have provisional spacing in the drawn
+frame. That registration does not establish a physical film scale.
 
 Comparing two distances on the drawn spine, such as body contact or
 pedicle-centre bracketing, does not need scale. Table screw sizes remain
 available; anchor positions are `typical`. Rod points and lengths also
 describe that typical drawing and must not be displayed as measured
-millimetres. A second unresolved contract requirement is their positional
-provenance: the frozen rod contract exposes angular provenance but has
-no separate positional status field. `rods::geometry_status(&fit)` gives
-that status to Rust callers, but it is not present on the serialized rod.
-`targetKyphosisStatus` must not replace positional provenance.
+millimetres. Each rod carries `geometryStatus`, filled by
+`rods::geometry_status(&fit)`, separately from `targetKyphosisStatus`.
 
 ## Versions and classification
 
@@ -246,12 +240,15 @@ side factors are project inferences. Thoracic ages 12 and above, or
 unspecified, use Gao et al. 2017 controls (60 girls); younger thoracic
 ages use Zheng et al. 2009's covered age bands (120 children). Lumbar
 ages 12 and above use Upendra et al. 2010 (24 patients). Under-12 lumbar
-widths remain missing. Assembly marks absent width bands `missing` and
+widths remain missing. The pedicle estimator marks absent width bands `missing` and
 keeps their look code. Candidate anchors are built lazily for needed
 levels, so an unused distant trajectory cannot prevent a placement.
 Sato et al. 2022's concave factors 0.73 at apex
 plus/minus one and 1.08 near the neutral vertebra come from 57 adolescents
-and 684 pedicles. Inner width subtracts Chiu et al. 2024's physical-side
+and 684 pedicles. When measured twist cannot supply a neutral vertebra,
+this project's fallback uses the curve end on that side of the apex as
+the neutral-zone edge. Overlapping curves use the nearer apex, with
+top-to-bottom curve order breaking ties. Inner width subtracts Chiu et al. 2024's physical-side
 and region-specific medial wall and 0.64 mm lateral wall; the wall
 spreads are not sampled. Cohort body-width references and a population
 adjustment are absent, so neither is invented.
@@ -263,7 +260,12 @@ excluded. Zheng's full younger chord table includes ages 9–11, so no
 nearest-age borrowing is needed there. Zheng's row ordering, divergent
 negative angles and interpretation of its unlabelled ± as SD are project
 readings. Gao's unlabelled ± is likewise read as SD by this project.
-Sato's suspect neutral-width block remains excluded.
+Sato's suspect neutral-width block remains excluded. Outside a curve,
+this project's inference combines Upendra's concave and convex columns
+with equal-weight means and the larger reported spread, retaining both
+sources. This applies to lumbar widths and to chords and medial angles.
+An absent curve-side label is not an absent age table; `no-table-for-this-age`
+is reserved for genuinely uncovered size populations.
 
 The straight-forward direction lies in the superior endplate's plane,
 turned medially by the table angle. The table chord and fitted generic
@@ -290,7 +292,9 @@ share is 0.8; the younger 0.65 is this project's midpoint of Zheng's 0.5–0.8
 range. The 4 mm anterior margin comes from Sarwahi et al. 2017, whose
 aorta-contact experiment is a warning basis rather than a patient
 boundary. Selected lengths are 25–45 mm in 2.5 mm steps, rounded down;
-no qualifying length remains null. Usual regional lengths from Balikci
+when none qualifies, the anchor retains the shortest catalogue length
+(25 mm) and `shorter-than-tables`. Missing chord tables still leave the
+length null. Usual regional lengths from Balikci
 and Kuraishi are displayed for comparison and never clamp the result.
 
 The first pattern occupies all qualifying pedicles. Missing qualifying
@@ -298,8 +302,9 @@ diameter, length or trajectory becomes a hook at the upper end and an
 empty pedicle elsewhere [own inference]. `key-levels` prioritises ends,
 apex and neighbours, then alternates sides subject to the 1.4-per-level
 cap from Larson et al. 2024's MIMO trial (211 patients). Priority on a
-short span is a project rule. Assembly applies the odd slot and
-alternating sides in a canonical right-convex frame, swapping sides for
+short span is a project rule. Bilateral key pairs are never split to
+fill an odd density-cap slot. Assembly applies alternating sides in a
+canonical right-convex frame, swapping sides for
 a left-convex major curve so the pattern reflects with that curve.
 `hooks-at-top` substitutes upper hooks;
 Zhao et al. 2024's association and Cammarata et al. 2014's numerical study
@@ -371,9 +376,8 @@ missing observations. Bending acquisition posture is not in the input;
 supine bends. Assembly also applies `may-be-too-narrow` when either
 secondary diameter rule yields no grid size, even if the primary rule
 does [own inference]. Naming scenarios apply the same extra trigger.
-Missing values and inapplicable rules stay distinct. The required
-`no-film-scale` code remains blocked by the contract gap described above;
-it is not currently emitted.
+Missing values and inapplicable rules stay distinct. Dimensional rules
+emit `no-film-scale` for a typical-size fit.
 
 The limits that follow apply to interpreting these placements and to
 passing them to the load bench.

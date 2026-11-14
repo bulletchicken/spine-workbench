@@ -237,3 +237,36 @@ fn film(kind: FilmKind, marks: Vec<(Level, VertebraMarks)>) -> LayoutFilm {
         },
     }
 }
+
+#[test]
+fn typical_lengths_refuse_each_comparison_with_published_millimetres() {
+    use shapes::implant_layout::{CannotTellCode, LumbarModifier};
+    let mut fixture = Fixture::new();
+    fixture.input.fit.lengths = FitLengths::TypicalSize;
+    // A readable sacrum and a settled modifier isolate the physical-scale
+    // requirement from missing marks or classification uncertainty.
+    fixture.reading.classification.lumbar_modifier = Ok(LumbarModifier::BetweenPedicles);
+    let ctx = fixture.context();
+    for rule in [
+        super::deviated_vertebra::evaluate,
+        super::substantially_touched::evaluate,
+        super::stable_minus_one::evaluate,
+    ] {
+        assert_eq!(rule(&ctx).unwrap().level, Err(CannotTellCode::NoFilmScale));
+    }
+    let mut reading = fixture.reading.clone();
+    super::ensemble::classify_lumbar_against_table_widths(
+        &mut reading,
+        &fixture.input.fit,
+        &fixture.outlines,
+    )
+    .unwrap();
+    assert_eq!(
+        reading.classification.lumbar_modifier,
+        Err(CannotTellCode::NoFilmScale)
+    );
+    // Contact with the drawn body and bracketing by its centres compare
+    // distances in the same drawing, so they retain a reading.
+    assert!(super::last_touched::landmark(&ctx).is_ok());
+    assert!(super::stable_minus_one::stable(&ctx).is_ok());
+}

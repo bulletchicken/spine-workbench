@@ -159,19 +159,12 @@ fn layout(
     let mut anchors = Vec::new();
     for &level in &levels {
         if let std::collections::btree_map::Entry::Vacant(entry) = candidates.entry(level) {
-            let mut pair = screws::anchors(
+            let pair = screws::anchors(
                 input,
                 &readings.versions.versions,
                 &readings.measured,
                 &[level],
             )?;
-            for anchor in &mut pair {
-                if anchor.pedicle.outer_width_mm.is_none()
-                    && anchor.pedicle.inner_width_mm.is_none()
-                {
-                    anchor.pedicle.status = shapes::implant_layout::ValueStatus::Missing;
-                }
-            }
             entry.insert(pair);
         }
         anchors.extend(candidates[&level].iter().cloned());

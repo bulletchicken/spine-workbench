@@ -43,9 +43,11 @@ pub fn stable(ctx: &RuleContext<'_>) -> Reading<usize> {
 }
 
 /// The modifier has already compared the centre line with this version's
-/// finite table-derived pedicle outlines. The later length-scale gate
-/// for this dependency belongs at this single entry point.
+/// finite table-derived pedicle outlines, requiring a physical scale.
 fn centre_line_against_lumbar_pedicle_outlines(ctx: &RuleContext<'_>) -> Reading<LumbarModifier> {
+    if ctx.fit.lengths == shapes::spine_fit::FitLengths::TypicalSize {
+        return Err(CannotTellCode::NoFilmScale);
+    }
     ctx.reading.classification.lumbar_modifier
 }
 

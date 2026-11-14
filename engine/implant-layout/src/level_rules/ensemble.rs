@@ -316,6 +316,10 @@ pub(crate) fn classify_lumbar_against_table_widths(
     outlines: &[PedicleOutlines],
 ) -> Result<(), LayoutError> {
     curves::classification::classify_with_pedicle_outlines(reading, fit, outlines)?;
+    if fit.lengths == shapes::spine_fit::FitLengths::TypicalSize {
+        reading.classification.lumbar_modifier = Err(CannotTellCode::NoFilmScale);
+        return Ok(());
+    }
     if reading.csvl_y_mm.is_ok()
         && let Ok(apex) = curves::lumbar::apex(reading, fit)
         && !outlines
