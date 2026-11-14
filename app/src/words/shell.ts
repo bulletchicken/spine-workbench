@@ -35,6 +35,12 @@ export const SHELL_WORDS = {
   nothingToUndo: 'Nothing to undo',
   nothingToRedo: 'Nothing to redo',
   saveCase: 'Save case',
+  caseSaved: 'Case saved.',
+  caseDownloaded: 'Case sent to your downloads.',
+  caseWriteFailed: 'The case could not be written there.',
+  caseWriteFailedHelp: 'Choose another place and try again.',
+  caseChangedBeforeSave: 'The case changed. Save it again.',
+  openedCase: 'Opened a saved case.',
 
   // The status line.
   /** Where the pointer is on a film, in millimetres, or in pixels while the film has no size. */

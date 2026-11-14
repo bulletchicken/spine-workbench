@@ -1,3 +1,6 @@
+import { useState } from 'react';
+import { hasCaseToSave, saveCurrentCase } from '@/bench/save-case';
+import { useEngine } from '@/engine-room/use-engine';
 import { useStore } from 'zustand';
 import { spineBuild } from '@/view-state/spine-build';
 import { useCase } from '@/case-state/case-store';
@@ -9,8 +12,10 @@ import { useFilmIntakeState } from '@/view-state/film-intake';
 import { railSteps } from './rail-steps';
 import type { TopBarProps } from './TopBar';
 
-/** The bar's five props, read from the current visit. */
+/** The bar's actions and state, read from the current visit. */
 export function useTopBar(steps: readonly StepContract[]): TopBarProps {
+  const engine = useEngine();
+  const [saving, setSaving] = useState(false);
   useStore(spineBuild);
   const { slug } = useCurrentStep();
   const c = useCase((store) => store.case);
@@ -20,6 +25,12 @@ export function useTopBar(steps: readonly StepContract[]): TopBarProps {
   return {
     rail: railSteps(steps, c, slug, intake.reading.length > 0 || intake.making),
     onGoToStep: (to) => { currentStep.getState().go(to); },
+    ...(hasCaseToSave(c) ? { onSave: () => {
+      if (saving) return;
+      setSaving(true);
+      void saveCurrentCase(engine).finally(() => { setSaving(false); });
+    } } : {}),
+    saving,
     requests,
     promiseOpen,
     onPromiseOpenChange: (open) => { popoverOpen.getState().setOpen(open); },

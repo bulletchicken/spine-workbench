@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { saidNow } from '@/building-blocks/toast/say';
 import { caseStore } from '@/case-state/case-store';
 import { filmPixels } from '@/case-state/film-pixels';
 import { EngineFailure } from '@/engine-room/engine-client';
@@ -60,18 +61,30 @@ describe('taking films in', () => {
     expect(filmPixels.getState().films.front).toBe(pixels);
     expect(filmIntake.getState().notice).toEqual({ kind: 'refused', count: 1, code: 'film-unknown-format' });
   });
-  it('counts an empty file and a saved case as refusals while taking the other films', async () => {
-    await takeIn(engine, [new Blob([]), new Blob([new Uint8Array([80, 75, 3, 4])]), blob('side')], 'side');
-    expect(caseStore.getState().case.films.map((film) => film.kind)).toEqual(['side']);
-    expect(filmIntake.getState().notice).toEqual({ kind: 'refused', count: 2, code: 'film-truncated' });
+  it('refuses an invalid case without changing the current films or pixels', async () => {
+    await takeIn(engine, [blob('side')], 'side');
+    const c = caseStore.getState().case;
+    const pixels = filmPixels.getState().films;
     await takeIn(engine, [new Blob([new Uint8Array([80, 75, 3, 4])])], null);
-    expect(filmIntake.getState().notice).toEqual({ kind: 'refused', count: 1, code: 'a-saved-case' });
+    expect(caseStore.getState().case).toBe(c);
+    expect(filmPixels.getState().films).toBe(pixels);
+    expect(filmIntake.getState().notice).toEqual({ kind: 'refused', count: 1, code: 'case-not-a-zip' });
   });
-  it('takes the picker results through the same assignment and refusal path, and ignores cancellation', async () => {
-    vi.mocked(pickFilms).mockResolvedValueOnce([{ kind: 'film', blob: blob('side') }, { kind: 'case', blob: new Blob(['zip']) }]);
+  it('opens the first case in a mixed drop and reports every other file as left out', async () => {
+    await takeIn(engine, [blob('front')], 'front');
+    const saved = await engine.saveCase(caseStore.getState().case);
+    const opened = vi.spyOn(engine, 'openCase');
+    await takeIn(engine, [new Blob([new Uint8Array(saved)]), blob('side'), new Blob([new Uint8Array(saved)]), new Blob([])], null);
+    expect(opened).toHaveBeenCalledTimes(1);
+    expect(caseStore.getState().case.films.map((film) => film.kind)).toEqual(['front']);
+    expect(filmIntake.getState().notice).toEqual({ kind: 'left-out', count: 3 });
+    expect(saidNow()?.line).toBe('Opened a saved case. Three files were left out.');
+  });
+  it('takes picker results through the same assignment path and ignores cancellation', async () => {
+    vi.mocked(pickFilms).mockResolvedValueOnce([{ kind: 'film', blob: blob('side') }]);
     await chooseFilms(engine, 'side');
     expect(caseStore.getState().case.films[0]?.kind).toBe('side');
-    expect(filmIntake.getState().notice).toEqual({ kind: 'refused', count: 1, code: 'a-saved-case' });
+    expect(filmIntake.getState().notice).toBeNull();
     const state = filmIntake.getState();
     vi.mocked(pickFilms).mockResolvedValueOnce([]);
     await chooseFilms(engine);

@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react';
+import { openSavedCase } from './open-saved-case';
 import { clearSpineBuild } from './three/build-spine';
 import { filmOrigins } from '@/view-state/film-origins';
 import { fitSources } from '@/view-state/fit-sources';
+import { say } from '@/building-blocks/toast/say';
+import { FILMS_WORDS } from '@/words/films';
+import { SHELL_WORDS } from '@/words/shell';
+import { faultWords } from '@/words/faults';
 import { caseStore } from '@/case-state/case-store';
 import { filmPixels } from '@/case-state/film-pixels';
 import { FILM_KINDS } from '@/case-state/selectors';
@@ -38,10 +43,30 @@ function backToFilms(): IntakeNotice | null {
 /** File judging is shared by a drop and the picker; neither keeps file names. */
 async function takeTold(engine: EngineClient, told: readonly DroppedFile[], onPlace: FilmKind | null, from: FilmIntakeState['from'], sample: number | null = null): Promise<void> {
   if (told.length === 0) return;
+  const saved = told.find((file) => file.kind === 'case');
+  if (saved?.kind === 'case') {
+    const leftOut = told.length - 1;
+    try {
+      await openSavedCase(engine, saved.blob);
+      if (leftOut > 0) {
+        filmIntake.getState().tell({ kind: 'left-out', count: leftOut });
+        say(`${SHELL_WORDS.openedCase} ${FILMS_WORDS.leftOut(leftOut)}`);
+      }
+    }
+    catch (error) {
+      const code = failureCode(error);
+      if (code !== 'pass-cancelled') {
+        if (currentStep.getState().slug === 'films') filmIntake.getState().tell({ kind: 'refused', count: 1, code });
+        // Keep a rejected file from changing the current moment as well as the case.
+        say(leftOut > 0 ? `${FILMS_WORDS.refusedHelp(faultWords(code).title)} ${FILMS_WORDS.leftOut(leftOut)}` : faultWords(code).title, { tone: 'note' });
+      }
+    }
+    return;
+  }
   const stopped = backToFilms();
   filmIntake.getState().tell(null);
   const blobs = told.flatMap((file) => file.kind === 'film' ? [file.blob] : []);
-  const refusals: (ErrorCode | 'a-saved-case')[] = told.flatMap((file) => file.kind === 'refused' ? [file.code] : file.kind === 'case' ? ['a-saved-case' as const] : []);
+  const refusals: ErrorCode[] = told.flatMap((file) => file.kind === 'refused' ? [file.code] : []);
   const wasFrom = filmIntake.getState().from;
   if (blobs.length > 0 && (from !== 'yours' || wasFrom === 'sample-film' || wasFrom === 'made-up-case')) clearFilms(engine);
   const filled = caseStore.getState().case.films.map((film) => film.kind);

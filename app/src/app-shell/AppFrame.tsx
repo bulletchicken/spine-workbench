@@ -1,3 +1,5 @@
+import { Check, Info } from 'lucide-react';
+import { Toasts } from '@/building-blocks/toast/Toasts';
 import { memo } from 'react';
 import { useStore } from 'zustand';
 import { motionMode } from '@/choreography/reduced-motion';
@@ -91,6 +93,7 @@ export function AppFrame({ steps = FOUND_STEPS, parts = FOUND_PARTS }: AppFrameP
           <LiveDock engine={engine} />
         </LitStandsDown>
         <PreviewNotice engine={engine} />
+        <Toasts marks={{ done: <Check strokeWidth="var(--icon-stroke)" />, note: <Info strokeWidth="var(--icon-stroke)" /> }} />
         </SpineHost>
       </div>
     </div>

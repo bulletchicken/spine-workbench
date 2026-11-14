@@ -1,3 +1,4 @@
+import './PromisePopover.css';
 import { ON_THIS_DEVICE_WORDS as WORDS } from '@/words/on-this-device';
 import { SHELL_WORDS } from '@/words/shell';
 import type { RequestsSent } from './requests-sent';
@@ -8,6 +9,7 @@ export function PromisePopover({ requests }: { requests: RequestsSent }) {
     <>
       <div>
         <p className="note-lead">{WORDS.lead}</p>
+        <p className="note-saved">{WORDS.savedCase}</p>
         <p className="note-count">{SHELL_WORDS.requestsSent} <span className="num">{requests.sent}</span></p>
         {requests.blocked > 0 && <p className="note-blocked">{WORDS.blocked(requests.blocked)}</p>}
       </div>
