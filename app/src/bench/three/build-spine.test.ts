@@ -56,3 +56,12 @@ it('discards a cancelled late answer and invalidates the cache on a new film ope
   filmPixels.getState().opened('front', { pixels: new Uint16Array(), thumbnail: new Uint8Array() });
   expect(hasCurrentFit(caseStore.getState().case)).toBe(false);
 });
+
+it('never calls the fit with Side alone', async () => {
+  caseStore.getState().apply([{ kind: 'remove-film', film: 'front' }]);
+  const fitSpine = vi.fn();
+  await buildSpine({ fitSpine });
+  expect(fitSpine).not.toHaveBeenCalled();
+  expect(currentStep.getState().slug).toBe('find');
+  expect(spineBuild.getState().phase).toBe('idle');
+});

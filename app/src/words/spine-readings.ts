@@ -12,7 +12,7 @@ export const REGION_NAMES: Record<CurveRegion, string> = {
 };
 export const REASON_WORDS: Record<NotMeasured, string | null> = {
   'no-side-film': 'Side curves need a side film.',
-  'not-on-side-film': 'These vertebrae were not marked on the side film.',
+  'not-on-side-film': 'The side film does not show these vertebrae.',
   'twist-not-measured': 'Twist is not measured from these films.',
   'no-sacrum': 'The lower curve is read to L5; the sacrum is not marked.',
   'no-curve': 'No side-to-side curve was found.', 'no-bending-films': null, 'not-fitted': null,
