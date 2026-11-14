@@ -1,3 +1,4 @@
+import { SIDE_WORDS as S } from '@/words/side';
 import { shownAt } from '@/auto-pass/find-replay';
 import type { FindReplayClock } from '@/auto-pass/find-replay-clock';
 import type { DockAction, DockSpec } from '@/guide/dock-spec';
@@ -8,6 +9,7 @@ import { faultWords } from '@/words/faults';
 import { FIND_WORDS as W } from '@/words/find';
 
 export interface FindDockState {
+  trainedSide?: boolean;
   find: FindState;
   films: readonly FilmMarks[];
   inPlace: number;
@@ -19,12 +21,15 @@ export interface FindDockState {
 export interface FindActions { review: () => void; looksRight: () => void; backToFilms: () => void; tryAgain: () => void; frontAlone: () => void }
 
 export function findDock(state: FindDockState, act: FindActions): DockSpec {
-  const { find, films, replay } = state;
+  const { find, films, replay, trainedSide = false } = state;
   const count = films.find((film) => film.film === 'front')?.vertebrae.filter((v) => compareLevels(v.level, 'T1') >= 0).length ?? 0;
-  const needed = lookLevels(films).filter((entry) => !find.looked.includes(entry.level));
+  const side = films.find((f) => f.film === 'side');
+  const sideOnly = count === 0 && (side?.vertebrae.length ?? 0) > 0;
+  const searchedSideOnly = find.kinds.length === 1 && find.kinds[0] === 'side';
+  const needed = lookLevels(films.filter((f) => !trainedSide || f.film !== 'side')).filter((entry) => !find.looked.includes(entry.level));
   const level = find.review === null ? undefined : find.reviewing[find.review];
   if (level !== undefined) {
-    const entry = lookLevels(films).find((entry) => entry.level === level);
+    const entry = lookLevels(films.filter((f) => !trainedSide || f.film !== 'side')).find((entry) => entry.level === level);
     const both = entry?.on.front !== undefined && entry.on.side !== undefined;
     return {
       scene: 'review', sentence: W.needsALook(level),
@@ -39,14 +44,14 @@ export function findDock(state: FindDockState, act: FindActions): DockSpec {
     const filmFault = noSpine || ['pass-film-too-small', 'pass-flat-film', 'pass-too-little-usable', 'pass-strip-too-short'].includes(code);
     return {
       scene: 'failed',
-      sentence: filmFault ? noSpine ? alone ? W.noSpineFront : W.noSpineSome : alone ? W.notSearchedFront : W.notSearchedSome : W.stopped,
+      sentence: filmFault ? noSpine ? alone ? searchedSideOnly ? S.noSpine : W.noSpineFront : W.noSpineSome : alone ? searchedSideOnly ? S.notSearched : W.notSearchedFront : W.notSearchedSome : W.stopped,
       helper: { kind: 'words', words: [noSpine ? alone ? W.noSpineFrontHelp : W.noSpineSomeHelp : W.faultHelp(faultWords(code).title)] },
       ...(filmFault && alone ? {} : { quiet: { label: W.backToFilms, press: act.backToFilms } }),
       primary: filmFault ? alone ? { label: W.backToFilms, press: act.backToFilms } : { label: W.frontAlone, press: act.frontAlone } : { label: W.tryAgain, press: act.tryAgain },
     };
   }
   // The registered destination controls both the waiting and the finished dock.
-  const next = state.laterStep === null ? {} : { primary: { ...state.laterStep, label: W.buildTheSpine, disabled: find.phase !== 'found' } };
+  const next = state.laterStep === null ? {} : { primary: { ...state.laterStep, label: W.buildTheSpine, disabled: find.phase !== 'found' || count === 0 } };
   if (find.phase !== 'found') {
     const total = replay.plan?.counted.length ?? 0;
     const shown = replay.plan === null ? 0 : shownAt(replay.plan, replay.times, replay.time).count;
@@ -54,15 +59,15 @@ export function findDock(state: FindDockState, act: FindActions): DockSpec {
       scene: 'finding', sentence: W.finding,
       helper: find.phase === 'replaying'
         ? { kind: 'count', count: W.count(shown, total), spoken: W.count(shown, total), share: total === 0 ? 0 : shown / total }
-        : { kind: 'meter', share: find.share, words: state.slowSearch && find.searched > 1 ? `${W.searching(find.searched)} ${W.aboutFifteenSeconds}` : W.searching(find.searched) },
+        : { kind: 'meter', share: find.share, words: state.slowSearch && find.searched > 1 ? `${W.searching(find.searched)} ${W.aboutFifteenSeconds}` : searchedSideOnly ? S.searching : W.searching(find.searched) },
       ...next,
     };
   }
   const estimated = films.find((film) => film.film === 'front')?.naming.flags.includes('estimated') ?? false;
   const words = estimated ? W.estimated : needed.length > 0 ? W.marked(needed.map((entry) => entry.level), state.inPlace) : W.allLookRight;
   return {
-    scene: 'found', sentence: `${W.found(count)}${needed.length > 0 ? ` ${W.needALook(needed.length)}` : ''}`,
-    helper: needed.length > 0 ? { kind: 'look', words } : { kind: 'words', words: [words] },
+    scene: 'found', sentence: sideOnly ? S.found : `${W.found(count)}${needed.length > 0 ? ` ${W.needALook(needed.length)}` : ''}`,
+    helper: sideOnly ? { kind: 'words', words: [S.noFront] } : !trainedSide ? needed.length > 0 ? { kind: 'look', words } : { kind: 'words', words: [words] } : { kind: 'words', words: [`${words} ${S.found}`] },
     ...(needed.length > 0 ? { quiet: { label: W.review(needed.length), press: act.review } } : {}),
     ...next,
   };

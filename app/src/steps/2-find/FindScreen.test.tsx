@@ -14,6 +14,8 @@ import { EngineProvider } from '@/engine-room/use-engine';
 import { filmRecordFrom } from '@/open-and-save/film-record';
 import { currentStep } from '@/view-state/current-step';
 import { dockNow } from '@/view-state/dock-now';
+import { filmOrigins } from '@/view-state/film-origins';
+import { filmPixels } from '@/case-state/film-pixels';
 import { filmIntake } from '@/view-state/film-intake';
 import { findState } from '@/view-state/find-state';
 import { passRequest } from '@/view-state/pass-request';
@@ -65,6 +67,7 @@ describe('Find through the frame', () => {
   it('retries the same Front-only search after a multi-film failure, and goes back with the films', async () => {
     caseStore.getState().apply([{ kind: 'open-case', case: { ...emptyCase(), films: Object.values(story.films).map((film) => filmRecordFrom(film.facts)) } }]);
     filmIntake.getState().source('yours');
+    for (const film of caseStore.getState().case.films) filmOrigins.getState().opened(film.kind, 'made-up-case', filmPixels.getState().openings[film.kind]);
     const failure = (code: 'pass-no-spine-found' | 'engine-crashed') => new EngineFailure({ code, message: '', detail: null });
     const called = vi.spyOn(engine, 'runAutoPass').mockRejectedValueOnce(failure('pass-no-spine-found')).mockRejectedValue(failure('engine-crashed'));
     passRequest.getState().request(); currentStep.getState().go('find'); await mount(); await tick(0);
@@ -176,7 +179,7 @@ describe('Find through the frame', () => {
     expect(stepButton('Find').disabled).toBe(true);
     expect(currentStep.getState().slug).toBe('films');
   });
-  it('gives way to Films when the Front film is replaced under a finished search', async () => {
+  it('keeps the found Side when the Front film is replaced under a finished search', async () => {
     const marks = structuredClone(story.pass.marks);
     const films = Object.values(story.films).map((film) => filmRecordFrom(film.facts));
     caseStore.getState().apply([{ kind: 'open-case', case: { ...emptyCase(), films, marks } }]);
@@ -186,8 +189,9 @@ describe('Find through the frame', () => {
     act(() => { caseStore.getState().apply([{ kind: 'set-film', film: front }]); });
     await tick(0);
     expect(caseStore.getState().case.marks.find((each) => each.film === 'front')).toBeUndefined();
-    expect(currentStep.getState().slug).toBe('films');
-    expect(findState.getState().phase).toBe('idle');
-    expect(dockNow.getState().spec?.sentence).not.toMatch(/vertebrae found/);
+    expect(currentStep.getState().slug).toBe('find');
+    expect(findState.getState().phase).toBe('found');
+    expect(dockNow.getState().spec?.primary?.disabled).toBe(true);
+    expect(dockNow.getState().spec?.helper).toMatchObject({ words: ['A 3D spine needs a front film.'] });
   });
 });

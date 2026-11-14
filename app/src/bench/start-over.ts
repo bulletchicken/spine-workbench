@@ -1,4 +1,5 @@
 import { clearSpineBuild } from './three/build-spine';
+import { filmOrigins } from '@/view-state/film-origins';
 import { fitSources } from '@/view-state/fit-sources';
 import { caseStore } from '@/case-state/case-store';
 import { emptyCase } from '@/case-state/empty-case';
@@ -27,6 +28,7 @@ export function queueFilmChange(change: () => Promise<void>): Promise<void> {
 export function clearFilms(engine: Pick<EngineClient, 'retireFilm'>): void {
   clearSpineBuild();
   fitSources.getState().clear();
+  filmOrigins.getState().clear();
   for (const kind of FILM_KINDS) {
     engine.retireFilm(kind);
     filmPixels.getState().retired(kind);

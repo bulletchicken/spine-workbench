@@ -8,9 +8,11 @@ import { durationOnPage, numberOnPage } from '@/choreography/timing';
 import { useSystemReducedMotion } from '@/choreography/use-system-reduced-motion';
 import { fromFilmMarks } from '@/marks/from-film-marks';
 import type { ReplaySignal } from '@/marks/TravellingLight';
+import { sideReviewKey } from '@/review/side-review';
 import { needsALook } from '@/review/needs-a-look';
 import type { FilmKind, Level, Px } from '@/shapes';
 import { useCurrentStep } from '@/view-state/current-step';
+import { fitSources } from '@/view-state/fit-sources';
 import { useFindState } from '@/view-state/find-state';
 import { usePreferences } from '@/view-state/preferences';
 import { selection, useSelection } from '@/view-state/selection';
@@ -26,8 +28,10 @@ export function useFindOnStage(): {
   replay: ReplaySignal | null;
   onPoint?: (film: FilmKind, key: string | null) => void;
 } {
+  const sideRevision = useCase((s) => s.changedAt.side);
   const marks = useCase((state) => state.case.marks);
   const find = useFindState();
+  const separateSide = useStore(fitSources, (s) => s.films.side?.finder === 'trained');
   const { slug } = useCurrentStep();
   const { hot } = useSelection();
   const system = useSystemReducedMotion();
@@ -54,17 +58,18 @@ export function useFindOnStage(): {
     const entries = marks.map((film): [FilmKind, FindFilm] => {
       const names = film.film === 'front' || film.film === 'side';
       const outlines = fromFilmMarks(film, (v) => {
-        const look = needsALook(v) && !find.looked.includes(v.level) ? 'look' : 'found';
+        const approved = film.film === 'side' && separateSide ? find.sideLooked === sideReviewKey(film, sideRevision) : find.looked.includes(v.level);
+        const look = needsALook(v) && !approved ? 'look' : 'found';
         return { look, spoken: MARK_WORDS.outline(v.level, look === 'look') };
       }, (v) => find.phase === 'found' || (find.phase === 'replaying' && shown.has(`${film.film}:${String(v.id)}`)));
-      const focus = outlines.find((m) => m.name === level);
+      const focus = film.film === 'side' && separateSide ? undefined : outlines.find((m) => m.name === level);
       const points = outlines.flatMap((m) => m.quad);
       const centre: Px | null = focus === undefined ? null : [focus.quad.reduce((sum, p) => sum + p[0], 0) / 4, focus.quad.reduce((sum, p) => sum + p[1], 0) / 4];
       const framing = slug === 'find' && !fadingToSpine && (find.phase === 'found' || find.phase === 'replaying') && points.length > 0;
       return [film.film, {
         outlines, names,
         on: find.phase === 'found' && !reviewing ? outlines.find((m) => m.name === hotLevel)?.key ?? null : null,
-        only: reviewing ? focus?.key ?? null : null,
+        only: reviewing && (!separateSide || film.film !== 'side') ? focus?.key ?? null : null,
         frame: !framing ? { kind: 'whole' } : reviewing && names && centre !== null ? { kind: 'vertebra', centre, names, over: measures.review } : {
           kind: 'spine', names, most: names ? measures.large : measures.small,
           box: { left: Math.min(...points.map((p) => p[0])), right: Math.max(...points.map((p) => p[0])), top: Math.min(...points.map((p) => p[1])), bottom: Math.max(...points.map((p) => p[1])) },
@@ -74,7 +79,7 @@ export function useFindOnStage(): {
     });
     return Object.fromEntries(entries);
     // An arrival can be on a partner film only, so this counts all outlines, not just Front's.
-  }, [marks, find.looked, find.phase, slug, level, reviewing, hotLevel, measures, reduced, plan, revealed, fadingToSpine]);
+  }, [marks, sideRevision, separateSide, find.looked, find.sideLooked, find.phase, slug, level, reviewing, hotLevel, measures, reduced, plan, revealed, fadingToSpine]);
   return {
     films, marked: allShown || find.phase === 'found', reviewing,
     replay: slug === 'find' && find.phase === 'replaying' && !reduced ? findReplay.signal : null,
