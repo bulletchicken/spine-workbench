@@ -22,10 +22,10 @@
 //    last step is still caught; one on a longer timer may not be. This
 //    stays the last step however long the journey grows.
 
-import { expect, test, type Locator, type Page } from '@playwright/test';
+import { expect, type Locator, type Page } from '@playwright/test';
 import { servedPaths } from '../test-rig/built-app';
 import { holdStill } from '../test-rig/hold-still';
-import { PolicyRecorder } from '../test-rig/policy-violations';
+import { PolicyRecorder, test } from '../test-rig/policy-violations';
 import { RequestLedger } from '../test-rig/request-ledger';
 
 const FILMS = ['Front', 'Side', 'Bending left', 'Bending right'] as const;

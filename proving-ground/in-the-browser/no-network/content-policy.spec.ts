@@ -11,12 +11,12 @@
 // evaluates directly is exempt from the page's policy, but a callback it
 // schedules runs as the page's own code.
 
-import { expect, test, type Page, type Worker } from '@playwright/test';
+import { expect, type Page, type Worker } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { CONTENT_POLICY, CONTENT_POLICY_HEADER } from '../../../app/build-plugins/content-policy';
 import { builtFiles, builtText } from '../test-rig/built-app';
-import { PolicyRecorder } from '../test-rig/policy-violations';
+import { PolicyRecorder, test } from '../test-rig/policy-violations';
 import { RequestLedger } from '../test-rig/request-ledger';
 
 const OUTSIDE = 'https://example.org/';

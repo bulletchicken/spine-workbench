@@ -1,8 +1,8 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, type Page } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 import { servedPaths } from '../test-rig/built-app';
 import { holdStill } from '../test-rig/hold-still';
-import { PolicyRecorder } from '../test-rig/policy-violations';
+import { PolicyRecorder, test } from '../test-rig/policy-violations';
 import { RequestLedger } from '../test-rig/request-ledger';
 
 const FILMS = ['Front', 'Side', 'Bending left', 'Bending right'] as const;
