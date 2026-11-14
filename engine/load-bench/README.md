@@ -248,7 +248,7 @@ them.
 |---|---|---|
 | `joint-springs.json` | T1/2–L4/5 translation AP/ML/CC 1392/294/341 N/mm; rotation about AP/ML/CC 448/644/738 N·mm/degree. L5/S1 700/190/190 and 222/410/410. | Tachi 2021, n=47; borrowed adult lumbar stiffness, uniformly applied in that planner [peer-reviewed, full text]. |
 | same | Release: axial rotation −17%, flexion −15%, coronal −3.8%, compression −14%. | Wang 2017; cited cadaver calibration targets, not measurements from its ten patients [peer-reviewed, full text]. |
-| same | Preload factor 1.71–2.11. Overall stiffness ×0.65–5.6 (assumed solver calibration). Thoracic lateral and axial rib factors. Adult disc and thoracic comparisons. | Gardner-Morse and Stokes 2004 [peer-reviewed, abstract]; Petit 2004 [peer-reviewed, abstract]; Watkins 2005 [peer-reviewed, abstract], Mannen 2018, Liebsch 2020, Stokes and Gardner-Morse 2016 and Wilke 2017 [peer-reviewed, full text]. The scale is calibrated against Salmingo 2013 head forces; rib ranges are own priors. Flexion bounds are derived explicitly from Mannen's with/without-rib values 2.29/2.12 and 2.97/1.39; the literal rounded range is not a published table cell. |
+| same | Preload factor 1.71–2.11. Overall stiffness ×0.72–1.66 (assumed solver calibration). Thoracic lateral and axial rib factors. Adult disc and thoracic comparisons. | Gardner-Morse and Stokes 2004 [peer-reviewed, abstract]; Petit 2004 [peer-reviewed, abstract]; Watkins 2005 [peer-reviewed, abstract], Mannen 2018, Liebsch 2020, Stokes and Gardner-Morse 2016 and Wilke 2017 [peer-reviewed, full text]. The scale is calibrated against Salmingo 2013 head forces; rib ranges are own priors. Flexion bounds are derived explicitly from Mannen's with/without-rib values 2.29/2.12 and 2.97/1.39; the literal rounded range is not a published table cell. |
 | `rod-materials.json` | Titanium E=114 GPa, yield 896–1034 and ultimate 965–1103 MPa; CoCr E=240, yield 500–1500, ultimate 900–1540; steel E=193, yield 170–310, ultimate 540–1000. | Prasad 2017 [peer-reviewed, full text]. Titanium strengths use body text because its Table 1 pair contradicts itself. One quantile samples yield and ultimate together, keeping yield below ultimate. Steel condition is not stated. |
 | same | Alternative planner/coupon material sets, textbook ranges and computed section comparisons. | Tachi 2021; Little 2013; Jeong 2025; Song 2021; Ohrt-Nissen 2018; Abe 2015 and other source keys retained in that table [peer-reviewed; access in bibliography]. They are distinct sets, not mixed material properties. Section arithmetic is own inference. |
 | `anchor-strength.json` | T1–T8 screw 481–611 N; T9–T12 screw 807 N; hook 321 N; lumbar screw 1056.4 N. | Lehman 2003, 30 paired adult thoracic vertebrae; Liljenqvist 2001, 9 adult spines/90 tests; Soshi 1991, lumbar cadavers [peer-reviewed, abstracts]. T1–T8 assignment and borrowing the hook region are own choices. |
@@ -259,10 +259,44 @@ them.
 | `fatigue.json` | Ti/CoCr construct run-outs 250/290 N, 5.5 mm rods, 5 million cycles. Historical Goodman-equivalent references 169/191 MPa; contour factor 0.6–0.8. Coupon comparisons retained. | Vieweg 2023 [peer-reviewed, full text]; Slivka 2013 [peer-reviewed, abstract]. The 40 mm fixture arm/equal sharing conversion and extrapolation of contour loss to CoCr and other diameters are own inference. Runtime ultimate strengths are sampled from Prasad, not the historical calibration's 900/1200 MPa. Steel has no construct-fatigue reference. |
 | `sources.json` | Publication identifiers, sample and population qualifications, source access and known omissions. | Bibliographic metadata for the papers above and the retained comparison rows. The project-assumptions key is own inference, not a paper. |
 
-The assumed 0.65–5.6 stiffness prior calibrates this solver with 5.5 mm
-cobalt-chrome rods and no overbend against published peak head forces of
-192–439 N (Salmingo 2013, n=6, PMID 23273729; author manuscript read in full).
-It is not a measurement of the child.
+The assumed 0.72–1.66 log-uniform stiffness prior calibrates this solver,
+not the child. The six surgical-size made-up reference spines are
+`right-thoracic-40`, `double-major-55-to-45` and `lumbar-left-30`, each at
+seeds 1 and 2. Use each first proposed placement, with 6 mm titanium-alloy
+rods (the sourced choice, E=114 GPa), no overbend, stiffness scale 1, the
+unchanged fit and the existing middle draw for other correction unknowns.
+Release follows that placement; preload and daily draws are unused at locking.
+The largest head forces after locking and rigid release, before springback,
+are respectively 317.363815, 194.374529, 543.417206, 320.981726,
+160.260443 and 200.155813 N.
+
+Their geometric mean is 264.850522 N. Centre the scale at
+`c = sqrt(192 × 439) / geometric_mean(reference forces) = 1.096180421361`.
+Use the published between-patient factor `439/192` for the width:
+`lower = c / sqrt(439/192) = 0.724937215262` and
+`upper = c × sqrt(439/192) = 1.657538736979`. Store these rounded to the
+nearest hundredth (two decimal places), halfway values up: 0.72 and 1.66.
+The unrounded factor is exactly 2.286458; endpoint rounding makes the stored
+factor 2.305556. Salmingo 2013 (n=6, PMID 23273729; author manuscript read
+in full) reports the largest screw force, 192 to 439 N across six patients,
+worked back from rod deformation. The 6 mm titanium-alloy rod is recorded
+for the same group's earlier three-patient report (Salmingo 2012,
+PMID 22321374) and is assumed for the six. The width equals the spread of
+the largest force across the six published patients, as if all of it came
+from stiffness; six patients are few, and the same report's summed forces
+spread by a factor of 3.1, so the true spread could be wider. The reference
+forces are taken with the rods held rigid, before springback, so the rod
+chosen does not change them, while the published forces come from rods
+after they flexed. The six reference spines differ among themselves by a
+factor of 3.4 at scale 1, more than the published 2.29, so one spine's forces
+at the stored range can still pass 439 N. It is an assumed calibration of
+this solver, not a measurement of the child, and it does not fit springback
+or daily forces.
+
+The fast test `the_stored_range_centres_the_geometric_means_and_uses_the_published_factor`
+pins the inputs and arithmetic. Recompute the six cases and check locking-force
+linearity at both stored endpoints on two cases with
+`cargo test --release -p load-bench --lib six_first_placements_recompute_the_stored_stiffness_range -- --ignored --nocapture`.
 
 A uniform tissue scale leaves order-0 geometry unchanged and scales its
 forces; it also affects springback and daily load sharing. Rod
@@ -274,7 +308,10 @@ because the requisite reference screw dimensions are missing.
 
 The following records come from the embedded source ledger. Full titles,
 coauthors, journal locations, populations and retained comparison citations
-are in `evidence/sources.json` and `evidence/README.md`.
+are in `evidence/sources.json` and `evidence/README.md` where recorded.
+
+- Salmingo RA et al. (2012), `salmingo-2012`: PMID 22321374 [peer-reviewed, secondary]. Earlier three-patient report recording 6 mm titanium-alloy rods, assumed for the six-patient comparison. Other bibliographic fields and publication locator are not recorded.
+- Salmingo RA et al. (2013), `salmingo-2013`: Clin Biomech 28:122; PMID 23273729 [peer-reviewed, full-text]. The largest screw force, 192 to 439 N across six patients, worked back from rod deformation. The rod is assumed from the earlier report. Full title, DOI and publication locator are not recorded.
 
 - Tachi H et al. (2021), `tachi-2021`: PMID 34712654; [DOI 10.3389/fbioe.2021.746902](https://doi.org/10.3389/fbioe.2021.746902) [peer-reviewed, full-text].
 - Wang X et al. (2017), `wang-2017`: PMID 28428982; [DOI 10.1186/s13013-017-0120-4](https://doi.org/10.1186/s13013-017-0120-4) [peer-reviewed, full-text].

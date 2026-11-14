@@ -6989,18 +6989,36 @@ export const EVIDENCE_LEDGER = [
   },
   {
     id: 'place-bench-joint-springs-stiffness-scale',
-    feature: 'Global log-uniform prior',
+    feature: 'Assumed global log-uniform stiffness scale',
     publishedNumber:
-      'lower: 1 ratio [own-inference; project-assumptions]; upper: 10 ratio [own-inference; ' +
+      'lower: 0.72 ratio [own-inference; project-assumptions]; upper: 1.66 ratio [own-inference; ' +
       'project-assumptions]; lumbar fitted lower: 1.38 ratio [published; petit-2004]; lumbar fitted upper: 10.0 ' +
       'ratio [published; petit-2004]; right thoracic fitted lower: 1.74 ratio [published; petit-2004]; right ' +
-      'thoracic fitted upper: 5.18 ratio [published; petit-2004]. Own inference: use Tachi as scale 1; Petit ' +
-      'supplies scale 10 endpoint with a different baseline. No identification of absolute stiffness from films. ' +
+      'thoracic fitted upper: 5.18 ratio [published; petit-2004]; reference force lower: 192 N [published; ' +
+      'salmingo-2013]; reference force upper: 439 N [published; salmingo-2013]; reference rod diameter: 6 mm ' +
+      '[own-inference; salmingo-2012]. The 6 mm titanium-alloy rod is recorded for the same group\'s earlier ' +
+      'three-patient report and is assumed for the six patients. Own inference: the assumed 0.72 to 1.66 ' +
+      'log-uniform range calibrates this solver against the largest screw force, 192 to 439 N across six ' +
+      'patients, worked back from rod deformation. ' +
+      'Its centre uses the geometric means of the published force endpoints and the locking forces on six ' +
+      'made-up spines. Its width equals the spread of the largest force across the six published patients, ' +
+      'as if all of it came from stiffness; six patients are few, and the same report\'s summed forces spread ' +
+      'by a factor of 3.1, so the true spread could be wider. The reference forces are taken with the rods ' +
+      'held rigid, before springback, so the rod chosen does not change them, while the published forces ' +
+      'come from rods after they flexed. The six reference spines differ among themselves by a factor of ' +
+      '3.4 at scale 1, more than the published 2.29, so one spine\'s forces at the stored range can still ' +
+      'pass 439 N. This is an assumption, not a ' +
+      'measurement of the child. It assumes forces after locking and rigid release scale linearly with ' +
+      'tissue stiffness; springback and daily forces are not fitted. Petit\'s fitted factors use a different ' +
+      'baseline and are kept beside this range. Films do not identify absolute tissue stiffness. ' +
       'Table use: bench.',
     population:
       'project-assumptions: No measured population; explicit project choices and calculations. ' +
       'Sample: not supplied. [own-inference; secondary]. petit-2004: Scoliosis bending-film personalisation of ' +
-      'per-segment torsion springs. Sample: 10. [peer-reviewed; abstract].',
+      'per-segment torsion springs. Sample: 10. [peer-reviewed; abstract]. salmingo-2013: Scoliosis correction ' +
+      'patients; the rod from the earlier report is assumed for these six. Sample: 6. [peer-reviewed; ' +
+      'full-text]. salmingo-2012: The same group\'s earlier report, with 6 mm titanium-alloy rods. Sample: 3. ' +
+      '[peer-reviewed; secondary].',
     sources: [
       {
         citation:
@@ -7008,6 +7026,16 @@ export const EVIDENCE_LEDGER = [
           'of the scoliotic spine. Med Biol Eng Comput 42(1):55-60.',
         pmid: '14977223',
         doi: '10.1007/bf02351011',
+      },
+      {
+        citation: 'Salmingo RA et al. 2013. Clin Biomech 28:122.',
+        pmid: '23273729',
+        doi: null,
+      },
+      {
+        citation: 'Salmingo RA et al. 2012.',
+        pmid: '22321374',
+        doi: null,
       },
     ] as readonly EvidenceSource[],
     checked: false,

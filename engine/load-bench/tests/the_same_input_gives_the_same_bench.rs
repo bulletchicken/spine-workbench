@@ -578,7 +578,7 @@ fn thirty_two_versions_keep_their_bits_across_two_and_uneven_splits() {
     let fingerprint = bytes.iter().fold(0xcbf29ce484222325_u64, |hash, byte| {
         (hash ^ u64::from(*byte)).wrapping_mul(0x100000001b3)
     });
-    assert_eq!(fingerprint, 17_181_406_478_243_357_212);
+    assert_eq!(fingerprint, 6_582_547_120_467_459_952);
     let split = |cuts: &[u32]| {
         let mut runs = Vec::new();
         for pair in cuts.windows(2) {
