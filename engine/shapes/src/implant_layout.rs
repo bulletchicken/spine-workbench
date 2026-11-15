@@ -148,12 +148,15 @@ pub struct LayoutProposals {
     /// Every level rule's vote, readable or not.
     pub rules: Vec<RuleVote>,
     /// Every (upper, lower) pair the rules land on or near.
+    /// For a sketch, the main-curve spans tried instead, with no rule counts.
     pub pairs: Vec<LevelPair>,
     /// `[0]` is the first placement; the rest are one step away from it.
     pub layouts: Vec<ImplantLayout>,
     /// True when the first placement is a sketch from the main curve's
-    /// ends because no pair came from the rules. A sketch is never shown
-    /// as a placement the rules gave.
+    /// ends when the rules give no pair on fitted levels, or the first pair
+    /// that can be laid out holds in fewer than one version in ten and the
+    /// sketch can be laid out. A sketch is never shown as a placement the
+    /// rules gave.
     pub first_is_sketch: bool,
     /// The first placement's upper ends over the versions, most frequent
     /// first. Empty when `firstIsSketch`.

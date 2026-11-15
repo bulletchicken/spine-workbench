@@ -193,7 +193,7 @@ Drawing poses and lines never supply an estimate or a count.
 | Shape | Fields and meaning |
 |---|---|
 | `RodProposal` | `standingPointsMm` follows `pointsMm` in the same order on the standing spine; `pointsMm` remains the target contour. `geometryStatus` covers both lines. Typical geometry must never be printed as measured millimetres. |
-| `LayoutProposals` | `firstIsSketch` identifies a fallback span; `upperEnds` and `lowerEnds` count each end separately, most frequent first, and are empty for a sketch. |
+| `LayoutProposals` | `firstIsSketch` identifies a fallback span from the main curve when the rules give no pair on fitted levels, or the first pair that can be laid out holds in fewer than one version in ten and the sketch can be laid out; `upperEnds` and `lowerEnds` count each end separately, most frequent first, and are empty for a sketch. |
 | `LayoutChoices` | `rods: RodChoice[]` lists the sourced material and diameter pairs, in the proposer's order. `rodMaterials` and `rodDiametersMm` also remain available; their cross-product can include pairs that `rebuildLayout` refuses. |
 | `RodChoice` | `material: RodMaterial`, `diameterMm`. Every advertised pair is accepted by `rebuildLayout`. |
 | `AnchorProposal` | `widerThanPedicle: DiameterCount[]` counts widths below `diameterMm / widthRatio` for each catalogue diameter; empty without a width table. `screwHere` carries the screw size before the pattern, including on hooks and empty pedicles; null without a size. |

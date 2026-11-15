@@ -687,6 +687,7 @@ fn the_forty_degree_curve_keeps_its_narrow_looks_on_the_counted_pedicles() {
         // film). The other four split 2-2 between T5 and T6 and 2-2 between
         // T11 and T12; the cranial mode tie-break gives T5, and T5-T12 beats
         // T5-T11 (one holding version each) on the caudal tie-break.
+        // One holding version now uses the main-curve sketch at T5-T12.
         assert_eq!(first.anchors.len(), if front_only { 16 } else { 14 });
         assert_eq!(
             (first.upper, first.lower),
@@ -696,10 +697,14 @@ fn the_forty_degree_curve_keeps_its_narrow_looks_on_the_counted_pedicles() {
                 (Level::T5, Level::T11)
             }
         );
+        assert_eq!(p.first_is_sketch, front_only);
         if front_only {
-            assert!(p.cannot_tell.iter().any(|c| {
-                c.code == CannotTellCode::EndsUnsettled && c.levels == vec![Level::T5, Level::T12]
-            }));
+            assert!(p.upper_ends.is_empty() && p.lower_ends.is_empty());
+            assert!(
+                !p.cannot_tell
+                    .iter()
+                    .any(|c| c.code == CannotTellCode::EndsUnsettled)
+            );
         }
         let mut expected = vec![
             (Level::T7, BodySide::Left),
@@ -1480,4 +1485,163 @@ fn exact_pose_front_only_hand_changes_keep_their_serialised_bytes() {
             (63568, 17835967667900474509),
         ]
     );
+}
+
+/// Built at assembly from made-up readings, rather than fitted: only the
+/// first N versions retain their regional modal rules.
+fn sparse_rules(holding: usize) -> (LayoutInput, implant_layout::level_rules::LevelReadings) {
+    let (input, _) = fixture(RecipeName::RightThoracic40);
+    let mut readings = implant_layout::proposal::measure(&input).unwrap();
+    for region in &mut readings.regions {
+        for rules in region.version_rules.iter_mut().skip(holding) {
+            rules.clear();
+        }
+    }
+    (input, readings)
+}
+
+#[test]
+fn a_tenth_keeps_the_rule_proposal_bytes() {
+    let (input, readings) = sparse_rules(4);
+    let result = implant_layout::proposal::assemble(&input, &readings).unwrap();
+    assert_eq!(
+        serialised_fingerprint(&result),
+        (625343, 4413226648983688609)
+    );
+    assert!(!result.first_is_sketch);
+    let first = &result.layouts[0];
+    assert_eq!((first.upper, first.lower), (Level::T5, Level::T12));
+    assert_eq!(
+        result
+            .pairs
+            .iter()
+            .find(|p| p.upper == first.upper && p.lower == first.lower)
+            .unwrap()
+            .versions_holding,
+        4
+    );
+}
+
+/// The fallback contains six spans; every trial reaches the Refused arm,
+/// removing each span before retaining the rules' proposal bytes.
+#[test]
+fn a_refused_sketch_keeps_the_rule_proposal_bytes() {
+    let (input, _) = fixture_seed(RecipeName::DoubleMajor55To45, 4);
+    let readings = implant_layout::proposal::measure(&input).unwrap();
+    let result = implant_layout::proposal::assemble(&input, &readings).unwrap();
+    assert_eq!(
+        serialised_fingerprint(&result),
+        (561816, 7360974448666973749)
+    );
+    assert!(!result.first_is_sketch);
+    let first = &result.layouts[0];
+    assert_eq!((first.upper, first.lower), (Level::T5, Level::T12));
+    assert_eq!(
+        result
+            .pairs
+            .iter()
+            .find(|p| p.upper == first.upper && p.lower == first.lower)
+            .unwrap()
+            .versions_holding,
+        0
+    );
+    let mut fallback = readings;
+    fallback.regions.clear();
+    assert!(
+        implant_layout::proposal::assemble(&input, &fallback)
+            .unwrap()
+            .layouts
+            .is_empty()
+    );
+}
+
+/// Built at assembly, not fitted: the regional rules hold in one version.
+#[test]
+fn sparse_rule_ends_use_the_same_sketch_as_absent_rules() {
+    let (input, mut readings) = sparse_rules(1);
+    let rules = implant_layout::pairs::build(&input, &readings).unwrap();
+    assert_eq!(
+        implant_layout::pairs::first_pair(&rules.pairs)
+            .unwrap()
+            .versions_holding,
+        1
+    );
+    let result = implant_layout::proposal::assemble(&input, &readings).unwrap();
+    assert!(result.first_is_sketch);
+    assert!(result.upper_ends.is_empty() && result.lower_ends.is_empty());
+    assert!(
+        !result
+            .cannot_tell
+            .iter()
+            .any(|c| c.code == CannotTellCode::EndsUnsettled)
+    );
+    let curve = &readings.nominal.curves[readings.nominal.major.unwrap()];
+    let names = input.front.as_ref().unwrap().marks.naming.template.names();
+    let lower = readings.nominal.vertebrae[curve.lower_index].level;
+    let next = names[names.iter().position(|l| *l == lower).unwrap() + 1];
+    assert_eq!(
+        (result.layouts[0].upper, result.layouts[0].lower),
+        (readings.nominal.vertebrae[curve.upper_index].level, next)
+    );
+    readings.regions.clear();
+    let absent = implant_layout::proposal::assemble(&input, &readings).unwrap();
+    assert_eq!(
+        serde_json::to_vec(&result).unwrap(),
+        serde_json::to_vec(&absent).unwrap()
+    );
+}
+
+/// Built at assembly, not fitted: the sketch adds T1, absent from one
+/// version, while the rules' T5–T12 span and its alternatives remain readable.
+#[test]
+fn an_invalid_sketch_trial_keeps_the_drawable_rule_pair() {
+    let (input, mut readings) = sparse_rules(4);
+    let major = readings.nominal.major.unwrap();
+    readings.nominal.curves[major].upper_index = 0;
+    readings.versions.versions[0]
+        .fit
+        .vertebrae
+        .retain(|v| v.level != Level::T1);
+    let baseline = implant_layout::proposal::assemble(&input, &readings).unwrap();
+    for region in &mut readings.regions {
+        for rules in region.version_rules.iter_mut().skip(1) {
+            rules.clear();
+        }
+    }
+    let result = implant_layout::proposal::assemble(&input, &readings).unwrap();
+    assert!(!result.first_is_sketch);
+    assert_eq!(result.layouts, baseline.layouts);
+    let mut expected = baseline;
+    for pair in &mut expected.pairs {
+        pair.versions_holding = pair.versions_holding.min(1);
+    }
+    for count in expected
+        .upper_ends
+        .iter_mut()
+        .chain(&mut expected.lower_ends)
+    {
+        count.versions = count.versions.min(1);
+    }
+    assert_eq!(
+        serde_json::to_vec(&result).unwrap(),
+        serde_json::to_vec(&expected).unwrap()
+    );
+    assert_eq!(
+        (result.layouts[0].upper, result.layouts[0].lower),
+        (Level::T5, Level::T12)
+    );
+    assert_eq!(
+        result
+            .pairs
+            .iter()
+            .find(|p| p.upper == Level::T5 && p.lower == Level::T12)
+            .unwrap()
+            .versions_holding,
+        1
+    );
+    readings.regions.clear();
+    assert!(matches!(
+        implant_layout::proposal::assemble(&input, &readings),
+        Err(implant_layout::LayoutError::InvalidValue { .. })
+    ));
 }

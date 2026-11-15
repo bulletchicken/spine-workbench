@@ -1,3 +1,4 @@
+import { layoutInput } from '../../app/src/bench/place/layout-input';
 // The same intake and finder stages as Find, followed by the one adapter
 // and the release fit. No saved fit or answer-key field supplies geometry.
 import { readFileSync } from 'node:fs';
@@ -7,10 +8,10 @@ import { fitInputFor } from '../../app/src/bench/three/fit-input';
 import { createCaseStore } from '../../app/src/case-state/case-store';
 import { emptyCase } from '../../app/src/case-state/empty-case';
 import { createFilmPixels } from '../../app/src/case-state/film-pixels';
-import { ChainPass, FilmDesk, fit_from_films, initSync, make_up_spine, measure_spine } from '../../app/src/engine-room/wasm-build/wasm_bridge.js';
+import { ChainPass, FilmDesk, fit_from_films, initSync, make_up_spine, measure_spine, propose_layouts } from '../../app/src/engine-room/wasm-build/wasm_bridge.js';
 import { SAMPLE_RECIPE } from '../../app/src/made-up-spines/the-sample-case';
 import { filmRecordFrom } from '../../app/src/open-and-save/film-record';
-import { compareLevels, type AnswerKey, type ChainAnswer, type Film, type FilmFacts, type FilmKind, type FilmMarks, type FilmPassResult, type FitFromFilms, type FrontFinder, type MadeUpSpine, type Reading, type SpineReadings, type SpineFit, type Step, type TrainedPassResult, type VertebraPose } from '../../app/src/shapes';
+import { compareLevels, type AnswerKey, type ChainAnswer, type Film, type FilmFacts, type FilmKind, type FilmMarks, type FilmPassResult, type FitFromFilms, type FrontFinder, type MadeUpSpine, type LayoutProposals, type Reading, type SpineReadings, type SpineFit, type Step, type TrainedPassResult, type VertebraPose } from '../../app/src/shapes';
 import { createFitSources } from '../../app/src/view-state/fit-sources';
 import { madeUpFront, TRAINED_FRONT_RECIPE } from './made-up-front';
 
@@ -142,6 +143,11 @@ describe('ordinary intake to the release fit', () => {
       });
       console.info('four-film recipe', JSON.stringify(SAMPLE_RECIPE));
       const { fit, input } = applyAndFit(opened.map(({ film }) => film), marks, 'hand-built');
+      const placement = propose_layouts(layoutInput(fit, { ...emptyCase(), films: opened.map(({ film }) => film), marks })) as LayoutProposals;
+      expect(placement.firstIsSketch).toBe(false);
+      expect(placement.layouts[0]).toMatchObject({ upper: 'T3', lower: 'L1' });
+      expect(placement.pairs.find((pair) => pair.upper === 'T3' && pair.lower === 'L1')?.versionsHolding).toBe(5);
+      expect(placement.cannotTell).toContainEqual({ code: 'ends-unsettled', levels: ['T3', 'L1'] });
       if (fit.sideFilm === null) {
         expect(fit).toEqual(fit_from_films({ ...input, side: null }));
       } else {

@@ -4,7 +4,7 @@ export const PLACE_WORDS = {
   step: 'Place', enter: 'Place screws and rods', back: 'Back', more: 'More', done: 'Done', next: 'Next', retry: 'Try again', backToThree: 'Back to 3D',
   working: 'Working out a first placement…', changed: 'The spine changed, so the placement was worked out again.',
   placed: (upper: Level, lower: Level) => `A first placement: ${upper} to ${lower}.`,
-  sketch: 'A sketch from the ends of the main curve: no pair of ends from the rules could be placed on this spine.',
+  sketch: 'A sketch from the ends of the main curve. The published rules did not settle on a pair of ends for this spine.',
   sizing: "Sized from published tables, not from this spine's bone.",
   review: (count: number) => `Review the ${String(count)}`,
   progress: (at: number, count: number) => `${String(at)} of ${String(count)}`,

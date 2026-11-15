@@ -98,7 +98,9 @@ describe('a first placement', () => {
     expect(dock.helper).toEqual({kind:'words', words:['16 screws, 1 hook, 3 left empty.']});
     expect(dock.sentence).toBe('A first placement: T4 to L1.'); expect(dock.quiet?.label).toBe('Review the 9'); expect(dock.primary).toBeUndefined();
     expect(placeDock({ ...ready, review: 1 }, actions).review?.count).toBe('2 of 9');
-    expect(placeDock({ ...ready, result: { ...ready.result, firstIsSketch: true } }, actions).helper).toMatchObject({ words: [expect.stringMatching(/^A sketch from the ends/)] });
+    const sketch = { ...ready.result, firstIsSketch: true, upperEnds: [], lowerEnds: [], pairs: [] };
+    expect(placeDock({ ...ready, result: sketch }, actions).helper).toEqual({kind:'words',words:[W.sketch+' 16 screws, 1 hook, 3 left empty.']});
+    expect(reviewItems(sketch).flatMap((item)=>item.sentences).join(' ')).not.toMatch(/Together,|holds in|upper end|lower end/);
     expect(placeDock({ ...state, phase: 'failed', failure: { kind: 'failed', reason: W.failed } }, actions).primary?.label).toBe(W.retry);
     expect(placeDock({ ...state, phase: 'failed', failure: { kind: 'refused', reason: W.refused } }, actions).primary).toBeUndefined();
     expect(placeDock({ ...ready, result: { ...ready.result, layouts: [] } }, actions).quiet?.label).toBe(W.backToThree);

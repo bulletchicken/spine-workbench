@@ -21,6 +21,16 @@ use shapes::levels::Level;
 use shapes::spine_readings::FitTier;
 use std::collections::{BTreeMap, BTreeSet};
 
+/// When the first pair that can be laid out holds in fewer than one version
+/// in ten, the sketch from the main curve replaces it if that sketch can be
+/// laid out; otherwise the pair stays. One in ten is this project's own
+/// threshold, the same tenth a range leaves out at each end.
+const SKETCH_HOLDING_DENOMINATOR: u64 = 10;
+
+fn needs_sketch(holding: u32, versions: u32) -> bool {
+    u64::from(holding) * SKETCH_HOLDING_DENOMINATOR < u64::from(versions)
+}
+
 /// Compute the complete ensemble once; construct all placements from those
 /// same draws. Missing rule inputs never become substitute votes.
 pub fn propose(input: &LayoutInput) -> Result<LayoutProposals, LayoutError> {
@@ -64,7 +74,7 @@ pub fn assemble(
         .collect();
     let mut cannot_tell = summary.cannot_tell;
     cannot_tell.extend(readings.cannot_tell.iter().cloned());
-    let fallback = pairs.is_empty();
+    let mut fallback = pairs.is_empty();
     if fallback {
         pairs = fallback_pairs(input, readings);
     }
@@ -73,7 +83,7 @@ pub fn assemble(
     if !pairs.is_empty() {
         let rod = rods::default_choice()?;
         let mut anchors = BTreeMap::new();
-        while let Some(pair) = if fallback {
+        'choose: while let Some(pair) = if fallback {
             pairs.first()
         } else {
             pairs::first_pair(&pairs)
@@ -95,6 +105,30 @@ pub fn assemble(
                 }
                 Err(error) => return Err(error),
             };
+            if !fallback && needs_sketch(pair.versions_holding, input.versions) {
+                let mut sketches = fallback_pairs(input, readings);
+                while let Some(sketch) = sketches.first() {
+                    let alternative = Alternative {
+                        id: "first".into(),
+                        change: LayoutChange::First {},
+                        upper: sketch.upper,
+                        lower: sketch.lower,
+                        pattern: Pattern::AllPedicles,
+                        rod: rod.clone(),
+                    };
+                    match layout(input, readings, &mut anchors, &alternative) {
+                        Ok(_) => {
+                            pairs = sketches;
+                            fallback = true;
+                            continue 'choose;
+                        }
+                        Err(LayoutError::Refused(_)) => {
+                            sketches.remove(0);
+                        }
+                        Err(_) => break,
+                    }
+                }
+            }
             if !fallback
                 && let Some(unsettled) = pairs::unsettled_ends(
                     pair,
@@ -305,9 +339,11 @@ fn registered_input(input: &LayoutInput) -> LayoutInput {
     working
 }
 
-// When unreadable minor curves prevent a fusion-region rule choosing an
-// upper end, this project's first sketch spans the nominal major curve,
-// plus one lower body where present. No unreadable rule receives a vote.
+// When the rules give no pair on fitted levels, or the first pair that can
+// be laid out holds in fewer than one version in ten, try this project's
+// sketch from the nominal major curve plus one lower body where present.
+// It replaces the thin pair only if it can be laid out. No unreadable rule
+// receives a vote.
 fn fallback_pairs(
     input: &LayoutInput,
     readings: &LevelReadings,
@@ -371,4 +407,26 @@ fn fallback_pairs(
 pub fn measure(input: &LayoutInput) -> Result<LevelReadings, LayoutError> {
     validate(input)?;
     level_rules::measure(&registered_input(input))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::needs_sketch;
+
+    #[test]
+    fn fewer_than_one_in_ten_uses_integer_edges() {
+        for (versions, holding, expected) in [
+            (32, 3, true),
+            (32, 4, false),
+            (10, 0, true),
+            (10, 1, false),
+            (4, 0, true),
+            (4, 1, false),
+            (1, 0, true),
+            (1, 1, false),
+            (u32::MAX, u32::MAX, false),
+        ] {
+            assert_eq!(needs_sketch(holding, versions), expected);
+        }
+    }
 }

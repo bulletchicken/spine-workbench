@@ -196,3 +196,14 @@ it('keeps the local film credit in the Place sheet notes',()=>{
   expect(sheet.host.querySelector('.panel-note')?.textContent).not.toContain('Films:');
   sheet.takeDown();
 });
+
+it('shows a sketch sheet without rule end counts or end review rows',()=>{
+  const {page,result,accepted}=mount();page.takeDown();
+  result.firstIsSketch=true;result.upperEnds=[];result.lowerEnds=[];
+  result.pairs=result.pairs.map((pair)=>({...pair,versionsHolding:0,rulesAt:[],rulesNear:[],rulesAgainst:[]}));
+  act(()=>{handState.setState({why:null});loadState.setState({phase:'idle',result:null});placeState.setState({result,sheet:true});});
+  const sheet=putOnThePage(<EngineProvider engine={{proposeLayouts:vi.fn()} as unknown as EngineClient}><PlaceSheet accepted={accepted}/></EngineProvider>);
+  expect([...sheet.host.querySelectorAll('.place-review-label')].some((label)=>/Upper end|Lower end/.test(label.textContent))).toBe(false);
+  expect(sheet.host.textContent).not.toMatch(/Together,|holds in|no pair of ends|no pair came/);
+  sheet.takeDown();
+});

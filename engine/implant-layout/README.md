@@ -69,7 +69,8 @@ width draws and the thresholds behind both width counts. Anchor
 `lookSources` retain evidence per quantity; each `LookSources` pairs a
 look `code` with its `sources`, beside the anchor's union of keys.
 `firstIsSketch` marks a fallback span from the main curve when the rules
-cannot supply a pair. Its end counts are empty; other end counts use the
+give no pair on fitted levels, or the first pair that can be laid out holds
+in fewer than one version in ten and the sketch can be laid out. Its end counts are empty; other end counts use the
 same modal pair in each version, most frequent first. A sketch raises no
 `ends-unsettled`. For a rule-derived pair, the pair's holding test still
 raises `ends-unsettled`, judging each end by the level the first placement
@@ -269,19 +270,25 @@ ordered by exact modal-rule agreements, then versions holding, then the
 more caudal lower end; a remaining tie takes the more cranial upper end
 [own inference]. The first placement uses the highest-ranked pair that
 can actually form its anchors and both rods. Failed candidates are
-removed and the next pair is tried. Holding below 60% gives
+removed and the next pair is tried. When the first pair that can be laid out
+holds in fewer than one version in ten, the sketch from the main curve
+replaces it if that sketch can be laid out; otherwise the pair stays. One
+in ten is this project's own threshold, the same tenth a range leaves out
+at each end [own inference, `SKETCH_HOLDING_DENOMINATOR`]. Holding below 60% gives
 `ends-unsettled` [own inference]. Liu et al. 2020's stop-short odds
 (2.60, 2.43, 3.05, 3.40 and 4.52 for the five landmarks) remain population
 figures with their source and comparison, never personal probabilities.
 
-Unreadable structural minors can leave no pair at all. In that case the
+Unreadable structural minors can leave no pair at all. In that case, or
+when the first pair that can be laid out holds in fewer than one version
+in ten, the
 assembly starts a sketch from the nominal major curve's upper end
 through its lower end plus one fitted anatomical level. It extends the
 lower end sequentially, no farther than L5, until both rods can be formed
 [own inference]. The sketch has zero versions holding and no invented
-rule agreements; `ends-unsettled` remains explicit. It does not resolve
-the unread minor curves. If none of these spans can be formed, no layout
-is returned.
+rule agreements; it raises no `ends-unsettled`. It does not resolve
+the unread minor curves. If none of these spans can be formed, the rule
+pair is retained when one can be laid out; otherwise no layout is returned.
 
 ## Screws, patterns and rods
 
