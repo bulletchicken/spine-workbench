@@ -35,6 +35,7 @@ selective: Array<SelectiveReading>,
 rules: Array<RuleVote>, 
 /**
  * Every (upper, lower) pair the rules land on or near.
+ * For a sketch, the main-curve spans tried instead, with no rule counts.
  */
 pairs: Array<LevelPair>, 
 /**
@@ -43,8 +44,10 @@ pairs: Array<LevelPair>,
 layouts: Array<ImplantLayout>, 
 /**
  * True when the first placement is a sketch from the main curve's
- * ends because no pair came from the rules. A sketch is never shown
- * as a placement the rules gave.
+ * ends when the rules give no pair on fitted levels, or the first pair
+ * that can be laid out holds in fewer than one version in ten and the
+ * sketch can be laid out. A sketch is never shown as a placement the
+ * rules gave.
  */
 firstIsSketch: boolean, 
 /**

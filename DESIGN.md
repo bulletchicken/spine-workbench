@@ -1646,7 +1646,7 @@ The tables cover Films, Find, 3D, the first placement and its load calculation. 
 | Quiet way back | Back to 3D |
 | Working and arriving sentence | Working out a first placement… |
 | Changed-spine helper | The spine changed, so the placement was worked out again. |
-| Sketch helper before counts | A sketch from the ends of the main curve: no pair of ends from the rules could be placed on this spine. |
+| Sketch helper before counts | A sketch from the ends of the main curve. The published rules did not settle on a pair of ends for this spine. |
 | Stage caption and sheet note | Sized from published tables, not from this spine's bone. |
 | Shared review item | Every pedicle |
 | Names review item | Level names |
