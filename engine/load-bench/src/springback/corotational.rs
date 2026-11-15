@@ -47,6 +47,9 @@ const REFINEMENT_STEPS: usize = 8;
 #[derive(Clone, Debug)]
 pub struct PrestressedStep {
     pub displacement: DVector<f64>,
+    /// Increment of the applied body-centre condition force (N/N·mm).
+    /// Nonzero only for a seating step holding T1 horizontally.
+    pub applied_load_increment: DVector<f64>,
     /// Patient-axis translation of the reference centroid, then rotation.
     pub rod_displacements: Vec<Wrench>,
     pub rod_origins_mm: Vec<Vector3<f64>>,
@@ -84,6 +87,7 @@ struct RodGeometry {
 #[derive(Clone, Copy, PartialEq, Eq)]
 enum Expansion {
     Seating,
+    BalancedSeating,
     Incremental,
 }
 
@@ -270,6 +274,32 @@ pub fn solve_prestressed(
     )
 }
 
+/// The same expansion with T1's two horizontal centre increments held at
+/// zero. The released condition load is already subtracted from the input
+/// gradient; these linear rows supply only its reaction increment.
+pub(super) fn solve_balanced_prestressed(
+    poses: &[Pose],
+    tissue_tangent: &DMatrix<f64>,
+    tissue_gradient: &DVector<f64>,
+    rods: &[RodLinearisation],
+    initial_loads: &[Vec<Wrench>],
+) -> Result<PrestressedStep, SpringbackError> {
+    solve(
+        poses,
+        tissue_tangent,
+        tissue_gradient,
+        rods,
+        initial_loads,
+        Expansion::BalancedSeating,
+        &|u| Ok(tissue_tangent * u),
+    )
+}
+
+fn free_load(mut load: DVector<f64>, held: usize) -> DVector<f64> {
+    load.rows_mut(0, held).fill(0.0);
+    load
+}
+
 /// One added-load solve about a supplied prestressed configuration.
 ///
 /// `body_load_increment` is the applied force/moment increment ON each body
@@ -330,6 +360,11 @@ fn solve(
     tissue_load: &TissueLoad<'_>,
 ) -> Result<PrestressedStep, SpringbackError> {
     let size = 6 * poses.len();
+    let held = if mode == Expansion::BalancedSeating {
+        2
+    } else {
+        0
+    };
     if size == 0
         || tissue_gradient.len() != size
         || tissue_tangent.shape() != (size, size)
@@ -352,7 +387,7 @@ fn solve(
         let local = geometry(poses, rod, loads)?;
         let p0 = flatten(loads);
         initial_residual += rod.kinematics.transpose() * &p0;
-        if mode == Expansion::Seating
+        if mode != Expansion::Incremental
             && (local.rigid.transpose() * &p0).norm() > RESIDUAL_TOLERANCE * p0.norm().max(1.0)
         {
             return Err(SpringbackError::InconsistentRigidLoads);
@@ -361,7 +396,7 @@ fn solve(
         combined += rod.kinematics.transpose() * &rod.effective_stiffness * &rod.kinematics;
         geometries.push(local);
     }
-    if mode == Expansion::Seating
+    if mode != Expansion::Incremental
         && initial_residual.norm() > RESIDUAL_TOLERANCE * tissue_gradient.norm().max(1.0)
     {
         return Err(SpringbackError::InconsistentRigidLoads);
@@ -370,35 +405,49 @@ fn solve(
     combined += &geometric;
     combined = (&combined + combined.transpose()) * 0.5;
     let scales = diagonal_scales(&combined);
-    let factor = CholeskyFactor::new(&congruence(&combined, &scales))
-        .map_err(|_| SpringbackError::NotPositiveDefinite)?;
+    let mut reduced = congruence(&combined, &scales);
+    // Exact coordinate elimination: identity rows merely embed the free
+    // principal submatrix in a full-size factor. No physical stiffness is
+    // added, and the unmodified tangent is retained for daily increments.
+    for axis in 0..held {
+        reduced.row_mut(axis).fill(0.0);
+        reduced.column_mut(axis).fill(0.0);
+        reduced[(axis, axis)] = 1.0;
+    }
+    let factor = CholeskyFactor::new(&reduced).map_err(|_| SpringbackError::NotPositiveDefinite)?;
     let mut displacement = factor
-        .solve(&(-tissue_gradient.component_mul(&scales)))?
+        .solve(&free_load(-tissue_gradient.component_mul(&scales), held))?
         .component_mul(&scales);
     // Refine the factored equation against its body/frame form. Recovering
     // tiny elastic strains from a large common motion in the assembled matrix
     // loses digits. No stiffness, acceptance tolerance or boundary changes.
-    let mut residual = -tissue_gradient
-        - balance::tangent_load(
-            poses,
-            tissue_load(&displacement)?,
-            rods,
-            &geometries,
-            &displacement,
-        );
+    let mut residual = free_load(
+        -tissue_gradient
+            - balance::tangent_load(
+                poses,
+                tissue_load(&displacement)?,
+                rods,
+                &geometries,
+                &displacement,
+            ),
+        held,
+    );
     for _ in 0..REFINEMENT_STEPS {
         let correction = factor
             .solve(&residual.component_mul(&scales))?
             .component_mul(&scales);
         let candidate = &displacement + correction;
-        let next = -tissue_gradient
-            - balance::tangent_load(
-                poses,
-                tissue_load(&candidate)?,
-                rods,
-                &geometries,
-                &candidate,
-            );
+        let next = free_load(
+            -tissue_gradient
+                - balance::tangent_load(
+                    poses,
+                    tissue_load(&candidate)?,
+                    rods,
+                    &geometries,
+                    &candidate,
+                ),
+            held,
+        );
         if next.norm() >= residual.norm() {
             break;
         }
@@ -407,6 +456,7 @@ fn solve(
     }
     let mut result = PrestressedStep {
         displacement,
+        applied_load_increment: DVector::zeros(size),
         rod_displacements: Vec::with_capacity(rods.len()),
         rod_origins_mm: Vec::with_capacity(rods.len()),
         material_head_wrenches: Vec::with_capacity(rods.len()),
@@ -487,6 +537,10 @@ fn solve(
         result.linear_head_wrenches_on_rod.push(linear_loads);
         result.physical_head_wrenches_on_rod.push(physical_loads);
     }
+    for axis in 0..held {
+        result.applied_load_increment[axis] = body_residual[axis];
+    }
+    body_residual -= &result.applied_load_increment;
     largest_residual = largest_residual.max(body_residual.norm() / denominator);
     let residual = tissue_gradient
         + balance::tangent_load(
@@ -496,7 +550,8 @@ fn solve(
             &geometries,
             &result.displacement,
         );
-    result.relative_residual = largest_residual.max(residual.norm() / denominator);
+    result.relative_residual =
+        largest_residual.max((residual - &result.applied_load_increment).norm() / denominator);
     if !result.relative_residual.is_finite() || result.relative_residual > RESIDUAL_TOLERANCE {
         return Err(SpringbackError::LinearResidual);
     }

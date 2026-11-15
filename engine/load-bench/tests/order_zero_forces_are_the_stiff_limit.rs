@@ -216,9 +216,15 @@ fn a_released_chain_has_the_same_force_limit_from_another_start() {
             for rod in &mut rods {
                 rod.stiffness *= *scale;
             }
-            load_bench::springback::solve(&case.chain, &rigid.poses, &rods, &held.poses)
-                .unwrap()
-                .head_wrenches_on_rod
+            load_bench::springback::solve_balanced(
+                &case.chain,
+                &rigid.poses,
+                &rods,
+                &held.poses,
+                &rigid.applied_loads,
+            )
+            .unwrap()
+            .head_wrenches_on_rod
         })
         .collect();
     for (rod, loads) in rigid.head_wrenches_on_rod.iter().enumerate() {

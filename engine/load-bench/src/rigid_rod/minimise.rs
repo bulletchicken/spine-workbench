@@ -51,6 +51,12 @@ pub trait Model {
     fn evaluate(&self, state: &Self::State) -> Option<Evaluation>;
     fn step(&self, state: &Self::State, increment: &DVector<f64>) -> Option<Self::State>;
 
+    /// Largest individual objective term in the gradient's scaled coordinates,
+    /// before balanced contributions cancel. The default adds no scale.
+    fn balanced_term_scale(&self, _state: &Self::State) -> Option<f64> {
+        Some(0.0)
+    }
+
     fn first_order(&self, state: &Self::State) -> Option<FirstOrder> {
         let e = self.evaluate(state)?;
         Some(FirstOrder {
@@ -673,9 +679,12 @@ pub fn minimise<M: Model>(model: &M, initial: M::State, options: Options) -> Sol
         );
     }
     for iteration in 0..=options.iteration_limit {
-        let Some(evaluation) = model
+        let Some((evaluation, balanced_term_scale)) = model
             .evaluate(&state)
-            .filter(|e| finite_evaluation(e, dimension))
+            .and_then(|e| model.balanced_term_scale(&state).map(|scale| (e, scale)))
+            .filter(|(e, scale)| {
+                finite_evaluation(e, dimension) && scale.is_finite() && *scale >= 0.0
+            })
         else {
             return finish(
                 state,
@@ -705,7 +714,9 @@ pub fn minimise<M: Model>(model: &M, initial: M::State, options: Options) -> Sol
         last_stationarity = max_abs(&stationarity);
         last_rank = rows.selected.len();
         last_multipliers = multipliers.clone();
-        let scale = max_abs(&evaluation.gradient).max(max_abs(&constraint_force));
+        let scale = max_abs(&evaluation.gradient)
+            .max(max_abs(&constraint_force))
+            .max(balanced_term_scale);
         let stationary = last_stationarity
             <= options.absolute_stationarity_tolerance + options.stationarity_tolerance * scale;
         let feasible = last_constraint <= options.constraint_tolerance;
@@ -1265,3 +1276,6 @@ mod tests {
         );
     }
 }
+
+#[cfg(test)]
+mod balanced_term_tests;

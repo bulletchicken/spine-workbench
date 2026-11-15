@@ -340,6 +340,32 @@ impl Chain {
         Ok(evaluation)
     }
 
+    /// Individual holding wrenches at the two body centres of each joint,
+    /// before summing into body balance. Inactive joints contribute zero;
+    /// the final pair's lower wrench acts on the fixed ground.
+    pub(crate) fn joint_wrenches(&self, poses: &[Pose]) -> Result<Vec<[Wrench; 2]>, ChainError> {
+        if poses.len() != self.joints.len() {
+            return Err(ChainError::Dimensions);
+        }
+        if poses.iter().any(|p| !p.usable()) {
+            return Err(ChainError::InvalidPose);
+        }
+        Ok(self
+            .joints
+            .iter()
+            .enumerate()
+            .map(|(i, joint)| {
+                if joint.stiffness.0.iter().all(|v| *v == 0.0) {
+                    [Wrench::zeros(); 2]
+                } else {
+                    let lower = poses.get(i + 1).unwrap_or(&self.ground);
+                    let (_, _, upper, lower) = joint.evaluate(&poses[i], lower);
+                    [upper, lower]
+                }
+            })
+            .collect())
+    }
+
     /// Apply the exact chart tangent through relative joint motions. This
     /// avoids subtracting large body-centre matrix products for a nearly
     /// rigid column. It is the same Hessian assembled by `linearise`.

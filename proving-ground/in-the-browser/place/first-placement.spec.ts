@@ -185,7 +185,7 @@ test('the made-up case reaches Place and returns to its 3D spine', async ({ page
   await expect(page.locator('.load-estimate-list')).toContainText('Heaviest anchor');
   await expect(page.locator('.load-estimate-list .load-range').first()).toBeVisible();
   await expect(page.locator('.load-estimates')).toContainText("In this model standing, bending forward and walking add little to the forces locked in when the rods go in. The model has no muscles, and its figures for these loads come from adults; none measured in a child's fused spine was found.");
-  await expect(page.locator('.load-estimates')).toContainText('The model does not rebalance the trunk above and below the rods.');
+  await expect(page.locator('.load-estimates')).toContainText('Rods in assumes the patient stands as balanced as on the standing film.');
   await expect(page.locator('.load-estimates')).not.toContainText(/Weight not given|Steps a day not given|million steps|rod swing/i);
   await page.screenshot({path:info.outputPath('all-estimates.png')});
   await page.keyboard.press('Escape');

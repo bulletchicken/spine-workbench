@@ -1771,7 +1771,7 @@ The tables cover Films, Find, 3D, the first placement and its load calculation. 
 | tablePopulations | The tables mainly studied Chinese, Japanese, Thai and Indian groups; no population adjustment is made. |
 | fit | Fit noise is drawn independently for each vertebra, which can overstate noise between neighbouring joints. Typical side curves and inferred twist are not sampled as measurements. |
 | names | Level names can be one off. Alternative names carry no probability. Shoulders, body balance, missing sacrum geometry and an unavailable rotation grade cannot be recovered from the fitted spine. |
-| outside | Outside the rods, joints keep their standing shape. Changes of an unfused curve and body rebalancing are absent; read shape changes only inside the instrumented levels. |
+| outside | Outside the rods, the free discs bend so that the top of the spine keeps its place over the pelvis, side to side and front to back, as it stood on the film. Its height and its tilt are free, and the pelvis does not move. That shape follows from this assumption; it does not show how the patient will stand. |
 | heads | Tightened heads never slip in the model. Hooks tie translation in both directions. Head offset and rod overhang are not measured on these films. |
 | history | The model leaves out acute screw–bone compliance, relaxation, growth-friendly eligibility and the body’s response to history or other diseases. |
 | method | The calculation finds a local constrained state, which need not be unique. A single elastic step does not describe the whole nonlinear rod response. |
@@ -1860,7 +1860,7 @@ The tables cover Films, Find, 3D, the first placement and its load calculation. 
 | Loaded rod chip | Its contour aims for a typical upper back: no side film measured this one's. |
 | Sheet, daily loads | In this model standing, bending forward and walking add little to the forces locked in when the rods go in. The model has no muscles, and its figures for these loads come from adults; none measured in a child's fused spine was found. |
 | Sheet, adjacent levels | This model does not work out the load on the levels beside the rods. |
-| Sheet, absent rebalancing | The model does not rebalance the trunk above and below the rods. |
+| Sheet, trunk balance | Rods in assumes the patient stands as balanced as on the standing film. |
 | Chip, after demand range | of its strength allowance. |
 | Sheet, allowance definition | An anchor's strength allowance is its published strength, lowered for weaker bone in some versions. |
 | Chip and sheet, after past-allowance count | Assumed: strengths from tables, lowered by the model's own allowances. |

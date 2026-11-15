@@ -1,6 +1,6 @@
 //! Rebuild a whole placement using the original table draws and hand choices.
 
-use super::{apply_pattern, candidate_anchors, measure, registered_input, released_levels};
+use super::{apply_pattern, candidate_anchors, registered_input, released_levels, validate};
 use crate::patterns::Pattern;
 use crate::screws::sizing::{diameter_grid, length_grid};
 use crate::{LayoutError, rods};
@@ -62,10 +62,22 @@ pub(crate) fn rebuild(input: &RebuildInput) -> Result<ImplantLayout, LayoutError
                 })
                 .ok_or_else(|| invalid("rod", "rod-not-in-choices"))?
         };
-    let readings = measure(&working)?;
-    let mut anchors = candidate_anchors(&working, &readings, &mut BTreeMap::new(), &levels)?;
+    validate(&working)?;
+    let readings = crate::level_rules::measure_curves(&working)?;
+    let mut anchors = candidate_anchors(
+        &working,
+        &readings.versions.versions,
+        &readings.measured,
+        &mut BTreeMap::new(),
+        &levels,
+    )?;
     let raw_anchors = anchors.clone();
-    apply_pattern(&mut anchors, &levels, &readings, Pattern::AllPedicles)?;
+    apply_pattern(
+        &mut anchors,
+        &levels,
+        &readings.nominal,
+        Pattern::AllPedicles,
+    )?;
     for choice in &input.anchors {
         let anchor = anchors
             .iter_mut()

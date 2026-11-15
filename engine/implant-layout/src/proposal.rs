@@ -8,9 +8,10 @@ pub(crate) mod rebuild;
 
 use crate::LayoutError;
 use crate::alternatives::{self, Alternative};
-use crate::curves::summary;
+use crate::curves::{SpineReading, summary};
 use crate::level_rules::{self, LevelReadings};
 use crate::patterns::Pattern;
+use crate::readings::Version;
 use crate::{pairs, rods, screws};
 use shapes::implant_layout::{
     AnchorProposal, CannotTell, CannotTellCode, ImplantLayout, LayoutChange, LayoutInput,
@@ -170,8 +171,19 @@ fn layout(
 ) -> Result<ImplantLayout, LayoutError> {
     let levels = alternatives::levels(input, alternative.upper, alternative.lower)
         .ok_or_else(|| LayoutError::Refused("instrumented-span-not-fitted".into()))?;
-    let mut anchors = candidate_anchors(input, readings, candidates, &levels)?;
-    apply_pattern(&mut anchors, &levels, readings, alternative.pattern)?;
+    let mut anchors = candidate_anchors(
+        input,
+        &readings.versions.versions,
+        &readings.measured,
+        candidates,
+        &levels,
+    )?;
+    apply_pattern(
+        &mut anchors,
+        &levels,
+        &readings.nominal,
+        alternative.pattern,
+    )?;
     let released_levels = released_levels(&anchors, &levels, alternative.lower);
     let rods = rods::propose(
         &input.fit,
@@ -193,19 +205,15 @@ fn layout(
 
 fn candidate_anchors(
     input: &LayoutInput,
-    readings: &LevelReadings,
+    versions: &[Version],
+    measured: &[SpineReading],
     candidates: &mut BTreeMap<Level, Vec<AnchorProposal>>,
     levels: &[Level],
 ) -> Result<Vec<AnchorProposal>, LayoutError> {
     let mut anchors = Vec::new();
     for &level in levels {
         if let std::collections::btree_map::Entry::Vacant(entry) = candidates.entry(level) {
-            let pair = screws::anchors(
-                input,
-                &readings.versions.versions,
-                &readings.measured,
-                &[level],
-            )?;
+            let pair = screws::anchors(input, versions, measured, &[level])?;
             entry.insert(pair);
         }
         anchors.extend(candidates[&level].iter().cloned());
@@ -216,21 +224,19 @@ fn candidate_anchors(
 fn apply_pattern(
     anchors: &mut [AnchorProposal],
     levels: &[Level],
-    readings: &LevelReadings,
+    nominal: &SpineReading,
     pattern: Pattern,
 ) -> Result<(), LayoutError> {
-    let apex = readings
-        .nominal
+    let apex = nominal
         .major
-        .map(|i| readings.nominal.vertebrae[readings.nominal.curves[i].apex_index].level);
+        .map(|i| nominal.vertebrae[nominal.curves[i].apex_index].level);
     anchors::apply(
         anchors,
         levels,
         apex,
-        readings
-            .nominal
+        nominal
             .major
-            .and_then(|i| readings.nominal.curves.get(i))
+            .and_then(|i| nominal.curves.get(i))
             .map(|c| c.convex),
         pattern,
     )

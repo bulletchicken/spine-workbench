@@ -184,7 +184,8 @@ impl<'a> ReleasedModel<'a> {
     fn constraints(&self, state: &State) -> (DVector<f64>, DMatrix<f64>) {
         let bodies = self.bodies(state);
         let rods = self.rods(state);
-        let mut c = DVector::zeros(self.hooks.len() * 3);
+        let balance = self.hooks.len() * 3;
+        let mut c = DVector::zeros(balance + 2);
         let mut j = DMatrix::zeros(c.len(), self.dimension);
         for (k, &index) in self.hooks.iter().enumerate() {
             let a = &self.construct.anchors[index];
@@ -197,6 +198,16 @@ impl<'a> ReleasedModel<'a> {
                     - self.point_jacobian(state, self.rod_group[a.rod], q)),
             );
         }
+        // Project assumption: keep this version's standing horizontal T1
+        // position over the fixed ground; height and rotations remain free.
+        let point = bodies[0].centre_mm;
+        let standing = &self.chain.reference[0].centre;
+        let point_jacobian = self.point_jacobian(state, self.body_group[0], point);
+        for axis in 0..2 {
+            c[balance + axis] = (point[axis] - standing[axis]) / LENGTH_MM;
+            j.row_mut(balance + axis)
+                .copy_from(&point_jacobian.row(axis));
+        }
         (c, j)
     }
 }
@@ -204,6 +215,34 @@ impl Model for ReleasedModel<'_> {
     type State = State;
     fn dimension(&self) -> usize {
         self.dimension
+    }
+    fn balanced_term_scale(&self, state: &State) -> Option<f64> {
+        let poses = self.bodies(state);
+        let wrenches = self.chain.joint_wrenches(&poses).ok()?;
+        let mut scale = 0.0_f64;
+        for (joint, pair) in wrenches.iter().enumerate() {
+            for (body, wrench) in [(joint, &pair[0]), (joint + 1, &pair[1])] {
+                // Ground has no solver coordinates.
+                let Some(pose) = poses.get(body) else {
+                    continue;
+                };
+                let group = self.body_group[body];
+                let force = wrench.fixed_rows::<3>(0).into_owned();
+                let arm = pose.centre_mm - state.groups[group].centre_mm;
+                let moment = wrench.fixed_rows::<3>(3) + arm.cross(&force);
+                for value in (force * LENGTH_MM)
+                    .iter()
+                    .copied()
+                    .chain(self.bases(state, group).iter().map(|b| b.dot(&moment)))
+                {
+                    if !value.is_finite() {
+                        return None;
+                    }
+                    scale = scale.max(value.abs());
+                }
+            }
+        }
+        Some(scale)
     }
     fn constraint_data(&self, state: &State) -> Option<(DVector<f64>, DMatrix<f64>)> {
         Some(self.constraints(state))
@@ -318,6 +357,17 @@ impl Model for ReleasedModel<'_> {
                         result[(j + 3 + u, j + 3 + v)] += b.dot(&(h * c));
                     }
                 }
+            }
+        }
+        let balance = self.hooks.len() * 3;
+        let force = Vector3::new(multipliers[balance], multipliers[balance + 1], 0.0);
+        let group = self.body_group[0];
+        let offset = self.offsets[group];
+        let h = arm_hessian(bodies[0].centre_mm - state.groups[group].centre_mm, force) / LENGTH_MM;
+        let bases = self.bases(state, group);
+        for (u, a) in bases.iter().enumerate() {
+            for (v, b) in bases.iter().enumerate() {
+                result[(offset + 3 + u, offset + 3 + v)] += a.dot(&(h * b));
             }
         }
         Some(result)
@@ -468,18 +518,25 @@ pub(super) fn solve(
     let mut settled = result.settled;
     let mut reason = StopReason::from(result.reason);
     let mut head_wrenches_on_rod = Vec::new();
+    let mut applied_loads = DVector::zeros(6 * poses.len());
     if settled {
+        let balance = model.hooks.len() * 3;
+        for axis in 0..2 {
+            applied_loads[axis] =
+                -chain.stiffness_scale() * result.multipliers[balance + axis] / LENGTH_MM;
+        }
         let prepared =
             prepare_rods(&poses, &rods).map_err(|e| SolveError::Linear(e.to_string()))?;
         let gradient = DVector::from_iterator(
             6 * poses.len(),
             energy.gradient.iter().flat_map(|w| w.iter().copied()),
-        );
+        ) - &applied_loads;
         match least_energy_loads(&gradient, &prepared) {
             Ok(loads) => head_wrenches_on_rod = loads,
             Err(_) => {
                 settled = false;
                 reason = StopReason::InconsistentConstraints;
+                applied_loads.fill(0.0);
             }
         }
     }
@@ -491,6 +548,7 @@ pub(super) fn solve(
         rod_points_mm,
         rod_head_stations_mm,
         head_wrenches_on_rod,
+        applied_loads,
         ground_reaction: energy.ground_reaction,
         energy_nmm: energy.energy_nmm,
         settled,
@@ -498,3 +556,6 @@ pub(super) fn solve(
         iterations: result.iterations,
     })
 }
+
+#[cfg(test)]
+mod tests;
