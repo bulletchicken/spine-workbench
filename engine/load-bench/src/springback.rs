@@ -31,6 +31,11 @@
 //! uses `Σ Bᵀ Kr B`, with no tissue stiffness and no initial iterate. Null
 //! coordinates are exposed by a bounded spectral decomposition, never by
 //! adding springs. Inconsistent force balance is refused.
+//!
+//! Released balance loads are applied at body centres as dead loads, adding
+//! no stiffness. `solve_balanced` additionally keeps T1's horizontal centre
+//! increments zero in this linear step and recovers the condition reaction.
+//! Height and rotations stay free; daily increments use the full tangent.
 
 mod corotational;
 mod head_stiffness;
@@ -104,6 +109,11 @@ pub struct SeatedState {
     pub rigid_poses: Vec<Pose>,
     pub held_poses: Vec<Pose>,
     pub displacement: DVector<f64>,
+    /// Total applied dead load plus the linear T1-condition reaction,
+    /// in body-centre patient coordinates, N/N·mm. No stiffness is added.
+    pub applied_loads: DVector<f64>,
+    /// Tissue gradient minus the applied load supplied at R. The linear
+    /// balance also includes the increment of `applied_loads` from R.
     pub tissue_gradient: DVector<f64>,
     pub tissue_tangent: DMatrix<f64>,
     /// Constraint/load-transport curvature, exactly condensed through the
@@ -141,8 +151,10 @@ pub struct SeatedState {
     /// clamped to [0,1] and does not select a particular clinical angle.
     pub stiff_rod_share: f64,
     pub linear_relative_residual: f64,
-    /// True only when the one linear solve is finite, positive definite,
-    /// and satisfies its residual check. Failure returns a reason instead.
+    /// True only when the one linear solve is finite, positive definite on
+    /// its free coordinates, and satisfies its residual check. The balanced
+    /// step does not certify the full tangent used by daily increments;
+    /// those solves retain their own positivity and residual checks.
     pub settled: bool,
 }
 
@@ -180,8 +192,56 @@ pub fn solve(
     rods: &[LockedRod],
     held_poses: &[Pose],
 ) -> Result<SeatedState, SpringbackError> {
+    solve_loaded(
+        chain,
+        rigid_poses,
+        rods,
+        held_poses,
+        &DVector::zeros(6 * rigid_poses.len()),
+    )
+}
+
+/// One elastic step with a constant body-centre applied load, with no added
+/// stiffness or T1 restraint. Every load uses patient axes and N/N·mm.
+pub fn solve_loaded(
+    chain: &Chain,
+    rigid_poses: &[Pose],
+    rods: &[LockedRod],
+    held_poses: &[Pose],
+    applied_loads: &DVector<f64>,
+) -> Result<SeatedState, SpringbackError> {
+    solve_with_load(chain, rigid_poses, rods, held_poses, applied_loads, false)
+}
+
+/// Released-state springback: carry its applied load as a dead load and
+/// retain its two horizontal T1 rows in the linear step. Because translation
+/// is about each body centre, zero x/y increments keep T1 exactly in place.
+pub fn solve_balanced(
+    chain: &Chain,
+    rigid_poses: &[Pose],
+    rods: &[LockedRod],
+    held_poses: &[Pose],
+    applied_loads: &DVector<f64>,
+) -> Result<SeatedState, SpringbackError> {
+    solve_with_load(chain, rigid_poses, rods, held_poses, applied_loads, true)
+}
+
+fn solve_with_load(
+    chain: &Chain,
+    rigid_poses: &[Pose],
+    rods: &[LockedRod],
+    held_poses: &[Pose],
+    applied_loads: &DVector<f64>,
+    hold_horizontal: bool,
+) -> Result<SeatedState, SpringbackError> {
     if held_poses.len() != rigid_poses.len() {
         return Err(SpringbackError::Dimensions);
+    }
+    if applied_loads.len() != 6 * rigid_poses.len() {
+        return Err(SpringbackError::Dimensions);
+    }
+    if applied_loads.iter().any(|value| !value.is_finite()) {
+        return Err(SpringbackError::NonFinite);
     }
     let tissue = chain.linearise(rigid_poses)?;
     let count = rigid_poses.len();
@@ -193,10 +253,20 @@ pub fn solve(
             .gradient
             .iter()
             .flat_map(|w| w.iter().copied()),
-    );
+    ) - applied_loads;
     let rods = prepare_rods(rigid_poses, rods)?;
     let rigid_loads = least_energy_loads(&gradient, &rods)?;
-    let step = solve_prestressed(rigid_poses, &tangent, &gradient, &rods, &rigid_loads)?;
+    let step = if hold_horizontal {
+        corotational::solve_balanced_prestressed(
+            rigid_poses,
+            &tangent,
+            &gradient,
+            &rods,
+            &rigid_loads,
+        )?
+    } else {
+        solve_prestressed(rigid_poses, &tangent, &gradient, &rods, &rigid_loads)?
+    };
     let poses: Vec<_> = rigid_poses
         .iter()
         .enumerate()
@@ -265,6 +335,7 @@ pub fn solve(
         rigid_poses: rigid_poses.to_vec(),
         held_poses: held_poses.to_vec(),
         displacement: step.displacement,
+        applied_loads: applied_loads + &step.applied_load_increment,
         tissue_gradient: gradient,
         tissue_tangent: tangent,
         geometric_tangent: step.geometric_tangent,

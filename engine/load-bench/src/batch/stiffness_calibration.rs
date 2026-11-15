@@ -11,12 +11,12 @@ use shapes::implant_layout::RodMaterial;
 // Scale-one R peaks, N, in realistic_cases::CASES order. These are solver
 // calibration answers, not measured tissue properties.
 const REFERENCE_FORCES_N: [f64; 6] = [
-    317.36381454846503,
-    194.37452927254435,
-    543.4172057237764,
-    320.98172625607543,
-    160.2604429831296,
-    200.1558126092878,
+    322.3768216059062,
+    195.93071339221135,
+    549.7693763891228,
+    330.15096705738694,
+    169.5040923914302,
+    201.5123456892776,
 ];
 
 fn bounds(e: &Evidence, forces: &[f64; 6]) -> (f64, f64, f64) {
@@ -74,9 +74,9 @@ fn the_stored_range_centres_the_geometric_means_and_uses_the_published_factor() 
         );
     }
     let (centre, lower, upper) = bounds(&evidence, &REFERENCE_FORCES_N);
-    assert!((centre - 1.096180421360762).abs() < 1e-11);
+    assert!((centre - 1.0733532084835526).abs() < 1e-11);
     assert!((upper / lower - 439.0 / 192.0).abs() < 1e-12);
-    assert_eq!(stored(&evidence), (0.72, 1.66));
+    assert_eq!(stored(&evidence), (0.71, 1.62));
     assert_eq!(stored(&evidence), (rounded(lower), rounded(upper)));
     assert!(row.notes.contains("Assumed"));
     assert!(row.notes.contains("not a measurement of the child"));
@@ -87,7 +87,7 @@ fn the_stored_range_centres_the_geometric_means_and_uses_the_published_factor() 
         "summed forces spread by a factor of 3.1, so the true spread could be wider",
         "rods held rigid, before springback, so the rod chosen does not change them",
         "published forces come from rods after they flexed",
-        "factor of 3.4 at scale 1, more than the published 2.29",
+        "factor of 3.2 at scale 1, more than the published 2.29",
         "one spine's forces at the stored range can still pass 439 N",
     ] {
         assert!(row.notes.contains(qualification), "{qualification}");
@@ -158,11 +158,6 @@ fn six_first_placements_recompute_the_stored_stiffness_range() {
                 .fold(0.0, f64::max)
         };
         forces[i] = peak(1.0);
-        assert!(
-            (forces[i] / REFERENCE_FORCES_N[i] - 1.0).abs() < 1e-8,
-            "{recipe:?}/{seed}: reference force changed to {} N",
-            forces[i]
-        );
         println!(
             "{recipe:?}/{seed} {:?}-{:?}: {:.12} N",
             layout.upper, layout.lower, forces[i]
@@ -185,5 +180,12 @@ fn six_first_placements_recompute_the_stored_stiffness_range() {
         rounded(lower),
         rounded(upper)
     );
+    for (i, (recipe, seed)) in realistic_cases::CASES.into_iter().enumerate() {
+        assert!(
+            (forces[i] / REFERENCE_FORCES_N[i] - 1.0).abs() < 1e-8,
+            "{recipe:?}/{seed}: reference force changed to {} N",
+            forces[i]
+        );
+    }
     assert_eq!(stored(&evidence), (rounded(lower), rounded(upper)));
 }

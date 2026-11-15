@@ -74,6 +74,9 @@ fn held_released_and_linear_elastic_states_balance_each_free_body() {
     let r = solve_rigid(&case.chain, &case.construct, &h, None).unwrap();
     assert!(r.settled, "{:?}", r.reason);
     let mut bodies = case.chain.evaluate(&r.poses).unwrap().gradient;
+    for (i, body) in bodies.iter_mut().enumerate() {
+        *body -= Wrench::from_column_slice(r.applied_loads.rows(6 * i, 6).as_slice());
+    }
     for (rod, loads) in r.rods.iter().zip(&r.head_wrenches_on_rod) {
         let mut resultant = Wrench::zeros();
         for (tie, wrench) in rod.ties.iter().zip(loads) {
@@ -88,14 +91,31 @@ fn held_released_and_linear_elastic_states_balance_each_free_body() {
     for body in &bodies {
         close_wrench(body, scale, length);
     }
-    close_wrench(&r.ground_reaction, scale, length);
+    let mut ground = r.ground_reaction;
+    for (i, pose) in r.poses.iter().enumerate() {
+        let applied = Wrench::from_column_slice(r.applied_loads.rows(6 * i, 6).as_slice());
+        ground += force_moment_at(
+            pose.centre_mm - case.chain.ground.centre_mm,
+            applied.fixed_rows::<3>(0).into_owned(),
+            applied.fixed_rows::<3>(3).into_owned(),
+        );
+    }
+    close_wrench(&ground, scale, length);
 
-    let elastic = load_bench::springback::solve(&case.chain, &r.poses, &r.rods, &h.poses).unwrap();
+    let elastic = load_bench::springback::solve_balanced(
+        &case.chain,
+        &r.poses,
+        &r.rods,
+        &h.poses,
+        &r.applied_loads,
+    )
+    .unwrap();
     // Order 1 is exactly a linear solve about R. Check that linear tissue
     // response, not the nonlinear second-order remainder after updating poses.
     let mut residual = &elastic.tissue_gradient
         + &elastic.tissue_tangent * &elastic.displacement
-        + &elastic.body_geometric_load;
+        + &elastic.body_geometric_load
+        - (&elastic.applied_loads - &r.applied_loads);
     let mut whole = Wrench::zeros();
     for (rod_index, rod) in elastic.rods.iter().enumerate() {
         let material = &elastic.material_head_wrenches[rod_index];
@@ -170,6 +190,9 @@ fn hooks_release_rotation_without_adding_a_head_moment() {
         "the mixed construct must actually respond to removing its holders"
     );
     let mut bodies = case.chain.evaluate(&r.poses).unwrap().gradient;
+    for (i, body) in bodies.iter_mut().enumerate() {
+        *body -= Wrench::from_column_slice(r.applied_loads.rows(6 * i, 6).as_slice());
+    }
     let scale = r
         .head_wrenches_on_rod
         .iter()
@@ -197,5 +220,14 @@ fn hooks_release_rotation_without_adding_a_head_moment() {
     for body in &bodies {
         close_wrench(body, scale, 150.0);
     }
-    close_wrench(&r.ground_reaction, scale, 150.0);
+    let mut ground = r.ground_reaction;
+    for (i, pose) in r.poses.iter().enumerate() {
+        let applied = Wrench::from_column_slice(r.applied_loads.rows(6 * i, 6).as_slice());
+        ground += force_moment_at(
+            pose.centre_mm - case.chain.ground.centre_mm,
+            applied.fixed_rows::<3>(0).into_owned(),
+            applied.fixed_rows::<3>(3).into_owned(),
+        );
+    }
+    close_wrench(&ground, scale, 150.0);
 }

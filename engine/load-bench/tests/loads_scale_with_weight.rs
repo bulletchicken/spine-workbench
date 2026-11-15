@@ -758,7 +758,14 @@ fn run_fitted_case(front_only: bool) {
     assert!(held.settled, "{:?}", held.reason);
     let rigid = rigid_rod::solve_rigid(&chain, &construct, &held, None).unwrap();
     assert!(rigid.settled, "{:?}", rigid.reason);
-    let seated = springback::solve(&chain, &rigid.poses, &rigid.rods, &held.poses).unwrap();
+    let seated = springback::solve_balanced(
+        &chain,
+        &rigid.poses,
+        &rigid.rods,
+        &held.poses,
+        &rigid.applied_loads,
+    )
+    .unwrap();
     let read = |row, term| {
         evidence
             .value(TableKind::DailyLoads, row, term)

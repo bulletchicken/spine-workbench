@@ -19,7 +19,14 @@ fn the_loaded_double_major_construct_has_positive_objective_stiffness() {
     assert!(held.settled, "{:?}", held.reason);
     let rigid = solve_rigid(&case.chain, &case.construct, &held, None).unwrap();
     assert!(rigid.settled, "{:?}", rigid.reason);
-    let state = springback::solve(&case.chain, &rigid.poses, &rigid.rods, &held.poses).unwrap();
+    let state = springback::solve_balanced(
+        &case.chain,
+        &rigid.poses,
+        &rigid.rods,
+        &held.poses,
+        &rigid.applied_loads,
+    )
+    .unwrap();
     assert!(state.settled && state.linear_relative_residual < 1e-9);
     // The joint-only target and supplied-frame holder remove this case's
     // former accidental negative bare-chart mode. The independent small
@@ -47,7 +54,14 @@ fn each_current_default_construct_settles_with_the_held_continuations() {
         );
         let rigid = solve_rigid(&case.chain, &case.construct, &held, None).unwrap();
         assert!(rigid.settled, "{recipe:?}/{seed}: {:?}", rigid.reason);
-        let state = springback::solve(&case.chain, &rigid.poses, &rigid.rods, &held.poses).unwrap();
+        let state = springback::solve_balanced(
+            &case.chain,
+            &rigid.poses,
+            &rigid.rods,
+            &held.poses,
+            &rigid.applied_loads,
+        )
+        .unwrap();
         assert!(state.settled && state.linear_relative_residual < 1e-9);
     }
 }

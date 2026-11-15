@@ -30,9 +30,14 @@ fn fitting_rods_leave_all_three_correction_states_at_rest() {
             .flatten()
             .all(|w| w.norm() < 1e-9)
     );
-    let elastic =
-        load_bench::springback::solve(&case.chain, &rigid.poses, &rigid.rods, &held.poses)
-            .expect("springback");
+    let elastic = load_bench::springback::solve_balanced(
+        &case.chain,
+        &rigid.poses,
+        &rigid.rods,
+        &held.poses,
+        &rigid.applied_loads,
+    )
+    .expect("springback");
     assert!(elastic.settled);
     cases::assert_poses_close(&elastic.poses, &standing, 1e-11);
     assert!(
@@ -464,8 +469,14 @@ fn rt1_rods_supplied_through_standing_heads_need_no_correction_or_holding_torque
     assert!(rigid.settled, "{:?}", rigid.reason);
     cases::assert_poses_close(&rigid.poses, &standing, 1e-9);
     check_zero_loads("R", &rigid.head_wrenches_on_rod);
-    let elastic =
-        load_bench::springback::solve(&case.chain, &rigid.poses, &rigid.rods, &held.poses).unwrap();
+    let elastic = load_bench::springback::solve_balanced(
+        &case.chain,
+        &rigid.poses,
+        &rigid.rods,
+        &held.poses,
+        &rigid.applied_loads,
+    )
+    .unwrap();
     assert!(elastic.settled);
     cases::assert_poses_close(&elastic.poses, &standing, 1e-9);
     assert!(elastic.displacement.norm() < 1e-9);

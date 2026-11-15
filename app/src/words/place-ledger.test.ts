@@ -282,7 +282,7 @@ describe('the Place evidence ledger', () => {
     expect(added.publishedNumber).toContain('summed forces spread by a factor of 3.1');
     expect(added.publishedNumber).toContain('held rigid, before springback, so the rod chosen does not change them');
     expect(added.publishedNumber).toContain('published forces come from rods after they flexed');
-    expect(added.publishedNumber).toContain('3.4 at scale 1, more than the published 2.29');
+    expect(added.publishedNumber).toContain('3.2 at scale 1, more than the published 2.29');
     expect(added.publishedNumber).toContain('can still pass 439 N');
     expect(added.publishedNumber).not.toMatch(/widest|per patient/);
     expect(added.population).toContain('Sample: 6');

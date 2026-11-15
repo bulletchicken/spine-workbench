@@ -89,8 +89,8 @@ fn every_version_settles_with_free_bodies_inside_a_long_released_group() {
         assert!(anchors.iter().all(|a| a.kind == AnchorKind::None));
     }
     // A bilateral screw pair connects the rods into one block. Each hook
-    // sits on a body already screwed to it, so no hook joins distinct groups
-    // and the released solve has no remaining constraint rows.
+    // sits on a body already screwed to it, so no hook joins distinct groups.
+    // Release retains only the two horizontal T1 constraint rows.
     assert!(placement.anchors.iter().any(|a| {
         a.kind == AnchorKind::Screw
             && placement

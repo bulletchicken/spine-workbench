@@ -48,7 +48,13 @@ fn fill(
         Ok(state) if state.settled => state,
         _ => return Ok(()),
     };
-    let seated = match springback::solve(&chain, &rigid.poses, &rigid.rods, &held.poses) {
+    let seated = match springback::solve_balanced(
+        &chain,
+        &rigid.poses,
+        &rigid.rods,
+        &held.poses,
+        &rigid.applied_loads,
+    ) {
         Ok(state) if state.settled => state,
         _ => return Ok(()),
     };

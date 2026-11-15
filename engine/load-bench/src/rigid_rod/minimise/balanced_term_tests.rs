@@ -71,3 +71,63 @@ fn a_balance_scale_changes_only_the_relative_stationarity_bound() {
     assert!(!maximum.settled);
     assert_eq!(maximum.reason, Reason::Singular);
 }
+
+#[test]
+fn hook_and_horizontal_rows_preserve_the_individual_term_stopping_scale() {
+    struct Rows {
+        hook: bool,
+        horizontal: bool,
+    }
+    impl Model for Rows {
+        type State = DVector<f64>;
+        fn dimension(&self) -> usize {
+            3
+        }
+        fn evaluate(&self, x: &Self::State) -> Option<Evaluation> {
+            let mut gradient = x.clone();
+            let count = usize::from(self.hook) + usize::from(self.horizontal);
+            let mut constraint = DVector::zeros(count);
+            let mut jacobian = DMatrix::zeros(count, 3);
+            let mut row = 0;
+            for (axis, active, force) in [(0, self.hook, 5.0), (1, self.horizontal, 7.0)] {
+                if active {
+                    gradient[axis] += force;
+                    constraint[row] = x[axis];
+                    jacobian[(row, axis)] = 1.0;
+                    row += 1;
+                }
+            }
+            Some(Evaluation {
+                energy: 0.5 * x.dot(x)
+                    + if self.hook { 5.0 * x[0] } else { 0.0 }
+                    + if self.horizontal { 7.0 * x[1] } else { 0.0 },
+                gradient,
+                hessian: DMatrix::identity(3, 3),
+                constraint,
+                jacobian,
+            })
+        }
+        fn step(&self, x: &Self::State, increment: &DVector<f64>) -> Option<Self::State> {
+            Some(x + increment)
+        }
+        fn balanced_term_scale(&self, _: &Self::State) -> Option<f64> {
+            Some(10.0)
+        }
+    }
+    // Each constrained force balances its multiplier exactly; the only KKT
+    // residual is z. Regardless of row presence, the bound is 2.01e-10.
+    for hook in [false, true] {
+        for horizontal in [false, true] {
+            let model = Rows { hook, horizontal };
+            for (residual, iterations) in [(1e-10, 0), (3e-10, 1)] {
+                let answer = minimise(
+                    &model,
+                    DVector::from_vec(vec![0.0, 0.0, residual]),
+                    Options::default(),
+                );
+                assert!(answer.settled);
+                assert_eq!(answer.iterations, iterations);
+            }
+        }
+    }
+}

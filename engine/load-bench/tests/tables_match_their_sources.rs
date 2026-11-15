@@ -198,7 +198,7 @@ fn joint_springs_keep_the_published_units_and_the_disagreeing_tables() {
         "stiffness-scale",
         "project-assumptions",
         Unit::Ratio,
-        &[("lower", 0.72), ("upper", 1.66)],
+        &[("lower", 0.71), ("upper", 1.62)],
     );
     for term in ["lower", "upper"] {
         assert_eq!(

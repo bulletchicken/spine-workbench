@@ -477,9 +477,10 @@ passing them to the load bench.
     This model has not been compared with patients. Its numerical and
     symmetry checks establish implementation identities, not clinical
     performance.
-13. Outside the rods, the bench keeps the standing joint rest shape.
-    Spontaneous correction of an unfused curve and body rebalancing are
-    absent. Read shape results inside the instrumented levels only.
+13. Outside the rods, the bench bends the free joints so that T1 stays
+    at its standing sideways and front-back position over a pelvis that
+    does not move. The shape outside the rods follows from that
+    assumption. Spontaneous correction of an unfused curve is absent.
 14. Tightened-head slip, actual adolescent head offset, a measured rod
     overhang, muscles, growth-friendly eligibility and the body's
     response to history or non-idiopathic disease are outside the

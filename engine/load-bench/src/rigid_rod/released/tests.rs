@@ -85,7 +85,7 @@ fn each_joint_wrench_uses_its_group_origin_before_terms_cancel() {
                 })
                 .collect(),
         };
-        assert_eq!(model.constraints(&initial(&model)).0.len(), 0);
+        assert_eq!(model.constraints(&initial(&model)).0.len(), 2);
         assert_eq!(model.balanced_term_scale(&initial(&model)), Some(40.0));
 
         // Re-express the upper group's coordinates 200 mm below its
@@ -149,4 +149,75 @@ fn a_joint_inside_one_rigid_group_does_not_supply_a_balance_scale() {
     // (Fx,My)=(2,-30), with no arm from the lowest member to the origin.
     // The severely strained internal disc is constant and contributes zero.
     assert_eq!(model.balanced_term_scale(&state), Some(40.0));
+}
+
+#[test]
+fn the_t1_rows_have_the_point_jacobian_and_block_arm_curvature() {
+    let chain = two_body_chain(1.0);
+    let mut held = held_at(chain.standing());
+    held.stations_mm = vec![0.0, 40.0];
+    held.rod_poses.push(Pose {
+        centre_mm: Vector3::zeros(),
+        rotation: Matrix3::identity(),
+    });
+    let mut construct = Construct {
+        rods: vec![super::super::Rod {
+            points_mm: vec![Vector3::new(0.0, 0.0, 60.0), Vector3::new(0.0, 0.0, 20.0)],
+            properties: crate::rod_beams::BeamProperties::from_young_modulus(200_000.0, 5.5),
+        }],
+        anchors: (0..2)
+            .map(|body| super::super::Anchor {
+                body,
+                rod: 0,
+                point_mm: Vector3::zeros(),
+                station_mm: 40.0 * body as f64,
+                kind: HeadKind::Screw,
+            })
+            .collect(),
+    };
+    for hook in [false, true] {
+        construct.anchors[0].kind = if hook {
+            HeadKind::Hook
+        } else {
+            HeadKind::Screw
+        };
+        let model = ReleasedModel::new(&chain, &construct, &held).unwrap();
+        let state = State {
+            groups: model
+                .origins
+                .iter()
+                .map(|origin| Pose {
+                    centre_mm: *origin,
+                    rotation: Matrix3::identity(),
+                })
+                .collect(),
+        };
+        let evaluation = model.evaluate(&state).unwrap();
+        let row = model.hooks.len() * 3;
+        assert_eq!(evaluation.constraint.len(), row + 2);
+        let mut lambda = DVector::zeros(row + 2);
+        lambda[row] = 7.0;
+        lambda[row + 1] = -3.0;
+        let mut direction = DVector::zeros(model.dimension);
+        let offset = model.offsets[model.body_group[0]];
+        direction[offset + 3] = 0.2;
+        direction[offset + 4] = -0.3;
+        direction[offset + 5] = 0.4;
+        // For an identity block with T1 40 mm above its origin,
+        // dc_x/dtheta_y=2 and dc_y/dtheta_x=-2. A free T1 has no arm.
+        let arm = if hook { 0.0 } else { 40.0 };
+        assert_eq!(evaluation.jacobian[(row, offset + 4)], arm / LENGTH_MM);
+        assert_eq!(evaluation.jacobian[(row + 1, offset + 3)], -arm / LENGTH_MM);
+
+        let curvature = model
+            .lagrangian_hessian(&state, &lambda, &evaluation)
+            .unwrap()
+            - &evaluation.hessian;
+        let step = 1e-4;
+        let weighted = |s: &State| lambda.dot(&model.constraints(s).0);
+        let plus = model.step(&state, &(&direction * step)).unwrap();
+        let minus = model.step(&state, &(&direction * -step)).unwrap();
+        let second = (weighted(&plus) - 2.0 * weighted(&state) + weighted(&minus)) / (step * step);
+        assert!((second - direction.dot(&(curvature * &direction))).abs() < 1e-8);
+    }
 }

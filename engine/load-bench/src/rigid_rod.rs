@@ -26,9 +26,13 @@
 //! energy. Screw-connected bodies and rods are represented as rigid groups;
 //! hooks leave point constraints between groups. This exact elimination of
 //! locked ties avoids counting redundant constraints as mechanisms.
-//! Outside the rods, joints return to their standing rest shape in R.
-//! There are no muscles or spontaneous unfused-curve changes in this model;
-//! shape comparisons are read inside the instrumented levels.
+//! R also holds T1's centre at this version's standing anterior and lateral
+//! coordinates over the fixed ground. Height and rotations remain free.
+//! Outside joints take their least-energy shape under that condition. The
+//! horizontal reaction represents active balance as a project assumption;
+//! free-joint shape and lowest-instrumented tilt follow from it and carry no
+//! spontaneous-correction interpretation. The reaction is a dead load in
+//! springback, which also holds the same two translations in its linear step.
 //!
 //! H admits a project-selected 20 mm straight continuation along each unit
 //! endpoint tangent. Nominal stations remain 0..L and the lower pin remains
@@ -241,6 +245,11 @@ pub struct RigidState {
     /// Forces and couples ON each rod, with the moment about its head.
     /// To transfer to a body centre, negate force and couple plus force arm.
     pub head_wrenches_on_rod: Vec<Vec<Wrench>>,
+    /// Applied body-centre load, six patient-axis entries per body (N/N·mm).
+    /// Only T1's two horizontal forces can be nonzero. This condition keeps
+    /// its standing position over the fixed ground; it is no muscle estimate.
+    /// Unsettled states contain zero loads.
+    pub applied_loads: nalgebra::DVector<f64>,
     pub ground_reaction: Wrench,
     pub energy_nmm: f64,
     pub settled: bool,

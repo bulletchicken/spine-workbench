@@ -23,6 +23,7 @@ fn tissue_scale_changes_loads_and_holding_torques_in_the_same_ratio() {
     );
     let r0 = solve_rigid(&base.chain, &base.construct, &h0, None).unwrap();
     assert!(r0.settled, "{:?}", r0.reason);
+    assert!(r0.applied_loads.norm() > 1e-6);
     for scale in [0.25, 4.0] {
         let case = cases::holding_case(scale);
         let h = solve_held(
@@ -37,6 +38,10 @@ fn tissue_scale_changes_loads_and_holding_torques_in_the_same_ratio() {
         assert!(r.settled, "{:?}", r.reason);
         cases::assert_poses_close(&h.poses, &h0.poses, 1e-10);
         cases::assert_poses_close(&r.poses, &r0.poses, 1e-10);
+        assert!(
+            (&r.applied_loads - &r0.applied_loads * scale).norm()
+                < 1e-9 * r0.applied_loads.norm().max(1.0)
+        );
         for (a, b) in h.head_forces_on_rod.iter().zip(&h0.head_forces_on_rod) {
             assert!((a - b * scale).norm() < 1e-9 * b.norm().max(1.0));
         }
@@ -72,11 +77,23 @@ fn elastic_shape_depends_only_on_the_tissue_to_rod_stiffness_ratio() {
         assert!(h.settled, "{:?}", h.reason);
         let r = solve_rigid(&case.chain, &case.construct, &h, None).unwrap();
         assert!(r.settled, "{:?}", r.reason);
-        load_bench::springback::solve(&case.chain, &r.poses, &r.rods, &h.poses).unwrap()
+        load_bench::springback::solve_balanced(
+            &case.chain,
+            &r.poses,
+            &r.rods,
+            &h.poses,
+            &r.applied_loads,
+        )
+        .unwrap()
     };
     let base = run(1.0, 1.0);
     let together = run(4.0, 4.0);
     cases::assert_poses_close(&base.poses, &together.poses, 1e-10);
+    assert!(base.applied_loads.norm() > 1e-6);
+    assert!(
+        (&together.applied_loads - &base.applied_loads * 4.0).norm()
+            < 1e-9 * base.applied_loads.norm().max(1.0)
+    );
     for (a, b) in together
         .head_wrenches_on_rod
         .iter()

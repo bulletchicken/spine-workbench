@@ -113,11 +113,21 @@ Correction has three states:
    continuation end is refused.
 2. **Locked and let go, R, order 0.** Screws lock all six relative freedoms at
    their H values; hooks keep only three translation ties. Holders are removed.
-   Rods are free rigid bodies. For screws only, the instrumented bodies move as
-   one rigid block and outside joints return to rest. Balanced head wrenches
-   are selected by the least rod strain energy, the elastic stiff-rod limit.
+   Rods are free rigid bodies. T1's centre keeps its standing anterior and
+   sideways coordinates relative to the fixed ground; its height and all three
+   rotations remain free. The other freedoms minimise tissue energy. For
+   screws only, the instrumented bodies move as one rigid block, while
+   free joints bend to permit the imposed T1 position. The condition's two
+   multipliers give a horizontal applied force at T1. Balanced head wrenches
+   include that force and are selected by the least rod strain energy, the
+   elastic stiff-rod limit.
 3. **Springback, order 1.** One prestressed linear elastic step about R lets
    the rods flex. The heads stay locked and there is no external holding torque.
+   The horizontal force at T1 is carried as a dead load, without added stiffness,
+   and the same two T1 centre coordinates are held in the linear step. Exact
+   coordinate elimination leaves T1's height and all rotations free; its reaction
+   increment is included in the applied load. Daily increments retain the full
+   tangent and their existing boundary conditions.
    `stiffRodShare` is the norm of this step divided by the rigid correction,
    with rotations converted using the solver's 20 mm coordinate scale. It is
    not a percentage loss of Cobb correction.
@@ -140,9 +150,10 @@ These stop definitions and load paths are project choices. Standing keeps the
 head, arm and trunk weight fractions in the evidence. At each disc the weight
 above acts as compression along the column through that disc's material point,
 with zero moment about the disc. No lever-arm or slice-offset moment is added.
-No muscles are modelled: this compression through the discs represents their
-balancing of the trunk. The compression is set once at the seated poses along
-each upper body's cranial axis; its total equals the published weight in size
+Muscle activity is represented only by the horizontal T1 condition force and
+this compression through the discs. The compression is set once at the seated
+poses along each upper body's cranial axis; its total equals the published
+weight in size
 but follows the lowest body's axis rather than the vertical. The chain without
 the construct is still solved under the same compression prescription at its
 reference poses. Its refusal, including the small-angle checks after scaling
@@ -317,7 +328,7 @@ them.
 |---|---|---|
 | `joint-springs.json` | T1/2–L4/5 translation AP/ML/CC 1392/294/341 N/mm; rotation about AP/ML/CC 448/644/738 N·mm/degree. L5/S1 700/190/190 and 222/410/410. | Tachi 2021, n=47; borrowed adult lumbar stiffness, uniformly applied in that planner [peer-reviewed, full text]. |
 | same | Release: axial rotation −17%, flexion −15%, coronal −3.8%, compression −14%. | Wang 2017; cited cadaver calibration targets, not measurements from its ten patients [peer-reviewed, full text]. |
-| same | Preload factor 1.71–2.11. Overall stiffness ×0.72–1.66 (assumed solver calibration). Thoracic lateral and axial rib factors. Adult disc and thoracic comparisons. | Gardner-Morse and Stokes 2004 [peer-reviewed, abstract]; Petit 2004 [peer-reviewed, abstract]; Watkins 2005 [peer-reviewed, abstract], Mannen 2018, Liebsch 2020, Stokes and Gardner-Morse 2016 and Wilke 2017 [peer-reviewed, full text]. The scale is calibrated against Salmingo 2013 head forces; rib ranges are own priors. Flexion bounds are derived explicitly from Mannen's with/without-rib values 2.29/2.12 and 2.97/1.39; the literal rounded range is not a published table cell. |
+| same | Preload factor 1.71–2.11. Overall stiffness ×0.71–1.62 (assumed solver calibration). Thoracic lateral and axial rib factors. Adult disc and thoracic comparisons. | Gardner-Morse and Stokes 2004 [peer-reviewed, abstract]; Petit 2004 [peer-reviewed, abstract]; Watkins 2005 [peer-reviewed, abstract], Mannen 2018, Liebsch 2020, Stokes and Gardner-Morse 2016 and Wilke 2017 [peer-reviewed, full text]. The scale is calibrated against Salmingo 2013 head forces; rib ranges are own priors. Flexion bounds are derived explicitly from Mannen's with/without-rib values 2.29/2.12 and 2.97/1.39; the literal rounded range is not a published table cell. |
 | `rod-materials.json` | Titanium E=114 GPa, yield 896–1034 and ultimate 965–1103 MPa; CoCr E=240, yield 500–1500, ultimate 900–1540; steel E=193, yield 170–310, ultimate 540–1000. | Prasad 2017 [peer-reviewed, full text]. Titanium strengths use body text because its Table 1 pair contradicts itself. One quantile samples yield and ultimate together, keeping yield below ultimate. Steel condition is not stated. |
 | same | Alternative planner/coupon material sets, textbook ranges and computed section comparisons. | Tachi 2021; Little 2013; Jeong 2025; Song 2021; Ohrt-Nissen 2018; Abe 2015 and other source keys retained in that table [peer-reviewed; access in bibliography]. They are distinct sets, not mixed material properties. Section arithmetic is own inference. |
 | `anchor-strength.json` | T1–T8 screw 481–611 N; T9–T12 screw 807 N; hook 321 N; lumbar screw 1056.4 N. | Lehman 2003, 30 paired adult thoracic vertebrae; Liljenqvist 2001, 9 adult spines/90 tests; Soshi 1991, lumbar cadavers [peer-reviewed, abstracts]. T1–T8 assignment and borrowing the hook region are own choices. |
@@ -328,25 +339,25 @@ them.
 | `fatigue.json` | Ti/CoCr construct run-outs 250/290 N, 5.5 mm rods, 5 million cycles. Historical Goodman-equivalent references 169/191 MPa; contour factor 0.6–0.8. Coupon comparisons retained. | Vieweg 2023 [peer-reviewed, full text]; Slivka 2013 [peer-reviewed, abstract]. The 40 mm fixture arm/equal sharing conversion and extrapolation of contour loss to CoCr and other diameters are own inference. Runtime ultimate strengths are sampled from Prasad, not the historical calibration's 900/1200 MPa. Steel has no construct-fatigue reference. |
 | `sources.json` | Publication identifiers, sample and population qualifications, source access and known omissions. | Bibliographic metadata for the papers above and the retained comparison rows. The project-assumptions key is own inference, not a paper. |
 
-The assumed 0.72–1.66 log-uniform stiffness prior calibrates this solver,
+The assumed 0.71–1.62 log-uniform stiffness prior calibrates this solver,
 not the child. The six surgical-size made-up reference spines are
 `right-thoracic-40`, `double-major-55-to-45` and `lumbar-left-30`, each at
 seeds 1 and 2. Use each first proposed placement, with 6 mm titanium-alloy
 rods (the sourced choice, E=114 GPa), no overbend, stiffness scale 1, the
 unchanged fit and the existing middle draw for other correction unknowns.
-Release follows that placement; preload and daily draws are unused at locking.
-The largest head forces after locking and rigid release, before springback,
-are respectively 317.363815, 194.374529, 543.417206, 320.981726,
-160.260443 and 200.155813 N.
+Release follows that placement, including the two horizontal T1 conditions;
+preload and daily draws are unused at locking. The largest head forces after
+locking and rigid release, before springback, are respectively 322.376822, 195.930713, 549.769376, 330.150967,
+169.504092 and 201.512346 N.
 
-Their geometric mean is 264.850522 N. Centre the scale at
-`c = sqrt(192 × 439) / geometric_mean(reference forces) = 1.096180421361`.
+Their geometric mean is 270.483150 N. Centre the scale at
+`c = sqrt(192 × 439) / geometric_mean(reference forces) = 1.073353208484`.
 Use the published between-patient factor `439/192` for the width:
-`lower = c / sqrt(439/192) = 0.724937215262` and
-`upper = c × sqrt(439/192) = 1.657538736979`. Store these rounded to the
-nearest hundredth (two decimal places), halfway values up: 0.72 and 1.66.
+`lower = c / sqrt(439/192) = 0.709840890047` and
+`upper = c × sqrt(439/192) = 1.623021618388`. Store these rounded to the
+nearest hundredth (two decimal places), halfway values up: 0.71 and 1.62.
 The unrounded factor is exactly 2.286458; endpoint rounding makes the stored
-factor 2.305556. Salmingo 2013 (n=6, PMID 23273729; author manuscript read
+factor 2.281690. Salmingo 2013 (n=6, PMID 23273729; author manuscript read
 in full) reports the largest screw force, 192 to 439 N across six patients,
 worked back from rod deformation. The 6 mm titanium-alloy rod is recorded
 for the same group's earlier three-patient report (Salmingo 2012,
@@ -357,7 +368,7 @@ spread by a factor of 3.1, so the true spread could be wider. The reference
 forces are taken with the rods held rigid, before springback, so the rod
 chosen does not change them, while the published forces come from rods
 after they flexed. The six reference spines differ among themselves by a
-factor of 3.4 at scale 1, more than the published 2.29, so one spine's forces
+factor of 3.2 at scale 1, more than the published 2.29, so one spine's forces
 at the stored range can still pass 439 N. It is an assumed calibration of
 this solver, not a measurement of the child, and it does not fit springback
 or daily forces.
@@ -458,13 +469,73 @@ are in `evidence/sources.json` and `evidence/README.md` where recorded.
     establish force estimates in patients. This model has not been compared
     with any patient.
 
-Further limits apply. Outside the rods, joints keep their standing rest shape;
-spontaneous correction of an unfused curve and body rebalancing are absent.
-The trunk above and below the rods is not rebalanced after correction, so the
-computed standing shape is not the patient's standing shape.
-Shape changes outside instrumented levels carry no spontaneous-correction
-interpretation. Tightened heads never slip; hooks
-are two-way translation ties without one-way contact. Growth, fusion timing,
+The released posture assumes the patient keeps the standing film's balance
+at T1 over a pelvis that does not move. Each version uses its own standing T1
+position, including any uncertainty or inferred depth in the fit. This adds no
+numeric target. The boundary condition follows Tachi 2021's fixed sacrum and
+T1 free only craniocaudally and in rotation [peer-reviewed, full text]; using
+it here is a project assumption. It preserves preoperative balance rather
+than specifying a surgical goal or establishing a postoperative outcome.
+
+Where T1 stands, the lowest instrumented vertebra's rods-in tilt and the shape
+outside the rods follow from this balance assumption. They are not independent
+results and cannot establish spontaneous correction by comparison with a
+published postoperative series. The condition force is the reaction that holds
+T1 in place. It stands in for the muscles that keep the patient balanced and
+is not an estimate of muscle force. The outward contract has no T1 position,
+condition force or free-joint bend fields.
+
+The ground is the fitted L5 lower-endplate centre with an identity frame.
+Pelvis and hip motion, sacral tilt and leg length are absent, so the free discs
+must take the whole change. L5–S1 takes a large share because its lateral-bending
+spring is about half as stiff as the other lumbar springs. There is no recorded
+lumbar range of motion to check these bends against, no range limit is applied,
+and the springs remain linear at large angles. These bends do not establish a
+physiological compensation pattern. The short proximal free segment changes
+little, unlike published unfused proximal-thoracic correction. T1 and shoulder
+tilt are not held. T1 represents the head; head and neck bodies are absent.
+The posture is immediate and has no time course for later spontaneous
+correction. Sagittal pelvic parameters and sagittal vertical axis are absent.
+
+For the first placements of `right-thoracic-40`, seed 1, the following bends
+from rest were measured at rods-in over 32 versions. They follow from the
+balance assumption and are computed examples, not published values. Each cell
+is the median coronal / sagittal / axial rotation-log component in degrees,
+in the current lower joint frame. The two-film placement spans T5–T11; the
+front-only placement spans T5–T12, so T11/T12 is inside that construct.
+
+| Free joint | Two films | Front only |
+|---|---|---|
+| T1/T2 | -0.03 / +0.01 / +0.00 | -0.03 / +0.01 / +0.00 |
+| T2/T3 | -0.09 / +0.03 / +0.00 | -0.09 / +0.04 / +0.00 |
+| T3/T4 | -0.17 / +0.05 / +0.01 | -0.16 / +0.06 / +0.01 |
+| T4/T5 | -0.24 / +0.05 / +0.01 | -0.23 / +0.07 / +0.01 |
+| T11/T12 | -0.72 / +0.15 / +0.10 | inside rods |
+| T12/L1 | -1.34 / +0.32 / +0.28 | -1.33 / +0.42 / +0.25 |
+| L1/L2 | -1.54 / +0.40 / +0.22 | -1.52 / +0.49 / +0.19 |
+| L2/L3 | -1.76 / +0.40 / +0.05 | -1.74 / +0.50 / +0.05 |
+| L3/L4 | -1.93 / +0.42 / -0.22 | -1.92 / +0.52 / -0.17 |
+| L4/L5 | -1.96 / +0.39 / -0.59 | -2.01 / +0.55 / -0.47 |
+| L5/S1 | -4.70 / +0.63 / -0.27 | -4.66 / +0.87 / -0.21 |
+
+L5–S1 is the largest free-joint bend in both runs. Its rotation-log magnitude
+has p10 / p50 / p90 of 4.11 / 4.75 / 5.40 degrees with two films and
+4.47 / 4.78 / 5.18 degrees with the front film only; the largest observed
+values are 5.82 and 5.45 degrees. The two-film middle draw gives L5–S1
+−4.71 / +0.62 / −0.27 degrees (magnitude 4.76 degrees). With fewer
+free discs below the rods, or a larger lean to take up, each free disc bends
+more than in these examples. These amounts have no recorded lumbar range
+against which this model can check them.
+
+The condition force magnitude in R spans 1.77–4.00 N across the two-film
+versions and 1.93–4.42 N front-only. After the springback reaction increment,
+the respective ranges are 1.76–3.97 and 1.93–4.42 N. The enforced horizontal
+springback drift is zero to rounding on all versions and both middle draws;
+T1 height and rotation remain free. The force and these bends are consequences
+of the stated boundary condition, not muscle or posture measurements.
+
+Further limits apply. Tightened heads never slip; hooks are two-way
+translation ties without one-way contact. Growth, fusion timing,
 acute screw–bone compliance and locked-in force relaxation are absent. The
 fixed-work nonlinear solver finds a regular local constrained minimum; it
 does not establish global uniqueness. A single elastic step is not full
@@ -508,7 +579,9 @@ the group's origin.
 Linear correction and daily solves recover rod strains in the moving frame
 before applying stiffness. Up to eight improving refinement steps check the
 same body and free-frame equations at the unchanged 1e-9 relative tolerance;
-a non-positive tangent or residual above tolerance remains unsettled.
+a non-positive tangent on the solve's free coordinates or residual above
+tolerance remains unsettled. Springback's two held T1 translations are absent
+from that positivity check; daily increments check their full tangent.
 
 The suite includes closed-form spring/beam/statics/Goodman checks, balance and
 mirror checks, stiffness and weight scale laws, no-force fitting rods,

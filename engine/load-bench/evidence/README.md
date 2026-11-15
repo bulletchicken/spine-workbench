@@ -122,12 +122,13 @@ ratio for a Prasad set. No shear modulus is derived or supplied.
 
 ## Retained assumptions and absences
 
-Films do not establish absolute joint stiffness. The assumed global 0.72–1.66
+Films do not establish absolute joint stiffness. The assumed global 0.71–1.62
 log-uniform range calibrates this solver, not the child. On the first
 placements of six surgical-size made-up spines, use scale 1, the existing
 middle correction draw and 6 mm titanium-alloy rods with no overbend. The
-six locking peaks, their geometric-mean centring rule and rounding are
-recorded in `joint-springs.json` and the crate README. Before endpoint
+released state holds T1's horizontal centre coordinates at their standing
+values. The six locking peaks, their geometric-mean centring rule and rounding
+are recorded in `joint-springs.json` and the crate README. Before endpoint
 rounding, the range's factor is exactly the published 439/192. The width
 equals the spread of the largest force across the six published patients,
 as if all of it came from stiffness; six patients are few, and the same
@@ -142,7 +143,7 @@ the six. The reference-rod-diameter cell marks that borrowing as own
 inference. The reference forces are taken with the rods held rigid,
 before springback, so the rod chosen does not change them, while the
 published forces come from rods after they flexed. The six reference
-spines differ among themselves by a factor of 3.4 at scale 1, more than
+spines differ among themselves by a factor of 3.2 at scale 1, more than
 the published 2.29, so one spine's forces at the stored range can still
 pass 439 N. The full title, DOI and publication locator of the six-patient
 report are unrecorded and remain absent; the earlier report's other
