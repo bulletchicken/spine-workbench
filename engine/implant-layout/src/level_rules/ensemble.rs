@@ -77,9 +77,20 @@ pub fn nominal(input: &LayoutInput) -> Result<NominalReadings, LayoutError> {
     })
 }
 
-/// Read the complete ensemble. Geometry and pedicle draws have exactly the
-/// identities exported by `readings`; this function does not sample again.
-pub fn measure(input: &LayoutInput) -> Result<LevelReadings, LayoutError> {
+struct Measurements {
+    readings: readings::Readings,
+    nominal_outlines: Vec<PedicleOutlines>,
+    nominal_sources: Vec<String>,
+    outlines: Vec<Vec<PedicleOutlines>>,
+    model_sources: Vec<Vec<String>>,
+}
+
+/// Keep the same curve classification and table draws without choosing ends.
+pub(crate) fn measure_curves(input: &LayoutInput) -> Result<readings::Readings, LayoutError> {
+    Ok(measurements(input)?.readings)
+}
+
+fn measurements(input: &LayoutInput) -> Result<Measurements, LayoutError> {
     let versions = readings::versions(
         &input.fit,
         u64::from(input.seed),
@@ -93,9 +104,9 @@ pub fn measure(input: &LayoutInput) -> Result<LevelReadings, LayoutError> {
     let mut outlines = Vec::new();
     let mut model_sources = Vec::new();
     for version in &versions.versions {
-        let raw = curves::measure(input, &version.fit)?;
-        let (outline, sources) = model_outlines(input, version, &raw, &sampler)?;
-        let mut reading = measure_lumbar_against_table_widths(input, &version.fit, &outline)?;
+        let mut reading = curves::measure(input, &version.fit)?;
+        let (outline, sources) = model_outlines(input, version, &reading, &sampler)?;
+        classify_lumbar_against_table_widths(&mut reading, &version.fit, &outline)?;
         reading.sources.extend(sources.iter().cloned());
         reading.sources.sort();
         reading.sources.dedup();
@@ -103,6 +114,34 @@ pub fn measure(input: &LayoutInput) -> Result<LevelReadings, LayoutError> {
         outlines.push(outline);
         model_sources.push(sources);
     }
+    Ok(Measurements {
+        readings: readings::Readings {
+            nominal,
+            measured,
+            versions,
+        },
+        nominal_outlines,
+        nominal_sources,
+        outlines,
+        model_sources,
+    })
+}
+
+/// Read the complete ensemble. Geometry and pedicle draws have exactly the
+/// identities exported by `readings`; this function does not sample again.
+pub fn measure(input: &LayoutInput) -> Result<LevelReadings, LayoutError> {
+    let Measurements {
+        readings:
+            readings::Readings {
+                nominal,
+                measured,
+                versions,
+            },
+        nominal_outlines,
+        nominal_sources,
+        outlines,
+        model_sources,
+    } = measurements(input)?;
     let context = |region| RuleContext {
         input,
         fit: &input.fit,
@@ -300,16 +339,6 @@ fn add_model_sources(rules: &mut [RuleReading], sources: &[String]) {
 
 /// This is the single scale-sensitive boundary for the lumbar modifier:
 /// its comparison incorporates widths in millimetres from a table.
-pub(crate) fn measure_lumbar_against_table_widths(
-    input: &LayoutInput,
-    fit: &shapes::spine_fit::SpineFit,
-    outlines: &[PedicleOutlines],
-) -> Result<SpineReading, LayoutError> {
-    let mut reading = curves::measure(input, fit)?;
-    classify_lumbar_against_table_widths(&mut reading, fit, outlines)?;
-    Ok(reading)
-}
-
 pub(crate) fn classify_lumbar_against_table_widths(
     reading: &mut SpineReading,
     fit: &shapes::spine_fit::SpineFit,
@@ -339,13 +368,13 @@ pub(crate) fn nominal_snapshot(
     versions: &[Version],
     sampler: &NamedSampler,
 ) -> Result<(SpineReading, Vec<PedicleOutlines>, Vec<String>), LayoutError> {
-    let raw = curves::measure(input, &input.fit)?;
+    let mut reading = curves::measure(input, &input.fit)?;
     let mut by_level: BTreeMap<_, (Vec<f64>, Vec<f64>)> = BTreeMap::new();
     let mut sources = BTreeSet::new();
     for version in versions {
         let mut nominal_version = version.clone();
         nominal_version.fit = input.fit.clone();
-        let (outlines, keys) = model_outlines(input, &nominal_version, &raw, sampler)?;
+        let (outlines, keys) = model_outlines(input, &nominal_version, &reading, sampler)?;
         sources.extend(keys);
         for outline in outlines {
             let widths = by_level.entry(outline.level).or_default();
@@ -376,7 +405,7 @@ pub(crate) fn nominal_snapshot(
         }
     }
     let sources: Vec<_> = sources.into_iter().collect();
-    let mut reading = measure_lumbar_against_table_widths(input, &input.fit, &outlines)?;
+    classify_lumbar_against_table_widths(&mut reading, &input.fit, &outlines)?;
     reading.sources.extend(sources.iter().cloned());
     reading.sources.sort();
     reading.sources.dedup();

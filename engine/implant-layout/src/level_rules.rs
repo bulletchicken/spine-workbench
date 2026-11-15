@@ -34,6 +34,7 @@ use shapes::implant_layout::{LayoutInput, LevelRule, RuleEnd, RuleInput};
 use shapes::levels::Level;
 use shapes::spine_fit::SpineFit;
 
+pub(crate) use ensemble::measure_curves;
 pub use ensemble::{LevelReadings, NominalReadings, RegionReadings, measure, nominal};
 pub use flips::apply_flip;
 

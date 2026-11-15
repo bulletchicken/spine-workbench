@@ -1314,3 +1314,170 @@ fn a_sketch_keeps_the_rule_end_counts_empty() {
             .any(|c| c.code == CannotTellCode::EndsUnsettled)
     );
 }
+
+// FNV-1a of complete serialised outputs, captured before the measurement split.
+fn serialised_fingerprint(value: &impl serde::Serialize) -> (usize, u64) {
+    let bytes = serde_json::to_vec(value).unwrap();
+    let hash = bytes.iter().fold(0xcbf2_9ce4_8422_2325_u64, |hash, byte| {
+        (hash ^ u64::from(*byte)).wrapping_mul(0x0000_0100_0000_01b3)
+    });
+    (bytes.len(), hash)
+}
+
+fn hand_change_fingerprints(front_only: bool, fitted: bool) -> [(usize, u64); 8] {
+    let (mut input, films) = fixture(RecipeName::RightThoracic40);
+    input.versions = 4;
+    if fitted {
+        input.bend_left = None;
+        input.bend_right = None;
+        input.fit = joint_fit::fit_from_films(&FitFromFilms {
+            front: films[0].clone(),
+            side: (!front_only).then(|| films[1].clone()),
+            typical: TypicalSource::BuiltIn,
+            twist_readings: Vec::new(),
+        })
+        .unwrap();
+    }
+    if front_only && !fitted {
+        input.fit.side_film = None;
+        input.bend_left = None;
+        input.bend_right = None;
+    }
+    let proposals = propose_layouts(&input).unwrap();
+    assert_eq!(
+        proposals.tier,
+        if front_only {
+            FitTier::FrontFilmOnly
+        } else {
+            FitTier::TwoFilms
+        }
+    );
+    let first = &proposals.layouts[0];
+    let original = hand_input(&input, first);
+    let mut requests = vec![original.clone()];
+    // Keep every retained hand choice; added levels use their table choices.
+    for (upper, offset) in [(true, -1_isize), (true, 1), (false, -1), (false, 1)] {
+        let mut request = original.clone();
+        let end = if upper { first.upper } else { first.lower };
+        let index = input
+            .fit
+            .vertebrae
+            .iter()
+            .position(|v| v.level == end)
+            .unwrap();
+        let shifted = input.fit.vertebrae[index.checked_add_signed(offset).unwrap()].level;
+        if upper {
+            request.upper = shifted;
+        } else {
+            request.lower = shifted;
+        }
+        request
+            .anchors
+            .retain(|a| request.upper <= a.level && a.level <= request.lower);
+        requests.push(request);
+    }
+    let screw = original
+        .anchors
+        .iter()
+        .position(|a| a.kind == AnchorKind::Screw)
+        .unwrap();
+    let mut kind = original.clone();
+    kind.anchors[screw].kind = AnchorKind::Hook;
+    kind.anchors[screw].diameter_mm = None;
+    kind.anchors[screw].length_mm = None;
+    requests.push(kind);
+    let mut size = original;
+    let anchor = &mut size.anchors[screw];
+    anchor.diameter_mm = Some(
+        sizing::diameter_grid()
+            .into_iter()
+            .find(|g| Some(g.mm) != anchor.diameter_mm)
+            .unwrap()
+            .mm,
+    );
+    anchor.length_mm = Some(
+        sizing::length_grid()
+            .into_iter()
+            .find(|g| Some(g.mm) != anchor.length_mm)
+            .unwrap()
+            .mm,
+    );
+    requests.push(size);
+    let mut fingerprints = vec![serialised_fingerprint(&proposals)];
+    fingerprints.extend(
+        requests.iter().map(|request| {
+            serialised_fingerprint(&implant_layout::rebuild_layout(request).unwrap())
+        }),
+    );
+    fingerprints.try_into().unwrap()
+}
+
+#[test]
+#[ignore = "fits a full front film; run explicitly in release"]
+fn front_only_hand_changes_keep_their_serialised_bytes() {
+    assert_eq!(
+        hand_change_fingerprints(true, true),
+        [
+            (598716, 2798233333493637148),
+            (62449, 17164809987479588220),
+            (70738, 12517158879963994093),
+            (54419, 8079826895613757327),
+            (54200, 2283174151896324805),
+            (70995, 8339570053816240664),
+            (62780, 6210085942336101090),
+            (62275, 10620606188196441332),
+        ]
+    );
+}
+
+#[test]
+#[ignore = "fits two full films; run explicitly in release"]
+fn two_film_hand_changes_keep_their_serialised_bytes() {
+    assert_eq!(
+        hand_change_fingerprints(false, true),
+        [
+            (545105, 3879168212533159498),
+            (56336, 5542496371768791876),
+            (64932, 500773216969023123),
+            (48030, 16724536013339532180),
+            (48260, 4437940695117762212),
+            (64927, 5103219575040975681),
+            (56434, 1605481536600766576),
+            (56162, 258916896983131656),
+        ]
+    );
+}
+
+#[test]
+fn exact_pose_hand_changes_keep_their_serialised_bytes() {
+    assert_eq!(
+        hand_change_fingerprints(false, false),
+        [
+            (622530, 3958700510366208856),
+            (64727, 17514740368564272512),
+            (72804, 14552528497602134876),
+            (56452, 16595635225967031405),
+            (56209, 17753168484814074191),
+            (72886, 17644759031844260288),
+            (64954, 15618939111601248806),
+            (64549, 6275641791076177859),
+        ]
+    );
+}
+
+#[test]
+fn exact_pose_front_only_hand_changes_keep_their_serialised_bytes() {
+    assert_eq!(
+        hand_change_fingerprints(true, false),
+        [
+            (607136, 6868330708811682004),
+            (63746, 13131885525540648520),
+            (71958, 7036287730316193649),
+            (55655, 2167130720120769749),
+            (55211, 6327265290091661927),
+            (71948, 782938958952491319),
+            (64086, 180955000766158413),
+            (63568, 17835967667900474509),
+        ]
+    );
+}
