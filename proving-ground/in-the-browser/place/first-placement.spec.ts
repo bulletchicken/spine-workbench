@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 
-/** Check the rendered words, including wrapped helper lines, inside the capsule. */
+/** Check the rendered words, including wrapped helper lines, inside the dock. */
 async function escapedDockText(page: Page): Promise<string[]> {
   return page.locator('.dock').evaluate((dock) => {
     const box = dock.getBoundingClientRect(), faults: string[] = [];
@@ -68,16 +68,16 @@ test('the made-up case reaches Place and returns to its 3D spine', async ({ page
     await expect(caption).toHaveText("Sized from published tables, not from this spine's bone.");
     await expect(caption).toBeVisible();
     await expect.poll(() => escapedDockText(page)).toEqual([]);
-    const cap = await caption.boundingBox(), capsule = await page.locator('.dock').boundingBox();
-    if (cap === null || capsule === null) throw new Error('the caption or dock has no box');
-    expect(cap.y + cap.height).toBeLessThan(capsule.y);
+    const cap = await caption.boundingBox(), dockBox = await page.locator('.dock').boundingBox();
+    if (cap === null || dockBox === null) throw new Error('the caption or dock has no box');
+    expect(cap.y + cap.height).toBeLessThan(dockBox.y);
     if(width<=900){
       await fixedDockRows(page,'.views');
       await expect.poll(()=>dock.locator('.views').evaluate((nav)=>{
         const current=nav.querySelector('[aria-current="true"]')?.getBoundingClientRect(),style=getComputedStyle(nav,'::before');
         if(current===undefined)return false;
-        const thumbLeft=nav.getBoundingClientRect().left+parseFloat(style.left)+new DOMMatrix(style.transform).m41;
-        return Math.abs(thumbLeft-current.left)<1;
+        const markerLeft=nav.getBoundingClientRect().left+parseFloat(style.left)+new DOMMatrix(style.transform).m41;
+        return Math.abs(markerLeft-current.left)<1;
       })).toBe(true);
     }
     await page.screenshot({ path: info.outputPath(`place-${String(width)}.png`) });

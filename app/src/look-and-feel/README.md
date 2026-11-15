@@ -30,7 +30,7 @@ values; the screens set none of those again.
 | `StateIcon.tsx` | the sign for the state of a row or a chip |
 | `icons/` | `Icon`, the names it takes, and the icons drawn for this app |
 | `figures/` | the four view figures, and `figure-for-view.ts`, which finds one by film kind |
-| `BrandMark.tsx` | the app's mark |
+| `BrandMark.tsx` | the app's mark: three bars, the middle one in the melon blend. It carries its own gradient, with an id of its own for each mark drawn, and its two stops read `--melon-1` and `--melon-2` through CSS |
 
 ## How a part is drawn
 

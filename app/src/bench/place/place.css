@@ -22,12 +22,12 @@
 
 .place-sheet-list .button-content { display: block; white-space: normal; }
 .place-sheet-list .button-content > .place-review-label { display: block; margin-bottom: var(--space-4); }
-.dock:has(.scene.on .place-review) { height: auto; min-height: var(--dock-h); padding-block: var(--space-16); border-radius: var(--r-xlarge); }
+.dock:has(.scene.on .place-review) { height: auto; min-height: var(--dock-h); padding-block: var(--space-16); }
 .dock [data-scene="place"] .say > p { white-space: normal; max-height: calc(2 * var(--line-small)); overflow: hidden; }
 .place-review details { margin-top: var(--space-12); font: var(--type-small); color: var(--ink-2); }
 .place-review details ul { padding-left: var(--space-16); }
 @media (width < 900px) {
-  .dock:has([data-scene="place"].on) { height: auto; min-height: var(--dock-h); padding-block: var(--space-12); border-radius: var(--r-xlarge); }
+  .dock:has([data-scene="place"].on) { height: auto; min-height: var(--dock-h); padding-block: var(--space-12); }
 }
 
 
@@ -73,7 +73,7 @@
 
 /* Stable rows: words, the full-width control, then quiet actions and the primary. */
 @media (width <= 900px) {
-  .dock:has([data-scene="place"].on) { height: auto; min-height: var(--dock-h); padding-block: var(--space-12); border-radius: var(--r-xlarge); }
+  .dock:has([data-scene="place"].on) { height: auto; min-height: var(--dock-h); padding-block: var(--space-12); }
   .dock [data-scene="place"].scene.on { display: grid; grid-template-columns: max-content max-content 1fr max-content; --actions-row: 2; }
   .dock [data-scene="place"].scene.on:has(> .seg) { --actions-row: 3; }
   .dock [data-scene="place"] .say { grid-area: 1 / 1 / 2 / -1; }

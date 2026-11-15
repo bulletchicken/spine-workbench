@@ -17,7 +17,7 @@ function Column({ children }: { children: ReactNode }) {
   return <div style={{ display: 'grid', gridTemplateColumns: 'auto', justifyContent: 'start' }}>{children}</div>;
 }
 
-/** The step control as the bar holds it: press an option and the thumb slides under it. */
+/** The step control as the bar holds it: press an option and the marker slides under it. */
 function Steps({ start }: { start: string }) {
   const [chosen, setChosen] = useState(start);
   return (
@@ -31,7 +31,7 @@ const page: GalleryPage = {
   area: 'building-blocks',
   part: 'Segmented',
   states: [
-    { name: 'Films chosen: press Find and the thumb slides; 3D cannot be pressed yet', show: () => <Steps start="films" /> },
+    { name: 'Films chosen: press Find and the marker slides; 3D cannot be pressed yet', show: () => <Steps start="films" /> },
     { name: 'Find chosen', show: () => <Steps start="find" /> },
     {
       name: 'A step ahead that cannot be pressed yet',
@@ -42,7 +42,7 @@ const page: GalleryPage = {
       ),
     },
     {
-      name: 'No option chosen: the thumb is hidden',
+      name: 'No option chosen: the marker is hidden',
       show: () => (
         <Column>
           <Segmented className="steps" label="Steps" options={STEPS} chosen={null} onChoose={() => undefined} />

@@ -1,8 +1,7 @@
 /* The rooms the 3D view's gallery pages show a spine in. The soft glow is
-   the one the design puts behind the spine; the app's own tokens do not
-   hold it yet, so its colour is named here and nowhere else. */
+   the one the design puts behind the spine: the system's own --glow. */
 .spine-room {
-  --spine-glow: #e9f0f9;
+  --spine-glow: var(--glow);
   display: inline-flex;
   flex-direction: column;
   gap: var(--s-3);
