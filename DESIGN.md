@@ -1771,7 +1771,7 @@ The tables cover Films, Find, 3D, the first placement and its load calculation. 
 | tablePopulations | The tables mainly studied Chinese, Japanese, Thai and Indian groups; no population adjustment is made. |
 | fit | Fit noise is drawn independently for each vertebra, which can overstate noise between neighbouring joints. Typical side curves and inferred twist are not sampled as measurements. |
 | names | Level names can be one off. Alternative names carry no probability. Shoulders, body balance, missing sacrum geometry and an unavailable rotation grade cannot be recovered from the fitted spine. |
-| outside | Outside the rods, the free discs bend so that the top of the spine stays where it stood on the film, over a pelvis that does not move. That shape follows from this assumption; it does not show how the patient will stand. |
+| outside | Outside the rods, the free discs bend so that the top of the spine keeps its place over the pelvis, side to side and front to back, as it stood on the film. Its height and its tilt are free, and the pelvis does not move. That shape follows from this assumption; it does not show how the patient will stand. |
 | heads | Tightened heads never slip in the model. Hooks tie translation in both directions. Head offset and rod overhang are not measured on these films. |
 | history | The model leaves out acute screw–bone compliance, relaxation, growth-friendly eligibility and the body’s response to history or other diseases. |
 | method | The calculation finds a local constrained state, which need not be unique. A single elastic step does not describe the whole nonlinear rod response. |
