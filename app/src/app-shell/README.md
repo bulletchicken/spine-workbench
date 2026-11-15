@@ -1,6 +1,6 @@
 # app-shell
 
-The one stage, with a capsule bar above it and a dock and notice below.
+The one stage, with a bar above it and a dock and notice below.
 The same bench stays mounted as the step changes. All three regions sit
 inside the centred frame; extra window space becomes margin.
 

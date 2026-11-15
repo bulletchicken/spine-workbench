@@ -34,7 +34,7 @@ describe('Segmented', () => {
     expect(find('nav').getAttribute('class')).toBe('seg steps');
   });
 
-  it('says when no option is chosen, so the thumb is hidden', () => {
+  it('says when no option is chosen, so the marker is hidden', () => {
     putOnThePage(<Segmented label="Steps" options={STEPS} chosen={null} onChoose={() => undefined} />);
     expect(find('nav.seg').hasAttribute('data-none')).toBe(true);
     expect(document.querySelector('[aria-current]')).toBeNull();
@@ -69,7 +69,7 @@ describe('Segmented', () => {
     expect(pressLit).not.toHaveBeenCalled();
   });
 
-  it('writes where the thumb sits as the chosen option’s place', () => {
+  it('writes where the marker sits as the chosen option’s place', () => {
     const page = putOnThePage(<Segmented label="Steps" options={STEPS} chosen="films" onChoose={() => undefined} />);
     const nav = find('nav.seg');
     expect(nav.style.getPropertyValue('--at')).toBe('0');

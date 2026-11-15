@@ -91,9 +91,9 @@ describe('the design system’s two stylesheets', () => {
 describe('the refreshed system', () => {
   it('keeps all three files byte for byte', () => {
     for (const [path, digest] of [
-      ['../../../DESIGN.md', '16103dd5c88a5c6f08bbf3276711804d3c40bd6d1743d98b6a21d3a024bfaa34'],
-      ['./tokens.css', '199dfa63180da1630b89d2401f8901fb8d1d57b029cbde639a39e5aa8f191e27'],
-      ['./components.css', 'a8c95925f0cd5d20bbd03885bb7b5a3908bff9a83eedab75e1c205a95d2d8d7b'],
+      ['../../../DESIGN.md', '5633a03b64438eb5430c201e58504faf7734c065482e17048c0378c24b496818'],
+      ['./tokens.css', '60763ad3b7f52e3790b54361abcc7c0514c16425d3623c876bd994d217f3cca7'],
+      ['./components.css', '4bb7929d7c65f402959b846ae505816d0b846d7dd6216ea1d85c9d25d88125ab'],
     ] as const) {
       expect(createHash('sha256').update(read(path)).digest('hex'), path).toBe(digest);
     }
@@ -111,6 +111,30 @@ describe('the refreshed system', () => {
     const atWidth = (width: number) => declarationsIn(new RegExp(String.raw`@media \(max-width: ${String(width)}px\) \{ :root \{([^}]*)\}`).exec(TOKENS)?.[1] ?? '');
     expect(atWidth(900)).toEqual({ '--frame-margin': '16px', '--type-say': 'var(--type-body-medium)', '--track-say': '0' });
     expect(atWidth(600)).toEqual({ '--bar-cols': 'auto 1fr auto', '--brand-name-display': 'none' });
+  });
+
+  it('has one warm light, melon, and leaves progress blue', () => {
+    expect(ROOT['--melon-1']).toBe('#ffa26b');
+    expect(ROOT['--melon-2']).toBe('#ff6680');
+    expect(ROOT['--melon']).toBe('linear-gradient(90deg, var(--melon-1), var(--melon-2))');
+    expect(ROOT['--glow']).toBe('linear-gradient(155deg, var(--glow-1) 20%, var(--glow-2) 80%)');
+    expect(COMPONENTS).toContain('.meter i { display: block; height: 100%; border-radius: var(--r-hair); background: var(--accent);');
+  });
+
+  it('writes the light again only where the tokens cannot be read, equal to them', () => {
+    const rgb = (hex = '') => [1, 3, 5].map((at) => parseInt(hex.slice(at, at + 2), 16)).join(', ');
+    expect(ROOT['--glow-quiet']).toBe(`linear-gradient(155deg, rgba(${rgb(ROOT['--glow-1'])}, 0.75) 20%, rgba(${rgb(ROOT['--glow-2'])}, 0.75) 80%)`);
+    const favicon = read('../../public/favicon.svg');
+    for (const stop of ['--melon-1', '--melon-2']) expect(favicon, stop).toContain(`stop-color="${ROOT[stop] ?? ''}"`);
+  });
+
+  it('gives a pressable part its block for a corner, and no part a pill', () => {
+    expect(ROOT['--block']).toBe('0.36');
+    expect(ROOT['--r-pill']).toBeUndefined();
+    expect(COMPONENTS).not.toContain('--r-pill');
+    for (const height of ['--bar-h', '--dock-h', '--primary-h', '--quiet-h', '--badge-h', '--chip-h', '--h']) {
+      expect(COMPONENTS, height).toContain(`border-radius: calc(var(${height}) * var(--block))`);
+    }
   });
 });
 

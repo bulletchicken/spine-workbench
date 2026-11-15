@@ -2,7 +2,7 @@ import type { ComponentProps, ReactNode } from 'react';
 import './Button.css';
 
 interface ButtonProps extends Omit<ComponentProps<'button'>, 'type' | 'disabled' | 'onClick'> {
-  /** `standard` is the design's secondary button, a white pill with a hairline edge; `text` is its quiet button, the words alone. */
+  /** `standard` is the design's secondary button, a white block with a hairline edge; `text` is its quiet button, the words alone. */
   look?: 'standard' | 'text';
   /** `large` is the design's size for the secondary button; `regular` is the smaller one earlier parts ask for. */
   size?: 'regular' | 'large';

@@ -50,7 +50,7 @@
                    a film viewer of the app's own draws the film, the viewer writes it); and --r,
                    one of the radius tokens
      on .caption   --i --cx --cy        on .place  --i --px
-     on .seg       --at (which option the thumb is under)
+     on .seg       --at (which option the marker is under)
      on .meter     --p (0 to 1)         on .measures li  --i
 
    State classes for showing a part in a fixed state: .is-hover .is-pressed .is-focus .is-drag.
@@ -93,9 +93,9 @@ button:disabled { cursor: default; }
 
 /* ---------- The page glow ---------- */
 
-/* The one soft glow behind whatever is on the stage: a quiet one for the films, a wider one for
-   the spine, cross-faded. Each is a blurred oval, not a gradient, so it has no edge and none of
-   the fine rings a very shallow gradient is drawn with. */
+/* The room's one light, behind whatever is on the stage: a quiet one for the films, a wider one
+   for the spine, cross-faded. It is melon, cantaloupe drifting into watermelon. Each is a blurred
+   oval, so it has no edge, and the blur hides the fine rings a very shallow gradient is drawn with. */
 .glow { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
 body > .glow { position: fixed; }
 .glow::before, .glow::after {
@@ -122,7 +122,7 @@ body > .glow { position: fixed; }
 
 /* The one next step of the moment. One on screen at most. */
 .primary {
-  flex: none; height: var(--primary-h); padding: 0 var(--primary-pad); border-radius: var(--r-pill);
+  flex: none; height: var(--primary-h); padding: 0 var(--primary-pad); border-radius: calc(var(--primary-h) * var(--block));
   background: var(--ink); color: var(--on-ink);
   font: var(--type-body-medium); white-space: nowrap;
   transition: background var(--quick), color var(--quick), transform var(--quick);
@@ -133,7 +133,7 @@ body > .glow { position: fixed; }
 
 /* Decided, being built: a way back that is not the next step. First use: "Done" in the comparison. */
 .secondary {
-  flex: none; height: var(--primary-h); padding: 0 var(--primary-pad); border-radius: var(--r-pill);
+  flex: none; height: var(--primary-h); padding: 0 var(--primary-pad); border-radius: calc(var(--primary-h) * var(--block));
   background: var(--page); box-shadow: inset 0 0 0 var(--hairline) var(--line);
   font: var(--type-body-medium); white-space: nowrap;
   transition: background var(--quick), transform var(--quick);
@@ -142,12 +142,12 @@ body > .glow { position: fixed; }
 .secondary:is(:active, .is-pressed) { background: var(--soft-2); transform: scale(var(--press)); }
 .secondary:disabled { background: var(--fill); color: var(--ink-3); box-shadow: none; transform: none; }
 /* The smaller size, as tall as a quiet button: data-size="regular". No part on the page uses it yet. */
-.secondary[data-size="regular"] { height: var(--quiet-h); padding: 0 var(--space-14); font: var(--type-small-medium); }
+.secondary[data-size="regular"] { height: var(--quiet-h); padding: 0 var(--space-14); border-radius: calc(var(--quiet-h) * var(--block)); font: var(--type-small-medium); }
 
 /* Everything else a person can do: words only. The aria-expanded state is Decided, being built:
    the "Measurements" button while its sheet is open. */
 .quiet {
-  flex: none; height: var(--quiet-h); padding: 0 var(--space-14); border-radius: var(--r-pill);
+  flex: none; height: var(--quiet-h); padding: 0 var(--space-14); border-radius: calc(var(--quiet-h) * var(--block));
   color: var(--ink-2);
   font: var(--type-small-medium); white-space: nowrap;
   transition: background var(--quick), color var(--quick), transform var(--quick);
@@ -168,25 +168,29 @@ body > .glow { position: fixed; }
 
 /* ---------- The step control and the view control ---------- */
 
-/* A pill of options with a white thumb that slides under the chosen one. It is a block grid: it
-   is as narrow as its options only inside a column sized to its content, which the bar gives it.
-   Shown alone, give it such a column. */
+/* The dial: words on a hairline, with a small melon marker that slides along the line to the
+   chosen one, like the needle of a radio dial. It is a block grid: it is as narrow as its options
+   only inside a column sized to its content, which the bar gives it. Shown alone, give it such a
+   column. The hairline runs along its bottom edge, its full width. */
 .seg {
   --w: var(--step-w); --h: var(--step-h);
   position: relative; display: grid; grid-auto-flow: column; grid-auto-columns: var(--w);
-  padding: var(--space-2); border-radius: var(--r-pill); background: var(--track);
+  padding: var(--space-2); box-shadow: inset 0 calc(-1 * var(--hairline)) 0 var(--line);
 }
+/* The marker. Its box is as wide as one option, so whatever moves it by a whole option still
+   carries it, and reaches down through the bottom padding to the control's edge. The marker is
+   painted at the bottom middle of that box, so it lies on the hairline and covers it. */
 .seg::before {
-  content: ""; position: absolute; left: var(--space-2); top: var(--space-2); width: var(--w); height: var(--h);
-  border-radius: var(--r-pill); background: var(--thumb);
-  box-shadow: var(--shadow-thumb);
+  content: ""; position: absolute; left: var(--space-2); top: var(--space-2); width: var(--w); height: calc(var(--h) + var(--space-2));
+  background: var(--melon) no-repeat center bottom / var(--marker-w) var(--marker-h);
+  clip-path: inset(calc(100% - var(--marker-h)) calc(50% - var(--marker-w) / 2) 0 round var(--r-hair));
   transform: translateX(calc(var(--at, 0) * var(--w)));
   transition: transform var(--appear), opacity var(--quick);
 }
-/* No option is chosen: the thumb is hidden. */
+/* No option is chosen: the marker is hidden. */
 .seg[data-none]::before { opacity: 0; }
 .seg button {
-  position: relative; height: var(--h); border-radius: var(--r-pill);
+  position: relative; height: var(--h); border-radius: calc(var(--h) * var(--block));
   font: var(--type-small-medium); color: var(--ink-2);
   transition: color var(--quick), transform var(--quick);
 }
@@ -195,16 +199,17 @@ body > .glow { position: fixed; }
 .seg button:disabled { color: var(--ink-faint); }
 .views { --w: var(--view-w); --h: var(--view-h); flex: none; margin-right: var(--space-2); }
 
-/* ---------- The capsule bar ---------- */
+/* ---------- The bar ---------- */
 
 /* The product's name, the three steps, the trust badge. As wide as the dock, so their edges line
-   up. The badge sits as far from the bar's end as from its top and bottom.
+   up, and with the same corner: like every pressable part, its corner is its block, a share of its
+   height. The badge sits as far from the bar's end as from its top and bottom.
      <div class="brand"> <svg/> <span class="brand-name">Spine Workbench</span> </div>
    In a small window the three no longer fit. tokens.css then gives --bar-cols a narrow first
    column and takes the product's name away; the mark stays and the steps sit in the middle. */
 .bar {
   width: var(--col); height: var(--bar-h);
-  padding: 0 calc((var(--bar-h) - var(--badge-h)) / 2 - var(--hairline)) 0 calc(var(--inset) - var(--hairline)); border-radius: var(--r-pill);
+  padding: 0 calc((var(--bar-h) - var(--badge-h)) / 2 - var(--hairline)) 0 calc(var(--inset) - var(--hairline)); border-radius: calc(var(--bar-h) * var(--block));
   display: grid; grid-template-columns: var(--bar-cols); align-items: center;
 }
 .bar .steps { justify-self: center; }
@@ -220,13 +225,21 @@ body > .glow { position: fixed; }
   flex: none; fill: none; stroke: currentColor; stroke-width: var(--icon-stroke);
   stroke-linecap: round; stroke-linejoin: round;
 }
+/* The mark's middle bar, the one out of line, is filled and drawn in melon, left to right, so it
+   is as large as the two outlines beside it. An SVG paint cannot read a CSS gradient, so the mark
+   carries its own, with an id of its own, and the bar names it in its fill and stroke. These two
+   rules give the gradient's stops the two melon colours.
+     <svg> <linearGradient id> <stop class="melon-1"/> <stop class="melon-2"/> </linearGradient>
+       <rect/> <rect fill="url(#id)" stroke="url(#id)"/> <rect/> </svg> */
+.brand .melon-1 { stop-color: var(--melon-1); }
+.brand .melon-2 { stop-color: var(--melon-2); }
 .brand svg { width: var(--icon-medium); height: var(--icon-medium); }
 .badge svg { width: var(--icon-small); height: var(--icon-small); }
 
 /* The trust badge. It opens the trust note. */
 .badge {
   justify-self: end; display: inline-flex; align-items: center; gap: var(--space-6);
-  height: var(--badge-h); padding: 0 var(--space-14) 0 var(--space-10); border-radius: var(--r-pill);
+  height: var(--badge-h); padding: 0 var(--space-14) 0 var(--space-10); border-radius: calc(var(--badge-h) * var(--block));
   font: var(--type-small-medium); color: var(--ink-2); white-space: nowrap;
   transition: background var(--quick), color var(--quick), transform var(--quick);
 }
@@ -505,7 +518,7 @@ html[data-leaving] :is(.tiles, .spine, .panel) { opacity: 0; transition: opacity
 
 /* The name chip: the name of the vertebra pointed at, beside the pointer. */
 .chip {
-  display: inline-block; height: var(--chip-h); padding: 0 var(--space-10); border-radius: var(--r-pill);
+  display: inline-block; height: var(--chip-h); padding: 0 var(--space-10); border-radius: calc(var(--chip-h) * var(--block));
   font-size: var(--size-caption); line-height: var(--line-chip); pointer-events: none;
   background: var(--glass-thick);
 }
@@ -556,7 +569,7 @@ body > .chip { position: fixed; z-index: var(--z-chip); left: 0; top: 0; opacity
    from its top and bottom. */
 .dock {
   width: var(--col); height: var(--dock-h);
-  padding: 0 calc((var(--dock-h) - var(--primary-h)) / 2 - var(--hairline)) 0 calc(var(--inset) - var(--hairline)); border-radius: var(--r-pill);
+  padding: 0 calc((var(--dock-h) - var(--primary-h)) / 2 - var(--hairline)) 0 calc(var(--inset) - var(--hairline)); border-radius: calc(var(--dock-h) * var(--block));
   display: grid; align-items: center;
 }
 .frame > .dock { position: absolute; z-index: var(--z-bar); left: 50%; bottom: var(--dock-bottom); translate: -50% 0; }
