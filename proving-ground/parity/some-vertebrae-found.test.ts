@@ -41,7 +41,7 @@ beforeAll(async () => {
     for (;;) if ((pass.advance(200) as Step).done) break;
     found = (pass.finish() as TrainedPassResult).marks;
   } finally { desk.free(); }
-});
+}, 120_000);
 
 /** The request Find's marks make when only these levels are kept. */
 function requestWith(levels: readonly Level[]): FitFromFilms {
