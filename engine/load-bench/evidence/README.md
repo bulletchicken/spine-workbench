@@ -122,7 +122,7 @@ ratio for a Prasad set. No shear modulus is derived or supplied.
 
 ## Retained assumptions and absences
 
-Films do not establish absolute joint stiffness. The assumed global 0.71–1.62
+Films do not establish absolute joint stiffness. The assumed global 0.76–1.73
 log-uniform range calibrates this solver, not the child. On the first
 placements of six surgical-size made-up spines, use scale 1, the existing
 middle correction draw and 6 mm titanium-alloy rods with no overbend. The
@@ -143,7 +143,7 @@ the six. The reference-rod-diameter cell marks that borrowing as own
 inference. The reference forces are taken with the rods held rigid,
 before springback, so the rod chosen does not change them, while the
 published forces come from rods after they flexed. The six reference
-spines differ among themselves by a factor of 3.2 at scale 1, more than
+spines differ among themselves by a factor of 2.8 at scale 1, more than
 the published 2.29, so one spine's forces at the stored range can still
 pass 439 N. The full title, DOI and publication locator of the six-patient
 report are unrecorded and remain absent; the earlier report's other

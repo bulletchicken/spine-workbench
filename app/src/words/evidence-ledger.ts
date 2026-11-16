@@ -7835,13 +7835,13 @@ export const EVIDENCE_LEDGER = [
     id: 'place-bench-joint-springs-stiffness-scale',
     feature: 'Assumed global log-uniform stiffness scale',
     publishedNumber:
-      'lower: 0.71 ratio [own-inference; project-assumptions]; upper: 1.62 ratio [own-inference; ' +
+      'lower: 0.76 ratio [own-inference; project-assumptions]; upper: 1.73 ratio [own-inference; ' +
       'project-assumptions]; lumbar fitted lower: 1.38 ratio [published; petit-2004]; lumbar fitted upper: 10.0 ' +
       'ratio [published; petit-2004]; right thoracic fitted lower: 1.74 ratio [published; petit-2004]; right ' +
       'thoracic fitted upper: 5.18 ratio [published; petit-2004]; reference force lower: 192 N [published; ' +
       'salmingo-2013]; reference force upper: 439 N [published; salmingo-2013]; reference rod diameter: 6 mm ' +
       '[own-inference; salmingo-2012]. The 6 mm titanium-alloy rod is recorded for the same group\'s earlier ' +
-      'three-patient report and is assumed for the six patients. Own inference: the assumed 0.71 to 1.62 ' +
+      'three-patient report and is assumed for the six patients. Own inference: the assumed 0.76 to 1.73 ' +
       'log-uniform range calibrates this solver against the largest screw force, 192 to 439 N across six ' +
       'patients, worked back from rod deformation. ' +
       'Its centre uses the geometric means of the published force endpoints and the locking forces on six ' +
@@ -7850,7 +7850,7 @@ export const EVIDENCE_LEDGER = [
       'by a factor of 3.1, so the true spread could be wider. The reference forces are taken with the rods ' +
       'held rigid, before springback, so the rod chosen does not change them, while the published forces ' +
       'come from rods after they flexed. The six reference spines differ among themselves by a factor of ' +
-      '3.2 at scale 1, more than the published 2.29, so one spine\'s forces at the stored range can still ' +
+      '2.8 at scale 1, more than the published 2.29, so one spine\'s forces at the stored range can still ' +
       'pass 439 N. This is an assumption, not a ' +
       'measurement of the child. It assumes forces after locking and rigid release scale linearly with ' +
       'tissue stiffness; springback and daily forces are not fitted. Petit\'s fitted factors use a different ' +

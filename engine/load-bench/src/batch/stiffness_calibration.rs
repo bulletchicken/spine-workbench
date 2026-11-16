@@ -11,12 +11,12 @@ use shapes::implant_layout::RodMaterial;
 // Scale-one R peaks, N, in realistic_cases::CASES order. These are solver
 // calibration answers, not measured tissue properties.
 const REFERENCE_FORCES_N: [f64; 6] = [
-    322.3768216059062,
-    195.93071339221135,
-    549.7693763891228,
-    330.15096705738694,
-    169.5040923914302,
-    201.5123456892776,
+    323.6621591706768,
+    253.27920555545114,
+    393.1222705600511,
+    308.0913510690729,
+    141.33116200755023,
+    190.66475266459648,
 ];
 
 fn bounds(e: &Evidence, forces: &[f64; 6]) -> (f64, f64, f64) {
@@ -74,9 +74,9 @@ fn the_stored_range_centres_the_geometric_means_and_uses_the_published_factor() 
         );
     }
     let (centre, lower, upper) = bounds(&evidence, &REFERENCE_FORCES_N);
-    assert!((centre - 1.0733532084835526).abs() < 1e-11);
+    assert!((centre - 1.1437077071237647).abs() < 1e-11);
     assert!((upper / lower - 439.0 / 192.0).abs() < 1e-12);
-    assert_eq!(stored(&evidence), (0.71, 1.62));
+    assert_eq!(stored(&evidence), (0.76, 1.73));
     assert_eq!(stored(&evidence), (rounded(lower), rounded(upper)));
     assert!(row.notes.contains("Assumed"));
     assert!(row.notes.contains("not a measurement of the child"));
@@ -87,7 +87,7 @@ fn the_stored_range_centres_the_geometric_means_and_uses_the_published_factor() 
         "summed forces spread by a factor of 3.1, so the true spread could be wider",
         "rods held rigid, before springback, so the rod chosen does not change them",
         "published forces come from rods after they flexed",
-        "factor of 3.2 at scale 1, more than the published 2.29",
+        "factor of 2.8 at scale 1, more than the published 2.29",
         "one spine's forces at the stored range can still pass 439 N",
     ] {
         assert!(row.notes.contains(qualification), "{qualification}");
