@@ -93,9 +93,9 @@ button:disabled { cursor: default; }
 
 /* ---------- The page glow ---------- */
 
-/* The room's one light, behind whatever is on the stage: a quiet one for the films, a wider one
-   for the spine, cross-faded. It is melon, cantaloupe drifting into watermelon. Each is a blurred
-   oval, so it has no edge, and the blur hides the fine rings a very shallow gradient is drawn with. */
+/* The one soft glow behind whatever is on the stage: a quiet one for the films, a wider one for
+   the spine, cross-faded. Each is a blurred oval, not a gradient, so it has no edge and none of
+   the fine rings a very shallow gradient is drawn with. */
 .glow { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
 body > .glow { position: fixed; }
 .glow::before, .glow::after {
@@ -168,7 +168,7 @@ body > .glow { position: fixed; }
 
 /* ---------- The step control and the view control ---------- */
 
-/* The dial: words on a hairline, with a small melon marker that slides along the line to the
+/* The dial: words on a hairline, with a small pink marker that slides along the line to the
    chosen one, like the needle of a radio dial. It is a block grid: it is as narrow as its options
    only inside a column sized to its content, which the bar gives it. Shown alone, give it such a
    column. The hairline runs along its bottom edge, its full width. */
@@ -178,11 +178,11 @@ body > .glow { position: fixed; }
   padding: var(--space-2); box-shadow: inset 0 calc(-1 * var(--hairline)) 0 var(--line);
 }
 /* The marker. Its box is as wide as one option, so whatever moves it by a whole option still
-   carries it, and reaches down through the bottom padding to the control's edge. The marker is
-   painted at the bottom middle of that box, so it lies on the hairline and covers it. */
+   carries it, and reaches down through the bottom padding to the control's edge. The box is solid
+   pink, clipped to the marker at its bottom middle, so the marker lies on the hairline and covers it. */
 .seg::before {
   content: ""; position: absolute; left: var(--space-2); top: var(--space-2); width: var(--w); height: calc(var(--h) + var(--space-2));
-  background: var(--melon) no-repeat center bottom / var(--marker-w) var(--marker-h);
+  background: var(--pink);
   clip-path: inset(calc(100% - var(--marker-h)) calc(50% - var(--marker-w) / 2) 0 round var(--r-hair));
   transform: translateX(calc(var(--at, 0) * var(--w)));
   transition: transform var(--appear), opacity var(--quick);
@@ -225,14 +225,10 @@ body > .glow { position: fixed; }
   flex: none; fill: none; stroke: currentColor; stroke-width: var(--icon-stroke);
   stroke-linecap: round; stroke-linejoin: round;
 }
-/* The mark's middle bar, the one out of line, is filled and drawn in melon, left to right, so it
-   is as large as the two outlines beside it. An SVG paint cannot read a CSS gradient, so the mark
-   carries its own, with an id of its own, and the bar names it in its fill and stroke. These two
-   rules give the gradient's stops the two melon colours.
-     <svg> <linearGradient id> <stop class="melon-1"/> <stop class="melon-2"/> </linearGradient>
-       <rect/> <rect fill="url(#id)" stroke="url(#id)"/> <rect/> </svg> */
-.brand .melon-1 { stop-color: var(--melon-1); }
-.brand .melon-2 { stop-color: var(--melon-2); }
+/* The mark's middle bar, the one out of line, is filled and drawn in pink, so it is as large as
+   the two outlines beside it.
+     <svg> <rect/> <rect class="brand-mark-offset"/> <rect/> </svg> */
+.brand .brand-mark-offset { fill: var(--pink); stroke: var(--pink); }
 .brand svg { width: var(--icon-medium); height: var(--icon-medium); }
 .badge svg { width: var(--icon-small); height: var(--icon-small); }
 

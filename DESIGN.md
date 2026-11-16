@@ -29,7 +29,7 @@ Anything with no status word is Settled. All sizes are in CSS pixels.
 
 ## 2. The product
 
-Spine Workbench is a browser app that runs entirely on the user's own computer. A clinician or researcher can give it up to four spine X-rays of one child: standing from the front, standing from the side, bending left and bending right. It finds vertebrae on the films, then builds a 3D spine from the fitted T1 to L5 bones that can be turned and measured. Missing bones are not drawn. Film measurements carry their error bands. A fourth moment, Place, draws a first placement on the same fitted spine. It is an education and research preview: sizes come from published tables, and a surgeon decides. Place shows supplied sizes, load estimates and counts over versions; it does not read a person's pedicle dimensions from the drawn bone. It should feel like a quiet white room with one object in it: clean, calm, thoughtful and effortless. The identity is called Clear. The room has one light, which is warm and is called Melon: cantaloupe drifting into watermelon.
+Spine Workbench is a browser app that runs entirely on the user's own computer. A clinician or researcher can give it up to four spine X-rays of one child: standing from the front, standing from the side, bending left and bending right. It finds vertebrae on the films, then builds a 3D spine from the fitted T1 to L5 bones that can be turned and measured. Missing bones are not drawn. Film measurements carry their error bands. A fourth moment, Place, draws a first placement on the same fitted spine. It is an education and research preview: sizes come from published tables, and a surgeon decides. Place shows supplied sizes, load estimates and counts over versions; it does not read a person's pedicle dimensions from the drawn bone. It should feel like a quiet white room with one object in it: clean, calm, thoughtful and effortless. The identity is called Clear. The product's own colour is a hot pink, used for two small marks.
 
 | Moment | What happens | The one sentence | The next action |
 |---|---|---|---|
@@ -49,15 +49,15 @@ Settled: Films, Find, 3D and Place follow one another, with fewer than four film
 1. **One sentence and at most one primary button per moment**: the dock says what is happening and holds the one next step. Placed offers Put it under load; review offers Next while another item remains. Views, stops and quiet reading or return actions can sit beside it.
    Rules out: a second primary button, toolbars, tooltips and panels of tools. Place has the helper and review text described in section 6. Named exception: the part chip opens on pointing and stays when pressed. It is the only place to read a part’s size and source beside that part, and is reachable by keyboard.
 2. **The films and the spine are the only dark, rich things on screen**: everything around them is light, soft and out of the way.
-   Rules out: dark bars, coloured panels, pictures or illustration in the interface, coloured gradients. Named exception: melon, the room's light: the glow, a dial's marker and the mark's offset bar, in principle 6.
+   Rules out: dark bars, coloured panels, pictures or illustration in the interface, coloured gradients.
 3. **Glass is for controls that float, never for content**: the bar, the dock, popovers and chips are glass; films, outlines and the spine are not.
    Rules out: glass on a film, glass on glass, a glass card in the middle of the stage. The content sheets are recorded under Depth.
 4. **Things travel, they do not swap**: the same four films carry through every moment, and a scene change only moves and scales them.
    Rules out: cross-fading whole screens, anything that vanishes in one place and reappears in another.
 5. **Every film measurement carries its band**: a measurement is written `40° ± 4°`. Place uses supplied sizes, load ranges and count forms in section 8.
    Rules out: a film measurement without its band, a hidden band, a size or count the engine did not give, colour that grades a value as good or bad.
-6. **Colour is a signal, and the room has one light**: blue means focus, the thing pointed at, the place a drop will land, or progress; amber means "needs a look"; melon is the room's light and says where the app is; everything else is black, white or grey.
-   Rules out: a fourth colour, a coloured button, colour as the only sign of a state. Melon as a signal: as words, a dot, a status beside a sentence, a button's fill or edge, or anything on a film. Melon and amber in one shape, or side by side.
+6. **Colour is a signal, and the product has one colour of its own**: blue means focus, the thing pointed at, the place a drop will land, or progress; amber means "needs a look"; pink is the product's own colour and says where the app is; everything else is black, white or grey.
+   Rules out: a fourth colour, a coloured button, colour as the only sign of a state. Pink as a signal: as words, a dot, a status beside a sentence, a button's fill or edge, or anything on a film. Pink as a glow or any background.
 7. **The same things stay in the same place**: the bar, the dock and the notice keep their places, share one width and start their words at the same inset. Named exception: Place’s dock widens when it has a primary outside review, or the load stop control; its edges and words then no longer line up with the bar.
    Rules out: controls that jump between moments, a dock wider than the bar outside that Place exception, hiding the notice or the trust badge.
 8. **The film stays as it is**: a film is never dimmed, tinted or otherwise altered to make a mark on it readable. A mark carries its own casing instead: the same shape drawn again beneath it, a little wider and dark.
@@ -101,7 +101,7 @@ Contrast is the colour as text on white, or on black for film colours. For a sur
 | Token | Value | Use | Contrast | Body text |
 |---|---|---|---|---|
 | `--ink` | `#0d0d0d` | Main text, the primary button | 19.4 on white | Pass |
-| `--ink-2` | `#5d5d5d` | Second text: helpers, names, quiet controls | 6.6 on white, 6.1 on `--page-soft`, 5.3 on `--glow` where it is deepest | Pass |
+| `--ink-2` | `#5d5d5d` | Second text: helpers, names, quiet controls | 6.6 on white, 6.1 on `--page-soft`, 5.7 on `--glow` | Pass |
 | `--ink-3` | `#8f8f8f` | Words on a disabled primary button | 3.2 on white, 3.0 on `--fill` | Fail. Disabled only |
 | `--ink-faint` | `rgba(13,13,13,0.3)` | A step not yet reached; the drawing in an empty place | 2.0 on its ground | Fail. Disabled and drawing only |
 | `--ink-faint-hover` | `rgba(13,13,13,0.44)` | That drawing, pointed at, and while its film is being read | 2.9 on `--soft-2` | Fail. Drawing only |
@@ -114,14 +114,12 @@ Contrast is the colour as text on white, or on black for film colours. For a sur
 | `--track` | `rgba(13,13,13,0.05)` | The chosen rod or review choice in Place; the fill of Place's age select | `--ink-2` on it: 5.9 | Pass |
 | `--underline` | `rgba(13,13,13,0.28)` | Under a text link at rest | 1.9 against white | Not text |
 | `--page` | `#fff` | The page | `--ink-2` on it: 6.6 | Pass |
-| `--page-soft` | `#fbf6f2` | The foot of the page. A warm grey, to sit beside the warm light | `--ink-2` on it: 6.1 | Pass |
-| `--page-wash-1`, `--page-wash-2` | `#fefcfb`, `#fdf9f7` | Two steps between them. `--page-wash` is the whole wash | `--ink-2` on them: 6.4, 6.3 | Pass |
-| `--glow-1` / `--glow-2` | `#ffe8d0` / `#ffdee2` | The light where it is cantaloupe; where it is watermelon | `--ink-2` on them: 5.6, 5.3 | Pass |
-| `--glow` | `linear-gradient(155deg, var(--glow-1) 20%, var(--glow-2) 80%)` | The glow behind the spine | `--ink-2` on it: 5.3 at its deepest | Pass |
-| `--glow-quiet` | `linear-gradient(155deg, rgba(255,232,208,0.75) 20%, rgba(255,222,226,0.75) 80%)` | The same light at 75%, behind the films | `--ink-2` on it, over white: 5.6 at its deepest | Pass |
-| `--melon-1` / `--melon-2` | `#ffa26b` / `#ff6680` | Cantaloupe, where the blend starts; watermelon, where it ends | 2.0 and 2.8 on white | Fail. Never words |
-| `--melon` | `linear-gradient(90deg, var(--melon-1), var(--melon-2))` | The blend, left to right: the marker of a dial, the offset bar of the product mark | | Not text |
-| `--soft-1` / `--soft-2` / `--soft-3` | `#f5f3f1` / `#efecea` / `#e9e6e3` | An empty film place: rest; pointed at, or while its film is being read; pressed. The same steps of grey as before, warmed | The drawing on them: 2.0 to 2.9 | Drawing only |
+| `--page-soft` | `#f6f7f9` | The foot of the page | `--ink-2` on it: 6.1 | Pass |
+| `--page-wash-1`, `--page-wash-2` | `#fcfcfd`, `#f9fafb` | Two steps between them. `--page-wash` is the whole wash | `--ink-2` on them: 6.4, 6.3 | Pass |
+| `--glow` | `#e9f0f9` | The glow behind the spine | `--ink-2` on it: 5.7 | Pass |
+| `--glow-quiet` | `rgba(233,240,249,0.8)` | The same glow behind the films | `--ink-2` on it: 5.9 | Pass |
+| `--soft-1` / `--soft-2` / `--soft-3` | `#f3f4f7` / `#edeff3` / `#e8eaef` | An empty film place: rest; pointed at, or while its film is being read; pressed | The drawing on them: 2.0 to 2.9 | Drawing only |
+| `--pink` | `#ff3d8f` | Hot pink, the product's own colour: the marker under the chosen option of a dial, the offset bar of the product mark | 3.3 on white, 3.1 on `--page-soft`, 2.9 on `--glow`. On thin glass, where both marks sit: 3.3 over white, 3.2 over `--page-soft` or the glow | Fail. Marks only, never words |
 | `--accent` | `#0a7cff` | Focus ring, the vertebra pointed at, the progress bar, a place files are held over, the ring of the one place or film they are over | 3.9 on white, 5.3 on black | Fail on white: rings, marks and drawings only, never words |
 | `--accent-soft` | `rgba(10,124,255,0.12)` | A wash for a selected thing. Open: named, used by nothing yet | `--ink` on it: 16.7 | Pass |
 | `--accent-fill` | `rgba(10,124,255,0.2)` | Inside the outline pointed at | | Not text |
@@ -143,14 +141,13 @@ Contrast is the colour as text on white, or on black for film colours. For a sur
 
 `--find-light` and `--find-light-mask` are the gradient and the side fade of the light that travels during the find. The light is drawn as an SVG shape, and an SVG paint cannot read a CSS gradient. So the same stops are written out again where the shape is drawn. Keep them equal to the two tokens.
 
-`--glow-quiet` writes `--glow-1` and `--glow-2` again at 75%, and the favicon writes `--melon-1` and `--melon-2` again in hex, because neither can read the tokens. Keep them equal. `tokens.test.ts` checks both.
+The favicon writes `--pink` again in hex, because it cannot read the tokens. Keep them equal. `tokens.test.ts` checks it.
 
-Melon is the product's own light. It is light, not paint.
+Pink is the product's own colour. It is one solid colour, never a gradient.
 
-- It says where the app is: the glow behind the object, the offset bar of the product mark, the marker under the chosen option of a dial. Nothing else.
-- It is never a signal. It is never words, never a dot, never on a film, never beside a sentence as a status, never a button's fill or edge. It is never the only sign of a state: the chosen option of a dial is also `--ink` and carries `aria-current`.
-- Cantaloupe and amber are both orange. They never share a shape or a place: neither is drawn in the other's form, and they never sit side by side. Amber is a dot beside words, a line on a film, or a ring on the spine in Place; melon is a glow, a bar of the mark, or a dial's marker. The glow is light behind the stage, so Place's amber rings may lie over it. One part may hold both, apart: after loading, Place's part chip can show the amber dot before its past-allowance sentence and, below a hairline, the kind dial with its marker.
-- The page's greys are warmed to match: `--page-soft`, the wash, the three soft greys and `--glass-solid`. `--page` stays white.
+- It says where the app is: the offset bar of the product mark and the marker under the chosen option of a dial. Nothing else.
+- It is never a signal. It is never words, never a dot, never on a film, never beside a sentence as a status, never a button's fill or edge, never a glow or any background. It is never the only sign of a state: the chosen option of a dial is also `--ink` and carries `aria-current`.
+- On white it is 3.3 to 1: enough for a mark, not for words.
 
 ### Space
 
@@ -210,7 +207,7 @@ Lines: a hairline is 1 (`--hairline`). An outline on film, and the ring of a pla
 | **2 Objects** | Film tiles, the spine and placement | `--film`; `--bone` | `--shadow-film`: `0 1px 2px` black 6%, `0 18px 40px -14px` black 26%. Inside every tile a 1 lit edge, `--film-edge`. Under the spine one soft round shadow |
 | **3 Glass** | Bar, dock and its Place review, trust note, name chip, part chip, measurements panel and sheet, Place sheet | See Glass | `--glass-shadow` |
 
-A dial has no shadow: its marker is a flat bar of light.
+A dial has no shadow: its marker is a flat bar of pink.
 
 | Token | Value | What |
 |---|---|---|
@@ -247,7 +244,7 @@ Never glass on glass. If text on glass is hard to read, make the glass thicker. 
 
 | Setting | Glass becomes |
 |---|---|
-| Reduced transparency | `--glass-solid` `#fcfbfa`, no blur. Edge and shadow stay. `--ink-2` on it: 6.4 |
+| Reduced transparency | `--glass-solid` `#fbfbfc`, no blur. Edge and shadow stay. `--ink-2` on it: 6.4 |
 | More contrast | White, no blur, a 1 edge of `--line-strong` |
 
 Class: `.glass`. A part chooses its thickness by setting its own `background`.
@@ -308,14 +305,14 @@ The app has its own setting for less motion, `data-motion="reduced"` on its root
 
 | Icon | Size | Drawn as | Where |
 |---|---|---|---|
-| Product mark | 20 (`--icon-medium`) | Three rounded bars, 9 by 3.5 with corners of 1.25, the middle one set 1.5 to the left. The two in line are an outline in the colour of the words. The middle one, out of line, is filled and stroked with the melon blend, left to right, so it has the same outer size as its neighbours | The bar |
-| Favicon | As the browser draws it | The product mark on its white rounded square, as three filled bars. The two in line are `#0d0d0d`. The middle one, set to the left, is filled with its own melon gradient, written in hex, because a favicon cannot read the app's tokens | The browser's tab |
+| Product mark | 20 (`--icon-medium`) | Three rounded bars, 9 by 3.5 with corners of 1.25, the middle one set 1.5 to the left. The two in line are an outline in the colour of the words. The middle one, out of line, is filled and stroked in `--pink`, so it has the same outer size as its neighbours | The bar |
+| Favicon | As the browser draws it | The product mark on its white rounded square, as three filled bars. The two in line are `#0d0d0d`. The middle one, set to the left, is filled `#ff3d8f`, the value of `--pink` written again, because a favicon cannot read the app's tokens | The browser's tab |
 | Lock | 18 (`--icon-small`) | A body 10.5 by 7 with corners of 2, and a shackle | The trust badge |
 | Place drawing, one for each film | 52 by 95 (`--place-drawing-w`, `--place-drawing-h`) | Seven blocks along the curve that film will show | Empty places |
 
 Line 1.5 (`--icon-stroke`), round ends and joins, no fill, the colour of the words beside it. Drawn inline as SVG. No icon in a tinted circle. A new icon needs a reason.
 
-Named exception: the product mark's middle bar is melon. An SVG paint cannot read a CSS gradient, so the mark carries its own gradient. Its two stops read `--melon-1` and `--melon-2` through CSS; the hex values are not written again. Each mark drawn has a gradient of its own, with its own id.
+Named exception: the product mark's offset bar is filled, in pink. Its paint is `--pink`, set in `components.css`; the mark does not write the value again.
 
 ## 5. Layout
 
@@ -440,13 +437,13 @@ Shared parts are in `components.css`; the tables name the files that add behavio
 
 | | |
 |---|---|
-| For | The quiet room everything sits in, and its one warm light. The glow gives the glass something to pick up |
-| Page | `--page-wash`: white for the top 52%, then easing through `--page-wash-1` at 72% and `--page-wash-2` at 86% to `--page-soft` at the foot. Its greys are warm. It never scrolls |
-| Glow | Two blurred ovals in the same place, centred 46% down the window (`--glow-y`). Quiet, behind the films: `--glow-quiet`, 40% of the window wide and 42% tall, blurred 80. Wide, behind the spine: `--glow`, 50% wide and 56% tall, blurred 100. Each is filled with the melon light at 155°: cantaloupe (`--glow-1`) at the upper left drifting into watermelon (`--glow-2`) at the lower right. The quiet one is the same light at 75% |
+| For | The quiet room everything sits in. The glow gives the glass something to pick up |
+| Page | `--page-wash`: white for the top 52%, then easing through `--page-wash-1` at 72% and `--page-wash-2` at 86% to `--page-soft` at the foot. It never scrolls |
+| Glow | Two blurred ovals in the same place, centred 46% down the window (`--glow-y`). Quiet, behind the films: `--glow-quiet`, 40% of the window wide and 42% tall, blurred 80. Wide, behind the spine: `--glow`, 50% wide and 56% tall, blurred 100 |
 | States | Films and Find show the quiet glow. 3D and Place show the wide one. They cross-fade in 900 |
 | Classes | `body.app`, `.glow` |
-| Do | Keep it so soft that no edge can be found. The blur hides the edge of each oval and of its fill |
-| Do not | Add a second glow, give it more colour than its two stops, or draw it as a gradient without the blur. Put it on a film |
+| Do | Keep it so soft that no edge can be found |
+| Do not | Add a second glow, give it more colour, or draw it as a gradient |
 
 ### Start sentence
 
@@ -467,7 +464,7 @@ Shared parts are in `components.css`; the tables name the files that add behavio
 | Parts | `.brand` (the mark and `.brand-name`), `.seg.steps`, then `.bar-actions` holding Save case before `.badge`. The three columns remain left, centre, right (`--bar-cols`) |
 | Size | 720 by 48, block corner 17.3, thin glass. Padding 23 at the left; 7 at the right, so the badge is as far from the end as from the top and bottom. 7 from the product mark to the name (`--brand-gap`); the mark is pulled 4 to the left |
 | States | Save case is shown once a film that is still present has found vertebrae. While Save is present, at every width, the brand shows its mark without its name and the columns are `auto 1fr auto`. Without Save, the same compact pattern begins at 600 wide or less through `--bar-cols` and `--brand-name-display` |
-| Classes | `.bar.glass`, `.brand`, `.brand-name` in `components.css`. The mark's two gradient stops wear `.melon-1` and `.melon-2`, coloured by `.brand .melon-1` and `.brand .melon-2`, so a mark is drawn inside `.brand`. `.bar-actions` and `.bar-save` in `app/src/app-shell/TopBar.tsx` and `app/src/app-shell/TopBar.css` group the right-side controls |
+| Classes | `.bar.glass`, `.brand`, `.brand-name` in `components.css`. The mark's offset bar wears `.brand-mark-offset`, filled and stroked by `.brand .brand-mark-offset`, so a mark is drawn inside `.brand`. `.bar-actions` and `.bar-save` in `app/src/app-shell/TopBar.tsx` and `app/src/app-shell/TopBar.css` group the right-side controls |
 | Do | Keep it the same width as the dock outside the named Place exception in principle 7. The bar keeps its width while that dock widens |
 | Do not | Add another action beyond Save case and the trust badge |
 
@@ -494,11 +491,11 @@ Shared parts are in `components.css`; the tables name the files that add behavio
 | | |
 |---|---|
 | For | Where you are in the flow, and the way back |
-| Parts | A dial: four options as words, Films, Find, 3D, Place, on a hairline, with a small melon marker that slides along the line to the chosen word. No fill, no thumb, no shadow |
-| Size | Each option 60 by 28, block corner 10.1. Words 13 / 18, 500. 2 padding all round. The hairline is 1 (`--hairline`) of `--line`, along the bottom edge of the control, its full width. The marker is 16 by 3 (`--marker-w`, `--marker-h`), corner 2 (`--r-hair`), which at 3 tall draws its ends fully round, filled with `--melon`. It is centred under the chosen option, and its bottom edge lies on the hairline's, so it covers the line where it sits. The control is as wide as its options only inside a column sized to its content, which the bar gives it. Shown alone, give it such a column |
+| Parts | A dial: four options as words, Films, Find, 3D, Place, on a hairline, with a small pink marker that slides along the line to the chosen word. No fill, no thumb, no shadow |
+| Size | Each option 60 by 28, block corner 10.1. Words 13 / 18, 500. 2 padding all round. The hairline is 1 (`--hairline`) of `--line`, along the bottom edge of the control, its full width. The marker is 16 by 3 (`--marker-w`, `--marker-h`), corner 2 (`--r-hair`), which at 3 tall draws its ends fully round, filled with solid `--pink`. It is centred under the chosen option, and its bottom edge lies on the hairline's, so it covers the line where it sits. The control is as wide as its options only inside a column sized to its content, which the bar gives it. Shown alone, give it such a column |
 | States | Rest: `--ink-2`. Hover: `--ink`. Pressed: scale 0.95. Current: `--ink`, the marker under it, `aria-current="true"`. Disabled: `--ink-faint`. All four steps are drawn. Earlier steps can be pressed. A later step opens only when it and the steps before it are complete; 3D needs a current fit. Place needs that fit with the arrival finished. Reading films blocks later steps. Focus: the ring |
 | Motion | The marker slides in 280 |
-| Classes | `.seg.steps`; `--at` says which option the marker is under. `.seg::before` draws the marker. Its box is as wide as one option and reaches down through the bottom padding to the control's edge. The marker is painted at the box's bottom centre, so a rule that moves the box by `--at` still carries it |
+| Classes | `.seg.steps`; `--at` says which option the marker is under. `.seg::before` draws the marker. Its box is as wide as one option and reaches down through the bottom padding to the control's edge. The box is filled with `--pink` and clipped to the marker at its bottom centre, so a rule that moves the box by `--at` still carries it |
 | Do | Let a step already reached be a way back |
 | Do not | Number the steps or colour their words. Mark more than one option |
 
@@ -631,7 +628,7 @@ Shared parts are in `components.css`; the tables name the files that add behavio
 | Keyboard | Enter presses it from anywhere that is not another control, when it is drawn and not disabled |
 | Classes | `.primary` |
 | Do | Name the result: "Build the 3D spine" |
-| Do not | Colour it, give it a gradient edge or make it glow. Show two |
+| Do not | Colour it. Show two |
 
 ### Secondary button. Settled
 
@@ -1147,7 +1144,7 @@ Shared parts are in `components.css`; the tables name the files that add behavio
 | | |
 |---|---|
 | For | Choosing Before or Rods in on the current placement |
-| Look | The existing dial: words on a hairline, the melon marker under the chosen stop. Wide cells are 112 by 40. Below 900 their base width is 84; at 900 and below the control fills its own dock row with equal cells |
+| Look | The existing dial: words on a hairline, the pink marker under the chosen stop. Wide cells are 112 by 40. Below 900 their base width is 84; at 900 and below the control fills its own dock row with equal cells |
 | States | Rods in is chosen on completion. Before removes load numbers and ghosts and restores ordinary part ink. A chosen stop has `aria-current="true"`. Choosing clears a pointed or kept chip. No primary remains after loading |
 | Presentation | Before and Rods in stay as the two choices. Standing, bending forward and walking give nearly the same load readings, so the control does not present them as separate analyses |
 | Classes and files | `.seg.load-stops` in `app/src/bench/place/place.css`; `app/src/building-blocks/Segmented.tsx` mounts its buttons, `app/src/guide/Dock.tsx` reads the shown list in `app/src/words/place.ts` |
@@ -2070,8 +2067,8 @@ The examples below use engine-supplied counts, population and sample text.
 
 | Subject | Rule | Where it stands |
 |---|---|---|
-| Contrast | Reading text is 4.5 to 1 or more. Rings, lines and marks that carry meaning are 3 to 1 or more | Text on the page and on glass passes: the weakest is `--ink-2` on the wide glow where it is deepest, `--glow-2`, 5.3. A dial's words have no track under them: `--ink-2` on thin glass over that glow is 6.1. The focus ring is 3.9 on white and 3.1 on the glow where it is deepest. Without a casing, names and outlines on film fail on the sample films. With their built casings, they pass on the measured sample films: see Marks on film, below |
-| Colour alone | A state is never shown by colour alone | Needs a look: amber, and the dock names the vertebrae. Each such outline also says "needs a look" when read aloud. Pointed at: blue, with its name beside it on the large films and in the chip on the spine. Current step or view: the darker word, `--ink`, and `aria-current`, with the melon marker under it. Melon is never the only sign. Disabled: faint, and the `disabled` attribute |
+| Contrast | Reading text is 4.5 to 1 or more. Rings, lines and marks that carry meaning are 3 to 1 or more | Text on the page and on glass passes: the weakest is `--ink-2` on the glow, 5.7. A dial's words have no track under them: `--ink-2` on thin glass over the glow is 6.3. The focus ring is 3.9 on white and 3.4 on the glow. Without a casing, names and outlines on film fail on the sample films. With their built casings, they pass on the measured sample films: see Marks on film, below |
+| Colour alone | A state is never shown by colour alone | Needs a look: amber, and the dock names the vertebrae. Each such outline also says "needs a look" when read aloud. Pointed at: blue, with its name beside it on the large films and in the chip on the spine. Current step or view: the darker word, `--ink`, and `aria-current`, with the pink marker under it. Pink is never the only sign. Disabled: faint, and the `disabled` attribute |
 | Keyboard order | Follow the mounted parts | Steps that can be pressed, Save case when shown, trust badge, then the stage and dock. Films has four place buttons in film order. Side radios and review buttons take native focus. In 3D the measurement rows and Start over precede rail-film buttons and dock views; that stage takes no focus. In Place the stage takes focus before the dock; rail films are pictures and hide during placement comparison. An open Place sheet keeps Tab inside |
 | Saving focus | Keep the button while its press is carried out | Busy uses `aria-busy` and `aria-disabled`, without native `disabled`, so Save case keeps its focus and size and ignores further presses. Its ring stands still under reduced motion |
 | Toast announcements | Say what changed without taking focus | A separate status line speaks the current toast. Save and reopen confirmations have no focusable action |
@@ -2113,7 +2110,7 @@ The examples below use engine-supplied counts, population and sample text.
 |---|---|
 | Marks on real films | Only the made-up sample films have been measured. By arithmetic the three outline casings hold 3 to 1 on any film: 3.0, 3.4 and 3.2 over pure white. The name's casing holds 4.5 where the film behind is no lighter than `#f8f8f8`. Over pure white it gives 4.3, and would need 57%. Measure again when real films are in |
 | One casing or three | The rule as first decided had one casing for all three lines. Measuring split it by line colour. The split was confirmed on 13 November 2026 after looking at it on the sample films. The other answer that passes, 80% under every line, reads as a heavy black edge on the white lines. As chosen, the casing cannot be told from the line's own edge under white, shows a little under amber, and is a plain dark edge under blue, on the one vertebra pointed at |
-| Faint shapes | An empty film place is 1.1 to 1 against the page and its drawing 2.0. A dial's marker is 2.0 to 2.8 against white: cantaloupe at its left end, watermelon at its right. Words carry the meaning in each case: the films' names and the dock's sentence; the darker word of the current step |
+| Faint shapes | An empty film place is 1.1 to 1 against the page and its drawing 2.0. A dial's marker in Place's part chip can fall under 3 to 1 where the chip lies over shaded bone: by arithmetic, 3.1 over `--bone` and 2.8 over `#c8c8c8`. Words carry the meaning in each case: the films' names and the dock's sentence; the darker word of the chosen option |
 | The glass edge with more contrast | `--line-strong` is 2.7 to 1 against white, under the 3 needed for an edge |
 | The amber dot | 2.0 to 1 on white. The words beside it carry the meaning |
 | Keyboard and the spine | The spine cannot be turned or zoomed freely by keyboard. Named views give three choices in 3D and four in Placed. The 3D name chip has no keyboard bone selection; Place’s focused stage walks parts |
@@ -2125,11 +2122,11 @@ Comparison uses the same single stage stop and native dock measure control. Colu
 
 ## 10. What would make it look cheap
 
-- A second black button on screen, or any coloured button. A button with a gradient edge, or one that glows.
+- A second black button on screen, or any coloured button.
 - A disabled button standing in for a step that does not exist.
 - Glass on a film, glass on glass, or a glass card in the middle of the stage.
-- A glow whose edge can be seen, or any gradient with colour in it. The one exception is melon: the light, a dial's marker and the mark's offset bar.
-- A fourth colour. Blue or amber used because it looks nice. Melon anywhere but the glow, the mark's offset bar and a dial's marker. Melon and amber in one shape, or side by side.
+- A glow whose edge can be seen, or any gradient with colour in it.
+- A fourth colour. Blue or amber used because it looks nice. Pink anywhere but the mark's offset bar and a dial's marker.
 - Lines on film thicker than 1.5, with drop shadows, or as filled boxes. Names in pills or boxes. A casing darker or wider than its line needs.
 - A film dimmed, tinted or otherwise changed so that the marks on it read better.
 - A film cropped or stretched to fill its tile. Light on the black beside a film.
@@ -2172,6 +2169,7 @@ grep -nE '#[0-9a-fA-F]{3,8}\b|rgba?\(|[0-9.]+(px|ms|em|rem|vw|vh)\b' app/src/loo
 
 ## 12. Decisions log
 
+- **15 November 2026 — The room goes back to cool blue, and the product's own colour is hot pink.** This undoes part of the Melon line below: the warm glow and the warmed greys are set aside, because the cool blue room is the identity and reads as calmer. The glow, the page, the soft greys and `--glass-solid` are as they were before 14 November. Melon goes, and one solid hot pink, `--pink` `#ff3d8f`, takes its two small places: a dial's marker, named melon in the lines below, and the mark's offset bar, with the favicon's bar. `--melon-1`, `--melon-2`, `--melon`, `--glow-1` and `--glow-2` are gone. Pink is never a glow or a background, and never a signal. Coloured gradients are ruled out again with no exception, so the mark no longer carries a gradient of its own. Principle 6 now names pink, and the rule that melon and amber never share a shape or a place goes, because pink and amber are not alike. The dial, the block and lower glass stand.
 - **15 November 2026 — Building waits for two vertebrae.** The fit needs two levels, so a Find that kept one vertebra offered a build that could only fail, and a "Try again" that failed the same way. The button now waits, and the helper says why. With fewer than all seventeen, each bone the fit stands is still the found vertebra's own: checked on three real front films with only some levels kept, every bone's body landed on its own outline within 5 film pixels and never on a neighbour's.
 - **14 November 2026 — On Front alone, a bone forms on its outline and then rises.** Formed where the fit stands it, in front of a wall 30 mm behind the spine and seen from 36° round, every bone came out well to one side of the vertebra it was found from, on a real film often by more than a vertebra's width. Formed flat on the film and then lifted square out of it, each bone is seen on its own vertebra first, and its threads show where it went. With Side as well a bone cannot lie on both films, so it still forms where their threads cross.
 - **14 November 2026 — Real sample films replace the made-up case.** Where the computer holds real films, the sample control goes round only those, and development opens on the real engine, which alone can read them; `?engine=stand-in`, a scene or the gallery keep the stand-in. Ordinary builds hold no real films, so they still offer the made-up case.

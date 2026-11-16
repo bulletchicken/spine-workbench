@@ -95,8 +95,7 @@ describe('on the page', () => {
       solid('--page-soft'),
       solid('--page-wash-1'),
       solid('--page-wash-2'),
-      solid('--glow-1'),
-      solid('--glow-2'),
+      solid('--glow'),
       solid('--fill', '--page'),
       solid('--track', '--page'),
       solid('--glass-solid'),
@@ -112,10 +111,14 @@ describe('on the page', () => {
     for (const face of ['--ink', '--ink-hover', '--ink-pressed']) expect(contrast(solid('--on-ink'), solid(face)), face).toBeGreaterThanOrEqual(7);
   });
 
-  it('draws the accent at 3:1 or more on the page and on the light, for the ring and the meter, and 4.5:1 on a film', () => {
+  it('draws the accent at 3:1 or more on the page, for the ring and the meter, and 4.5:1 on a film', () => {
     expect(contrast(solid('--accent'), PAGE)).toBeGreaterThanOrEqual(3);
-    for (const stop of ['--glow-1', '--glow-2']) expect(contrast(solid('--accent'), solid(stop)), stop).toBeGreaterThanOrEqual(3);
     expect(contrast(solid('--accent'), FILM)).toBeGreaterThanOrEqual(4.5);
+  });
+
+  it('draws pink at 3:1 or more as a mark: on white, and on the thin glass over the glow its marks sit on', () => {
+    expect(contrast(solid('--pink'), PAGE)).toBeGreaterThanOrEqual(3);
+    expect(contrast(solid('--pink'), solid('--glass-thin', '--glow'))).toBeGreaterThanOrEqual(3);
   });
 });
 

@@ -11,7 +11,7 @@ draws. Each has a page in the gallery (`?gallery` in development).
 | `Kbd` | `Kbd.tsx` | a key hint, written as this machine's keyboard prints it (⌘Z or Ctrl+Z) |
 | `Tooltip` | `Tooltip.tsx` | a few words beside a control, on hover and on keyboard focus |
 | `Popover` | `Popover.tsx` | a panel beside the control that opened it, always on the page; `open` adds the class `open`, and the caller's classes (the design system's `note glass`) give its look and both fades. Escape, a press outside or focus moving on closes it |
-| `Segmented` | `Segmented.tsx` | the design system's `.seg`, the dial: options as words on a hairline, with a melon marker that slides under the chosen one, the steps of the journey |
+| `Segmented` | `Segmented.tsx` | the design system's `.seg`, the dial: options as words on a hairline, with a pink marker that slides under the chosen one, the steps of the journey |
 | `Dialog` | `Dialog.tsx` | a sheet of paper over a veil, with focus kept inside it and every key kept from what is behind it |
 | `Slider` | `Slider.tsx` | a slider cut into named parts, for the pointer and the keyboard |
 | `Toasts`, `say()` | `toast/` | one line at the foot of the bench saying what just happened, with at most one action |

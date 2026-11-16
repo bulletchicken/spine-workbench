@@ -1,12 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <defs>
-    <linearGradient id="melon">
-      <stop offset="0" stop-color="#ffa26b"/>
-      <stop offset="1" stop-color="#ff6680"/>
-    </linearGradient>
-  </defs>
   <rect x="1" y="1" width="30" height="30" rx="5" fill="#ffffff" stroke="#111417" stroke-width="2"/>
   <rect x="10" y="4.4" width="14.4" height="5.6" rx="2" fill="#0d0d0d"/>
-  <rect x="7.6" y="13.2" width="14.4" height="5.6" rx="2" fill="url(#melon)"/>
+  <rect x="7.6" y="13.2" width="14.4" height="5.6" rx="2" fill="#ff3d8f"/>
   <rect x="10" y="22" width="14.4" height="5.6" rx="2" fill="#0d0d0d"/>
 </svg>

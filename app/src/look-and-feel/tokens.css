@@ -8,14 +8,12 @@
   /* ---------- Colour: the page ---------- */
 
   --page: #fff;                                  /* the page */
-  --page-soft: #fbf6f2;                          /* the foot of the page. A warm grey, to sit beside the warm light */
-  --page-wash-1: #fefcfb;                        /* two steps between them, so the wash starts without a line */
-  --page-wash-2: #fdf9f7;
+  --page-soft: #f6f7f9;                          /* the foot of the page */
+  --page-wash-1: #fcfcfd;                        /* two steps between them, so the wash starts without a line */
+  --page-wash-2: #f9fafb;
   --page-wash: linear-gradient(var(--page) 52%, var(--page-wash-1) 72%, var(--page-wash-2) 86%, var(--page-soft));
-  --glow-1: #ffe8d0;                             /* the room's one light, where it is cantaloupe */
-  --glow-2: #ffdee2;                             /* and where it is watermelon */
-  --glow: linear-gradient(155deg, var(--glow-1) 20%, var(--glow-2) 80%);   /* the one soft glow behind the spine */
-  --glow-quiet: linear-gradient(155deg, rgba(255, 232, 208, 0.75) 20%, rgba(255, 222, 226, 0.75) 80%);   /* the same light at 75%, behind the films */
+  --glow: #e9f0f9;                               /* the one soft glow behind the spine */
+  --glow-quiet: rgba(233, 240, 249, 0.8);        /* the same glow, quieter, behind the films */
 
   /* ---------- Colour: ink ---------- */
 
@@ -35,9 +33,9 @@
   --underline: rgba(13, 13, 13, 0.28);           /* under a text link at rest */
   --underline-gap: 3px;                          /* from the words to that line */
 
-  --soft-1: #f5f3f1;                             /* an empty film place */
-  --soft-2: #efecea;                             /* the same, pointed at, or while its film is being read */
-  --soft-3: #e9e6e3;                             /* the same, pressed */
+  --soft-1: #f3f4f7;                             /* an empty film place */
+  --soft-2: #edeff3;                             /* the same, pointed at, or while its film is being read */
+  --soft-3: #e8eaef;                             /* the same, pressed */
 
   /* ---------- Colour: the two signals ---------- */
 
@@ -51,14 +49,11 @@
   --look-fill: rgba(245, 165, 36, 0.14);         /* inside an outline that needs a look */
   --look-pulse: rgba(245, 165, 36, 0.5);         /* the top of its one pulse when the find ends */
 
-  /* ---------- Colour: the light ---------- */
+  /* ---------- Colour: the product's own ---------- */
 
-  /* Melon: cantaloupe drifting into watermelon. It is the room's own light, not a signal. It is only
-     ever the glow, the marker of a dial, or the offset bar of the product mark. Never words: neither
-     colour reads as text on white. */
-  --melon-1: #ffa26b;                            /* cantaloupe, where the blend starts */
-  --melon-2: #ff6680;                            /* watermelon, where it ends */
-  --melon: linear-gradient(90deg, var(--melon-1), var(--melon-2));   /* the blend, left to right: the dial's marker, the mark's offset bar */
+  /* A hot pink. It says where the app is, and nothing else: it is never a signal. Never words: it
+     does not read as text on white. Never a glow or a background. */
+  --pink: #ff3d8f;                               /* the marker under the chosen option of a dial, the offset bar of the product mark */
 
   /* ---------- Colour: on film and in 3D ---------- */
 
@@ -176,7 +171,7 @@
   --glass-blur: blur(24px) saturate(180%);
   --glass-border: var(--hairline) solid rgba(255, 255, 255, 0.7);
   --glass-shadow: 0 0 0 1px rgba(13, 13, 13, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 6px 18px -6px rgba(0, 0, 0, 0.1);   /* close under it, so glass sits low on the page */
-  --glass-solid: #fcfbfa;                        /* what glass becomes when transparency is reduced */
+  --glass-solid: #fbfbfc;                        /* what glass becomes when transparency is reduced */
 
   /* ---------- Focus ---------- */
 
@@ -197,7 +192,7 @@
   --chip-h: 26px;
   --step-w: 60px;        --step-h: 28px;         /* one option of the step control */
   --view-w: 64px;        --view-h: 36px;         /* one option of the view control */
-  --marker-w: 16px;      --marker-h: 3px;        /* the melon marker under the chosen option of a dial */
+  --marker-w: 16px;      --marker-h: 3px;        /* the pink marker under the chosen option of a dial */
   --badge-h: 32px;
   --quiet-h: 36px;
   --primary-h: 44px;                             /* also the secondary button */

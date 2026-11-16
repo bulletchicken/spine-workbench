@@ -91,9 +91,9 @@ describe('the design system’s two stylesheets', () => {
 describe('the refreshed system', () => {
   it('keeps all three files byte for byte', () => {
     for (const [path, digest] of [
-      ['../../../DESIGN.md', 'fd0f631df7fe17efa65badbcd5402945b64cafaa05611dd7e083472f945e9d4e'],
-      ['./tokens.css', '60763ad3b7f52e3790b54361abcc7c0514c16425d3623c876bd994d217f3cca7'],
-      ['./components.css', '4bb7929d7c65f402959b846ae505816d0b846d7dd6216ea1d85c9d25d88125ab'],
+      ['../../../DESIGN.md', '0dcdb7b1214bd79b85c76b4f086c8443a0596d77af963840a25bdf8d586e00cd'],
+      ['./tokens.css', 'fc33edaf9d8b79bc9bb6877ced6870b08b97bc51819603a3a8d881625638e0a3'],
+      ['./components.css', '419807df3c2b9a8bc0c7fc737fcbe9e7986eb42fb59179cbf779843b1cc519b9'],
     ] as const) {
       expect(createHash('sha256').update(read(path)).digest('hex'), path).toBe(digest);
     }
@@ -113,19 +113,22 @@ describe('the refreshed system', () => {
     expect(atWidth(600)).toEqual({ '--bar-cols': 'auto 1fr auto', '--brand-name-display': 'none' });
   });
 
-  it('has one warm light, melon, and leaves progress blue', () => {
-    expect(ROOT['--melon-1']).toBe('#ffa26b');
-    expect(ROOT['--melon-2']).toBe('#ff6680');
-    expect(ROOT['--melon']).toBe('linear-gradient(90deg, var(--melon-1), var(--melon-2))');
-    expect(ROOT['--glow']).toBe('linear-gradient(155deg, var(--glow-1) 20%, var(--glow-2) 80%)');
+  it('has one colour of its own, a solid pink, keeps the glow blue and leaves progress blue', () => {
+    expect(ROOT['--pink']).toBe('#ff3d8f');
+    expect(ROOT['--glow']).toBe('#e9f0f9');
+    for (const name of ['--melon-1', '--melon-2', '--melon', '--glow-1', '--glow-2']) {
+      expect(TOKENS, name).not.toContain(name);
+      expect(COMPONENTS, name).not.toContain(name);
+    }
+    const gradients = Object.keys(ROOT).filter((name) => (ROOT[name] ?? '').includes('gradient('));
+    expect(gradients).toEqual(['--page-wash', '--find-light', '--find-light-mask']);
     expect(COMPONENTS).toContain('.meter i { display: block; height: 100%; border-radius: var(--r-hair); background: var(--accent);');
   });
 
-  it('writes the light again only where the tokens cannot be read, equal to them', () => {
-    const rgb = (hex = '') => [1, 3, 5].map((at) => parseInt(hex.slice(at, at + 2), 16)).join(', ');
-    expect(ROOT['--glow-quiet']).toBe(`linear-gradient(155deg, rgba(${rgb(ROOT['--glow-1'])}, 0.75) 20%, rgba(${rgb(ROOT['--glow-2'])}, 0.75) 80%)`);
+  it('writes pink again only where the tokens cannot be read, equal to them', () => {
     const favicon = read('../../public/favicon.svg');
-    for (const stop of ['--melon-1', '--melon-2']) expect(favicon, stop).toContain(`stop-color="${ROOT[stop] ?? ''}"`);
+    expect(favicon).toContain(`<rect x="7.6" y="13.2" width="14.4" height="5.6" rx="2" fill="${ROOT['--pink'] ?? ''}"/>`);
+    expect(favicon).not.toContain('gradient');
   });
 
   it('gives a pressable part its block for a corner, and no part a pill', () => {

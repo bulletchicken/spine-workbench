@@ -20,7 +20,7 @@ interface SegmentedProps {
 }
 
 /**
- * A dial: words on a hairline, with a small melon marker that slides along the line to the chosen
+ * A dial: words on a hairline, with a small pink marker that slides along the line to the chosen
  * one. The steps of the journey. It is a list of places to go, so it is a `nav` and the chosen one is the current one.
  * Every rule is the design system's `.seg`. That is a block grid, as narrow as its options only
  * inside a column sized to its content, which the bar gives it.
