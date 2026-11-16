@@ -6,7 +6,7 @@
 // only because a hand threw it. Setting a view from outside ends the glide.
 
 import { joinLoop } from '@/choreography/one-loop';
-import { fittedScale } from '../looking/framing';
+import { type Bounds, fittedScale } from '../looking/framing';
 import { perspectiveFor } from '../looking/named-views';
 import { type Turn, makeTurning } from '../looking/turning';
 import type { CanvasSize, View } from '../looking/view';
@@ -39,6 +39,7 @@ export function attachHandTurning(stage: Stage, canvas: HTMLCanvasElement, optio
   let gliding: (() => void) | null = null;
   let pointed: Pointed | null = null;
   let lastPointer: PointerEvent | null = null;
+  let pointing: (() => void) | null = null;
   /** The view the hand took hold of: its aim is kept, so the spine does not jump to the middle. */
   let held: View | null = null;
 
@@ -54,9 +55,17 @@ export function attachHandTurning(stage: Stage, canvas: HTMLCanvasElement, optio
     turning.set({ azimuth: held.azimuth, elevation: held.elevation, zoom: held.pxPerMm[0] / fitted });
   };
 
+  /** The scale that fits the stage's box to a canvas, kept while the stage gives the same box for a canvas of the same size. */
+  let fitted: { bounds: Bounds; width: number; height: number; scale: number } | null = null;
+  const fittedTo = (size: CanvasSize) => {
+    const bounds = stage.bounds();
+    if (fitted?.bounds !== bounds || fitted.width !== size.width || fitted.height !== size.height) fitted = { bounds, width: size.width, height: size.height, scale: fittedScale(bounds, size) };
+    return fitted.scale;
+  };
+
   /** The view the hand's turn makes, for a canvas of any size. */
   const viewFor = (turn: Turn, from: View, grasped: CanvasSize) => (size: CanvasSize): View => {
-    const scale = fittedScale(stage.bounds(), size) * turn.zoom;
+    const scale = fittedTo(size) * turn.zoom;
     return {
       azimuth: turn.azimuth,
       elevation: turn.elevation,
@@ -85,7 +94,8 @@ export function attachHandTurning(stage: Stage, canvas: HTMLCanvasElement, optio
   };
 
   const point = (event: PointerEvent) => {
-    lastPointer = event;
+    pointing?.();
+    pointing = null;
     const [x, y] = place(event);
     const now = stage.pick(x, y);
     if (now === null && pointed === null) return;
@@ -93,6 +103,17 @@ export function attachHandTurning(stage: Stage, canvas: HTMLCanvasElement, optio
     pointed = now;
     canvas.setAttribute(HAND, now === null ? 'free' : 'on-a-bone');
     options.onPoint?.(now);
+  };
+  /**
+   * After a frame is drawn, what is under a still pointer is asked again on the next frame, not at once, and not at all if the
+   * pointer moves first. The browser sends at most one pointer move a frame, so the stage is asked at most once a frame.
+   */
+  const pointSoon = () => {
+    pointing ??= joinLoop(() => {
+      pointing?.();
+      pointing = null;
+      if (lastPointer !== null && !turning.held()) point(lastPointer);
+    });
   };
 
   const onDown = (event: PointerEvent) => {
@@ -112,7 +133,7 @@ export function attachHandTurning(stage: Stage, canvas: HTMLCanvasElement, optio
 
   const onMove = (event: PointerEvent) => {
     if (!turning.held()) {
-      if (event.pointerType !== 'touch') point(event);
+      if (event.pointerType !== 'touch') { lastPointer = event; point(event); }
       return;
     }
     const [x, y] = place(event);
@@ -167,7 +188,7 @@ export function attachHandTurning(stage: Stage, canvas: HTMLCanvasElement, optio
     options.onPoint?.(null);
   };
 
-  const stopDrawn = stage.onDrawn(() => { if (lastPointer !== null && !turning.held()) point(lastPointer); });
+  const stopDrawn = stage.onDrawn(() => { if (lastPointer !== null && !turning.held()) pointSoon(); });
   canvas.setAttribute(HAND, 'free');
   canvas.addEventListener('pointerdown', onDown);
   canvas.addEventListener('pointermove', onMove);
@@ -181,6 +202,8 @@ export function attachHandTurning(stage: Stage, canvas: HTMLCanvasElement, optio
     detach() {
       stopDrawn();
       rest();
+      pointing?.();
+      pointing = null;
       for (const pointer of captured) if (canvas.hasPointerCapture(pointer)) canvas.releasePointerCapture(pointer);
       captured.clear();
       canvas.removeEventListener('pointerdown', onDown);

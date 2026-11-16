@@ -167,12 +167,17 @@ export interface DrawnSpineInside {
   filledAt(level: Level, own: Vec3): boolean;
   /** The film the spine is pressed onto may have been stood somewhere new: press onto where it is now. */
   followFilm(): void;
+  /** Counts every change to where the spine is drawn, so the stage knows when a box it keeps is out of date. */
+  version(): number;
 }
 
 export function drawSpine(model: SpineModel, host: SpineHost, flat = false): DrawnSpineInside {
   const releaseModel = model.retain();
   const layers: SceneLayerInside[] = [];
   let removed = false, travelled = false;
+  /** The box `bounds()` gives, kept until the spine is next moved, and how many times it has been moved. */
+  let box: Bounds | null = null, moves = 0;
+  const movedNow = () => { box = null; moves++; };
   const root = new Group();
   root.matrixAutoUpdate = false;
   host.scene.add(root);
@@ -293,6 +298,53 @@ export function drawSpine(model: SpineModel, host: SpineHost, flat = false): Dra
 
   const clamp = (value: number) => Math.min(1, Math.max(0, value));
 
+  /** The model's box, turned and sized about the middle and moved: a spine that has not travelled. */
+  const boxBounds = (): Bounds => {
+    const { low, high } = model.bounds;
+    const reach: [number, number, number] = [Infinity, Infinity, Infinity];
+    const top: [number, number, number] = [-Infinity, -Infinity, -Infinity];
+    const { right, up, toViewer } = viewAxes(spineValues.turned[0], spineValues.turned[1]);
+    for (const x of [low[0], high[0]]) {
+      for (const y of [low[1], high[1]]) {
+        for (const z of [low[2], high[2]]) {
+          const turned = apply([right, up, toViewer], sub([x, y, z], middle));
+          const at = add(add(middle, scaled(turned, spineValues.scale)), spineValues.offset);
+          for (const axis of [0, 1, 2] as const) {
+            reach[axis] = Math.min(reach[axis], at[axis]);
+            top[axis] = Math.max(top[axis], at[axis]);
+          }
+        }
+      }
+    }
+    return { low: reach, high: top };
+  };
+
+  /**
+   * Every point of every bone as drawn, through `inScene`: a spine that has travelled. The same sums in
+   * the same order as `inScene(add(offset, apply(linear, own)))`, written out so no point needs an array.
+   */
+  const sweptBounds = (): Bounds => {
+    const low: [number, number, number] = [Infinity, Infinity, Infinity], high: [number, number, number] = [-Infinity, -Infinity, -Infinity];
+    const { right, up, toViewer } = viewAxes(spineValues.turned[0], spineValues.turned[1]), size = spineValues.scale, moved = spineValues.offset;
+    const [m0, m1, m2] = middle;
+    for (const bone of bones) {
+      const { linear: [[a0, a1, a2], [b0, b1, b2], [c0, c1, c2]], offset: [o0, o1, o2] } = placingOfBone(bone), points = bone.of.geometry.getAttribute('position');
+      for (let i = 0; i < points.count; i++) {
+        const x = points.getX(i), y = points.getY(i), z = points.getZ(i);
+        // The patient point, then the same in the scene's axes (x → Z, y → X, z → Y), from the middle.
+        const px = o0 + (a0 * x + a1 * y + a2 * z), py = o1 + (b0 * x + b1 * y + b2 * z), pz = o2 + (c0 * x + c1 * y + c2 * z);
+        const f0 = py - m0, f1 = pz - m1, f2 = px - m2;
+        const s0 = m0 + (right[0] * f0 + right[1] * f1 + right[2] * f2) * size + moved[0];
+        const s1 = m1 + (up[0] * f0 + up[1] * f1 + up[2] * f2) * size + moved[1];
+        const s2 = m2 + (toViewer[0] * f0 + toViewer[1] * f1 + toViewer[2] * f2) * size + moved[2];
+        low[0] = Math.min(low[0], s0); high[0] = Math.max(high[0], s0);
+        low[1] = Math.min(low[1], s1); high[1] = Math.max(high[1], s1);
+        low[2] = Math.min(low[2], s2); high[2] = Math.max(high[2], s2);
+      }
+    }
+    return { low, high };
+  };
+
   const formation = formationDrawing(model, root, () => { host.changed(); });
   const formationGroup = root.children[bones.length];
   let formationVisible = false, passing = false;
@@ -311,6 +363,18 @@ export function drawSpine(model: SpineModel, host: SpineHost, flat = false): Dra
         return pose !== undefined && sameShape(pose, bone.of.vertebra.pose) && [...pose.centre, ...pose.rotation].every(Number.isFinite);
       });
       if (!Number.isFinite(p) || !complete(from) || !complete(to)) throw new RangeError('A complete compatible pose set is required');
+      movedNow();
+      // Every bone back where the model stands it: the spine has not travelled, and is drawn and boxed as one that never did.
+      const own = (poses: readonly VertebraPose[]) => poses.every((pose) => {
+        const at = byLevel.get(pose.level)?.of.vertebra.pose;
+        return at !== undefined && pose.centre.every((value, i) => value === at.centre[i]) && pose.rotation.every((value, i) => value === at.rotation[i]);
+      });
+      if ((p >= 1 || own(from)) && own(to) || p <= 0 && own(from)) {
+        travelled = false; liveHeights = model.heights;
+        for (const bone of bones) { bone.placing = bone.of.placing; placeBone(bone); paintBone(bone); }
+        host.changed();
+        return;
+      }
       const next = bones.map((bone) => {
         const a = from.find((pose) => pose.level === bone.of.level), b = to.find((pose) => pose.level === bone.of.level);
         if (a === undefined || b === undefined) throw new RangeError('Missing pose');
@@ -320,9 +384,10 @@ export function drawSpine(model: SpineModel, host: SpineHost, flat = false): Dra
       const heights: [number, number] = [Infinity, -Infinity];
       bones.forEach((bone, i) => {
         bone.placing = next[i] ?? bone.placing;
-        const points = bone.of.geometry.getAttribute('position');
+        // The patient height of each point, as `placing.toPatient(own)[2]` works it out, without a new array for each point.
+        const points = bone.of.geometry.getAttribute('position'), { centre, rotation } = bone.placing, [r0, r1, r2] = rotation[2], c = centre[2];
         for (let j = 0; j < points.count; j++) {
-          const z = bone.placing.toPatient([points.getX(j), points.getY(j), points.getZ(j)])[2];
+          const z = c + (r0 * points.getX(j) + r1 * points.getY(j) + r2 * points.getZ(j));
           heights[0] = Math.min(heights[0], z); heights[1] = Math.max(heights[1], z);
         }
       });
@@ -338,13 +403,16 @@ export function drawSpine(model: SpineModel, host: SpineHost, flat = false): Dra
         for (const [name, value] of Object.entries(values) as [keyof BoneValues, number | undefined][]) {
           if (value !== undefined) bone.values[name] = name === 'edgeFill' && value < 0 ? -1 : clamp(value);
         }
-        if (moved) placeBone(bone);
+        if (moved) { placeBone(bone); movedNow(); }
         paintBone(bone);
       }
       host.changed();
     },
     setSpine(values) {
+      const was = spineValues;
       spineValues = { ...spineValues, ...values, strength: clamp(values.strength ?? spineValues.strength), depth: clamp(values.depth ?? spineValues.depth), fill: clamp(values.fill ?? spineValues.fill), cageOnFilm: clamp(values.cageOnFilm ?? spineValues.cageOnFilm) };
+      const now = spineValues;
+      if (now.depth !== was.depth || now.revealRise !== was.revealRise || now.scale !== was.scale || now.turned.some((value, i) => value !== was.turned[i]) || now.offset.some((value, i) => value !== was.offset[i])) movedNow();
       placeRoot();
       for (const bone of bones) {
         placeBone(bone);
@@ -355,12 +423,12 @@ export function drawSpine(model: SpineModel, host: SpineHost, flat = false): Dra
     },
     pressOnto(film) {
       sheetNow = film === null ? () => null : 'plane' in film ? () => film.plane() : () => film;
-      plane = sheetNow();
+      plane = sheetNow(); movedNow();
       for (const bone of bones) placeBone(bone);
       host.changed();
     },
     settle() {
-      travelled = false; liveHeights = model.heights;
+      travelled = false; liveHeights = model.heights; movedNow();
       for (const bone of bones) { bone.values = { ...BONE_DEFAULTS }; bone.placing = bone.of.placing; }
       spine.setSpine({ depth: 1, fill: 1 });
     },
@@ -387,34 +455,8 @@ export function drawSpine(model: SpineModel, host: SpineHost, flat = false): Dra
       return add(add(middle, scaled(turned, spineValues.scale)), spineValues.offset);
     },
     bounds() {
-      if (travelled) {
-        const low: [number, number, number] = [Infinity, Infinity, Infinity], high: [number, number, number] = [-Infinity, -Infinity, -Infinity];
-        for (const bone of bones) {
-          const { linear, offset } = placingOfBone(bone), points = bone.of.geometry.getAttribute('position');
-          for (let i = 0; i < points.count; i++) {
-            const point = spine.inScene(add(offset, apply(linear, [points.getX(i), points.getY(i), points.getZ(i)])));
-            for (const axis of [0, 1, 2] as const) { low[axis] = Math.min(low[axis], point[axis]); high[axis] = Math.max(high[axis], point[axis]); }
-          }
-        }
-        return { low, high };
-      }
-      const { low, high } = model.bounds;
-      const reach: [number, number, number] = [Infinity, Infinity, Infinity];
-      const top: [number, number, number] = [-Infinity, -Infinity, -Infinity];
-      const { right, up, toViewer } = viewAxes(spineValues.turned[0], spineValues.turned[1]);
-      for (const x of [low[0], high[0]]) {
-        for (const y of [low[1], high[1]]) {
-          for (const z of [low[2], high[2]]) {
-            const turned = apply([right, up, toViewer], sub([x, y, z], middle));
-            const at = add(add(middle, scaled(turned, spineValues.scale)), spineValues.offset);
-            for (const axis of [0, 1, 2] as const) {
-              reach[axis] = Math.min(reach[axis], at[axis]);
-              top[axis] = Math.max(top[axis], at[axis]);
-            }
-          }
-        }
-      }
-      return { low: reach, high: top };
+      box ??= travelled ? sweptBounds() : boxBounds();
+      return box;
     },
     remove() {
       if (removed) return; removed = true;
@@ -470,9 +512,10 @@ export function drawSpine(model: SpineModel, host: SpineHost, flat = false): Dra
       const now = sheetNow();
       const same = now === plane || (now !== null && plane !== null && now.out === plane.out && now.towardReader.every((part, i) => part === plane?.towardReader[i]));
       if (same) return;
-      plane = now;
+      plane = now; movedNow();
       for (const bone of bones) placeBone(bone);
     },
+    version: () => moves,
     filledAt(level, own) {
       const bone = byLevel.get(level);
       if (!bone) return false;

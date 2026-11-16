@@ -336,6 +336,7 @@ The folders and import rules in one picture: `app/README.md`.
 | the 3D view's camera: no perspective to a narrow lens, and the named views | `app/src/spine-3d/looking/lens.ts`, `app/src/spine-3d/looking/named-views.ts` |
 | the bone colour, the lights and the shadow of the 3D stage | `app/src/spine-3d/scene/look.ts` |
 | what can be set on a drawn spine, a film and the stage | `app/src/spine-3d/scene/drawn-spine.ts`, `app/src/spine-3d/scene/film-wall.ts`, `app/src/spine-3d/scene/stage.ts` |
+| the drawn spine's box and the stage's view, each worked out once per change | `app/src/spine-3d/scene/drawn-spine.test.ts`, `app/src/spine-3d/scene/stage-keeps.test.ts` |
 | the 3D view as a part a screen places | `app/src/spine-3d/view/Spine3D.tsx` |
 | the case edits | `app/src/case-state/case-edits.ts` |
 | how the product looks, moves and speaks, and why | `DESIGN.md` |

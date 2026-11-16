@@ -4,6 +4,11 @@ import type { FrameStep } from '@/choreography/one-loop';
 import { attachHandTurning } from './hand-turning';
 import type { Stage } from './stage';
 const loop = vi.hoisted(() => new Set<FrameStep>());
+const fitted = vi.hoisted(() => ({ calls: 0 }));
+vi.mock('../looking/framing', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../looking/framing')>();
+  return { ...actual, fittedScale: (...args: Parameters<typeof actual.fittedScale>) => { fitted.calls++; return actual.fittedScale(...args); } };
+});
 vi.mock('@/choreography/one-loop', () => ({ joinLoop: (step: FrameStep) => { loop.add(step); return () => { loop.delete(step); }; } }));
 afterEach(() => { loop.clear(); });
 function setup() {
@@ -50,4 +55,34 @@ it('never glides or chooses on cancellation, and detach releases a held pointer'
   pointer('pointerdown', 0, 30); expect(captured.size).toBe(1);
   hand.detach(); expect(captured.size).toBe(0);
   pointer('pointerup', 0, 40); expect(choose).not.toHaveBeenCalled();
+});
+it('fits the box to the canvas once while the stage gives the same box, however often the turned view is asked for', () => {
+  const { canvas, stage, setView, pointer } = setup();
+  let box = { low: [0, 0, 0], high: [100, 100, 100] };
+  Object.assign(stage, { bounds: () => box });
+  const hand = attachHandTurning(stage, canvas, { reducedMotion: () => true });
+  pointer('pointerdown', 0, 0); pointer('pointermove', 30, 20);
+  const rule = (setView.mock.calls.at(-1) as unknown[] | undefined)?.[0] as ((size: { width: number; height: number }) => { pxPerMm: readonly [number, number] }) | undefined;
+  if (rule === undefined) throw new Error('No view was set');
+  const first = rule({ width: 400, height: 600 }), calls = fitted.calls;
+  for (let i = 0; i < 100; i++) expect(rule({ width: 400, height: 600 })).toEqual(first);
+  expect(fitted.calls).toBe(calls);
+  box = { low: [0, 0, 0], high: [200, 200, 200] };
+  expect(rule({ width: 400, height: 600 }).pxPerMm[0]).toBeCloseTo(first.pxPerMm[0] / 2);
+  expect(fitted.calls).toBe(calls + 1);
+  rule({ width: 200, height: 600 }); expect(fitted.calls).toBe(calls + 2);
+  pointer('pointerup', 30, 21); hand.detach();
+});
+it('asks what is under a still pointer once on the frame after a drawing, and not at all when the pointer moves first', () => {
+  const { canvas, stage, pointer } = setup();
+  let drawn: () => void = () => { /* Set when the hand listens. */ };
+  const pick = vi.fn(() => null);
+  Object.assign(stage, { pick, onDrawn: (listener: () => void) => { drawn = listener; return () => undefined; } });
+  const hand = attachHandTurning(stage, canvas);
+  pointer('pointermove', 10, 0); expect(pick).toHaveBeenCalledTimes(1);
+  drawn(); drawn(); expect(pick).toHaveBeenCalledTimes(1); expect(loop.size).toBe(1);
+  for (const tick of [...loop]) tick(16, 16);
+  expect(pick).toHaveBeenCalledTimes(2); expect(loop.size).toBe(0);
+  drawn(); pointer('pointermove', 12, 20); expect(pick).toHaveBeenCalledTimes(3); expect(loop.size).toBe(0);
+  drawn(); hand.detach(); expect(loop.size).toBe(0); expect(pick).toHaveBeenCalledTimes(3);
 });

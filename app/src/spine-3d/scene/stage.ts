@@ -111,8 +111,35 @@ export function makeStage(canvas: HTMLCanvasElement): Stage {
   let viewsSet = 0;
   let leave: (() => void) | null = null;
   let disposed = false;
+  /** Counts each change the stage is told of and each frame it draws; and each time spines join, leave or are put in columns. */
+  let epoch = 0, cast = 0;
+  const touch = () => { epoch++; };
+  /** How many times the spines on the stage have moved, all told. */
+  const moves = () => {
+    let count = 0;
+    for (const { inside } of spines) count += inside.version();
+    return count;
+  };
+  /**
+   * The box round the spines, kept (the same object) until a spine moves or the spines change; and the
+   * view and each column's view, kept until then or until a change is told or a frame is drawn. However
+   * many points are projected in between, the box and the view (a view rule too) are worked out once.
+   */
+  let keptBox: { cast: number; moves: number; bounds: Bounds } | null = null;
+  let kept: { epoch: number; moves: number; view: View | null; views: Map<DrawnSpineInside, View> } = { epoch: -1, moves: 0, view: null, views: new Map() };
+  const fresh = () => {
+    const now = moves();
+    if (kept.epoch !== epoch || kept.moves !== now) kept = { epoch, moves: now, view: null, views: new Map() };
+    return kept;
+  };
 
   const bounds = (): Bounds => {
+    const now = moves();
+    if (keptBox?.cast !== cast || keptBox.moves !== now) keptBox = { cast, moves: now, bounds: boundsNow() };
+    return keptBox.bounds;
+  };
+
+  const boundsNow = (): Bounds => {
     const low: [number, number, number] = [Infinity, Infinity, Infinity];
     const high: [number, number, number] = [-Infinity, -Infinity, -Infinity];
     const fitted = spines.filter(({ inside }) => !inside.flat && (columns.length === 0 || columns.includes(inside.spine)));
@@ -128,8 +155,9 @@ export function makeStage(canvas: HTMLCanvasElement): Stage {
   };
 
   const viewNow = (): View => {
-    if (rule === null) return namedView(bounds(), size, 'three-quarter');
-    return typeof rule === 'function' ? rule(size) : rule;
+    const now = fresh();
+    now.view ??= rule === null ? namedView(bounds(), size, 'three-quarter') : typeof rule === 'function' ? rule(size) : rule;
+    return now.view;
   };
 
   /** Where each film stands: behind the spine as its reader sees it, and meeting the other film in a corner when both are up. */
@@ -177,10 +205,14 @@ export function makeStage(canvas: HTMLCanvasElement): Stage {
     return {left:cell.left*p,right:size.width+(cell.right-size.width)*p,top:cell.top*p,bottom:size.height+(cell.bottom-size.height)*p};
   };
   const viewOf = (inside: DrawnSpineInside): View => {
+    const now = fresh(), known = now.views.get(inside);
+    if (known !== undefined) return known;
     const primary = inside.flat && columns.length > 0 ? spines.find((entry) => entry.inside.spine === columns[0])?.inside : undefined;
     const fitted = primary ?? inside;
     const cell = cellOf(fitted.spine);
-    return cell === null ? viewNow() : columnView(fitted.spine.bounds(), cell, size, viewNow(), bounds());
+    const view = cell === null ? viewNow() : columnView(fitted.spine.bounds(), cell, size, viewNow(), bounds());
+    now.views.set(inside, view);
+    return view;
   };
 
   const render = (shown: typeof spines, view: View, cell: Column | null) => {
@@ -246,6 +278,7 @@ export function makeStage(canvas: HTMLCanvasElement): Stage {
 
   const draw = () => {
     if (disposed) return;
+    touch();
     standWalls();
     for (const { inside } of spines) inside.followFilm();
     if (columns.length === 0) render(spines, viewNow(), null);
@@ -265,6 +298,7 @@ export function makeStage(canvas: HTMLCanvasElement): Stage {
   };
 
   const changed = () => {
+    touch();
     if (disposed || leave !== null) return;
     leave = joinLoop(() => {
       leave?.();
@@ -277,7 +311,7 @@ export function makeStage(canvas: HTMLCanvasElement): Stage {
     const next = { width: Math.max(1, canvas.clientWidth), height: Math.max(1, canvas.clientHeight) };
     const ratio = Math.min(window.devicePixelRatio || 1, MOST_DEVICE_PIXELS);
     if (next.width === size.width && next.height === size.height && ratio === renderer.getPixelRatio()) return;
-    size = next;
+    size = next; touch();
     renderer.setPixelRatio(ratio);
     // The canvas's own size on the page is the stylesheet's to say.
     renderer.setSize(size.width, size.height, false);
@@ -313,7 +347,7 @@ export function makeStage(canvas: HTMLCanvasElement): Stage {
         removed: (spine) => {
           const at = spines.findIndex((each) => each.inside.spine === spine);
           const [gone] = at < 0 ? [] : spines.splice(at, 1);
-          columns = columns.filter((each) => each !== spine);
+          columns = columns.filter((each) => each !== spine); cast++;
           if (gone) {
             inScene.remove(gone.shadow.pivot);
             gone.shadow.dispose();
@@ -321,7 +355,7 @@ export function makeStage(canvas: HTMLCanvasElement): Stage {
           changed();
         },
       }, options.flat ?? false);
-      spines.push({ inside, shadow });
+      spines.push({ inside, shadow }); touch(); cast++;
       standWalls();
       changed();
       return inside.spine;
@@ -329,7 +363,7 @@ export function makeStage(canvas: HTMLCanvasElement): Stage {
     inColumns(next, options) {
       columnCells(size, next.length, options.gapPx, options.footPx);
       if (new Set(next).size !== next.length || next.some((spine) => !spines.some(({ inside }) => inside.spine === spine))) throw new RangeError('Columns require distinct spines from this stage');
-      columns = [...next]; columnOptions = { ...options }; changed();
+      columns = [...next]; columnOptions = { ...options }; cast++; changed();
     },
     columnOf: cellOf,
     hangFilm(name, filmCamera, pixels = null) {
