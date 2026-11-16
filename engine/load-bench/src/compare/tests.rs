@@ -961,3 +961,35 @@ fn an_unused_slice_offset_cannot_be_named_as_a_range_driver() {
     let samples = vec![(0, 1.0), (1, 2.0), (2, 3.0)];
     assert_eq!(ranks::driver(&by_version, &samples).0, None);
 }
+
+#[test]
+fn the_fit_gets_one_column_like_every_other_unknown() {
+    // A single pose coordinate that happens to follow the result exactly
+    // must not name the fit: the fit is read through Before main Cobb
+    // alone, which here does not move. Stiffness follows the result closely.
+    let runs: Vec<_> = (0..6u32)
+        .map(|version| {
+            let mut value = run("first", version, 20.0, 1.0);
+            value.draws.stiffness_scale = [2.0, 1.0, 3.0, 4.0, 6.0, 5.0][version as usize];
+            value.stops[0].poses = Some(vec![shapes::made_up::VertebraPose {
+                level: Level::T8,
+                centre: [f64::from(version), 0.0, 0.0],
+                rotation: [0.0; 3],
+                height: 20.0,
+                wedge_front: 0.0,
+                wedge_side: 0.0,
+                top_half_width: 10.0,
+                top_half_depth: 8.0,
+                bottom_half_width: 10.0,
+                bottom_half_depth: 8.0,
+            }]);
+            value
+        })
+        .collect();
+    let by_version = runs.iter().map(|run| (run.version, run)).collect();
+    let samples: Vec<_> = (0..6u32).map(|v| (v, f64::from(v) + 1.0)).collect();
+    assert_eq!(
+        ranks::driver(&by_version, &samples).0,
+        Some(SampledUnknown::StiffnessScale)
+    );
+}

@@ -290,8 +290,10 @@ Tags are computed per estimate using project thresholds:
 `mostlyFrom` is the sampled unknown with largest absolute Spearman rank
 correlation with that estimate. Ties receive equal average ranks. Dot order
 sorts by the unknown most correlated with the **paired difference**. These
-associations describe the chosen ensemble, not causal attribution. Geometry
-and rib cage use the strongest individual component. `mostlyFrom` and
+associations describe the chosen ensemble, not causal attribution. The fit
+is scored as one column, the Before main Cobb, as each other unknown is, so
+it cannot win on its number of chances; rib cage uses the strongest of its
+three factors. `mostlyFrom` and
 `sortedBy` are null when no unknown has nonzero rank correlation with the
 result; dots then follow global version order. Ghosts are
 actual version poses nearest the p10 and p90 main-Cobb ranks; a pose is never

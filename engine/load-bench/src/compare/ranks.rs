@@ -7,44 +7,17 @@ type Column = (SampledUnknown, Vec<(u32, f64)>);
 type Scalar = (SampledUnknown, fn(&BenchRun) -> f64);
 
 /// Pick the scalar component with greatest absolute Spearman correlation.
-/// Geometry and rib factors keep their components separate: summing them
-/// would hide equal and opposite changes. Stable component order breaks ties.
+/// The fit is read through the Before main Cobb alone. Rib factors keep
+/// their components separate: summing them would hide equal and opposite
+/// changes. Stable component order breaks ties.
 pub(super) fn driver(
     runs: &Runs<'_>,
     samples: &[(u32, f64)],
 ) -> (Option<SampledUnknown>, BTreeMap<u32, f64>) {
-    let mut columns: Vec<Column> = Vec::new();
-    let geometry_count = runs
-        .values()
-        .find_map(|run| {
-            stop_values(run, BenchStop::Before)?
-                .poses
-                .as_ref()
-                .map(|poses| poses.len() * 6)
-        })
-        .unwrap_or(0);
-    for component in 0..geometry_count {
-        columns.push((
-            SampledUnknown::Geometry,
-            samples
-                .iter()
-                .filter_map(|(version, _)| {
-                    let pose = stop_values(runs[version], BenchStop::Before)?
-                        .poses
-                        .as_ref()?
-                        .get(component / 6)?;
-                    let value = if component % 6 < 3 {
-                        pose.centre[component % 6]
-                    } else {
-                        pose.rotation[component % 6 - 3]
-                    };
-                    Some((*version, value))
-                })
-                .collect(),
-        ));
-    }
-    // Before Cobb is still available when a hand-supplied batch omits poses.
-    columns.push((
+    // The fit gets one column, the Before main Cobb, as every other
+    // unknown gets one; a column per pose component would hand it about a
+    // hundred chances against one and let it win on noise.
+    let mut columns: Vec<Column> = vec![(
         SampledUnknown::Geometry,
         samples
             .iter()
@@ -55,7 +28,7 @@ pub(super) fn driver(
                 ))
             })
             .collect(),
-    ));
+    )];
     let scalars: [Scalar; 11] = [
         (SampledUnknown::StiffnessScale, |run| {
             run.draws.stiffness_scale
