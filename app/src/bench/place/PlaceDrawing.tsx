@@ -17,11 +17,11 @@ import { filmSide, placementLooks, reviewItems } from './placement-view';
 import { placeState } from './place-state';
 import { restingView } from '../three/resting-view';
 import { loadState } from './load-state';
-import { anchorLoad, anchorPoint, loadLabels, pastWords, rangeWords, shownLoadStop, shownStopResult,tooFewSettled } from './load-view';
+import { anchorLoad, anchorPoint, loadLabels, pastWords, rangeWords, ringedPast, seatPoint, shownLoadStop, shownStopResult,tooFewSettled } from './load-view';
 import { useLoadDrawing } from './load-drawing';
 import { RangeBar, scaleFor } from './LoadEstimates';
 import { PartControls } from './PartControls';
-import { EndHandles } from './EndHandles';
+import { EndHandles, endTextX } from './EndHandles';
 import { changePlacement, fittedLevels, handState, openWhy, snapEnd } from './hand-state';
 import { useEngine } from '@/engine-room/use-engine';
 import { PlacementCaption } from './PlacementCaption';
@@ -117,9 +117,11 @@ export function PlaceDrawing({ accepted, handle }: { accepted: AcceptedSpine; ha
     if(layout===undefined||on==null||stage==null||surface==null||dock==null)return;
     let previous='',wasNarrow=false;
     const fit=()=>{
+      // A wide window keeps the resting view: nothing on the page needs reading, frame after frame.
+      const narrow=window.innerWidth<1100;if(!narrow&&!wasNarrow)return;
       const size=stage.size(),box=surface.getBoundingClientRect(),top=dock.getBoundingClientRect().top;
       const key=`${String(size.width)}:${String(size.height)}:${String(top)}`;if(key===previous)return;previous=key;
-      const narrow=window.innerWidth<1100;if(!narrow&&!wasNarrow)return;wasNarrow=narrow;
+      wasNarrow=narrow;
       const caption=surface.querySelector('.place-caption'),gap=parseFloat(getComputedStyle(surface).getPropertyValue('--space-12'));
       const clear=narrow?Math.max(1,Math.min(size.height,top-box.top-(caption?.getBoundingClientRect().height??0)-2*gap)):size.height;
       const base=restingView(stage,surface),view=stage.view(),scale=Math.min(1,clear/size.height);
@@ -176,9 +178,56 @@ export function PlaceDrawing({ accepted, handle }: { accepted: AcceptedSpine; ha
   useLayoutEffect(() => {
     const stage = handle.current?.stage(), spine = handle.current?.spine(), surface = root.current;
     if (stage == null || spine == null || surface === null || layout === undefined) return;
+    // Read once, and again when they change size: the page's spacing, the chip's offset from what it names, where the labels' sheet
+    // sits in the drawing, how far down the dock leaves the drawing clear, and the chip's size. Nothing on the page is read again frame
+    // after frame. A change of size places the chip at once: a chip that grows into its controls draws no frame of the spine.
+    let gap = 0, chipDx = 0, chipDy = 0, clear = Infinity, sheet: { x: number; y: number } | null = null, last = '', was: readonly unknown[] = [];
+    const placed = new WeakSet<Element>();
+    let chipSeen: HTMLDivElement | null = null, chipSize: { offsetWidth: number; offsetHeight: number; width: number; height: number } | null = null;
+    const dock = surface.closest('.frame, .place-gallery')?.querySelector('.dock') ?? null;
+    const readStyle = () => {
+      const css = getComputedStyle(surface); gap = parseFloat(css.getPropertyValue('--space-8')); chipDx = parseFloat(css.getPropertyValue('--chip-dx')); chipDy = parseFloat(css.getPropertyValue('--chip-dy'));
+      // The dock lies over the foot of the drawing: the chip ends a gap above it.
+      const below = dock?.getBoundingClientRect(); clear = below === undefined || below.height === 0 ? Infinity : below.top - surface.getBoundingClientRect().top - gap;
+      sheet = null; last = '';
+    };
+    readStyle();
+    const resized = new ResizeObserver(() => { readStyle(); project(); }), chipResized = new ResizeObserver(() => { chipSize = null; last = ''; project(); });
+    resized.observe(surface); const sheetNode = surface.querySelector('.place-labels'); if (sheetNode !== null) resized.observe(sheetNode); if (dock !== null) resized.observe(dock);
     const project = () => {
       const first = spine.levels[0];
-      if (first !== undefined) surface.dataset.boneStrength = String(spine.valuesOf(first)?.strength);
+      const strength = first === undefined ? undefined : String(spine.valuesOf(first)?.strength);
+      if (strength !== undefined && surface.dataset.boneStrength !== strength) surface.dataset.boneStrength = strength;
+      const chipNow = chip.current;
+      if (chipNow !== chipSeen) { if (chipSeen !== null) chipResized.unobserve(chipSeen); chipSeen = chipNow; chipSize = null; if (chipNow !== null) chipResized.observe(chipNow); }
+      // Every read of the page comes first, then every write.
+      if (chipNow !== null && chipSize === null) { const rect = chipNow.getBoundingClientRect(); chipSize = { offsetWidth: chipNow.offsetWidth, offsetHeight: chipNow.offsetHeight, width: rect.width, height: rect.height }; }
+      // Nothing is moved when neither the view, the spine, the poses, the hardware nor the chip has, and every mark is one already placed.
+      const view = stage.view(), size = stage.size(), room = Math.max(0, Math.min(size.height, clear)), chipWidth = chipSize?.offsetWidth ?? 0, chipHeight = Math.min(room, chipSize?.offsetHeight ?? 0);
+      const key = [view.azimuth, view.elevation, view.perspective, ...view.pxPerMm, ...view.aim, ...view.aimAt, size.width, size.height, room, chipWidth, chipHeight].join(), now = [spine.bounds(), motion.poses.current, drawnRef.current, chipNow];
+      const marks = surface.querySelectorAll<SVGElement>('[data-anchor], [data-end], [data-load-part], [data-range]');
+      if (key === last && !motion.moving.current && now.every((part, i) => part === was[i]) && [...marks].every((mark) => placed.has(mark))) return;
+      last = key; was = now; for (const mark of marks) placed.add(mark);
+      const ranges = [...surface.querySelectorAll<SVGGElement>('[data-range]')];
+      let point = anchor===undefined?rod===undefined?undefined:layout.anchors.filter((a)=>a.side===rod.side&&a.kind!=='none').map((a)=>anchorPoint(a,accepted.fit,motion.poses.current))[0]:anchorPoint(anchor,accepted.fit,motion.poses.current);
+      const spanId=selected?.startsWith('span:')===true?selected.split(':'):[];
+      const from=layout.anchors.find((a)=>a.side===spanId[1]&&a.level===spanId[2]),to=layout.anchors.find((a)=>a.side===spanId[1]&&a.level===spanId[3]);
+      if(from!==undefined&&to!==undefined){const a=anchorPoint(from,accepted.fit,motion.poses.current),b=anchorPoint(to,accepted.fit,motion.poses.current);point=[(a[0]+b[0])/2,(a[1]+b[1])/2,(a[2]+b[2])/2];}
+      if(rod!==undefined)point=drawnRef.current?.point(selected??'')??point;
+      if (point === undefined && chosenEnd !== undefined) point = accepted.fit.vertebrae.find((v) => v.level === chosenEnd)?.pose.centre;
+      /** Boxes from the drawing's top-left corner, for the labels the chip would cover. */
+      const covered = chipNow !== null && chipSize !== null && ranges.length > 0;
+      const unplaced = new Map<SVGGElement, { left: number; right: number; top: number; bottom: number } | undefined>();
+      let chipAt: { left: number; right: number; top: number; bottom: number } | undefined;
+      // Rarely a label or the chip is not moved this frame: it stays where the page has it, read before anything is written.
+      const still = covered ? ranges.filter((node) => { const label = labels.find((l) => l.id === node.dataset.range); return label === undefined || spine.centre(label.level) === null; }) : [];
+      if (covered && (sheet === null || still.length > 0 || point === undefined)) {
+        const surfaceBox = surface.getBoundingClientRect();
+        const fromSurface = (box: DOMRect) => ({ left: box.left - surfaceBox.left, right: box.right - surfaceBox.left, top: box.top - surfaceBox.top, bottom: box.bottom - surfaceBox.top });
+        if (sheet === null) { const on = sheetNode?.getBoundingClientRect(); sheet = { x: (on?.left ?? surfaceBox.left) - surfaceBox.left, y: (on?.top ?? surfaceBox.top) - surfaceBox.top }; }
+        for (const node of still) { const box = node.querySelector('foreignObject')?.getBoundingClientRect(); unplaced.set(node, box === undefined ? undefined : fromSurface(box)); }
+        if (point === undefined) chipAt = fromSurface(chipNow.getBoundingClientRect());
+      }
       for (const node of surface.querySelectorAll<SVGElement>('[data-anchor]')) {
         const a = layout.anchors[Number(node.dataset.anchor)]; if (a === undefined) continue;
         const p = stage.patientToCanvas(anchorPoint(a,accepted.fit,motion.poses.current), spine); node.setAttribute('transform', `translate(${String(p.x)} ${String(p.y)})`);
@@ -189,20 +238,19 @@ export function PlaceDrawing({ accepted, handle }: { accepted: AcceptedSpine; ha
         const plate = upper ? marks.top : marks.bottom;
         const point = stage.toCanvas(plate.centre);
         const left = stage.toCanvas(plate.left), right = stage.toCanvas(plate.right);
-        const gap = parseFloat(getComputedStyle(surface).getPropertyValue('--space-8'));
-        node.querySelector('text')?.setAttribute('x', String(Math.max(left.x, right.x) - point.x + gap));
+        node.querySelector('text')?.setAttribute('x', String(endTextX(stage, spine, [left.x, right.x], point.y, drawnRef.current?.reach(upper ? 'upper' : 'lower') ?? [], (layout.rods[0]?.diameterMm ?? 0) * D.headOverRod / 2, gap) - point.x));
         node.setAttribute('transform', `translate(${String(point.x)} ${String(point.y)})`);
       }
       for(const node of surface.querySelectorAll<SVGGElement>('[data-load-part]')){
         const partId=node.dataset.loadPart??'',whole=drawnRef.current?.point(partId);
         if(whole!=null){const p=stage.patientToCanvas(whole,spine);node.setAttribute('transform',`translate(${String(p.x)} ${String(p.y)})`);continue;}
-        const [side,from,to]=partId.split(':');
+        const [kind,side,from,to]=partId.split(':');if(kind!=='span')continue;
         const a=layout.anchors.find((a)=>a.side===side&&a.level===from),b=layout.anchors.find((a)=>a.side===side&&a.level===to);
         if(a===undefined)continue;
-        const x=stage.patientToCanvas(anchorPoint(a,accepted.fit,motion.poses.current),spine),y=b===undefined?x:stage.patientToCanvas(anchorPoint(b,accepted.fit,motion.poses.current),spine);
+        const offset=layout.rods.find((r)=>r.side===side)?.headOffsetMm??0,x=stage.patientToCanvas(seatPoint(a,offset,accepted.fit,motion.poses.current),spine),y=b===undefined?x:stage.patientToCanvas(seatPoint(b,offset,accepted.fit,motion.poses.current),spine);
         node.setAttribute('transform',`translate(${String((x.x+y.x)/2)} ${String((x.y+y.y)/2)})`);
       }
-      const positions=[...surface.querySelectorAll<SVGGElement>('[data-range]')].flatMap((node)=>{
+      const positions=ranges.flatMap((node)=>{
         const label=labels.find((l)=>l.id===node.dataset.range);if(label===undefined)return[];
         const a=label.anchor===undefined?undefined:layout.anchors[label.anchor];
         const scene=spine.centre(label.level);if(scene===null)return[];
@@ -211,37 +259,38 @@ export function PlaceDrawing({ accepted, handle }: { accepted: AcceptedSpine; ha
       });
       const bounds=spine.bounds();
       const edges=[bounds.low[0],bounds.high[0]].flatMap((x)=>[bounds.low[1],bounds.high[1]].flatMap((y)=>[bounds.low[2],bounds.high[2]].map((z)=>stage.toCanvas([x,y,z]).x)));
+      const boxes=new Map<SVGGElement,{left:number;right:number;top:number;bottom:number}>();
       for(const left of [true,false]){
         let previous=16;
         for(const at of positions.filter((p)=>p.left===left).sort((a,b)=>a.y-b.y)){
-          const x=left?Math.max(16,Math.min(...edges)-232):Math.min(stage.size().width-224,Math.max(...edges)+24);
-          const y=Math.max(previous,Math.min(stage.size().height-112,at.y));previous=y+104;
+          const x=left?Math.max(16,Math.min(...edges)-232):Math.min(size.width-224,Math.max(...edges)+24);
+          const y=Math.max(previous,Math.min(size.height-112,at.y));previous=y+104;
           at.node.setAttribute('transform',`translate(${String(at.at.x)} ${String(at.at.y)})`);
           const box=at.node.querySelector('foreignObject');box?.setAttribute('x',String(x-at.at.x));box?.setAttribute('y',String(y-at.at.y));
           at.node.querySelector('path')?.setAttribute('d',`M0 0L${String(x-at.at.x+(left?208:0))} ${String(y-at.at.y+24)}`);
+          // The label's box is its 208 by 104 sheet, where it was just put.
+          if(box!==null&&sheet!==null){const l=sheet.x+at.at.x+(x-at.at.x),t=sheet.y+at.at.y+(y-at.at.y);boxes.set(at.node,{left:l,right:l+208,top:t,bottom:t+104});}
         }
       }
-      let point = anchor===undefined?rod===undefined?undefined:layout.anchors.filter((a)=>a.side===rod.side&&a.kind!=='none').map((a)=>anchorPoint(a,accepted.fit,motion.poses.current))[0]:anchorPoint(anchor,accepted.fit,motion.poses.current);
-      const spanId=selected?.startsWith('span:')===true?selected.split(':'):[];
-      const from=layout.anchors.find((a)=>a.side===spanId[1]&&a.level===spanId[2]),to=layout.anchors.find((a)=>a.side===spanId[1]&&a.level===spanId[3]);
-      if(from!==undefined&&to!==undefined){const a=anchorPoint(from,accepted.fit,motion.poses.current),b=anchorPoint(to,accepted.fit,motion.poses.current);point=[(a[0]+b[0])/2,(a[1]+b[1])/2,(a[2]+b[2])/2];}
-      if(rod!==undefined)point=drawnRef.current?.point(selected??'')??point;
-      if (point === undefined && chosenEnd !== undefined) point = accepted.fit.vertebrae.find((v) => v.level === chosenEnd)?.pose.centre;
-      if (point !== undefined && chip.current !== null) {
-        const p = stage.patientToCanvas(point, spine), css = getComputedStyle(surface);
-        const dx = parseFloat(css.getPropertyValue('--chip-dx')), dy = parseFloat(css.getPropertyValue('--chip-dy'));
-        chip.current.style.left = `${String(Math.max(0, Math.min(stage.size().width - chip.current.offsetWidth, p.x + dx)))}px`;
-        chip.current.style.top = `${String(Math.max(0, Math.min(stage.size().height - chip.current.offsetHeight, p.y + dy)))}px`;
+      if (point !== undefined && chipNow !== null) {
+        const p = stage.patientToCanvas(point, spine);
+        // The whole chip stays in the drawing and above the dock; one taller than that room scrolls within it.
+        const left = Math.max(0, Math.min(size.width - chipWidth, p.x + chipDx)), top = Math.max(0, Math.min(room - chipHeight, p.y + chipDy));
+        chipNow.style.left = `${String(left)}px`;
+        chipNow.style.top = `${String(top)}px`;
+        chipNow.style.maxHeight = `${String(room)}px`;
+        // The chip is placed from the drawing's own corner: the drawing has no border.
+        if (chipSize !== null) chipAt = { left, right: left + chipSize.width, top, bottom: top + Math.min(room, chipSize.height) };
       }
-      const chipBox = chip.current?.getBoundingClientRect();
-      for (const label of surface.querySelectorAll<SVGGElement>('[data-range]')) {
-        const box = label.querySelector('foreignObject')?.getBoundingClientRect();
-        const overlaps = chipBox !== undefined && box !== undefined && chipBox.left < box.right && chipBox.right > box.left && chipBox.top < box.bottom && chipBox.bottom > box.top;
+      for (const label of ranges) {
+        const box = boxes.get(label) ?? unplaced.get(label);
+        const overlaps = covered && chipAt !== undefined && box !== undefined && chipAt.left < box.right && chipAt.right > box.left && chipAt.top < box.bottom && chipAt.bottom > box.top;
         label.style.visibility = overlaps ? 'hidden' : '';
       }
     };
-    project(); return stage.onDrawn(project);
-  }, [accepted, anchor, chosenEnd, handle, layout, rod, selected, state.sheet, state.arriving, motion.poses, labels]);
+    project(); const unstage = stage.onDrawn(project);
+    return () => { unstage(); resized.disconnect(); chipResized.disconnect(); };
+  }, [accepted, anchor, chosenEnd, handle, layout, rod, selected, state.sheet, state.arriving, motion.poses, motion.moving, labels]);
   const facing = accepted.input.front.marks.namedFor;
   const title = span!==null&&span[2]!==undefined&&span[3]!==undefined?L.span(span[2] as import('@/shapes').Level,span[3] as import('@/shapes').Level,filmSide(rod?.side??'left',facing)):anchor === undefined ? rod === undefined ? chosenEnd === undefined ? null : W.end(selected === 'upper', chosenEnd) : W.rod(filmSide(rod.side, facing)) : W.part(anchor.level, filmSide(anchor.side, facing), anchor.kind);
   const width = anchor?.pedicle.outerWidthMm;
@@ -252,8 +301,8 @@ export function PlaceDrawing({ accepted, handle }: { accepted: AcceptedSpine; ha
     {state.input!==null&&layout!==undefined&&<EndKeyboard selected={selected} layout={layout}/>}
     {layout !== undefined && !state.arriving && <PlacementCaption />}
     {layout !== undefined && <svg className="place-labels" style={{ opacity: state.arriving ? 0 : 1 }} aria-hidden="true">
-      {layout.anchors.map((_, i) => (looks?.local[i]?.length ?? 0) > 0 || (layout.anchors[i]!==undefined&&(anchorLoad(loadParts,layout.anchors[i])?.versionsPastStrength??0)>0) || selected === `anchor:${String(i)}` || item?.anchor === i ? <g key={i} data-anchor={i}><circle className={selected === `anchor:${String(i)}` ? 'pointed' : 'look'} r={D.ringRadiusPx} /></g> : null)}
-      {loadParts.filter((p)=>p.versionsPastStrength>0&&(p.part.kind==='rod-span'||p.part.kind==='rod')).map((p)=>p.part.kind==='rod-span'?<g key={JSON.stringify(p.part)} data-load-part={`${p.part.side}:${p.part.from}:${p.part.to}`}><circle className="look" r={D.ringRadiusPx}/></g>:p.part.kind==='rod'?<g key={JSON.stringify(p.part)} data-load-part={`rod:${p.part.side}`}><circle className="look" r={D.ringRadiusPx}/></g>:null)}
+      {layout.anchors.map((_, i) => (looks?.local[i]?.length ?? 0) > 0 || (layout.anchors[i]!==undefined&&ringedPast(anchorLoad(loadParts,layout.anchors[i]),load.result)) || selected === `anchor:${String(i)}` || item?.anchor === i ? <g key={i} data-anchor={i}><circle className={selected === `anchor:${String(i)}` ? 'pointed' : 'look'} r={D.ringRadiusPx} /></g> : null)}
+      {loadParts.filter((p)=>ringedPast(p,load.result)&&(p.part.kind==='rod-span'||p.part.kind==='rod')).map((p)=>p.part.kind==='rod-span'?<g key={JSON.stringify(p.part)} data-load-part={`span:${p.part.side}:${p.part.from}:${p.part.to}`}><circle className="look" r={D.ringRadiusPx}/></g>:p.part.kind==='rod'?<g key={JSON.stringify(p.part)} data-load-part={`rod:${p.part.side}`}><circle className="look" r={D.ringRadiusPx}/></g>:null)}
       {loaded&&load.result!==null&&labels.map((label)=><g key={label.id} data-range={label.id} className="load-label-group"><path className="load-leader"/><foreignObject width="208" height="104"><div className="load-label"><p><LevelWords>{label.anchor===undefined?ESTIMATE_NAMES[label.measure]:L.anchorRange(label.level,filmSide(layout.anchors[label.anchor]?.side??'left',accepted.input.front.marks.namedFor))}</LevelWords></p><div className="num">{rangeWords(label.measure,label.band)}</div><RangeBar band={label.band} scale={load.result===null?undefined:scaleFor(load.result,label.measure)}/><small>{ESTIMATE_TAGS[label.tag]}</small></div></foreignObject></g>)}
       {([['upper', layout.upper], ['lower', layout.lower]] as const).map(([end, level]) => <g key={end} data-end={end}><text x="24" className="num">{level}</text>{result?.firstIsSketch !== true && result?.cannotTell.some((r) => r.code === 'ends-unsettled' && r.levels.includes(level)) === true && <circle className="look" r={D.ringRadiusPx} />}</g>)}
       {state.input!==null&&result!==null&&<EndHandles layout={layout} result={result} handle={handle} drawn={drawnRef}/>}
@@ -279,7 +328,7 @@ function EndKeyboard({selected,layout}:{selected:string|null;layout:import('@/sh
   const engine=useEngine();
   useKey('popover',['ArrowUp','ArrowDown'],(event)=>{
     if(!event.shiftKey||selected!=='upper'&&selected!=='lower')return false;
-    if(handState.getState().busy!==null)return true;
+    if(handState.getState().busy!==null||loadState.getState().phase==='running')return true;
     const levels=fittedLevels(),at=levels.indexOf(layout[selected]),wanted=levels[at+(event.key==='ArrowUp'?-1:1)];
     if(wanted!==undefined){const level=snapEnd(layout,selected,wanted,levels);if(level!==layout[selected])void changePlacement(engine,{kind:'end',end:selected,level});}
     return true;

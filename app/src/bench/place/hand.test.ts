@@ -118,3 +118,16 @@ it('clears Why here on every sheet close and does not resurrect selections chang
     expect(placeState.getState().pressed).toBe(expected);expect(placeState.getState().hovered).toBe(selection===null?null:`anchor:${String(answer.anchors.findIndex((a)=>a===before.anchors[2]))}`);
   }
 });
+it('makes no placement change while a load is running',async()=>{
+  const engine={rebuildLayout:vi.fn()};loadState.setState({phase:'running',completed:0,total:32});
+  await changePlacement(engine,choice('hook'));await changePlacement(engine,{kind:'end',end:'lower',level:'L2'});
+  expect(engine.rebuildLayout).not.toHaveBeenCalled();expect(handState.getState().busy).toBeNull();loadState.setState({phase:'idle',total:0});
+});
+it('neither undoes nor starts again from the first placement while a load is running, and the load runs on',async()=>{
+  const engine={rebuildLayout:()=>Promise.resolve({...layout(),change:{kind:'changed-by-hand' as const}})};
+  await changePlacement(engine,choice('hook'));const yours=placeState.getState().result;expect(handState.getState().past).toHaveLength(1);
+  loadState.setState({phase:'running',completed:4,total:32});
+  undoPlacement();startFirstPlacement();
+  expect(placeState.getState().result).toBe(yours);expect(handState.getState().past).toHaveLength(1);expect(loadState.getState()).toMatchObject({phase:'running',completed:4});
+  loadState.setState({phase:'idle',completed:0,total:0});
+});

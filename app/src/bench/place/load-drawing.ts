@@ -2,6 +2,7 @@ import { useLayoutEffect, useRef, type RefObject } from 'react';
 import { useStore } from 'zustand';
 import type { Spine3DHandle } from '@/spine-3d/view/Spine3D';
 import type { AcceptedSpine } from '@/view-state/spine-build';
+import type { VertebraPose } from '@/shapes';
 import { joinLoop } from '@/choreography/one-loop';
 import { curveOf, durationOf } from '@/choreography/timing';
 import { SYSTEM_ASKS_FOR_REDUCED } from '@/choreography/reduced-motion';
@@ -25,11 +26,15 @@ export function useLoadDrawing(accepted: AcceptedSpine, handle: RefObject<Spine3
   },[accepted,handle,load.result]);
   useLayoutEffect(()=>{
     const spine=handle.current?.spine(),stage=handle.current?.stage(),part=surface.current,hardware=drawn.current;
-    if(spine==null||part==null||hardware===null)return;
-    const base=drawingPoses(accepted.fit,null),loaded=load.phase==='loaded'&&load.result!==null;
+    if(spine==null)return;
+    const base=drawingPoses(accepted.fit,null),moved=(to:readonly VertebraPose[])=>poses.current.some((p,i)=>JSON.stringify(p.centre)!==JSON.stringify(to[i]?.centre)||JSON.stringify(p.rotation)!==JSON.stringify(to[i]?.rotation));
+    // A placement being worked out again has no drawing yet: its bones go back to the fit, so the next drawing meets them there.
+    if(hardware===null){if(moved(base)){spine.betweenPoses(base,base,1);poses.current=base;}moving.current=false;return;}
+    if(part==null)return;
+    const loaded=load.phase==='loaded'&&load.result!==null;
     const drawing=load.result===null?null:rodsInDrawing(load.result,load.batches,accepted.fit);
     const before=!loaded||shownLoadStop(load.stop)==='before',target=before?base:drawing?.poses??base,from=poses.current;
-    const shapeChange=from.some((p,i)=>JSON.stringify(p.centre)!==JSON.stringify(target[i]?.centre)||JSON.stringify(p.rotation)!==JSON.stringify(target[i]?.rotation));
+    const shapeChange=moved(target);
     const reduced=window.matchMedia(SYSTEM_ASKS_FOR_REDUCED).matches||part.closest('[data-motion="reduced"]')!==null;
     const fade=durationOf(part,'--dur-appear'),travel=reduced?0:shapeChange?LOAD_DRAWING.moveMs:0,curve=curveOf(part,'--ease-settle');
     const parts=loaded&&!before&&!tooFewSettled(load.result)?shownStopResult(load.result,load.stop)?.parts??[]:null;
@@ -42,7 +47,8 @@ export function useLoadDrawing(accepted: AcceptedSpine, handle: RefObject<Spine3
       const fadeProgress=fade===0?1:Math.min(1,elapsed/fade);
       const p=reduced&&shapeChange?(fadeProgress<.5?0:1):travel===0?1:curve(Math.min(1,elapsed/travel));
       if(reduced&&shapeChange)spine.setSpine({strength:Math.abs(1-2*fadeProgress)});
-      poses.current=target.map((to,i)=>poseBetween(from[i]??to,to,p));
+      // At the end, the target itself: the round trip through quaternions leaves the last digits off, and the spine counts only its exact own poses as unmoved.
+      poses.current=p>=1?target:target.map((to,i)=>poseBetween(from[i]??to,to,p));
       spine.betweenPoses(base,poses.current,1);
       if(shapeChange)hardware.poses(poses.current,loaded&&!before&&drawing?.source!=='fit',drawing?.rods??null,drawing?.poses,before&&p<1);
       if(!reduced||!shapeChange||faded)ink(fade===0?1:Math.min(1,elapsed/fade));

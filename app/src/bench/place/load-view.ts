@@ -83,6 +83,10 @@ export function loadLabels(result: BenchResult, proposals: LayoutProposals, fit:
   if(anchor!==undefined && own?.demand!=null) labels.push({id:'anchor',level:anchor.level,measure:'heaviest-anchor-demand',band:own.demand,tag:'assumed',anchor:chosen});
   return labels;
 }
+/** After load a look ring marks a part only when it is past its allowance in more than half of the versions that settled; its chip gives the count either way. */
+export function ringedPast(part: PartResult | undefined, result: BenchResult | null): boolean {
+  return part !== undefined && result !== null && part.versionsPastStrength * 2 > result.versions - unsettledCount(result);
+}
 export function pastWords(part: PartResult, result: BenchResult): string | null {
   if (tooFewSettled(result)||part.versionsPastStrength <= 0 || part.part.kind === 'junction') return null;
   return W.past(part.part.kind,W.denominator(part.versionsPastStrength,result.versions,unsettledCount(result)));

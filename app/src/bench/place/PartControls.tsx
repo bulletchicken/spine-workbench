@@ -5,13 +5,14 @@ import { Segmented } from '@/building-blocks/Segmented';
 import { useEngine } from '@/engine-room/use-engine';
 import { PLACE_EDIT_WORDS as W, PLACE_WORDS } from '@/words/place';
 import { changePlacement, choiceReason, handState } from './hand-state';
+import { loadState } from './load-state';
 function Stepper({label,value,grid,less,more,change,busy}:{label:string;value:number|null;grid:readonly number[];less:string;more:string;change:(n:number)=>void;busy:boolean}) {
   if(value===null||grid.length===0)return null;
   const at=grid.indexOf(value),previous=grid.filter((n)=>n<value).at(-1),next=grid.find((n)=>n>value);
   return <div className="place-stepper"><span>{label}</span><Button look="text" disabled={previous===undefined} busy={busy} aria-label={less} onPress={()=>{if(previous!==undefined)change(previous);}}>{W.less}</Button><span className="num">{label===W.diameter?PLACE_WORDS.diameter(value):W.lengthSize(value)}</span><Button look="text" disabled={next===undefined||at===grid.length-1} busy={busy} aria-label={more} onPress={()=>{if(next!==undefined)change(next);}}>{W.more}</Button></div>;
 }
 export function PartControls({layout,anchor,rod,choices}:{layout:ImplantLayout;anchor:AnchorProposal|undefined;rod:RodProposal|undefined;choices:LayoutChoices}) {
-  const engine=useEngine(),hand=useStore(handState),busy=hand.busy!==null;
+  const engine=useEngine(),hand=useStore(handState),running=useStore(loadState,(s)=>s.phase==='running'),busy=hand.busy!==null||running;
   if(anchor!==undefined){
     const set=(kind:AnchorProposal['kind'],diameterMm:number|null=null,lengthMm:number|null=null)=>{if(!busy)void changePlacement(engine,{kind:'anchor',level:anchor.level,side:anchor.side,anchorKind:kind,diameterMm,lengthMm});};
     const kinds=[['screw',W.screw],['hook',W.hook],['none',W.none]] as const;

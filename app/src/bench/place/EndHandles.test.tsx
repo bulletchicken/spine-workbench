@@ -10,13 +10,18 @@ import { layoutInput } from './layout-input';
 import { placementFixture } from './placement-fixture.scenes';
 import { placeState } from './place-state';
 import { handState } from './hand-state';
+import { loadState } from './load-state';
+import { PartControls } from './PartControls';
 import { EndHandles } from './EndHandles';
+import { PLACE_DRAWING as D } from './draw-placement';
 import type { DrawnPlacement } from './draw-placement';
 it('Escape cancels a held end and its later pointer release sends no change',()=>{
   const result=placementFixture(),layout=result.layouts[0];if(layout===undefined)throw new Error('layout');
   placeState.setState({key:'cancel-drag',input:layoutInput(MADE_UP_CASE.fit,emptyCase()),result,phase:'ready',arriving:false,sheet:false});
   const engine={rebuildLayout:vi.fn()},fade=vi.fn();
-  const handle={current:{stage:()=>({onDrawn:()=>()=>undefined}),spine:()=>({landmarks:()=>null})} as unknown as Spine3DHandle};
+  vi.stubGlobal('ResizeObserver',class { observe(){/* The page never changes size here. */} disconnect(){/* Nothing is watched. */} });
+  const view={azimuth:0,elevation:0,perspective:0,pxPerMm:[1,1],aim:[0,0,0],aimAt:[0,0]},bounds={low:[0,0,0],high:[1,1,1]};
+  const handle={current:{stage:()=>({onDrawn:()=>()=>undefined,view:()=>view,size:()=>({width:100,height:100})}),spine:()=>({landmarks:()=>null,bounds:()=>bounds})} as unknown as Spine3DHandle};
   const drawn={current:{fadeParts:fade} as unknown as DrawnPlacement};
   const page=putOnThePage(<EngineProvider engine={engine as unknown as EngineClient}><svg><EndHandles layout={layout} result={result} handle={handle} drawn={drawn}/></svg></EngineProvider>);
   const circle=page.host.querySelector<SVGCircleElement>('[data-end-handle="lower"] circle');if(circle===null)throw new Error('handle');
@@ -24,5 +29,33 @@ it('Escape cancels a held end and its later pointer release sends no change',()=
   send(circle,new MouseEvent('pointerdown',{bubbles:true,cancelable:true}));act(()=>{handState.setState({drag:{end:'lower',level:'L2'}});});
   expect(page.host.querySelector('[data-end-handle="lower"] text')?.textContent).toBe('L2');expect(pressKey('Escape').defaultPrevented).toBe(true);
   expect(handState.getState().drag).toBeNull();expect(page.host.querySelector('[data-end-handle="lower"] text')?.textContent).toBe('L1');expect(fade).toHaveBeenLastCalledWith(['lower'],1);
-  send(circle,new MouseEvent('pointerup',{bubbles:true,cancelable:true}));expect(engine.rebuildLayout).not.toHaveBeenCalled();expect(placeState.getState().sheet).toBe(false);page.takeDown();
+  send(circle,new MouseEvent('pointerup',{bubbles:true,cancelable:true}));expect(engine.rebuildLayout).not.toHaveBeenCalled();expect(placeState.getState().sheet).toBe(false);page.takeDown();vi.unstubAllGlobals();
+});
+function stage(reach:[number,number,number][]=[]) {
+  const result=placementFixture(),layout=result.layouts[0];if(layout===undefined)throw new Error('layout');
+  placeState.setState({key:'inert',input:layoutInput(MADE_UP_CASE.fit,emptyCase()),result,phase:'ready',arriving:false,sheet:false});handState.setState({drag:null,busy:null});
+  vi.stubGlobal('ResizeObserver',class { observe(){/* The page never changes size here. */} disconnect(){/* Nothing is watched. */} });
+  vi.stubGlobal('getComputedStyle',()=>({getPropertyValue:(key:string)=>key==='--space-8'?'8':'16'}));
+  const view={azimuth:0,elevation:0,perspective:0,pxPerMm:[1,1],aim:[0,0,0],aimAt:[0,0]},bounds={low:[0,0,0],high:[1,1,1]},on=(p:readonly number[])=>({x:p[0]??0,y:p[1]??0});
+  const plate={centre:[0,0,0],left:[-10,0,0],right:[10,0,0]};
+  const handle={current:{stage:()=>({onDrawn:()=>()=>undefined,view:()=>view,size:()=>({width:100,height:100}),toCanvas:on,patientToCanvas:on}),spine:()=>({landmarks:()=>({top:plate,bottom:plate}),bounds:()=>bounds})} as unknown as Spine3DHandle};
+  const drawn={current:{fadeParts:vi.fn(),reach:(end:string)=>end==='lower'?reach:[]} as unknown as DrawnPlacement},engine={rebuildLayout:vi.fn()};
+  const page=putOnThePage(<EngineProvider engine={engine as unknown as EngineClient}><svg><EndHandles layout={layout} result={result} handle={handle} drawn={drawn}/></svg><PartControls layout={layout} anchor={layout.anchors[0]} rod={undefined} choices={result.choices}/></EngineProvider>);
+  return {page,layout,engine};
+}
+it('leaves end handles and part controls inert while a load is running, as while a hand change is worked out',()=>{
+  const {page}=stage();act(()=>{loadState.setState({phase:'running',completed:4,total:32});});
+  const circle=page.host.querySelector<SVGCircleElement>('[data-end-handle="lower"] circle');if(circle===null)throw new Error('handle');
+  circle.setPointerCapture=vi.fn();send(circle,new MouseEvent('pointerdown',{bubbles:true,cancelable:true}));
+  expect(handState.getState().drag).toBeNull();expect(page.host.querySelector('.place-part-controls')?.getAttribute('aria-busy')).toBe('true');
+  act(()=>{loadState.setState({phase:'idle',completed:0,total:0});});expect(page.host.querySelector('.place-part-controls')?.getAttribute('aria-busy')).toBeNull();
+  send(circle,new MouseEvent('pointerdown',{bubbles:true,cancelable:true}));expect(handState.getState().drag).toEqual({end:'lower',level:'L1'});
+  act(()=>{handState.setState({drag:null});});page.takeDown();vi.unstubAllGlobals();
+});
+it('names an end beyond the heads, entries and rods on its line, not over them',()=>{
+  const {page:alone}=stage();expect(alone.host.querySelector('[data-end-handle="lower"] text')?.getAttribute('x')).toBe('18');alone.takeDown();
+  const {page,layout}=stage([[40,0,0],[50,5,0],[90,100,0]]),head=(layout.rods[0]?.diameterMm??0)*D.headOverRod/2;
+  expect(page.host.querySelector('[data-end-handle="lower"] text')?.getAttribute('x')).toBe(String(50+Math.max(D.ringRadiusPx,head)+8));
+  expect(page.host.querySelector('[data-end-handle="upper"] text')?.getAttribute('x')).toBe('18');
+  page.takeDown();vi.unstubAllGlobals();
 });

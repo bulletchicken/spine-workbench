@@ -3,6 +3,7 @@ import { TEMPLATE_LEVELS, type AnchorChoice, type AnchorKind, type AnchorProposa
 import { EngineFailure, type EngineClient } from '@/engine-room/engine-client';
 import { PLACE_EDIT_WORDS as W } from '@/words/place';
 import { placeState } from './place-state';
+import { loadState } from './load-state';
 export type End = 'upper' | 'lower';
 export type HandChange = { kind:'anchor'; level:Level; side:AnchorChoice['side']; anchorKind:AnchorKind; diameterMm:number|null; lengthMm:number|null } | {kind:'end';end:End;level:Level} | {kind:'rod';pair:RodChoice};
 interface Snapshot { result:LayoutProposals; choices:AnchorChoice[] }
@@ -58,7 +59,7 @@ export function changedParts(before:ImplantLayout,after:ImplantLayout):string[] 
   return [...after.anchors.flatMap((a,i)=>{const old=before.anchors.find((b)=>b.level===a.level&&b.side===a.side);return old===undefined||shape(old)!==shape(a)?[`anchor:${String(i)}`]:[];}),...(['upper','lower'] as const).filter((end)=>before[end]!==after[end]),...after.rods.flatMap((r)=>JSON.stringify(r)!==JSON.stringify(before.rods.find((b)=>b.side===r.side))?[`rod:${r.side}`]:[])];
 }
 export async function changePlacement(engine:Pick<EngineClient,'rebuildLayout'>,change:HandChange):Promise<void> {
-  const state=placeState.getState(),before=state.result,layout=before?.layouts[0],hand=handState.getState();if(hand.busy!==null||before==null||layout===undefined)return;
+  const state=placeState.getState(),before=state.result,layout=before?.layouts[0],hand=handState.getState();if(hand.busy!==null||loadState.getState().phase==='running'||before==null||layout===undefined)return;
   if(change.kind==='anchor'){const a=layout.anchors.find((a)=>a.level===change.level&&a.side===change.side);if(a===undefined||choiceReason(layout,a,change.anchorKind)!==null)return;}
   if(change.kind==='end'&&(endReason(layout,change.end,change.level)!==null||!endLevels(layout,fittedLevels(),change.end).includes(change.level)))return;
   if(change.kind==='rod'&&!before.choices.rods.some((p)=>p.material===change.pair.material&&p.diameterMm===change.pair.diameterMm))return;
@@ -80,12 +81,12 @@ export async function changePlacement(engine:Pick<EngineClient,'rebuildLayout'>,
   }catch(error){if(mine!==generation)return;const cancelled=error instanceof EngineFailure&&error.error.code==='pass-cancelled',temporary=error instanceof EngineFailure&&['engine-crashed','engine-out-of-memory','engine-load-failed'].includes(error.error.code);handState.setState({busy:null,failure:cancelled?null:temporary?'failed':'refused'});}
 }
 export function undoPlacement():void {
-  const hand=handState.getState(),previous=hand.past.at(-1),current=placeState.getState().result?.layouts[0];if(previous===undefined||hand.busy!==null)return;
+  const hand=handState.getState(),previous=hand.past.at(-1),current=placeState.getState().result?.layouts[0];if(previous===undefined||hand.busy!==null||loadState.getState().phase==='running')return;
   generation++;handState.setState({past:hand.past.slice(0,-1),choices:previous.choices,failure:null,retry:null,flashing:current===undefined?[]:changedParts(current,previous.result.layouts[0]??current),why:null});
   placeState.setState({result:previous.result,review:null,pressed:null,hovered:null,keyboard:false});
 }
 export function startFirstPlacement():void {
-  const hand=handState.getState(),first=hand.first,current=placeState.getState().result?.layouts[0];if(hand.busy!==null||hand.past.length===0||first===null)return;
+  const hand=handState.getState(),first=hand.first,current=placeState.getState().result?.layouts[0];if(hand.busy!==null||loadState.getState().phase==='running'||hand.past.length===0||first===null)return;
   generation++;handState.setState({past:[],choices:[],failure:null,retry:null,why:null,flashing:current===undefined?[]:changedParts(current,first.layouts[0]??current)});
   placeState.setState({result:first,review:null,pressed:null,hovered:null,keyboard:false});
 }
