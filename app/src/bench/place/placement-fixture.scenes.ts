@@ -19,7 +19,7 @@ export function placementFixture(): LayoutProposals {
       diameterSources: ['made-up-width'], lengthSources: ['made-up-chord'], directionSources: ['made-up-direction'], lookSources: looks.map((code) => ({ code, sources: ['made-up-width'] })), sources: ['made-up-width', 'made-up-chord', 'made-up-direction'] };
   }));
   const rods = (['left', 'right'] as BodySide[]).map((side): RodProposal => {
-    const points = anchors.filter((a) => a.side === side && a.kind !== 'none').map((a): [number, number, number] => [a.entryMm[0] - 5, a.entryMm[1], a.entryMm[2]]);
+    const points = anchors.filter((a) => a.side === side && a.kind !== 'none').map((a): [number, number, number] => [a.entryMm[0] - a.directionUnit[0] * 5, a.entryMm[1] - a.directionUnit[1] * 5, a.entryMm[2] - a.directionUnit[2] * 5]);
     return { side, curveSide: side === 'left' ? 'concave' : 'outside', material: 'cobalt-chrome', diameterMm: 5.5, targetKyphosisDeg: 25, targetKyphosisStatus: 'from-tables', coronalLine: 'l5-vertical', overbendDeg: 0, headOffsetMm: 5, lengthMm: 280, geometryStatus: 'from-template', pointsMm: points, standingPointsMm: points, sources: ['made-up-rod'] };
   });
   return { tier: 'two-films', versions: 32, curves: [], classification: [], selective: [], rules: [

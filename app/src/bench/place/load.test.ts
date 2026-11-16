@@ -1,7 +1,7 @@
-import { Group, Mesh, MeshBasicMaterial } from 'three';
+import { BufferGeometry, CylinderGeometry, Group, Mesh, MeshBasicMaterial, MeshStandardMaterial, Vector3 } from 'three';
 import { sceneLayer } from '@/spine-3d/scene/scene-layer';
 import { currentStep } from '@/view-state/current-step';
-import { drawPlacement } from './draw-placement';
+import { drawPlacement, PLACE_DRAWING } from './draw-placement';
 import { placeDock } from './place-dock';
 import { beforeEach, expect, it, vi } from 'vitest';
 import type { BenchBatch, BenchInput, BenchCompareInput, BenchResult, BenchRun, BenchStop, Measure, PartResult, StopResult } from '@/shapes';
@@ -14,7 +14,7 @@ import { placementFixture } from './placement-fixture.scenes';
 import { limitsForPlacement } from './placement-view';
 import { placeState } from './place-state';
 import { loadFailure, loadPlacement, loadState, stopLoading } from './load-state';
-import { anchorPoint, drawingPoses, estimatesAt, loadLabels, rangeWords, rodsInDrawing, shownLoadStop, shownStopResult, variationWords,tooFewSettled,pastWords } from './load-view';
+import { drawingPoses, movedPoint, poseMotion, seatPoint, estimatesAt, loadLabels, rangeWords, rodsInDrawing, shownLoadStop, shownStopResult, variationWords,tooFewSettled,pastWords } from './load-view';
 let key=0;
 const band=(p50:number)=>({p10:p50-.1,p50,p90:p50+.1});
 function result(): BenchResult {
@@ -118,7 +118,7 @@ it('keeps empty places at placement ink, joins caps to their spans, and releases
   drawn.poses(shift,false,null,undefined,true);
   const first=layout.anchors.find((a)=>a.side==='left'&&a.kind!=='none');if(first===undefined)throw new Error('head');
   const cap=inside.registrations().find((p)=>p.id==='rod:left'&&p.object instanceof Mesh)?.object;
-  expect(cap?.position.z).toBeCloseTo(anchorPoint(first,MADE_UP_CASE.fit,shift)[2],8);
+  const offset=layout.rods.find((r)=>r.side==='left')?.headOffsetMm??NaN;expect(cap?.position.z).toBeCloseTo(seatPoint(first,offset,MADE_UP_CASE.fit,shift)[2],8);
   drawn.poses(base,true,null);
   const rod=layout.rods[0],heads=layout.anchors.filter((a)=>a.side===rod?.side&&a.kind!=='none');if(rod===undefined||heads[0]===undefined||heads[1]===undefined)throw new Error('rod');
   const id=`span:${rod.side}:${heads[0].level}:${heads[1].level}`,segment=inside.registrations().find((p)=>p.id===id)?.object.children[0],end=inside.registrations().find((p)=>p.id===`rod:${rod.side}`&&p.object instanceof Mesh)?.object;
@@ -130,11 +130,52 @@ it('keeps empty places at placement ink, joins caps to their spans, and releases
   const own=(a:typeof one,share:number):PartResult=>({part:{kind:'anchor',level:a.level,side:a.side},share:{p10:share,p50:share,p90:share},demand:null,steady:false,versionsPastStrength:0,sources:[]});
   drawn.loadTo([own(one,.1),own(two,.2),{...own(one,.05),part:{kind:'rod-span',side:rod.side,from:heads[0].level,to:heads[1].level}}])(1);
   const firstMesh=inside.registrations().find((p)=>p.id===`anchor:${String(layout.anchors.indexOf(one))}`)?.object.children[0];
-  if(!(firstMesh instanceof Mesh)||!(firstMesh.material instanceof MeshBasicMaterial)||!(segment.material instanceof MeshBasicMaterial))throw new Error('material');
+  if(!(firstMesh instanceof Mesh)||!(firstMesh.material instanceof MeshStandardMaterial)||!(segment.material instanceof MeshStandardMaterial))throw new Error('material');
   expect(firstMesh.material.opacity).toBe(.325);expect(segment.material.opacity).toBe(.2875);
-  const removeListener=vi.spyOn(segment.geometry,'removeEventListener');unregister.mockClear();drawn.poses(shift,true,null);expect(unregister).toHaveBeenCalledWith(end);expect(removeListener).toHaveBeenCalledWith('dispose',expect.any(Function));
+  // The same spans riding moved bones keep their geometry and are written in place.
+  const shape=segment.geometry as BufferGeometry,was=Array.from(shape.getAttribute('position').array),removeListener=vi.spyOn(shape,'removeEventListener');unregister.mockClear();drawn.poses(shift,true,null);
+  expect(unregister).not.toHaveBeenCalled();expect(inside.registrations().find((p)=>p.id===id)?.object.children[0]).toBe(segment);expect(Array.from(shape.getAttribute('position').array)).not.toEqual(was);
+  const middle=drawn.point(`rod:${rod.side}`);expect(middle?.[2]).toBeLessThan(seatPoint(heads[0],rod.headOffsetMm,MADE_UP_CASE.fit,shift)[2]);expect(middle?.[2]).toBeGreaterThan(seatPoint(heads.at(-1)??heads[0],rod.headOffsetMm,MADE_UP_CASE.fit,shift)[2]);
+  drawn.poses(shift,false,null);expect(unregister).toHaveBeenCalledWith(end);expect(removeListener).toHaveBeenCalledWith('dispose',expect.any(Function));
   inside.layer.onSpine.add(end);expect(inside.registrations().some((p)=>p.object===end)).toBe(false);end.removeFromParent();
-  const middle=drawn.point(`rod:${rod.side}`);expect(middle?.[2]).toBeLessThan(anchorPoint(heads[0],MADE_UP_CASE.fit,shift)[2]);expect(middle?.[2]).toBeGreaterThan(anchorPoint(heads.at(-1)??heads[0],MADE_UP_CASE.fit,shift)[2]);
+  drawn.remove();
+});
+
+it('draws round rods through every seat, joins spans ring to ring at the heads, and seats hooks as screws',()=>{
+  const layout=placementFixture().layouts[0];if(layout===undefined)throw new Error('layout');
+  const levels=MADE_UP_CASE.fit.vertebrae.map((v)=>v.level),root=new Group(),holders=new Map(levels.map((level)=>{const g=new Group();root.add(g);return [level,g] as const;}));
+  const inside=sceneLayer(root,holders,vi.fn(),vi.fn()),drawn=drawPlacement({levels,addLayer:()=>inside.layer},MADE_UP_CASE.fit,layout,[]),R=PLACE_DRAWING.rodSegments;
+  const rod=layout.rods.find((r)=>r.side==='right'),heads=layout.anchors.filter((a)=>a.side==='right'&&a.kind!=='none');if(rod===undefined||heads.length<3)throw new Error('rod');
+  const tube=(id:string)=>{const mesh=inside.registrations().find((p)=>p.id===id)?.object.children[0];if(!(mesh instanceof Mesh))throw new Error(id);return mesh.geometry as BufferGeometry;};
+  const rings=(geometry:BufferGeometry)=>{const at=geometry.getAttribute('position'),centres:Vector3[]=[];for(let i=0;i<at.count;i+=R){const c=new Vector3();for(let j=0;j<R;j++)c.add(new Vector3().fromBufferAttribute(at,i+j));centres.push(c.divideScalar(R));}return centres;};
+  const near=(centres:readonly Vector3[],point:readonly number[])=>Math.min(...centres.map((c)=>c.distanceTo(new Vector3(...point))));
+  // Before: one round tube of the supplied radius through every seat, wound outward.
+  const whole=tube(`rod:${rod.side}`),centres=rings(whole),position=whole.getAttribute('position');
+  for(const a of heads)expect(near(centres,seatPoint(a,rod.headOffsetMm,MADE_UP_CASE.fit,MADE_UP_CASE.fit.vertebrae.map((v)=>v.pose)))).toBeLessThan(rod.diameterMm/2/100);
+  centres.forEach((c,i)=>{for(let j=0;j<R;j++)expect(new Vector3().fromBufferAttribute(position,i*R+j).distanceTo(c)).toBeCloseTo(rod.diameterMm/2,4);});
+  const index=whole.getIndex();if(index===null)throw new Error('index');
+  const [a,b,c]=[0,1,2].map((k)=>new Vector3().fromBufferAttribute(position,index.getX(k)));if(a===undefined||b===undefined||c===undefined)throw new Error('triangle');
+  expect(b.clone().sub(a).cross(c.clone().sub(a)).dot(a.clone().sub(centres[0]??a))).toBeGreaterThan(0);
+  // Rods in, riding moved bones: spans meet on one shared ring at each moved seat, with no gap and no overlap.
+  const base=drawingPoses(MADE_UP_CASE.fit,null),shift=base.map((p)=>({...p,centre:[p.centre[0],p.centre[1],p.centre[2]+40] as [number,number,number]}));
+  drawn.poses(shift,true,[{side:rod.side,pointsMm:rod.standingPointsMm}],base);
+  for(let i=1;i+1<heads.length;i++){
+    const before=heads[i-1],here=heads[i],after=heads[i+1];if(before===undefined||here===undefined||after===undefined)continue;
+    const upper=rings(tube(`span:${rod.side}:${before.level}:${here.level}`)),lower=rings(tube(`span:${rod.side}:${here.level}:${after.level}`));
+    expect(upper.at(-1)?.distanceTo(lower[0]??new Vector3())).toBe(0);
+    expect(near([lower[0]??new Vector3()],seatPoint(here,rod.headOffsetMm,MADE_UP_CASE.fit,shift))).toBeLessThan(1e-4);
+  }
+  // A hook's head stands where a screw's would, from the same offset.
+  const cupOf=(i:number)=>inside.registrations().find((p)=>p.id===`anchor:${String(i)}`)?.object.children.find((m)=>m instanceof Mesh&&m.geometry instanceof CylinderGeometry&&m.geometry.parameters.radiusTop===rod.diameterMm);
+  const hook=layout.anchors.findIndex((x)=>x.kind==='hook'),screw=layout.anchors.findIndex((x)=>x.kind==='screw'&&x.side===layout.anchors[hook]?.side);
+  const along=new Vector3(...(layout.anchors[hook]?.directionUnit??[0,0,0])).length();
+  expect(cupOf(hook)?.position.y).toBeCloseTo(-rod.headOffsetMm*along,12);expect(cupOf(screw)?.position.y).toBeCloseTo(-rod.headOffsetMm*along,12);
+  // One move per bone gives the same point as moving each point alone.
+  const from=base[3],other=base[5];if(from===undefined||other===undefined)throw new Error('poses');const to={...other,rotation:[.1,-.2,.05] as [number,number,number]};
+  const moved=new Vector3(3,-4,5).applyMatrix4(poseMotion(from,to)).toArray();movedPoint([3,-4,5],from,to).forEach((n,i)=>{expect(moved[i]).toBeCloseTo(n,9);});
+  // Back at Before the spans are gone, and so are their middles: a span's ring then falls back to its two heads.
+  const span=`span:${rod.side}:${heads[0]?.level??''}:${heads[1]?.level??''}`;expect(drawn.point(span)).not.toBeNull();
+  drawn.poses(base,false,null);expect(drawn.point(span)).toBeNull();expect(drawn.point(`rod:${rod.side}`)).not.toBeNull();
   drawn.remove();
 });
 
@@ -169,4 +210,15 @@ it('withholds ranges strictly above a quarter, retaining the engine drawing and 
  layout.versionsUnsettled=14;const dock=placeDock(placeState.getState(),actions);expect(dock).toMatchObject({sentence:'Too few versions settled to give ranges.',helper:{kind:'words',words:['14 of 32 versions did not settle.']}});expect(dock.primary).toBeUndefined();expect(dock.small).toBeUndefined();
  const rodsIn=layout.stops.find((s)=>s.stop==='rods-in');if(rodsIn===undefined)throw new Error('stop');rodsIn.middle=answer.layouts[0]?.stops[0]?.middle??MADE_UP_CASE.fit.vertebrae.map((v)=>v.pose);rodsIn.rods=[{side:'left',pointsMm:[[0,0,10],[0,0,20]]}];expect(rodsInDrawing(answer,[],MADE_UP_CASE.fit)).toMatchObject({source:'middle',rods:rodsIn.rods});
  loadState.setState({stop:'before'});expect(placeDock(placeState.getState(),actions).sentence).toBe(W.before);expect(placeDock(placeState.getState(),actions).primary).toBeUndefined();
+});
+it('gives an end the entries and heads at its level and the drawn rods, wherever the bones now stand',()=>{
+  const layout=placementFixture().layouts[0];if(layout===undefined)throw new Error('layout');
+  const levels=MADE_UP_CASE.fit.vertebrae.map((v)=>v.level),root=new Group(),holders=new Map(levels.map((level)=>{const g=new Group();root.add(g);return [level,g] as const;}));
+  const inside=sceneLayer(root,holders,vi.fn(),vi.fn()),drawn=drawPlacement({levels,addLayer:()=>inside.layer},MADE_UP_CASE.fit,layout,[]),base=drawingPoses(MADE_UP_CASE.fit,null);
+  const shift=base.map((p)=>({...p,centre:[p.centre[0]+7,p.centre[1],p.centre[2]] as [number,number,number]}));drawn.poses(shift,false,null,undefined,true);
+  const lowest=layout.anchors.filter((a)=>a.level===layout.lower&&a.kind!=='none'),reach=drawn.reach('lower');
+  for(const a of lowest){const offset=layout.rods.find((r)=>r.side===a.side)?.headOffsetMm??NaN;expect(reach).toContainEqual(seatPoint(a,offset,MADE_UP_CASE.fit,shift));}
+  const caps=inside.registrations().filter((p)=>p.id.startsWith('rod:')&&p.object instanceof Mesh).map((p)=>p.object.position.toArray());expect(caps).toHaveLength(4);
+  for(const cap of caps)expect(reach).toContainEqual(cap);expect(drawn.reach('upper')).not.toContainEqual(reach[0]);
+  drawn.remove();
 });

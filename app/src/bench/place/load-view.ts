@@ -1,7 +1,7 @@
 import type { AnchorProposal, Band, BenchBatch, BenchResult, BenchStop, Estimate, ImplantLayout, LayoutProposals, Level, Measure, PartResult, SpineFit, SampledUnknown, StopResult, VertebraPose } from '@/shapes';
 import { TEMPLATE_LEVELS } from '@/shapes';
 import { placingOf } from '@/spine-3d/placing/place-vertebra';
-import { Quaternion, Vector3 } from 'three';
+import { Matrix4, Quaternion, Vector3 } from 'three';
 import { PLACE_LOAD_WORDS as W, SHOWN_LOAD_STOPS, DAILY_STOPS_NOT_SHOWN, UNKNOWN_NAMES } from '@/words/place';
 /** More than this share failing leaves a potentially biased settled sample. */
 export const MAX_UNSETTLED_SHARE = .25;
@@ -51,6 +51,20 @@ export function movedPoint(point: readonly [number,number,number], from: Vertebr
   const r = new Vector3(...from.rotation), angle = r.length(), inverse = angle === 0 ? new Quaternion() : new Quaternion().setFromAxisAngle(r.normalize(), angle).invert();
   const own = new Vector3(...point).sub(new Vector3(...from.centre)).applyQuaternion(inverse);
   return [...placingOf(to).toPatient(own.toArray())];
+}
+/** The same move as `movedPoint`, once, for many points riding one bone. */
+export function poseMotion(from: Pick<VertebraPose,'centre'|'rotation'>, to: Pick<VertebraPose,'centre'|'rotation'>): Matrix4 {
+  const turn = (r: readonly number[]) => { const v = new Vector3(r[0], r[1], r[2]), angle = v.length(); return angle === 0 ? new Quaternion() : new Quaternion().setFromAxisAngle(v.normalize(), angle); };
+  return new Matrix4().makeTranslation(to.centre[0], to.centre[1], to.centre[2]).multiply(new Matrix4().makeRotationFromQuaternion(turn(to.rotation).multiply(turn(from.rotation).invert()))).multiply(new Matrix4().makeTranslation(-from.centre[0], -from.centre[1], -from.centre[2]));
+}
+/** Where the rod lies in a screw head or a hook: back from the entry along the anchor's direction by the rod's head offset, as the layout and the bench seat it. */
+export function seatOf(anchor: Pick<AnchorProposal,'entryMm'|'directionUnit'>, headOffsetMm: number): [number,number,number] {
+  const [x, y, z] = anchor.entryMm, [dx, dy, dz] = anchor.directionUnit;
+  return [x - dx * headOffsetMm, y - dy * headOffsetMm, z - dz * headOffsetMm];
+}
+export function seatPoint(anchor: AnchorProposal, headOffsetMm: number, fit: SpineFit, poses: readonly VertebraPose[]): [number, number, number] {
+  const from = fit.vertebrae.find((v) => v.level === anchor.level)?.pose, to = poses.find((p) => p.level === anchor.level), seat = seatOf(anchor, headOffsetMm);
+  return from === undefined || to === undefined ? seat : movedPoint(seat, from, to);
 }
 
 export function anchorLoad(parts: readonly PartResult[], anchor: AnchorProposal): PartResult | undefined { return parts.find((p) => p.part.kind === 'anchor' && p.part.level === anchor.level && p.part.side === anchor.side); }

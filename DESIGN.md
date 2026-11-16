@@ -1031,8 +1031,8 @@ Shared parts are in `components.css`; the tables name the files that add behavio
 
 | | |
 |---|---|
-| For | Drawing a returned screw at its supplied entry and direction |
-| Look | Flat ink at 80%, no metal shine. The shaft uses only the returned diameter and length. The head is symbolic: radius 3.2 mm, depth 2 mm; these are drawing sizes, not a pedicle measurement |
+| For | Drawing a returned screw at its supplied entry and direction, with its head where its rod lies |
+| Look | Lit grey metal at 80%: the `--ink-2` grey, roughness 0.35, metalness 0.5. The head is a cup centred on the rod's seat, the entry less the direction times the rod's returned head offset: twice the rod's diameter across and along the screw, so the rod is seen lying in it. The shank runs from under the head through the entry and on for the returned length, at the returned diameter. Without a rod on its side the head is a disc at the entry, radius 3.2 mm, depth 2 mm. These are drawing sizes, not a pedicle or head measurement |
 | States | Arriving. Shown. Pointed or kept open. Under review. If shaft dimensions are missing, no shaft is drawn; the symbolic head remains |
 | Classes and files | No DOM class: `anchor:` identities on the bone's scene layer in `app/src/bench/place/draw-placement.ts`. `app/src/bench/place/PlaceDrawing.tsx` projects its ring and chip |
 
@@ -1041,8 +1041,8 @@ Shared parts are in `components.css`; the tables name the files that add behavio
 | | |
 |---|---|
 | For | Showing a returned hook or a place the first placement leaves empty |
-| Hook | An open curl with ring radius 4 mm and tube radius 0.7 mm. Flat ink at 80% |
-| Empty place | A closed ring at the same ring radius, tube radius 0.25 mm. It names a place left empty, without filling it |
+| Hook | An open curl at the entry with ring radius 4 mm and tube radius 0.7 mm, the same head as a screw at the rod's seat, and a body of the rod's diameter between them. The screw's metal at 80% |
+| Empty place | A closed ring at the same ring radius, tube radius 0.25 mm, in flat ink at 80%. It names a place left empty, without filling it |
 | States | Arriving. Shown. Pointed or kept open. Under review. The dimensions here are symbolic drawing sizes, not proposed hook or pedicle sizes |
 | Classes and files | No DOM class: the same `anchor:` scene-layer identities in `app/src/bench/place/draw-placement.ts` |
 
@@ -1051,8 +1051,8 @@ Shared parts are in `components.css`; the tables name the files that add behavio
 | | |
 |---|---|
 | For | Joining the returned standing head points before loading, and drawing the seated line at Rods in |
-| Look | A tube of the supplied diameter, flat ink at 80%, with rounded ends. It follows the supplied straight segments; no new curve is smoothed between them |
-| States | Arriving last. Shown. Pointed or kept open. Before uses the standing line. Rods in uses the supplied seated line with its overhang; without it, the line joins heads riding the drawn bones. On return to Before it rides those heads while moving, then yields to the standing line. Caps share the adjacent span’s load ink. Without loading, fewer than two standing points draw no rod |
+| Look | A round tube of the supplied diameter in the screws' metal at 80%, 16 sides, with rounded ends. It is a centripetal Catmull-Rom curve through the supplied points, thinned to at least 1.5 mm apart but always keeping every seat and both ends, so it passes through every head |
+| States | Arriving last. Shown. Pointed or kept open. Before uses the standing line. Rods in uses the supplied seated line with its overhang, cut at the seats into spans that share their end rings; without it, the standing line rides the drawn bones. While the bones move, each point rides the two seats either side of it, so the rod stays in every head; on return to Before it ends on the standing line. Moving rewrites the same tubes in place. Caps share the adjacent span’s load ink. Without loading, fewer than two standing points draw no rod |
 | Classes and files | No DOM class: `rod:` identities on the spine's layer in `app/src/bench/place/draw-placement.ts` |
 
 #### End mark

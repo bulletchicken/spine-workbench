@@ -1,9 +1,10 @@
-import { Group, Mesh, Vector3 } from 'three';
+import { CylinderGeometry, Group, Mesh, Vector3 } from 'three';
 import { bonesFromDisk } from '@/spine-3d/bones/bones-from-disk';
 import { drawSpine } from '@/spine-3d/scene/drawn-spine';
 import { modelSpine } from '@/spine-3d/scene/spine-model';
 import { sceneLayer } from '@/spine-3d/scene/scene-layer';
 import { drawPlacement } from './draw-placement';
+import { seatOf } from './load-view';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { caseStore } from '@/case-state/case-store';
 import { emptyCase } from '@/case-state/empty-case';
@@ -161,20 +162,26 @@ describe('a first placement', () => {
     await requestPlacement(engine,{...accepted,key:'c'},c); expect(placeState.getState().changed).toBe(false);
     await requestPlacement(engine,{...accepted,key:'d'},c); expect(placeState.getState().changed).toBe(false);
   });
-  it('keeps an engine head at its entry and its tip forward and nearer the midline through a bone frame', () => {
+  it('keeps an engine head at its rod seat, the shank through its entry and its tip forward and nearer the midline through a bone frame', () => {
     const scene = new Group(), model = modelSpine(MADE_UP_CASE.fit,bonesFromDisk());
     const inside = drawSpine(model,{scene,changed:vi.fn(),removed:vi.fn()});
-    const layout = placementFixture().layouts[0], first = layout?.anchors[0]; if(layout===undefined||first===undefined)throw new Error('layout');
+    const layout = placementFixture().layouts[0], first = layout?.anchors[0], rod = layout?.rods.find((r)=>r.side==='left'); if(layout===undefined||first===undefined||rod===undefined)throw new Error('layout');
     const entry:[number,number,number]=[-78.7,-2.4,222.9], direction:[number,number,number]=[.871,-.409,.270], length=27.5;
-    const drawn=drawPlacement(inside.spine,MADE_UP_CASE.fit,{...layout,upper:'T10',lower:'T11',anchors:[{...first,level:'T10',side:'left',kind:'screw',entryMm:entry,directionUnit:direction,lengthMm:length}],rods:[]},[]);
+    const screw={...first,level:'T10' as const,side:'left' as const,kind:'screw' as const,entryMm:entry,directionUnit:direction,lengthMm:length};
+    const drawn=drawPlacement(inside.spine,MADE_UP_CASE.fit,{...layout,upper:'T10',lower:'T11',anchors:[screw],rods:[{...rod,headOffsetMm:15,standingPointsMm:[]}]},[]);
     scene.updateMatrixWorld(true);
     const group=inside.layers[0]?.registrations().find((r)=>r.id==='anchor:0')?.object;
-    const shaft=group?.children[0], head=group?.children[1];if(!(shaft instanceof Mesh)||head===undefined)throw new Error('screw');
-    const expectedHead=inside.spine.inScene(entry), actualHead=head.getWorldPosition(new Vector3()).toArray();
+    const shaft=group?.children[0], head=group?.children[1];if(!(shaft instanceof Mesh)||!(shaft.geometry instanceof CylinderGeometry)||!(head instanceof Mesh)||!(head.geometry instanceof CylinderGeometry))throw new Error('screw');
+    const seat=seatOf(screw,15);
+    seat.forEach((n,i)=>{expect((entry[i]??0)-n).toBeCloseTo((direction[i]??0)*15,12);});
+    const expectedHead=inside.spine.inScene(seat), actualHead=head.getWorldPosition(new Vector3()).toArray();
     actualHead.forEach((n,i)=>{expect(n).toBeCloseTo(expectedHead[i]??0,8);});
-    const tip=shaft.localToWorld(new Vector3(0,length/2,0));
+    // The head is a cup twice the rod's diameter, wider than the rod it holds; the shank starts under it.
+    expect(head.geometry.parameters.radiusTop).toBe(rod.diameterMm);expect(head.geometry.parameters.height).toBe(2*rod.diameterMm);
+    const tip=shaft.localToWorld(new Vector3(0,shaft.geometry.parameters.height/2,0)),neck=shaft.localToWorld(new Vector3(0,-shaft.geometry.parameters.height/2,0));
     const patientTip=new Vector3(...entry).addScaledVector(new Vector3(...direction).normalize(),length);
     const expectedTip=inside.spine.inScene(patientTip.toArray());tip.toArray().forEach((n,i)=>{expect(n).toBeCloseTo(expectedTip[i]??0,8);});
+    const headBottom=head.localToWorld(new Vector3(0,head.geometry.parameters.height/2,0));neck.toArray().forEach((n,i)=>{expect(n).toBeCloseTo(headBottom.toArray()[i]??0,8);});
     expect(patientTip.x).toBeGreaterThan(entry[0]);expect(patientTip.y).toBeLessThan(entry[1]);
     expect(patientTip.x).toBeCloseTo(-54.73337950081357,8);
     expect(patientTip.y).toBeCloseTo(-13.654130636242536,8);
