@@ -255,7 +255,13 @@ fn solve_with_load(
             .flat_map(|w| w.iter().copied()),
     ) - applied_loads;
     let rods = prepare_rods(rigid_poses, rods)?;
-    let rigid_loads = least_energy_loads(&gradient, &rods)?;
+    let rigid_loads = least_energy_loads(&gradient, &rods, chain.stiffness_scale())?;
+    // A round-off gradient was given no rod load, so it is seated as none.
+    let gradient = if gradient.norm() <= linear::round_off_load(chain.stiffness_scale()) {
+        DVector::zeros(gradient.len())
+    } else {
+        gradient
+    };
     let step = if hold_horizontal {
         corotational::solve_balanced_prestressed(
             rigid_poses,

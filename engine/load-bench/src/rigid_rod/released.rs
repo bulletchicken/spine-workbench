@@ -531,7 +531,7 @@ pub(super) fn solve(
             6 * poses.len(),
             energy.gradient.iter().flat_map(|w| w.iter().copied()),
         ) - &applied_loads;
-        match least_energy_loads(&gradient, &prepared) {
+        match least_energy_loads(&gradient, &prepared, chain.stiffness_scale()) {
             Ok(loads) => head_wrenches_on_rod = loads,
             Err(_) => {
                 settled = false;

@@ -5,6 +5,11 @@ use load_bench::rod_beams::{BeamProperties, CondensedRod, polyline_stations};
 use load_bench::springback::{HeadTie, LockedRod, least_energy_loads, prepare_rods, solve_linear};
 use nalgebra::{DMatrix, DVector, Matrix3, Vector3};
 
+/// The made-up small chain's stiffness scale, which sets the round-off floor.
+fn tissue_stiffness() -> f64 {
+    cases::small(1.0, 0.0, 0.0).chain.stiffness_scale()
+}
+
 fn rods(scale: f64) -> (Vec<Pose>, Vec<LockedRod>) {
     let poses: Vec<_> = (0..3)
         .map(|i| Pose {
@@ -74,7 +79,7 @@ fn identical_free_rods_share_the_least_energy_loads_equally() {
     let (poses, input) = rods(1.0);
     let prepared = prepare_rods(&poses, &input).unwrap();
     let (g, expected) = gradient();
-    let loads = least_energy_loads(&g, &prepared).unwrap();
+    let loads = least_energy_loads(&g, &prepared, tissue_stiffness()).unwrap();
     for rod in &loads {
         for (actual, expected) in rod.iter().zip(&expected) {
             assert!((actual - expected).norm() < 1e-8, "{actual} {expected}");
@@ -82,7 +87,7 @@ fn identical_free_rods_share_the_least_energy_loads_equally() {
     }
     // The selector has no iterate or starting-point argument: its solution
     // is fixed by these equations and the rod strain metric alone.
-    let repeated = least_energy_loads(&g, &prepared).unwrap();
+    let repeated = least_energy_loads(&g, &prepared, tissue_stiffness()).unwrap();
     assert_eq!(loads, repeated);
 }
 
@@ -91,7 +96,7 @@ fn two_elastic_stiffnesses_extrapolate_to_the_rigid_limit() {
     let (g, _) = gradient();
     let (poses, input) = rods(1.0);
     let prepared = prepare_rods(&poses, &input).unwrap();
-    let limit = least_energy_loads(&g, &prepared).unwrap();
+    let limit = least_energy_loads(&g, &prepared, tissue_stiffness()).unwrap();
     let tangent = DMatrix::from_diagonal(&DVector::from_fn(
         18,
         |i, _| if i % 6 < 3 { 2.0 } else { 40.0 },
@@ -127,7 +132,7 @@ fn a_load_on_a_free_rigid_motion_has_no_rigid_force_solution() {
     let prepared = prepare_rods(&poses, &input).unwrap();
     let mut g = DVector::zeros(18);
     g[0] = 1.0;
-    assert!(least_energy_loads(&g, &prepared).is_err());
+    assert!(least_energy_loads(&g, &prepared, tissue_stiffness()).is_err());
 }
 
 #[test]
@@ -145,7 +150,7 @@ fn coordinate_conditioning_does_not_amplify_resting_body_round_off() {
     let mut g = DVector::zeros(24);
     g.rows_mut(0, 18).copy_from(&balanced);
     g[18] = 32.0 * f64::EPSILON * balanced.norm();
-    let loads = least_energy_loads(&g, &prepared).unwrap();
+    let loads = least_energy_loads(&g, &prepared, tissue_stiffness()).unwrap();
     for rod in &loads {
         for (actual, answer) in rod.iter().zip(&expected) {
             assert!((actual - answer).norm() < 1e-8);
@@ -153,7 +158,7 @@ fn coordinate_conditioning_does_not_amplify_resting_body_round_off() {
     }
     // A real unsupported force is not a round-off residual and must fail.
     g[18] = 1.0;
-    assert!(least_energy_loads(&g, &prepared).is_err());
+    assert!(least_energy_loads(&g, &prepared, tissue_stiffness()).is_err());
 }
 
 #[test]
@@ -162,7 +167,7 @@ fn unequal_rods_share_load_in_proportion_to_their_stiffnesses() {
     input[1].stiffness *= 3.0;
     let prepared = prepare_rods(&poses, &input).unwrap();
     let (g, half) = gradient();
-    let loads = least_energy_loads(&g, &prepared).unwrap();
+    let loads = least_energy_loads(&g, &prepared, tissue_stiffness()).unwrap();
     for (head, half_load) in half.iter().enumerate() {
         assert!((loads[0][head] - half_load * 0.5).norm() < 1e-8);
         assert!((loads[1][head] - half_load * 1.5).norm() < 1e-8);

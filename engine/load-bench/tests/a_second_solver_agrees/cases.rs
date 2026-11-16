@@ -37,8 +37,8 @@ pub fn material() -> BeamProperties {
     BeamProperties::from_young_modulus(modulus.value * 1000.0, 5.5)
 }
 
-pub fn rods_through(target: &[Pose], bodies: RangeInclusive<usize>) -> Construct {
-    let body_indices: Vec<_> = bodies.collect();
+pub fn rods_through(target: &[Pose], bodies: impl IntoIterator<Item = usize>) -> Construct {
+    let body_indices: Vec<_> = bodies.into_iter().collect();
     let properties = material();
     let mut rods = Vec::new();
     let mut anchors = Vec::new();

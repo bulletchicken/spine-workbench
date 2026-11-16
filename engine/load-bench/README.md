@@ -583,6 +583,13 @@ a non-positive tangent on the solve's free coordinates or residual above
 tolerance remains unsettled. Springback's two held T1 translations are absent
 from that positivity check; daily increments check their full tangent.
 
+The rigid-limit head loads meet the same 1e-9 relative balance, but never
+below a round-off floor of 1e-11 times the tissue stiffness scale times the
+20 mm coordinate scale, this project's own tolerance. A straight rod through
+two freely sliding heads (two heads a rod) holds nothing, so the tissue
+gradient it leaves is round-off: it gets no rod load and is seated as none,
+and Rods in then matches Before.
+
 The suite includes closed-form spring/beam/statics/Goodman checks, balance and
 mirror checks, stiffness and weight scale laws, no-force fitting rods,
 three-state correction checks, batch identity, paired version identity, tags,

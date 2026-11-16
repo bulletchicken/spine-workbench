@@ -499,3 +499,50 @@ fn an_undefined_holder_half_turn_is_refused_without_choosing_a_plane() {
         Err(SolveError::InvalidInput("holder swing-twist ambiguity"))
     ));
 }
+
+#[test]
+fn a_straight_rod_through_two_heads_settles_with_no_head_load() {
+    // Two heads a rod: the rod through them is straight, so under freely
+    // sliding heads it holds nothing and every residual is round-off.
+    for recipe in [
+        shapes::made_up::RecipeName::Random,
+        shapes::made_up::RecipeName::RightThoracic40,
+    ] {
+        let mut case = cases::made_up(recipe, 1, 1.0);
+        let count = case.chain.reference.len();
+        // Two neighbouring levels, and two far apart with nothing between.
+        for bodies in [
+            [count - 4, count - 3],
+            [count - 6, count - 5],
+            [4, count - 3],
+        ] {
+            case.construct = cases::rods_through(&case.target, bodies);
+            let held = solve_held(&case.chain, &case.construct, &HeldOptions::default(), None)
+                .expect("held solve");
+            assert!(held.settled, "{recipe:?} {bodies:?} held {:?}", held.reason);
+            let rigid = solve_rigid(&case.chain, &case.construct, &held, None).expect("released");
+            assert!(
+                rigid.settled,
+                "{recipe:?} {bodies:?} rigid {:?}",
+                rigid.reason
+            );
+            assert!(
+                rigid
+                    .head_wrenches_on_rod
+                    .iter()
+                    .flatten()
+                    .all(|w| w.norm() < 1e-9),
+                "{recipe:?} {bodies:?}"
+            );
+            let elastic = load_bench::springback::solve_balanced(
+                &case.chain,
+                &rigid.poses,
+                &rigid.rods,
+                &held.poses,
+                &rigid.applied_loads,
+            )
+            .unwrap_or_else(|e| panic!("{recipe:?} {bodies:?} springback {e:?}"));
+            assert!(elastic.settled, "{recipe:?} {bodies:?} springback");
+        }
+    }
+}

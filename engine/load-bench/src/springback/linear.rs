@@ -4,12 +4,29 @@ use super::head_stiffness::{congruence, diagonal_scales};
 use super::{LinearStep, RodLinearisation, SpringbackError};
 use crate::chain::Wrench;
 use crate::chain_solver::{CholeskyFactor, SymmetricSpectrum};
+use crate::rigid_rod::LENGTH_MM;
 use nalgebra::{DMatrix, DVector};
 
 /// Project relative threshold after diagonal congruence for rigid null modes.
 const RANK_TOLERANCE: f64 = 1e-13;
 /// Project relative tolerance for both physical balance and linear residuals.
 const RESIDUAL_TOLERANCE: f64 = 1e-9;
+/// Project numerical tolerance for round-off in the rigid-limit balance, as
+/// a share of the load the tissue's stiffness scale makes over [`LENGTH_MM`].
+/// The rigid solve runs on the chain scaled by one over that stiffness,
+/// with translations in steps of [`LENGTH_MM`], so its absolute
+/// stationarity tolerance ([`crate::rigid_rod::minimise::Options`]) comes
+/// back as that tolerance times stiffness over [`LENGTH_MM`] in newtons and
+/// times stiffness in newton-millimetres. This floor, applied to one norm
+/// over both, is ten times [`LENGTH_MM`] squared (4000) times the first and
+/// ten times [`LENGTH_MM`] (200) times the second, so what the rigid solve
+/// may leave unbalanced sits well under it. A straight rod through two
+/// freely sliding heads holds nothing, so the tissue gradient it leaves is
+/// round-off: a gradient under this floor needs no rod load and a residual
+/// under it is accepted, instead of dividing round-off by round-off. It is
+/// tied to the tissue, which makes the gradient, not to the rods, so stiffer
+/// rods never loosen it.
+const ROUND_OFF_LOAD_TOLERANCE: f64 = 1e-11;
 /// Project fixed cap for round-off residual refinement, not nonlinear steps.
 const REFINEMENT_STEPS: usize = 3;
 
@@ -65,9 +82,12 @@ pub fn solve_linear(
 /// on rods, so their mapped body loads equal minus the tissue gradient.
 /// A solution exists only when the supplied state-R gradient balances every
 /// free rigid motion. This function has no iteration starting point.
+/// `tissue_stiffness` is the chain's stiffness scale in N/mm
+/// ([`crate::chain::Chain::stiffness_scale`]); it sets the round-off floor.
 pub fn least_energy_loads(
     tissue_gradient: &DVector<f64>,
     rods: &[RodLinearisation],
+    tissue_stiffness: f64,
 ) -> Result<Vec<Vec<Wrench>>, SpringbackError> {
     let size = tissue_gradient.len();
     check_dimensions(size, &DMatrix::zeros(size, size), rods)?;
@@ -79,6 +99,15 @@ pub fn least_energy_loads(
         stiffness += rod.kinematics.transpose() * &rod.effective_stiffness * &rod.kinematics;
     }
     stiffness = (&stiffness + stiffness.transpose()) * 0.5;
+    let round_off = round_off_load(tissue_stiffness);
+    if tissue_gradient.norm() <= round_off {
+        // Nothing beyond round-off to carry, so the least-energy loads are
+        // zero; solving for them would only work on round-off.
+        return Ok(rods
+            .iter()
+            .map(|rod| vec![Wrench::zeros(); rod.kinematics.nrows() / 6])
+            .collect());
+    }
     let scales = diagonal_scales(&stiffness);
     let scaled = congruence(&stiffness, &scales);
     let spectrum = SymmetricSpectrum::new(&scaled, RANK_TOLERANCE)?;
@@ -109,15 +138,19 @@ pub fn least_energy_loads(
         );
         residual += rod.kinematics.transpose() * p;
     }
-    let relative = if tissue_gradient.norm() > 0.0 {
-        residual.norm() / tissue_gradient.norm()
-    } else {
-        residual.norm()
-    };
-    if relative > RESIDUAL_TOLERANCE || !relative.is_finite() {
+    // Relative to the tissue gradient, but never below round-off: a gradient
+    // that is itself round-off cannot judge a round-off residual.
+    let allowed = (RESIDUAL_TOLERANCE * tissue_gradient.norm()).max(round_off);
+    if residual.norm() > allowed || !residual.norm().is_finite() {
         return Err(SpringbackError::InconsistentRigidLoads);
     }
     Ok(loads)
+}
+
+/// The tissue load under which a rigid-limit gradient or residual is
+/// round-off; `tissue_stiffness` as for [`least_energy_loads`].
+pub(crate) fn round_off_load(tissue_stiffness: f64) -> f64 {
+    ROUND_OFF_LOAD_TOLERANCE * tissue_stiffness.abs() * LENGTH_MM
 }
 
 fn check_dimensions(
@@ -166,4 +199,26 @@ fn loads_for_displacement(
                 .collect()
         })
         .collect()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::rigid_rod::minimise::Options;
+
+    /// The floor once claimed ten times the rigid solve's tolerance; set to
+    /// that, it would sit 400 times lower and two-head rods could stop
+    /// settling again. Pin the margins its doc comment states.
+    #[test]
+    fn the_round_off_floor_keeps_its_margin_over_the_rigid_solve() {
+        let tolerance = Options::default().absolute_stationarity_tolerance;
+        for stiffness in [0.5, 1.0, 800.0] {
+            let floor = round_off_load(stiffness);
+            let force = tolerance * stiffness / LENGTH_MM;
+            let moment = tolerance * stiffness;
+            for (ratio, expected) in [(floor / force, 4000.0), (floor / moment, 200.0)] {
+                assert!((ratio / expected - 1.0).abs() < 1e-9, "{ratio}");
+            }
+        }
+    }
 }
