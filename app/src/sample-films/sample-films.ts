@@ -58,6 +58,8 @@ const caseFilms = import.meta.env.SAMPLE_FILMS_ON_THIS_MACHINE
 const caseMetadata = import.meta.env.SAMPLE_FILMS_ON_THIS_MACHINE
   ? import.meta.glob<unknown>('./on-this-machine/case/case.json', { import: 'default', eager: true }) : {};
 const localCase = sampleCaseFrom(caseFilms, Object.values(caseMetadata)[0]);
+/** Whether this machine holds real films for the sample control: numbered front films or a case. */
+export function hasRealSamples(): boolean { return files.length > 0 || localCase !== null; }
 export async function sampleCaseFor(engine: Pick<EngineClient, 'info'>): Promise<SampleCase | null> {
   if (import.meta.env.DEV && (await engine.info()).engineVersion === 'stand-in') return null;
   return localCase;

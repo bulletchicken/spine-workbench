@@ -96,7 +96,7 @@ describe('the Films screen', () => {
     await until(() => { expect(find('.scene.on .quiet').textContent).toBe('Use a sample film'); });
     pressOn(find('.scene.on .quiet'));
     await until(() => { expect(sentence()).toBe('The sample film is in.'); });
-    expect(find('.scene.on .quiet').textContent).toBe('Use the sample case');
+    expect(find('.scene.on .quiet').textContent).toBe('Start over');
   });
   it('keeps the step contract open and allows leaving only with Front', () => {
     expect(step.number).toBe(1);
@@ -114,7 +114,7 @@ describe('the real sample case control, using stand-in films', () => {
     await until(() => { expect(find('.scene.on .quiet').textContent).toBe('Use the real sample case'); });
   }
   const file = (kind: keyof typeof story.films) => ({ bytes: () => story.films[kind].file.slice(0) });
-  it('offers the case first, assigns all four slots, answers facing and continues the sample round', async () => {
+  it('offers the case first, assigns all four slots, answers facing and goes round the real films only', async () => {
     samples.files = [file('front')];
     await offer({ films: { front: file('front'), side: file('side'), 'bend-left': file('bend-left'), 'bend-right': file('bend-right') }, sideFaces: 'right', credit: 'Made-up test films, CC0.' });
     const opened = vi.spyOn(engine, 'openFilm');
@@ -134,10 +134,9 @@ describe('the real sample case control, using stand-in films', () => {
     pressOn(find('.scene.on .quiet'));
     await until(() => { expect(sentence()).toBe('The sample film is in.'); });
     expect(filmOrigins.getState().credit).toBeNull();
+    expect(find('.scene.on .quiet').textContent).toBe('Use the real sample case');
     pressOn(find('.scene.on .quiet'));
-    await until(() => { expect(filmIntake.getState().from).toBe('made-up-case'); expect(sentence()).toBe('All four films are in.'); });
-    pressOn(find('.scene.on .quiet'));
-    await until(() => { expect(find('.scene.on .quiet').textContent).toBe('Use the real sample case'); });
+    await until(() => { expect(filmIntake.getState().from).toBe('real-case'); expect(sentence()).toBe('All four films are in.'); });
   });
   it('loads front alone without metadata, and preserves a missing side slot with bending films', async () => {
     await offer({ films: { front: file('front') } });

@@ -124,13 +124,15 @@ export async function chooseFilms(engine: EngineClient, onPlace: FilmKind | null
   await queueFilmChange(async () => { await takeTold(engine, told, onPlace, 'yours'); });
 }
 
+/** Real films kept on this machine go round on their own; the made-up case is offered only when there are none. */
 export function takeInNextSample(engine: EngineClient): Promise<void> {
   return queueFilmChange(async () => {
     try {
       const files = await sampleFilmFilesFor(engine);
       const local = await sampleCaseFor(engine);
       const offset = local === null ? 0 : 1;
-      const next = Math.min(filmIntake.getState().nextSample, files.length + offset);
+      const real = files.length + offset;
+      const next = real === 0 ? 0 : filmIntake.getState().nextSample % real;
       if (local !== null && next === 0) {
         const places = FILM_KINDS.filter((kind) => local.films[kind] !== undefined);
         await takeTold(engine, places.flatMap((kind) => {

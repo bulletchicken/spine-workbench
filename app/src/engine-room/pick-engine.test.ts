@@ -1,6 +1,6 @@
 import type { StandInStory } from '@/sample-case/story-shape';
 import { describe, expect, it } from 'vitest';
-import { pickEngine } from './pick-engine';
+import { pickEngine, wantsStandIn } from './pick-engine';
 import { smallStory } from './stand-in/small-story';
 
 /** The story the stand-in should be telling: the sample case's once it exists, else its own. */
@@ -28,5 +28,15 @@ describe('picking the engine in development', () => {
     } finally {
       engine.stop();
     }
+  });
+});
+
+describe('real sample films on this machine', () => {
+  it.each([
+    ['', false, true], ['?slow', false, true], ['?engine=real', false, false],
+    ['', true, false], ['?slow', true, false], ['?engine=real', true, false],
+    ['?engine=stand-in', true, true], ['?scene=pass-result', true, true], ['?gallery', true, true],
+  ] as const)('%j with real films %s asks for the stand-in: %s', (address, realSamples, standIn) => {
+    expect(wantsStandIn(address, realSamples)).toBe(standIn);
   });
 });

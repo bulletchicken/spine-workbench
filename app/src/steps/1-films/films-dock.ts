@@ -12,8 +12,10 @@ const words = (text: string): DockHelper => ({ kind: 'words', words: [text] });
 
 export function filmsDock({ inPlace, intake, sampleFilms, realCase = false, canFind = inPlace.includes('front'), sideExclusion = null }: FilmsState, act: FilmsActions): DockSpec {
   const primary = { label: W.findTheSpine, press: act.find, disabled: !canFind };
-  const frontIndex = intake.nextSample - (realCase ? 1 : 0);
-  const sampleLabel = realCase && intake.nextSample === 0 ? W.useRealSampleCase : frontIndex >= sampleFilms ? W.useSampleCase : W.useSampleFilm;
+  // Real films go round on their own; the made-up case is offered only when there are none.
+  const real = sampleFilms + (realCase ? 1 : 0);
+  const coming = real === 0 ? 0 : intake.nextSample % real;
+  const sampleLabel = real === 0 ? W.useSampleCase : realCase && coming === 0 ? W.useRealSampleCase : W.useSampleFilm;
   let spec: DockSpec;
   if (intake.making || intake.reading.length > 0) {
     const sample = intake.making || intake.from === 'made-up-case';
@@ -36,13 +38,15 @@ export function filmsDock({ inPlace, intake, sampleFilms, realCase = false, canF
     };
   } else {
     const sample = intake.from === 'sample-film';
+    // With one real sample, pressing again would only open the same film.
+    const goesRound = (sample || intake.from === 'real-case') && real > 1;
     const front = inPlace.includes('front');
     spec = {
       scene: 'ready',
       sentence: sample ? sampleFilms === 1 ? W.oneSampleIn : W.sampleIn((intake.sample ?? 0) + 1, sampleFilms)
         : !front && inPlace.includes('side') ? SIDE_WORDS.sideIn : !front ? W.frontToAdd : inPlace.length === 4 ? W.allIn : inPlace.length === 1 ? W.frontIn : W.someIn(inPlace.length),
       helper: words(intake.from === 'real-case' ? W.realSampleCaseHelp : sample ? W.sampleHelp : !front ? W.frontToAddHelp : inPlace.length === 4 ? W.allInHelp : W.canFind),
-      quiet: { label: sample || intake.from === 'real-case' ? frontIndex >= sampleFilms ? W.useSampleCase : intake.from === 'real-case' ? W.useSampleFilm : W.nextSampleFilm : W.startOver, press: sample || intake.from === 'real-case' ? act.sample : act.startOver },
+      quiet: { label: !goesRound ? W.startOver : realCase && coming === 0 ? W.useRealSampleCase : intake.from === 'real-case' ? W.useSampleFilm : W.nextSampleFilm, press: goesRound ? act.sample : act.startOver },
       primary,
     };
   }

@@ -15,7 +15,7 @@ describe('the Films dock', () => {
   it('F1 and F2: adds films through one link and the next sample, with Find disabled', () => {
     expect(dock()).toEqual({ scene: 'add', sentence: 'Add the four films.', helper: { kind: 'words', words: ['Drop them anywhere, or ', { link: 'choose them', press: act.choose } satisfies { link: string; press: () => void }, '.'] } satisfies DockHelper, quiet: { label: 'Use the sample case', press: act.sample }, primary: { label: 'Find the spine', press: act.find, disabled: true } });
     expect(dock([], {}, 6).quiet?.label).toBe('Use a sample film');
-    expect(dock([], { nextSample: 6 }, 6).quiet?.label).toBe('Use the sample case');
+    expect(dock([], { nextSample: 6 }, 6).quiet?.label).toBe('Use a sample film');
   });
   it('F3: reads one into its named place, with no quiet action', () => {
     expect(dock([], { reading: ['side'], readTotal: 1 })).toEqual({ scene: 'reading', sentence: 'Reading the film…', helper: { kind: 'words', words: ['It goes in the Side place.'] }, primary: { label: 'Find the spine', press: act.find, disabled: true } });
@@ -45,10 +45,10 @@ describe('the Films dock', () => {
   it('F8 and F11: the made-up case uses the same four-film words', () => {
     expect(dock(FILM_KINDS, { from: 'made-up-case' })).toEqual(dock(FILM_KINDS, { from: 'yours' }));
   });
-  it('F10: numbers samples, and the last one leads to the made-up case', () => {
+  it('F10: numbers samples, and the last one goes round to the first, never to the made-up case', () => {
     expect(dock(['front'], { from: 'sample-film', sample: 1, nextSample: 2 }, 6)).toEqual({ scene: 'ready', sentence: 'Sample film 2 of 6 is in.', helper: { kind: 'words', words: ['Drop your own films at any time.'] }, quiet: { label: 'Next sample film', press: act.sample }, primary: { label: 'Find the spine', press: act.find, disabled: false } });
-    expect(dock(['front'], { from: 'sample-film', sample: 0, nextSample: 1 }, 1)).toMatchObject({ sentence: 'The sample film is in.', quiet: { label: 'Use the sample case' } });
-    expect(dock(['front'], { from: 'sample-film', sample: 5, nextSample: 6 }, 6).quiet?.label).toBe('Use the sample case');
+    expect(dock(['front'], { from: 'sample-film', sample: 0, nextSample: 1 }, 1)).toMatchObject({ sentence: 'The sample film is in.', quiet: { label: 'Start over', press: act.startOver } });
+    expect(dock(['front'], { from: 'sample-film', sample: 5, nextSample: 6 }, 6).quiet).toEqual({ label: 'Next sample film', press: act.sample });
   });
   it.each([
     [{ kind: 'refused', count: 1, code: 'film-unknown-format' }, [], 'One file could not be read.', 'This file is not a film the app can read.'],
@@ -68,4 +68,13 @@ describe('the Films dock', () => {
 
 it('names real case reading separately from made-up sample work', () => {
   expect(filmsDock({ inPlace: [], sampleFilms: 0, realCase: true, intake: { ...createFilmIntake().getState(), from: 'real-case', reading: ['front'], readTotal: 4 } }, { choose: () => undefined, sample: () => undefined, startOver: () => undefined, find: () => undefined }).sentence).toBe('Getting the real sample case ready…');
+});
+
+it('goes round a real case and its front films, with no made-up case among them', () => {
+  const real = (patch: Partial<FilmIntakeState>, inPlace: readonly FilmKind[] = ['front']) => filmsDock({ inPlace, sampleFilms: 2, realCase: true, intake: { ...createFilmIntake().getState(), ...patch } }, act).quiet;
+  expect(real({}, [])?.label).toBe('Use the real sample case');
+  expect(real({ from: 'real-case', nextSample: 1 }, FILM_KINDS)).toEqual({ label: 'Use a sample film', press: act.sample });
+  expect(real({ from: 'sample-film', sample: 0, nextSample: 2 })).toEqual({ label: 'Next sample film', press: act.sample });
+  expect(real({ from: 'sample-film', sample: 1, nextSample: 3 })).toEqual({ label: 'Use the real sample case', press: act.sample });
+  expect(filmsDock({ inPlace: FILM_KINDS, sampleFilms: 0, realCase: true, intake: { ...createFilmIntake().getState(), from: 'real-case', nextSample: 1 } }, act).quiet).toEqual({ label: 'Start over', press: act.startOver });
 });

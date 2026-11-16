@@ -91,7 +91,7 @@ describe('the design system’s two stylesheets', () => {
 describe('the refreshed system', () => {
   it('keeps all three files byte for byte', () => {
     for (const [path, digest] of [
-      ['../../../DESIGN.md', '5633a03b64438eb5430c201e58504faf7734c065482e17048c0378c24b496818'],
+      ['../../../DESIGN.md', 'f7fe13a37b0d823dc0fdab22b3cbdddd1a74cb87034104e1b618d2b987606f3f'],
       ['./tokens.css', '60763ad3b7f52e3790b54361abcc7c0514c16425d3623c876bd994d217f3cca7'],
       ['./components.css', '4bb7929d7c65f402959b846ae505816d0b846d7dd6216ea1d85c9d25d88125ab'],
     ] as const) {

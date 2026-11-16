@@ -168,7 +168,7 @@ describe('taking films in', () => {
     await takeIn(engine, [blob('front'), new Blob([])], null);
     expect(filmIntake.getState().notice).toEqual({ kind: 'refused', count: 1, code: 'film-truncated' });
   });
-  it('always makes the case on the stand-in, even with local samples, and goes round samples on a capable engine', async () => {
+  it('always makes the case on the stand-in, even with local samples, and goes round only the samples on a capable engine', async () => {
     samples.files = [{ bytes: () => story.films.front.file.slice(0) }, { bytes: () => story.films.front.file.slice(0) }];
     await takeInNextSample(engine);
     expect(filmIntake.getState()).toMatchObject({ from: 'made-up-case', nextSample: 0 });
@@ -179,11 +179,11 @@ describe('taking films in', () => {
     expect(caseStore.getState().case.films).toHaveLength(1);
     await takeInNextSample(engine);
     expect(filmIntake.getState()).toMatchObject({ from: 'sample-film', sample: 1, nextSample: 2 });
-    await takeInNextSample(engine);
-    expect(filmIntake.getState()).toMatchObject({ from: 'made-up-case', sample: null, nextSample: 0 });
-    expect(caseStore.getState().case.films).toHaveLength(4);
+    const made = vi.spyOn(engine, 'makeUpSpine');
     await takeInNextSample(engine);
     expect(filmIntake.getState()).toMatchObject({ from: 'sample-film', sample: 0, nextSample: 1 });
+    expect(caseStore.getState().case.films).toHaveLength(1);
+    expect(made).not.toHaveBeenCalled();
   });
   it('finishes the drawing state with a notice if making the sample fails', async () => {
     vi.spyOn(engine, 'makeUpSpine').mockRejectedValueOnce(refused('made-up-unsatisfiable'));

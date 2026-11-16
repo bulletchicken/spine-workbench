@@ -4,6 +4,9 @@
 // running the compiled Rust. In development the stand-in answers instead,
 // so screens can be built and looked at before the engine can do what
 // they ask, unless the address asks for the real one with `?engine=real`.
+// When this machine keeps real sample films (`sample-films/`), the real
+// engine is the default, because only it can open them; `?engine=stand-in`
+// still asks for the stand-in, and a scene or the gallery keeps it.
 // The stand-in tells the sample case's story (`sample-case/story.ts`,
 // found by a glob so this file never waits for it) or, until that file
 // exists, a small story of its own; `?slow` runs its automatic pass at
@@ -14,17 +17,27 @@
 // any of its code reaches the bundle.
 
 import type { StandInStory } from '@/sample-case/story-shape';
+import { hasRealSamples } from '@/sample-films/sample-films';
 import { startRealEngine } from './crew/start-real-engine';
 import type { EngineClient } from './engine-client';
 
 /** An engine and the way to close its workers when the page is done with it. */
 export type RunningEngine = EngineClient & { stop(): void };
 
+/** Whether a development page at this query string gets the stand-in. */
+export function wantsStandIn(address: string, realSamples: boolean): boolean {
+  const query = new URLSearchParams(address);
+  const asked = query.get('engine');
+  if (asked === 'real') return false;
+  if (asked === 'stand-in') return true;
+  return !realSamples || query.has('scene') || query.has('gallery');
+}
+
 /** The engine for this page; `address` is its query string. */
-export async function pickEngine(address: string): Promise<RunningEngine> {
+export async function pickEngine(address: string, realSamples = hasRealSamples()): Promise<RunningEngine> {
   if (import.meta.env.DEV) {
-    const query = new URLSearchParams(address);
-    if (query.get('engine') !== 'real') {
+    if (wantsStandIn(address, realSamples)) {
+      const query = new URLSearchParams(address);
       const sampleStory = Object.values(import.meta.glob<StandInStory>('../sample-case/story.ts', { import: 'default' }))[0];
       const [{ startStandInEngine }, story] = await Promise.all([import('./stand-in/stand-in-engine'), sampleStory?.() ?? null]);
       return startStandInEngine({ story, scripts: { pace: query.has('slow') ? 'slow' : 'normal' } });
