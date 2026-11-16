@@ -100,4 +100,23 @@ describe('the Find dock', () => {
     findDock({ ...s, laterStep: { label: '3D', press } }, act).primary?.press();
     expect(press).toHaveBeenCalledOnce();
   });
+  it('keeps Build the 3D spine disabled, and says why, while the films give fewer than two vertebrae', () => {
+    const s = state(); const press = vi.fn();
+    s.find.phase = 'found';
+    const front = s.films.find((film) => film.film === 'front'), side = s.films.find((film) => film.film === 'side');
+    if (front === undefined || side === undefined) throw new Error('the story has no front and side');
+    const keep = (film: typeof front, levels: readonly Level[]) => { film.vertebrae = film.vertebrae.filter((v) => levels.includes(v.level)); };
+    keep(front, ['L4']); keep(side, []);
+    const one = findDock({ ...s, laterStep: { label: '3D', press } }, act);
+    expect(one).toMatchObject({ sentence: '1 vertebra found.', helper: { kind: 'words', words: ['The 3D spine needs at least two vertebrae.'] }, primary: { label: 'Build the 3D spine', disabled: true } });
+    keep(side, ['L4']);
+    expect(findDock({ ...s, laterStep: { label: '3D', press } }, act).primary?.disabled).toBe(true);
+    // A Side with two of its own gives the fit its second level.
+    side.vertebrae = smallStory().pass.marks.find((film) => film.film === 'side')?.vertebrae.filter((v) => v.level === 'L4' || v.level === 'L5') ?? [];
+    expect(side.vertebrae).toHaveLength(2);
+    expect(findDock({ ...s, laterStep: { label: '3D', press } }, act).primary?.disabled).toBe(false);
+    front.vertebrae = smallStory().pass.marks.find((film) => film.film === 'front')?.vertebrae.filter((v) => v.level === 'L4' || v.level === 'L5') ?? []; keep(side, []);
+    const two = findDock({ ...s, laterStep: { label: '3D', press } }, act);
+    expect(two.primary?.disabled).toBe(false); expect(two.helper).not.toMatchObject({ words: ['The 3D spine needs at least two vertebrae.'] });
+  });
 });

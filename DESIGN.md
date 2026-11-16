@@ -42,7 +42,7 @@ Settled: Films, Find, 3D and Place follow one another, with fewer than four film
 
 - The Front film alone is enough to find and build the spine. The other films can be left out.
 - A Side film can be searched alone after its facing is chosen and its finder is available. Building a 3D spine still needs Front.
-- Find shows "Build the 3D spine" disabled while searching, and ready when Front has been found. A failed build keeps the films and offers "Try again".
+- Find shows "Build the 3D spine" disabled while searching, and ready when Front has been found with at least two vertebrae. A failed build keeps the films and offers "Try again".
 
 ## 3. Principles
 
@@ -592,7 +592,7 @@ Shared parts are in `components.css`; the tables name the files that add behavio
 |---|---|
 | For | Ending Find with what was found and the next step |
 | Dock | "17 vertebrae found. 2 need a look." over the marked levels, or the estimated-names note. Counts and grammar follow what was found. A trained Side adds its five-outline check sentence; Side alone uses that sentence over "A 3D spine needs a front film." |
-| Buttons | "Review the 2" when needed, then "Build the 3D spine". Building is disabled without found Front vertebrae |
+| Buttons | "Review the 2" when needed, then "Build the 3D spine". Building is disabled without found Front vertebrae, and while the films give the fit fewer than two: one on Front, with no Side of two or more. Then the helper is "The 3D spine needs at least two vertebrae." |
 | States | Scene: found. Building changes to building at once, without a spinner or meter. After 300, the stage has `aria-busy="true"`. A failed or unfinished fit changes to build-failed with "Try again"; the films stay |
 | Classes | `.scene[data-scene="found"]`, `.scene[data-scene="building"]`, `.scene[data-scene="build-failed"]` in `app/src/guide/Dock.tsx`. The build runs in `app/src/bench/three/build-spine.ts` |
 | Do | Keep a failed build separate from a failed search |
@@ -627,7 +627,7 @@ Shared parts are in `components.css`; the tables name the files that add behavio
 | For | The one next step |
 | Size | 44 tall, block corner 15.8, 22 each side. Words 15 / 22, 500 |
 | States | Rest: `--ink`, white words. Hover: `--ink-hover`. Pressed: `--ink-pressed`, scale 0.97. Focus: the ring. Disabled: `--fill`, words `--ink-3`; it is shown before its time so the next step can be read. Becoming ready: fades in and grows from 0.94 over 520, after 100 |
-| Availability | "Build the 3D spine" is drawn during Find because its destination is built. It is disabled until Find is found and Front has vertebrae. No button stands in for an unbuilt step |
+| Availability | "Build the 3D spine" is drawn during Find because its destination is built. It is disabled until Find is found and Front has vertebrae, two of them unless Side has two of its own. No button stands in for an unbuilt step |
 | Keyboard | Enter presses it from anywhere that is not another control, when it is drawn and not disabled |
 | Classes | `.primary` |
 | Do | Name the result: "Build the 3D spine" |
@@ -1248,7 +1248,7 @@ This clock starts after the answer and the film travel. The answer sets the leve
 | When | What happens |
 |---|---|
 | All outlines have been revealed | Outlines that need a look pulse once over 1400, peaking at 35% |
-| 560 after the last outline | The dock says what was found and how many need a look. "Build the 3D spine" becomes ready when Front has vertebrae |
+| 560 after the last outline | The dock says what was found and how many need a look. "Build the 3D spine" becomes ready when Front has vertebrae and the films give at least two |
 
 Pointing at an outline then lights the same level on the films. Estimated names keep their note after review.
 
@@ -1494,6 +1494,7 @@ The tables cover Films, Find, 3D, the first placement and its load calculation. 
 | Find | Review, action | Looks right |
 | Find | Hand-built sample search only, helper | About 15 seconds. |
 | Find | Estimated names, helper | Names are estimates. Check where T1 is. |
+| Find | Too few to build, helper | The 3D spine needs at least two vertebrae. |
 | Find | Failure, action | Back to the films |
 | Find | Failure, action | Try again |
 | Find | Failure, action | Search Front alone |
@@ -2171,6 +2172,7 @@ grep -nE '#[0-9a-fA-F]{3,8}\b|rgba?\(|[0-9.]+(px|ms|em|rem|vw|vh)\b' app/src/loo
 
 ## 12. Decisions log
 
+- **15 November 2026 — Building waits for two vertebrae.** The fit needs two levels, so a Find that kept one vertebra offered a build that could only fail, and a "Try again" that failed the same way. The button now waits, and the helper says why. With fewer than all seventeen, each bone the fit stands is still the found vertebra's own: checked on three real front films with only some levels kept, every bone's body landed on its own outline within 5 film pixels and never on a neighbour's.
 - **14 November 2026 — On Front alone, a bone forms on its outline and then rises.** Formed where the fit stands it, in front of a wall 30 mm behind the spine and seen from 36° round, every bone came out well to one side of the vertebra it was found from, on a real film often by more than a vertebra's width. Formed flat on the film and then lifted square out of it, each bone is seen on its own vertebra first, and its threads show where it went. With Side as well a bone cannot lie on both films, so it still forms where their threads cross.
 - **14 November 2026 — Real sample films replace the made-up case.** Where the computer holds real films, the sample control goes round only those, and development opens on the real engine, which alone can read them; `?engine=stand-in`, a scene or the gallery keep the stand-in. Ordinary builds hold no real films, so they still offer the made-up case.
 - **14 November 2026 — The room's one light turns warm, and is called Melon.** The look was to be slightly more the product's own, without leaving Clear. The cool blue glow becomes cantaloupe drifting into watermelon: the same two blurred ovals, sizes, blur and cross-fade, with only their fill changed. The page's cool greys looked blue beside a warm light, so the same steps are warmed. Melon is light, not paint: a glow, a dial's marker or the mark's offset bar, never a signal. Principle 6 now names it, and the old "a third colour" rule becomes a fourth. Blue and amber keep every meaning.

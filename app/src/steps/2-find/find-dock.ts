@@ -25,6 +25,8 @@ export function findDock(state: FindDockState, act: FindActions): DockSpec {
   const count = films.find((film) => film.film === 'front')?.vertebrae.filter((v) => compareLevels(v.level, 'T1') >= 0).length ?? 0;
   const side = films.find((f) => f.film === 'side');
   const sideOnly = count === 0 && (side?.vertebrae.length ?? 0) > 0;
+  // The fit needs two levels. A Side brings its own only when it has two of them.
+  const tooFew = count > 0 && (films.find((film) => film.film === 'front')?.vertebrae.length ?? 0) < 2 && (side?.vertebrae.length ?? 0) < 2;
   const searchedSideOnly = find.kinds.length === 1 && find.kinds[0] === 'side';
   const needed = lookLevels(films.filter((f) => !trainedSide || f.film !== 'side')).filter((entry) => !find.looked.includes(entry.level));
   const level = find.review === null ? undefined : find.reviewing[find.review];
@@ -51,7 +53,7 @@ export function findDock(state: FindDockState, act: FindActions): DockSpec {
     };
   }
   // The registered destination controls both the waiting and the finished dock.
-  const next = state.laterStep === null ? {} : { primary: { ...state.laterStep, label: W.buildTheSpine, disabled: find.phase !== 'found' || count === 0 } };
+  const next = state.laterStep === null ? {} : { primary: { ...state.laterStep, label: W.buildTheSpine, disabled: find.phase !== 'found' || count === 0 || tooFew } };
   if (find.phase !== 'found') {
     const total = replay.plan?.counted.length ?? 0;
     const shown = replay.plan === null ? 0 : shownAt(replay.plan, replay.times, replay.time).count;
@@ -67,7 +69,7 @@ export function findDock(state: FindDockState, act: FindActions): DockSpec {
   const words = estimated ? W.estimated : needed.length > 0 ? W.marked(needed.map((entry) => entry.level), state.inPlace) : W.allLookRight;
   return {
     scene: 'found', sentence: sideOnly ? S.found : `${W.found(count)}${needed.length > 0 ? ` ${W.needALook(needed.length)}` : ''}`,
-    helper: sideOnly ? { kind: 'words', words: [S.noFront] } : !trainedSide ? needed.length > 0 ? { kind: 'look', words } : { kind: 'words', words: [words] } : { kind: 'words', words: [`${words} ${S.found}`] },
+    helper: sideOnly ? { kind: 'words', words: [S.noFront] } : tooFew ? { kind: 'words', words: [W.needTwo] } : !trainedSide ? needed.length > 0 ? { kind: 'look', words } : { kind: 'words', words: [words] } : { kind: 'words', words: [`${words} ${S.found}`] },
     ...(needed.length > 0 ? { quiet: { label: W.review(needed.length), press: act.review } } : {}),
     ...next,
   };

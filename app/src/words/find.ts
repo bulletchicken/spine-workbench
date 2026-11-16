@@ -22,6 +22,7 @@ export const FIND_WORDS = {
   searching: (n: number) => n === 1 ? 'Searching the Front film.' : `Searching ${String(n)} films.`,
   aboutFifteenSeconds: 'About 15 seconds.',
   estimated: 'Names are estimates. Check where T1 is.',
+  needTwo: 'The 3D spine needs at least two vertebrae.',
   backToFilms: 'Back to the films',
   tryAgain: 'Try again',
   frontAlone: 'Search Front alone',

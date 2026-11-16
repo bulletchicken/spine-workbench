@@ -391,6 +391,7 @@ The proof ladder: `proving-ground/README.md`.
 | the known answer for swapping left/right names | `proving-ground/known-answers/side-swap.json` |
 | the known answers the 3D view's placing is held to | `proving-ground/known-answers/spine-3d/placed-bodies.json` |
 | the real engine in Node | `proving-ground/parity/contract.test.ts` |
+| each fitted bone on its own outline when Find keeps only some vertebrae, and the refusal with one | `proving-ground/parity/some-vertebrae-found.test.ts` |
 | the trained finder's native answer, and the browser build held to it | `proving-ground/known-answers/trained-pass/front.json`, `proving-ground/parity/trained-pass.test.ts`, `engine/trained-finder/tests/finds_the_vertebrae_on_a_made_up_film.rs` |
 | the offline Films-to-Find journey and its 640-wide layout checks | `proving-ground/in-the-browser/no-network/nothing-leaves.spec.ts` |
 | the content-policy browser test | `proving-ground/in-the-browser/no-network/content-policy.spec.ts` |
