@@ -8,7 +8,7 @@ const clamp = (p: number) => Math.max(0, Math.min(1, p));
 export const span = (t: number, a: number, b: number) => clamp((t - a) / (b - a));
 export function scriptFor(level: Level): FormationScript {
   const order = Math.max(0, ORDER.indexOf(level));
-  return { begins: 660 + order * 66, fills: 2520 + order * 24, first: 185, spread: [230, 520], loose: 26, lines: [520, 320], fade: [100, 260], reach: 200, hold: 300, threadFade: 220, pointFade: 110, pointSettle: 260, nodeSettle: 180 };
+  return { begins: 660 + order * 66, fills: 2520 + order * 24, first: 185, spread: [230, 520], loose: 26, lines: [520, 320], fade: [100, 260], reach: 200, hold: 300, threadFade: 220, pointFade: 110, pointSettle: 260, nodeSettle: 180, rise: [600, 520] };
 }
 export function sample(progress: number) {
   const t = LENGTH * (Number.isFinite(progress) ? clamp(progress) : 0);

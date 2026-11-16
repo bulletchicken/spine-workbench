@@ -13,10 +13,19 @@ export interface FormationScript {
   begins: number; fills: number; first: number; spread: readonly [number, number]; loose: number;
   lines: readonly [number, number]; fade: readonly [number, number];
   reach: number; hold: number; threadFade: number; pointFade: number; pointSettle: number; nodeSettle: number;
+  /** When a bone formed on a pressed film starts to rise from it, after `begins`, and how long it takes to reach the fit. */
+  rise: readonly [number, number];
 }
 export interface FormationDrawing {
   script(level: Level, script: FormationScript): void;
   threads(planes: readonly FilmPlane[]): void;
+  /**
+   * The sheet each bone forms on: its points and lines start pressed flat onto it, over the bone's
+   * outline on that film, and rise square out of it to where the fit stands them, on the script's
+   * `rise`. A thread then runs from the outline to the rising bone. Null: they form where the fit
+   * stands them.
+   */
+  press(plane: Pick<FilmPlane, 'towardReader' | 'out'> | null): void;
   time(ms: number, visible: boolean): void;
   prepare(view: View, size: CanvasSize, ratio: number, walls: readonly (readonly Vec3[])[]): void;
   dispose(): void;
@@ -35,6 +44,17 @@ const OVER_FILM = /* glsl */`
     return max(uWalls.x * within(p, uWall[0], uWall[1], uWall[2], uWall[3]), uWalls.y * within(p, uWall[4], uWall[5], uWall[6], uWall[7]));
   }`;
 
+// Pressing, as placing/flat-on-film.ts presses a bone: a point keeps only part of its distance
+// from the sheet, measured along the sheet's beam. In patient millimetres, before the model view.
+const PRESSED = /* glsl */`
+  attribute vec2 aRise;      // when this bone starts to rise from the sheet, and how long it takes
+  uniform vec4 uPress;       // the sheet: its unit direction toward the reader, and how far out it stands
+  uniform float uPressed;    // 1 while a sheet is given, else 0
+  vec3 pressed(vec3 p) {
+    float kept = smoothstep(0.0, 1.0, clamp((uT - aRise.x) / max(aRise.y, 1.0), 0.0, 1.0));
+    return p - uPressed * (1.0 - kept) * (dot(p, uPress.xyz) - uPress.w) * uPress.xyz;
+  }`;
+
 // A point: a small plain dot. It comes out a little large and settles; when lines reach it, it
 // becomes their joint; when the bone fills in, it goes with the lines.
 const POINT_VERTEX = /* glsl */`
@@ -43,9 +63,10 @@ const POINT_VERTEX = /* glsl */`
   uniform float uT, uRatio, uDot, uFirst, uNode, uFrom, uLift, uFar, uGoFor, uPointFor, uSettleFor, uJoinFor;
   varying float vAlpha;
   varying float vSize;
+  ${PRESSED}
   void main() {
-    vec4 mv = modelViewMatrix * vec4(position, 1.0);
-    float nearer = mv.z - (modelViewMatrix * vec4(aCentre, 1.0)).z;
+    vec4 mv = modelViewMatrix * vec4(pressed(position), 1.0);
+    float nearer = mv.z - (modelViewMatrix * vec4(pressed(aCentre), 1.0)).z;
     float since = uT - aTime.x;
     float out_ = clamp(since / uPointFor, 0.0, 1.0);
     float settled = 1.0 - pow(1.0 - clamp(since / uSettleFor, 0.0, 1.0), 3.0);
@@ -83,11 +104,13 @@ const LINE_VERTEX = /* glsl */`
   uniform vec2 uView;
   varying float vAcross;
   varying float vAlpha;
+  ${PRESSED}
   void main() {
     float drawn = clamp((uT - aTime.x) / aTime.y, 0.0, 1.0);
     drawn = mix(drawn, drawn * drawn * (3.0 - 2.0 * drawn), uEase);
-    vec4 a = modelViewMatrix * vec4(position, 1.0), b = modelViewMatrix * vec4(aEnd, 1.0);
-    float nearer = mix(a.z, b.z, aCorner.x) - (modelViewMatrix * vec4(aCentre, 1.0)).z;
+    // A thread's foot is on the sheet already, so pressing leaves it there while its far end rises.
+    vec4 a = modelViewMatrix * vec4(pressed(position), 1.0), b = modelViewMatrix * vec4(pressed(aEnd), 1.0);
+    float nearer = mix(a.z, b.z, aCorner.x) - (modelViewMatrix * vec4(pressed(aCentre), 1.0)).z;
     a.xyz *= 1.0 - uLift / length(a.xyz); b.xyz *= 1.0 - uLift / length(b.xyz);
     vec4 ca = projectionMatrix * a, cb = projectionMatrix * b;
     vec2 along_ = (cb.xy / cb.w - ca.xy / ca.w) * uView;
@@ -120,15 +143,20 @@ function strip(count: number) {
     corners.set([0, -1, 0, 1, 1, -1, 1, 1], i * 8);
     index.set([i * 4, i * 4 + 1, i * 4 + 2, i * 4 + 2, i * 4 + 1, i * 4 + 3], i * 6);
   }
-  for (const [name, size] of [['position', 3], ['aEnd', 3], ['aCentre', 3], ['aTime', 3]] as const) geometry.setAttribute(name, new BufferAttribute(new Float32Array(count * 4 * size), size));
+  for (const [name, size] of [['position', 3], ['aEnd', 3], ['aCentre', 3], ['aTime', 3], ['aRise', 2]] as const) geometry.setAttribute(name, new BufferAttribute(new Float32Array(count * 4 * size), size));
   geometry.setAttribute('aCorner', new BufferAttribute(corners, 2)); geometry.setIndex(new BufferAttribute(index, 1));
   return geometry;
 }
-function writeLine(geometry: BufferGeometry, i: number, from: Vec3, to: Vec3, centre: Vec3, times: Vec3) {
+function writeLine(geometry: BufferGeometry, i: number, from: Vec3, to: Vec3, centre: Vec3, times: Vec3, rise: readonly [number, number]) {
   for (let c = 0; c < 4; c++) for (const [name, value] of [['position', from], ['aEnd', to], ['aCentre', centre], ['aTime', times]] as const) {
     const attribute = geometry.getAttribute(name); attribute.setXYZ(i * 4 + c, ...value); attribute.needsUpdate = true;
   }
+  const rising = geometry.getAttribute('aRise');
+  for (let c = 0; c < 4; c++) rising.setXY(i * 4 + c, ...rise);
+  rising.needsUpdate = true;
 }
+/** A bone's rise in the drawing's own time: when it starts, and how long it takes. */
+const riseOf = (script: FormationScript): [number, number] => [script.begins + script.rise[0], script.rise[1]];
 function scatter(a: number, b: number) {
   let h = (a * 374761393 + b * 668265263) >>> 0; h = Math.imul(h ^ (h >>> 13), 1274126177) >>> 0;
   return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
@@ -139,12 +167,13 @@ export function formationDrawing(model: SpineModel, root: Group, changed: () => 
   const time = { value: 0 }, ratio = { value: 1 }, view = { value: new Vector2(1, 1) };
   const walls = { uWall: { value: Array.from({ length: 8 }, () => new Vector2()) }, uWalls: { value: new Vector2() } };
   const colour = (name: string, strength: number) => { const c = new Color(name).convertLinearToSRGB(); return { value: new Vector4(c.r, c.g, c.b, strength) }; };
-  const common = { uT: time, uRatio: ratio, ...walls, uLift: { value: FORMATION.lift }, uGoFor: { value: 1 } };
+  const sheet = { uPress: { value: new Vector4(1, 0, 0, 0) }, uPressed: { value: 0 } };
+  const common = { uT: time, uRatio: ratio, ...walls, ...sheet, uLift: { value: FORMATION.lift }, uGoFor: { value: 1 } };
   const lineMaterial = (thread: boolean) => new ShaderMaterial({ vertexShader: LINE_VERTEX, fragmentShader: LINE_FRAGMENT, transparent: true, depthWrite: false, depthTest: false, side: DoubleSide,
     uniforms: { ...common, uView: view, uWidth: { value: FORMATION.line }, uFar: { value: thread ? 1 : FORMATION.far }, uEase: { value: thread ? 1 : 0 }, uInk: colour(CAGE.onPage, thread ? FORMATION.threadStrength : CAGE.strength), uLight: colour(CAGE.onFilm, thread ? FORMATION.lightThread : FORMATION.lightLine) } });
   const dotGeometry = new BufferGeometry();
   const dotCount = model.bones.reduce((sum, bone) => sum + bone.formation.points.length, 0);
-  for (const [name, size] of [['position', 3], ['aCentre', 3], ['aTime', 4]] as const) dotGeometry.setAttribute(name, new BufferAttribute(new Float32Array(dotCount * size), size));
+  for (const [name, size] of [['position', 3], ['aCentre', 3], ['aTime', 4], ['aRise', 2]] as const) dotGeometry.setAttribute(name, new BufferAttribute(new Float32Array(dotCount * size), size));
   const dots = new Points(dotGeometry, new ShaderMaterial({ vertexShader: POINT_VERTEX, fragmentShader: POINT_FRAGMENT, transparent: true, depthWrite: false, depthTest: false,
     uniforms: { ...common, uPointFor: { value: 1 }, uSettleFor: { value: 1 }, uJoinFor: { value: 1 }, uDot: { value: FORMATION.dot }, uFirst: { value: FORMATION.first }, uNode: { value: FORMATION.node }, uFrom: { value: FORMATION.from }, uFar: { value: FORMATION.far }, uInk: colour(FORMATION.ink, FORMATION.dotStrength), uLight: colour(CAGE.onFilm, FORMATION.lightDot) } }));
   const lines = new Mesh(strip(model.bones.reduce((sum, bone) => sum + bone.formation.edges.length, 0)), lineMaterial(false));
@@ -166,11 +195,15 @@ export function formationDrawing(model: SpineModel, root: Group, changed: () => 
   let planes: readonly FilmPlane[] = [];
   const writeThreads = () => {
     let i = 0;
+    const pressing = sheet.uPressed.value > 0;
     for (const { bone } of ranges) {
       const script = scripts.get(bone.level); if (script === undefined) continue;
+      const rise = riseOf(script);
+      // On a pressed sheet a thread is whole from the moment its bone starts to rise: its length is the rise.
+      const times: Vec3 = pressing ? [rise[0], 1, rise[0] + rise[1]] : [script.begins, script.reach, script.begins + script.hold];
       for (const pole of bone.formation.poles) {
         const point = bone.placing.toPatient(pole);
-        for (const plane of planes) writeLine(threads.geometry, i++, threadFoot(point, plane), point, bone.placing.centre, [script.begins, script.reach, script.begins + script.hold]);
+        for (const plane of planes) writeLine(threads.geometry, i++, threadFoot(point, plane), point, bone.placing.centre, times, rise);
       }
       const fade = threads.material.uniforms.uGoFor; if (fade !== undefined) fade.value = script.threadFade;
     }
@@ -189,16 +222,22 @@ export function formationDrawing(model: SpineModel, root: Group, changed: () => 
         const loose = (scatter(dot + i, line) * 2 - 1) * script.loose * Math.min(1, rank / .2);
         const appears = first ? script.first : script.spread[0] + (script.spread[1] - script.spread[0]) * rank + loose;
         dotGeometry.getAttribute('aTime').setXYZW(dot + i, script.begins + appears, script.begins + script.lines[0] + rank * script.lines[1], goes, first ? 1 : 0);
+        dotGeometry.getAttribute('aRise').setXY(dot + i, ...riseOf(script));
       });
-      dotGeometry.getAttribute('aTime').needsUpdate = true; changed();
+      dotGeometry.getAttribute('aTime').needsUpdate = true; dotGeometry.getAttribute('aRise').needsUpdate = true; changed();
       bone.formation.edges.forEach(([a, b], i) => {
         const near = bone.formation.rank[a] ?? 0, far = bone.formation.rank[b] ?? 1;
         const duration = Math.max(.05, far - near);
         const start = Math.min(1 - duration, near);
-        writeLine(lines.geometry, line + i, bone.placing.toPatient(bone.formation.points[a] ?? [0, 0, 0]), bone.placing.toPatient(bone.formation.points[b] ?? [0, 0, 0]), bone.placing.centre, [script.begins + script.lines[0] + start * script.lines[1], duration * script.lines[1], goes]);
+        writeLine(lines.geometry, line + i, bone.placing.toPatient(bone.formation.points[a] ?? [0, 0, 0]), bone.placing.toPatient(bone.formation.points[b] ?? [0, 0, 0]), bone.placing.centre, [script.begins + script.lines[0] + start * script.lines[1], duration * script.lines[1], goes], riseOf(script));
       });
     },
     threads(next) { planes = next; writeThreads(); changed(); },
+    press(plane) {
+      sheet.uPressed.value = plane === null ? 0 : 1;
+      if (plane !== null) sheet.uPress.value.set(...plane.towardReader, plane.out);
+      writeThreads(); changed();
+    },
     time(ms, visible) { time.value = ms; group.visible = visible; changed(); },
     prepare(camera, size, deviceRatio, wallCorners) {
       ratio.value = deviceRatio; view.value.set(size.width * deviceRatio, size.height * deviceRatio);

@@ -1285,6 +1285,7 @@ Before that clock starts, the move is held at zero through its first painted fra
 | Its own 230 to 520 | Remaining points spread along the bone from the nearer first point, with fixed timing variation up to 26 either way |
 | Its own 300 to 520 | Threads fade away |
 | Its own 520 to 840 | Lines draw outward from point to point. Points become the joints of the lines over 180 |
+| Its own 600 to 1120 | Front alone: the bone, formed flat on its outline, rises square out of the film to where the fit stands it. See below |
 | 2520 + 24 × i | Each bone begins its faces in the same order, taking 440. Faces grow out from the first points and close inward from the lines |
 | A bone's fill start + 100 to + 360 | Its points and lines fade as the faces arrive |
 | 2900 to 4000 | The page glow widens |
@@ -1297,7 +1298,7 @@ Before that clock starts, the move is held at zero through its first painted fra
 
 The order, with i starting at zero: T9, T3, L2, T6, T12, T1, L4, T8, T4, L1, T10, L5, T2, T7, L3, T5, T11. A missing fitted bone is not invented. Points and lines change from white over a film to ink over the page, pixel by pixel.
 
-Front alone uses the same clock, without a Side wall. The wall stands 30 mm behind the fitted bounds. The view turns 36°, with its pivot 0.42 of the way from the wall towards the spine; elevation, scale, depth and drift stay the same. Threads end at the bone's first points without a second film to cross them.
+Front alone uses the same clock, without a Side wall. The wall stands 30 mm behind the fitted bounds. The view turns 36°, with its pivot 0.42 of the way from the wall towards the spine; elevation, scale, depth and drift stay the same. With no second film to fix its depth, each bone forms where it was found: its points and lines start pressed flat onto the wall, over its outline, so the turned view shows them on the film's own vertebra. From its own 600 the bone rises square out of the film over 520, eased in and out, to where the fit stands it, and has arrived before its faces begin. Its threads run from the outline to the two first points as it rises, so they are whole from the start of the rise and grow only with it; they fade over 220 once it has arrived.
 
 An earlier mesh-first timeline remains selectable through `MOVE_TIMELINE` in `app/src/bench/three/move/move.ts`.
 
@@ -2170,6 +2171,7 @@ grep -nE '#[0-9a-fA-F]{3,8}\b|rgba?\(|[0-9.]+(px|ms|em|rem|vw|vh)\b' app/src/loo
 
 ## 12. Decisions log
 
+- **14 November 2026 — On Front alone, a bone forms on its outline and then rises.** Formed where the fit stands it, in front of a wall 30 mm behind the spine and seen from 36° round, every bone came out well to one side of the vertebra it was found from, on a real film often by more than a vertebra's width. Formed flat on the film and then lifted square out of it, each bone is seen on its own vertebra first, and its threads show where it went. With Side as well a bone cannot lie on both films, so it still forms where their threads cross.
 - **14 November 2026 — Real sample films replace the made-up case.** Where the computer holds real films, the sample control goes round only those, and development opens on the real engine, which alone can read them; `?engine=stand-in`, a scene or the gallery keep the stand-in. Ordinary builds hold no real films, so they still offer the made-up case.
 - **14 November 2026 — The room's one light turns warm, and is called Melon.** The look was to be slightly more the product's own, without leaving Clear. The cool blue glow becomes cantaloupe drifting into watermelon: the same two blurred ovals, sizes, blur and cross-fade, with only their fill changed. The page's cool greys looked blue beside a warm light, so the same steps are warmed. Melon is light, not paint: a glow, a dial's marker or the mark's offset bar, never a signal. Principle 6 now names it, and the old "a third colour" rule becomes a fourth. Blue and amber keep every meaning.
 - **14 November 2026 — The dial replaces the sliding pill.** A grey track with a white thumb said nothing about this product. The step and view controls become words on a hairline, with a 16 by 3 melon marker that slides to the chosen word, like the needle of a radio dial or the cursor of a slide rule: the product measures things, so its controls now look like an instrument's. Only the paint changed; each control keeps its size, so the bar's columns, the dock's rows and Place's variants stand as they were. `--thumb` and `--shadow-thumb` went with the thumb.

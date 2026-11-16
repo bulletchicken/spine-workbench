@@ -23,7 +23,7 @@ it('has one seekable loop, settles fully on a press and consumes the resulting t
   const view = { azimuth: 34, elevation: 14, perspective: 1, pxPerMm: [1, 1] as const, aim: [0, 0, 0] as const, aimAt: [300, 300] as const };
   const stage = { view: () => view, namedView: () => view, bounds: () => ({ low: [0, 0, 0], high: [100, 500, 100] }), setView: vi.fn(), film: () => null, drawNow: vi.fn() } as unknown as Stage;
   const set = vi.fn(), setSpine = vi.fn();
-  const spine = { formation: { script: vi.fn(), threads: vi.fn(), time: vi.fn() }, set, setSpine, levels: ['T1', 'L5'], about: () => ({ pose: { centre: [0, 0, 0] } }) } as unknown as DrawnSpine;
+  const spine = { formation: { script: vi.fn(), threads: vi.fn(), press: vi.fn(), time: vi.fn() }, set, setSpine, levels: ['T1', 'L5'], about: () => ({ pose: { centre: [0, 0, 0] } }) } as unknown as DrawnSpine;
   const finish = vi.fn(), done = vi.fn();
   const move = createMove({ stage, spine, canvas, host, stageElement, films: { moment: 'three', compared: null, separation: 0, shown: () => null, opening: () => null, set: vi.fn(), finish }, done });
   move.play(); move.play(); expect(steps.size).toBe(1);
@@ -42,7 +42,7 @@ it('uses a plain fade for reduced motion and lets Enter settle without starting 
   const view = { azimuth: 34, elevation: 14, perspective: 1, pxPerMm: [1, 1] as const, aim: [0, 0, 0] as const, aimAt: [300, 300] as const };
   const time = vi.fn(), done = vi.fn();
   const stage = { view: () => view, bounds: () => ({ low: [0, 0, 0], high: [100, 500, 100] }), namedView: () => view, setView: vi.fn(), film: () => null, drawNow: vi.fn() } as unknown as Stage;
-  const spine = { formation: { script: vi.fn(), threads: vi.fn(), time }, set: vi.fn(), setSpine: vi.fn(), levels: ['T1', 'L5'], about: () => ({ pose: { centre: [0, 0, 0] } }) } as unknown as DrawnSpine;
+  const spine = { formation: { script: vi.fn(), threads: vi.fn(), press: vi.fn(), time }, set: vi.fn(), setSpine: vi.fn(), levels: ['T1', 'L5'], about: () => ({ pose: { centre: [0, 0, 0] } }) } as unknown as DrawnSpine;
   const move = createMove({ stage, spine, canvas, host, stageElement, films: { moment: 'three', compared: null, separation: 0, shown: () => null, opening: () => null, set: vi.fn(), finish: vi.fn() }, done });
   move.play(); expect(host.style.opacity).toBe('0'); expect(time).not.toHaveBeenCalled();
   for (const step of steps) step(160); expect(host.style.opacity).toBe('0'); expect(time).not.toHaveBeenCalled();
@@ -64,7 +64,8 @@ it('keeps the Front tile until the opening wall has had a frame to present', () 
   const placement = { size: { width: 100, height: 200 }, view: { quarterTurns: 0 as const, mirrored: false }, zoom: 2.8, pan: [0, 0] as const };
   const source: MoveFilm = { film: { size: placement.size, pixels: new Uint16Array(20000), thumbnail: new Uint8Array(), outlines: [], names: true, on: null, only: null, frame: { kind: 'whole' }, light: null }, opening: { x: 500, y: 100, width: 280, height: 560, placement }, rail: { x: 50, y: 300, width: 66, height: 132, placement: { ...placement, zoom: .66 } } };
   let corners: readonly Vec3[] = [], view = from, picture: unknown = null, presented = 0;
-  const wall = { camera, plane: () => filmPlane(camera, -30), values: () => ({ strength: 0, out: null, corner: 8, hinge: 1 }), set: vi.fn(), show: (pixels: unknown) => { picture = pixels; }, place: (points: readonly Vec3[] | null) => { corners = points ?? []; }, marks: vi.fn() } as unknown as FilmWall;
+  const wallSet = vi.fn(), press = vi.fn();
+  const wall = { camera, plane: () => filmPlane(camera, -30), values: () => ({ strength: 0, out: null, corner: 8, hinge: 1 }), set: wallSet, show: (pixels: unknown) => { picture = pixels; }, place: (points: readonly Vec3[] | null) => { corners = points ?? []; }, marks: vi.fn() } as unknown as FilmWall;
   const size = { width: 1280, height: 800 };
   const drawNow = vi.fn(() => {
     expect(tile.style.opacity).not.toBe('0'); expect(tile.style.getPropertyValue('--bw')).toBe('280');
@@ -73,7 +74,7 @@ it('keeps the Front tile until the opening wall has had a frame to present', () 
     corners.forEach((corner, i) => { const pixel = toCanvas(view, size, toScene(corner)); expect(pixel.x).toBeCloseTo(500 + (i === 1 || i === 2 ? 280 : 0), 10); expect(pixel.y).toBeCloseTo(100 + (i >= 2 ? 560 : 0), 10); });
   });
   const stage = { view: () => from, viewAlong: () => from, namedView: () => rest, bounds: () => ({ low: [-50, 0, -20], high: [50, 400, 20] }), size: () => size, setView: (next: View) => { view = next; }, toCanvas: (point: Vec3) => toCanvas(view, size, point), film: (name: string) => name === 'front' ? wall : null, drawNow } as unknown as Stage;
-  const spine = { formation: { script: vi.fn(), threads: vi.fn(), time: vi.fn() }, levels: ['T1'], set: vi.fn(), setSpine: vi.fn(), pressOnto: vi.fn() } as unknown as DrawnSpine;
+  const spine = { formation: { script: vi.fn(), threads: vi.fn(), press, time: vi.fn() }, levels: ['T1'], set: vi.fn(), setSpine: vi.fn(), pressOnto: vi.fn() } as unknown as DrawnSpine;
   const set = vi.fn(() => { expect(presented).toBeGreaterThan(0); tile.style.setProperty('--bw', '66'); });
   const move = createMove({ stage, spine, canvas, host, stageElement, films: { moment: 'three', compared: null, separation: 0, shown: () => shown, opening: () => shown, moveFilm: (name) => name === 'front' ? source : null, set, finish: vi.fn() }, done: vi.fn() });
   expect(tile.style.opacity).not.toBe('0'); move.play();
@@ -86,5 +87,10 @@ it('keeps the Front tile until the opening wall has had a frame to present', () 
   presented++;
   frame(16);
   expect(drawNow).toHaveBeenCalledTimes(3); expect(set).toHaveBeenCalledOnce(); expect(tile.style.opacity).toBe('0');
+  // Front alone: the bones form pressed onto the standing wall, over their outlines.
+  const out = (wallSet.mock.calls.find(([values]) => typeof values === 'object' && values !== null && 'out' in values)?.[0] as { out: number } | undefined)?.out;
+  expect(out).toBeDefined();
+  expect(press).toHaveBeenCalledWith({ ...filmPlane(camera, out ?? 0) });
   move.dispose();
+  expect(press).toHaveBeenLastCalledWith(null);
 });

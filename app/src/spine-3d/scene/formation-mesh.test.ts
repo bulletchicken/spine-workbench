@@ -58,7 +58,7 @@ it('keeps one fixed point batch and two line batches, with identical packed seed
   const drawing = formationDrawing(model, root, () => undefined);
   const front = fittedFilmCamera(FRONT_ONLY_CASE.front.geometry, FRONT_ONLY_CASE.front.size, FRONT_ONLY_CASE.fit.frontFilm);
   if (front === null) throw new Error('no-front-camera');
-  for (const bone of model.bones) drawing.script(bone.level, { begins: 0, fills: 1000, first: 10, spread: [20, 100], loose: 0, lines: [100, 100], fade: [10, 100], reach: 10, hold: 20, threadFade: 100, pointFade: 10, pointSettle: 20, nodeSettle: 10 });
+  for (const bone of model.bones) drawing.script(bone.level, { begins: 0, fills: 1000, first: 10, spread: [20, 100], loose: 0, lines: [100, 100], fade: [10, 100], reach: 10, hold: 20, threadFade: 100, pointFade: 10, pointSettle: 20, nodeSettle: 10, rise: [100, 100] });
   drawing.threads([filmPlane(front, -120)]);
   const group = root.children[0]; if (group === undefined) throw new Error('no-drawing');
   const points = group.children.find((child) => child instanceof Points);
@@ -76,5 +76,35 @@ it('keeps one fixed point batch and two line batches, with identical packed seed
   const objects = [...group.children], geometries = objects.map((object) => (object as Mesh).geometry);
   for (const t of [0, 900, 300, 4020]) drawing.time(t, t < 4020);
   expect(group.visible).toBe(false); expect(group.children).toEqual(objects); expect(geometries.every((geometry, i) => (objects[i] as Mesh).geometry === geometry)).toBe(true); expect(group.children).toHaveLength(3);
+  drawing.dispose(); model.dispose();
+});
+
+it('rises every pressed bone from its outline on one clock, its threads whole from the start of the rise', () => {
+  const model = modelSpine(FRONT_ONLY_CASE.fit, bonesFromDisk()), root = new Group();
+  const drawing = formationDrawing(model, root, () => undefined);
+  const front = fittedFilmCamera(FRONT_ONLY_CASE.front.geometry, FRONT_ONLY_CASE.front.size, FRONT_ONLY_CASE.fit.frontFilm);
+  if (front === null) throw new Error('no-front-camera');
+  model.bones.forEach((bone, i) => { drawing.script(bone.level, { begins: 50 * i, fills: 2000, first: 10, spread: [20, 100], loose: 0, lines: [100, 100], fade: [10, 100], reach: 10, hold: 20, threadFade: 100, pointFade: 10, pointSettle: 20, nodeSettle: 10, rise: [120, 300] }); });
+  const plane = filmPlane(front, -120);
+  drawing.press(plane); drawing.threads([plane]);
+  const group = root.children[0]; if (group === undefined) throw new Error('no-drawing');
+  const [points, lines, threads] = group.children as [Points, Mesh, Mesh];
+  let dot = 0, line = 0, thread = 0;
+  model.bones.forEach((bone, i) => {
+    const rise = [50 * i + 120, 300];
+    expect([points.geometry.getAttribute('aRise').getX(dot), points.geometry.getAttribute('aRise').getY(dot)]).toEqual(rise);
+    expect([lines.geometry.getAttribute('aRise').getX(line * 4), lines.geometry.getAttribute('aRise').getY(line * 4)]).toEqual(rise);
+    for (let seed = 0; seed < 2; seed++, thread++) {
+      const time = threads.geometry.getAttribute('aTime'), foot = threads.geometry.getAttribute('position'), end = threads.geometry.getAttribute('aEnd');
+      expect([time.getX(thread * 4), time.getY(thread * 4), time.getZ(thread * 4)]).toEqual([rise[0], 1, (rise[0] ?? 0) + 300]);
+      // Pressed flat, the bone's first point is where its thread leaves the film.
+      const point = [end.getX(thread * 4), end.getY(thread * 4), end.getZ(thread * 4)] as const;
+      const away = point[0] * plane.towardReader[0] + point[1] * plane.towardReader[1] + point[2] * plane.towardReader[2] - plane.out;
+      point.forEach((value, axis) => { expect(value - away * (plane.towardReader[axis] ?? 0)).toBeCloseTo(foot.getComponent(thread * 4, axis), 3); });
+    }
+    dot += bone.formation.points.length; line += bone.formation.edges.length;
+  });
+  drawing.press(null);
+  expect(threads.geometry.getAttribute('aTime').getX(0)).toBe(0);
   drawing.dispose(); model.dispose();
 });

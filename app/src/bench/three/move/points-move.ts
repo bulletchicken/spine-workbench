@@ -41,6 +41,9 @@ export function pointsMove(stage: Stage, spine: DrawnSpine, films: FilmDriver, c
     entry.wall.set({ out: entry.out });
   }
   for (const level of spine.levels) spine.formation.script(level, scriptFor(level));
+  // Front alone: each bone forms flat on its outline, then rises square out of the film to the fit.
+  // With Side as well a bone cannot lie on both films; it forms where their threads cross.
+  spine.formation.press(front !== undefined && side === undefined ? filmPlane(front.wall.camera, front.out) : null);
   spine.formation.threads(walls.map(({ wall, out }) => filmPlane(wall.camera, out)));
   const frontCentre = front === undefined ? from.aim : toScene(front.corners.reduce<Vec3>((sum, point) => add(sum, scale(point, .25)), [0, 0, 0]));
   const pivot = front === undefined || side === undefined ? frontCentre : toScene(add(add(scale(front.wall.plane().towardReader, front.out), scale(side.wall.plane().towardReader, side.out)), [0, 0, frontCentre[1]]));
@@ -86,7 +89,7 @@ export function pointsMove(stage: Stage, spine: DrawnSpine, films: FilmDriver, c
       return { ...s, walls: walls.map(({ name }) => name) };
     },
     clear() {
-      spine.formation.time(0, false); spine.set({ edgeFill: -1 });
+      spine.formation.time(0, false); spine.formation.press(null); spine.set({ edgeFill: -1 });
       for (const { wall, saved } of walls) { wall.set(saved); wall.place(null); wall.marks([]); wall.show(null); }
     },
   };

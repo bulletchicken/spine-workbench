@@ -14,6 +14,10 @@ it('finds and fills every bone in the fixed scattered order and leaves only the 
     expect(sample(scriptFor(level).begins / LENGTH).bone(level).threads).toBe(0);
     expect(sample((scriptFor(level).begins + 840) / LENGTH).bone(level).lines).toBe(1);
     expect(sample(1).bone(level)).toMatchObject({ fill: 1, revealed: 1, lines: 1, drawing: 0, threads: 0, lift: 0 });
+    // On Front alone a bone forms on its outline and has risen to the fit before its faces arrive.
+    const { first, spread, rise, begins, fills } = scriptFor(level);
+    expect(rise[0]).toBeGreaterThanOrEqual(spread[1]); expect(rise[0]).toBeGreaterThan(first);
+    expect(begins + rise[0] + rise[1]).toBeLessThanOrEqual(fills);
   });
   expect(sample(1)).toMatchObject({ ownParts: false, hand: 1, shadow: 1, settle: 1, trips: { front: 1, side: 1, 'bend-left': 1, 'bend-right': 1 } });
   expect(sample(3440 / LENGTH).shadow).toBe(0);
