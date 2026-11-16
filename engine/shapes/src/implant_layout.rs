@@ -628,7 +628,10 @@ pub struct AnchorProposal {
     pub side: BodySide,
     pub kind: AnchorKind,
     /// The entry point implied by the table chord on the generic bone
-    /// shaped to the fit, patient frame, mm.
+    /// shaped to the fit, patient frame, mm. A screw with a printed chord
+    /// spread then slides along its own direction, by at most one printed
+    /// SD, so the rod seats line up; its entry plus `chordMm` along
+    /// `directionUnit` is then not the body's front exit.
     pub entry_mm: [f64; 3],
     pub entry_status: ValueStatus,
     /// The screw's direction in the patient frame, a unit vector pointing
@@ -655,8 +658,9 @@ pub struct AnchorProposal {
     pub diameters_beside: Vec<DiameterRule>,
     /// Screw diameter over outer pedicle width, over the versions.
     pub screw_to_pedicle: Option<Band>,
-    /// The pedicle's chord from its table, mm; `null` when no table covers
-    /// this level and age.
+    /// The pedicle's chord from its table (the printed mean), mm; `null`
+    /// when no table covers this level and age. The entry may sit up to one
+    /// printed SD off it.
     pub chord_mm: Option<f64>,
     /// The share of the chord the length aims for.
     pub chord_share: Option<f64>,
@@ -793,7 +797,8 @@ pub struct RodProposal {
     pub curve_side: CurveSide,
     pub material: RodMaterial,
     pub diameter_mm: f64,
-    /// The T5 to T12 kyphosis the contour aims for.
+    /// The T5 to T12 kyphosis the contour aims for; 0 with typical status
+    /// when the fit lacks T5 or T12, so there is no such reading.
     pub target_kyphosis_deg: f64,
     pub target_kyphosis_status: ValueStatus,
     /// The line the rod is straightened to in the frontal plane.
@@ -801,7 +806,8 @@ pub struct RodProposal {
     /// Extra kyphosis bent into the rod beyond the target, over its
     /// thoracic span; 0 for a rod contoured to the target.
     pub overbend_deg: f64,
-    /// How far each screw head stands from the bone along its screw.
+    /// How far each rod seat, at a screw head or a hook, stands back from
+    /// its entry along the anchor's direction.
     pub head_offset_mm: f64,
     /// Along the contour from the top head to the bottom head, with no
     /// overhang.

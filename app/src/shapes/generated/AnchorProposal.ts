@@ -19,7 +19,10 @@ import type { ValueStatus } from "./ValueStatus";
 export type AnchorProposal = { level: Level, side: BodySide, kind: AnchorKind, 
 /**
  * The entry point implied by the table chord on the generic bone
- * shaped to the fit, patient frame, mm.
+ * shaped to the fit, patient frame, mm. A screw with a printed chord
+ * spread then slides along its own direction, by at most one printed
+ * SD, so the rod seats line up; its entry plus `chordMm` along
+ * `directionUnit` is then not the body's front exit.
  */
 entryMm: [number, number, number], entryStatus: ValueStatus, 
 /**
@@ -60,8 +63,9 @@ diametersBeside: Array<DiameterRule>,
  */
 screwToPedicle: Band | null, 
 /**
- * The pedicle's chord from its table, mm; `null` when no table covers
- * this level and age.
+ * The pedicle's chord from its table (the printed mean), mm; `null`
+ * when no table covers this level and age. The entry may sit up to one
+ * printed SD off it.
  */
 chordMm: number | null, 
 /**

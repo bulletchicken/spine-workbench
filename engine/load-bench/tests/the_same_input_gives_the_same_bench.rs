@@ -879,13 +879,8 @@ fn moved_head(
             .pose,
     );
     let moved = Pose::from_vertebra(poses.iter().find(|p| p.level == anchor.level).unwrap());
-    let head = Vector3::from(anchor.entry_mm)
-        - Vector3::from(anchor.direction_unit)
-            * if anchor.kind == AnchorKind::Hook {
-                0.0
-            } else {
-                rod.head_offset_mm
-            };
+    let head =
+        Vector3::from(anchor.entry_mm) - Vector3::from(anchor.direction_unit) * rod.head_offset_mm;
     let local = original.rotation.transpose() * (head - original.centre_mm);
     moved.centre_mm + moved.rotation * local
 }

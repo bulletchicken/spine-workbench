@@ -163,9 +163,15 @@ pub fn assemble(
             levels: Vec::new(),
         });
     }
-    let naming_scenarios = match layouts.first() {
-        Some(first) => naming::scenarios(input, readings, first)?,
-        None => Vec::new(),
+    // A renaming that runs off the end of a count costs only the renaming
+    // details; the placements were built without it.
+    let naming_scenarios = match layouts
+        .first()
+        .map(|f| naming::scenarios(input, readings, f))
+    {
+        Some(Ok(scenarios)) => scenarios,
+        Some(Err(LayoutError::Refused(_))) | None => Vec::new(),
+        Some(Err(error)) => return Err(error),
     };
     Ok(LayoutProposals {
         first_is_sketch: fallback && !layouts.is_empty(),
@@ -237,6 +243,11 @@ fn layout(
     })
 }
 
+/// The span's candidates, cut from the whole fitted column around it: the
+/// unbroken run of fitted levels from T1 to L5 that holds the span, ended
+/// early at any level outside the span whose candidates cannot be built.
+/// The column's entries are lined up once, before any span is cut, so
+/// moving an end never moves the entry of a level both spans share.
 fn candidate_anchors(
     input: &LayoutInput,
     versions: &[Version],
@@ -244,15 +255,34 @@ fn candidate_anchors(
     candidates: &mut BTreeMap<Level, Vec<AnchorProposal>>,
     levels: &[Level],
 ) -> Result<Vec<AnchorProposal>, LayoutError> {
-    let mut anchors = Vec::new();
-    for &level in levels {
-        if let std::collections::btree_map::Entry::Vacant(entry) = candidates.entry(level) {
-            let pair = screws::anchors(input, versions, measured, &[level])?;
-            entry.insert(pair);
+    if levels.iter().any(|level| !candidates.contains_key(level)) {
+        let fitted = |level: &Level| {
+            (Level::T1..=Level::L5).contains(level)
+                && input.fit.vertebrae.iter().any(|v| v.level == *level)
+        };
+        let names = alternatives::names(input);
+        let run = names
+            .split(|level| !fitted(level))
+            .find(|run| run.contains(&levels[0]))
+            .unwrap_or(levels);
+        let mut column = Vec::new();
+        for &level in run {
+            match screws::anchors(input, versions, measured, &[level]) {
+                Ok(pair) => column.extend(pair),
+                Err(error) if levels.contains(&level) => return Err(error),
+                Err(_) if level > levels[0] => break,
+                Err(_) => column.clear(),
+            }
         }
-        anchors.extend(candidates[&level].iter().cloned());
+        anchors::line_up(&mut column)?;
+        for pair in column.chunks(2) {
+            candidates.insert(pair[0].level, pair.to_vec());
+        }
     }
-    Ok(anchors)
+    Ok(levels
+        .iter()
+        .flat_map(|level| candidates[level].iter().cloned())
+        .collect())
 }
 
 fn apply_pattern(
@@ -343,7 +373,8 @@ fn registered_input(input: &LayoutInput) -> LayoutInput {
 // be laid out holds in fewer than one version in ten, try this project's
 // sketch from the nominal major curve plus one lower body where present.
 // It replaces the thin pair only if it can be laid out. No unreadable rule
-// receives a vote.
+// receives a vote. Its ends are held within T1 to L5, the span every pair
+// is laid out on: a curve ending at L6 is sketched down to L5.
 fn fallback_pairs(
     input: &LayoutInput,
     readings: &LevelReadings,
@@ -355,8 +386,12 @@ fn fallback_pairs(
     else {
         return Vec::new();
     };
-    let upper = readings.nominal.vertebrae[curve.upper_index].level;
-    let lower = readings.nominal.vertebrae[curve.lower_index].level;
+    let upper = readings.nominal.vertebrae[curve.upper_index]
+        .level
+        .max(Level::T1);
+    let lower = readings.nominal.vertebrae[curve.lower_index]
+        .level
+        .min(Level::L5);
     let names = input
         .front
         .as_ref()

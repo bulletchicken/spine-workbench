@@ -329,15 +329,33 @@ is reserved for genuinely uncovered size populations.
 
 The straight-forward direction lies in the superior endplate's plane,
 turned medially by the table angle. The table chord and fitted generic
-body exit imply an entry point; no anatomical entry landmark is
-located. Upendra is the default angle source; Zheng and Fennell/Peng
-techniques are shown beside it because their axis definitions and
-cohorts differ. Lehman et al. 2003's cadaver comparison supplies the
-straight-forward basis. Directions include sampled angle spreads where
-the tables print them.
+body exit imply an entry point; no anatomical entry landmark is located.
+Each level's entry therefore carries its own chord cell and fitted body
+depth: Upendra's T10 convex mean is 10 mm under T9's, so on its own it
+put one seat well in front of its neighbours and the rod through every
+seat kinked there. Within one reported SD of its chord each screw's
+entry then slides along its own path to where the seats behind the
+entries line up most closely (the least summed squared change of
+seat-to-seat direction per mm) [own inference]. A chord one SD under its
+mean still holds the length the 90% rule chose; a screw held at the 25 mm
+catalogue floor failed that rule, so it slides back only, never towards
+the front of the body. Directions, sizes and kinds keep their values;
+hooks and screws without a printed chord spread stay put. The slides are
+found once over the whole unbroken run of fitted levels from T1 to L5,
+before any span is cut from it, so every span, pattern and hand rebuild
+shares the same entry at each level: moving an end moves no other
+screw. Upendra is
+the default angle source; Zheng and Fennell/Peng techniques are shown
+beside it because their axis definitions and cohorts differ. Lehman et
+al. 2003's cadaver comparison supplies the straight-forward basis.
+Directions include sampled angle spreads where the tables print them.
 
 The diameter rule chooses the largest grid size with no more than 10%
-of versions below `diameter / 1.25`; 10% is a project threshold. Sato's
+of versions below `diameter / 1.25`; 10% is a project threshold. When
+even the smallest grid size fails, this project's own catalogue floor
+keeps that smallest size (4.0 mm) with `may-be-too-narrow`, as lengths
+keep 25 mm, so a narrow pedicle shows a flagged screw rather than an
+empty place [own inference]. Sato's
 1.25 outer-width rule is shown beside Misenhimer's 0.80 and Upendra's
 1.15. The diameter grid is inferred from reported sizes/ranges and the
 smallest published grid step, carrying each covering source (Ramanathan
@@ -357,9 +375,11 @@ when none qualifies, the anchor retains the shortest catalogue length
 length null. Usual regional lengths from Balikci
 and Kuraishi are displayed for comparison and never clamp the result.
 
-The first pattern occupies all qualifying pedicles. Missing qualifying
-diameter, length or trajectory becomes a hook at the upper end and an
-empty pedicle elsewhere [own inference]. `key-levels` prioritises ends,
+The first pattern occupies all qualifying pedicles. With the catalogue
+floors a size is missing only where a width or chord table is (an
+uncovered age); a missing diameter, length or trajectory becomes a hook
+at the upper end and an empty pedicle elsewhere [own inference]. A hook
+stays reachable through `hooks-at-top` and by hand. `key-levels` prioritises ends,
 apex and neighbours, then alternates sides subject to the 1.4-per-level
 cap from Larson et al. 2024's MIMO trial (211 patients). Priority on a
 short span is a project rule. Bilateral key pairs are never split to
@@ -388,19 +408,32 @@ The target is built by joint rotations alone [own inference]. The
 lowest instrumented vertebra keeps its standing pose. Upward from it,
 each relative coronal component becomes zero, axial components stay
 standing, and the facing endplate midpoint stays fixed in both bodies.
-Only instrumented T5/T6 through T11/T12 sagittal components share a
-scale to reach the measured T5–T12 kyphosis clamped to 10–40 degrees.
+Only instrumented T5/T6 through T11/T12 sagittal components change, each
+by one shared added angle, to reach the measured T5–T12 kyphosis clamped
+to 10–40 degrees. A shared factor on the standing angles could not bend a
+flat back (it was refused) and, on a hypokyphotic back whose joints sit
+near zero with mixed signs, turned them into alternating bends of tens
+of degrees: the 90 degree made-up spine's target folded back on itself.
 T12/L1 and lumbar sagittal components remain standing. Without measured
-side geometry the sagittal profile stays typical and unscaled. No
+side geometry the sagittal profile stays typical and unscaled. A fit
+without T5 or T12 (a film cut off at the top, or eleven thoracic
+vertebrae) is laid out the same way: its profile stays unscaled with
+`targetKyphosisStatus: "typical"`, and `targetKyphosisDeg` is 0, a
+placeholder meaning no T5–T12 reading, not a flat spine. No
 vertebral centre is moved onto a line. `coronalLine` is reference
 metadata retained by the frozen contract; it does not move the target.
 
 Rod contours interpolate the occupied heads on this target with a
-clamped cubic or exact straight/circular construction, keeping every
+natural cubic (no curvature at either end head, as at a rod's free end)
+or exact straight/circular construction, keeping every
 zero-overbend head knot and samples at no more than 2 mm arc intervals
 [own inference]. The 15 mm head offset is borrowed from Borrelli et al.
 2025's lumbar cantilever model, not a measured adolescent head height.
-Hooks hold at their entry. Both first rods have `overbendDeg: 0`.
+A hook's seat stands off along its own direction by the same offset: its
+body carries the rod behind the lamina about as far off the bone as a
+screw head does [own inference, no number of its own], so one rod runs
+through both kinds without a step. The bench seats the rod at the same
+points. Both first rods have `overbendDeg: 0`.
 Surgeons commonly bend a concave rod further to offset flattening
 (Cidambi 2012, Salmingo 2014 and Sia 2019); this first placement cannot
 show permanent yielding. The explicit overbend API is retained for a

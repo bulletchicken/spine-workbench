@@ -559,12 +559,7 @@ fn standing_lines_keep_the_occupied_heads_in_the_target_lines_order() {
             .filter(|a| a.side == rod.side && a.kind != AnchorKind::None)
         {
             let standing = Vector3::from(anchor.entry_mm)
-                - Vector3::from(anchor.direction_unit)
-                    * if anchor.kind == AnchorKind::Screw {
-                        rod.head_offset_mm
-                    } else {
-                        0.0
-                    };
+                - Vector3::from(anchor.direction_unit) * rod.head_offset_mm;
             let index = rod
                 .standing_points_mm
                 .iter()
@@ -732,7 +727,7 @@ fn three_made_up_shapes_turn_joints_without_translating_their_material_points() 
                 (actual - goal).abs() < 1e-7,
                 "the projected T5/T12 target is met: {actual}, expected {goal}"
             );
-            let mut scale: Option<f64> = None;
+            let mut shared: Option<f64> = None;
             for i in 0..instrumented.len() - 1 {
                 let upper = &instrumented[i];
                 let lower = &instrumented[i + 1];
@@ -764,17 +759,20 @@ fn three_made_up_shapes_turn_joints_without_translating_their_material_points() 
                 );
                 let eligible =
                     (Level::T5..=Level::T11).contains(&upper.level) && lower.level <= Level::T12;
-                if eligible && standing[1].abs() > 1e-9 {
-                    let ratio = changed[1] / standing[1];
-                    if let Some(previous) = scale {
-                        assert!((ratio - previous).abs() < 1e-8, "one common sagittal scale");
+                if eligible {
+                    let added = changed[1] - standing[1];
+                    if let Some(previous) = shared {
+                        assert!(
+                            (added - previous).abs() < 1e-8,
+                            "one common added sagittal angle"
+                        );
                     } else {
-                        scale = Some(ratio);
+                        shared = Some(added);
                     }
-                } else if !eligible {
+                } else {
                     assert!(
                         (changed[1] - standing[1]).abs() < 1e-9,
-                        "T12/L1 and every other unscaled joint keep sagittal angle"
+                        "T12/L1 and every joint outside T5/T6..T11/T12 keep their sagittal angle"
                     );
                 }
             }

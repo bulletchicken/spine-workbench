@@ -390,13 +390,8 @@ fn check_layout(input: &LayoutInput, layout: &ImplantLayout) {
                 .unwrap()
                 .pose;
             let changed = target.poses.iter().find(|v| v.level == a.level).unwrap();
-            let head = Vector3::from(a.entry_mm)
-                - Vector3::from(a.direction_unit)
-                    * if a.kind == AnchorKind::Screw {
-                        rod.head_offset_mm
-                    } else {
-                        0.0
-                    };
+            let head =
+                Vector3::from(a.entry_mm) - Vector3::from(a.direction_unit) * rod.head_offset_mm;
             let local = matrix_from_rotation_vector(&standing.rotation.into()).transpose()
                 * (head - Vector3::from(standing.centre));
             let moved = Vector3::from(changed.centre)
@@ -413,6 +408,114 @@ fn check_layout(input: &LayoutInput, layout: &ImplantLayout) {
     }
     assert!(layout.released_levels.iter().all(|l| levels.contains(l)));
 }
+
+/// This project's own numerical tolerance for a rod that can be bent and
+/// drawn: the largest turn, in degrees, between consecutive samples (at
+/// most 2 mm apart) of the contoured or the standing line. The made-up
+/// recipes below, the 90 degree one included, now stay under 4.4 degrees;
+/// before entries lined up and the target bent its joints by one shared
+/// angle they reached 6.9, and 87 on the 90 degree recipe.
+const MAX_TURN_PER_SAMPLE_DEG: f64 = 7.0;
+
+fn largest_turn_deg(points: &[[f64; 3]]) -> f64 {
+    points
+        .windows(3)
+        .map(|p| {
+            let u = Vector3::from(p[1]) - Vector3::from(p[0]);
+            let v = Vector3::from(p[2]) - Vector3::from(p[1]);
+            libm::atan2(u.cross(&v).norm(), u.dot(&v)).to_degrees()
+        })
+        .fold(0.0, f64::max)
+}
+
+fn rods_turn_smoothly(layout: &ImplantLayout) {
+    for rod in &layout.rods {
+        for (line, points) in [
+            ("contoured", &rod.points_mm),
+            ("standing", &rod.standing_points_mm),
+        ] {
+            let turn = largest_turn_deg(points);
+            assert!(
+                turn <= MAX_TURN_PER_SAMPLE_DEG,
+                "{} {:?} {line} rod turns {turn} degrees in one sample",
+                layout.id,
+                rod.side
+            );
+        }
+    }
+}
+
+/// This test's own bound: a screw more than 60 degrees off its vertebra's
+/// forward axis would be drawn lying across the bone.
+const MAX_SCREW_OFF_FORWARD_DEG: f64 = 60.0;
+
+/// In each vertebra's own frame the left seat stays left of the right one,
+/// and every screw, an added end level's included, enters its bone from
+/// behind rather than lying across it.
+fn seats_keep_their_sides_and_screws_enter_their_bone(input: &LayoutInput, layout: &ImplantLayout) {
+    for level in layout.anchors.iter().map(|a| a.level) {
+        let pose = input
+            .fit
+            .vertebrae
+            .iter()
+            .find(|v| v.level == level)
+            .unwrap()
+            .pose;
+        let turn = matrix_from_rotation_vector(&pose.rotation.into());
+        let forward = turn * Vector3::x();
+        let left = turn * Vector3::y();
+        let seat = |side| {
+            let a = layout
+                .anchors
+                .iter()
+                .find(|a| a.level == level && a.side == side)?;
+            let rod = layout.rods.iter().find(|r| r.side == side)?;
+            (a.kind != AnchorKind::None).then(|| {
+                Vector3::from(a.entry_mm) - Vector3::from(a.direction_unit) * rod.head_offset_mm
+            })
+        };
+        if let (Some(l), Some(r)) = (seat(BodySide::Left), seat(BodySide::Right)) {
+            assert!(
+                (l - r).dot(&left) > 0.0,
+                "{} {level:?} seats swap sides",
+                layout.id
+            );
+        }
+        for a in layout
+            .anchors
+            .iter()
+            .filter(|a| a.level == level && a.kind == AnchorKind::Screw)
+        {
+            let off = libm::acos(
+                Vector3::from(a.direction_unit)
+                    .dot(&forward)
+                    .clamp(-1.0, 1.0),
+            );
+            assert!(
+                off.to_degrees() <= MAX_SCREW_OFF_FORWARD_DEG,
+                "{} {level:?} {:?} screw lies {} degrees off its forward axis",
+                layout.id,
+                a.side,
+                off.to_degrees()
+            );
+        }
+    }
+}
+
+fn hook_beside_screw(layout: &ImplantLayout) -> bool {
+    [BodySide::Left, BodySide::Right].into_iter().any(|side| {
+        let kinds: Vec<_> = layout
+            .anchors
+            .iter()
+            .filter(|a| a.side == side && a.kind != AnchorKind::None)
+            .map(|a| a.kind)
+            .collect();
+        kinds
+            .windows(2)
+            .any(|p| p.contains(&AnchorKind::Hook) && p.contains(&AnchorKind::Screw))
+    })
+}
+
 fn check_proposal(input: &LayoutInput, p: &LayoutProposals) {
     assert_eq!(p.versions, input.versions);
     assert_eq!(
@@ -566,6 +669,10 @@ macro_rules! recipe_case {
             let (input, _) = fixture(RecipeName::$recipe);
             let p = propose_layouts(&input).expect("the named recipe returns proposals");
             check_proposal(&input, &p);
+            p.layouts.iter().for_each(rods_turn_smoothly);
+            for layout in &p.layouts {
+                seats_keep_their_sides_and_screws_enter_their_bone(&input, layout);
+            }
         }
     };
 }
@@ -1086,18 +1193,25 @@ fn hand_sizes_keep_the_ratio_direction_and_population_counts() {
         .unwrap();
     request.anchors[index].diameter_mm = Some(diameter);
     request.anchors[index].length_mm = Some(length);
-    let empty = first
-        .anchors
-        .iter()
-        .position(|a| {
-            a.screw_here.is_none()
-                && a.pedicle.outer_width_mm.is_some()
-                && a.direction_status == ValueStatus::FromTables
-        })
+    // The catalogue floor gives every pedicle with a full width ensemble a
+    // table size, so a second pedicle is given sizes other than its own.
+    let other = (0..first.anchors.len())
+        .find(|&i| i != index && first.anchors[i].screw_here.is_some())
         .unwrap();
-    request.anchors[empty].kind = AnchorKind::Screw;
-    request.anchors[empty].diameter_mm = p.choices.screw_diameters_mm.first().copied();
-    request.anchors[empty].length_mm = p.choices.screw_lengths_mm.first().copied();
+    let table = first.anchors[other].screw_here.clone().unwrap();
+    request.anchors[other].kind = AnchorKind::Screw;
+    request.anchors[other].diameter_mm = p
+        .choices
+        .screw_diameters_mm
+        .iter()
+        .copied()
+        .find(|&mm| mm != table.diameter_mm);
+    request.anchors[other].length_mm = p
+        .choices
+        .screw_lengths_mm
+        .iter()
+        .copied()
+        .find(|&mm| mm != table.length_mm);
     let rebuilt = implant_layout::rebuild_layout(&request).unwrap();
     let changed = &rebuilt.anchors[index];
     assert_eq!(changed.diameter_mm, Some(diameter));
@@ -1118,10 +1232,10 @@ fn hand_sizes_keep_the_ratio_direction_and_population_counts() {
             .contains(&shapes::implant_layout::LookCode::MayBeTooNarrow)
     );
     assert_eq!(changed.look_sources.len(), changed.looks.len());
-    let filled = &rebuilt.anchors[empty];
+    let filled = &rebuilt.anchors[other];
     assert_eq!(filled.kind, AnchorKind::Screw);
     assert!(filled.medial_angle.is_some() && filled.screw_to_pedicle.is_some());
-    assert!(filled.screw_here.is_none());
+    assert_eq!(filled.screw_here, Some(table));
     assert_eq!(filled.diameter_status, ValueStatus::Entered);
     assert_eq!(filled.length_status, ValueStatus::Entered);
     assert!(filled.diameter_sources.is_empty() && filled.length_sources.is_empty());
@@ -1277,6 +1391,141 @@ fn fitted_cervical_extra_lumbar_and_gapped_spans_are_refused() {
 }
 
 #[test]
+fn rods_turn_smoothly_where_a_hook_meets_a_screw() {
+    let (mut input, _) = fixture(RecipeName::RightThoracic40);
+    input.versions = 4;
+    let proposals = propose_layouts(&input).unwrap();
+    assert!(
+        proposals.layouts.iter().any(hook_beside_screw),
+        "the made-up placements include a hook beside a screw"
+    );
+    proposals.layouts.iter().for_each(rods_turn_smoothly);
+    // By hand: hooks at the top of both rods and one in the middle of
+    // each, so every hook sits between screws or above one.
+    let first = &proposals.layouts[0];
+    let mut request = hand_input(&input, first);
+    for side in [BodySide::Left, BodySide::Right] {
+        let screws: Vec<_> = (0..request.anchors.len())
+            .filter(|&i| {
+                request.anchors[i].side == side && request.anchors[i].kind == AnchorKind::Screw
+            })
+            .collect();
+        for i in [screws[0], screws[screws.len() / 2]] {
+            let anchor = &mut request.anchors[i];
+            anchor.kind = AnchorKind::Hook;
+            anchor.diameter_mm = None;
+            anchor.length_mm = None;
+        }
+    }
+    let hooked = implant_layout::rebuild_layout(&request).unwrap();
+    assert!(hook_beside_screw(&hooked));
+    rods_turn_smoothly(&hooked);
+    // A hook seats where the screw it replaces did, so neither line moves.
+    for (rod, before) in hooked.rods.iter().zip(&first.rods) {
+        assert_eq!(rod.side, before.side);
+        for (after, before) in [
+            (&rod.points_mm, &before.points_mm),
+            (&rod.standing_points_mm, &before.standing_points_mm),
+        ] {
+            assert_eq!(after.len(), before.len());
+            for (p, q) in after.iter().zip(before) {
+                assert!((Vector3::from(*p) - Vector3::from(*q)).norm() < 1e-9);
+            }
+        }
+    }
+}
+
+/// The fit and every film keep only the vertebrae `keep` accepts, as when
+/// a film is cut off or a vertebra is not counted.
+fn keep_levels(input: &mut LayoutInput, keep: impl Fn(Level) -> bool) {
+    input.fit.vertebrae.retain(|v| keep(v.level));
+    for film in [
+        &mut input.front,
+        &mut input.bend_left,
+        &mut input.bend_right,
+    ]
+    .into_iter()
+    .flatten()
+    {
+        film.marks.vertebrae.retain(|v| keep(v.level));
+    }
+}
+
+fn typical_rods_without_a_reading(layout: &ImplantLayout) {
+    for rod in &layout.rods {
+        assert_eq!(rod.target_kyphosis_status, ValueStatus::Typical);
+        assert_eq!(rod.target_kyphosis_deg, 0.0);
+    }
+}
+
+#[test]
+fn a_fit_without_t5_or_t12_still_gets_a_placement() {
+    for (name, keep) in [
+        (
+            "cut off above T6",
+            (|l| l >= Level::T6) as fn(Level) -> bool,
+        ),
+        ("no T12", |l| l != Level::T12),
+    ] {
+        let (mut input, _) = fixture(RecipeName::RightThoracic40);
+        input.versions = 8;
+        keep_levels(&mut input, keep);
+        let p = propose_layouts(&input).unwrap();
+        assert!(!p.layouts.is_empty(), "{name}: {:?}", p.cannot_tell);
+        for layout in &p.layouts {
+            check_layout(&input, layout);
+            typical_rods_without_a_reading(layout);
+        }
+        let mut request = hand_input(&input, &p.layouts[0]);
+        request.anchors.clear();
+        (request.upper, request.lower) = (Level::L1, Level::L4);
+        typical_rods_without_a_reading(&implant_layout::rebuild_layout(&request).unwrap());
+    }
+}
+
+#[test]
+fn a_bending_film_counted_on_its_own_keeps_the_placements() {
+    let (mut input, _) = fixture(RecipeName::RightThoracic40);
+    input.versions = 8;
+    input.naming = NamingDoubt::MayBeOneOff;
+    let usual = propose_layouts(&input).unwrap();
+    assert_eq!(usual.naming_scenarios.len(), 2);
+    // The left bending film counts an extra thoracic: its L1 to L5 are
+    // named T13 and L1 to L4, which the front's count has no name for.
+    let mut extra = input.clone();
+    let bend = &mut extra.bend_left.as_mut().unwrap().marks;
+    bend.naming.template = Template::ExtraThoracic;
+    for v in &mut bend.vertebrae {
+        v.level = match v.level {
+            Level::L1 => Level::T13,
+            Level::L2 => Level::L1,
+            Level::L3 => Level::L2,
+            Level::L4 => Level::L3,
+            Level::L5 => Level::L4,
+            level => level,
+        };
+    }
+    let p = propose_layouts(&extra).unwrap();
+    assert!(!p.layouts.is_empty());
+    assert_eq!(
+        p.naming_scenarios.len(),
+        2,
+        "each film moves along its own count"
+    );
+    // A bending film whose lowest name ends the list: one step down has no
+    // name, so only the renaming details are lost, never the placements.
+    let mut last = input.clone();
+    let lowest = last.bend_left.as_mut().unwrap().marks.vertebrae.last_mut();
+    let lowest = lowest.unwrap();
+    assert_eq!(lowest.level, Level::L5);
+    assert_eq!(Level::ALL.last(), Some(&Level::L7));
+    lowest.level = Level::L7;
+    let p = propose_layouts(&last).unwrap();
+    assert!(!p.layouts.is_empty());
+    assert!(p.naming_scenarios.is_empty());
+}
+
+#[test]
 fn a_hand_hook_without_a_table_direction_is_refused() {
     use shapes::errors::{EngineError, ErrorCode};
     use shapes::implant_layout::AnchorChoice;
@@ -1318,6 +1567,48 @@ fn a_sketch_keeps_the_rule_end_counts_empty() {
             .iter()
             .any(|c| c.code == CannotTellCode::EndsUnsettled)
     );
+}
+
+/// The entries were lined up over each span alone, so moving one end, in
+/// a placement beside the first or by hand, slid the screws of levels the
+/// change never touched. They are lined up over the whole fitted column.
+#[test]
+fn moving_an_end_never_moves_a_shared_entry() {
+    let (mut input, _) = fixture(RecipeName::RightThoracic40);
+    input.versions = 4;
+    let proposals = propose_layouts(&input).unwrap();
+    let first = &proposals.layouts[0];
+    let entries = |layout: &ImplantLayout| -> Vec<_> {
+        layout
+            .anchors
+            .iter()
+            .map(|a| (a.level, a.side, a.entry_mm))
+            .collect()
+    };
+    let shared = |a: &ImplantLayout, b: &ImplantLayout| {
+        let (a, b) = (entries(a), entries(b));
+        let common: Vec<_> = a
+            .iter()
+            .filter(|x| b.iter().any(|y| (y.0, y.1) == (x.0, x.1)))
+            .collect();
+        assert!(common.len() >= 4);
+        for x in common {
+            assert_eq!(Some(x), b.iter().find(|y| (y.0, y.1) == (x.0, x.1)));
+        }
+    };
+    let moved_ends: Vec<_> = proposals
+        .layouts
+        .iter()
+        .filter(|l| (l.upper, l.lower) != (first.upper, first.lower))
+        .collect();
+    assert_eq!(moved_ends.len(), 4);
+    for layout in moved_ends {
+        shared(first, layout);
+        let mut request = hand_input(&input, first);
+        request.anchors.clear();
+        (request.upper, request.lower) = (layout.upper, layout.lower);
+        shared(first, &implant_layout::rebuild_layout(&request).unwrap());
+    }
 }
 
 // FNV-1a of complete serialised outputs, captured before the measurement split.
@@ -1423,14 +1714,14 @@ fn front_only_hand_changes_keep_their_serialised_bytes() {
     assert_eq!(
         hand_change_fingerprints(true, true),
         [
-            (598716, 2798233333493637148),
-            (62449, 17164809987479588220),
-            (70738, 12517158879963994093),
-            (54419, 8079826895613757327),
-            (54200, 2283174151896324805),
-            (70995, 8339570053816240664),
-            (62780, 6210085942336101090),
-            (62275, 10620606188196441332),
+            (611587, 13774154800999321479),
+            (63888, 17619063237871066832),
+            (71954, 12139043153922690622),
+            (55740, 7511198657723376360),
+            (55679, 988401265798016133),
+            (72443, 13537662036664151598),
+            (63760, 5207833755706780307),
+            (63655, 4332988658384256470),
         ]
     );
 }
@@ -1441,14 +1732,14 @@ fn two_film_hand_changes_keep_their_serialised_bytes() {
     assert_eq!(
         hand_change_fingerprints(false, true),
         [
-            (545105, 3879168212533159498),
-            (56336, 5542496371768791876),
-            (64932, 500773216969023123),
-            (48030, 16724536013339532180),
-            (48260, 4437940695117762212),
-            (64927, 5103219575040975681),
-            (56434, 1605481536600766576),
-            (56162, 258916896983131656),
+            (557671, 8915511845704622265),
+            (57750, 343529669024308921),
+            (66168, 2774808426912564653),
+            (49601, 16932612553952717781),
+            (49555, 5229104112533522712),
+            (66386, 14119666237342783203),
+            (57622, 14529783802682069550),
+            (57517, 16003584600432466489),
         ]
     );
 }
@@ -1458,14 +1749,14 @@ fn exact_pose_hand_changes_keep_their_serialised_bytes() {
     assert_eq!(
         hand_change_fingerprints(false, false),
         [
-            (622530, 3958700510366208856),
-            (64727, 17514740368564272512),
-            (72804, 14552528497602134876),
-            (56452, 16595635225967031405),
-            (56209, 17753168484814074191),
-            (72886, 17644759031844260288),
-            (64954, 15618939111601248806),
-            (64549, 6275641791076177859),
+            (634777, 6399587130604658601),
+            (66078, 315608697238697520),
+            (74464, 2817601403946281840),
+            (58064, 8181873827660707217),
+            (57458, 10711073004944921213),
+            (74260, 8389079364235742548),
+            (65945, 2509951005274521112),
+            (65900, 16979981033600005629),
         ]
     );
 }
@@ -1475,14 +1766,14 @@ fn exact_pose_front_only_hand_changes_keep_their_serialised_bytes() {
     assert_eq!(
         hand_change_fingerprints(true, false),
         [
-            (607136, 6868330708811682004),
-            (63746, 13131885525540648520),
-            (71958, 7036287730316193649),
-            (55655, 2167130720120769749),
-            (55211, 6327265290091661927),
-            (71948, 782938958952491319),
-            (64086, 180955000766158413),
-            (63568, 17835967667900474509),
+            (619883, 11644877264924909714),
+            (65237, 995587915205777560),
+            (73634, 7053437676410274103),
+            (57238, 8516466936557249277),
+            (56713, 4974182565430281113),
+            (73446, 13553452555020867349),
+            (65104, 6704329383720397792),
+            (65059, 16863788549520358919),
         ]
     );
 }
@@ -1506,7 +1797,7 @@ fn a_tenth_keeps_the_rule_proposal_bytes() {
     let result = implant_layout::proposal::assemble(&input, &readings).unwrap();
     assert_eq!(
         serialised_fingerprint(&result),
-        (625343, 4413226648983688609)
+        (637684, 3989943222286645900)
     );
     assert!(!result.first_is_sketch);
     let first = &result.layouts[0];
@@ -1522,20 +1813,22 @@ fn a_tenth_keeps_the_rule_proposal_bytes() {
     );
 }
 
-/// The fallback contains six spans; every trial reaches the Refused arm,
-/// removing each span before retaining the rules' proposal bytes.
+/// The rules hold T6 to T12 in every version. A factor on the standing
+/// sagittal angles bent this target past a quarter turn and refused it, so
+/// the placement fell to T5 to T12, held by no version, after every sketch
+/// was refused the same way. One shared added angle builds the rule pair.
 #[test]
-fn a_refused_sketch_keeps_the_rule_proposal_bytes() {
+fn the_rule_pair_a_sagittal_factor_refused_now_keeps_its_proposal_bytes() {
     let (input, _) = fixture_seed(RecipeName::DoubleMajor55To45, 4);
     let readings = implant_layout::proposal::measure(&input).unwrap();
     let result = implant_layout::proposal::assemble(&input, &readings).unwrap();
     assert_eq!(
         serialised_fingerprint(&result),
-        (561816, 7360974448666973749)
+        (566274, 9493619728016298689)
     );
     assert!(!result.first_is_sketch);
     let first = &result.layouts[0];
-    assert_eq!((first.upper, first.lower), (Level::T5, Level::T12));
+    assert_eq!((first.upper, first.lower), (Level::T6, Level::T12));
     assert_eq!(
         result
             .pairs
@@ -1543,16 +1836,47 @@ fn a_refused_sketch_keeps_the_rule_proposal_bytes() {
             .find(|p| p.upper == first.upper && p.lower == first.lower)
             .unwrap()
             .versions_holding,
-        0
+        input.versions
     );
+    // Without the rules the sketch from the curve ends, which the factor
+    // also refused span by span, now builds as well.
     let mut fallback = readings;
     fallback.regions.clear();
-    assert!(
-        implant_layout::proposal::assemble(&input, &fallback)
-            .unwrap()
-            .layouts
-            .is_empty()
-    );
+    let sketch = implant_layout::proposal::assemble(&input, &fallback).unwrap();
+    assert!(sketch.first_is_sketch);
+    assert!(!sketch.layouts.is_empty());
+}
+
+/// At ten the tables give no lumbar width, so the lumbar curve's sketches,
+/// T12 to L4 and T12 to L5, hold one screw a side and are refused. Each
+/// refusal drops that sketch and tries the next; with none left the rules'
+/// thin pair stays, as a placement and not as a sketch.
+#[test]
+fn a_refused_sketch_keeps_the_rule_pair() {
+    let (mut input, _) = fixture_seed(RecipeName::LumbarLeft30, 4);
+    input.child.age_years = Some(10.0);
+    let mut readings = implant_layout::proposal::measure(&input).unwrap();
+    for region in &mut readings.regions {
+        for rules in region.version_rules.iter_mut().skip(1) {
+            rules.clear();
+        }
+    }
+    let result = implant_layout::proposal::assemble(&input, &readings).unwrap();
+    assert!(!result.first_is_sketch);
+    let first = &result.layouts[0];
+    assert_eq!((first.upper, first.lower), (Level::T11, Level::L3));
+    let pair = result
+        .pairs
+        .iter()
+        .find(|p| p.upper == first.upper && p.lower == first.lower)
+        .unwrap();
+    assert!(u64::from(pair.versions_holding) * 10 < u64::from(input.versions));
+    assert!(!result.upper_ends.is_empty() && !result.lower_ends.is_empty());
+    // The same sketches with no rules at all: each is refused, so nothing
+    // is laid out.
+    readings.regions.clear();
+    let sketch = implant_layout::proposal::assemble(&input, &readings).unwrap();
+    assert!(sketch.layouts.is_empty() && sketch.pairs.is_empty());
 }
 
 /// Built at assembly, not fitted: the regional rules hold in one version.
@@ -1589,6 +1913,34 @@ fn sparse_rule_ends_use_the_same_sketch_as_absent_rules() {
         serde_json::to_vec(&result).unwrap(),
         serde_json::to_vec(&absent).unwrap()
     );
+}
+
+/// Built at assembly, not fitted: with six lumbar vertebrae and no rule
+/// pair, a main curve ending at L6 is sketched down to L5, not given up.
+#[test]
+fn a_sketch_holds_its_ends_within_t1_to_l5() {
+    let (mut input, _) = fixture(RecipeName::SixLumbar);
+    input.versions = 4;
+    let mut readings = implant_layout::proposal::measure(&input).unwrap();
+    readings.regions.clear();
+    let major = readings
+        .nominal
+        .major
+        .expect("the made-up spine has a curve");
+    let l6 = readings
+        .nominal
+        .vertebrae
+        .iter()
+        .position(|v| v.level == Level::L6);
+    readings.nominal.curves[major].lower_index = l6.expect("six lumbar vertebrae are fitted");
+    let result = implant_layout::proposal::assemble(&input, &readings).unwrap();
+    assert!(result.first_is_sketch, "{:?}", result.cannot_tell);
+    let upper = readings.nominal.vertebrae[readings.nominal.curves[major].upper_index].level;
+    assert_eq!(
+        (result.layouts[0].upper, result.layouts[0].lower),
+        (upper, Level::L5)
+    );
+    result.layouts.iter().for_each(|l| check_layout(&input, l));
 }
 
 /// Built at assembly, not fitted: the sketch adds T1, absent from one

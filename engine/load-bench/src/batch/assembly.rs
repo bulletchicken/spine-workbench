@@ -157,13 +157,10 @@ pub(super) fn construct(
                 .position(|p| p.level == anchor.level)
                 .ok_or_else(|| refusal("head-not-fitted"))?;
             let pose = Pose::from_vertebra(&reference[body]);
+            // The layout's rule: every seat, hook or screw, stands back
+            // from its entry along its direction by the head offset.
             let point = Vector3::from(anchor.entry_mm)
-                - Vector3::from(anchor.direction_unit)
-                    * if anchor.kind == AnchorKind::Hook {
-                        0.0
-                    } else {
-                        rod.head_offset_mm
-                    };
+                - Vector3::from(anchor.direction_unit) * rod.head_offset_mm;
             let station_mm = if anchor.level == bottom {
                 length
             } else {

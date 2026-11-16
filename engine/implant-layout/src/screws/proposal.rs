@@ -151,7 +151,7 @@ pub fn anchor(
         Vec::new()
     };
     diameter_sources.extend(pedicle.sources.iter().cloned());
-    let diameter = if outer.len() == versions.len() {
+    let mut diameter = if outer.len() == versions.len() {
         sizing::choose_diameter(&outer, &dgrid, k, sizing::DEFAULT_ALPHA)?
     } else {
         sizing::SizeChoice {
@@ -159,6 +159,14 @@ pub fn anchor(
             also_seen: Vec::new(),
         }
     };
+    let narrower_than_grid = outer.len() == versions.len() && diameter.mm.is_none();
+    // This project's catalogue floor, as for lengths: a pedicle whose drawn
+    // widths reject even the smallest diameter keeps that smallest size.
+    // The refusal stays visible as `may-be-too-narrow`.
+    if narrower_than_grid {
+        diameter.mm = dgrid.first().map(|g| g.mm);
+        diameter.also_seen.retain(|&mm| Some(mm) != diameter.mm);
+    }
     let mut length = if chord_complete {
         sizing::choose_length(&chords, &lgrid, share, margin, sizing::DEFAULT_ALPHA)?
     } else {
@@ -234,7 +242,7 @@ pub fn anchor(
                     && nominal_reading.vertebrae[c.apex_index].level <= Level::T12
             }),
         missing_table: missing,
-        no_diameter: diameter.mm.is_none(),
+        no_diameter: diameter.mm.is_none() || narrower_than_grid,
         outer_narrow_share: f64::from(pedicle.versions_too_narrow) / versions.len() as f64,
         inner_narrow_share: f64::from(pedicle.versions_inner_under_1_mm) / versions.len() as f64,
         convergence: convergence_deg,

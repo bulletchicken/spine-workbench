@@ -5,7 +5,9 @@ use made_up_spines::film_layout::FilmLayout;
 use made_up_spines::patient::make_up_patient;
 use made_up_spines::recipes::film_recipes;
 use shapes::confidence::{Confidence, ConfidenceBand};
-use shapes::implant_layout::{AnchorKind, ChildFacts, LayoutFilm, LayoutInput, NamingDoubt};
+use shapes::implant_layout::{
+    AnchorChoice, AnchorKind, ChildFacts, LayoutFilm, LayoutInput, NamingDoubt, RebuildInput,
+};
 use shapes::landmarks::{Landmarks, SacrumTop};
 use shapes::levels::Level;
 use shapes::load_bench::BenchInput;
@@ -13,6 +15,7 @@ use shapes::made_up::{FilmAnswer, MadeUpRecipe, RecipeName, Tier, TrueMark, True
 use shapes::marks::{EndplateLines, FrontMarks, Mark, MarkSource, PedicleMark, SideMarks};
 use shapes::naming::{ChosenBy, LevelNaming};
 use shapes::spine_fit::{FilmToFit, FitFromFilms, MarkSpread, TypicalSource};
+use shapes::spine_readings::BodySide;
 use shapes::vertebra::{FilmMarks, VertebraMarks, VertebraOnFilm};
 
 #[test]
@@ -52,7 +55,7 @@ fn every_version_settles_with_free_bodies_inside_a_long_released_group() {
         weight_kg: None,
         activity: None,
     };
-    let proposals = implant_layout::propose_layouts(&LayoutInput {
+    let input = LayoutInput {
         fit: fit.clone(),
         front: Some(layout_film(&films[0])),
         bend_left: Some(layout_film(&films[2])),
@@ -62,13 +65,48 @@ fn every_version_settles_with_free_bodies_inside_a_long_released_group() {
         versions: 32,
         seed: recipe.seed,
         pedicle_child_share: None,
-    })
-    .unwrap();
-    let placement = proposals
+    };
+    let proposals = implant_layout::propose_layouts(&input).unwrap();
+    let first = proposals
         .layouts
         .into_iter()
         .find(|layout| layout.id == "starts-at-T4")
         .expect("the long upper extension");
+    assert_eq!((first.upper, first.lower), (Level::T4, Level::L3));
+    // The catalogue floor gives these narrow pedicles the smallest screw.
+    // They are set by hand, as a person may, to a hook at the top and empty
+    // places, so the block keeps two bodies with no heads and a hook on a
+    // screwed body.
+    let (left, right) = (BodySide::Left, BodySide::Right);
+    let hand = [
+        (Level::T4, right, AnchorKind::Hook),
+        (Level::T5, left, AnchorKind::None),
+        (Level::T5, right, AnchorKind::None),
+        (Level::T6, left, AnchorKind::None),
+        (Level::T6, right, AnchorKind::None),
+        (Level::T7, left, AnchorKind::None),
+        (Level::T8, left, AnchorKind::None),
+        (Level::T9, left, AnchorKind::None),
+        (Level::T10, left, AnchorKind::None),
+    ];
+    let placement = implant_layout::rebuild_layout(&RebuildInput {
+        layout: input,
+        upper: first.upper,
+        lower: first.lower,
+        anchors: hand
+            .into_iter()
+            .map(|(level, side, kind)| AnchorChoice {
+                level,
+                side,
+                kind,
+                diameter_mm: None,
+                length_mm: None,
+            })
+            .collect(),
+        rod_material: first.rods[0].material,
+        rod_diameter_mm: first.rods[0].diameter_mm,
+    })
+    .unwrap();
     assert_eq!((placement.upper, placement.lower), (Level::T4, Level::L3));
     assert_eq!(placement.rods.len(), 2);
     for level in [Level::T4, Level::L3] {

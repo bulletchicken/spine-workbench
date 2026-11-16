@@ -66,8 +66,11 @@ pub(super) fn scenarios(
         .into_iter()
         .flatten()
         {
+            // Each film moves along its own count: a bending film may
+            // count a T13 or an L6 that the front film's count lacks.
+            let film_names = film.marks.naming.template.names();
             for v in &mut film.marks.vertebrae {
-                v.level = renamed(&names, v.level, shift)?;
+                v.level = renamed(&film_names, v.level, shift)?;
             }
         }
         let mut versions = readings.versions.versions.clone();

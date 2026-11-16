@@ -15,7 +15,8 @@ export type RodProposal = { side: BodySide,
  */
 curveSide: CurveSide, material: RodMaterial, diameterMm: number, 
 /**
- * The T5 to T12 kyphosis the contour aims for.
+ * The T5 to T12 kyphosis the contour aims for; 0 with typical status
+ * when the fit lacks T5 or T12, so there is no such reading.
  */
 targetKyphosisDeg: number, targetKyphosisStatus: ValueStatus, 
 /**
@@ -28,7 +29,8 @@ coronalLine: CoronalLine,
  */
 overbendDeg: number, 
 /**
- * How far each screw head stands from the bone along its screw.
+ * How far each rod seat, at a screw head or a hook, stands back from
+ * its entry along the anchor's direction.
  */
 headOffsetMm: number, 
 /**

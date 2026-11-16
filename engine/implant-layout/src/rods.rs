@@ -134,6 +134,8 @@ pub struct TargetJoint {
 pub struct TargetSpine {
     pub poses: Vec<VertebraPose>,
     pub joints: Vec<TargetJoint>,
+    /// The target's T5-top to T12-bottom kyphosis; 0 with Typical status
+    /// when the fit lacks T5 or T12, so no such reading exists.
     pub target_kyphosis_deg: f64,
     pub target_kyphosis_status: ValueStatus,
     pub geometry_status: ValueStatus,
@@ -153,8 +155,8 @@ pub fn geometry_status(fit: &SpineFit) -> ValueStatus {
 }
 
 /// This project's joint-only target: remove each instrumented relative
-/// coronal angle, retain its axial angle, and uniformly scale only its
-/// T5/T6 through T11/T12 sagittal angles. The scalar objective is the shared
+/// coronal angle, retain its axial angle, and add one shared sagittal angle
+/// to each of its T5/T6 through T11/T12 joints. The scalar objective is the shared
 /// reader's projected T5-top to T12-bottom kyphosis, including bone wedges;
 /// it is not the sum of finite relative Euler angles. Unchanged relative
 /// joints above the span carry that part of the profile rigidly for this
@@ -163,10 +165,18 @@ pub fn geometry_status(fit: &SpineFit) -> ValueStatus {
 /// Material points are the standing midpoint of facing endplate centres,
 /// fixed in both bodies. The lowest instrumented pose stays standing;
 /// reconstruction never translates a joint or places centres on a line.
-/// Without measured side geometry its sagittal profile remains unscaled,
+/// The added angle, not a factor on the standing angles, carries the change:
+/// a flat or hypokyphotic thoracic spine has standing joints near zero and of
+/// mixed sign, and a factor large enough to reach the reading turned them
+/// into alternating bends of tens of degrees that folded the target back on
+/// itself, while an equal share bends every joint the same way.
+/// Without measured side geometry its sagittal profile remains unchanged,
 /// with Typical status. With no editable T5--T12 joint the reconstructed
 /// kyphosis is retained; an unrelated lumbar joint cannot supply it.
-/// The fitted profile must contain T5 and T12 to report this target.
+/// A fit without T5 or T12 (a film cut off at the top, or eleven thoracic
+/// vertebrae) cannot give the T5-top to T12-bottom reading: its profile
+/// also stays unchanged and Typical, and `target_kyphosis_deg` is then 0, a
+/// placeholder that marks no reading rather than a flat spine.
 pub fn target_spine(
     fit: &SpineFit,
     levels: &[Level],
@@ -192,10 +202,13 @@ pub fn target_spine(
     )?;
     let editable =
         (first..last).any(|i| scales_kyphosis(fit.vertebrae[i].level, fit.vertebrae[i + 1].level));
-    let mut scale = 1.0;
-    let mut profile = target_profile(fit, scale, first, last)?;
+    let mut added = 0.0;
+    let mut profile = target_profile(fit, added, first, last)?;
+    let readable = [Level::T5, Level::T12]
+        .iter()
+        .all(|level| fit.vertebrae.iter().any(|v| v.level == *level));
     let desired = measured
-        .filter(|_| editable)
+        .filter(|_| editable && readable)
         .map(|value| value.clamp(minimum, maximum));
     if let Some(desired) = desired {
         for _ in 0..TARGET_SCALE_STEPS {
@@ -203,22 +216,26 @@ pub fn target_spine(
             if (value - desired).abs() <= ANGLE_TOLERANCE_DEG {
                 break;
             }
-            let trial = target_profile(fit, scale + TARGET_SCALE_DIFFERENCE, first, last)?;
-            let derivative = (profile_kyphosis(&trial)? - value) / TARGET_SCALE_DIFFERENCE;
+            let trial = target_profile(fit, added + TARGET_ANGLE_DIFFERENCE, first, last)?;
+            let derivative = (profile_kyphosis(&trial)? - value) / TARGET_ANGLE_DIFFERENCE;
             if !derivative.is_finite() || derivative.abs() < ANGLE_TOLERANCE_DEG {
                 return Err(refused("rod-target-has-no-scalable-kyphosis-profile"));
             }
-            scale -= (value - desired) / derivative;
-            if !scale.is_finite() {
+            added -= (value - desired) / derivative;
+            if !added.is_finite() {
                 return Err(refused("rod-target-profile-did-not-settle"));
             }
-            profile = target_profile(fit, scale, first, last)?;
+            profile = target_profile(fit, added, first, last)?;
         }
         if (profile_kyphosis(&profile)? - desired).abs() > ANGLE_TOLERANCE_DEG {
             return Err(refused("rod-target-profile-did-not-settle"));
         }
     }
-    let actual = profile_kyphosis(&profile)?;
+    let actual = if readable {
+        profile_kyphosis(&profile)?
+    } else {
+        0.0
+    };
     let mut joints = Vec::new();
     for i in first..last {
         let standing = relative_angles(&fit.vertebrae[i].pose, &fit.vertebrae[i + 1].pose)?;
@@ -235,6 +252,7 @@ pub fn target_spine(
         joints,
         target_kyphosis_deg: actual,
         target_kyphosis_status: match measured {
+            _ if !readable => ValueStatus::Typical,
             None => ValueStatus::Typical,
             Some(value) if (actual - value).abs() <= ANGLE_TOLERANCE_DEG => ValueStatus::Measured,
             Some(_) if desired.is_none() => ValueStatus::FromTemplate,
@@ -254,9 +272,16 @@ pub fn target_spine(
     })
 }
 
-/// This project's deterministic scalar-solve budgets, not anatomy cutoffs.
+/// The borrowed distance from an anchor's entry back to its rod seat, and
+/// its source; see `propose_with_overbend`.
+pub(crate) fn head_offset() -> Result<(f64, String), LayoutError> {
+    scalar(Table::RodChoices, "screw-cantilever-length", "lumbar")
+}
+
+/// This project's deterministic scalar-solve budgets, not anatomy cutoffs:
+/// the step count and the finite-difference step in radians.
 const TARGET_SCALE_STEPS: usize = 20;
-const TARGET_SCALE_DIFFERENCE: f64 = 1e-4;
+const TARGET_ANGLE_DIFFERENCE: f64 = 1e-4;
 /// This project's regular Euler-frame tolerance near a quarter-turn pitch.
 const JOINT_FRAME_EPS: f64 = 1e-10;
 
@@ -331,7 +356,7 @@ fn relative_angles(upper: &VertebraPose, lower: &VertebraPose) -> Result<[f64; 3
 
 fn target_profile(
     fit: &SpineFit,
-    scale: f64,
+    added: f64,
     first: usize,
     last: usize,
 ) -> Result<Vec<VertebraPose>, LayoutError> {
@@ -349,10 +374,10 @@ fn target_profile(
         let q = if i >= first {
             let [_, sagittal, axial] = matrix_angles(&q0)?;
             let sagittal = sagittal
-                * if scales_kyphosis(poses[i].level, poses[i + 1].level) {
-                    scale
+                + if scales_kyphosis(poses[i].level, poses[i + 1].level) {
+                    added
                 } else {
-                    1.0
+                    0.0
                 };
             if sagittal.abs() >= core::f64::consts::FRAC_PI_2 - JOINT_FRAME_EPS {
                 return Err(refused("rod-target-joint-outside-regular-angle-frame"));
@@ -406,7 +431,12 @@ pub fn propose(
 
 /// Build rods with an explicitly requested concave extra kyphosis. Zero
 /// retains all target-head knots. A lumbar-only rod always has zero extra.
-/// The borrowed head offset applies to screws; a hook holds at its entry.
+/// Every occupied seat stands back from its entry along the anchor's own
+/// direction by the borrowed head offset. A hook's body carries the rod
+/// behind the lamina about as far off the bone as a screw head does, so
+/// a hook takes the same offset as a screw: this project's assumption,
+/// with no number of its own. One rod then runs through both kinds
+/// without a step where a hook meets a screw.
 pub fn propose_with_overbend(
     fit: &SpineFit,
     levels: &[Level],
@@ -425,8 +455,7 @@ pub fn propose_with_overbend(
         })
         .ok_or_else(|| refused("rod-choice-has-no-source"))?;
     let target = target_spine(fit, levels, reading)?;
-    let (head_offset, head_source) =
-        scalar(Table::RodChoices, "screw-cantilever-length", "lumbar")?;
+    let (head_offset, head_source) = head_offset()?;
     let extra_source = if extra_deg > 0.0 {
         Some(scalar(Table::RodChoices, "overcontour", "concave")?.1)
     } else {
@@ -470,13 +499,8 @@ pub fn propose_with_overbend(
                 .expect("the target contains fitted levels");
             let before = VertebraParams::from(&nominal.pose);
             let after = VertebraParams::from(pose);
-            let nominal_head = Vector3::from(anchor.entry_mm)
-                - Vector3::from(anchor.direction_unit)
-                    * if anchor.kind == AnchorKind::Screw {
-                        head_offset
-                    } else {
-                        0.0
-                    };
+            let nominal_head =
+                Vector3::from(anchor.entry_mm) - Vector3::from(anchor.direction_unit) * head_offset;
             let local_head = before.rotation_matrix().transpose() * (nominal_head - before.centre);
             heads.push(after.centre + after.rotation_matrix() * local_head);
             standing_heads.push(nominal_head);
@@ -587,7 +611,10 @@ struct Station {
 /// constraints on an overbent rod. These are this project's own rules.
 ///
 /// Straight and co-circular sagittal targets use exact line/arc geometry;
-/// other targets use a cubic clamped to adjacent secants. All supplied
+/// other targets use a natural cubic: no curvature at either end head, as
+/// an elastic rod's free end carries no bending moment. The former clamp of
+/// each end to its secant forced the whole turn at the second head from that
+/// end, where a short last span then kinked the rod. All supplied
 /// heads remain interpolation knots of the zero-overbend target. Sampling
 /// includes heads, T12 and the thoracic midpoint, at <=2 mm arc intervals.
 pub fn contour(
@@ -623,7 +650,7 @@ fn contour_with_stations(
 
 /// Zero-overbend target interpolation, retaining its existing public
 /// name. Exactly straight/circular sagittal data use their analytic
-/// primitives; all other data use the clamped C2 cubic. Every head is a
+/// primitives; all other data use the natural C2 cubic. Every head is a
 /// returned knot, including noncoplanar heads.
 pub fn clamped_spline(heads: &[Vector3<f64>]) -> Result<Vec<[f64; 3]>, LayoutError> {
     let reference = ReferenceCurve::new(heads)?;
@@ -1173,9 +1200,9 @@ impl CubicSpline {
         let mut diagonal = vec![0.0; n];
         let mut upper = vec![0.0; n];
         let mut rhs = vec![Vector3::zeros(); n];
-        diagonal[0] = 2.0 * steps[0];
-        upper[0] = steps[0];
-        diagonal[n - 1] = 2.0 * steps[n - 2];
+        // Natural ends: zero second derivative at the first and last head.
+        diagonal[0] = 1.0;
+        diagonal[n - 1] = 1.0;
         for i in 1..n - 1 {
             diagonal[i] = 2.0 * (steps[i - 1] + steps[i]);
             upper[i] = steps[i];
@@ -1184,7 +1211,8 @@ impl CubicSpline {
                 * 6.0;
         }
         for i in 1..n {
-            let multiplier = steps[i - 1] / diagonal[i - 1];
+            let lower = if i + 1 < n { steps[i - 1] } else { 0.0 };
+            let multiplier = lower / diagonal[i - 1];
             diagonal[i] -= multiplier * upper[i - 1];
             let previous = rhs[i - 1];
             rhs[i] -= previous * multiplier;
@@ -1506,10 +1534,21 @@ mod tests {
     }
 
     #[test]
-    fn absent_side_geometry_stays_typical_and_a_measured_unscalable_target_is_refused() {
+    fn absent_side_geometry_stays_typical_and_a_flat_measured_back_gains_kyphosis() {
+        let minimum = scalar(
+            Table::LevelRuleThresholds,
+            "normal-kyphosis-min",
+            "sagittal-modifier",
+        )
+        .unwrap()
+        .0;
         let fit = fit(0.0);
         let levels: Vec<_> = fit.vertebrae.iter().map(|v| v.level).collect();
-        assert!(target_spine(&fit, &levels, &reading(0.0)).is_err());
+        // Flat standing joints have nothing to multiply; an added angle
+        // still bends them to the clamped reading.
+        let flat = target_spine(&fit, &levels, &reading(0.0)).unwrap();
+        near(flat.target_kyphosis_deg, minimum, 1e-8);
+        assert_eq!(flat.target_kyphosis_status, ValueStatus::FromTables);
         let mut measured = reading(0.0);
         measured.kyphosis_t5_t12_deg = Err(CannotTellCode::NoSideFilm);
         let target = target_spine(&fit, &levels, &measured).unwrap();
@@ -1610,15 +1649,15 @@ mod tests {
     }
 
     #[test]
-    fn a_partial_construct_scales_only_its_internal_thoracic_joints() {
+    fn a_partial_construct_bends_only_its_internal_thoracic_joints() {
         let fit = fit(30.0);
-        let profile = target_profile(&fit, 2.0, 2, 5).unwrap();
+        let profile = target_profile(&fit, 0.05, 2, 5).unwrap();
         for i in 0..fit.vertebrae.len() - 1 {
             let before =
                 relative_angles(&fit.vertebrae[i].pose, &fit.vertebrae[i + 1].pose).unwrap()[1];
             let after = relative_angles(&profile[i], &profile[i + 1]).unwrap()[1];
             let expected = if (2..5).contains(&i) {
-                2.0 * before
+                before + 0.05
             } else {
                 before
             };
@@ -1631,6 +1670,77 @@ mod tests {
 
     fn near(a: f64, b: f64, tolerance: f64) {
         assert!((a - b).abs() <= tolerance, "{a} against {b}");
+    }
+
+    #[test]
+    fn a_rod_end_carries_no_curvature_so_a_short_last_span_shares_the_turn() {
+        // A long span then a short one stepping 15 mm sideways, as where a
+        // lowest screw sits out of line. Clamping the end to its secant put
+        // the whole turn just above the second head from the end.
+        let heads = [
+            Vector3::new(-60.0, -10.0, 130.0),
+            Vector3::new(-57.0, -2.0, 93.0),
+            Vector3::new(-49.0, -5.0, 59.0),
+            Vector3::new(-47.0, 10.0, 47.0),
+        ];
+        let spline = CubicSpline::new(&heads).unwrap();
+        assert_eq!(spline.second[0], Vector3::zeros());
+        assert_eq!(spline.second[3], Vector3::zeros());
+        // The end tangent leans past the last secant instead of along it.
+        let end = spline.eval(Station {
+            span: 2,
+            fraction: 1.0,
+        });
+        let secant = heads[3] - heads[2];
+        assert!(end.1.normalize().dot(&secant.normalize()) < 1.0 - 1e-3);
+    }
+
+    #[test]
+    fn a_nearly_flat_mixed_sign_back_bends_every_thoracic_joint_one_way() {
+        // Standing T5..T12 joints alternate about 1.5 and -0.9 degrees, a
+        // hypokyphotic back. A factor reaching 30 degrees made them about 22
+        // and -14: the target, and the rod through it, zigzagged.
+        let mut fit = fit(2.0);
+        for (i, v) in fit.vertebrae.iter_mut().enumerate().take(8) {
+            let wobble: f64 = if i % 2 == 0 { 0.6 } else { -0.6 };
+            let lean = v.angles.forward_lean_rad + wobble.to_radians();
+            let mut params = VertebraParams::from(&v.pose);
+            params.rotation = rotation_vector_from_matrix(&rot_y(lean));
+            v.pose = params.pose(v.level);
+            v.angles.forward_lean_rad = lean;
+        }
+        let levels: Vec<_> = fit.vertebrae.iter().map(|v| v.level).collect();
+        let target = target_spine(&fit, &levels, &reading(30.0)).unwrap();
+        near(target.target_kyphosis_deg, 30.0, 1e-8);
+        let shares: Vec<_> = target
+            .joints
+            .iter()
+            .filter(|j| scales_kyphosis(j.upper, j.lower))
+            .map(|j| j.target_rad[1] - j.standing_rad[1])
+            .collect();
+        let first = target
+            .joints
+            .iter()
+            .find(|j| scales_kyphosis(j.upper, j.lower))
+            .unwrap();
+        for joint in target
+            .joints
+            .iter()
+            .filter(|j| scales_kyphosis(j.upper, j.lower))
+        {
+            assert!(
+                joint.target_rad[1] * first.target_rad[1] > 0.0,
+                "{:?}/{:?} bends {} degrees against {}",
+                joint.upper,
+                joint.lower,
+                joint.target_rad[1].to_degrees(),
+                first.target_rad[1].to_degrees()
+            );
+            assert!(joint.target_rad[1].abs().to_degrees() < 30.0);
+        }
+        for share in &shares {
+            near(*share, shares[0], 1e-12);
+        }
     }
 
     fn circular_heads(chord: f64, turn: f64) -> Vec<[f64; 3]> {

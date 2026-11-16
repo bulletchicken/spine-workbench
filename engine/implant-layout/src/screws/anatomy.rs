@@ -34,6 +34,23 @@ pub fn chord(level: Level, side: CurveSide, age_years: Option<f64>) -> Option<Di
     upendra(Table::Chords, "chord", level, side)
 }
 
+/// The reported spread printed with a chord mean that `chord` gives for
+/// this level and curve side at some age: Upendra's column, or one of
+/// Zheng's covered age bands. An anchor keeps the chord mean but not the
+/// age, so the mean itself picks the column; none matches, or the column
+/// prints no spread, gives `None`.
+pub fn chord_spread(level: Level, side: CurveSide, mean: f64) -> Option<f64> {
+    core::iter::once(chord(level, side, None))
+        .chain(
+            [AgeBand::FiveToEight, AgeBand::NineToEleven]
+                .into_iter()
+                .map(|band| zheng(Table::Chords, "pedicle-length", level, band)),
+        )
+        .flatten()
+        .find(|c| c.mean == mean)
+        .and_then(|c| c.sd)
+}
+
 /// Upendra's medial-angle population at this level and curve side.
 /// This project's interpolation uses the neighbouring usable levels only
 /// when the exact level is absent or excluded; printed values are retained.
@@ -273,6 +290,21 @@ mod tests {
         assert_eq!(actual.sd, male.sd.zip(female.sd).map(|(a, b)| a.max(b)));
         assert!(!actual.nearest_age);
         assert!(chord(Level::L1, CurveSide::Concave, Some(10.0)).is_none());
+    }
+
+    #[test]
+    fn a_chord_mean_finds_the_spread_printed_beside_it() {
+        let adult = chord(Level::T10, CurveSide::Convex, None).unwrap();
+        assert_eq!(
+            chord_spread(Level::T10, CurveSide::Convex, adult.mean),
+            adult.sd
+        );
+        let young = chord(Level::T8, CurveSide::Outside, Some(10.0)).unwrap();
+        assert_eq!(
+            chord_spread(Level::T8, CurveSide::Outside, young.mean),
+            young.sd
+        );
+        assert_eq!(chord_spread(Level::T10, CurveSide::Convex, -1.0), None);
     }
 
     #[test]

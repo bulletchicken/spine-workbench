@@ -125,7 +125,7 @@ pub fn one_step(input: &LayoutInput, first: &ImplantLayout, rod: &RodChoice) -> 
     result
 }
 
-fn names(input: &LayoutInput) -> Vec<Level> {
+pub(crate) fn names(input: &LayoutInput) -> Vec<Level> {
     input
         .front
         .as_ref()

@@ -326,10 +326,14 @@ fn a_complete_synthetic_proposal_keeps_bands_sources_and_apical_flags() {
                     .count() as u32
             );
         }
+        // A chosen size passes the share test, unless it is the catalogue
+        // floor kept for a pedicle too narrow for every size.
         if let Some(d) = a.diameter_mm {
+            let share = widths.iter().filter(|&&w| w < d / k).count() as f64 / widths.len() as f64;
             assert!(
-                widths.iter().filter(|&&w| w < d / k).count() as f64 / widths.len() as f64
-                    <= sizing::DEFAULT_ALPHA
+                share <= sizing::DEFAULT_ALPHA
+                    || (d == sizing::diameter_grid()[0].mm
+                        && a.looks.contains(&LookCode::MayBeTooNarrow))
             );
         }
         assert_eq!(
@@ -381,6 +385,38 @@ fn a_childs_lumbar_table_is_absent_and_cannot_make_a_screw() {
     .unwrap();
     assert!(a.pedicle.outer_width_mm.is_some());
     assert!(!a.looks.contains(&LookCode::NoTableForThisAge));
+}
+
+#[test]
+fn a_pedicle_too_narrow_for_every_size_keeps_the_smallest_screw() {
+    let smallest = sizing::diameter_grid()[0].mm;
+    let mut floored = 0;
+    for age in [5.0, 8.0, 14.0] {
+        let mut input = fixture_input();
+        input.child.age_years = Some(age);
+        let all = readings(&input, 0..input.versions).unwrap();
+        for &level in &Level::MEASURED[..12] {
+            for side in [BodySide::Left, BodySide::Right] {
+                let a = anchor(&input, &all.versions.versions, &all.measured, level, side);
+                let a = a.unwrap();
+                let Some(first) = a.wider_than_pedicle.first() else {
+                    continue;
+                };
+                assert_eq!(first.diameter_mm, smallest);
+                if f64::from(first.versions) / f64::from(input.versions) <= sizing::DEFAULT_ALPHA {
+                    continue;
+                }
+                floored += 1;
+                assert_eq!(a.diameter_mm, Some(smallest), "{age} {level:?} {side:?}");
+                assert!(!a.diameter_also_seen.contains(&smallest));
+                assert!(a.looks.contains(&LookCode::MayBeTooNarrow));
+                assert!(!a.diameter_sources.is_empty());
+                assert_eq!(a.kind, AnchorKind::Screw);
+                assert_eq!(a.screw_here.unwrap().diameter_mm, smallest);
+            }
+        }
+    }
+    assert!(floored > 0, "some made-up pedicle rejects every diameter");
 }
 
 #[test]
