@@ -189,6 +189,15 @@ pub fn polyline_at(
     station_mm: f64,
 ) -> Result<(Vector3<f64>, Vector3<f64>), RodError> {
     let stations = polyline_stations(polyline)?;
+    polyline_at_on(polyline, &stations, station_mm)
+}
+
+/// `polyline_at` with the polyline's own stations already worked out.
+pub(crate) fn polyline_at_on(
+    polyline: &[Vector3<f64>],
+    stations: &[f64],
+    station_mm: f64,
+) -> Result<(Vector3<f64>, Vector3<f64>), RodError> {
     let length = stations[stations.len() - 1];
     if !station_mm.is_finite() || station_mm < 0.0 || station_mm > length {
         return Err(RodError::InvalidHeadStations);

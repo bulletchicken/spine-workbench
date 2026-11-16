@@ -6,7 +6,7 @@
 
 use super::*;
 use crate::fatigue::{self, FatigueComparison, WalkingInput};
-use crate::rod_beams::{polyline_at, polyline_stations};
+use crate::rod_beams::{polyline_at_on, polyline_stations};
 use crate::rod_statics::{self, HeadIncrement, HeadLoad, SectionIncrement, SectionLoad};
 use shapes::load_bench::RodSwing;
 
@@ -105,10 +105,10 @@ pub(super) fn at_stop(
             }
             let mut peak: f64 = 0.0;
             for s in cuts {
-                let locked = rod_statics::section_at(&points, &heads, s)
+                let locked = rod_statics::section_at_on(&points, &new_knots, &heads, s)
                     .map_err(|e| refusal(&e.to_string()))?;
                 let total_section = if let Some(delta) = &delta {
-                    section(&points, &heads, &current_stations, delta, s)?
+                    section(&points, &new_knots, &heads, &current_stations, delta, s)?
                 } else {
                     locked
                 };
@@ -117,7 +117,14 @@ pub(super) fn at_stop(
                     .von_mises_mpa;
                 peak = peak.max(stress / yield_mpa);
                 if year {
-                    let standing = section(&points, &heads, &current_stations, &standing_delta, s)?;
+                    let standing = section(
+                        &points,
+                        &new_knots,
+                        &heads,
+                        &current_stations,
+                        &standing_delta,
+                        s,
+                    )?;
                     let turn = daily.standing.rod_displacements[r]
                         .fixed_rows::<3>(3)
                         .into_owned();
@@ -184,19 +191,21 @@ fn increment_in_rod_frame(
 
 fn section(
     points: &[Vector3<f64>],
+    knots: &[f64],
     heads: &[HeadLoad],
     stations: &[f64],
     delta: &[HeadIncrement],
     s: f64,
 ) -> Result<SectionLoad, BenchError> {
     let motions: Vec<_> = delta.iter().map(|d| d.point_mm).collect();
-    let (_, tangent) = polyline_at(points, s).map_err(|e| refusal(&e.to_string()))?;
+    let (_, tangent) = polyline_at_on(points, knots, s).map_err(|e| refusal(&e.to_string()))?;
     let i = interval(stations, s);
     let tangent_change = (motions[i + 1] - motions[i]) / (stations[i + 1] - stations[i]);
     let current_tangent =
         (tangent + tangent_change - tangent * tangent.dot(&tangent_change)).normalize();
-    rod_statics::linearised_section_at(
+    rod_statics::linearised_section_at_on(
         points,
+        knots,
         heads,
         delta,
         s,

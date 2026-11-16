@@ -15,7 +15,7 @@
 //! except at the rod's last point. Both sides may be sampled at a corner
 //! when distinguishing local bending and torsion matters.
 
-use crate::rod_beams::{RodError, polyline_at, polyline_stations};
+use crate::rod_beams::{RodError, polyline_at_on, polyline_stations};
 use nalgebra::Vector3;
 
 /// This project's tolerance for a supplied section tangent being a unit vector.
@@ -89,6 +89,16 @@ pub fn section_at(
     station_mm: f64,
 ) -> Result<SectionLoad, RodError> {
     let stations = polyline_stations(polyline)?;
+    section_at_on(polyline, &stations, heads, station_mm)
+}
+
+/// `section_at` with the polyline's own stations already worked out.
+pub(crate) fn section_at_on(
+    polyline: &[Vector3<f64>],
+    stations: &[f64],
+    heads: &[HeadLoad],
+    station_mm: f64,
+) -> Result<SectionLoad, RodError> {
     let length = stations[stations.len() - 1];
     if heads.iter().any(|head| {
         !head.station_mm.is_finite()
@@ -100,7 +110,7 @@ pub fn section_at(
     }) {
         return Err(RodError::InvalidHeadStations);
     }
-    let (position_mm, tangent_unit) = polyline_at(polyline, station_mm)?;
+    let (position_mm, tangent_unit) = polyline_at_on(polyline, stations, station_mm)?;
     let mut force_n = Vector3::zeros();
     let mut moment_nmm = Vector3::zeros();
     for head in heads.iter().filter(|head| head.station_mm <= station_mm) {
@@ -126,24 +136,27 @@ pub fn linearised_section_at(
     station_mm: f64,
     cut: SectionIncrement,
 ) -> Result<SectionLoad, RodError> {
-    if heads.len() != increments.len()
-        || increments.iter().any(|d| {
-            d.point_mm
-                .iter()
-                .chain(d.force_n.iter())
-                .chain(d.couple_nmm.iter())
-                .any(|v| !v.is_finite())
-        })
-        || cut
-            .point_mm
-            .iter()
-            .chain(cut.tangent_unit.iter())
-            .any(|v| !v.is_finite())
-        || (cut.tangent_unit.norm_squared() - 1.0).abs() > TANGENT_UNIT_TOLERANCE
-    {
+    // The increments are checked before the polyline, as they always were.
+    if !increments_usable(heads, increments, &cut) {
         return Err(RodError::InvalidHeadStations);
     }
-    let mut section = section_at(polyline, heads, station_mm)?;
+    let stations = polyline_stations(polyline)?;
+    linearised_section_at_on(polyline, &stations, heads, increments, station_mm, cut)
+}
+
+/// `linearised_section_at` with the polyline's own stations already worked out.
+pub(crate) fn linearised_section_at_on(
+    polyline: &[Vector3<f64>],
+    stations: &[f64],
+    heads: &[HeadLoad],
+    increments: &[HeadIncrement],
+    station_mm: f64,
+    cut: SectionIncrement,
+) -> Result<SectionLoad, RodError> {
+    if !increments_usable(heads, increments, &cut) {
+        return Err(RodError::InvalidHeadStations);
+    }
+    let mut section = section_at_on(polyline, stations, heads, station_mm)?;
     for (head, delta) in heads
         .iter()
         .zip(increments)
@@ -157,6 +170,27 @@ pub fn linearised_section_at(
     section.position_mm += cut.point_mm;
     section.tangent_unit = cut.tangent_unit;
     Ok(section)
+}
+
+fn increments_usable(
+    heads: &[HeadLoad],
+    increments: &[HeadIncrement],
+    cut: &SectionIncrement,
+) -> bool {
+    heads.len() == increments.len()
+        && !increments.iter().any(|d| {
+            d.point_mm
+                .iter()
+                .chain(d.force_n.iter())
+                .chain(d.couple_nmm.iter())
+                .any(|v| !v.is_finite())
+        })
+        && !cut
+            .point_mm
+            .iter()
+            .chain(cut.tangent_unit.iter())
+            .any(|v| !v.is_finite())
+        && (cut.tangent_unit.norm_squared() - 1.0).abs() <= TANGENT_UNIT_TOLERANCE
 }
 
 /// Axial, bending and torsion stress of a solid circular section. The
@@ -345,5 +379,54 @@ mod tests {
         let mirrored_stress = surface_stress(&mirrored, 4.0).unwrap();
         assert!((original_stress.von_mises_mpa - mirrored_stress.von_mises_mpa).abs() < 1e-13);
         assert!((original_stress.torsional_mpa + mirrored_stress.torsional_mpa).abs() < 1e-13);
+    }
+
+    #[test]
+    fn stations_worked_out_once_give_the_same_sections() {
+        use crate::rod_beams::{polyline_at, polyline_at_on};
+        // A made-up curved rod: forty points on a helix.
+        let points: Vec<_> = (0..40)
+            .map(|i| {
+                let t = i as f64 * 0.17;
+                Vector3::new(12.0 * libm::cos(t), 12.0 * libm::sin(t), 3.1 * i as f64)
+            })
+            .collect();
+        let knots = polyline_stations(&points).unwrap();
+        let heads = [(3, 1.0), (17, -0.4), (31, -0.6)].map(|(k, share)| HeadLoad {
+            station_mm: knots[k],
+            position_mm: points[k] + Vector3::new(0.3, -0.2, 0.1),
+            force_n: Vector3::new(40.0, -25.0, 9.0) * share,
+            couple_nmm: Vector3::new(-120.0, 75.0, 310.0) * share,
+        });
+        let increments = heads.map(|h| HeadIncrement {
+            point_mm: Vector3::new(0.02, -0.01, 0.03) * h.station_mm,
+            force_n: h.force_n * 0.05,
+            couple_nmm: h.couple_nmm * -0.03,
+        });
+        let cut = SectionIncrement {
+            point_mm: Vector3::new(0.4, 0.1, -0.2),
+            tangent_unit: Vector3::new(0.6, 0.0, 0.8),
+        };
+        let length = knots[knots.len() - 1];
+        let mut cuts = Vec::new();
+        for pair in knots.windows(2) {
+            cuts.extend([pair[0], 0.5 * (pair[0] + pair[1])]);
+            cuts.extend([pair[0].next_down(), pair[0].next_up()]);
+        }
+        cuts.extend([length.next_down(), length]);
+        for s in cuts.into_iter().filter(|s| (0.0..=length).contains(s)) {
+            assert_eq!(
+                polyline_at_on(&points, &knots, s).unwrap(),
+                polyline_at(&points, s).unwrap()
+            );
+            assert_eq!(
+                section_at_on(&points, &knots, &heads, s).unwrap(),
+                section_at(&points, &heads, s).unwrap()
+            );
+            assert_eq!(
+                linearised_section_at_on(&points, &knots, &heads, &increments, s, cut).unwrap(),
+                linearised_section_at(&points, &heads, &increments, s, cut).unwrap()
+            );
+        }
     }
 }
