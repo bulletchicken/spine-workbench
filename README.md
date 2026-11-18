@@ -40,8 +40,11 @@ A browser app with four steps. You can stop after any of them.
 flowchart LR
     A["<b>1 · Films</b><br/>drop in up to four X-rays"] --> B["<b>2 · Find</b><br/>every vertebra outlined and named"]
     B --> C["<b>3 · 3D</b><br/>one fitted spine, with measurements"]
-    C --> D["<b>4 · Place</b><br/>a first layout of screws and rods"]
-    D --> E["<b>Under load</b><br/>standing, bending, a year of walking"]
+    C --> D["<b>4 · Place</b><br/>screws and rods, then tried under load"]
+    %% Two empty boxes. They keep the last step clear of GitHub's zoom buttons.
+    D ~~~ gap1["&nbsp;"] ~~~ gap2["&nbsp;"]
+    classDef unseen fill:none,stroke:none
+    class gap1,gap2 unseen
 ```
 
 | Step | What happens |
@@ -112,6 +115,11 @@ flowchart TD
     T --> H["48 held back to choose the<br/>checkpoint and the score threshold"]
     X --> S["112 scored<br/>children with no film in training"]
     X --> O["16 left out of the figures<br/>the child also has a film in training"]
+    %% Two empty boxes. They keep the last one clear of GitHub's zoom buttons.
+    X ~~~ gap1["&nbsp;"]
+    X ~~~ gap2["&nbsp;"]
+    classDef unseen fill:none,stroke:none
+    class gap1,gap2 unseen
 ```
 
 ## How it is built
